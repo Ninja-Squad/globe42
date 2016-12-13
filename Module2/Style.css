@@ -10,6 +10,10 @@ h1 {
   margin: 20px;
 }
 
+p {
+  clear: right;
+}
+
 .box {
   background-color: #BBBBBB;
   /*padding: 0px 10px 10px 10px;*/
@@ -25,16 +29,16 @@ h1 {
   border: 2px solid black; /*pq obligee de le rajouter alors quil est dans .box ?*/
   font-size: 18px;
   width: 100px;
-  position: absolute;
-  right: 0px;
+  position: relative;
+  float:right;
 }
 
 .chicken {
-  background-color: pink;
+  background-color: #FFC0CB;
   padding: 2px 0px 2px 0px;
 }
 .beef {
-  background-color: #A52A2A;
+  background-color: #B63B3B;
   color: white;
   padding: 2px 0px 2px 0px;
 }
