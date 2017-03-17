@@ -1,0 +1,19 @@
+server:
+  port: 9000
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+      - application/javascript
+      - text/html
+      - text/css
+      - text/plain
+      - image/gif
+spring:
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  datasource:
+    url: jdbc:postgresql:globe42
+    username: globe42
+    password: globe42

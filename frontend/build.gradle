@@ -1,0 +1,29 @@
+plugins {
+  id "com.moowork.node" version "1.1.1"
+}
+
+apply plugin: 'base'
+
+repositories {
+  jcenter()
+}
+
+node {
+  version = '6.9.5'
+  npmVersion = '3.10.3'
+  download = true
+}
+
+clean.dependsOn 'cleanNpm_run_build'
+
+npm_run_build {
+  dependsOn 'yarn_install'
+  inputs.dir 'src'
+  outputs.dir 'dist'
+}
+
+yarn_install {
+  inputs.file 'package.json'
+  inputs.file 'yarn.lock'
+  outputs.dir 'node_modules'
+}
