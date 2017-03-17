@@ -6,10 +6,12 @@ import { HttpModule } from '@angular/http';
 import { routes } from './app.routes';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
