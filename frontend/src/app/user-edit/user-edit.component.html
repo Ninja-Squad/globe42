@@ -1,0 +1,16 @@
+<form [formGroup]="userForm" (ngSubmit)="update()">
+  <div class="form-group row">
+    <label for="lastname" class="col-sm-2 col-form-label">Nom</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="lastname" placeholder="Nom" formControlName="lastName">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="firstname" class="col-sm-2 col-form-label">Prénom</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="firstname" placeholder="Prénom" formControlName="firstName">
+    </div>
+  </div>
+  <button class="btn btn-primary" type="submit" [disabled]="userForm.invalid">Enregister</button>
+  <a class="btn btn-secondary" routerLink="/users">Annuler</a>
+</form>
