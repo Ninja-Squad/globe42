@@ -1,14 +1,68 @@
 <form [formGroup]="userForm" (ngSubmit)="update()">
   <div class="form-group row">
-    <label for="lastname" class="col-sm-2 col-form-label">Nom</label>
+    <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
     <div class="col-sm-10">
-      <input class="form-control" id="lastname" placeholder="Nom" formControlName="lastName">
+      <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
     </div>
   </div>
   <div class="form-group row">
-    <label for="firstname" class="col-sm-2 col-form-label">Prénom</label>
+    <label for="firstName" class="col-sm-2 col-form-label">Prénom</label>
     <div class="col-sm-10">
-      <input class="form-control" id="firstname" placeholder="Prénom" formControlName="firstName">
+      <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="surName" class="col-sm-2 col-form-label">Pseudo</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="surName" placeholder="Pseudo" formControlName="surName">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="birthDate" class="col-sm-2 col-form-label">Date de naissance</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="birthDate" placeholder="1980-01-01" formControlName="birthDate">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="mediationCode" class="col-sm-2 col-form-label">Code de médiation</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="mediationCode" placeholder="code" formControlName="mediationCode">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="address" class="col-sm-2 col-form-label">Adresse</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="zipCode" class="col-sm-2 col-form-label">Code postal</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="zipCode" placeholder="42000" formControlName="zipCode">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="city" class="col-sm-2 col-form-label">Ville</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="city" placeholder="42000" formControlName="city">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="email" class="col-sm-2 col-form-label">Email</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="email" placeholder="42000" formControlName="email">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="email" class="col-sm-2 col-form-label">Est adhérent</label>
+    <div class="col-sm-10">
+      <input class="form-check-input" type="checkbox" name="isAdherent" id="isAdherent" formControlName="isAdherent">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="entryDate" class="col-sm-2 col-form-label">Date d'entrée en France</label>
+    <div class="col-sm-10">
+      <input class="form-control" id="entryDate" placeholder="42000" formControlName="entryDate">
     </div>
   </div>
   <button class="btn btn-primary" type="submit" [disabled]="userForm.invalid">Enregister</button>
