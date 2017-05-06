@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 
@@ -14,7 +15,7 @@ import { UserModel } from '../models/user.model';
 })
 export class UserEditComponent implements OnInit {
 
-  user: UserModel|null;
+  user: UserModel | null;
   userForm: FormGroup;
   firstNameCtrl: FormControl;
   lastNameCtrl: FormControl;
@@ -28,7 +29,11 @@ export class UserEditComponent implements OnInit {
   isAdherentCtrl: FormControl;
   entryDateCtrl: FormControl;
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) { }
+  constructor(private userService: UserService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private fb: FormBuilder,
+              private parserFormatter: NgbDateParserFormatter) { }
 
   ngOnInit() {
     this.user = this.route.snapshot.data['user'];
@@ -56,11 +61,15 @@ export class UserEditComponent implements OnInit {
     });
     if (this.user) {
       this.userForm.patchValue(this.user);
+      this.birthDateCtrl.setValue(this.parserFormatter.parse(this.user.birthDate));
+      this.entryDateCtrl.setValue(this.parserFormatter.parse(this.user.entryDate));
     }
   }
 
   update() {
     const user = this.userForm.value;
+    user.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
+    user.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
     if (this.user && this.user.id !== undefined) {
       user.id = this.user.id;
       this.userService.update(user)
