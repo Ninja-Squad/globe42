@@ -16,6 +16,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserResolverService } from './user-resolver.service';
 import { UsersResolverService } from './users-resolver.service';
 import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
+import { FormControlValidationDirective } from './form-control-validation.directive';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
     HomeComponent,
     UsersComponent,
     UserComponent,
-    UserEditComponent
+    UserEditComponent,
+    FormControlValidationDirective
   ],
   imports: [
     BrowserModule,
