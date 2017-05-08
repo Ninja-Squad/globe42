@@ -53,8 +53,10 @@ describe('UserEditComponent', () => {
       expect(city.value).toBe(user.city);
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe(user.email);
-      const isAdherent = nativeElement.querySelector('#isAdherent');
-      expect(isAdherent.checked).toBe(true);
+      const isAdherentYes = nativeElement.querySelector('#isAdherentYes');
+      expect(isAdherentYes.checked).toBe(true);
+      const isAdherentNo = nativeElement.querySelector('#isAdherentNo');
+      expect(isAdherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe(user.entryDate);
 
@@ -112,8 +114,10 @@ describe('UserEditComponent', () => {
       expect(city.value).toBe('');
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe('');
-      const isAdherent = nativeElement.querySelector('#isAdherent');
-      expect(isAdherent.checked).toBe(false);
+      const isAdherentYes = nativeElement.querySelector('#isAdherentYes');
+      expect(isAdherentYes.checked).toBe(false);
+      const isAdherentNo = nativeElement.querySelector('#isAdherentNo');
+      expect(isAdherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe('');
 
@@ -135,8 +139,8 @@ describe('UserEditComponent', () => {
       city.dispatchEvent(new Event('input'));
       email.value = 'jane@mail.com';
       email.dispatchEvent(new Event('input'));
-      isAdherent.checked = true;
-      isAdherent.dispatchEvent(new Event('change'));
+      isAdherentYes.checked = true;
+      isAdherentYes.dispatchEvent(new Event('change'));
       entryDate.value = '2015-02-02';
       entryDate.dispatchEvent(new Event('change'));
       nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
