@@ -6,9 +6,13 @@ export interface UserModel {
   birthDate: string;
   mediationCode: string;
   address: string;
-  zipCode: number;
-  city: string;
+  city: CityModel;
   email: string;
   isAdherent: boolean;
   entryDate: string;
+}
+
+export interface CityModel {
+  code: number;
+  city: string;
 }

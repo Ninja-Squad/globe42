@@ -1,12 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Http } from '@angular/http';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/catch';
 
 import { UserService } from '../user.service';
-import { UserModel } from '../models/user.model';
+import { CityModel, UserModel } from '../models/user.model';
+import { SearchCityService } from '../search-city.service';
+import { DisplayCityPipe } from '../display-city.pipe';
 
 @Component({
   selector: 'gl-user-edit',
@@ -23,16 +32,35 @@ export class UserEditComponent implements OnInit {
   birthDateCtrl: FormControl;
   mediationCodeCtrl: FormControl;
   addressCtrl: FormControl;
-  zipCodeCtrl: FormControl;
   cityCtrl: FormControl;
   emailCtrl: FormControl;
   isAdherentCtrl: FormControl;
   entryDateCtrl: FormControl;
 
+  searchFailed = false;
+
+  search = (text: Observable<string>) =>
+    text
+      .filter(text => text.length > 1)
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .switchMap(term =>
+        this.searchCityService.search(term)
+          .do(() => this.searchFailed = false)
+          .catch(() => {
+            this.searchFailed = true;
+            return Observable.of([]);
+          }));
+
+  cityFormatter = (result: CityModel) => this.displayCityPipe.transform(result);
+
   constructor(private userService: UserService,
+              private searchCityService: SearchCityService,
+              private displayCityPipe: DisplayCityPipe,
               private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder,
+              private http: Http,
               private parserFormatter: NgbDateParserFormatter) { }
 
   ngOnInit() {
@@ -42,7 +70,7 @@ export class UserEditComponent implements OnInit {
     this.surNameCtrl = this.fb.control('', Validators.required);
     this.birthDateCtrl = this.fb.control('', Validators.required);
     this.addressCtrl = this.fb.control('', Validators.required);
-    this.zipCodeCtrl = this.fb.control('', Validators.required);
+    this.cityCtrl = this.fb.control({ code: '', city: '' }, Validators.required);
     this.emailCtrl = this.fb.control('', [Validators.required, Validators.email]);
     this.isAdherentCtrl = this.fb.control('', Validators.required);
     this.entryDateCtrl = this.fb.control('', Validators.required);
@@ -53,7 +81,6 @@ export class UserEditComponent implements OnInit {
       birthDate: this.birthDateCtrl,
       mediationCode: this.mediationCodeCtrl,
       address: this.addressCtrl,
-      zipCode: this.zipCodeCtrl,
       city: this.cityCtrl,
       email: this.emailCtrl,
       isAdherent: this.isAdherentCtrl,
@@ -68,6 +95,7 @@ export class UserEditComponent implements OnInit {
 
   update() {
     const user = this.userForm.value;
+    console.log(user);
     user.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
     user.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
     if (this.user && this.user.id !== undefined) {

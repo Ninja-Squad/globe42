@@ -39,16 +39,12 @@
       <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
     </div>
   </div>
-  <div class="form-group row">
-    <label for="zipCode" class="col-sm-2 col-form-label">Code postal</label>
-    <div class="col-sm-10">
-      <input class="form-control" type="number" id="zipCode" placeholder="42000" formControlName="zipCode">
-    </div>
-  </div>
-  <div class="form-group row">
+  <div class="form-group row" [class.has-danger]="searchFailed">
     <label for="city" class="col-sm-2 col-form-label">Ville</label>
+    <ng-template #resultTemplate let-result="result">{{ result | displayCity }}</ng-template>
     <div class="col-sm-10">
-      <input class="form-control" id="city" placeholder="Saint Etienne" formControlName="city">
+      <input class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
+             [ngbTypeahead]="search" [resultTemplate]="resultTemplate" [inputFormatter]="cityFormatter">
     </div>
   </div>
   <div class="form-group row">
