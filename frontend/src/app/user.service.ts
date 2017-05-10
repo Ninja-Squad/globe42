@@ -4,16 +4,17 @@ import 'rxjs/add/observable/of';
 
 import { UserModel } from './models/user.model';
 
+const city = { code: 42000, city: 'SAINT-ETIENNE' };
 const users: Array<UserModel> = [
   {
     id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
-    mediationCode: 'code1', address: 'Chemin de la gare', zipCode: 42000,
-    city: 'Saint Etienne', email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01'
+    mediationCode: 'code1', address: 'Chemin de la gare',
+    city, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01'
   },
   {
     id: 1, firstName: 'Jane', lastName: 'Doe', surName: 'jane', birthDate: '1979-01-01',
-    mediationCode: 'code2', address: 'Chemin de la gare', zipCode: 42000,
-    city: 'Saint Etienne', email: 'jane@mail.com', isAdherent: false, entryDate: '2016-12-01'
+    mediationCode: 'code2', address: 'Chemin de la gare',
+    city, email: 'jane@mail.com', isAdherent: false, entryDate: '2016-12-01'
   }
 ];
 

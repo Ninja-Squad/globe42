@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -7,15 +7,20 @@ import 'rxjs/add/observable/of';
 import { UserEditComponent } from './user-edit.component';
 import { AppModule } from '../app.module';
 import { UserService } from '../user.service';
-import { UserModel } from '../models/user.model';
+import { CityModel, UserModel } from '../models/user.model';
+import { DisplayCityPipe } from '../display-city.pipe';
 
 describe('UserEditComponent', () => {
+  const cityModel: CityModel = {
+    code: 42000,
+    city: 'SAINT-ETIENNE'
+  };
 
   describe('in edit mode', () => {
     const user: UserModel = {
       id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
-      mediationCode: 'code1', address: 'Chemin de la gare', zipCode: 42000,
-      city: 'Saint Etienne', email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01'
+      mediationCode: 'code1', address: 'Chemin de la gare',
+      city: cityModel, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
     };
     const activatedRoute = {
       snapshot: { data: { user } }
@@ -31,6 +36,7 @@ describe('UserEditComponent', () => {
       spyOn(userService, 'update').and.returnValue(Observable.of(user));
       const router = TestBed.get(Router);
       spyOn(router, 'navigateByUrl');
+      const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
@@ -47,10 +53,8 @@ describe('UserEditComponent', () => {
       expect(mediationCode.value).toBe(user.mediationCode);
       const address = nativeElement.querySelector('#address');
       expect(address.value).toBe(user.address);
-      const zipCode = nativeElement.querySelector('#zipCode');
-      expect(+zipCode.value).toBe(user.zipCode);
       const city = nativeElement.querySelector('#city');
-      expect(city.value).toBe(user.city);
+      expect(city.value).toBe(displayCityPipe.transform(user.city));
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe(user.email);
       const isAdherentYes = nativeElement.querySelector('#isAdherentYes');
@@ -87,12 +91,16 @@ describe('UserEditComponent', () => {
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     }));
 
-    it('should create and save a new user', () => {
+    it('should create and save a new user', fakeAsync(() => {
       const userService = TestBed.get(UserService);
       spyOn(userService, 'create').and.returnValue(Observable.of(null));
       const router = TestBed.get(Router);
       spyOn(router, 'navigateByUrl');
+      const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(UserEditComponent);
+      // fake typeahead results
+      fixture.componentInstance.search = (text: Observable<string>) => Observable.of([cityModel]);
+
       fixture.detectChanges();
 
       const nativeElement = fixture.nativeElement;
@@ -108,10 +116,8 @@ describe('UserEditComponent', () => {
       expect(mediationCode.value).toBe('');
       const address = nativeElement.querySelector('#address');
       expect(address.value).toBe('');
-      const zipCode = nativeElement.querySelector('#zipCode');
-      expect(+zipCode.value).toBe(0);
       const city = nativeElement.querySelector('#city');
-      expect(city.value).toBe('');
+      expect(city.value).toBe(' ');
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe('');
       const isAdherentYes = nativeElement.querySelector('#isAdherentYes');
@@ -133,10 +139,20 @@ describe('UserEditComponent', () => {
       mediationCode.dispatchEvent(new Event('input'));
       address.value = 'Avenue Liberté';
       address.dispatchEvent(new Event('input'));
-      zipCode.value = '69007';
-      zipCode.dispatchEvent(new Event('input'));
-      city.value = 'Lyon';
+
+      // trigger city typeahead
+      city.value = '4200';
       city.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      tick();
+      // select first result
+      const result = nativeElement.querySelector('button');
+      expect(result.textContent)
+        .toContain(displayCityPipe.transform(cityModel));
+      result.dispatchEvent(new Event('click'));
+      fixture.detectChanges();
+      tick();
+
       email.value = 'jane@mail.com';
       email.dispatchEvent(new Event('input'));
       isAdherentYes.checked = true;
@@ -158,13 +174,13 @@ describe('UserEditComponent', () => {
       expect(userUpdated.birthDate).toBe('1985-03-03');
       expect(userUpdated.mediationCode).toBe('code2');
       expect(userUpdated.address).toBe('Avenue Liberté');
-      expect(userUpdated.zipCode).toBe(69007);
-      expect(userUpdated.city).toBe('Lyon');
+      expect(userUpdated.city.code).toBe(42000);
+      expect(userUpdated.city.city).toBe('SAINT-ETIENNE');
       expect(userUpdated.email).toBe('jane@mail.com');
       expect(userUpdated.isAdherent).toBe(true);
       expect(userUpdated.entryDate).toBe('2015-02-02');
 
       expect(router.navigateByUrl).toHaveBeenCalledWith('/users');
-    });
+    }));
   });
 });

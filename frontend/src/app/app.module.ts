@@ -17,6 +17,8 @@ import { UserResolverService } from './user-resolver.service';
 import { UsersResolverService } from './users-resolver.service';
 import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
 import { FormControlValidationDirective } from './form-control-validation.directive';
+import { SearchCityService } from './search-city.service';
+import { DisplayCityPipe } from './display-city.pipe';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { FormControlValidationDirective } from './form-control-validation.direct
     UsersComponent,
     UserComponent,
     UserEditComponent,
-    FormControlValidationDirective
+    FormControlValidationDirective,
+    DisplayCityPipe
   ],
   imports: [
     BrowserModule,
@@ -37,6 +40,8 @@ import { FormControlValidationDirective } from './form-control-validation.direct
   ],
   providers: [
     UserService,
+    SearchCityService,
+    DisplayCityPipe,
     UserResolverService,
     UsersResolverService,
     { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService }
