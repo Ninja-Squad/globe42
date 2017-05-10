@@ -14,7 +14,8 @@ describe('UserComponent', () => {
   const user: UserModel = {
     id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
     mediationCode: 'code1', address: 'Chemin de la gare',
-    city: cityModel, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01'
+    city: cityModel, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
+    gender: 'male', phoneNumber: '06 12 34 56 78'
   };
 
   const activatedRoute = {
@@ -33,12 +34,16 @@ describe('UserComponent', () => {
     const nativeElement = fixture.nativeElement;
     const name = nativeElement.querySelector('#fullName');
     expect(name.textContent).toBe('John Doe dit john');
+    const gender = nativeElement.querySelector('#gender');
+    expect(gender.textContent).toBe('Homme');
     const address = nativeElement.querySelector('#fullAddress');
     expect(address.textContent).toBe('Chemin de la gare, 42000 SAINT-ETIENNE');
     const birthDate = nativeElement.querySelector('#birthDate');
     expect(birthDate.textContent).toBe('1980-01-01');
     const email = nativeElement.querySelector('#email');
     expect(email.textContent).toBe('john@mail.com');
+    const phoneNumber = nativeElement.querySelector('#phoneNumber');
+    expect(phoneNumber.textContent).toBe('06 12 34 56 78');
     const adherent = nativeElement.querySelector('#isAdherent');
     expect(adherent.textContent).toBe('Oui');
     const entryDate = nativeElement.querySelector('#entryDate');

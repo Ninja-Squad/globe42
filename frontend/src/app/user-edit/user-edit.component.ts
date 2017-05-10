@@ -29,11 +29,13 @@ export class UserEditComponent implements OnInit {
   firstNameCtrl: FormControl;
   lastNameCtrl: FormControl;
   surNameCtrl: FormControl;
+  genderCtrl: FormControl;
   birthDateCtrl: FormControl;
   mediationCodeCtrl: FormControl;
   addressCtrl: FormControl;
   cityCtrl: FormControl;
   emailCtrl: FormControl;
+  phoneNumberCtrl: FormControl;
   isAdherentCtrl: FormControl;
   entryDateCtrl: FormControl;
 
@@ -41,7 +43,7 @@ export class UserEditComponent implements OnInit {
 
   search = (text: Observable<string>) =>
     text
-      .filter(text => text.length > 1)
+      .filter(query => query.length > 1)
       .debounceTime(300)
       .distinctUntilChanged()
       .switchMap(term =>
@@ -68,21 +70,25 @@ export class UserEditComponent implements OnInit {
     this.firstNameCtrl = this.fb.control('', Validators.required);
     this.lastNameCtrl = this.fb.control('', Validators.required);
     this.surNameCtrl = this.fb.control('', Validators.required);
+    this.genderCtrl = this.fb.control('', Validators.required);
     this.birthDateCtrl = this.fb.control('', Validators.required);
     this.addressCtrl = this.fb.control('', Validators.required);
     this.cityCtrl = this.fb.control({ code: '', city: '' }, Validators.required);
     this.emailCtrl = this.fb.control('', [Validators.required, Validators.email]);
+    this.phoneNumberCtrl = this.fb.control('', Validators.required);
     this.isAdherentCtrl = this.fb.control('', Validators.required);
     this.entryDateCtrl = this.fb.control('', Validators.required);
     this.userForm = this.fb.group({
       firstName: this.firstNameCtrl,
       lastName: this.lastNameCtrl,
       surName: this.surNameCtrl,
+      gender: this.genderCtrl,
       birthDate: this.birthDateCtrl,
       mediationCode: this.mediationCodeCtrl,
       address: this.addressCtrl,
       city: this.cityCtrl,
       email: this.emailCtrl,
+      phoneNumber: this.phoneNumberCtrl,
       isAdherent: this.isAdherentCtrl,
       entryDate: this.entryDateCtrl
     });

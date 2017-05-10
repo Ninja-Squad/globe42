@@ -21,6 +21,7 @@ describe('UserEditComponent', () => {
       id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
       mediationCode: 'code1', address: 'Chemin de la gare',
       city: cityModel, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
+      gender: 'male', phoneNumber: '06 12 34 56 78'
     };
     const activatedRoute = {
       snapshot: { data: { user } }
@@ -47,6 +48,8 @@ describe('UserEditComponent', () => {
       expect(lastName.value).toBe(user.lastName);
       const surName = nativeElement.querySelector('#surName');
       expect(surName.value).toBe(user.surName);
+      const gender = nativeElement.querySelector('#genderMale');
+      expect(gender.checked).toBe(true);
       const birthDate = nativeElement.querySelector('#birthDate');
       expect(birthDate.value).toBe(user.birthDate);
       const mediationCode = nativeElement.querySelector('#mediationCode');
@@ -57,6 +60,8 @@ describe('UserEditComponent', () => {
       expect(city.value).toBe(displayCityPipe.transform(user.city));
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe(user.email);
+      const phoneNumber = nativeElement.querySelector('#phoneNumber');
+      expect(phoneNumber.value).toBe(user.phoneNumber);
       const isAdherentYes = nativeElement.querySelector('#isAdherentYes');
       expect(isAdherentYes.checked).toBe(true);
       const isAdherentNo = nativeElement.querySelector('#isAdherentNo');
@@ -110,6 +115,12 @@ describe('UserEditComponent', () => {
       expect(lastName.value).toBe('');
       const surName = nativeElement.querySelector('#surName');
       expect(surName.value).toBe('');
+      const genderMale = nativeElement.querySelector('#genderMale');
+      expect(genderMale.checked).toBe(false);
+      const genderFemale = nativeElement.querySelector('#genderFemale');
+      expect(genderFemale.checked).toBe(false);
+      const genderOther = nativeElement.querySelector('#genderOther');
+      expect(genderOther.checked).toBe(false);
       const birthDate = nativeElement.querySelector('#birthDate');
       expect(birthDate.value).toBe('');
       const mediationCode = nativeElement.querySelector('#mediationCode');
@@ -120,6 +131,8 @@ describe('UserEditComponent', () => {
       expect(city.value).toBe(' ');
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe('');
+      const phoneNumber = nativeElement.querySelector('#phoneNumber');
+      expect(phoneNumber.value).toBe('');
       const isAdherentYes = nativeElement.querySelector('#isAdherentYes');
       expect(isAdherentYes.checked).toBe(false);
       const isAdherentNo = nativeElement.querySelector('#isAdherentNo');
@@ -133,6 +146,8 @@ describe('UserEditComponent', () => {
       firstName.dispatchEvent(new Event('input'));
       surName.value = 'jane';
       surName.dispatchEvent(new Event('input'));
+      genderFemale.checked = true;
+      genderFemale.dispatchEvent(new Event('change'));
       birthDate.value = '1985-03-03';
       birthDate.dispatchEvent(new Event('change'));
       mediationCode.value = 'code2';
@@ -155,6 +170,8 @@ describe('UserEditComponent', () => {
 
       email.value = 'jane@mail.com';
       email.dispatchEvent(new Event('input'));
+      phoneNumber.value = '06 13 13 13 13';
+      phoneNumber.dispatchEvent(new Event('input'));
       isAdherentYes.checked = true;
       isAdherentYes.dispatchEvent(new Event('change'));
       entryDate.value = '2015-02-02';
@@ -171,12 +188,14 @@ describe('UserEditComponent', () => {
       expect(userUpdated.lastName).toBe('Doe');
       expect(userUpdated.firstName).toBe('Jane');
       expect(userUpdated.surName).toBe('jane');
+      expect(userUpdated.gender).toBe('female');
       expect(userUpdated.birthDate).toBe('1985-03-03');
       expect(userUpdated.mediationCode).toBe('code2');
       expect(userUpdated.address).toBe('Avenue Liberté');
       expect(userUpdated.city.code).toBe(42000);
       expect(userUpdated.city.city).toBe('SAINT-ETIENNE');
       expect(userUpdated.email).toBe('jane@mail.com');
+      expect(userUpdated.phoneNumber).toBe('06 13 13 13 13');
       expect(userUpdated.isAdherent).toBe(true);
       expect(userUpdated.entryDate).toBe('2015-02-02');
 

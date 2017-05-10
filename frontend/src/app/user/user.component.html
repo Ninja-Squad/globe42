@@ -5,6 +5,12 @@
   </div>
 </div>
 <div class="form-group row">
+  <label class="col-sm-2 col-form-label">Genre</label>
+  <div class="col-sm-10">
+    <p id="gender" class="form-control-static">{{ user.gender | displayGender }}</p>
+  </div>
+</div>
+<div class="form-group row">
   <label class="col-sm-2 col-form-label">Né(e) le</label>
   <div class="col-sm-10">
     <p id="birthDate" class="form-control-static">{{ user.birthDate }}</p>
@@ -20,6 +26,12 @@
   <label class="col-sm-2 col-form-label">Email</label>
   <div class="col-sm-10">
     <p id="email" class="form-control-static">{{ user.email }}</p>
+  </div>
+</div>
+<div class="form-group row">
+  <label class="col-sm-2 col-form-label">Téléphone</label>
+  <div class="col-sm-10">
+    <p id="phoneNumber" class="form-control-static">{{ user.phoneNumber }}</p>
   </div>
 </div>
 <div class="form-group row">

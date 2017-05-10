@@ -9,12 +9,14 @@ const users: Array<UserModel> = [
   {
     id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
     mediationCode: 'code1', address: 'Chemin de la gare',
-    city, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01'
+    city, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
+    gender: 'male', phoneNumber: '06 12 34 56 78'
   },
   {
     id: 1, firstName: 'Jane', lastName: 'Doe', surName: 'jane', birthDate: '1979-01-01',
     mediationCode: 'code2', address: 'Chemin de la gare',
-    city, email: 'jane@mail.com', isAdherent: false, entryDate: '2016-12-01'
+    city, email: 'jane@mail.com', isAdherent: false, entryDate: '2016-12-01',
+    gender: 'female', phoneNumber: '06 12 34 56 79'
   }
 ];
 
