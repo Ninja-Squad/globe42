@@ -10,6 +10,8 @@ export interface UserModel {
   email: string;
   isAdherent: boolean;
   entryDate: string;
+  gender: 'male'|'female'|'other';
+  phoneNumber: string;
 }
 
 export interface CityModel {

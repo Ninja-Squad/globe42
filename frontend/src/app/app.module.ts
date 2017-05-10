@@ -19,6 +19,7 @@ import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
 import { FormControlValidationDirective } from './form-control-validation.directive';
 import { SearchCityService } from './search-city.service';
 import { DisplayCityPipe } from './display-city.pipe';
+import { DisplayGenderPipe } from './display-gender.pipe';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { DisplayCityPipe } from './display-city.pipe';
     UserComponent,
     UserEditComponent,
     FormControlValidationDirective,
-    DisplayCityPipe
+    DisplayCityPipe,
+    DisplayGenderPipe
   ],
   imports: [
     BrowserModule,
