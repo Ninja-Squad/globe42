@@ -34,7 +34,7 @@ describe('SearchCityService', () => {
     const response = new Response(new ResponseOptions({ body }));
     mockBackend.connections.subscribe(connection => {
       const request = connection.request;
-      expect(request.url).toBe('https://vicopo.selfbuild.fr/cherche/SAINT');
+      expect(request.url).toBe('http://vicopo.selfbuild.fr/cherche/SAINT');
       expect(request.method).toBe(RequestMethod.Get);
       connection.mockRespond(response)
     });

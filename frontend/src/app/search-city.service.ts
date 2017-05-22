@@ -21,7 +21,7 @@ export class SearchCityService {
       return Observable.of([]);
     }
 
-    const vicopoUrl = `https://vicopo.selfbuild.fr/cherche/${term}`;
+    const vicopoUrl = `${window.location.protocol}//vicopo.selfbuild.fr/cherche/${term}`;
 
     return this.http
       .get(vicopoUrl)
