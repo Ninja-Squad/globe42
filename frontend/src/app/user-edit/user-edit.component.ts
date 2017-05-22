@@ -73,7 +73,7 @@ export class UserEditComponent implements OnInit {
     this.genderCtrl = this.fb.control('', Validators.required);
     this.birthDateCtrl = this.fb.control('', Validators.required);
     this.addressCtrl = this.fb.control('', Validators.required);
-    this.cityCtrl = this.fb.control({ code: '', city: '' }, Validators.required);
+    this.cityCtrl = this.fb.control({ }, Validators.required);
     this.emailCtrl = this.fb.control('', [Validators.required, Validators.email]);
     this.phoneNumberCtrl = this.fb.control('', Validators.required);
     this.isAdherentCtrl = this.fb.control('', Validators.required);
@@ -101,7 +101,6 @@ export class UserEditComponent implements OnInit {
 
   update() {
     const user = this.userForm.value;
-    console.log(user);
     user.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
     user.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
     if (this.user && this.user.id !== undefined) {

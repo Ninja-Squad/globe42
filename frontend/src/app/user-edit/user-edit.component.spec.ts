@@ -128,7 +128,7 @@ describe('UserEditComponent', () => {
       const address = nativeElement.querySelector('#address');
       expect(address.value).toBe('');
       const city = nativeElement.querySelector('#city');
-      expect(city.value).toBe(' ');
+      expect(city.value).toBe('');
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe('');
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
