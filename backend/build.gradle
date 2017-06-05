@@ -1,14 +1,11 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.2.RELEASE'
-	}
 	repositories {
 		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
+		maven { url 'https://repo.spring.io/libs-milestone' }
 	}
+
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M1'
 	}
 }
 
@@ -16,36 +13,39 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
-idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file("$buildDir/classes/main/")
-    }
-}
-
 repositories {
 	mavenCentral()
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url "https://repo.spring.io/milestone" }
+	maven { url "https://repo.spring.io/libs-milestone" }
 }
 
-jar {
+tasks.withType(JavaCompile) {
+    // enable parameter name preservation, used by Jackson
+    options.compilerArgs.add('-parameters')
+}
+
+bootJar {
     archiveName = 'globe42.jar'
     dependsOn ':frontend:npm_run_build'
 
-    into('static') {
+    into('BOOT-INF/classes/static') {
         from "${project(':frontend').projectDir}/dist"
     }
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
-	runtime('org.postgresql:postgresql:9.4.1212')
+	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.assertj:assertj-core:3.8.0'
+    testCompile 'com.ninja-squad:DbSetup:2.1.0'
+	runtime 'org.postgresql:postgresql:9.4.1212'
+	runtime 'org.flywaydb:flyway-core'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names'
 }

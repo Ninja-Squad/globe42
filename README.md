@@ -10,11 +10,11 @@ The project uses PostgreSQL as a database.
 You need to [install PostgreSQL](https://www.postgresql.org/download/) on your machine.
 When this is done, run the database creation script:
 
-    psql -h localhost -f backend/database/database.sql
+    psql -h localhost -U postgres -f backend/database/database.sql
     
 ### Backend
 
-The project uses Spring (4.x) fot ehe backend,
+The project uses Spring (5.x) fot ehe backend,
 with Spring Boot.
 
 You need to install:
@@ -35,7 +35,7 @@ You need to install:
 - Yarn as a package manager (see [here to install](https://yarnpkg.com/en/docs/install))
 
 Then in the `frontend` directory, run `yarn` to download the dependencies.
-Then run `ng serve -p proxy.conf.js` to start the app, using the proxy conf to reroute calls to `/api` to the backend.
+Then run `yarn start` to start the app, using the proxy conf to reroute calls to `/api` to the backend.
 
 The application will be available on http://localhost:4200
 

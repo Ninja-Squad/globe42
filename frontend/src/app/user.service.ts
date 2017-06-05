@@ -1,47 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
 
 import { UserModel } from './models/user.model';
-
-const city = { code: 42000, city: 'SAINT-ETIENNE' };
-const users: Array<UserModel> = [
-  {
-    id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
-    mediationCode: 'code1', address: 'Chemin de la gare',
-    city, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
-    gender: 'male', phoneNumber: '06 12 34 56 78'
-  },
-  {
-    id: 1, firstName: 'Jane', lastName: 'Doe', surName: 'jane', birthDate: '1979-01-01',
-    mediationCode: 'code2', address: 'Chemin de la gare',
-    city, email: 'jane@mail.com', isAdherent: false, entryDate: '2016-12-01',
-    gender: 'female', phoneNumber: '06 12 34 56 79'
-  }
-];
+import { Http } from '@angular/http';
 
 @Injectable()
 export class UserService {
 
-  constructor() { }
+  constructor(private http: Http) { }
 
   get(id: number): Observable<UserModel> {
-    return Observable.of(users[id]);
+    return this.http.get(`/api/persons/${id}`).map(response => response.json());
   }
 
-  update(user: UserModel): Observable<UserModel> {
-    users[user.id] = user;
-    return Observable.of(user);
+  update(user: UserModel): Observable<any> {
+    return this.http.put(`/api/persons/${user.id}`, user);
   }
 
   create(user: UserModel): Observable<UserModel> {
-    user.id = users.length;
-    users[user.id] = user;
-    return Observable.of(user);
+    return this.http.post(`/api/persons`, user).map(response => response.json());
   }
 
   list(): Observable<Array<UserModel>> {
-    return Observable.of(users);
+    return this.http.get('/api/persons').map(response => response.json());
   }
 
 }
