@@ -48,4 +48,5 @@ dependencies {
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     compile 'com.fasterxml.jackson.module:jackson-module-parameter-names'
+    compile 'io.jsonwebtoken:jjwt:0.7.0'
 }

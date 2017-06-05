@@ -3,9 +3,7 @@ package org.globe42.web.persons;
 import static org.globe42.test.JsonTestUtil.OBJECT_MAPPER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -15,11 +13,11 @@ import java.util.Optional;
 
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.Person;
+import org.globe42.test.GlobeMvcTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -30,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * @author JB Nizet
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(PersonController.class)
+@GlobeMvcTest(PersonController.class)
 public class PersonControllerMvcTest {
 
     @MockBean
