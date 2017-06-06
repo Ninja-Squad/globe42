@@ -6,7 +6,13 @@ buildscript {
 
 	dependencies {
 		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M1'
+        classpath 'org.flywaydb:flyway-gradle-plugin:4.2.0'
+        classpath 'org.postgresql:postgresql:9.4.1212'
 	}
+}
+
+plugins {
+    id "org.flywaydb.flyway" version "4.2.0"
 }
 
 apply plugin: 'java'
@@ -49,4 +55,16 @@ dependencies {
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     compile 'com.fasterxml.jackson.module:jackson-module-parameter-names'
     compile 'io.jsonwebtoken:jjwt:0.7.0'
+}
+
+task flywayCleanInteg(type: org.flywaydb.gradle.task.FlywayCleanTask) {
+    url = 'jdbc:postgresql://localhost:5432/globe42'
+    user = 'globe42'
+    password = 'globe42'
+}
+
+task flywayCleanTest(type: org.flywaydb.gradle.task.FlywayCleanTask) {
+    url = 'jdbc:postgresql://localhost:5432/globe42_test'
+    user = 'globe42'
+    password = 'globe42'
 }

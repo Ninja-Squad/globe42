@@ -1,20 +1,18 @@
-package org.globe42.web.security;
+package org.globe42.web.users;
 
 import org.globe42.domain.User;
 
 /**
- * A user, with its JWT token
+ * Basic information about the current user
  * @author JB Nizet
  */
-public final class UserDTO {
-    private Long id;
+public final class CurrentUserDTO {
+    private final Long id;
     private final String login;
-    private final String token;
 
-    public UserDTO(User user, String token) {
+    public CurrentUserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
-        this.token = token;
     }
 
     public Long getId() {
@@ -23,9 +21,5 @@ public final class UserDTO {
 
     public String getLogin() {
         return login;
-    }
-
-    public String getToken() {
-        return token;
     }
 }

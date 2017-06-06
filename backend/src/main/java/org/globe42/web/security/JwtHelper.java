@@ -6,13 +6,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO include class javadoc here
+ * Helper class to build a JWT token or extract the claim from a token.
  * @author JB Nizet
  */
 @Component
 public class JwtHelper {
 
-    public static final String DEFAULT_SECRET_KEY = "ng2ponyracerByNinjaSqu4d!";
+    public static final String DEFAULT_SECRET_KEY = "globe42!";
 
     private final String secretKey;
 
