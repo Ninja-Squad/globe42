@@ -21,8 +21,8 @@ public class PersonDaoTest extends BaseDaoTest {
     @Before
     public void prepare() {
         Operation person =
-            Insert.into("PERSON")
-                .columns("ID", "NICK_NAME", "GENDER", "ADHERENT", "ENTRY_DATE")
+            Insert.into("person")
+                .columns("id", "nick_name", "gender", "adherent", "entry_date")
                 .values(1L, "Ced", Gender.MALE, true, "2017-01-01")
                 .build();
         dbSetup(person);

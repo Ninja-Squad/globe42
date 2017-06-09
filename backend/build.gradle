@@ -61,6 +61,9 @@ dependencies {
     compile 'io.jsonwebtoken:jjwt:0.7.0'
 }
 
+// remove default tasks added by flyway plugin
+tasks.removeIf { it.name.startsWith('flyway') }
+
 task flywayCleanInteg(type: org.flywaydb.gradle.task.FlywayCleanTask) {
     url = 'jdbc:postgresql://localhost:5432/globe42'
     user = 'globe42'
@@ -72,3 +75,4 @@ task flywayCleanTest(type: org.flywaydb.gradle.task.FlywayCleanTask) {
     user = 'globe42'
     password = 'globe42'
 }
+

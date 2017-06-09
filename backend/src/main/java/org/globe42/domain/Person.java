@@ -1,12 +1,17 @@
 package org.globe42.domain;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -57,6 +62,12 @@ public class Person {
     private Gender gender;
 
     private String phoneNumber;
+
+    /**
+     * The incomes of the person
+     */
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Income> incomes = new HashSet<>();
 
     public Person() {
     }
@@ -167,5 +178,19 @@ public class Person {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void addIncome(Income income) {
+        income.setPerson(this);
+        this.incomes.add(income);
+    }
+
+    public void removeIncome(Income income) {
+        income.setPerson(null);
+        this.incomes.remove(income);
+    }
+
+    public Set<Income> getIncomes() {
+        return Collections.unmodifiableSet(incomes);
     }
 }
