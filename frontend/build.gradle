@@ -22,8 +22,21 @@ npm_run_build {
   outputs.dir 'dist'
 }
 
+npm_run_test {
+  inputs.dir 'src'
+  outputs.upToDateWhen { true }
+}
+
 yarn_install {
   inputs.file 'package.json'
   inputs.file 'yarn.lock'
   outputs.dir 'node_modules'
+}
+
+task test {
+  dependsOn npm_run_test
+}
+
+check {
+  dependsOn test
 }
