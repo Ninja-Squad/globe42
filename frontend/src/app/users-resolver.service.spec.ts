@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import { UsersResolverService } from './users-resolver.service';
 import { UserModel } from './models/user.model';
 import { UserService } from './user.service';
-import { HttpModule } from '@angular/http';
 
 describe('UsersResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
