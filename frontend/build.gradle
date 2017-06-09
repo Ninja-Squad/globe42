@@ -14,8 +14,6 @@ node {
   download = true
 }
 
-clean.dependsOn 'cleanNpm_run_build'
-
 npm_run_build {
   dependsOn 'yarn_install'
   inputs.dir 'src'
@@ -24,7 +22,7 @@ npm_run_build {
 
 npm_run_test {
   inputs.dir 'src'
-  outputs.upToDateWhen { true }
+  outputs.dir 'coverage'
 }
 
 yarn_install {
@@ -40,3 +38,6 @@ task test {
 check {
   dependsOn test
 }
+
+clean.dependsOn 'cleanNpm_run_build'
+clean.dependsOn 'cleanNpm_run_test'
