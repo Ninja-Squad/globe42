@@ -5,10 +5,12 @@ import 'rxjs/add/observable/of';
 import { UsersResolverService } from './users-resolver.service';
 import { UserModel } from './models/user.model';
 import { UserService } from './user.service';
+import { HttpModule } from '@angular/http';
 
 describe('UsersResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [UsersResolverService, UserService]
+    providers: [UsersResolverService, UserService],
+    imports: [HttpModule]
   }));
 
   it('should retrieve the users', () => {

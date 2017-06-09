@@ -18,7 +18,7 @@ public final class PersonCommandDTO {
     private final String lastName;
 
     @NotEmpty
-    private final String surName;
+    private final String nickName;
 
     private final LocalDate birthDate;
     private final String mediationCode;
@@ -38,7 +38,7 @@ public final class PersonCommandDTO {
     @JsonCreator
     public PersonCommandDTO(@JsonProperty String firstName,
                             @JsonProperty String lastName,
-                            @JsonProperty String surName,
+                            @JsonProperty String nickName,
                             @JsonProperty LocalDate birthDate,
                             @JsonProperty String mediationCode,
                             @JsonProperty String address,
@@ -50,7 +50,7 @@ public final class PersonCommandDTO {
                             @JsonProperty String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.surName = surName;
+        this.nickName = nickName;
         this.birthDate = birthDate;
         this.mediationCode = mediationCode;
         this.address = address;
@@ -70,8 +70,8 @@ public final class PersonCommandDTO {
         return lastName;
     }
 
-    public String getSurName() {
-        return surName;
+    public String getNickName() {
+        return nickName;
     }
 
     public LocalDate getBirthDate() {

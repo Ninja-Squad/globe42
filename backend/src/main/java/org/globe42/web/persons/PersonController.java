@@ -62,7 +62,7 @@ public class PersonController {
     private void copyCommandToPerson(PersonCommandDTO command, Person person) {
         person.setFirstName(command.getFirstName());
         person.setLastName(command.getLastName());
-        person.setSurName(command.getSurName());
+        person.setNickName(command.getNickName());
         person.setBirthDate(command.getBirthDate());
         person.setMediationCode(command.getMediationCode());
         person.setAddress(command.getAddress());

@@ -28,7 +28,7 @@ export class UserEditComponent implements OnInit {
   userForm: FormGroup;
   firstNameCtrl: FormControl;
   lastNameCtrl: FormControl;
-  surNameCtrl: FormControl;
+  nickNameCtrl: FormControl;
   genderCtrl: FormControl;
   birthDateCtrl: FormControl;
   mediationCodeCtrl: FormControl;
@@ -69,7 +69,7 @@ export class UserEditComponent implements OnInit {
     this.user = this.route.snapshot.data['user'];
     this.firstNameCtrl = this.fb.control('', Validators.required);
     this.lastNameCtrl = this.fb.control('', Validators.required);
-    this.surNameCtrl = this.fb.control('', Validators.required);
+    this.nickNameCtrl = this.fb.control('', Validators.required);
     this.genderCtrl = this.fb.control('', Validators.required);
     this.birthDateCtrl = this.fb.control('', Validators.required);
     this.addressCtrl = this.fb.control('', Validators.required);
@@ -81,7 +81,7 @@ export class UserEditComponent implements OnInit {
     this.userForm = this.fb.group({
       firstName: this.firstNameCtrl,
       lastName: this.lastNameCtrl,
-      surName: this.surNameCtrl,
+      nickName: this.nickNameCtrl,
       gender: this.genderCtrl,
       birthDate: this.birthDateCtrl,
       mediationCode: this.mediationCodeCtrl,

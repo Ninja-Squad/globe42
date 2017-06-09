@@ -18,7 +18,7 @@ describe('UserEditComponent', () => {
 
   describe('in edit mode', () => {
     const user: UserModel = {
-      id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
+      id: 0, firstName: 'John', lastName: 'Doe', nickName: 'john', birthDate: '1980-01-01',
       mediationCode: 'code1', address: 'Chemin de la gare',
       city: cityModel, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
       gender: 'male', phoneNumber: '06 12 34 56 78'
@@ -46,8 +46,8 @@ describe('UserEditComponent', () => {
       expect(firstName.value).toBe(user.firstName);
       const lastName = nativeElement.querySelector('#lastName');
       expect(lastName.value).toBe(user.lastName);
-      const surName = nativeElement.querySelector('#surName');
-      expect(surName.value).toBe(user.surName);
+      const nickName = nativeElement.querySelector('#nickName');
+      expect(nickName.value).toBe(user.nickName);
       const gender = nativeElement.querySelector('#genderMale');
       expect(gender.checked).toBe(true);
       const birthDate = nativeElement.querySelector('#birthDate');
@@ -113,8 +113,8 @@ describe('UserEditComponent', () => {
       expect(firstName.value).toBe('');
       const lastName = nativeElement.querySelector('#lastName');
       expect(lastName.value).toBe('');
-      const surName = nativeElement.querySelector('#surName');
-      expect(surName.value).toBe('');
+      const nickName = nativeElement.querySelector('#nickName');
+      expect(nickName.value).toBe('');
       const genderMale = nativeElement.querySelector('#genderMale');
       expect(genderMale.checked).toBe(false);
       const genderFemale = nativeElement.querySelector('#genderFemale');
@@ -144,8 +144,8 @@ describe('UserEditComponent', () => {
       lastName.dispatchEvent(new Event('input'));
       firstName.value = 'Jane';
       firstName.dispatchEvent(new Event('input'));
-      surName.value = 'jane';
-      surName.dispatchEvent(new Event('input'));
+      nickName.value = 'jane';
+      nickName.dispatchEvent(new Event('input'));
       genderFemale.checked = true;
       genderFemale.dispatchEvent(new Event('change'));
       birthDate.value = '1985-03-03';
@@ -187,7 +187,7 @@ describe('UserEditComponent', () => {
       expect(userUpdated.id).toBeUndefined();
       expect(userUpdated.lastName).toBe('Doe');
       expect(userUpdated.firstName).toBe('Jane');
-      expect(userUpdated.surName).toBe('jane');
+      expect(userUpdated.nickName).toBe('jane');
       expect(userUpdated.gender).toBe('female');
       expect(userUpdated.birthDate).toBe('1985-03-03');
       expect(userUpdated.mediationCode).toBe('code2');

@@ -2,7 +2,7 @@ export interface UserModel {
   id: number;
   firstName: string;
   lastName: string;
-  surName: string;
+  nickName: string;
   birthDate: string;
   mediationCode: string;
   address: string;

@@ -16,7 +16,7 @@ public class PersonCommandDTOTest {
     @Test
     public void shouldDeserialize() throws IOException {
         String json = "{\n" +
-            "    \"surName\": \"Agnes\",\n" +
+            "    \"nickName\": \"Agnes\",\n" +
             "    \"gender\": \"female\",\n" +
             "    \"isAdherent\": true,\n" +
             "    \"city\": {\n" +
@@ -26,7 +26,7 @@ public class PersonCommandDTOTest {
             "}";
 
         PersonCommandDTO command = OBJECT_MAPPER.readValue(json, PersonCommandDTO.class);
-        assertThat(command.getSurName()).isEqualTo("Agnes");
+        assertThat(command.getNickName()).isEqualTo("Agnes");
         assertThat(command.getGender()).isEqualTo(Gender.FEMALE);
         assertThat(command.isAdherent()).isTrue();
         assertThat(command.getCity().getCode()).isEqualTo("42000");

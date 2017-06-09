@@ -116,7 +116,7 @@ public class PersonControllerTest extends BaseTest {
     private void assertPersonEqualsCommand(Person person, PersonCommandDTO command) {
         assertThat(person.getFirstName()).isEqualTo(command.getFirstName());
         assertThat(person.getLastName()).isEqualTo(command.getLastName());
-        assertThat(person.getSurName()).isEqualTo(command.getSurName());
+        assertThat(person.getNickName()).isEqualTo(command.getNickName());
         assertThat(person.getBirthDate()).isEqualTo(command.getBirthDate());
         assertThat(person.getMediationCode()).isEqualTo(command.getMediationCode());
         assertThat(person.getAddress()).isEqualTo(command.getAddress());

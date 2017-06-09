@@ -12,7 +12,7 @@ describe('UserComponent', () => {
     city: 'SAINT-ETIENNE'
   };
   const user: UserModel = {
-    id: 0, firstName: 'John', lastName: 'Doe', surName: 'john', birthDate: '1980-01-01',
+    id: 0, firstName: 'John', lastName: 'Doe', nickName: 'john', birthDate: '1980-01-01',
     mediationCode: 'code1', address: 'Chemin de la gare',
     city: cityModel, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
     gender: 'male', phoneNumber: '06 12 34 56 78'

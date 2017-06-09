@@ -22,7 +22,7 @@ public class PersonDaoTest extends BaseDaoTest {
     public void prepare() {
         Operation person =
             Insert.into("PERSON")
-                .columns("ID", "SUR_NAME", "GENDER", "ADHERENT", "ENTRY_DATE")
+                .columns("ID", "NICK_NAME", "GENDER", "ADHERENT", "ENTRY_DATE")
                 .values(1L, "Ced", Gender.MALE, true, "2017-01-01")
                 .build();
         dbSetup(person);
@@ -32,7 +32,7 @@ public class PersonDaoTest extends BaseDaoTest {
     public void shouldInsert() {
         Person person = new Person();
         person.setGender(Gender.MALE);
-        person.setSurName("JB");
+        person.setNickName("JB");
 
         personDao.save(person);
         personDao.flush();

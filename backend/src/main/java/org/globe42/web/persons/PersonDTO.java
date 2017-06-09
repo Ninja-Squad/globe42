@@ -14,7 +14,7 @@ public final class PersonDTO {
     private final Long id;
     private final String firstName;
     private final String lastName;
-    private final String surName;
+    private final String nickName;
     private final LocalDate birthDate;
     private final String mediationCode;
     private final String address;
@@ -31,7 +31,7 @@ public final class PersonDTO {
         this.id = person.getId();
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
-        this.surName = person.getSurName();
+        this.nickName = person.getNickName();
         this.birthDate = person.getBirthDate();
         this.mediationCode = person.getMediationCode();
         this.address = person.getAddress();
@@ -55,8 +55,8 @@ public final class PersonDTO {
         return lastName;
     }
 
-    public String getSurName() {
-        return surName;
+    public String getNickName() {
+        return nickName;
     }
 
     public LocalDate getBirthDate() {

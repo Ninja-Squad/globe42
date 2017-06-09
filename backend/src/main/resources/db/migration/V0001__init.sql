@@ -2,7 +2,7 @@ create table PERSON (
   ID BIGINT PRIMARY KEY,
   first_name VARCHAR,
   last_name VARCHAR,
-  sur_name VARCHAR NOT NULL UNIQUE,
+  nick_name VARCHAR NOT NULL UNIQUE,
   gender VARCHAR,
   birth_date DATE,
   email VARCHAR,

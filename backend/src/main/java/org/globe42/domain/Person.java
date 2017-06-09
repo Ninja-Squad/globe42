@@ -33,7 +33,7 @@ public class Person {
     private String lastName;
 
     @NotEmpty
-    private String surName;
+    private String nickName;
 
     private LocalDate birthDate;
 
@@ -89,12 +89,12 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getSurName() {
-        return surName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setSurName(String surName) {
-        this.surName = surName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public LocalDate getBirthDate() {
