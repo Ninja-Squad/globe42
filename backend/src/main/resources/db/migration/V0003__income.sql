@@ -8,6 +8,7 @@ CREATE SEQUENCE income_source_type_seq START WITH 1000;
 CREATE TABLE income_source (
   id                 BIGINT PRIMARY KEY,
   type_id            BIGINT NOT NULL,
+  name               VARCHAR NOT NULL,
   max_monthly_amount NUMERIC(10, 2)
 );
 

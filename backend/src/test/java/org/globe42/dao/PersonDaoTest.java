@@ -46,4 +46,18 @@ public class PersonDaoTest extends BaseDaoTest {
             assertThat(p.getEntryDate()).isEqualTo("2017-01-01");
         });
     }
+
+    @Test
+    public void shouldFindIfExistsByNickName() {
+        TRACKER.skipNextLaunch();
+        assertThat(personDao.existsByNickName("hello")).isFalse();
+        assertThat(personDao.existsByNickName("Ced")).isTrue();
+    }
+
+    @Test
+    public void shouldFindByNickName() {
+        TRACKER.skipNextLaunch();
+        assertThat(personDao.findByNickName("hello")).isEmpty();
+        assertThat(personDao.findByNickName("Ced")).isNotEmpty();
+    }
 }

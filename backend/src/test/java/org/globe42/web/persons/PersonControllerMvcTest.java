@@ -51,6 +51,7 @@ public class PersonControllerMvcTest {
         when(mockPersonDao.findAll()).thenReturn(Collections.singletonList(person));
 
         mvc.perform(get("/api/persons"))
+           .andExpect(status().isOk())
            .andExpect(jsonPath("$[0].id").value(1))
            .andExpect(jsonPath("$[0].entryDate").value("2017-05-21"))
            .andExpect(jsonPath("$[0].isAdherent").value(true));
@@ -61,6 +62,7 @@ public class PersonControllerMvcTest {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
 
         mvc.perform(get("/api/persons/{personId}", person.getId()))
+           .andExpect(status().isOk())
            .andExpect(jsonPath("$.id").value(1));
     }
 

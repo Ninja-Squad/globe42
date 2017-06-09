@@ -48,13 +48,16 @@ bootRun {
 }
 
 dependencies {
-	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
+        exclude module: 'tomcat-jdbc'
+    }
 	compile 'org.springframework.boot:spring-boot-starter-web'
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.assertj:assertj-core:3.8.0'
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
 	runtime 'org.postgresql:postgresql:9.4.1212'
 	runtime 'org.flywaydb:flyway-core'
+    runtime 'com.zaxxer:HikariCP:2.6.1'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     compile 'com.fasterxml.jackson.module:jackson-module-parameter-names'
@@ -75,4 +78,3 @@ task flywayCleanTest(type: org.flywaydb.gradle.task.FlywayCleanTask) {
     user = 'globe42'
     password = 'globe42'
 }
-

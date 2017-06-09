@@ -17,3 +17,5 @@ spring:
     url: jdbc:postgresql:globe42
     username: globe42
     password: globe42
+    hikari:
+      maximum-pool-size: 5

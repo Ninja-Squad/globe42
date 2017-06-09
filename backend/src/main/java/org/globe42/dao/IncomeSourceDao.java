@@ -1,5 +1,7 @@
 package org.globe42.dao;
 
+import java.util.Optional;
+
 import org.globe42.domain.IncomeSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author JB Nizet
  */
 public interface IncomeSourceDao extends JpaRepository<IncomeSource, Long> {
+    boolean existsByName(String name);
+    Optional<IncomeSource> findByName(String name);
 }

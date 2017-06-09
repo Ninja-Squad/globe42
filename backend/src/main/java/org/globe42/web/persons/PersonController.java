@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.City;
 import org.globe42.domain.Person;
+import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -47,6 +48,10 @@ public class PersonController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDTO create(@Validated @RequestBody PersonCommandDTO command) {
+        if (personDao.existsByNickName(command.getNickName())) {
+            throw new BadRequestException("This nickname is already used by another person");
+        }
+
         Person person = new Person();
         copyCommandToPerson(command, person);
         return new PersonDTO(personDao.save(person));
@@ -56,6 +61,11 @@ public class PersonController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable("personId") Long id, @Validated @RequestBody PersonCommandDTO command) {
         Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
+
+        personDao.findByNickName(command.getNickName()).filter(other -> !other.getId().equals(id)).ifPresent(other -> {
+            throw new BadRequestException("This nickname is already used by another person");
+        });
+
         copyCommandToPerson(command, person);
     }
 
