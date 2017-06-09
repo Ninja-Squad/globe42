@@ -1,8 +1,14 @@
 package org.globe42.web.security;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,16 +18,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtHelper {
 
-    public static final String DEFAULT_SECRET_KEY = "globe42!";
+    public static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
 
     private final String secretKey;
 
-    public JwtHelper(String secretKey) {
+    public JwtHelper(@Value("${globe42.secretKey}") String secretKey) {
         this.secretKey = secretKey;
-    }
-
-    public JwtHelper() {
-        this(DEFAULT_SECRET_KEY);
     }
 
     /**
@@ -33,7 +35,7 @@ public class JwtHelper {
     public String buildToken(Long userId) {
         return Jwts.builder()
                    .setSubject(userId.toString())
-                   .signWith(SignatureAlgorithm.HS256, secretKey).compact();
+                   .signWith(SIGNATURE_ALGORITHM, secretKey).compact();
     }
 
     /**
@@ -44,5 +46,14 @@ public class JwtHelper {
      */
     public Claims extractClaims(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    }
+
+    /**
+     * Allows generating a real secret key
+     */
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(SIGNATURE_ALGORITHM.getJcaName());
+        SecretKey secretKey = keyGenerator.generateKey();
+        System.out.println(Base64.getEncoder().encodeToString(secretKey.getEncoded()));
     }
 }

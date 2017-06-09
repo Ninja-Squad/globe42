@@ -15,7 +15,7 @@ public class JwtHelperTest {
 
     @Before
     public void prepare() {
-        jwtHelper = new JwtHelper();
+        jwtHelper = new JwtHelper("someSecretKey");
     }
 
     @Test

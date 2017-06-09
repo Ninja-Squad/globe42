@@ -48,6 +48,6 @@ To build the app, just run:
     
 This will build a standalone jar at `backend/build/libs/globe42.jar`, that you can run with:
 
-    java -jar backend/build/libs/globe42.jar
+    java -jar backend/build/libs/globe42.jar --globe42.secretKey=<some secret key>
     
 And the full app runs on http://localhost:9000
