@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author JB Nizet
  */
 public interface IncomeSourceTypeDao extends JpaRepository<IncomeSourceType, Long> {
+    boolean existsByType(String type);
 }
