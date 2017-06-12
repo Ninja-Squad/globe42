@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgbDatepickerI18n, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,6 +20,9 @@ import { FormControlValidationDirective } from './form-control-validation.direct
 import { SearchCityService } from './search-city.service';
 import { DisplayCityPipe } from './display-city.pipe';
 import { DisplayGenderPipe } from './display-gender.pipe';
+import { LoginComponent } from './login/login.component';
+import { UserService } from 'app/user.service';
+import { AuthenticatedGuard } from 'app/authenticated.guard';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,7 @@ import { DisplayGenderPipe } from './display-gender.pipe';
     PersonsComponent,
     PersonComponent,
     PersonEditComponent,
+    LoginComponent,
     FormControlValidationDirective,
     DisplayCityPipe,
     DisplayGenderPipe
@@ -36,17 +40,20 @@ import { DisplayGenderPipe } from './display-gender.pipe';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    FormsModule,
     HttpModule,
     RouterModule.forRoot(routes),
     NgbModule.forRoot()
   ],
   providers: [
     PersonService,
+    UserService,
     SearchCityService,
     DisplayCityPipe,
     PersonResolverService,
     PersonsResolverService,
-    { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService }
+    { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
+    AuthenticatedGuard
   ],
   bootstrap: [AppComponent]
 })

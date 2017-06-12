@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-4 offset-md-4">
+    <h1>Connexion</h1>
+
+    <div class="alert alert-danger" *ngIf="authenticationFailed">
+      <button type="button" class="close" aria-label="Close" (click)="authenticationFailed = false;"><span aria-hidden="true">&#215;</span></button>
+      Erreur d'authentification, essayez encore.
+    </div>
+
+    <form (ngSubmit)="authenticate()" #loginForm="ngForm">
+      <div class="form-group">
+        <label for="login">Identifiant</label>
+        <input id="login" class="form-control" name="login" [(ngModel)]="credentials.login" required #loginCtrl="ngModel">
+        <div *ngIf="loginCtrl.control.dirty && loginCtrl.control.hasError('required')">L'identifiant est obligatoire</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" class="form-control" type="password" name="password" [(ngModel)]="credentials.password" required #passwordCtrl="ngModel">
+        <div *ngIf="passwordCtrl.control.dirty && passwordCtrl.control.hasError('required')">Le mot de passe est obligatoire</div>
+      </div>
+
+      <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Connexion</button>
+    </form>
+  </div>
+</div>

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
+import { UserModel } from '../models/user.model';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'gl-home',
@@ -7,9 +11,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  user: UserModel;
+  userEventsSubscription: Subscription;
 
-  ngOnInit() {
+  constructor(private userService: UserService) {
   }
 
+  ngOnInit() {
+    this.userEventsSubscription = this.userService.userEvents.subscribe(user => this.user = user);
+  }
+
+  ngOnDestroy() {
+    if (this.userEventsSubscription) {
+      this.userEventsSubscription.unsubscribe();
+    }
+  }
 }

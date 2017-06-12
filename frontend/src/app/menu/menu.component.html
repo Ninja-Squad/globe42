@@ -5,7 +5,13 @@
   <a class="navbar-brand" routerLink="/">Globe42</a>
   <div id="navbar" class="navbar-collapse" [class.collapse]="navbarCollapsed">
     <div class="nav navbar-nav mr-auto">
-      <!--a class="nav-item nav-link" routerLink="/"></a-->
+      <a class="nav-item nav-link" *ngIf="user" routerLink="/persons">Adhérents</a>
+    </div>
+    <div class="nav navbar-nav">
+      <span class="nav-item navbar-text mr-2" *ngIf="user">{{ user.login }}</span>
+      <a (click)="logout($event)" class="nav-item nav-link" href="#" *ngIf="user">
+        <span class="fa fa-power-off"></span>
+      </a>
     </div>
   </div>
 </nav>

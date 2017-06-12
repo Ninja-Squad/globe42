@@ -1,5 +1,10 @@
 <div class="text-center" style="margin-top: 100px">
   <h1>Globe42</h1>
 
-  <a routerLink="/persons">Gestion des adhérents</a>
+  <div *ngIf="!user; else loggedIn">
+    <a class="btn btn-primary" routerLink="/login">Connexion</a>
+  </div>
+  <ng-template #loggedIn>
+    <a routerLink="/persons">Gestion des adhérents</a>
+  </ng-template>
 </div>
