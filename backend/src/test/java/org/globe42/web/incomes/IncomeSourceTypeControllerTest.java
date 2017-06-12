@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.globe42.dao.IncomeSourceTypeDao;
 import org.globe42.domain.IncomeSourceType;
@@ -38,6 +39,15 @@ public class IncomeSourceTypeControllerTest extends BaseTest {
     @Before
     public void prepare() {
         incomeSourceType = new IncomeSourceType(1L, "CAF");
+    }
+
+    @Test
+    public void shouldGet() {
+        when(mockIncomeSourceTypeDao.findById(incomeSourceType.getId())).thenReturn(Optional.of(incomeSourceType));
+
+        IncomeSourceTypeDTO result = controller.get(incomeSourceType.getId());
+
+        assertThat(result.getId()).isEqualTo(incomeSourceType.getId());
     }
 
     @Test

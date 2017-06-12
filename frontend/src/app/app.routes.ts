@@ -6,8 +6,12 @@ import { PersonComponent } from './person/person.component';
 import { PersonEditComponent } from './person-edit/person-edit.component';
 import { PersonResolverService } from './person-resolver.service';
 import { PersonsResolverService } from './persons-resolver.service';
-import { LoginComponent } from 'app/login/login.component';
-import { AuthenticatedGuard } from 'app/authenticated.guard';
+import { LoginComponent } from './login/login.component';
+import { AuthenticatedGuard } from './authenticated.guard';
+import { IncomeTypesComponent } from './income-types/income-types.component';
+import { IncomeTypesResolverService } from './income-types-resolver.service';
+import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';
+import { IncomeTypeResolverService } from './income-type-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -34,6 +38,26 @@ export const routes: Routes = [
       component: PersonEditComponent,
       resolve: {
         person: PersonResolverService
+      }
+    }
+  ],
+    canActivate: [AuthenticatedGuard]
+  },
+  {
+    path: 'income-types', children: [
+    {
+      path: '',
+      component: IncomeTypesComponent,
+      resolve: {
+        incomeTypes: IncomeTypesResolverService
+      }
+    },
+    { path: 'create', component: IncomeTypeEditComponent },
+    {
+      path: ':id/edit',
+      component: IncomeTypeEditComponent,
+      resolve: {
+        incomeType: IncomeTypeResolverService
       }
     }
   ],

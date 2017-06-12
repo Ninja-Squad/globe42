@@ -10,7 +10,7 @@ import { PersonService } from '../person.service';
 import { CityModel, PersonModel } from '../models/person.model';
 import { DisplayCityPipe } from '../display-city.pipe';
 
-describe('personEditComponent', () => {
+describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
     code: 42000,
     city: 'SAINT-ETIENNE'
