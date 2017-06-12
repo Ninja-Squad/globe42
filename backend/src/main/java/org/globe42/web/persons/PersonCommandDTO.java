@@ -27,7 +27,6 @@ public final class PersonCommandDTO {
     @Valid
     private final CityDTO city;
     private final String email;
-    @JsonProperty("isAdherent")
     private final boolean adherent;
     private final LocalDate entryDate;
 
@@ -44,7 +43,7 @@ public final class PersonCommandDTO {
                             @JsonProperty String address,
                             @JsonProperty CityDTO city,
                             @JsonProperty String email,
-                            @JsonProperty("isAdherent") boolean adherent,
+                            @JsonProperty boolean adherent,
                             @JsonProperty LocalDate entryDate,
                             @JsonProperty Gender gender,
                             @JsonProperty String phoneNumber) {

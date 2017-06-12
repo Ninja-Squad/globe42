@@ -1,4 +1,4 @@
-export interface UserModel {
+export interface PersonModel {
   id: number;
   firstName: string;
   lastName: string;
@@ -8,7 +8,7 @@ export interface UserModel {
   address: string;
   city: CityModel;
   email: string;
-  isAdherent: boolean;
+  adherent: boolean;
   entryDate: string;
   gender: 'male'|'female'|'other';
   phoneNumber: string;

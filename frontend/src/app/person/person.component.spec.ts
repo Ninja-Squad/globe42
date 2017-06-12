@@ -2,24 +2,24 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { UserComponent } from './user.component';
+import { PersonComponent } from './person.component';
 import { AppModule } from '../app.module';
-import { CityModel, UserModel } from '../models/user.model';
+import { CityModel, PersonModel } from '../models/person.model';
 
-describe('UserComponent', () => {
+describe('PersonComponent', () => {
   const cityModel: CityModel = {
     code: 42000,
     city: 'SAINT-ETIENNE'
   };
-  const user: UserModel = {
+  const person: PersonModel = {
     id: 0, firstName: 'John', lastName: 'Doe', nickName: 'john', birthDate: '1980-01-01',
     mediationCode: 'code1', address: 'Chemin de la gare',
-    city: cityModel, email: 'john@mail.com', isAdherent: true, entryDate: '2016-12-01',
+    city: cityModel, email: 'john@mail.com', adherent: true, entryDate: '2016-12-01',
     gender: 'male', phoneNumber: '06 12 34 56 78'
   };
 
   const activatedRoute = {
-    snapshot: { data: { user } }
+    snapshot: { data: { person } }
   };
 
   beforeEach(() => TestBed.configureTestingModule({
@@ -27,8 +27,8 @@ describe('UserComponent', () => {
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   }));
 
-  it('should display a user', () => {
-    const fixture = TestBed.createComponent(UserComponent);
+  it('should display a person', () => {
+    const fixture = TestBed.createComponent(PersonComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
@@ -44,7 +44,7 @@ describe('UserComponent', () => {
     expect(email.textContent).toBe('john@mail.com');
     const phoneNumber = nativeElement.querySelector('#phoneNumber');
     expect(phoneNumber.textContent).toBe('06 12 34 56 78');
-    const adherent = nativeElement.querySelector('#isAdherent');
+    const adherent = nativeElement.querySelector('#adherent');
     expect(adherent.textContent).toBe('Oui');
     const entryDate = nativeElement.querySelector('#entryDate');
     expect(entryDate.textContent).toBe('2016-12-01');

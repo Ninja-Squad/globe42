@@ -54,7 +54,7 @@ public class PersonControllerMvcTest {
            .andExpect(status().isOk())
            .andExpect(jsonPath("$[0].id").value(1))
            .andExpect(jsonPath("$[0].entryDate").value("2017-05-21"))
-           .andExpect(jsonPath("$[0].isAdherent").value(true));
+           .andExpect(jsonPath("$[0].adherent").value(true));
     }
 
     @Test

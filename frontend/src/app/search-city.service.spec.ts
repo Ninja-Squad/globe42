@@ -3,7 +3,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { SearchCityService } from './search-city.service';
 import { MockBackend } from '@angular/http/testing';
 import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
-import { CityModel } from './models/user.model';
+import { CityModel } from './models/person.model';
 
 describe('SearchCityService', () => {
 

@@ -18,7 +18,7 @@ public class PersonCommandDTOTest {
         String json = "{\n" +
             "    \"nickName\": \"Agnes\",\n" +
             "    \"gender\": \"female\",\n" +
-            "    \"isAdherent\": true,\n" +
+            "    \"adherent\": true,\n" +
             "    \"city\": {\n" +
             "        \"code\": \"42000\",\n" +
             "        \"city\": \"SAINT-ETIENNE\"\n" +

@@ -2,12 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { UsersComponent } from './users.component';
+import { PersonsComponent } from './persons.component';
 import { AppModule } from '../app.module';
 
-describe('UsersComponent', () => {
+describe('PersonsComponent', () => {
   const activatedRoute = {
-    snapshot: { data: { users: [{ firstName: 'John', lastName: 'Doe' }] } }
+    snapshot: { data: { persons: [{ firstName: 'John', lastName: 'Doe' }] } }
   };
 
   beforeEach(() => TestBed.configureTestingModule({
@@ -15,12 +15,12 @@ describe('UsersComponent', () => {
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   }));
 
-  it('should list users', () => {
-    const fixture = TestBed.createComponent(UsersComponent);
+  it('should list persons', () => {
+    const fixture = TestBed.createComponent(PersonsComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const users = nativeElement.querySelectorAll('div.list-group-item');
-    expect(users.length).toBe(1);
+    const persons = nativeElement.querySelectorAll('div.list-group-item');
+    expect(persons.length).toBe(1);
   });
 });
