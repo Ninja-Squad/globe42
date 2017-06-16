@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
@@ -24,7 +24,8 @@ export class SearchCityService {
     const vicopoUrl = `${window.location.protocol}//vicopo.selfbuild.fr/cherche/${term}`;
 
     return this.http
-      .get(vicopoUrl)
+    // reset Headers as Authentication is not allowed by the service
+      .get(vicopoUrl, { headers: new Headers() })
       .map(response => response.json())
       .map(response => response.cities.slice(0, 10) as Array<CityModel>);
   }
