@@ -50,4 +50,10 @@ This will build a standalone jar at `backend/build/libs/globe42.jar`, that you c
 
     java -jar backend/build/libs/globe42.jar --globe42.secretKey=<some secret key>
     
+
+To start the application with the demo profile, add this command-line option:  
+    
+    --spring.profiles.active=demo
+    
 And the full app runs on http://localhost:9000
+

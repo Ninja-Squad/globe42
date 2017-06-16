@@ -19,3 +19,9 @@ spring:
     password: globe42
     hikari:
       maximum-pool-size: 5
+
+---
+spring:
+  profiles: demo
+flyway:
+  locations: classpath:/db/migration,classpath:/demo/db/migration
