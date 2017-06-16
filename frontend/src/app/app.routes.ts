@@ -1,35 +1,35 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { UsersComponent } from './users/users.component';
-import { UserComponent } from './user/user.component';
-import { UserEditComponent } from './user-edit/user-edit.component';
-import { UserResolverService } from './user-resolver.service';
-import { UsersResolverService } from './users-resolver.service';
+import { PersonsComponent } from './persons/persons.component';
+import { PersonComponent } from './person/person.component';
+import { PersonEditComponent } from './person-edit/person-edit.component';
+import { PersonResolverService } from './person-resolver.service';
+import { PersonsResolverService } from './persons-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   {
-    path: 'users', children: [
+    path: 'persons', children: [
     {
       path: '',
-      component: UsersComponent,
+      component: PersonsComponent,
       resolve: {
-        users: UsersResolverService
+        persons: PersonsResolverService
       }
     },
-    { path: 'create', component: UserEditComponent },
+    { path: 'create', component: PersonEditComponent },
     {
       path: ':id',
-      component: UserComponent,
+      component: PersonComponent,
       resolve: {
-        user: UserResolverService
+        person: PersonResolverService
       }
     },
     {
       path: ':id/edit',
-      component: UserEditComponent,
+      component: PersonEditComponent,
       resolve: {
-        user: UserResolverService
+        person: PersonResolverService
       }
     }
   ]

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Http } from '@angular/http';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -12,20 +11,20 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 
-import { UserService } from '../user.service';
-import { CityModel, UserModel } from '../models/user.model';
+import { PersonService } from '../person.service';
+import { CityModel, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
 import { DisplayCityPipe } from '../display-city.pipe';
 
 @Component({
-  selector: 'gl-user-edit',
-  templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.scss']
+  selector: 'gl-person-edit',
+  templateUrl: './person-edit.component.html',
+  styleUrls: ['./person-edit.component.scss']
 })
-export class UserEditComponent implements OnInit {
+export class PersonEditComponent implements OnInit {
 
-  user: UserModel | null;
-  userForm: FormGroup;
+  person: PersonModel | null;
+  personForm: FormGroup;
   firstNameCtrl: FormControl;
   lastNameCtrl: FormControl;
   nickNameCtrl: FormControl;
@@ -36,7 +35,7 @@ export class UserEditComponent implements OnInit {
   cityCtrl: FormControl;
   emailCtrl: FormControl;
   phoneNumberCtrl: FormControl;
-  isAdherentCtrl: FormControl;
+  adherentCtrl: FormControl;
   entryDateCtrl: FormControl;
 
   searchFailed = false;
@@ -56,17 +55,16 @@ export class UserEditComponent implements OnInit {
 
   cityFormatter = (result: CityModel) => this.displayCityPipe.transform(result);
 
-  constructor(private userService: UserService,
+  constructor(private personService: PersonService,
               private searchCityService: SearchCityService,
               private displayCityPipe: DisplayCityPipe,
               private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder,
-              private http: Http,
               private parserFormatter: NgbDateParserFormatter) { }
 
   ngOnInit() {
-    this.user = this.route.snapshot.data['user'];
+    this.person = this.route.snapshot.data['person'];
     this.firstNameCtrl = this.fb.control('', Validators.required);
     this.lastNameCtrl = this.fb.control('', Validators.required);
     this.nickNameCtrl = this.fb.control('', Validators.required);
@@ -76,9 +74,9 @@ export class UserEditComponent implements OnInit {
     this.cityCtrl = this.fb.control({ }, Validators.required);
     this.emailCtrl = this.fb.control('', [Validators.required, Validators.email]);
     this.phoneNumberCtrl = this.fb.control('', Validators.required);
-    this.isAdherentCtrl = this.fb.control('', Validators.required);
+    this.adherentCtrl = this.fb.control('', Validators.required);
     this.entryDateCtrl = this.fb.control('', Validators.required);
-    this.userForm = this.fb.group({
+    this.personForm = this.fb.group({
       firstName: this.firstNameCtrl,
       lastName: this.lastNameCtrl,
       nickName: this.nickNameCtrl,
@@ -89,27 +87,27 @@ export class UserEditComponent implements OnInit {
       city: this.cityCtrl,
       email: this.emailCtrl,
       phoneNumber: this.phoneNumberCtrl,
-      isAdherent: this.isAdherentCtrl,
+      adherent: this.adherentCtrl,
       entryDate: this.entryDateCtrl
     });
-    if (this.user) {
-      this.userForm.patchValue(this.user);
-      this.birthDateCtrl.setValue(this.parserFormatter.parse(this.user.birthDate));
-      this.entryDateCtrl.setValue(this.parserFormatter.parse(this.user.entryDate));
+    if (this.person) {
+      this.personForm.patchValue(this.person);
+      this.birthDateCtrl.setValue(this.parserFormatter.parse(this.person.birthDate));
+      this.entryDateCtrl.setValue(this.parserFormatter.parse(this.person.entryDate));
     }
   }
 
   update() {
-    const user = this.userForm.value;
-    user.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
-    user.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
-    if (this.user && this.user.id !== undefined) {
-      user.id = this.user.id;
-      this.userService.update(user)
-        .subscribe(() => this.router.navigateByUrl('/users'));
+    const person = this.personForm.value;
+    person.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
+    person.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
+    if (this.person && this.person.id !== undefined) {
+      person.id = this.person.id;
+      this.personService.update(person)
+        .subscribe(() => this.router.navigateByUrl('/persons'));
     } else {
-      this.userService.create(user)
-        .subscribe(() => this.router.navigateByUrl('/users'));
+      this.personService.create(person)
+        .subscribe(() => this.router.navigateByUrl('/persons'));
     }
   }
 

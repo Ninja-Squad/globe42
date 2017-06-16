@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CityModel } from './models/user.model';
+import { CityModel } from './models/person.model';
 
 @Pipe({
   name: 'displayCity'

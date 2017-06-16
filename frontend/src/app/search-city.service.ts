@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { CityModel } from './models/user.model';
+import { CityModel } from './models/person.model';
 
 @Injectable()
 export class SearchCityService {

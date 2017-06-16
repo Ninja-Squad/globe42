@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 
 @Component({
   template: `
-    <form [formGroup]="userForm">
+    <form [formGroup]="personForm">
       <div class="form-group row">
         <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
         <div class="col-sm-10">
@@ -15,7 +15,7 @@ import { TestBed } from '@angular/core/testing';
     </form>`
 })
 class FormComponent {
-  userForm = new FormGroup({
+  personForm = new FormGroup({
     lastName: new FormControl('', Validators.required)
   });
 }

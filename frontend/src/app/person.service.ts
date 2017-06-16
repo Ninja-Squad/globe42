@@ -3,27 +3,27 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 
-import { UserModel } from './models/user.model';
+import { PersonModel } from './models/person.model';
 import { Http } from '@angular/http';
 
 @Injectable()
-export class UserService {
+export class PersonService {
 
   constructor(private http: Http) { }
 
-  get(id: number): Observable<UserModel> {
+  get(id: number): Observable<PersonModel> {
     return this.http.get(`/api/persons/${id}`).map(response => response.json());
   }
 
-  update(user: UserModel): Observable<any> {
-    return this.http.put(`/api/persons/${user.id}`, user);
+  update(person: PersonModel): Observable<any> {
+    return this.http.put(`/api/persons/${person.id}`, person);
   }
 
-  create(user: UserModel): Observable<UserModel> {
-    return this.http.post(`/api/persons`, user).map(response => response.json());
+  create(person: PersonModel): Observable<PersonModel> {
+    return this.http.post(`/api/persons`, person).map(response => response.json());
   }
 
-  list(): Observable<Array<UserModel>> {
+  list(): Observable<Array<PersonModel>> {
     return this.http.get('/api/persons').map(response => response.json());
   }
 

@@ -1,8 +1,6 @@
 package org.globe42.web.persons;
 
 import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.globe42.domain.Gender;
 import org.globe42.domain.Person;
 
@@ -20,8 +18,6 @@ public final class PersonDTO {
     private final String address;
     private final CityDTO city;
     private final String email;
-
-    @JsonProperty("isAdherent")
     private final boolean adherent;
     private final LocalDate entryDate;
     private final Gender gender;
