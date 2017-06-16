@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-md-4 offset-md-4">
+    <h1>Nouveau type de revenu</h1>
+
+    <div class="alert alert-danger" *ngIf="actionFailed">
+      <button type="button" class="close" aria-label="Close" (click)="actionFailed = false;"><span aria-hidden="true">&#215;</span></button>
+      Erreur à la sauvegarde du type de revenu.
+    </div>
+
+    <form (ngSubmit)="create()" #typeForm="ngForm">
+      <div class="form-group">
+        <label for="type">Type</label>
+        <input id="type" class="form-control" name="type" [(ngModel)]="incomeType.type" required #typeCtrl="ngModel">
+        <div *ngIf="typeCtrl.control.dirty && typeCtrl.control.hasError('required')">Le type est obligatoire</div>
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!typeForm.valid">Enregister</button>
+    </form>
+  </div>
+</div>

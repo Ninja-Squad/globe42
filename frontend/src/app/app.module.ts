@@ -23,6 +23,11 @@ import { DisplayGenderPipe } from './display-gender.pipe';
 import { LoginComponent } from './login/login.component';
 import { UserService } from 'app/user.service';
 import { AuthenticatedGuard } from 'app/authenticated.guard';
+import { IncomeTypesComponent } from './income-types/income-types.component';
+import { IncomeTypesResolverService } from 'app/income-types-resolver.service';
+import { IncomeService } from 'app/income.service';
+import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';
+import { IncomeTypeResolverService } from 'app/income-type-resolver.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +40,9 @@ import { AuthenticatedGuard } from 'app/authenticated.guard';
     LoginComponent,
     FormControlValidationDirective,
     DisplayCityPipe,
-    DisplayGenderPipe
+    DisplayGenderPipe,
+    IncomeTypesComponent,
+    IncomeTypeEditComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +60,10 @@ import { AuthenticatedGuard } from 'app/authenticated.guard';
     PersonResolverService,
     PersonsResolverService,
     { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
-    AuthenticatedGuard
+    AuthenticatedGuard,
+    IncomeTypesResolverService,
+    IncomeService,
+    IncomeTypeResolverService
   ],
   bootstrap: [AppComponent]
 })
