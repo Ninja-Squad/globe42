@@ -1,14 +1,14 @@
 buildscript {
-	repositories {
-		mavenCentral()
-		maven { url 'https://repo.spring.io/libs-milestone' }
-	}
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.spring.io/libs-milestone' }
+    }
 
-	dependencies {
-		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M1'
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M2'
         classpath 'org.flywaydb:flyway-gradle-plugin:4.2.0'
         classpath 'org.postgresql:postgresql:9.4.1212'
-	}
+    }
 }
 
 plugins {
@@ -25,8 +25,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/libs-milestone" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/libs-milestone" }
 }
 
 tasks.withType(JavaCompile) {
@@ -48,19 +48,12 @@ bootRun {
 }
 
 dependencies {
-	compile ('org.springframework.boot:spring-boot-starter-data-jpa') {
-        exclude module: 'tomcat-jdbc'
-    }
-	compile 'org.springframework.boot:spring-boot-starter-web'
-	testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile 'org.assertj:assertj-core:3.8.0'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
-	runtime 'org.postgresql:postgresql:9.4.1212'
-	runtime 'org.flywaydb:flyway-core'
-    runtime 'com.zaxxer:HikariCP:2.6.1'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names'
+    runtime 'org.postgresql:postgresql:9.4.1212'
+    runtime 'org.flywaydb:flyway-core'
     compile 'io.jsonwebtoken:jjwt:0.7.0'
 }
 
