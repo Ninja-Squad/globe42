@@ -33,4 +33,11 @@ public class UserDaoTest extends BaseDaoTest {
         assertThat(userDao.findByLogin("jb")).isNotEmpty();
         assertThat(userDao.findByLogin("ced")).isEmpty();
     }
+
+    @Test
+    public void shouldExistByLogin() {
+        TRACKER.skipNextLaunch();
+        assertThat(userDao.existsByLogin("jb")).isTrue();
+        assertThat(userDao.existsByLogin("ced")).isFalse();
+    }
 }

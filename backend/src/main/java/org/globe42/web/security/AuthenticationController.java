@@ -32,12 +32,12 @@ public class AuthenticationController {
     }
 
     @PostMapping
-    public UserDTO authenticate(@RequestBody CredentialsDTO credentials) {
+    public AuthenticatedUserDTO authenticate(@RequestBody CredentialsDTO credentials) {
         User user = userDao.findByLogin(credentials.getLogin()).orElseThrow(UnauthorizedException::new);
         if (!passwordDigester.match(credentials.getPassword(), user.getPassword())) {
             throw new UnauthorizedException();
         }
 
-        return new UserDTO(user, jwtHelper.buildToken(user.getId()));
+        return new AuthenticatedUserDTO(user, jwtHelper.buildToken(user.getId()));
     }
 }
