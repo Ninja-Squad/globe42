@@ -77,6 +77,18 @@ public class IncomeSourceTypeControllerTest extends BaseTest {
         assertIncomeSourceTypeEqualsCommand(incomeSourceTypeArgumentCaptor.getValue(), command);
     }
 
+    @Test
+    public void shouldUpdate() {
+        IncomeSourceTypeCommandDTO command = createCommand();
+
+        when(mockIncomeSourceTypeDao.findById(incomeSourceType.getId())).thenReturn(Optional.of(incomeSourceType));
+        when(mockIncomeSourceTypeDao.findByType(command.getType())).thenReturn(Optional.empty());
+
+        controller.update(incomeSourceType.getId(), command);
+
+        assertIncomeSourceTypeEqualsCommand(incomeSourceType, command);
+    }
+
     static IncomeSourceTypeCommandDTO createCommand() {
         return new IncomeSourceTypeCommandDTO("Securité Sociale");
     }

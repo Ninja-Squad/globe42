@@ -59,7 +59,7 @@ public class AuthenticationControllerTest extends BaseTest {
         when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(true);
         String token = "token";
         when(mockJwtHelper.buildToken(user.getId())).thenReturn(token);
-        UserDTO result = controller.authenticate(credentials);
+        AuthenticatedUserDTO result = controller.authenticate(credentials);
 
         assertThat(result.getId()).isEqualTo(user.getId());
         assertThat(result.getLogin()).isEqualTo(user.getLogin());
