@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Ninja-Squad/globe42.svg?branch=master)](https://travis-ci.org/Ninja-Squad/globe42)
+
 # Projet de gestion sécurisée des adhérents pour l'association Globe 42
 
 ## Setup
@@ -14,7 +16,7 @@ When this is done, run the database creation script:
     
 ### Backend
 
-The project uses Spring (5.x) fot ehe backend,
+The project uses Spring (5.x) for the backend,
 with Spring Boot.
 
 You need to install:
