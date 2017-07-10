@@ -20,8 +20,8 @@ public class UserDaoTest extends BaseDaoTest {
     @Before
     public void prepare() {
         Operation users = Insert.into("guser")
-            .columns("id", "login", "password")
-            .values(1L, "jb", "hashedPassword")
+            .columns("id", "login", "password", "admin")
+            .values(1L, "jb", "hashedPassword", true)
             .build();
 
         dbSetup(users);

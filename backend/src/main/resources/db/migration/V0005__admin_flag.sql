@@ -1,0 +1,8 @@
+ALTER TABLE guser
+  ADD COLUMN admin BOOLEAN;
+
+UPDATE guser
+SET admin = TRUE;
+
+ALTER TABLE guser
+  ALTER admin SET NOT NULL;

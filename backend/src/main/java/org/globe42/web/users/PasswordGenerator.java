@@ -12,7 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class PasswordGenerator {
 
+    /**
+     * The size of generated passwords
+     */
     private static final int SIZE = 8;
+
+    /**
+     * The characters composing generated passwords. The generators picks randomly in these characters.
+     */
     private static final char[] CHARACTERS =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_$%?/+=.<>#*".toCharArray();
 

@@ -112,7 +112,7 @@ public class UserControllerTest extends BaseTest{
 
     @Test
     public void shouldCreate() {
-        UserCommandDTO command = new UserCommandDTO("test");
+        UserCommandDTO command = new UserCommandDTO("test", true);
 
         when(mockPasswordGenerator.generatePassword()).thenReturn("password");
         when(mockPasswordDigester.hash("password")).thenReturn("hashed");
@@ -120,6 +120,7 @@ public class UserControllerTest extends BaseTest{
         UserWithPasswordDTO result = controller.create(command);
         assertThat(result.getGeneratedPassword()).isEqualTo("password");
         assertThat(result.getUser().getLogin()).isEqualTo(command.getLogin());
+        assertThat(result.getUser().isAdmin()).isEqualTo(command.isAdmin());
 
         verify(mockUserDao).save(userCaptor.capture());
         assertThat(userCaptor.getValue().getPassword()).isEqualTo("hashed");
@@ -127,7 +128,7 @@ public class UserControllerTest extends BaseTest{
 
     @Test(expected = BadRequestException.class)
     public void shouldThrowWhenCreatingWithExistingLogin() {
-        UserCommandDTO command = new UserCommandDTO("test");
+        UserCommandDTO command = new UserCommandDTO("test", false);
 
         when(mockUserDao.existsByLogin(command.getLogin())).thenReturn(true);
 
@@ -136,17 +137,18 @@ public class UserControllerTest extends BaseTest{
 
     @Test
     public void shouldUpdate() {
-        UserCommandDTO command = new UserCommandDTO("test");
+        UserCommandDTO command = new UserCommandDTO("test", true);
         User user = createUser(userId);
         when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
 
         controller.update(userId, command);
         assertThat(user.getLogin()).isEqualTo(command.getLogin());
+        assertThat(user.isAdmin()).isEqualTo(command.isAdmin());
     }
 
     @Test(expected = BadRequestException.class)
     public void shouldThrowWhenUpdatingWithExistingLogin() {
-        UserCommandDTO command = new UserCommandDTO("test");
+        UserCommandDTO command = new UserCommandDTO("test", false);
         User user = createUser(userId);
         when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
 
@@ -158,7 +160,7 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void shouldNotThrowWhenUpdatingWithSameLogin() {
         User user = createUser(userId);
-        UserCommandDTO command = new UserCommandDTO(user.getLogin());
+        UserCommandDTO command = new UserCommandDTO(user.getLogin(), false);
         when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
 
         when(mockUserDao.findByLogin(command.getLogin())).thenReturn(Optional.of(user));

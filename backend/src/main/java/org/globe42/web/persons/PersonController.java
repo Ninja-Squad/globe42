@@ -9,6 +9,7 @@ import org.globe42.domain.City;
 import org.globe42.domain.Person;
 import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
+import org.globe42.web.security.AdminOnly;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,7 @@ public class PersonController {
 
     @PutMapping("/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @AdminOnly
     public void update(@PathVariable("personId") Long id, @Validated @RequestBody PersonCommandDTO command) {
         Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
 

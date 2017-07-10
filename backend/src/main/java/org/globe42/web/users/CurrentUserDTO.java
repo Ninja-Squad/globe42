@@ -9,10 +9,12 @@ import org.globe42.domain.User;
 public final class CurrentUserDTO {
     private final Long id;
     private final String login;
+    private final boolean admin;
 
     public CurrentUserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
+        this.admin = user.isAdmin();
     }
 
     public Long getId() {
@@ -21,5 +23,9 @@ public final class CurrentUserDTO {
 
     public String getLogin() {
         return login;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 }

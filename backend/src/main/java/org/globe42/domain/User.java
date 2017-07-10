@@ -31,6 +31,12 @@ public class User {
     @NotEmpty
     private String password;
 
+    /**
+     * Indicates that the user is an administrator. An administrator can manage other users, and access information
+     * that regular users can't.
+     */
+    private boolean admin;
+
     public User() {
     }
 
@@ -60,5 +66,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }

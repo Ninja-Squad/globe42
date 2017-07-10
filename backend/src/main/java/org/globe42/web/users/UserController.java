@@ -8,6 +8,7 @@ import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
+import org.globe42.web.security.AdminOnly;
 import org.globe42.web.security.CurrentUser;
 import org.globe42.web.security.PasswordDigester;
 import org.springframework.http.HttpStatus;
@@ -60,17 +61,20 @@ public class UserController {
     }
 
     @GetMapping
+    @AdminOnly
     public List<UserDTO> list() {
         return userDao.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{userId}")
+    @AdminOnly
     public UserDTO get(@PathVariable("userId") Long userId) {
         return userDao.findById(userId).map(UserDTO::new).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @AdminOnly
     public UserWithPasswordDTO create(@Validated @RequestBody UserCommandDTO command) {
         if (userDao.existsByLogin(command.getLogin())) {
             throw new BadRequestException("This login is already used by another user");
@@ -89,6 +93,7 @@ public class UserController {
 
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @AdminOnly
     public void update(@PathVariable("userId") Long userId, @Validated @RequestBody UserCommandDTO command) {
         User user = userDao.findById(userId).orElseThrow(() -> new NotFoundException("No user with ID " + userId));
 
@@ -101,12 +106,14 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @AdminOnly
     public void delete(@PathVariable("userId") Long userId) {
         userDao.findById(userId).ifPresent(userDao::delete);
     }
 
     @PostMapping("/{userId}/password-resets")
     @ResponseStatus(HttpStatus.CREATED)
+    @AdminOnly
     public UserWithPasswordDTO resetPassword(@PathVariable("userId") Long userId) {
         User user = userDao.findById(userId).orElseThrow(() -> new NotFoundException("No user with ID " + userId));
         String generatedPassword = passwordGenerator.generatePassword();
@@ -116,5 +123,6 @@ public class UserController {
 
     private void copyCommandToUser(UserCommandDTO command, User user) {
         user.setLogin(command.getLogin());
+        user.setAdmin(command.isAdmin());
     }
 }

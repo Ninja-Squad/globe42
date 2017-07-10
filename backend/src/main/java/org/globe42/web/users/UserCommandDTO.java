@@ -16,12 +16,23 @@ public final class UserCommandDTO {
     @NotEmpty
     private final String login;
 
+    /**
+     * The new admin flag of the user.
+     */
+    private final boolean admin;
+
     @JsonCreator
-    public UserCommandDTO(@JsonProperty String login) {
+    public UserCommandDTO(@JsonProperty String login,
+                          @JsonProperty boolean admin) {
         this.login = login;
+        this.admin = admin;
     }
 
     public String getLogin() {
         return login;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 }

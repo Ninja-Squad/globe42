@@ -85,7 +85,7 @@ public class UserControllerMvcTest {
 
     @Test
     public void shouldCreate() throws Exception {
-        UserCommandDTO command = new UserCommandDTO("test");
+        UserCommandDTO command = new UserCommandDTO("test", true);
 
         when(mockPasswordGenerator.generatePassword()).thenReturn("password");
         when(mockPasswordDigester.hash("password")).thenReturn("hashed");
@@ -103,7 +103,7 @@ public class UserControllerMvcTest {
         User user = UserControllerTest.createUser(42L);
         when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
 
-        UserCommandDTO command = new UserCommandDTO("test");
+        UserCommandDTO command = new UserCommandDTO("test", true);
 
         mvc.perform(put("/api/users/{userId}", user.getId())
                         .contentType(MediaType.APPLICATION_JSON)
