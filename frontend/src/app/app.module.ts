@@ -28,6 +28,7 @@ import { IncomeTypesResolverService } from 'app/income-types-resolver.service';
 import { IncomeService } from 'app/income.service';
 import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';
 import { IncomeTypeResolverService } from 'app/income-type-resolver.service';
+import { PasswordChangeComponent } from './password-change/password-change.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { IncomeTypeResolverService } from 'app/income-type-resolver.service';
     DisplayCityPipe,
     DisplayGenderPipe,
     IncomeTypesComponent,
-    IncomeTypeEditComponent
+    IncomeTypeEditComponent,
+    PasswordChangeComponent
   ],
   imports: [
     BrowserModule,

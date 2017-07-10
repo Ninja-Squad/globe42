@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
 import { UserModel } from './models/user.model';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserService {
@@ -44,5 +45,15 @@ export class UserService {
 
   isLoggedIn(): boolean {
     return !!window.localStorage.getItem('rememberMe');
+  }
+
+  checkPassword(password: string): Observable<void> {
+    return this.http.post('/api/authentication', {login: this.userEvents.getValue().login, password})
+      .map(() => null);
+  }
+
+  changePassword(newPassword: string): Observable<void> {
+    return this.http.put('/api/users/me/passwords', {newPassword})
+      .map(() => null);
   }
 }

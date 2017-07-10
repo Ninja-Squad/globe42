@@ -1,9 +1,6 @@
 import { fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RouterLinkWithHref } from '@angular/router';
-import { By } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
 
 import { AppModule } from '../app.module';
 import { MenuComponent } from './menu.component';
@@ -93,9 +90,28 @@ describe('MenuComponent', () => {
     fixture.detectChanges();
 
     const element = fixture.nativeElement;
-    const info = element.querySelector('span.nav-item.navbar-text.mr-2');
+    const info = element.querySelector('#userDropDown');
     expect(info).not.toBeNull();
     expect(info.textContent).toContain('cedric');
+  });
+
+  it('should navigate to the password change page', () => {
+    const fixture = TestBed.createComponent(MenuComponent);
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance;
+    component.user = { login: 'cedric' } as UserModel;
+
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement;
+    const info = element.querySelector('#userDropDown');
+    info.dispatchEvent(new Event('click'));
+
+    fixture.detectChanges();
+
+    const changePasswordLink = element.querySelector('a[href="/password-changes"]');
+    expect(changePasswordLink).not.toBeNull();
   });
 
   it('should unsubscribe on destroy', () => {
