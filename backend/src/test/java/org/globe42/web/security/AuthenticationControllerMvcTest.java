@@ -1,6 +1,5 @@
 package org.globe42.web.security;
 
-import static org.globe42.test.JsonTestUtil.OBJECT_MAPPER;
 import static org.globe42.web.security.AuthenticationControllerTest.createCredentials;
 import static org.globe42.web.security.AuthenticationControllerTest.createUser;
 import static org.mockito.Mockito.when;
@@ -10,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.test.GlobeMvcTest;
@@ -34,6 +34,9 @@ public class AuthenticationControllerMvcTest {
     @MockBean
     private PasswordDigester mockPasswordDigester;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private JwtHelper mockJwtHelper;
 
@@ -52,7 +55,7 @@ public class AuthenticationControllerMvcTest {
 
         mvc.perform(post("/api/authentication")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsBytes(credentials)))
+                .content(objectMapper.writeValueAsBytes(credentials)))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.login").value(user.getLogin()))
            .andExpect(jsonPath("$.token").value(token));

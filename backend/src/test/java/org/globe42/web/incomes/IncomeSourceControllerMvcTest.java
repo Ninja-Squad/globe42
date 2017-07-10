@@ -1,6 +1,5 @@
 package org.globe42.web.incomes;
 
-import static org.globe42.test.JsonTestUtil.OBJECT_MAPPER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -11,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.globe42.dao.IncomeSourceDao;
 import org.globe42.dao.IncomeSourceTypeDao;
 import org.globe42.domain.IncomeSource;
@@ -38,6 +38,9 @@ public class IncomeSourceControllerMvcTest {
 
     @MockBean
     private IncomeSourceTypeDao mockIncomeSourceTypeDao;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mvc;
@@ -82,7 +85,7 @@ public class IncomeSourceControllerMvcTest {
 
         mvc.perform(post("/api/income-sources")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(OBJECT_MAPPER.writeValueAsBytes(command)))
+                    .content(objectMapper.writeValueAsBytes(command)))
            .andExpect(status().isCreated())
            .andExpect(jsonPath("$.id").value(42));
     }
@@ -96,7 +99,7 @@ public class IncomeSourceControllerMvcTest {
 
         mvc.perform(put("/api/income-sources/{sourceId}", incomeSource.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(OBJECT_MAPPER.writeValueAsBytes(command)))
+                        .content(objectMapper.writeValueAsBytes(command)))
            .andExpect(status().isNoContent());
     }
 }

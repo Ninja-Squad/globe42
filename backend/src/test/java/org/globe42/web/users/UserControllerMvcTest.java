@@ -1,6 +1,5 @@
 package org.globe42.web.users;
 
-import static org.globe42.test.JsonTestUtil.OBJECT_MAPPER;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -9,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Collections;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.test.GlobeMvcTest;
@@ -42,6 +42,9 @@ public class UserControllerMvcTest {
     private PasswordDigester mockPasswordDigester;
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mvc;
 
     @Test
@@ -67,7 +70,7 @@ public class UserControllerMvcTest {
 
         mvc.perform(put("/api/users/me/passwords")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsBytes(command)))
+                .content(objectMapper.writeValueAsBytes(command)))
            .andExpect(status().isNoContent());
     }
 
@@ -92,7 +95,7 @@ public class UserControllerMvcTest {
 
         mvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(OBJECT_MAPPER.writeValueAsBytes(command)))
+                .content(objectMapper.writeValueAsBytes(command)))
            .andExpect(status().isCreated())
            .andExpect(jsonPath("$.login").value(command.getLogin()))
            .andExpect(jsonPath("$.generatedPassword").value("password"));
@@ -107,7 +110,7 @@ public class UserControllerMvcTest {
 
         mvc.perform(put("/api/users/{userId}", user.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(OBJECT_MAPPER.writeValueAsBytes(command)))
+                        .content(objectMapper.writeValueAsBytes(command)))
            .andExpect(status().isNoContent());
     }
 

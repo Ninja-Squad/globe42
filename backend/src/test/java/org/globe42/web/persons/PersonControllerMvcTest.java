@@ -1,6 +1,5 @@
 package org.globe42.web.persons;
 
-import static org.globe42.test.JsonTestUtil.OBJECT_MAPPER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -11,6 +10,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.Person;
 import org.globe42.test.GlobeMvcTest;
@@ -33,6 +33,9 @@ public class PersonControllerMvcTest {
 
     @MockBean
     private PersonDao mockPersonDao;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mvc;
@@ -80,7 +83,7 @@ public class PersonControllerMvcTest {
 
         mvc.perform(post("/api/persons")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(OBJECT_MAPPER.writeValueAsBytes(PersonControllerTest.createCommand())))
+                    .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
            .andExpect(status().isCreated())
            .andExpect(jsonPath("$.id").value(1));
     }
@@ -91,7 +94,7 @@ public class PersonControllerMvcTest {
 
         mvc.perform(put("/api/persons/{personId}", person.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(OBJECT_MAPPER.writeValueAsBytes(PersonControllerTest.createCommand())))
+                        .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
            .andExpect(status().isNoContent());
     }
 }
