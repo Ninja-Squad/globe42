@@ -56,4 +56,8 @@ export class UserService {
     return this.http.put('/api/users/me/passwords', {newPassword})
       .map(() => null);
   }
+
+  list(): Observable<Array<UserModel>> {
+    return this.http.get('/api/users').map(response => response.json());
+  }
 }

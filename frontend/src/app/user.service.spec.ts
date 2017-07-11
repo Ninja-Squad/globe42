@@ -19,8 +19,7 @@ describe('UserService', () => {
   const user = {
     id: 1,
     login: 'cedric',
-    money: 1000,
-    registrationInstant: '2015-12-01T11:00:00Z',
+    admin: true,
     token: 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.5cAW816GUAg3OWKWlsYyXI4w3fDrS5BpnmbyBjVM7lo'
   };
 

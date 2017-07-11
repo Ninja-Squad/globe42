@@ -58,6 +58,7 @@ public class AuthenticationControllerMvcTest {
                 .content(objectMapper.writeValueAsBytes(credentials)))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.login").value(user.getLogin()))
+           .andExpect(jsonPath("$.admin").value(user.isAdmin()))
            .andExpect(jsonPath("$.token").value(token));
     }
 }

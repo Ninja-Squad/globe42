@@ -114,6 +114,20 @@ describe('MenuComponent', () => {
     expect(changePasswordLink).not.toBeNull();
   });
 
+  it('should navigate to the users page if admin', () => {
+    const fixture = TestBed.createComponent(MenuComponent);
+    fixture.detectChanges();
+
+    const component = fixture.componentInstance;
+    component.user = { login: 'cedric', admin: true } as UserModel;
+
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement;
+    const usersLink = element.querySelector('a[href="/users"]');
+    expect(usersLink).not.toBeNull();
+  });
+
   it('should unsubscribe on destroy', () => {
     const component = new MenuComponent(fakeUserService, fakeRouter);
     component.ngOnInit();

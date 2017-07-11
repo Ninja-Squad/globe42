@@ -13,6 +13,8 @@ import { IncomeTypesResolverService } from './income-types-resolver.service';
 import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';
 import { IncomeTypeResolverService } from './income-type-resolver.service';
 import { PasswordChangeComponent } from './password-change/password-change.component';
+import { UsersComponent } from './users/users.component';
+import { UsersResolverService } from './users-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -65,7 +67,19 @@ export const routes: Routes = [
           }
         ]
       },
-      { path: 'password-changes', component: PasswordChangeComponent }
+      { path: 'password-changes', component: PasswordChangeComponent },
+      {
+        path: 'users',
+        children: [
+          {
+            path: '',
+            component: UsersComponent,
+            resolve: {
+              users: UsersResolverService
+            }
+          }
+        ]
+      }
     ]
   }
 ];

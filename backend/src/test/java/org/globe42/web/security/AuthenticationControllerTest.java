@@ -63,6 +63,7 @@ public class AuthenticationControllerTest extends BaseTest {
 
         assertThat(result.getId()).isEqualTo(user.getId());
         assertThat(result.getLogin()).isEqualTo(user.getLogin());
+        assertThat(result.isAdmin()).isEqualTo(user.isAdmin());
         assertThat(result.getToken()).isEqualTo(token);
     }
 
@@ -74,6 +75,7 @@ public class AuthenticationControllerTest extends BaseTest {
         User user = new User(1L);
         user.setLogin("JB");
         user.setPassword("hashedPassword");
+        user.setAdmin(true);
         return user;
     }
 }

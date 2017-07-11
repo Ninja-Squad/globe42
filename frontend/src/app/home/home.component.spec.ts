@@ -48,7 +48,7 @@ describe('HomeComponent', () => {
     expect(component.userEventsSubscription.unsubscribe).toHaveBeenCalled();
   });
 
-  it('should display only a link to go the persons page if logged in', () => {
+  it('should display link to go the persons page if logged in', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
 
@@ -59,5 +59,18 @@ describe('HomeComponent', () => {
     const button = element.querySelector('a[href="/persons"]');
     expect(button).not.toBeNull();
     expect(button.textContent).toContain('Gestion des adhérents');
+  });
+
+  it('should display link to go the users page if admin', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+
+    fixture.componentInstance.user = { login: 'cedric', admin: true } as UserModel;
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement;
+    const button = element.querySelector('a[href="/users"]');
+    expect(button).not.toBeNull();
+    expect(button.textContent).toContain('Gestion des utilisateurs de l\'application');
   });
 });

@@ -5,7 +5,14 @@
     <a class="btn btn-primary" routerLink="/login">Connexion</a>
   </div>
   <ng-template #loggedIn>
-    <a routerLink="/persons">Gestion des adhérents</a><br>
-    <a routerLink="/income-types">Gestion des types de revenu</a>
+    <div>
+      <a routerLink="/persons">Gestion des adhérents</a>
+    </div>
+    <div>
+      <a routerLink="/income-types">Gestion des types de revenu</a>
+    </div>
+    <div>
+      <a *ngIf="user?.admin" routerLink="/users">Gestion des utilisateurs de l'application</a>
+    </div>
   </ng-template>
 </div>
