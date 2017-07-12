@@ -68,10 +68,14 @@ export class UserService {
   }
 
   get(id: number): Observable<UserModel> {
-    return this.http.get(`api/users/${id}`).map(response => response.json());
+    return this.http.get(`/api/users/${id}`).map(response => response.json());
   }
 
   update(id: number, user: UserCommand): Observable<void> {
-    return this.http.put(`api/users/${id}`, user).map(() => null);
+    return this.http.put(`/api/users/${id}`, user).map(() => null);
+  }
+
+  resetPassword(id: number): Observable<UserWithPasswordModel> {
+    return this.http.post(`/api/users/${id}/password-resets`, null).map(response => response.json());
   }
 }

@@ -1,11 +1,11 @@
 <h1 class="mb-5">Adhérents</h1>
 
-<div class="list-group">
-  <div class="list-group-item list-group-item-action flex-column align-items-start mb-2" *ngFor="let person of persons">
-    <div class="d-flex w-100 justify-content-between">
-      <a [routerLink]="['/persons', person.id]">{{person.firstName}} {{person.lastName}}</a>
-      <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'edit']">Éditer</a>
-    </div>
+<div class="row align-items-center mb-2 person-item" *ngFor="let person of persons">
+  <div class="col-sm">
+    <a [routerLink]="['/persons', person.id]">{{person.firstName}} {{person.lastName}}</a>
+  </div>
+  <div class="col-sm text-right">
+    <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'edit']">Éditer</a>
   </div>
 </div>
 

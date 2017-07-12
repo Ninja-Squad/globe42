@@ -17,6 +17,7 @@ import { UsersComponent } from './users/users.component';
 import { UsersResolverService } from './users-resolver.service';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserResolverService } from './user-resolver.service';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -84,6 +85,13 @@ export const routes: Routes = [
           {
             path: ':id/edit',
             component: UserEditComponent,
+            resolve: {
+              user: UserResolverService
+            }
+          },
+          {
+            path: ':id/password-resets',
+            component: PasswordResetComponent,
             resolve: {
               user: UserResolverService
             }

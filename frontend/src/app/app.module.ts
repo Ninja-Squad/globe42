@@ -33,6 +33,7 @@ import { UsersComponent } from './users/users.component';
 import { UsersResolverService } from './users-resolver.service';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserResolverService } from './user-resolver.service';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { UserResolverService } from './user-resolver.service';
     IncomeTypeEditComponent,
     PasswordChangeComponent,
     UsersComponent,
-    UserEditComponent
+    UserEditComponent,
+    PasswordResetComponent
   ],
   imports: [
     BrowserModule,

@@ -20,7 +20,7 @@ describe('PersonsComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const persons = nativeElement.querySelectorAll('div.list-group-item');
+    const persons = nativeElement.querySelectorAll('.person-item');
     expect(persons.length).toBe(1);
   });
 });
