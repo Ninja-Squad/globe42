@@ -15,6 +15,8 @@ import { IncomeTypeResolverService } from './income-type-resolver.service';
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { UsersComponent } from './users/users.component';
 import { UsersResolverService } from './users-resolver.service';
+import { UserEditComponent } from './user-edit/user-edit.component';
+import { UserResolverService } from './user-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -57,7 +59,7 @@ export const routes: Routes = [
               incomeTypes: IncomeTypesResolverService
             }
           },
-          {path: 'create', component: IncomeTypeEditComponent},
+          { path: 'create', component: IncomeTypeEditComponent },
           {
             path: ':id/edit',
             component: IncomeTypeEditComponent,
@@ -76,6 +78,14 @@ export const routes: Routes = [
             component: UsersComponent,
             resolve: {
               users: UsersResolverService
+            }
+          },
+          { path: 'create', component: UserEditComponent },
+          {
+            path: ':id/edit',
+            component: UserEditComponent,
+            resolve: {
+              user: UserResolverService
             }
           }
         ]

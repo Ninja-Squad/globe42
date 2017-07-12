@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
+import { sortBy } from '../utils';
 
 @Component({
   selector: 'gl-users',
@@ -15,5 +16,6 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.users = this.route.snapshot.data['users'];
+    sortBy(this.users, u => u.login);
   }
 }

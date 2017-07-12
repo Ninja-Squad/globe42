@@ -31,6 +31,8 @@ import { IncomeTypeResolverService } from 'app/income-type-resolver.service';
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { UsersComponent } from './users/users.component';
 import { UsersResolverService } from './users-resolver.service';
+import { UserEditComponent } from './user-edit/user-edit.component';
+import { UserResolverService } from './user-resolver.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,8 @@ import { UsersResolverService } from './users-resolver.service';
     IncomeTypesComponent,
     IncomeTypeEditComponent,
     PasswordChangeComponent,
-    UsersComponent
+    UsersComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +72,8 @@ import { UsersResolverService } from './users-resolver.service';
     IncomeTypesResolverService,
     IncomeService,
     IncomeTypeResolverService,
-    UsersResolverService
+    UsersResolverService,
+    UserResolverService
   ],
   bootstrap: [AppComponent]
 })

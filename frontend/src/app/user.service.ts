@@ -6,6 +6,8 @@ import 'rxjs/add/operator/do';
 
 import { UserModel } from './models/user.model';
 import { Observable } from 'rxjs/Observable';
+import { UserCommand } from './models/user.command';
+import { UserWithPasswordModel } from './models/user-with-password.model';
 
 @Injectable()
 export class UserService {
@@ -59,5 +61,17 @@ export class UserService {
 
   list(): Observable<Array<UserModel>> {
     return this.http.get('/api/users').map(response => response.json());
+  }
+
+  create(command: UserCommand): Observable<UserWithPasswordModel> {
+    return this.http.post('/api/users', command).map(response => response.json());
+  }
+
+  get(id: number): Observable<UserModel> {
+    return this.http.get(`api/users/${id}`).map(response => response.json());
+  }
+
+  update(id: number, user: UserCommand): Observable<void> {
+    return this.http.put(`api/users/${id}`, user).map(() => null);
   }
 }

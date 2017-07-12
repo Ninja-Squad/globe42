@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UsersComponent } from './users.component';
 import { AppModule } from '../app.module';
@@ -20,12 +20,19 @@ describe('UsersComponent', () => {
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   }));
 
+  it('should expose sorted users', () => {
+    const fixture = TestBed.createComponent(UsersComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.users.map(u => u.login)).toEqual(['ced', 'jb']);
+  });
+
   it('should list users', () => {
     const fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const types = nativeElement.querySelectorAll('div.list-group-item');
+    const types = nativeElement.querySelectorAll('div.user-item');
     expect(types.length).toBe(2);
   });
 });

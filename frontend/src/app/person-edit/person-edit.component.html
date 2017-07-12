@@ -98,6 +98,11 @@
              formControlName="entryDate" ngbDatepicker #ed="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
     </div>
   </div>
-  <button class="btn btn-primary" type="submit" [disabled]="personForm.invalid">Enregister</button>
-  <a class="btn btn-secondary" routerLink="/persons">Annuler</a>
+  <div class="row">
+    <div class="col-sm-10 offset-sm-2">
+      <button class="btn btn-primary" type="submit" [disabled]="personForm.invalid">Enregister</button>
+      <a class="btn btn-secondary" routerLink="/persons">Annuler</a>
+    </div>
+  </div>
+
 </form>
