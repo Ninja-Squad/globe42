@@ -1,80 +1,67 @@
-import { async, TestBed } from '@angular/core/testing';
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { PersonService } from './person.service';
 import { PersonModel } from './models/person.model';
 
 describe('PersonService', () => {
 
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      MockBackend,
-      BaseRequestOptions,
-      { provide: Http, useFactory: (backend, options) => new Http(backend, options), deps: [MockBackend, BaseRequestOptions] },
-      PersonService
-    ]
-  }));
+  let service: PersonService;
+  let http: HttpTestingController;
 
-  it('should get a person', async(() => {
-    const service: PersonService = TestBed.get(PersonService);
-    const fakePerson: PersonModel = { id: 1 } as PersonModel;
-
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/persons/1`);
-      expect(connection.request.method).toBe(RequestMethod.Get);
-      connection.mockRespond(new Response(new ResponseOptions({ body: fakePerson })));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [ PersonService ],
+      imports: [ HttpClientTestingModule ]
     });
 
-    service.get(1)
-      .subscribe(person => expect(person).toBe(fakePerson));
-  }));
+    service = TestBed.get(PersonService);
+    http = TestBed.get(HttpTestingController);
+  });
 
-  it('should update a person', async(() => {
-    const service: PersonService = TestBed.get(PersonService);
+  it('should get a person', () => {
+    const expectedPerson: PersonModel = { id: 1 } as PersonModel;
+
+    let actualPerson;
+    service.get(1).subscribe(person => actualPerson = person);
+
+    http.expectOne({url: '/api/persons/1', method: 'GET'}).flush(expectedPerson);
+    expect(actualPerson).toEqual(expectedPerson);
+
+  });
+
+  it('should update a person', () => {
     const fakePerson: PersonModel = { id: 2 } as PersonModel;
 
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/persons/2`);
-      expect(connection.request.method).toBe(RequestMethod.Put);
-      expect(JSON.parse(connection.request.getBody())).toEqual(fakePerson);
-      connection.mockRespond(new Response(new ResponseOptions({ body: fakePerson })));
-    });
+    service.update(fakePerson).subscribe(() => {});
 
-    service.update(fakePerson)
-      .subscribe(() => {});
-  }));
+    const testRequest = http.expectOne({url: '/api/persons/2', method: 'PUT'});
+    expect(testRequest.request.body).toEqual(fakePerson);
+    testRequest.flush(null);
+  });
 
-  it('should create a person', async(() => {
-    const service: PersonService = TestBed.get(PersonService);
-    const fakePerson: PersonModel = { id: 1 } as PersonModel;
+  it('should create a person', () => {
+    const fakePerson: PersonModel = { nickName: 'ced' } as PersonModel;
+    const expectedPerson: PersonModel = { id: 2 } as PersonModel;
 
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/persons`);
-      expect(connection.request.method).toBe(RequestMethod.Post);
-      expect(JSON.parse(connection.request.getBody())).toEqual(fakePerson);
-      connection.mockRespond(new Response(new ResponseOptions({ body: fakePerson })));
-    });
+    let actualPerson;
+    service.create(fakePerson).subscribe(person => actualPerson = person);
 
-    service.create(fakePerson)
-      .subscribe(person => expect(person).toBe(fakePerson));
-  }));
+    const testRequest = http.expectOne({ url: '/api/persons', method: 'POST' });
+    expect(testRequest.request.body).toEqual(fakePerson);
+    testRequest.flush(expectedPerson);
 
-  it('should list persons', async(() => {
-    const service: PersonService = TestBed.get(PersonService);
-    const fakePerson: PersonModel = { id: 1 } as PersonModel;
+    expect(actualPerson).toEqual(expectedPerson);
+  });
 
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/persons`);
-      expect(connection.request.method).toBe(RequestMethod.Get);
-      connection.mockRespond(new Response(new ResponseOptions({ body: [fakePerson] })));
-    });
+  it('should list persons', () => {
+    const expectedPersons: Array<PersonModel> = [{ id: 1 }] as Array<PersonModel>;
 
-    service.list()
-      .subscribe(persons => expect(persons).toEqual([fakePerson]));
-  }));
+    let actualPersons;
+    service.list().subscribe(persons => actualPersons = persons);
+
+    http.expectOne({url: '/api/persons', method: 'GET'}).flush(expectedPersons);
+
+    expect(actualPersons).toEqual(expectedPersons);
+  });
 });

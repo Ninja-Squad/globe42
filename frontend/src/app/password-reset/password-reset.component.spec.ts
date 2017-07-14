@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PasswordResetComponent } from './password-reset.component';
 import { UserModel } from '../models/user.model';
@@ -20,7 +20,7 @@ describe('PasswordResetComponent', () => {
     providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
   }));
 
-  it('should reset password', async(() => {
+  it('should reset password', () => {
     const fixture = TestBed.createComponent(PasswordResetComponent);
     fixture.detectChanges();
 
@@ -41,9 +41,9 @@ describe('PasswordResetComponent', () => {
 
     expect(fixture.componentInstance.updatedUser).toBe(updatedUser);
     expect(nativeElement.querySelector('#password-reset-form')).toBeNull();
-    let updatedUserAlert = nativeElement.querySelector('#updated-user');
+    const updatedUserAlert = nativeElement.querySelector('#updated-user');
     expect(updatedUserAlert).not.toBeNull();
     expect(updatedUserAlert.textContent).toContain('jb');
     expect(updatedUserAlert.textContent).toContain('passw0rd');
-  }));
+  });
 });

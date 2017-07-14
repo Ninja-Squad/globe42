@@ -5,13 +5,14 @@ import { UserService } from './user.service';
 import { UserModel } from './models/user.model';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { JwtInterceptorService } from './jwt-interceptor.service';
 
 describe('UserResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UserResolverService, UserService],
-      imports: [HttpModule]
+      providers: [UserResolverService, UserService, JwtInterceptorService],
+      imports: [HttpClientModule]
     });
   });
 

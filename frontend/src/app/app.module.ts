@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgbDatepickerI18n, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { routes } from './app.routes';
@@ -34,6 +34,8 @@ import { UsersResolverService } from './users-resolver.service';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserResolverService } from './user-resolver.service';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { JwtInterceptorService } from './jwt-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,7 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(routes),
     NgbModule.forRoot()
   ],
@@ -75,7 +77,13 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
     IncomeService,
     IncomeTypeResolverService,
     UsersResolverService,
-    UserResolverService
+    UserResolverService,
+    JwtInterceptorService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useExisting: JwtInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

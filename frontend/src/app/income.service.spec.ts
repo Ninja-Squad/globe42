@@ -1,80 +1,67 @@
-import { async, TestBed } from '@angular/core/testing';
-import { BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { IncomeService } from './income.service';
 import { IncomeTypeModel } from './models/income.model';
 
 describe('IncomeService', () => {
 
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      MockBackend,
-      BaseRequestOptions,
-      { provide: Http, useFactory: (backend, options) => new Http(backend, options), deps: [MockBackend, BaseRequestOptions] },
-      IncomeService
-    ]
-  }));
+  let http: HttpTestingController;
+  let service: IncomeService;
 
-  it('should getType an income type', async(() => {
-    const service: IncomeService = TestBed.get(IncomeService);
-    const fakeIncomeType: IncomeTypeModel = { id: 1 } as IncomeTypeModel;
-
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/income-source-types/1`);
-      expect(connection.request.method).toBe(RequestMethod.Get);
-      connection.mockRespond(new Response(new ResponseOptions({ body: fakeIncomeType })));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        IncomeService
+      ],
+      imports: [HttpClientTestingModule]
     });
 
-    service.getType(1)
-      .subscribe(incomeType => expect(incomeType).toBe(fakeIncomeType));
-  }));
+    http = TestBed.get(HttpTestingController);
+    service = TestBed.get(IncomeService);
+  });
 
-  it('should update a income type', async(() => {
-    const service: IncomeService = TestBed.get(IncomeService);
+  it('should get an income type', () => {
+    const expectedIncomeType: IncomeTypeModel = { id: 1 } as IncomeTypeModel;
+
+    let actualIncomeType;
+    service.getType(1).subscribe(incomeType => actualIncomeType = incomeType);
+    http.expectOne({url: '/api/income-source-types/1', method: 'GET'}).flush(expectedIncomeType);
+
+    expect(actualIncomeType).toEqual(expectedIncomeType);
+  });
+
+  it('should update an income type', () => {
     const fakeIncomeType: IncomeTypeModel = { id: 2 } as IncomeTypeModel;
+    service.updateType(fakeIncomeType).subscribe(() => {});
 
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/income-source-types/2`);
-      expect(connection.request.method).toBe(RequestMethod.Put);
-      expect(JSON.parse(connection.request.getBody())).toEqual(fakeIncomeType);
-      connection.mockRespond(new Response(new ResponseOptions({ body: fakeIncomeType })));
-    });
+    const testRequest = http.expectOne({ url: '/api/income-source-types/2', method: 'PUT' });
+    expect(testRequest.request.body).toEqual(fakeIncomeType);
+    testRequest.flush(null);
+  });
 
-    service.updateType(fakeIncomeType)
-      .subscribe(() => {});
-  }));
+  it('should create a income type', () => {
+    const fakeIncomeType: IncomeTypeModel = { type: 'foo' } as IncomeTypeModel;
+    const expectedIncomeType: IncomeTypeModel = { id: 2 } as IncomeTypeModel;
 
-  it('should create a income type', async(() => {
-    const service: IncomeService = TestBed.get(IncomeService);
-    const fakeIncomeType: IncomeTypeModel = { id: 1 } as IncomeTypeModel;
+    let actualIncomeType;
+    service.createType(fakeIncomeType).subscribe(incomeType => actualIncomeType = incomeType);
 
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/income-source-types`);
-      expect(connection.request.method).toBe(RequestMethod.Post);
-      expect(JSON.parse(connection.request.getBody())).toEqual(fakeIncomeType);
-      connection.mockRespond(new Response(new ResponseOptions({ body: fakeIncomeType })));
-    });
+    const testRequest = http.expectOne({ url: '/api/income-source-types', method: 'POST' });
+    expect(testRequest.request.body).toEqual(fakeIncomeType);
+    testRequest.flush(expectedIncomeType);
 
-    service.createType(fakeIncomeType)
-      .subscribe(incomeType => expect(incomeType).toBe(fakeIncomeType));
-  }));
+    expect(actualIncomeType).toEqual(expectedIncomeType);
+  });
 
-  it('should list income types', async(() => {
-    const service: IncomeService = TestBed.get(IncomeService);
-    const fakeIncomeType: IncomeTypeModel = { id: 1 } as IncomeTypeModel;
+  it('should list income types', () => {
+    const expectedIncomeTypes: Array<IncomeTypeModel> = [{ id: 1 }] as Array<IncomeTypeModel>;
 
-    const mockBackend: MockBackend = TestBed.get(MockBackend);
-    mockBackend.connections.subscribe(connection => {
-      expect(connection.request.url).toBe(`/api/income-source-types`);
-      expect(connection.request.method).toBe(RequestMethod.Get);
-      connection.mockRespond(new Response(new ResponseOptions({ body: [fakeIncomeType] })));
-    });
+    let actualIncomeTypes;
+    service.listTypes().subscribe(incomeTypes => actualIncomeTypes = incomeTypes);
 
-    service.listTypes()
-      .subscribe(incomeTypes => expect(incomeTypes).toEqual([fakeIncomeType]));
-  }));
+    http.expectOne({url: '/api/income-source-types', method: 'GET'}).flush(expectedIncomeTypes);
+
+    expect(actualIncomeTypes).toEqual(expectedIncomeTypes);
+  });
 });

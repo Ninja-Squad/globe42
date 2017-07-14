@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
@@ -11,7 +11,7 @@ import { IncomeTypeModel } from './models/income.model';
 describe('IncomeTypeResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [IncomeTypeResolverService, IncomeService],
-    imports: [HttpModule]
+    imports: [HttpClientModule]
   }));
 
   it('should retrieve a type', () => {

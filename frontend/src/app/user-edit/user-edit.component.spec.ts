@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { UserEditComponent } from './user-edit.component';
 import { AppModule } from '../app.module';
@@ -19,16 +19,16 @@ describe('UserEditComponent', () => {
       providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
     }));
 
-    it('should expose no created user, and a default user', async(() => {
+    it('should expose no created user, and a default user', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
       expect(component.createdUser).toBeUndefined();
       expect(component.user).toEqual({login: '', admin: false});
-    }));
+    });
 
-    it('should display the user in a form, and have the save button disabled', async(() => {
+    it('should display the user in a form, and have the save button disabled', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
@@ -52,7 +52,7 @@ describe('UserEditComponent', () => {
         const createdUser = nativeElement.querySelector('#created-user');
         expect(createdUser).toBeNull();
       });
-    }));
+    });
 
     it('should save the user and display the result', () => {
       const userService = TestBed.get(UserService);
@@ -109,16 +109,16 @@ describe('UserEditComponent', () => {
       providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
     }));
 
-    it('should expose no created user, and the edited user info', async(() => {
+    it('should expose no created user, and the edited user info', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
       expect(component.createdUser).toBeUndefined();
       expect(component.user).toEqual({login: 'jb', admin: true});
-    }));
+    });
 
-    it('should display the user in a form, and have the save button enabled', async(() => {
+    it('should display the user in a form, and have the save button enabled', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
@@ -142,7 +142,7 @@ describe('UserEditComponent', () => {
         const createdUser = nativeElement.querySelector('#created-user');
         expect(createdUser).toBeNull();
       });
-    }));
+    });
 
     it('should save the user and navigate to the users page', () => {
       const userService = TestBed.get(UserService);
