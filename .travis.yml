@@ -13,9 +13,6 @@ before_install:
   - sudo apt-get install language-pack-fr
   - sudo /etc/init.d/postgresql stop
   - sudo /etc/init.d/postgresql start 9.6
-  - sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
-  - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
 
 before_script:
   - psql -f backend/database/database.sql -U postgres
