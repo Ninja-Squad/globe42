@@ -15,7 +15,6 @@ import org.globe42.dao.PersonDao;
 import org.globe42.domain.Gender;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
-import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,15 +106,6 @@ public class PersonControllerTest extends BaseTest {
         assertThat(controller.create(command).getMediationCode()).isEqualTo("Z76");
     }
 
-    @Test(expected = BadRequestException.class)
-    public void shouldThrowWhenCreatingWithAlreadyUsedNickName() {
-        PersonCommandDTO command = createCommand();
-
-        when(mockPersonDao.existsByNickName(command.getNickName())).thenReturn(true);
-
-        controller.create(command);
-    }
-
     @Test
     public void shouldUpdate() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
@@ -146,28 +136,6 @@ public class PersonControllerTest extends BaseTest {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
 
         controller.update(person.getId(), createCommand());
-    }
-
-    @Test(expected = BadRequestException.class)
-    public void shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
-        PersonCommandDTO command = createCommand();
-
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.findByNickName(command.getNickName())).thenReturn(Optional.of(new Person(4567L)));
-
-        controller.update(person.getId(), command);
-    }
-
-    @Test
-    public void shouldUpdateIfSameSurnameIsKept() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        PersonCommandDTO command = createCommand();
-
-        when(mockPersonDao.findByNickName(command.getNickName())).thenReturn(Optional.of(person));
-
-        controller.update(person.getId(), command);
-
-        assertPersonEqualsCommand(person, command);
     }
 
     static PersonCommandDTO createCommand() {

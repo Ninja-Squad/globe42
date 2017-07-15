@@ -15,9 +15,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public final class PersonCommandDTO {
     private final String firstName;
-    private final String lastName;
 
     @NotEmpty
+    private final String lastName;
     private final String nickName;
 
     private final LocalDate birthDate;

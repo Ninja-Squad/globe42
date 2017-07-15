@@ -22,8 +22,8 @@ public class PersonDaoTest extends BaseDaoTest {
     public void prepare() {
         Operation person =
             Insert.into("person")
-                .columns("id", "nick_name", "gender", "adherent", "entry_date")
-                .values(1L, "Ced", Gender.MALE, true, "2017-01-01")
+                .columns("id", "last_name", "mediation_code", "gender", "adherent", "entry_date")
+                .values(1L, "Exbrayat", "E1", Gender.MALE, true, "2017-01-01")
                 .build();
         dbSetup(person);
     }
@@ -32,7 +32,8 @@ public class PersonDaoTest extends BaseDaoTest {
     public void shouldInsert() {
         Person person = new Person();
         person.setGender(Gender.MALE);
-        person.setNickName("JB");
+        person.setLastName("Nizet");
+        person.setMediationCode("N1");
 
         personDao.save(person);
         personDao.flush();
@@ -45,20 +46,6 @@ public class PersonDaoTest extends BaseDaoTest {
             assertThat(p.getId()).isEqualTo(1L);
             assertThat(p.getEntryDate()).isEqualTo("2017-01-01");
         });
-    }
-
-    @Test
-    public void shouldFindIfExistsByNickName() {
-        TRACKER.skipNextLaunch();
-        assertThat(personDao.existsByNickName("hello")).isFalse();
-        assertThat(personDao.existsByNickName("Ced")).isTrue();
-    }
-
-    @Test
-    public void shouldFindByNickName() {
-        TRACKER.skipNextLaunch();
-        assertThat(personDao.findByNickName("hello")).isEmpty();
-        assertThat(personDao.findByNickName("Ced")).isNotEmpty();
     }
 
     @Test

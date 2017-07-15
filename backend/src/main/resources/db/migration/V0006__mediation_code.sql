@@ -24,3 +24,9 @@ CREATE SEQUENCE mediation_code_w_seq START WITH 1;
 CREATE SEQUENCE mediation_code_x_seq START WITH 1;
 CREATE SEQUENCE mediation_code_y_seq START WITH 1;
 CREATE SEQUENCE mediation_code_z_seq START WITH 1;
+
+ALTER TABLE person DROP CONSTRAINT person_nick_name_key;
+ALTER TABLE person ALTER nick_name DROP NOT NULL;
+ALTER TABLE person ALTER last_name SET NOT NULL;
+ALTER TABLE person ALTER mediation_code SET NOT NULL;
+ALTER TABLE person ADD CONSTRAINT person_un1 UNIQUE (mediation_code);

@@ -35,13 +35,14 @@ public class Person {
 
     private String firstName;
 
+    @NotEmpty
     private String lastName;
 
-    @NotEmpty
     private String nickName;
 
     private LocalDate birthDate;
 
+    @NotEmpty
     private String mediationCode;
 
     private String address;
