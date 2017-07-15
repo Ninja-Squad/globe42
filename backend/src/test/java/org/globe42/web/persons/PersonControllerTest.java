@@ -1,11 +1,10 @@
 package org.globe42.web.persons;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.globe42.test.Answers.modifiedFirstArgument;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyChar;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -77,41 +76,35 @@ public class PersonControllerTest extends BaseTest {
     public void shouldCreate() {
         PersonCommandDTO command = createCommand();
 
-        when(mockPersonDao.save(any(Person.class))).thenReturn(person);
+        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
         when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
 
-        controller.create(command);
+        PersonDTO result = controller.create(command);
 
         verify(mockPersonDao).save(personArgumentCaptor.capture());
         Person savedPerson = personArgumentCaptor.getValue();
         assertPersonEqualsCommand(savedPerson, command);
-        assertThat(savedPerson.getMediationCode()).isEqualTo("L37");
+        assertThat(result.getMediationCode()).isEqualTo("L37");
     }
 
     @Test
     public void shouldCreateWithLowercaseLastName() {
         PersonCommandDTO command = createCommand("lacote");
 
-        when(mockPersonDao.save(any(Person.class))).thenReturn(person);
+        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
         when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
 
-        controller.create(command);
-        verify(mockPersonDao).save(personArgumentCaptor.capture());
-        Person savedPerson = personArgumentCaptor.getValue();
-        assertThat(savedPerson.getMediationCode()).isEqualTo("L37");
+        assertThat(controller.create(command).getMediationCode()).isEqualTo("L37");
     }
 
     @Test
     public void shouldCreateWithLastNameStartingWithBizarreLetter() {
         PersonCommandDTO command = createCommand("$foo");
 
-        when(mockPersonDao.save(any(Person.class))).thenReturn(person);
+        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
         when(mockPersonDao.nextMediationCode('Z')).thenReturn(76);
 
-        PersonDTO result = controller.create(command);
-        verify(mockPersonDao).save(personArgumentCaptor.capture());
-        Person savedPerson = personArgumentCaptor.getValue();
-        assertThat(savedPerson.getMediationCode()).isEqualTo("Z76");
+        assertThat(controller.create(command).getMediationCode()).isEqualTo("Z76");
     }
 
     @Test(expected = BadRequestException.class)

@@ -1,5 +1,6 @@
 package org.globe42.web.persons;
 
+import static org.globe42.test.Answers.modifiedFirstArgument;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -80,7 +81,7 @@ public class PersonControllerMvcTest {
 
     @Test
     public void shouldCreate() throws Exception {
-        when(mockPersonDao.save(any(Person.class))).thenReturn(person);
+        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(1L)));
 
         mvc.perform(post("/api/persons")
                     .contentType(MediaType.APPLICATION_JSON)

@@ -1,6 +1,7 @@
 package org.globe42.web.incomes;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.globe42.test.Answers.modifiedFirstArgument;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -67,13 +68,14 @@ public class IncomeSourceTypeControllerTest extends BaseTest {
         IncomeSourceTypeCommandDTO command = createCommand();
 
         when(mockIncomeSourceTypeDao.existsByType(command.getType())).thenReturn(false);
-        when(mockIncomeSourceTypeDao.save(any(IncomeSourceType.class))).thenReturn(incomeSourceType);
+        when(mockIncomeSourceTypeDao.save(any(IncomeSourceType.class)))
+            .thenAnswer(modifiedFirstArgument((IncomeSourceType st) -> st.setId(42L)));
 
         IncomeSourceTypeDTO result = controller.create(command);
 
         verify(mockIncomeSourceTypeDao).save(incomeSourceTypeArgumentCaptor.capture());
 
-        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(42L);
         assertIncomeSourceTypeEqualsCommand(incomeSourceTypeArgumentCaptor.getValue(), command);
     }
 
