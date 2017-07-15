@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IncomeTypeModel } from '../models/income.model';
+import { IncomeSourceTypeModel } from '../models/income.model';
 import { IncomeService } from '../income.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { IncomeService } from '../income.service';
 })
 export class IncomeTypeEditComponent implements OnInit {
 
-  incomeType: IncomeTypeModel;
+  incomeType: IncomeSourceTypeModel;
   actionFailed = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private incomeService: IncomeService) { }

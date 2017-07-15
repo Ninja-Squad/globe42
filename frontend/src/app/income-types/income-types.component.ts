@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IncomeTypeModel } from 'app/models/income.model';
+import { IncomeSourceTypeModel } from 'app/models/income.model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class IncomeTypesComponent implements OnInit {
 
-  incomeTypes: Array<IncomeTypeModel>;
+  incomeTypes: Array<IncomeSourceTypeModel>;
 
   constructor(private route: ActivatedRoute) { }
 

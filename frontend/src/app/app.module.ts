@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -36,6 +36,8 @@ import { UserResolverService } from './user-resolver.service';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { JwtInterceptorService } from './jwt-interceptor.service';
 import { DisplayMaritalStatusPipe } from './display-marital-status.pipe';
+import { IncomeSourcesComponent } from './income-sources/income-sources.component';
+import { IncomeSourcesResolverService } from './income-sources-resolver.service';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,8 @@ import { DisplayMaritalStatusPipe } from './display-marital-status.pipe';
     UsersComponent,
     UserEditComponent,
     PasswordResetComponent,
-    DisplayMaritalStatusPipe
+    DisplayMaritalStatusPipe,
+    IncomeSourcesComponent
   ],
   imports: [
     BrowserModule,
@@ -77,6 +80,7 @@ import { DisplayMaritalStatusPipe } from './display-marital-status.pipe';
     IncomeTypesResolverService,
     IncomeService,
     IncomeTypeResolverService,
+    IncomeSourcesResolverService,
     UsersResolverService,
     UserResolverService,
     JwtInterceptorService,
@@ -84,6 +88,10 @@ import { DisplayMaritalStatusPipe } from './display-marital-status.pipe';
       provide: HTTP_INTERCEPTORS,
       useExisting: JwtInterceptorService,
       multi: true
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: 'fr-FR'
     }
   ],
   bootstrap: [AppComponent]

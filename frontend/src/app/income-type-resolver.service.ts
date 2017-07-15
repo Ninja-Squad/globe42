@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { IncomeService } from './income.service';
-import { IncomeTypeModel } from './models/income.model';
+import { IncomeSourceTypeModel } from './models/income.model';
 
 @Injectable()
-export class IncomeTypeResolverService {
+export class IncomeTypeResolverService implements Resolve<IncomeSourceTypeModel> {
 
   constructor(private incomeService: IncomeService) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Array<IncomeTypeModel>> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IncomeSourceTypeModel> {
     const typeId = +route.paramMap.get('id');
     return this.incomeService.getType(typeId);
   }

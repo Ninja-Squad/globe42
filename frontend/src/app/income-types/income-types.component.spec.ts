@@ -4,10 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IncomeTypesComponent } from './income-types.component';
 import { AppModule } from '../app.module';
-import { IncomeTypeModel } from '../models/income.model';
+import { IncomeSourceTypeModel } from '../models/income.model';
 
 describe('IncomeTypesComponent', () => {
-  const incomeTypes: Array<IncomeTypeModel> = [{ id: 42, type: 'CAF' }];
+  const incomeTypes: Array<IncomeSourceTypeModel> = [{ id: 42, type: 'CAF' }];
   const activatedRoute = {
     snapshot: { data: { incomeTypes } }
   };

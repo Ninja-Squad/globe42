@@ -6,7 +6,7 @@ import 'rxjs/add/observable/of';
 
 import { IncomeService } from './income.service';
 import { IncomeTypeResolverService } from './income-type-resolver.service';
-import { IncomeTypeModel } from './models/income.model';
+import { IncomeSourceTypeModel } from './models/income.model';
 
 describe('IncomeTypeResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -16,7 +16,7 @@ describe('IncomeTypeResolverService', () => {
 
   it('should retrieve a type', () => {
     const incomeService = TestBed.get(IncomeService);
-    const expectedResult: Observable<IncomeTypeModel> = Observable.of({ id: 42, type: 'CAF' });
+    const expectedResult: Observable<IncomeSourceTypeModel> = Observable.of({ id: 42, type: 'CAF' });
 
     spyOn(incomeService, 'getType').and.returnValue(expectedResult);
 

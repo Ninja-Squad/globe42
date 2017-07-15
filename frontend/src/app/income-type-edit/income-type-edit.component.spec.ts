@@ -7,12 +7,12 @@ import 'rxjs/add/observable/of';
 import { IncomeTypeEditComponent } from './income-type-edit.component';
 import { AppModule } from '../app.module';
 import { IncomeService } from '../income.service';
-import { IncomeTypeModel } from '../models/income.model';
+import { IncomeSourceTypeModel } from '../models/income.model';
 
 describe('IncomeTypeEditComponent', () => {
 
   describe('in edit mode', () => {
-    const incomeType: IncomeTypeModel = { id: 42, type: 'CAF' };
+    const incomeType: IncomeSourceTypeModel = { id: 42, type: 'CAF' };
     const activatedRoute = {
       snapshot: { data: { incomeType } }
     };
@@ -86,7 +86,7 @@ describe('IncomeTypeEditComponent', () => {
 
       expect(incomeService.createType).toHaveBeenCalled();
 
-      const typeUpdated = incomeService.createType.calls.argsFor(0)[0] as IncomeTypeModel;
+      const typeUpdated = incomeService.createType.calls.argsFor(0)[0] as IncomeSourceTypeModel;
 
       expect(typeUpdated.id).toBeUndefined();
       expect(typeUpdated.type).toBe('CAF');
