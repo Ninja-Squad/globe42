@@ -1,3 +1,5 @@
+export type MaritalStatus = 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 'WIDOWER' | 'DIVORCED' | 'SPLIT';
+
 export interface PersonModel {
   id: number;
   firstName: string;
@@ -12,6 +14,7 @@ export interface PersonModel {
   entryDate: string;
   gender: 'male'|'female'|'other';
   phoneNumber: string;
+  maritalStatus: MaritalStatus
 }
 
 export interface CityModel {

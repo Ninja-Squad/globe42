@@ -64,6 +64,9 @@ public class Person {
 
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    private MaritalStatus maritalStatus;
+
     /**
      * The incomes of the person
      */
@@ -179,6 +182,14 @@ public class Person {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public MaritalStatus getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(MaritalStatus maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public void addIncome(Income income) {

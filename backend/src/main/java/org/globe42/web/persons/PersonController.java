@@ -91,6 +91,7 @@ public class PersonController {
         person.setEntryDate(command.getEntryDate());
         person.setGender(command.getGender());
         person.setPhoneNumber(command.getPhoneNumber());
+        person.setMaritalStatus(command.getMaritalStatus());
     }
 
     private char mediationCodeLetter(Person person) {

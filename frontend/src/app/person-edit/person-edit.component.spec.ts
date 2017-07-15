@@ -9,6 +9,7 @@ import { AppModule } from '../app.module';
 import { PersonService } from '../person.service';
 import { CityModel, PersonModel } from '../models/person.model';
 import { DisplayCityPipe } from '../display-city.pipe';
+import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -21,7 +22,7 @@ describe('PersonEditComponent', () => {
       id: 0, firstName: 'John', lastName: 'Doe', nickName: 'john', birthDate: '1980-01-01',
       mediationCode: 'code1', address: 'Chemin de la gare',
       city: cityModel, email: 'john@mail.com', adherent: true, entryDate: '2016-12-01',
-      gender: 'male', phoneNumber: '06 12 34 56 78'
+      gender: 'male', phoneNumber: '06 12 34 56 78', maritalStatus: 'SINGLE'
     };
     const activatedRoute = {
       snapshot: { data: { person } }
@@ -62,6 +63,8 @@ describe('PersonEditComponent', () => {
       expect(email.value).toBe(person.email);
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe(person.phoneNumber);
+      const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
+      expect(maritalStatus.options[maritalStatus.selectedIndex].value).toBe(person.maritalStatus);
       const adherentYes = nativeElement.querySelector('#adherentYes');
       expect(adherentYes.checked).toBe(true);
       const adherentNo = nativeElement.querySelector('#adherentNo');
@@ -133,6 +136,9 @@ describe('PersonEditComponent', () => {
       expect(email.value).toBe('');
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe('');
+      const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
+      expect(maritalStatus.selectedIndex).toBe(-1);
+      expect(maritalStatus.options[0].value).toBe('');
       const adherentYes = nativeElement.querySelector('#adherentYes');
       expect(adherentYes.checked).toBe(false);
       const adherentNo = nativeElement.querySelector('#adherentNo');
@@ -170,6 +176,8 @@ describe('PersonEditComponent', () => {
       email.dispatchEvent(new Event('input'));
       phoneNumber.value = '06 13 13 13 13';
       phoneNumber.dispatchEvent(new Event('input'));
+      maritalStatus.selectedIndex = 2;
+      maritalStatus.dispatchEvent(new Event('change'));
       adherentYes.checked = true;
       adherentYes.dispatchEvent(new Event('change'));
       entryDate.value = '2015-02-02';
@@ -194,6 +202,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.city.city).toBe('SAINT-ETIENNE');
       expect(createdPerson.email).toBe('jane@mail.com');
       expect(createdPerson.phoneNumber).toBe('06 13 13 13 13');
+      expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[1].key);
       expect(createdPerson.adherent).toBe(true);
       expect(createdPerson.entryDate).toBe('2015-02-02');
 

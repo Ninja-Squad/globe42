@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.globe42.domain.Gender;
+import org.globe42.domain.MaritalStatus;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -32,6 +33,7 @@ public final class PersonCommandDTO {
     @NotNull
     private final Gender gender;
     private final String phoneNumber;
+    private MaritalStatus maritalStatus;
 
     @JsonCreator
     public PersonCommandDTO(@JsonProperty String firstName,
@@ -44,7 +46,8 @@ public final class PersonCommandDTO {
                             @JsonProperty boolean adherent,
                             @JsonProperty LocalDate entryDate,
                             @JsonProperty Gender gender,
-                            @JsonProperty String phoneNumber) {
+                            @JsonProperty String phoneNumber,
+                            @JsonProperty MaritalStatus maritalStatus) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nickName = nickName;
@@ -56,6 +59,7 @@ public final class PersonCommandDTO {
         this.entryDate = entryDate;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.maritalStatus = maritalStatus;
     }
 
     public String getFirstName() {
@@ -100,5 +104,9 @@ public final class PersonCommandDTO {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public MaritalStatus getMaritalStatus() {
+        return maritalStatus;
     }
 }

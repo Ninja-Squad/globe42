@@ -2,6 +2,7 @@ package org.globe42.web.persons;
 
 import java.time.LocalDate;
 import org.globe42.domain.Gender;
+import org.globe42.domain.MaritalStatus;
 import org.globe42.domain.Person;
 
 /**
@@ -22,6 +23,7 @@ public final class PersonDTO {
     private final LocalDate entryDate;
     private final Gender gender;
     private final String phoneNumber;
+    private final MaritalStatus maritalStatus;
 
     public PersonDTO(Person person) {
         this.id = person.getId();
@@ -37,6 +39,7 @@ public final class PersonDTO {
         this.entryDate = person.getEntryDate();
         this.gender = person.getGender();
         this.phoneNumber = person.getPhoneNumber();
+        this.maritalStatus = person.getMaritalStatus();
     }
 
     public Long getId() {
@@ -89,5 +92,9 @@ public final class PersonDTO {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public MaritalStatus getMaritalStatus() {
+        return maritalStatus;
     }
 }

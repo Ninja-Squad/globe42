@@ -35,6 +35,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserResolverService } from './user-resolver.service';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { JwtInterceptorService } from './jwt-interceptor.service';
+import { DisplayMaritalStatusPipe } from './display-marital-status.pipe';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { JwtInterceptorService } from './jwt-interceptor.service';
     PasswordChangeComponent,
     UsersComponent,
     UserEditComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    DisplayMaritalStatusPipe
   ],
   imports: [
     BrowserModule,

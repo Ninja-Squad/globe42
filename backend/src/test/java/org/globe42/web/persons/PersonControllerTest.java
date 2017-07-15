@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.Gender;
+import org.globe42.domain.MaritalStatus;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.NotFoundException;
@@ -153,7 +154,8 @@ public class PersonControllerTest extends BaseTest {
                                     true,
                                     LocalDate.of(2017, 4, 13),
                                     Gender.MALE,
-                                    "01234567");
+                                    "01234567",
+                                    MaritalStatus.CONCUBINAGE);
     }
 
     private void assertPersonEqualsCommand(Person person, PersonCommandDTO command) {
@@ -169,5 +171,6 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getEntryDate()).isEqualTo(command.getEntryDate());
         assertThat(person.getGender()).isEqualTo(command.getGender());
         assertThat(person.getPhoneNumber()).isEqualTo(command.getPhoneNumber());
+        assertThat(person.getMaritalStatus()).isEqualTo(command.getMaritalStatus());
     }
 }

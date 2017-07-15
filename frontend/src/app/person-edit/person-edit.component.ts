@@ -15,6 +15,7 @@ import { PersonService } from '../person.service';
 import { CityModel, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
 import { DisplayCityPipe } from '../display-city.pipe';
+import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 
 @Component({
   selector: 'gl-person-edit',
@@ -34,6 +35,7 @@ export class PersonEditComponent implements OnInit {
   cityCtrl: FormControl;
   emailCtrl: FormControl;
   phoneNumberCtrl: FormControl;
+  maritalStatusCtrl: FormControl;
   adherentCtrl: FormControl;
   entryDateCtrl: FormControl;
 
@@ -54,6 +56,8 @@ export class PersonEditComponent implements OnInit {
 
   cityFormatter = (result: CityModel) => this.displayCityPipe.transform(result);
 
+  maritalStatuses: Array<string> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
+
   constructor(private personService: PersonService,
               private searchCityService: SearchCityService,
               private displayCityPipe: DisplayCityPipe,
@@ -73,6 +77,7 @@ export class PersonEditComponent implements OnInit {
     this.cityCtrl = this.fb.control({ }, Validators.required);
     this.emailCtrl = this.fb.control('', [Validators.required, Validators.email]);
     this.phoneNumberCtrl = this.fb.control('', Validators.required);
+    this.maritalStatusCtrl = this.fb.control(null);
     this.adherentCtrl = this.fb.control('', Validators.required);
     this.entryDateCtrl = this.fb.control('', Validators.required);
     this.personForm = this.fb.group({
@@ -85,6 +90,7 @@ export class PersonEditComponent implements OnInit {
       city: this.cityCtrl,
       email: this.emailCtrl,
       phoneNumber: this.phoneNumberCtrl,
+      maritalStatus: this.maritalStatusCtrl,
       adherent: this.adherentCtrl,
       entryDate: this.entryDateCtrl
     });
