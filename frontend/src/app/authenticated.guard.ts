@@ -8,7 +8,7 @@ export class AuthenticatedGuard implements CanActivate {
   constructor(private userService: UserService, private router: Router) {}
 
   canActivate(): boolean {
-    let loggedIn = this.userService.isLoggedIn();
+    const loggedIn = this.userService.isLoggedIn();
     if (!loggedIn) {
       this.router.navigate(['/login']);
     }

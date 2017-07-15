@@ -19,7 +19,7 @@ describe('UserService', () => {
     removeItem: key => {}
   };
 
-  const user = {
+  const globeUser = {
     id: 1,
     login: 'cedric',
     admin: true,
@@ -53,29 +53,29 @@ describe('UserService', () => {
 
     const testRequest = http.expectOne({ url: '/api/authentication', method: 'POST' });
     expect(testRequest.request.body).toEqual(credentials);
-    testRequest.flush(user);
+    testRequest.flush(globeUser);
 
-    expect(actualUser).toEqual(user);
+    expect(actualUser).toEqual(globeUser);
     expect(service.storeLoggedInUser).toHaveBeenCalledWith(actualUser);
   });
 
   it('should store the logged in user', () => {
     spyOn(mockLocalStorage, 'setItem');
 
-    service.storeLoggedInUser(user);
+    service.storeLoggedInUser(globeUser);
 
-    expect(service.userEvents.getValue()).toBe(user);
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('rememberMe', JSON.stringify(user));
-    expect(jwtInterceptor.token).toBe(user.token);
+    expect(service.userEvents.getValue()).toBe(globeUser);
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('rememberMe', JSON.stringify(globeUser));
+    expect(jwtInterceptor.token).toBe(globeUser.token);
   });
 
   it('should retrieve a user if one is stored', () => {
-    spyOn(mockLocalStorage, 'getItem').and.returnValue(JSON.stringify(user));
+    spyOn(mockLocalStorage, 'getItem').and.returnValue(JSON.stringify(globeUser));
 
     service.retrieveUser();
 
-    expect(service.userEvents.getValue()).toEqual(user);
-    expect(jwtInterceptor.token).toBe(user.token);
+    expect(service.userEvents.getValue()).toEqual(globeUser);
+    expect(jwtInterceptor.token).toBe(globeUser.token);
   });
 
   it('should retrieve no user if none stored', () => {
@@ -88,7 +88,7 @@ describe('UserService', () => {
   });
 
   it('should logout the user', () => {
-    service.userEvents.next(user);
+    service.userEvents.next(globeUser);
 
     spyOn(mockLocalStorage, 'removeItem');
 

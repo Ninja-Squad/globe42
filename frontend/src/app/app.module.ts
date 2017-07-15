@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgbDatepickerI18n, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { routes } from './app.routes';
 import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { PersonsComponent } from './persons/persons.component';
@@ -34,7 +34,6 @@ import { UsersResolverService } from './users-resolver.service';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserResolverService } from './user-resolver.service';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { JwtInterceptorService } from './jwt-interceptor.service';
 
 @NgModule({

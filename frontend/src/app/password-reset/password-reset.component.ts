@@ -12,7 +12,7 @@ import { UserService } from '../user.service';
 export class PasswordResetComponent implements OnInit {
 
   user: UserModel;
-  updatedUser: UserWithPasswordModel
+  updatedUser: UserWithPasswordModel;
 
   constructor(private route: ActivatedRoute, private userService: UserService) { }
 

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../user.service';
 
 @Component({
-  selector: 'pr-login',
+  selector: 'gl-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

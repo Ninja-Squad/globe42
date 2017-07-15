@@ -27,8 +27,8 @@ describe('SearchCityService', () => {
     const city: CityModel = { city: 'SAINT-ETIENNE', code: 42000 };
     const body = { cities: [city] };
 
-    let expectedResult = [city];
-    let actualResult;
+    const expectedResult = [city];
+    let actualResult = [];
     service.search('SAINT').subscribe(result => actualResult = result);
     http.expectOne({ url: 'http://vicopo.selfbuild.fr/cherche/SAINT', method: 'GET' }).flush(body);
 

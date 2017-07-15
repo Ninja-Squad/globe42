@@ -15,7 +15,7 @@ describe('UsersResolverService', () => {
 
   it('should retrieve users', () => {
     const userService = TestBed.get(UserService);
-    let expectedResult = Observable.of([
+    const expectedResult = Observable.of([
       { id: 42, login: 'ced', admin: true }
     ]);
     spyOn(userService, 'list').and.returnValue(expectedResult);
