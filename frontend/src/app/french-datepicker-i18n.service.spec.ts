@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
 

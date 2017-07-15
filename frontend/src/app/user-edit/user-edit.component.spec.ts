@@ -11,12 +11,12 @@ import { UserModel } from '../models/user.model';
 describe('UserEditComponent', () => {
   describe('in creation mode', () => {
     const activatedRoute = {
-      snapshot: {data: {}}
+      snapshot: { data: {} }
     };
 
     beforeEach(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
-      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     }));
 
     it('should expose no created user, and a default user', () => {
@@ -25,7 +25,7 @@ describe('UserEditComponent', () => {
 
       const component = fixture.componentInstance;
       expect(component.createdUser).toBeUndefined();
-      expect(component.user).toEqual({login: '', admin: false});
+      expect(component.user).toEqual({ login: '', admin: false });
     });
 
     it('should display the user in a form, and have the save button disabled', () => {
@@ -82,7 +82,7 @@ describe('UserEditComponent', () => {
         expect(save.disabled).toBe(false);
         save.click();
 
-        expect(userService.create).toHaveBeenCalledWith({login: 'foo', admin: true});
+        expect(userService.create).toHaveBeenCalledWith({ login: 'foo', admin: true });
 
         fixture.detectChanges();
 
@@ -101,12 +101,12 @@ describe('UserEditComponent', () => {
       admin: true
     };
     const activatedRoute = {
-      snapshot: {data: {user}}
+      snapshot: { data: { user } }
     };
 
     beforeEach(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
-      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     }));
 
     it('should expose no created user, and the edited user info', () => {
@@ -115,7 +115,7 @@ describe('UserEditComponent', () => {
 
       const component = fixture.componentInstance;
       expect(component.createdUser).toBeUndefined();
-      expect(component.user).toEqual({login: 'jb', admin: true});
+      expect(component.user).toEqual({ login: 'jb', admin: true });
     });
 
     it('should display the user in a form, and have the save button enabled', () => {
@@ -161,7 +161,7 @@ describe('UserEditComponent', () => {
         const save = nativeElement.querySelector('#save');
         save.click();
 
-        expect(userService.update).toHaveBeenCalledWith(42, {login: 'jb', admin: true});
+        expect(userService.update).toHaveBeenCalledWith(42, { login: 'jb', admin: true });
 
         fixture.detectChanges();
 
