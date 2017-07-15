@@ -55,6 +55,10 @@ public class PersonController {
 
         Person person = new Person();
         copyCommandToPerson(command, person);
+
+        char mediationCodeLetter = mediationCodeLetter(person);
+        person.setMediationCode(mediationCodeLetter + String.valueOf(personDao.nextMediationCode(mediationCodeLetter)));
+
         return new PersonDTO(personDao.save(person));
     }
 
@@ -64,11 +68,18 @@ public class PersonController {
     public void update(@PathVariable("personId") Long id, @Validated @RequestBody PersonCommandDTO command) {
         Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
 
+        char oldMediationCodeLetter = person.getMediationCode().charAt(0);
+
         personDao.findByNickName(command.getNickName()).filter(other -> !other.getId().equals(id)).ifPresent(other -> {
             throw new BadRequestException("This nickname is already used by another person");
         });
 
         copyCommandToPerson(command, person);
+
+        char newMediationCodeLetter = mediationCodeLetter(person);
+        if (newMediationCodeLetter != oldMediationCodeLetter) {
+            person.setMediationCode(newMediationCodeLetter + String.valueOf(personDao.nextMediationCode(newMediationCodeLetter)));
+        }
     }
 
     private void copyCommandToPerson(PersonCommandDTO command, Person person) {
@@ -76,7 +87,6 @@ public class PersonController {
         person.setLastName(command.getLastName());
         person.setNickName(command.getNickName());
         person.setBirthDate(command.getBirthDate());
-        person.setMediationCode(command.getMediationCode());
         person.setAddress(command.getAddress());
         if (command.getCity() == null) {
             person.setCity(null);
@@ -90,5 +100,13 @@ public class PersonController {
         person.setEntryDate(command.getEntryDate());
         person.setGender(command.getGender());
         person.setPhoneNumber(command.getPhoneNumber());
+    }
+
+    private char mediationCodeLetter(Person person) {
+        char letter = Character.toUpperCase(person.getLastName().charAt(0));
+        if (letter < 'A' || letter > 'Z') {
+            letter = 'Z';
+        }
+        return letter;
     }
 }

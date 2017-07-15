@@ -47,6 +47,7 @@ public class PersonControllerMvcTest {
         person = new Person(1L);
         person.setAdherent(true);
         person.setEntryDate(LocalDate.of(2017, 5, 21));
+        person.setMediationCode("A2");
     }
 
     @Test

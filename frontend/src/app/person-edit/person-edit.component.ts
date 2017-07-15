@@ -30,7 +30,6 @@ export class PersonEditComponent implements OnInit {
   nickNameCtrl: FormControl;
   genderCtrl: FormControl;
   birthDateCtrl: FormControl;
-  mediationCodeCtrl: FormControl;
   addressCtrl: FormControl;
   cityCtrl: FormControl;
   emailCtrl: FormControl;
@@ -82,7 +81,6 @@ export class PersonEditComponent implements OnInit {
       nickName: this.nickNameCtrl,
       gender: this.genderCtrl,
       birthDate: this.birthDateCtrl,
-      mediationCode: this.mediationCodeCtrl,
       address: this.addressCtrl,
       city: this.cityCtrl,
       email: this.emailCtrl,

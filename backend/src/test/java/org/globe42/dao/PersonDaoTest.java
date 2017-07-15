@@ -60,4 +60,14 @@ public class PersonDaoTest extends BaseDaoTest {
         assertThat(personDao.findByNickName("hello")).isEmpty();
         assertThat(personDao.findByNickName("Ced")).isNotEmpty();
     }
+
+    @Test
+    public void shouldGetNextMediatonCode() {
+        int result = personDao.nextMediationCode('R');
+        assertThat(result).isEqualTo(1);
+        result = personDao.nextMediationCode('r');
+        assertThat(result).isEqualTo(2);
+        result = personDao.nextMediationCode('a');
+        assertThat(result).isEqualTo(1);
+    }
 }

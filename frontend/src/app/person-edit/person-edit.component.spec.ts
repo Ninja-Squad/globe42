@@ -53,7 +53,7 @@ describe('PersonEditComponent', () => {
       const birthDate = nativeElement.querySelector('#birthDate');
       expect(birthDate.value).toBe(person.birthDate);
       const mediationCode = nativeElement.querySelector('#mediationCode');
-      expect(mediationCode.value).toBe(person.mediationCode);
+      expect(mediationCode.textContent).toContain('Généré automatiquement');
       const address = nativeElement.querySelector('#address');
       expect(address.value).toBe(person.address);
       const city = nativeElement.querySelector('#city');
@@ -124,7 +124,7 @@ describe('PersonEditComponent', () => {
       const birthDate = nativeElement.querySelector('#birthDate');
       expect(birthDate.value).toBe('');
       const mediationCode = nativeElement.querySelector('#mediationCode');
-      expect(mediationCode.value).toBe('');
+      expect(mediationCode.textContent).toContain('Généré automatiquement');
       const address = nativeElement.querySelector('#address');
       expect(address.value).toBe('');
       const city = nativeElement.querySelector('#city');
@@ -150,8 +150,6 @@ describe('PersonEditComponent', () => {
       genderFemale.dispatchEvent(new Event('change'));
       birthDate.value = '1985-03-03';
       birthDate.dispatchEvent(new Event('change'));
-      mediationCode.value = 'code2';
-      mediationCode.dispatchEvent(new Event('input'));
       address.value = 'Avenue Liberté';
       address.dispatchEvent(new Event('input'));
 
@@ -183,21 +181,21 @@ describe('PersonEditComponent', () => {
 
       expect(personService.create).toHaveBeenCalled();
 
-      const personUpdated = personService.create.calls.argsFor(0)[0] as PersonModel;
-      expect(personUpdated.id).toBeUndefined();
-      expect(personUpdated.lastName).toBe('Doe');
-      expect(personUpdated.firstName).toBe('Jane');
-      expect(personUpdated.nickName).toBe('jane');
-      expect(personUpdated.gender).toBe('female');
-      expect(personUpdated.birthDate).toBe('1985-03-03');
-      expect(personUpdated.mediationCode).toBe('code2');
-      expect(personUpdated.address).toBe('Avenue Liberté');
-      expect(personUpdated.city.code).toBe(42000);
-      expect(personUpdated.city.city).toBe('SAINT-ETIENNE');
-      expect(personUpdated.email).toBe('jane@mail.com');
-      expect(personUpdated.phoneNumber).toBe('06 13 13 13 13');
-      expect(personUpdated.adherent).toBe(true);
-      expect(personUpdated.entryDate).toBe('2015-02-02');
+      const createdPerson = personService.create.calls.argsFor(0)[0] as PersonModel;
+      expect(createdPerson.id).toBeUndefined();
+      expect(createdPerson.lastName).toBe('Doe');
+      expect(createdPerson.firstName).toBe('Jane');
+      expect(createdPerson.nickName).toBe('jane');
+      expect(createdPerson.gender).toBe('female');
+      expect(createdPerson.birthDate).toBe('1985-03-03');
+      expect(createdPerson.mediationCode).toBeUndefined();
+      expect(createdPerson.address).toBe('Avenue Liberté');
+      expect(createdPerson.city.code).toBe(42000);
+      expect(createdPerson.city.city).toBe('SAINT-ETIENNE');
+      expect(createdPerson.email).toBe('jane@mail.com');
+      expect(createdPerson.phoneNumber).toBe('06 13 13 13 13');
+      expect(createdPerson.adherent).toBe(true);
+      expect(createdPerson.entryDate).toBe('2015-02-02');
 
       expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
     }));

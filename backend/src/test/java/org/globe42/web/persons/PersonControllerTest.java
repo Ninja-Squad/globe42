@@ -2,6 +2,8 @@ package org.globe42.web.persons;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyChar;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +45,7 @@ public class PersonControllerTest extends BaseTest {
     @Before
     public void prepare() {
         person = new Person(1L);
+        person.setMediationCode("A2");
     }
 
     @Test
@@ -75,11 +78,40 @@ public class PersonControllerTest extends BaseTest {
         PersonCommandDTO command = createCommand();
 
         when(mockPersonDao.save(any(Person.class))).thenReturn(person);
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
 
         controller.create(command);
 
         verify(mockPersonDao).save(personArgumentCaptor.capture());
-        assertPersonEqualsCommand(personArgumentCaptor.getValue(), command);
+        Person savedPerson = personArgumentCaptor.getValue();
+        assertPersonEqualsCommand(savedPerson, command);
+        assertThat(savedPerson.getMediationCode()).isEqualTo("L37");
+    }
+
+    @Test
+    public void shouldCreateWithLowercaseLastName() {
+        PersonCommandDTO command = createCommand("lacote");
+
+        when(mockPersonDao.save(any(Person.class))).thenReturn(person);
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+
+        controller.create(command);
+        verify(mockPersonDao).save(personArgumentCaptor.capture());
+        Person savedPerson = personArgumentCaptor.getValue();
+        assertThat(savedPerson.getMediationCode()).isEqualTo("L37");
+    }
+
+    @Test
+    public void shouldCreateWithLastNameStartingWithBizarreLetter() {
+        PersonCommandDTO command = createCommand("$foo");
+
+        when(mockPersonDao.save(any(Person.class))).thenReturn(person);
+        when(mockPersonDao.nextMediationCode('Z')).thenReturn(76);
+
+        PersonDTO result = controller.create(command);
+        verify(mockPersonDao).save(personArgumentCaptor.capture());
+        Person savedPerson = personArgumentCaptor.getValue();
+        assertThat(savedPerson.getMediationCode()).isEqualTo("Z76");
     }
 
     @Test(expected = BadRequestException.class)
@@ -94,11 +126,26 @@ public class PersonControllerTest extends BaseTest {
     @Test
     public void shouldUpdate() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
         PersonCommandDTO command = createCommand();
         controller.update(person.getId(), command);
 
         assertPersonEqualsCommand(person, command);
+        assertThat(person.getMediationCode()).isEqualTo("L37");
+    }
+
+    @Test
+    public void shouldNotUpdateMediationCodeIfLetterStaysTheSame() {
+        person.setMediationCode("L42");
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+
+        PersonCommandDTO command = createCommand();
+
+        controller.update(person.getId(), command);
+
+        assertPersonEqualsCommand(person, command);
+        assertThat(person.getMediationCode()).isEqualTo("L42");
+        verify(mockPersonDao, never()).nextMediationCode(anyChar());
     }
 
     @Test(expected = NotFoundException.class)
@@ -131,11 +178,14 @@ public class PersonControllerTest extends BaseTest {
     }
 
     static PersonCommandDTO createCommand() {
+        return createCommand("Lacote");
+    }
+
+    static PersonCommandDTO createCommand(String lastName) {
         return new PersonCommandDTO("Cyril",
-                                    "Lacote",
+                                    lastName,
                                     "CEO, Bitch",
                                     LocalDate.of(1977, 9, 12),
-                                    "4321",
                                     "somewhere",
                                     new CityDTO("42000", "Saint-Etienne"),
                                     "cyril@ninja-squad.com",
@@ -150,7 +200,6 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getLastName()).isEqualTo(command.getLastName());
         assertThat(person.getNickName()).isEqualTo(command.getNickName());
         assertThat(person.getBirthDate()).isEqualTo(command.getBirthDate());
-        assertThat(person.getMediationCode()).isEqualTo(command.getMediationCode());
         assertThat(person.getAddress()).isEqualTo(command.getAddress());
         assertThat(person.getCity().getCode()).isEqualTo(command.getCity().getCode());
         assertThat(person.getCity().getCity()).isEqualTo(command.getCity().getCity());

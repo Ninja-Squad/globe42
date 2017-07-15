@@ -21,7 +21,6 @@ public final class PersonCommandDTO {
     private final String nickName;
 
     private final LocalDate birthDate;
-    private final String mediationCode;
     private final String address;
 
     @Valid
@@ -39,7 +38,6 @@ public final class PersonCommandDTO {
                             @JsonProperty String lastName,
                             @JsonProperty String nickName,
                             @JsonProperty LocalDate birthDate,
-                            @JsonProperty String mediationCode,
                             @JsonProperty String address,
                             @JsonProperty CityDTO city,
                             @JsonProperty String email,
@@ -51,7 +49,6 @@ public final class PersonCommandDTO {
         this.lastName = lastName;
         this.nickName = nickName;
         this.birthDate = birthDate;
-        this.mediationCode = mediationCode;
         this.address = address;
         this.city = city;
         this.email = email;
@@ -75,10 +72,6 @@ public final class PersonCommandDTO {
 
     public LocalDate getBirthDate() {
         return birthDate;
-    }
-
-    public String getMediationCode() {
-        return mediationCode;
     }
 
     public String getAddress() {
