@@ -21,14 +21,8 @@
     <label class="col-sm-2 col-form-label">Genre</label>
     <div class="col-sm-10">
       <div ngbRadioGroup name="gender" formControlName="gender">
-        <label class="btn btn-secondary">
-          <input id="genderMale" type="radio" value="male"> Homme
-        </label>
-        <label class="btn btn-secondary">
-          <input id="genderFemale" type="radio" value="female"> Femme
-        </label>
-        <label class="btn btn-secondary">
-          <input id="genderOther" type="radio" value="other"> Autre
+        <label class="btn btn-secondary" *ngFor="let gender of genders">
+          <input id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
         </label>
       </div>
     </div>

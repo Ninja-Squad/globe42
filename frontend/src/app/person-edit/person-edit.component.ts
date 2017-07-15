@@ -12,10 +12,11 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 
 import { PersonService } from '../person.service';
-import { CityModel, PersonModel } from '../models/person.model';
+import { CityModel, Gender, MaritalStatus, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
+import { GENDER_TRANSLATIONS } from '../display-gender.pipe';
 
 @Component({
   selector: 'gl-person-edit',
@@ -56,7 +57,8 @@ export class PersonEditComponent implements OnInit {
 
   cityFormatter = (result: CityModel) => this.displayCityPipe.transform(result);
 
-  maritalStatuses: Array<string> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
+  genders: Array<Gender> = GENDER_TRANSLATIONS.map(t => t.key);
+  maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
 
   constructor(private personService: PersonService,
               private searchCityService: SearchCityService,

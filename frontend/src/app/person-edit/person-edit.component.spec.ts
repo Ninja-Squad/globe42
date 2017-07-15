@@ -22,7 +22,7 @@ describe('PersonEditComponent', () => {
       id: 0, firstName: 'John', lastName: 'Doe', nickName: 'john', birthDate: '1980-01-01',
       mediationCode: 'code1', address: 'Chemin de la gare',
       city: cityModel, email: 'john@mail.com', adherent: true, entryDate: '2016-12-01',
-      gender: 'male', phoneNumber: '06 12 34 56 78', maritalStatus: 'SINGLE'
+      gender: 'MALE', phoneNumber: '06 12 34 56 78', maritalStatus: 'SINGLE'
     };
     const activatedRoute = {
       snapshot: { data: { person } }
@@ -49,7 +49,7 @@ describe('PersonEditComponent', () => {
       expect(lastName.value).toBe(person.lastName);
       const nickName = nativeElement.querySelector('#nickName');
       expect(nickName.value).toBe(person.nickName);
-      const gender = nativeElement.querySelector('#genderMale');
+      const gender = nativeElement.querySelector('#genderMALE');
       expect(gender.checked).toBe(true);
       const birthDate = nativeElement.querySelector('#birthDate');
       expect(birthDate.value).toBe(person.birthDate);
@@ -118,11 +118,11 @@ describe('PersonEditComponent', () => {
       expect(lastName.value).toBe('');
       const nickName = nativeElement.querySelector('#nickName');
       expect(nickName.value).toBe('');
-      const genderMale = nativeElement.querySelector('#genderMale');
+      const genderMale = nativeElement.querySelector('#genderMALE');
       expect(genderMale.checked).toBe(false);
-      const genderFemale = nativeElement.querySelector('#genderFemale');
+      const genderFemale = nativeElement.querySelector('#genderFEMALE');
       expect(genderFemale.checked).toBe(false);
-      const genderOther = nativeElement.querySelector('#genderOther');
+      const genderOther = nativeElement.querySelector('#genderOTHER');
       expect(genderOther.checked).toBe(false);
       const birthDate = nativeElement.querySelector('#birthDate');
       expect(birthDate.value).toBe('');
@@ -194,7 +194,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.lastName).toBe('Doe');
       expect(createdPerson.firstName).toBe('Jane');
       expect(createdPerson.nickName).toBe('jane');
-      expect(createdPerson.gender).toBe('female');
+      expect(createdPerson.gender).toBe('FEMALE');
       expect(createdPerson.birthDate).toBe('1985-03-03');
       expect(createdPerson.mediationCode).toBeUndefined();
       expect(createdPerson.address).toBe('Avenue Liberté');

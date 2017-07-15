@@ -15,7 +15,7 @@ describe('PersonComponent', () => {
     id: 0, firstName: 'John', lastName: 'Doe', nickName: 'john', birthDate: '1980-01-01',
     mediationCode: 'D1', address: 'Chemin de la gare',
     city: cityModel, email: 'john@mail.com', adherent: true, entryDate: '2016-12-01',
-    gender: 'male', phoneNumber: '06 12 34 56 78', maritalStatus: 'SINGLE'
+    gender: 'MALE', phoneNumber: '06 12 34 56 78', maritalStatus: 'SINGLE'
   };
 
   const activatedRoute = {

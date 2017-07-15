@@ -27,7 +27,7 @@ public class PersonCommandDTOTest {
     public void shouldDeserialize() throws IOException {
         String json = "{\n" +
             "    \"nickName\": \"Agnes\",\n" +
-            "    \"gender\": \"female\",\n" +
+            "    \"gender\": \"FEMALE\",\n" +
             "    \"adherent\": true,\n" +
             "    \"city\": {\n" +
             "        \"code\": \"42000\",\n" +
