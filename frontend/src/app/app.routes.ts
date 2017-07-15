@@ -20,6 +20,8 @@ import { UserResolverService } from './user-resolver.service';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { IncomeSourcesComponent } from './income-sources/income-sources.component';
 import { IncomeSourcesResolverService } from './income-sources-resolver.service';
+import { IncomeSourceEditComponent } from './income-source-edit/income-source-edit.component';
+import { IncomeSourceResolverService } from './income-source-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -80,6 +82,21 @@ export const routes: Routes = [
             component: IncomeSourcesComponent,
             resolve: {
               incomeSources: IncomeSourcesResolverService
+            }
+          },
+          {
+            path: 'create',
+            component: IncomeSourceEditComponent,
+            resolve: {
+              incomeSourceTypes: IncomeTypesResolverService
+            }
+          },
+          {
+            path: ':id/edit',
+            component: IncomeSourceEditComponent,
+            resolve: {
+              incomeSource: IncomeSourceResolverService,
+              incomeSourceTypes: IncomeTypesResolverService
             }
           }
         ]

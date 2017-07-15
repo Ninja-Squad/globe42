@@ -94,7 +94,7 @@ describe('UserEditComponent', () => {
     });
   });
 
-  describe('in creation mode', () => {
+  describe('in edition mode', () => {
     const user: UserModel = {
       id: 42,
       login: 'jb',

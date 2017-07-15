@@ -12,7 +12,7 @@ describe('IncomeSourcesResolverService', () => {
     imports: [HttpClientModule]
   }));
 
-  it('should retrieve a type', () => {
+  it('should retrieve sources', () => {
     const incomeService = TestBed.get(IncomeService);
     const expectedResults: Observable<Array<IncomeSourceModel>> = Observable.of([{ id: 42, name: 'Allocations Familiales' }]);
 

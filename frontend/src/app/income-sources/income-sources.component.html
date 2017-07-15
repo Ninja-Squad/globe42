@@ -3,7 +3,10 @@
 <div class="row mb-2 align-items-center income-source-item" *ngFor="let incomeSource of incomeSources">
   <div class="col-sm"><a [routerLink]="['/income-sources', incomeSource.id, 'edit']">{{ incomeSource.name }}</a></div>
   <div class="col-sm text-muted">{{ incomeSource.type.type }}</div>
-  <div class="col-sm text-muted">max. {{ incomeSource.maxMonthlyAmount | currency:'EUR':true }} / mois</div>
+  <div class="col-sm text-muted">
+    <ng-container *ngIf="incomeSource.maxMonthlyAmount">
+      max. {{ incomeSource.maxMonthlyAmount | currency:'EUR':true }} / mois
+    </ng-container></div>
   <div class="col-sm text-right">
     <a class="btn btn-secondary" [routerLink]="['/income-sources', incomeSource.id, 'edit']">Éditer</a>
   </div>

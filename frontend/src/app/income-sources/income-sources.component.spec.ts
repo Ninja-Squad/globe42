@@ -7,12 +7,19 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
 describe('IncomeSourcesComponent', () => {
-  const incomeSources: Array<IncomeSourceModel> = [{
-    id: 12,
-    name: 'Allocations familiales',
-    type: { id: 42, type: 'CAF' },
-    maxMonthlyAmount: 789.01
-  }];
+  const incomeSources: Array<IncomeSourceModel> = [
+    {
+      id: 12,
+      name: 'Allocations familiales',
+      type: { id: 42, type: 'CAF' },
+      maxMonthlyAmount: 789.01
+    },
+    {
+      id: 13,
+      name: 'Salaire',
+      type: { id: 43, type: 'travail' },
+      maxMonthlyAmount: null
+    }];
 
   const activatedRoute = {
     snapshot: { data: { incomeSources } }
@@ -29,11 +36,14 @@ describe('IncomeSourcesComponent', () => {
 
     const nativeElement = fixture.nativeElement;
     const sources = nativeElement.querySelectorAll('div.income-source-item');
-    expect(sources.length).toBe(1);
+    expect(sources.length).toBe(2);
 
-    const source = sources[0];
-    expect(source.textContent).toContain('Allocations familiales');
-    expect(source.textContent).toContain('CAF');
-    expect(source.textContent).toContain('max. 789,01 € / mois');
+    const source1 = sources[0];
+    expect(source1.textContent).toContain('Allocations familiales');
+    expect(source1.textContent).toContain('CAF');
+    expect(source1.textContent).toContain('max. 789,01 € / mois');
+
+    const source2 = sources[1];
+    expect(source2.textContent).not.toContain('max.');
   });
 });
