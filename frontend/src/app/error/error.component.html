@@ -1,0 +1,10 @@
+<ngb-alert class="error-alert" type="danger" *ngIf="error" (close)="error = null;">
+  <ng-container *ngIf="error.technical">
+    Une erreur technique inattendue s'est produite. Essayez de recharger la page.
+    <br/>
+    <small>{{ error.status ? error.status + ' - ' + error.message : error.message }}</small>
+  </ng-container>
+  <ng-container *ngIf="!error.technical">
+    {{ error.message }}
+  </ng-container>
+</ngb-alert>

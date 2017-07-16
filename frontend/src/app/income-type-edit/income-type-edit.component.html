@@ -3,11 +3,6 @@
   <ng-container *ngIf="!editedIncomeType">Nouveau type de revenu</ng-container>
 </h1>
 
-<div class="alert alert-danger" *ngIf="actionFailed">
-  <button type="button" class="close" aria-label="Close" (click)="actionFailed = false;"><span aria-hidden="true">&#215;</span></button>
-  Erreur à la sauvegarde du type de revenu.
-</div>
-
 <form (ngSubmit)="save()" #typeForm="ngForm">
   <div class="form-group row">
     <label for="type" class="col-sm-2 col-form-label">Type</label>

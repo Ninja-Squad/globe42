@@ -27,8 +27,7 @@ export class PersonIncomeEditComponent implements OnInit {
 
   ngOnInit() {
     this.person = this.route.snapshot.data['person'];
-    this.incomeSources = this.route.snapshot.data['incomeSources'];
-    sortBy(this.incomeSources, source => source.name);
+    this.incomeSources = sortBy<IncomeSourceModel>(this.route.snapshot.data['incomeSources'], source => source.name);
     this.income = {
       source: null,
       monthlyAmount: null

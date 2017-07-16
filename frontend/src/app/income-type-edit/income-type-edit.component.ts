@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IncomeSourceTypeCommand } from '../models/income-source-type.command';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceTypeService } from '../income-source-type.service';
+import { ErrorService } from '../error.service';
 
 @Component({
   selector: 'gl-income-type-edit',
@@ -14,9 +15,11 @@ export class IncomeTypeEditComponent implements OnInit {
 
   editedIncomeType: IncomeSourceTypeModel;
   incomeType: IncomeSourceTypeCommand;
-  actionFailed = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private incomeSourceTypeService: IncomeSourceTypeService) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private incomeSourceTypeService: IncomeSourceTypeService,
+              private errorService: ErrorService) { }
 
   ngOnInit() {
     this.editedIncomeType = this.route.snapshot.data['incomeType'];
@@ -32,7 +35,7 @@ export class IncomeTypeEditComponent implements OnInit {
     }
     action.subscribe(
       () => this.router.navigateByUrl('/income-types'),
-      error => this.actionFailed = true
+      this.errorService.functionalErrorHandler()
     );
   }
 

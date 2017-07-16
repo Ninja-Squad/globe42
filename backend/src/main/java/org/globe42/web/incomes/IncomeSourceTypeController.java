@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.globe42.dao.IncomeSourceTypeDao;
 import org.globe42.domain.IncomeSourceType;
 import org.globe42.web.exception.BadRequestException;
+import org.globe42.web.exception.ErrorCode;
 import org.globe42.web.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -43,7 +44,7 @@ public class IncomeSourceTypeController {
     @ResponseStatus(HttpStatus.CREATED)
     public IncomeSourceTypeDTO create(@Validated @RequestBody IncomeSourceTypeCommandDTO command) {
         if (incomeSourceTypeDao.existsByType(command.getType())) {
-            throw new BadRequestException("This type is already used by another income source type");
+            throw new BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS);
         }
 
         IncomeSourceType type = new IncomeSourceType();
@@ -57,7 +58,7 @@ public class IncomeSourceTypeController {
         IncomeSourceType type = incomeSourceTypeDao.findById(typeId).orElseThrow(NotFoundException::new);
 
         incomeSourceTypeDao.findByType(command.getType()).filter(other -> !other.getId().equals(typeId)).ifPresent(other -> {
-            throw new BadRequestException("This type is already used by another income source type");
+            throw new BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS);
         });
 
         copyCommandToType(command, type);

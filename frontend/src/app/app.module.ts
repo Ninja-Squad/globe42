@@ -48,6 +48,8 @@ import { PersonIncomesComponent } from './person-incomes/person-incomes.componen
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 import { ConfirmService } from './confirm.service';
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
+import { ErrorService } from './error.service';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +75,8 @@ import { PersonIncomeEditComponent } from './person-income-edit/person-income-ed
     PersonIncomesComponent,
     PersonLayoutComponent,
     ConfirmModalContentComponent,
-    PersonIncomeEditComponent
+    PersonIncomeEditComponent,
+    ErrorComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -106,9 +109,15 @@ import { PersonIncomeEditComponent } from './person-income-edit/person-income-ed
     IncomesResolverService,
     UserResolverService,
     JwtInterceptorService,
+    ErrorService,
     {
       provide: HTTP_INTERCEPTORS,
       useExisting: JwtInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useExisting: ErrorService,
       multi: true
     },
     {

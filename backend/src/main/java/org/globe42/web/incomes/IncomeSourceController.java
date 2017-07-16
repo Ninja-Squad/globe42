@@ -9,6 +9,7 @@ import org.globe42.dao.IncomeSourceTypeDao;
 import org.globe42.domain.IncomeSource;
 import org.globe42.domain.IncomeSourceType;
 import org.globe42.web.exception.BadRequestException;
+import org.globe42.web.exception.ErrorCode;
 import org.globe42.web.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -55,7 +56,7 @@ public class IncomeSourceController {
     @ResponseStatus(HttpStatus.CREATED)
     public IncomeSourceDTO create(@Validated @RequestBody IncomeSourceCommandDTO command) {
         if (incomeSourceDao.existsByName(command.getName())) {
-            throw new BadRequestException("This name is already used by another income source");
+            throw new BadRequestException(ErrorCode.INCOME_SOURCE_NAME_ALREADY_EXISTS);
         }
 
         IncomeSource source = new IncomeSource();
@@ -69,7 +70,7 @@ public class IncomeSourceController {
         IncomeSource source = incomeSourceDao.findById(sourceId).orElseThrow(NotFoundException::new);
 
         incomeSourceDao.findByName(command.getName()).filter(other -> !other.getId().equals(sourceId)).ifPresent(other -> {
-            throw new BadRequestException("This name is already used by another income source");
+            throw new BadRequestException(ErrorCode.INCOME_SOURCE_NAME_ALREADY_EXISTS);
         });
 
         copyCommandToSource(command, source);

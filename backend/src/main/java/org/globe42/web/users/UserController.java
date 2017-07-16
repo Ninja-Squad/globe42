@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.web.exception.BadRequestException;
+import org.globe42.web.exception.ErrorCode;
 import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.AdminOnly;
 import org.globe42.web.security.CurrentUser;
@@ -77,7 +78,7 @@ public class UserController {
     @AdminOnly
     public UserWithPasswordDTO create(@Validated @RequestBody UserCommandDTO command) {
         if (userDao.existsByLogin(command.getLogin())) {
-            throw new BadRequestException("This login is already used by another user");
+            throw new BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
         }
 
         User user = new User();
@@ -98,7 +99,7 @@ public class UserController {
         User user = userDao.findById(userId).orElseThrow(() -> new NotFoundException("No user with ID " + userId));
 
         userDao.findByLogin(command.getLogin()).filter(other -> !other.getId().equals(userId)).ifPresent(other -> {
-            throw new BadRequestException("This login is already used by another user");
+            throw new BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
         });
 
         copyCommandToUser(command, user);

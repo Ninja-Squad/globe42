@@ -15,7 +15,6 @@ export class UsersComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.users = this.route.snapshot.data['users'];
-    sortBy(this.users, u => u.login);
+    this.users = sortBy<UserModel>(this.route.snapshot.data['users'], u => u.login);
   }
 }
