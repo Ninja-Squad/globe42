@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IncomeService } from '../income.service';
 import { sortBy } from '../utils';
-import { IncomeSourceModel, IncomeSourceTypeModel } from '../models/income.model';
 import { IncomeSourceCommand } from '../models/income-source.command';
+import { IncomeSourceModel } from '../models/income-source.model';
+import { IncomeSourceTypeModel } from '../models/income-source-type.model';
+import { IncomeSourceService } from '../income-source.service';
 
 @Component({
   selector: 'gl-income-source-edit',
@@ -12,12 +13,12 @@ import { IncomeSourceCommand } from '../models/income-source.command';
 })
 export class IncomeSourceEditComponent implements OnInit {
 
-  private editedIncomeSource: IncomeSourceModel;
+  editedIncomeSource: IncomeSourceModel;
 
   incomeSourceTypes: Array<IncomeSourceTypeModel>;
   incomeSource: IncomeSourceCommand;
 
-  constructor(private route: ActivatedRoute, private incomeService: IncomeService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private incomeSourceService: IncomeSourceService, private router: Router) { }
 
   ngOnInit() {
     this.incomeSourceTypes = this.route.snapshot.data['incomeSourceTypes'];
@@ -44,10 +45,10 @@ export class IncomeSourceEditComponent implements OnInit {
   save() {
     let action;
     if (this.editedIncomeSource) {
-      action = this.incomeService.updateSource(this.editedIncomeSource.id, this.incomeSource);
+      action = this.incomeSourceService.update(this.editedIncomeSource.id, this.incomeSource);
     }
     else {
-      action = this.incomeService.createSource(this.incomeSource);
+      action = this.incomeSourceService.create(this.incomeSource);
     }
     action.subscribe(() => this.router.navigate(['/income-sources']));
   }

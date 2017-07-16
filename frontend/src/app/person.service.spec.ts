@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { PersonService } from './person.service';
 import { PersonModel } from './models/person.model';
+import { PersonCommand } from './models/person.command';
 
 describe('PersonService', () => {
 
@@ -31,9 +32,9 @@ describe('PersonService', () => {
   });
 
   it('should update a person', () => {
-    const fakePerson: PersonModel = { id: 2 } as PersonModel;
+    const fakePerson: PersonCommand = { firstName: 'Ced' } as PersonCommand;
 
-    service.update(fakePerson).subscribe(() => {});
+    service.update(2, fakePerson).subscribe(() => {});
 
     const testRequest = http.expectOne({url: '/api/persons/2', method: 'PUT'});
     expect(testRequest.request.body).toEqual(fakePerson);
@@ -41,7 +42,7 @@ describe('PersonService', () => {
   });
 
   it('should create a person', () => {
-    const fakePerson: PersonModel = { nickName: 'ced' } as PersonModel;
+    const fakePerson: PersonCommand = { nickName: 'ced' } as PersonCommand;
     const expectedPerson: PersonModel = { id: 2 } as PersonModel;
 
     let actualPerson;

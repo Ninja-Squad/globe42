@@ -1,3 +1,8 @@
+<h1 class="mb-5">
+  <ng-container *ngIf="editedIncomeSource">Modification de la source de revenu {{ editedIncomeSource.name }}</ng-container>
+  <ng-container *ngIf="!editedIncomeSource">Nouvelle source de revenu</ng-container>
+</h1>
+
 <form (ngSubmit)="save()" #sourceForm="ngForm">
   <div class="form-group row">
     <label for="name" class="col-sm-3 col-form-label">Nom</label>

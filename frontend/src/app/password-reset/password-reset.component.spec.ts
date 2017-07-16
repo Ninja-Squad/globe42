@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { PasswordResetComponent } from './password-reset.component';
 import { UserModel } from '../models/user.model';
@@ -15,10 +15,10 @@ describe('PasswordResetComponent', () => {
     snapshot: {data: {user}}
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
     providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
-  }));
+  })));
 
   it('should reset password', () => {
     const fixture = TestBed.createComponent(PasswordResetComponent);

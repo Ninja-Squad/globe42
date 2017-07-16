@@ -1,3 +1,8 @@
+<h1 class="mb-5">
+  <ng-container *ngIf="editedUser">Modification de l'utilisateur {{ editedUser.login }}</ng-container>
+  <ng-container *ngIf="!editedUser">Nouvel utilisateur</ng-container>
+</h1>
+
 <form (ngSubmit)="save()" #userForm="ngForm" *ngIf="!createdUser">
   <div class="form-group row">
     <label for="login" class="col-sm-2 col-form-label">Identifiant</label>

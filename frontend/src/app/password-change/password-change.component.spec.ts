@@ -11,12 +11,12 @@ describe('PasswordChangeComponent', () => {
 
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule],
     providers: [
       { provide: Router, useValue: fakeRouter }
     ]
-  }));
+  })));
 
   beforeEach(() => {
     fakeRouter.navigate.calls.reset();

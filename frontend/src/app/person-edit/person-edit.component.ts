@@ -17,6 +17,7 @@ import { SearchCityService } from '../search-city.service';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { GENDER_TRANSLATIONS } from '../display-gender.pipe';
+import { PersonCommand } from '../models/person.command';
 
 @Component({
   selector: 'gl-person-edit',
@@ -25,7 +26,8 @@ import { GENDER_TRANSLATIONS } from '../display-gender.pipe';
 })
 export class PersonEditComponent implements OnInit {
 
-  person: PersonModel | null;
+  editedPerson: PersonModel | null;
+
   personForm: FormGroup;
   firstNameCtrl: FormControl;
   lastNameCtrl: FormControl;
@@ -69,7 +71,8 @@ export class PersonEditComponent implements OnInit {
               private parserFormatter: NgbDateParserFormatter) { }
 
   ngOnInit() {
-    this.person = this.route.snapshot.data['person'];
+    this.editedPerson = this.route.snapshot.data['person'];
+
     this.firstNameCtrl = this.fb.control('', Validators.required);
     this.lastNameCtrl = this.fb.control('', Validators.required);
     this.nickNameCtrl = this.fb.control('', Validators.required);
@@ -96,25 +99,25 @@ export class PersonEditComponent implements OnInit {
       adherent: this.adherentCtrl,
       entryDate: this.entryDateCtrl
     });
-    if (this.person) {
-      this.personForm.patchValue(this.person);
-      this.birthDateCtrl.setValue(this.parserFormatter.parse(this.person.birthDate));
-      this.entryDateCtrl.setValue(this.parserFormatter.parse(this.person.entryDate));
+    if (this.editedPerson) {
+      this.personForm.patchValue(this.editedPerson);
+      this.birthDateCtrl.setValue(this.parserFormatter.parse(this.editedPerson.birthDate));
+      this.entryDateCtrl.setValue(this.parserFormatter.parse(this.editedPerson.entryDate));
     }
   }
 
-  update() {
-    const person = this.personForm.value;
-    person.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
-    person.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
-    if (this.person && this.person.id !== undefined) {
-      person.id = this.person.id;
-      this.personService.update(person)
-        .subscribe(() => this.router.navigateByUrl('/persons'));
+  save() {
+    const command: PersonCommand = this.personForm.value;
+    command.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
+    command.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
+
+    let action;
+    if (this.editedPerson && this.editedPerson.id !== undefined) {
+      action = this.personService.update(this.editedPerson.id, command);
     } else {
-      this.personService.create(person)
-        .subscribe(() => this.router.navigateByUrl('/persons'));
+      action = this.personService.create(command);
     }
+    action.subscribe(() => this.router.navigateByUrl('/persons'))
   }
 
 }

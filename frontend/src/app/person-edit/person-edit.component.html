@@ -1,4 +1,9 @@
-<form [formGroup]="personForm" (ngSubmit)="update()">
+<h1 class="mb-5">
+  <ng-container *ngIf="editedPerson">Modification de l'adhérent {{ editedPerson.firstName }} {{ editedPerson.lastName }} <ng-container *ngIf="editedPerson.nickName">({{ editedPerson.nickName }})</ng-container></ng-container>
+  <ng-container *ngIf="!editedPerson">Nouvel adhérent</ng-container>
+</h1>
+
+<form [formGroup]="personForm" (ngSubmit)="save()">
   <div class="form-group row">
     <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
     <div class="col-sm-10">

@@ -6,8 +6,8 @@ import 'rxjs/add/observable/of';
 
 import { IncomeTypeEditComponent } from './income-type-edit.component';
 import { AppModule } from '../app.module';
-import { IncomeService } from '../income.service';
-import { IncomeSourceTypeModel } from '../models/income.model';
+import { IncomeSourceTypeModel } from '../models/income-source-type.model';
+import { IncomeSourceTypeService } from '../income-source-type.service';
 
 describe('IncomeTypeEditComponent', () => {
 
@@ -17,35 +17,39 @@ describe('IncomeTypeEditComponent', () => {
       snapshot: { data: { incomeType } }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
+    beforeEach(async(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    })));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification du type de revenu CAF');
+    });
 
     it('should edit and update an existing income type', async(() => {
-      const incomeService = TestBed.get(IncomeService);
-      spyOn(incomeService, 'updateType').and.returnValue(Observable.of(incomeType));
+      const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
+      spyOn(incomeSourceTypeService, 'update').and.returnValue(Observable.of(incomeType));
       const router = TestBed.get(Router);
       spyOn(router, 'navigateByUrl');
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
+        expect(fixture.componentInstance.incomeType).toEqual({ type: 'CAF' })
 
         const nativeElement = fixture.nativeElement;
         const type = nativeElement.querySelector('#type');
-        expect(type.value).toBe(incomeType.type);
+        expect(type.value).toBe('CAF');
 
         type.value = 'Caisse Allocations Familiales';
         type.dispatchEvent(new Event('input'));
         nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
         fixture.detectChanges();
 
-        expect(incomeService.updateType).toHaveBeenCalled();
-
-        const typeUpdated = incomeService.updateType.calls.argsFor(0)[0];
-        expect(typeUpdated.id).toBe(42);
-        expect(typeUpdated.type).toBe('Caisse Allocations Familiales');
+        expect(incomeSourceTypeService.update).toHaveBeenCalledWith(42, { type: 'Caisse Allocations Familiales' });
 
         expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');
       });
@@ -55,17 +59,24 @@ describe('IncomeTypeEditComponent', () => {
 
   describe('in create mode', () => {
     const activatedRoute = {
-      snapshot: { data: { incomeType: null } }
+      snapshot: { data: {} }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
+    beforeEach(async(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    })));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouveau type de revenu');
+    });
 
     it('should create and save a new income type', fakeAsync(() => {
-      const incomeService = TestBed.get(IncomeService);
-      spyOn(incomeService, 'createType').and.returnValue(Observable.of(null));
+      const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
+      spyOn(incomeSourceTypeService, 'create').and.returnValue(Observable.of(null));
       const router = TestBed.get(Router);
       spyOn(router, 'navigateByUrl');
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
@@ -73,6 +84,7 @@ describe('IncomeTypeEditComponent', () => {
       fixture.detectChanges();
       tick();
 
+      expect(fixture.componentInstance.incomeType).toEqual({ type: '' });
       const nativeElement = fixture.nativeElement;
 
       const type = nativeElement.querySelector('#type');
@@ -84,12 +96,7 @@ describe('IncomeTypeEditComponent', () => {
       fixture.detectChanges();
       tick();
 
-      expect(incomeService.createType).toHaveBeenCalled();
-
-      const typeUpdated = incomeService.createType.calls.argsFor(0)[0] as IncomeSourceTypeModel;
-
-      expect(typeUpdated.id).toBeUndefined();
-      expect(typeUpdated.type).toBe('CAF');
+      expect(incomeSourceTypeService.create).toHaveBeenCalledWith({ type: 'CAF' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');
     }));
   });

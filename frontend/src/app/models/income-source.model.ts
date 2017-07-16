@@ -1,7 +1,4 @@
-export interface IncomeSourceTypeModel {
-  id: number;
-  type: string;
-}
+import { IncomeSourceTypeModel } from './income-source-type.model';
 
 export interface IncomeSourceModel {
   id: number;

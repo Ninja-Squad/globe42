@@ -3,26 +3,26 @@ import { HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import { IncomeService } from './income.service';
 import { IncomeTypesResolverService } from './income-types-resolver.service';
-import { IncomeSourceTypeModel } from './models/income.model';
+import { IncomeSourceTypeModel } from './models/income-source-type.model';
+import { IncomeSourceTypeService } from './income-source-type.service';
 
 describe('IncomeTypesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [IncomeTypesResolverService, IncomeService],
+    providers: [IncomeTypesResolverService, IncomeSourceTypeService],
     imports: [HttpClientModule]
   }));
 
   it('should retrieve a type', () => {
-    const incomeService = TestBed.get(IncomeService);
+    const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
     const expectedResults: Observable<Array<IncomeSourceTypeModel>> = Observable.of([{ id: 42, type: 'CAF' }]);
 
-    spyOn(incomeService, 'listTypes').and.returnValue(expectedResults);
+    spyOn(incomeSourceTypeService, 'list').and.returnValue(expectedResults);
 
     const resolver = TestBed.get(IncomeTypesResolverService);
     const result = resolver.resolve(null);
 
     expect(result).toBe(expectedResults);
-    expect(incomeService.listTypes).toHaveBeenCalled();
+    expect(incomeSourceTypeService.list).toHaveBeenCalled();
   });
 });

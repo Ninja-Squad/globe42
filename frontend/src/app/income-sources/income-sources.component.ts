@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IncomeSourceModel } from '../models/income.model';
+import { IncomeSourceModel } from '../models/income-source.model';
 
 @Component({
   selector: 'gl-income-sources',

@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { IncomeSourceEditComponent } from './income-source-edit.component';
 import { AppModule } from '../app.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IncomeService } from '../income.service';
 import { Observable } from 'rxjs/Observable';
-import { IncomeSourceModel } from '../models/income.model';
+import { IncomeSourceModel } from '../models/income-source.model';
+import { IncomeSourceService } from '../income-source.service';
 
 describe('IncomeSourceEditComponent', () => {
 
@@ -20,10 +20,17 @@ describe('IncomeSourceEditComponent', () => {
       snapshot: { data: { incomeSourceTypes } }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
+    beforeEach(async(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    })));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(IncomeSourceEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle source de revenu');
+    });
 
     it('should expose sorted income source types', () => {
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
@@ -66,10 +73,10 @@ describe('IncomeSourceEditComponent', () => {
     });
 
     it('should save the income source and navigate to the list', () => {
-      const incomeService = TestBed.get(IncomeService);
+      const incomeSourceService = TestBed.get(IncomeSourceService);
       const router = TestBed.get(Router);
 
-      spyOn(incomeService, 'createSource').and.returnValue(Observable.of({
+      spyOn(incomeSourceService, 'create').and.returnValue(Observable.of({
         id: 42
       }));
       spyOn(router, 'navigate');
@@ -101,7 +108,7 @@ describe('IncomeSourceEditComponent', () => {
 
         save.click();
 
-        expect(incomeService.createSource).toHaveBeenCalledWith({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+        expect(incomeSourceService.create).toHaveBeenCalledWith({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
 
         fixture.detectChanges();
 
@@ -121,10 +128,17 @@ describe('IncomeSourceEditComponent', () => {
       snapshot: { data: { incomeSource, incomeSourceTypes } }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
+    beforeEach(async(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    })));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(IncomeSourceEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la source de revenu foo');
+    });
 
     it('should expose the edited income source info', () => {
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
@@ -158,10 +172,10 @@ describe('IncomeSourceEditComponent', () => {
     });
 
     it('should save the income source and navigate to the income sources page', () => {
-      const incomeService = TestBed.get(IncomeService);
+      const incomeSourceService = TestBed.get(IncomeSourceService);
       const router = TestBed.get(Router);
 
-      spyOn(incomeService, 'updateSource').and.returnValue(Observable.of(null));
+      spyOn(incomeSourceService, 'update').and.returnValue(Observable.of(null));
       spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
@@ -174,7 +188,7 @@ describe('IncomeSourceEditComponent', () => {
         const save = nativeElement.querySelector('#save');
         save.click();
 
-        expect(incomeService.updateSource).toHaveBeenCalledWith(42, { name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+        expect(incomeSourceService.update).toHaveBeenCalledWith(42, { name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
 
         fixture.detectChanges();
 

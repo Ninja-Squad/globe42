@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -10,6 +10,7 @@ import { PersonService } from '../person.service';
 import { CityModel, PersonModel } from '../models/person.model';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
+import { PersonCommand } from '../models/person.command';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -28,10 +29,17 @@ describe('PersonEditComponent', () => {
       snapshot: { data: { person } }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
+    beforeEach(async(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    })));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de l\'adhérent John Doe (john)');
+    });
 
     it('should edit and update an existing person', () => {
       const personService = TestBed.get(PersonService);
@@ -79,8 +87,9 @@ describe('PersonEditComponent', () => {
 
       expect(personService.update).toHaveBeenCalled();
 
-      const personUpdated = personService.update.calls.argsFor(0)[0];
-      expect(personUpdated.id).toBe(0);
+      const idUpdated = personService.update.calls.argsFor(0)[0];
+      expect(idUpdated).toBe(0);
+      const personUpdated = personService.update.calls.argsFor(0)[1];
       expect(personUpdated.lastName).toBe('Do');
       expect(personUpdated.firstName).toBe('John');
 
@@ -94,10 +103,18 @@ describe('PersonEditComponent', () => {
       snapshot: { data: { person: null } }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
+    beforeEach(async(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    })));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvel adhérent');
+    });
+
 
     it('should create and save a new person', fakeAsync(() => {
       const personService = TestBed.get(PersonService);
@@ -189,8 +206,7 @@ describe('PersonEditComponent', () => {
 
       expect(personService.create).toHaveBeenCalled();
 
-      const createdPerson = personService.create.calls.argsFor(0)[0] as PersonModel;
-      expect(createdPerson.id).toBeUndefined();
+      const createdPerson = personService.create.calls.argsFor(0)[0] as PersonCommand;
       expect(createdPerson.lastName).toBe('Doe');
       expect(createdPerson.firstName).toBe('Jane');
       expect(createdPerson.nickName).toBe('jane');

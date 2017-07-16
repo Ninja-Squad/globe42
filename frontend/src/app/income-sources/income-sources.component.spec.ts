@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { IncomeSourcesComponent } from './income-sources.component';
-import { IncomeSourceModel } from '../models/income.model';
 import { AppModule } from '../app.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
+import { IncomeSourceModel } from '../models/income-source.model';
 
 describe('IncomeSourcesComponent', () => {
   const incomeSources: Array<IncomeSourceModel> = [
@@ -25,10 +25,10 @@ describe('IncomeSourcesComponent', () => {
     snapshot: { data: { incomeSources } }
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-  }));
+  })));
 
   it('should list income sources', () => {
     const fixture = TestBed.createComponent(IncomeSourcesComponent);

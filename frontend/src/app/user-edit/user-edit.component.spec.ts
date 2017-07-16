@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { UserEditComponent } from './user-edit.component';
 import { AppModule } from '../app.module';
@@ -14,10 +14,17 @@ describe('UserEditComponent', () => {
       snapshot: { data: {} }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
+    beforeEach(async(() => TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    })));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(UserEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvel utilisateur');
+    });
 
     it('should expose no created user, and a default user', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
@@ -108,6 +115,13 @@ describe('UserEditComponent', () => {
       imports: [AppModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     }));
+
+    it('should have a title', () => {
+      const fixture = TestBed.createComponent(UserEditComponent);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de l\'utilisateur jb');
+    });
 
     it('should expose no created user, and the edited user info', () => {
       const fixture = TestBed.createComponent(UserEditComponent);

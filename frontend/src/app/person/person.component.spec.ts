@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -22,10 +22,10 @@ describe('PersonComponent', () => {
     snapshot: { data: { person } }
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-  }));
+  })));
 
   it('should display a person', () => {
     const fixture = TestBed.createComponent(PersonComponent);
@@ -33,7 +33,7 @@ describe('PersonComponent', () => {
 
     const nativeElement = fixture.nativeElement;
     const name = nativeElement.querySelector('#fullName');
-    expect(name.textContent).toBe('John Doe dit john');
+    expect(name.textContent).toContain('John Doe (john)');
     const gender = nativeElement.querySelector('#gender');
     expect(gender.textContent).toBe('Homme');
     const address = nativeElement.querySelector('#fullAddress');

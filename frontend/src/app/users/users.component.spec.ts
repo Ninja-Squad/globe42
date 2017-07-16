@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { UsersComponent } from './users.component';
 import { AppModule } from '../app.module';
@@ -15,10 +15,10 @@ describe('UsersComponent', () => {
     snapshot: { data: { users } }
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-  }));
+  })));
 
   it('should expose sorted users', () => {
     const fixture = TestBed.createComponent(UsersComponent);

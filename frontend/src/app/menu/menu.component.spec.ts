@@ -1,4 +1,4 @@
-import { fakeAsync, tick, TestBed } from '@angular/core/testing';
+import { async, fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -15,12 +15,12 @@ describe('MenuComponent', () => {
   } as UserService;
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
     providers: [
       { provide: UserService, useValue: fakeUserService }
     ]
-  }));
+  })));
 
   it('should have a `navbarCollapsed` field', () => {
     const menu: MenuComponent = new MenuComponent(fakeUserService, fakeRouter);

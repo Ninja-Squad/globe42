@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -10,10 +10,10 @@ describe('PersonsComponent', () => {
     snapshot: { data: { persons: [{ firstName: 'John', lastName: 'Doe' }] } }
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-  }));
+  })));
 
   it('should list persons', () => {
     const fixture = TestBed.createComponent(PersonsComponent);

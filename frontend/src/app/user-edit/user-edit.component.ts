@@ -12,7 +12,7 @@ import { UserModel } from '../models/user.model';
 })
 export class UserEditComponent implements OnInit {
 
-  private editedUser: UserModel;
+  editedUser: UserModel;
   createdUser: UserWithPasswordModel;
 
   user: UserCommand;

@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { IncomeTypesComponent } from './income-types.component';
 import { AppModule } from '../app.module';
-import { IncomeSourceTypeModel } from '../models/income.model';
+import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 
 describe('IncomeTypesComponent', () => {
   const incomeTypes: Array<IncomeSourceTypeModel> = [{ id: 42, type: 'CAF' }];
@@ -12,17 +12,17 @@ describe('IncomeTypesComponent', () => {
     snapshot: { data: { incomeTypes } }
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
+  beforeEach(async(() => TestBed.configureTestingModule({
     imports: [AppModule, RouterTestingModule],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-  }));
+  })));
 
   it('should list types', () => {
     const fixture = TestBed.createComponent(IncomeTypesComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const types = nativeElement.querySelectorAll('div.list-group-item');
+    const types = nativeElement.querySelectorAll('div.income-type-item');
     expect(types.length).toBe(1);
   });
 });

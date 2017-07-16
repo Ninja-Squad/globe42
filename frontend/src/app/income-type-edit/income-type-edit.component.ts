@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IncomeSourceTypeModel } from '../models/income.model';
-import { IncomeService } from '../income.service';
+import { IncomeSourceTypeCommand } from '../models/income-source-type.command';
+import { IncomeSourceTypeModel } from '../models/income-source-type.model';
+import { IncomeSourceTypeService } from '../income-source-type.service';
 
 @Component({
   selector: 'gl-income-type-edit',
@@ -11,21 +12,23 @@ import { IncomeService } from '../income.service';
 })
 export class IncomeTypeEditComponent implements OnInit {
 
-  incomeType: IncomeSourceTypeModel;
+  editedIncomeType: IncomeSourceTypeModel;
+  incomeType: IncomeSourceTypeCommand;
   actionFailed = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private incomeService: IncomeService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private incomeSourceTypeService: IncomeSourceTypeService) { }
 
   ngOnInit() {
-    this.incomeType = this.route.snapshot.data['incomeType'] || { type: '' };
+    this.editedIncomeType = this.route.snapshot.data['incomeType'];
+    this.incomeType = this.editedIncomeType ? { type: this.editedIncomeType.type } : { type: '' };
   }
 
-  create() {
+  save() {
     let action;
-    if (this.incomeType && this.incomeType.id !== undefined) {
-      action = this.incomeService.updateType(this.incomeType)
+    if (this.editedIncomeType) {
+      action = this.incomeSourceTypeService.update(this.editedIncomeType.id, this.incomeType);
     } else {
-      action = this.incomeService.createType(this.incomeType)
+      action = this.incomeSourceTypeService.create(this.incomeType);
     }
     action.subscribe(
       () => this.router.navigateByUrl('/income-types'),

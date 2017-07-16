@@ -1,11 +1,9 @@
 <h1 class="mb-5">Types de revenu</h1>
 
-<div class="list-group" *ngIf="incomeTypes">
-  <div class="list-group-item list-group-item-action flex-column align-items-start mb-2" *ngFor="let incomeType of incomeTypes">
-    <div class="d-flex w-100 justify-content-between">
-      <a [routerLink]="['/income-types', incomeType.id, 'edit']">{{incomeType.type}}</a>
-      <a class="btn btn-secondary" [routerLink]="['/income-types', incomeType.id, 'edit']">Éditer</a>
-    </div>
+<div class="row mb-2 align-items-center income-type-item" *ngFor="let incomeType of incomeTypes">
+  <div class="col-sm"><a [routerLink]="['/income-types', incomeType.id, 'edit']">{{ incomeType.type }}</a></div>
+  <div class="col-sm text-right">
+    <a class="btn btn-secondary" [routerLink]="['/income-types', incomeType.id, 'edit']">Éditer</a>
   </div>
 </div>
 

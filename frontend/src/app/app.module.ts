@@ -25,7 +25,6 @@ import { UserService } from 'app/user.service';
 import { AuthenticatedGuard } from 'app/authenticated.guard';
 import { IncomeTypesComponent } from './income-types/income-types.component';
 import { IncomeTypesResolverService } from 'app/income-types-resolver.service';
-import { IncomeService } from 'app/income.service';
 import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';
 import { IncomeTypeResolverService } from 'app/income-type-resolver.service';
 import { PasswordChangeComponent } from './password-change/password-change.component';
@@ -40,6 +39,8 @@ import { IncomeSourcesComponent } from './income-sources/income-sources.componen
 import { IncomeSourcesResolverService } from './income-sources-resolver.service';
 import { IncomeSourceEditComponent } from './income-source-edit/income-source-edit.component';
 import { IncomeSourceResolverService } from './income-source-resolver.service';
+import { IncomeSourceService } from './income-source.service';
+import { IncomeSourceTypeService } from './income-source-type.service';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { IncomeSourceResolverService } from './income-source-resolver.service';
     { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
     AuthenticatedGuard,
     IncomeTypesResolverService,
-    IncomeService,
+    IncomeSourceTypeService,
+    IncomeSourceService,
     IncomeTypeResolverService,
     IncomeSourcesResolverService,
     IncomeSourceResolverService,
