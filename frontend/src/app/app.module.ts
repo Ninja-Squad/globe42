@@ -45,6 +45,8 @@ import { IncomesResolverService } from './incomes-resolver.service';
 import { PersonLayoutComponent } from './person-layout/person-layout.component';
 import { IncomeService } from './income.service';
 import { PersonIncomesComponent } from './person-incomes/person-incomes.component';
+import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
+import { ConfirmService } from './confirm.service';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,11 @@ import { PersonIncomesComponent } from './person-incomes/person-incomes.componen
     IncomeSourcesComponent,
     IncomeSourceEditComponent,
     PersonIncomesComponent,
-    PersonLayoutComponent
+    PersonLayoutComponent,
+    ConfirmModalContentComponent
+  ],
+  entryComponents: [
+    ConfirmModalContentComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +112,8 @@ import { PersonIncomesComponent } from './person-incomes/person-incomes.componen
     {
       provide: LOCALE_ID,
       useValue: 'fr-FR'
-    }
+    },
+    ConfirmService
   ],
   bootstrap: [AppComponent]
 })

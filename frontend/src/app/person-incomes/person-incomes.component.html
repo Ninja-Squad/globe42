@@ -1,3 +1,9 @@
+<div *ngIf="incomes.length == 0" class="text-center" id="no-income">
+  <span style="font-size: 60px;" class="fa fa-info-circle text-info"></span>
+  <br/>
+  Aucun revenu&nbsp;!
+</div>
+
 <div class="row align-items-center mb-2 income-item" *ngFor="let income of incomes">
   <div class="col-sm">
     {{ income.source.name }}
@@ -6,7 +12,7 @@
     {{ income.monthlyAmount | currency:'EUR':true }} / mois
   </div>
   <div class="col-sm text-right">
-    <button class="btn btn-danger">
+    <button class="btn btn-danger delete-button" (click)="delete(income)">
       <span class="fa fa-trash"></span>
       Supprimer
     </button>

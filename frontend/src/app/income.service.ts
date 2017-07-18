@@ -11,4 +11,8 @@ export class IncomeService {
   list(personId: number): Observable<Array<IncomeModel>> {
     return this.http.get(`/api/persons/${personId}/incomes`);
   }
+
+  delete(personId: number, incomeId: number): Observable<void> {
+    return this.http.delete<void>(`/api/persons/${personId}/incomes/${incomeId}`);
+  }
 }

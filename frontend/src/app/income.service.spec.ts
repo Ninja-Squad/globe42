@@ -30,4 +30,10 @@ describe('IncomeService', () => {
 
     expect(actualIncomes).toEqual(expectedIncomes);
   });
+
+  it('should delete an income of a person', () => {
+    service.delete(42, 12).subscribe();
+
+    http.expectOne({url: '/api/persons/42/incomes/12', method: 'DELETE'}).flush(null);
+  });
 });

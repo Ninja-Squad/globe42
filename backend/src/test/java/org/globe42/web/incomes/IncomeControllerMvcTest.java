@@ -1,12 +1,14 @@
 package org.globe42.web.incomes;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Optional;
 
+import org.globe42.dao.IncomeDao;
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.Income;
 import org.globe42.domain.Person;
@@ -29,6 +31,9 @@ public class IncomeControllerMvcTest {
     @MockBean
     private PersonDao mockPersonDao;
 
+    @MockBean
+    private IncomeDao mockIncomeDao;
+
     @Autowired
     private MockMvc mvc;
 
@@ -50,5 +55,16 @@ public class IncomeControllerMvcTest {
            .andExpect(jsonPath("$[0].id").value(income.getId()))
            .andExpect(jsonPath("$[0].monthlyAmount").value(income.getMonthlyAmount().doubleValue()))
            .andExpect(jsonPath("$[0].source.id").value(income.getSource().getId().intValue()));
+    }
+
+    @Test
+    public void shouldDelete() throws Exception {
+        Income income = IncomeControllerTest.createIncome(12L);
+        person.addIncome(income);
+
+        when(mockIncomeDao.findById(income.getId())).thenReturn(Optional.of(income));
+
+        mvc.perform(delete("/api/persons/{personId}/incomes/{incomeId}", person.getId(), income.getId()))
+           .andExpect(status().isNoContent());
     }
 }
