@@ -19,7 +19,9 @@ describe('PersonComponent', () => {
   };
 
   const activatedRoute = {
-    snapshot: { data: { person } }
+    parent: {
+      snapshot: { data: { person } }
+    }
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
@@ -32,8 +34,6 @@ describe('PersonComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const name = nativeElement.querySelector('#fullName');
-    expect(name.textContent).toContain('John Doe (john)');
     const gender = nativeElement.querySelector('#gender');
     expect(gender.textContent).toBe('Homme');
     const address = nativeElement.querySelector('#fullAddress');

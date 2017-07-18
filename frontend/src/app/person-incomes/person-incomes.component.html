@@ -1,0 +1,14 @@
+<div class="row align-items-center mb-2 income-item" *ngFor="let income of incomes">
+  <div class="col-sm">
+    {{ income.source.name }}
+  </div>
+  <div class="col-sm text-right">
+    {{ income.monthlyAmount | currency:'EUR':true }} / mois
+  </div>
+  <div class="col-sm text-right">
+    <button class="btn btn-danger">
+      <span class="fa fa-trash"></span>
+      Supprimer
+    </button>
+  </div>
+</div>

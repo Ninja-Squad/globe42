@@ -1,0 +1,18 @@
+<h1 id="fullName">{{ person.firstName }} {{ person.lastName }} <ng-container *ngIf="person.nickName">({{ person.nickName }})</ng-container></h1>
+
+<div class="row">
+  <div class="col-xs-12 col-md-4 col-lg-2">
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="info" routerLinkActive="active">Informations</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="incomes" routerLinkActive="active">Revenus</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -15,7 +15,7 @@ export class PersonComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.person = this.route.snapshot.data['person'];
+    this.person = this.route.parent.snapshot.data['person'];
   }
 
 }

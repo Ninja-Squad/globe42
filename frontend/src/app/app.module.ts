@@ -41,6 +41,10 @@ import { IncomeSourceEditComponent } from './income-source-edit/income-source-ed
 import { IncomeSourceResolverService } from './income-source-resolver.service';
 import { IncomeSourceService } from './income-source.service';
 import { IncomeSourceTypeService } from './income-source-type.service';
+import { IncomesResolverService } from './incomes-resolver.service';
+import { PersonLayoutComponent } from './person-layout/person-layout.component';
+import { IncomeService } from './income.service';
+import { PersonIncomesComponent } from './person-incomes/person-incomes.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +66,9 @@ import { IncomeSourceTypeService } from './income-source-type.service';
     PasswordResetComponent,
     DisplayMaritalStatusPipe,
     IncomeSourcesComponent,
-    IncomeSourceEditComponent
+    IncomeSourceEditComponent,
+    PersonIncomesComponent,
+    PersonLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -88,6 +94,8 @@ import { IncomeSourceTypeService } from './income-source-type.service';
     IncomeSourcesResolverService,
     IncomeSourceResolverService,
     UsersResolverService,
+    IncomeService,
+    IncomesResolverService,
     UserResolverService,
     JwtInterceptorService,
     {
