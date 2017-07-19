@@ -13,7 +13,8 @@ describe('IncomeTypesComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule],
+    imports: [RouterTestingModule],
+    declarations: [IncomeTypesComponent],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   })));
 

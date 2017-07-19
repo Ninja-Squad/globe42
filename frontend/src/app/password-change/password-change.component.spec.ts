@@ -1,20 +1,25 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { AppModule } from 'app/app.module';
 import { PasswordChangeComponent } from './password-change.component';
 import { UserService } from '../user.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { JwtInterceptorService } from '../jwt-interceptor.service';
 
 describe('PasswordChangeComponent', () => {
 
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule],
+    imports: [HttpClientModule, FormsModule],
+    declarations: [PasswordChangeComponent],
     providers: [
-      { provide: Router, useValue: fakeRouter }
+      { provide: Router, useValue: fakeRouter },
+      UserService,
+      JwtInterceptorService
     ]
   })));
 

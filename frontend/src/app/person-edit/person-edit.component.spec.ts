@@ -5,18 +5,31 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import { PersonEditComponent } from './person-edit.component';
-import { AppModule } from '../app.module';
 import { PersonService } from '../person.service';
 import { CityModel, PersonModel } from '../models/person.model';
 import { DisplayCityPipe } from '../display-city.pipe';
-import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
+import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { PersonCommand } from '../models/person.command';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DisplayGenderPipe } from '../display-gender.pipe';
+import { SearchCityService } from '../search-city.service';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
     code: 42000,
     city: 'SAINT-ETIENNE'
   };
+
+  @NgModule({
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, NgbModule.forRoot()],
+    declarations: [PersonEditComponent, DisplayMaritalStatusPipe, DisplayCityPipe, DisplayGenderPipe],
+    providers: [ PersonService, DisplayCityPipe, SearchCityService ]
+  })
+  class TestModule {}
 
   describe('in edit mode', () => {
     const person: PersonModel = {
@@ -30,7 +43,7 @@ describe('PersonEditComponent', () => {
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule],
+      imports: [TestModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     })));
 
@@ -104,7 +117,7 @@ describe('PersonEditComponent', () => {
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule],
+      imports: [TestModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     })));
 

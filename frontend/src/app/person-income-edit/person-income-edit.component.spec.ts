@@ -7,6 +7,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IncomeService } from '../income.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -16,13 +20,20 @@ describe('PersonIncomeEditComponent', () => {
 
   const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', 'nickName': 'JB'}
 
+  @NgModule({
+    imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule],
+    declarations: [PersonIncomeEditComponent],
+    providers: [IncomeService]
+  })
+  class TestModule {}
+
   describe('in creation mode', () => {
     const activatedRoute = {
       snapshot: { data: { person, incomeSources } }
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule],
+      imports: [TestModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     })));
 

@@ -1,21 +1,35 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { UserEditComponent } from './user-edit.component';
-import { AppModule } from '../app.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { Observable } from 'rxjs/Observable';
 import { UserModel } from '../models/user.model';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { ErrorService } from '../error.service';
 
 describe('UserEditComponent', () => {
+
+  @NgModule({
+    imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule, NgbModule.forRoot()],
+    declarations: [UserEditComponent],
+    providers: [UserService, JwtInterceptorService, ErrorService]
+  })
+  class TestModule {}
+
   describe('in creation mode', () => {
     const activatedRoute = {
       snapshot: { data: {} }
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule],
+      imports: [TestModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     })));
 
@@ -112,7 +126,7 @@ describe('UserEditComponent', () => {
     };
 
     beforeEach(() => TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule],
+      imports: [TestModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     }));
 

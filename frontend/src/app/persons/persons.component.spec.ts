@@ -11,7 +11,8 @@ describe('PersonsComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule],
+    imports: [RouterTestingModule],
+    declarations: [PersonsComponent],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   })));
 

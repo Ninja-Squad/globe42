@@ -1,10 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmOptions, ConfirmService } from './confirm.service';
-import { AppModule } from './app.module';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
 import { Observable } from 'rxjs/Observable';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Component, NgModule } from '@angular/core';
+import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 
 describe('ConfirmService and its modal compoent', () => {
   let modalContent;
@@ -12,10 +13,10 @@ describe('ConfirmService and its modal compoent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ AppModule, RouterTestingModule ]
+      imports: [TestModule]
     });
 
-    fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(TestComponent);
     fixture.detectChanges();
   }));
 
@@ -36,19 +37,19 @@ describe('ConfirmService and its modal compoent', () => {
   }
 
   it('should display a modal dialog when confirming', () => {
-    confirm({ message: 'Really?' });
+    confirm({message: 'Really?'});
     expect(modalContent).toBeTruthy();
     expect(modalContent.querySelector('.modal-title').textContent).toBe('Confirmation');
     expect(modalContent.querySelector('.modal-body').textContent).toContain('Really?');
   });
 
   it('should honor the title option', () => {
-    confirm({ message: 'Really?', title: 'foo' });
+    confirm({message: 'Really?', title: 'foo'});
     expect(modalContent.querySelector('.modal-title').textContent).toBe('foo');
   });
 
   it('should emit when confirming', (done: DoneFn) => {
-    confirm({ message: 'Really?' }).subscribe(() => done());
+    confirm({message: 'Really?'}).subscribe(() => done());
     const yesButton = modalContent.querySelectorAll('button')[1];
     expect(yesButton.textContent).toBe('Oui');
     yesButton.click();
@@ -59,7 +60,7 @@ describe('ConfirmService and its modal compoent', () => {
   });
 
   it('should error when not confirming', (done: DoneFn) => {
-    confirm({ message: 'Really?' }).subscribe(null, () => done());
+    confirm({message: 'Really?'}).subscribe(null, () => done());
     const noButton = modalContent.querySelectorAll('button')[2];
     expect(noButton.textContent).toBe('Non');
     noButton.click();
@@ -70,7 +71,7 @@ describe('ConfirmService and its modal compoent', () => {
   });
 
   it('should error when closing', (done: DoneFn) => {
-    confirm({ message: 'Really?' }).subscribe(null, () => done());
+    confirm({message: 'Really?'}).subscribe(null, () => done());
     const closeButton = modalContent.querySelectorAll('button')[0];
     expect(closeButton.textContent).toContain('×');
     closeButton.click();
@@ -80,3 +81,18 @@ describe('ConfirmService and its modal compoent', () => {
     expect(document.querySelector('.modal-content')).toBeFalsy();
   });
 });
+
+@Component({
+  template: ''
+})
+class TestComponent {
+}
+
+@NgModule({
+  imports: [RouterTestingModule, NgbModule.forRoot()],
+  declarations: [ConfirmModalContentComponent, TestComponent],
+  providers: [ConfirmService],
+  entryComponents: [ConfirmModalContentComponent]
+})
+class TestModule {
+}

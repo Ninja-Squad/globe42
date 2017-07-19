@@ -1,7 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { UsersComponent } from './users.component';
-import { AppModule } from '../app.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
@@ -16,7 +15,8 @@ describe('UsersComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule],
+    imports: [RouterTestingModule],
+    declarations: [UsersComponent],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   })));
 

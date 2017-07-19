@@ -1,13 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { PersonIncomesComponent } from './person-incomes.component';
 import { IncomeModel } from '../models/income.model';
-import { AppModule } from '../app.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmService } from '../confirm.service';
 import { Observable } from 'rxjs/Observable';
 import { IncomeService } from '../income.service';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LOCALE_ID } from '@angular/core';
 
 describe('PersonIncomesComponent', () => {
   const incomes: Array<IncomeModel> = [
@@ -38,8 +40,14 @@ describe('PersonIncomesComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule],
-    providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+    imports: [HttpClientModule, RouterTestingModule, NgbModule.forRoot()],
+    declarations: [PersonIncomesComponent],
+    providers: [
+      { provide: ActivatedRoute, useValue: activatedRoute },
+      { provide: LOCALE_ID, useValue: 'fr-FR' },
+      IncomeService,
+      ConfirmService
+    ]
   })));
 
   it('should list incomes', () => {

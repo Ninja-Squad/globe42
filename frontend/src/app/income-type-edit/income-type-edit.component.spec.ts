@@ -1,15 +1,32 @@
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import { IncomeTypeEditComponent } from './income-type-edit.component';
-import { AppModule } from '../app.module';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceTypeService } from '../income-source-type.service';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ErrorService } from '../error.service';
 
 describe('IncomeTypeEditComponent', () => {
+
+  const fakeRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
+
+  @NgModule({
+    imports: [CommonModule, HttpClientModule, FormsModule],
+    declarations: [IncomeTypeEditComponent],
+    providers: [
+      { provide: Router, useValue: fakeRouter },
+      IncomeSourceTypeService,
+      ErrorService
+    ]
+  })
+  class TestModule {}
+
 
   describe('in edit mode', () => {
     const incomeType: IncomeSourceTypeModel = { id: 42, type: 'CAF' };
@@ -18,8 +35,10 @@ describe('IncomeTypeEditComponent', () => {
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      imports: [TestModule],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute }
+      ]
     })));
 
     it('should have a title', () => {
@@ -33,7 +52,6 @@ describe('IncomeTypeEditComponent', () => {
       const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
       spyOn(incomeSourceTypeService, 'update').and.returnValue(Observable.of(incomeType));
       const router = TestBed.get(Router);
-      spyOn(router, 'navigateByUrl');
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
 
@@ -63,7 +81,7 @@ describe('IncomeTypeEditComponent', () => {
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule],
+      imports: [TestModule],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     })));
 
@@ -78,7 +96,6 @@ describe('IncomeTypeEditComponent', () => {
       const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
       spyOn(incomeSourceTypeService, 'create').and.returnValue(Observable.of(null));
       const router = TestBed.get(Router);
-      spyOn(router, 'navigateByUrl');
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
 
       fixture.detectChanges();

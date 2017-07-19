@@ -1,8 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { PersonLayoutComponent } from './person-layout.component';
 import { PersonModel } from '../models/person.model';
-import { AppModule } from '../app.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { By } from '@angular/platform-browser';
@@ -20,7 +19,8 @@ describe('PersonLayoutComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule],
+    imports: [RouterTestingModule],
+    declarations: [PersonLayoutComponent],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   })));
 

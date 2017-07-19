@@ -1,8 +1,6 @@
-import { async, fakeAsync, tick, TestBed } from '@angular/core/testing';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-import { AppModule } from '../app.module';
 import { MenuComponent } from './menu.component';
 import { UserService } from '../user.service';
 import { UserModel } from '../models/user.model';
@@ -16,7 +14,8 @@ describe('MenuComponent', () => {
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule],
+    imports: [RouterTestingModule],
+    declarations: [MenuComponent],
     providers: [
       { provide: UserService, useValue: fakeUserService }
     ]

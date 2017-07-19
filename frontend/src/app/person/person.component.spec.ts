@@ -1,10 +1,13 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PersonComponent } from './person.component';
 import { AppModule } from '../app.module';
 import { CityModel, PersonModel } from '../models/person.model';
+import { DisplayGenderPipe } from '../display-gender.pipe';
+import { DisplayMaritalStatusPipe } from '../display-marital-status.pipe';
+import { DisplayCityPipe } from '../display-city.pipe';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -25,8 +28,11 @@ describe('PersonComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule],
-    providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+    imports: [ RouterTestingModule ],
+    declarations: [ PersonComponent, DisplayGenderPipe, DisplayMaritalStatusPipe, DisplayCityPipe ],
+    providers: [
+      { provide: ActivatedRoute, useValue: activatedRoute }
+    ]
   })));
 
   it('should display a person', () => {
