@@ -3,6 +3,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { IncomeService } from './income.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { IncomeModel } from './models/income.model';
+import { IncomeCommand } from './models/income.command';
 
 describe('IncomeService', () => {
   let http: HttpTestingController;
@@ -36,4 +37,20 @@ describe('IncomeService', () => {
 
     http.expectOne({url: '/api/persons/42/incomes/12', method: 'DELETE'}).flush(null);
   });
+
+  it('should create an income for a person', () => {
+    const fakeIncomeCommand: IncomeCommand = { sourceId: 12, monthlyAmount: 340 };
+    const expectedIncome: IncomeModel = { id: 2 } as IncomeModel;
+
+    let actualIncome;
+    service.create(42, fakeIncomeCommand).subscribe(income => actualIncome = income);
+
+    const testRequest = http.expectOne({ url: '/api/persons/42/incomes', method: 'POST' });
+    expect(testRequest.request.body).toEqual(fakeIncomeCommand);
+    testRequest.flush(expectedIncome);
+
+    expect(actualIncome).toEqual(expectedIncome);
+  });
+
+
 });

@@ -26,4 +26,8 @@ export class PersonIncomesComponent {
       .switchMap(() => this.incomeService.list(this.person.id))
       .subscribe(incomes => this.incomes = incomes);
   }
+
+  totalMonthlyAmount() {
+    return this.incomes.map(income => income.monthlyAmount).reduce((sum, value) => sum + value);
+  }
 }

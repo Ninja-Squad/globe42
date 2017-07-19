@@ -1,0 +1,28 @@
+<h1 class="mb-5" id="fullName">
+  Créer un nouveau revenu pour {{ person.firstName }} {{ person.lastName }} <ng-container *ngIf="person.nickName">({{ person.nickName }})</ng-container>
+</h1>
+
+<form (ngSubmit)="save()" #incomeForm="ngForm">
+  <div class="form-group row">
+    <label for="source" class="col-sm-3 col-form-label">Source du revenu</label>
+    <div class="col-sm-9">
+      <select class="form-control" id="source" name="source" [(ngModel)]="income.source" required>
+        <option value=""></option>
+        <option *ngFor="let source of incomeSources" [ngValue]="source">{{ source.name }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="monthlyAmount" class="col-sm-3 col-form-label">Montant mensuel</label>
+    <div class="col-sm-9">
+      <input type="number" class="form-control" id="monthlyAmount" name="monthlyAmount" min="1" [max]="income.source?.maxMonthlyAmount"
+             [(ngModel)]="income.monthlyAmount"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-9 offset-sm-3">
+      <button class="btn btn-primary" [disabled]="!incomeForm.valid" id="save">Enregistrer</button>
+      <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'incomes']">Annuler</a>
+    </div>
+  </div>
+</form>

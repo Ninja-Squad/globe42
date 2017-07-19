@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IncomeModel } from './models/income.model';
 import { Observable } from 'rxjs/Observable';
+import { IncomeCommand } from './models/income.command';
 
 @Injectable()
 export class IncomeService {
@@ -14,5 +15,9 @@ export class IncomeService {
 
   delete(personId: number, incomeId: number): Observable<void> {
     return this.http.delete<void>(`/api/persons/${personId}/incomes/${incomeId}`);
+  }
+
+  create(personId: number, command: IncomeCommand): Observable<IncomeModel> {
+    return this.http.post(`/api/persons/${personId}/incomes`, command);
   }
 }

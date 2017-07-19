@@ -15,6 +15,11 @@ describe('PersonIncomesComponent', () => {
       id: 12,
       source: { name: 'Allocations familiales'},
       monthlyAmount: 789.01
+    },
+    {
+      id: 13,
+      source: { name: 'Salaire'},
+      monthlyAmount: 300
     }
   ] as Array<IncomeModel>;
 
@@ -43,7 +48,7 @@ describe('PersonIncomesComponent', () => {
 
     const nativeElement = fixture.nativeElement;
     const incomes = nativeElement.querySelectorAll('div.income-item');
-    expect(incomes.length).toBe(1);
+    expect(incomes.length).toBe(2);
 
     const income1 = incomes[0];
     expect(income1.textContent).toContain('Allocations familiales');
@@ -52,7 +57,7 @@ describe('PersonIncomesComponent', () => {
     expect(nativeElement.querySelector('#no-income')).toBeFalsy();
   });
 
-  it('should display no income message when no income', () => {
+  it('should display no income message and no total when no income', () => {
     const fixture = TestBed.createComponent(PersonIncomesComponent);
     fixture.componentInstance.incomes = [];
     fixture.detectChanges();
@@ -63,6 +68,19 @@ describe('PersonIncomesComponent', () => {
 
     const noIncome = nativeElement.querySelector('#no-income');
     expect(noIncome.textContent).toContain('Aucun revenu\u00A0!');
+
+    const totalIncome = nativeElement.querySelector('#total-income');
+    expect(totalIncome).toBeNull();
+  });
+
+  it('should display total income', () => {
+    const fixture = TestBed.createComponent(PersonIncomesComponent);
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement;
+    const totalIncome = nativeElement.querySelector('#total-income');
+    expect(totalIncome.textContent).toContain('Total');
+    expect(totalIncome.textContent).toContain('1\u00A0089,01 € / mois');
   });
 
   it('should ask for confirmation before deletion', () => {

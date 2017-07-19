@@ -18,3 +18,12 @@
     </button>
   </div>
 </div>
+
+<div *ngIf="incomes.length" class="row align-items-center mb-2" id="total-income">
+  <div class="col-sm"><strong>Total</strong></div>
+  <div class="col-sm text-right"><strong>{{ totalMonthlyAmount() | currency:'EUR':true }} / mois</strong></div>
+  <div class="col-sm"></div>
+</div>
+
+
+<a [routerLink]="['/persons', person.id , 'incomes', 'create']" class="btn btn-outline-primary">Ajouter un revenu</a>

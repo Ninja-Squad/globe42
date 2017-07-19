@@ -47,6 +47,7 @@ import { IncomeService } from './income.service';
 import { PersonIncomesComponent } from './person-incomes/person-incomes.component';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 import { ConfirmService } from './confirm.service';
+import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { ConfirmService } from './confirm.service';
     IncomeSourceEditComponent,
     PersonIncomesComponent,
     PersonLayoutComponent,
-    ConfirmModalContentComponent
+    ConfirmModalContentComponent,
+    PersonIncomeEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
