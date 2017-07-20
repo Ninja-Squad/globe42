@@ -1,9 +1,8 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { PersonComponent } from './person.component';
-import { AppModule } from '../app.module';
 import { CityModel, PersonModel } from '../models/person.model';
 import { DisplayGenderPipe } from '../display-gender.pipe';
 import { DisplayMaritalStatusPipe } from '../display-marital-status.pipe';

@@ -1,5 +1,9 @@
 <h1 class="mb-5">Adhérents</h1>
 
+<div class="mb-4">
+  <input id="filter-input" [formControl]="filterCtrl" class="form-control" placeholder="Filtrer" />
+</div>
+
 <div class="row align-items-center mb-2 person-item" *ngFor="let person of persons">
   <div class="col-sm">
     <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>

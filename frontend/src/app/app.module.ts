@@ -126,7 +126,8 @@ import { FullnamePipe } from './fullname.pipe';
       provide: LOCALE_ID,
       useValue: 'fr-FR'
     },
-    ConfirmService
+    ConfirmService,
+    FullnamePipe
   ],
   bootstrap: [AppComponent]
 })

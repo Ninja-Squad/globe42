@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { IncomeTypesComponent } from './income-types.component';
-import { AppModule } from '../app.module';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 
 describe('IncomeTypesComponent', () => {
