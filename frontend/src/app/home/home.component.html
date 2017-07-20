@@ -1,21 +1,26 @@
-<div class="text-center" style="margin-top: 100px">
-  <h1>Globe42</h1>
+<div class="row align-items-center justify-content-center" style="margin-top: 100px">
 
-  <div *ngIf="!user; else loggedIn">
-    <a class="btn btn-primary" routerLink="/login">Connexion</a>
+  <div class="col-sm">
+    <img src="/assets/logo.png" class="img-fluid" alt="Logo de Globe 42"/>
   </div>
-  <ng-template #loggedIn>
-    <div>
-      <a routerLink="/persons">Gestion des adhérents</a>
+  <div class="col-sm">
+    <div *ngIf="!user; else loggedIn" class="text-center">
+      <a class="btn btn-primary btn-lg" routerLink="/login">
+        <span class="fa fa-sign-in"></span>
+        Connexion
+      </a>
     </div>
-    <div>
-      <a routerLink="/income-sources">Gestion des sources de revenu</a>
-    </div>
-    <div>
-      <a routerLink="/income-types">Gestion des types de revenu</a>
-    </div>
-    <div>
-      <a *ngIf="user?.admin" routerLink="/users">Gestion des utilisateurs de l'application</a>
-    </div>
-  </ng-template>
+    <ng-template #loggedIn>
+      <ul class="list-unstyled lead ml-sm-5">
+        <li><a routerLink="/persons"><span class="fa fa-caret-right"></span> Gestion des adhérents</a></li>
+        <li><div class="list-item">Gestion des ressources</div>
+          <ul class="list-unstyled ml-4">
+            <li><a routerLink="/income-sources"><span class="fa fa-caret-right"></span> Sources de revenu</a></li>
+            <li><a routerLink="/income-types"><span class="fa fa-caret-right"></span> Types de revenu</a></li>
+          </ul>
+        </li>
+        <li *ngIf="user?.admin"><a routerLink="/users"><span class="fa fa-caret-right"></span> Gestion des utilisateurs de l'application</a></li>
+      </ul>
+    </ng-template>
+  </div>
 </div>

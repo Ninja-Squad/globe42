@@ -1,4 +1,4 @@
-<h1 class="mb-5">Utilisateurs de l'application</h1>
+<h1>Utilisateurs de l'application</h1>
 
 <div class="row mb-2 align-items-center user-item" *ngFor="let user of users">
   <div class="col-sm"><a [routerLink]="['/users', user.id, 'edit']">{{ user.login }}</a></div>
@@ -7,9 +7,18 @@
     <span *ngIf="!user.admin" class="text-muted">simple utilisateur</span>
   </div>
   <div class="col-sm text-right">
-    <a class="btn btn-secondary" [routerLink]="['/users', user.id, 'edit']">Éditer</a>
-    <a class="btn btn-secondary" [routerLink]="['/users', user.id, 'password-resets']">Réinitialiser le mot de passe</a>
+    <a class="btn btn-secondary btn-sm" [routerLink]="['/users', user.id, 'edit']">
+      <span class="fa fa-edit"></span>
+      Éditer
+    </a>
+    <a class="btn btn-secondary btn-sm" [routerLink]="['/users', user.id, 'password-resets']">
+      <span class="fa fa-key"></span>
+      Réinitialiser le mot de passe
+    </a>
   </div>
 </div>
 
-<a class="btn btn-outline-primary" routerLink="/users/create">Nouvel utilisateur</a>
+<a class="btn btn-outline-primary" routerLink="/users/create">
+  <span class="fa fa-plus"></span>
+  Nouvel utilisateur
+</a>

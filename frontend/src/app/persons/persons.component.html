@@ -1,4 +1,4 @@
-<h1 class="mb-5">Adhérents</h1>
+<h1>Adhérents</h1>
 
 <div class="mb-4">
   <input id="filter-input" [formControl]="filterCtrl" class="form-control" placeholder="Filtrer" />
@@ -10,8 +10,14 @@
   </div>
   <div class="col-sm">{{ person.mediationCode }}</div>
   <div class="col-sm text-right">
-    <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'edit']">Éditer</a>
+    <a class="btn btn-secondary btn-sm" [routerLink]="['/persons', person.id, 'edit']">
+      <span class="fa fa-edit"></span>
+      Éditer
+    </a>
   </div>
 </div>
 
-<a class="btn btn-outline-primary" routerLink="/persons/create">Nouvel adhérent</a>
+<a class="btn btn-outline-primary" routerLink="/persons/create">
+  <span class="fa fa-plus"></span>
+  Nouvel adhérent
+</a>

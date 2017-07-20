@@ -1,4 +1,4 @@
-<h1 class="mb-5">Sources de revenu</h1>
+<h1>Sources de revenu</h1>
 
 <div class="row mb-2 align-items-center income-source-item" *ngFor="let incomeSource of incomeSources">
   <div class="col-sm"><a [routerLink]="['/income-sources', incomeSource.id, 'edit']">{{ incomeSource.name }}</a></div>
@@ -8,8 +8,14 @@
       max. {{ incomeSource.maxMonthlyAmount | currency:'EUR':true }} / mois
     </ng-container></div>
   <div class="col-sm text-right">
-    <a class="btn btn-secondary" [routerLink]="['/income-sources', incomeSource.id, 'edit']">Éditer</a>
+    <a class="btn btn-secondary btn-sm" [routerLink]="['/income-sources', incomeSource.id, 'edit']">
+      <span class="fa fa-edit"></span>
+      Éditer
+    </a>
   </div>
 </div>
 
-<a class="btn btn-outline-primary" routerLink="/income-sources/create">Nouvelle source de revenu</a>
+<a class="btn btn-outline-primary" routerLink="/income-sources/create">
+  <span class="fa fa-plus"></span>
+  Nouvelle source de revenu
+</a>
