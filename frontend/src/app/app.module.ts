@@ -50,6 +50,7 @@ import { ConfirmService } from './confirm.service';
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
 import { ErrorService } from './error.service';
 import { ErrorComponent } from './error/error.component';
+import { FullnamePipe } from './fullname.pipe';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { ErrorComponent } from './error/error.component';
     PersonLayoutComponent,
     ConfirmModalContentComponent,
     PersonIncomeEditComponent,
-    ErrorComponent
+    ErrorComponent,
+    FullnamePipe
   ],
   entryComponents: [
     ConfirmModalContentComponent

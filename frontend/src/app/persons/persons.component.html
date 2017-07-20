@@ -2,8 +2,9 @@
 
 <div class="row align-items-center mb-2 person-item" *ngFor="let person of persons">
   <div class="col-sm">
-    <a [routerLink]="['/persons', person.id]">{{person.firstName}} {{person.lastName}}</a>
+    <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
   </div>
+  <div class="col-sm">{{ person.mediationCode }}</div>
   <div class="col-sm text-right">
     <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'edit']">Éditer</a>
   </div>

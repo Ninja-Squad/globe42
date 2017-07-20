@@ -11,6 +11,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -22,7 +23,7 @@ describe('PersonIncomeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule],
-    declarations: [PersonIncomeEditComponent],
+    declarations: [PersonIncomeEditComponent, FullnamePipe],
     providers: [IncomeService]
   })
   class TestModule {}

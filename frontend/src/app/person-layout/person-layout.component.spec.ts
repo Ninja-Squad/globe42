@@ -5,6 +5,7 @@ import { PersonModel } from '../models/person.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { By } from '@angular/platform-browser';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonLayoutComponent', () => {
   const person: PersonModel = {
@@ -20,7 +21,7 @@ describe('PersonLayoutComponent', () => {
 
   beforeEach(async(() => TestBed.configureTestingModule({
     imports: [RouterTestingModule],
-    declarations: [PersonLayoutComponent],
+    declarations: [PersonLayoutComponent, FullnamePipe],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   })));
 
