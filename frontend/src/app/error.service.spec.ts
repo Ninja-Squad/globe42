@@ -1,23 +1,38 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ErrorService } from './error.service';
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpEvent, HttpHandler,
+  HttpRequest
+} from '@angular/common/http';
 import { FunctionalErrorModel, TechnicalErrorModel } from './models/error.model';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-// should rather use the HttpClientTestingModule, which would allow to make _handleError private,
-// but the issue https://github.com/angular/angular/issues/18181 prevents doing that
-describe('ErrorInterceptorService', () => {
+describe('ErrorService', () => {
 
   let service: ErrorService;
+  let http: HttpTestingController;
+  let httpClient: HttpClient;
+  const noop = () => {};
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ ErrorService ]
+      imports: [HttpClientTestingModule],
+      providers: [
+        {
+          provide: HTTP_INTERCEPTORS,
+          useExisting: ErrorService,
+          multi: true
+        },
+        ErrorService,
+      ]
     });
 
     service = TestBed.get(ErrorService);
+    http = TestBed.get(HttpTestingController);
+    httpClient = TestBed.get(HttpClient);
   });
 
   it('should emit technical error when error is not an HTTP response', () => {
@@ -26,9 +41,10 @@ describe('ErrorInterceptorService', () => {
       error = err;
     });
 
-    service._handleError(new HttpErrorResponse({ error: new Error('not good') }));
+    httpClient.get('/test').subscribe(null, noop);
+    http.expectOne('/test').error({ message: 'not good' } as ErrorEvent);
 
-    expect(error.status).toBeUndefined();
+    expect(error.status).toBe(0);
     expect(error.message).toBe('not good');
   });
 
@@ -38,10 +54,11 @@ describe('ErrorInterceptorService', () => {
       error = err;
     });
 
-    service._handleError(new HttpErrorResponse({ status: 500, statusText: 'Server Error' }));
+    httpClient.get('/test').subscribe(null, noop);
+    http.expectOne('/test').flush(null, {status: 500, statusText: 'Server Error'});
 
     expect(error.status).toBe(500);
-    expect(error.message).toBe('Http failure response for (unknown url): 500 Server Error');
+    expect(error.message).toBe('Http failure response for /test: 500 Server Error');
   });
 
   it('should emit technical error when error is an HTTP response with a spring boot json body', () => {
@@ -50,7 +67,8 @@ describe('ErrorInterceptorService', () => {
       error = err;
     });
 
-    service._handleError(new HttpErrorResponse({ status: 500, statusText: 'Server Error', error: { message: 'Not good' } }));
+    httpClient.get('/test').subscribe(null, noop);
+    http.expectOne('/test').flush({message: 'Not good'}, {status: 500, statusText: 'Server Error'});
 
     expect(error.status).toBe(500);
     expect(error.message).toBe('Not good');
@@ -67,17 +85,16 @@ describe('ErrorInterceptorService', () => {
       technicalError = err;
     });
 
-    service._handleError(new HttpErrorResponse({
-      status: 400,
-      statusText: 'Server Error',
-      error: {
-        message: 'Not good',
-        functionalError: {
-          code: 'ERROR_CODE',
-          parameters: { foo: 'bar' }
-        }
+    httpClient.get('/test').subscribe(null, noop);
+
+    const functionalErrorBody = {
+      message: 'Not good',
+      functionalError: {
+        code: 'ERROR_CODE',
+        parameters: {foo: 'bar'}
       }
-    }));
+    };
+    http.expectOne('/test').flush(functionalErrorBody, {status: 400, statusText: 'Bad Request'});
 
     expect(functionalError).toBeUndefined();
     expect(technicalError).toBeUndefined();
@@ -94,11 +111,8 @@ describe('ErrorInterceptorService', () => {
       technicalError = err;
     });
 
-    service._handleError(new HttpErrorResponse({
-      status: 401,
-      statusText: 'Unauthorized',
-      url: 'http://localhost/api/authentication'
-    }));
+    httpClient.get('/api/authentication').subscribe(null, noop);
+    http.expectOne('/api/authentication').flush(null, {status: 401, statusText: 'Unauthorized'});
 
     expect(functionalError).toBeUndefined();
     expect(technicalError).toBeUndefined();
@@ -118,38 +132,12 @@ describe('ErrorInterceptorService', () => {
         message: 'Not good',
         functionalError: {
           code: 'ERROR_CODE',
-          parameters: { foo: 'bar' }
+          parameters: {foo: 'bar'}
         }
       }
     }));
 
     expect(error.code).toBe('ERROR_CODE');
-    expect(error.parameters).toEqual({ foo: 'bar' });
-  });
-
-  it('should intercept', () => {
-    // we expect this will be populated when the observable returned by the next handler throws an HttpErrorResponse
-    let error: TechnicalErrorModel;
-    service.technicalErrors.subscribe(err => {
-      error = err;
-    });
-
-    // create a fake next handle that throws an HttpErrorResponse when we want to
-    const errorSubject = new Subject<HttpEvent<any>>();
-    const next: HttpHandler = {
-      handle(req: HttpRequest<any>): Observable<HttpEvent<any>> {
-        return errorSubject;
-      }
-    };
-
-    // call intercept() on our service
-    service.intercept(null, next).subscribe(null, () => {});
-
-    // make the next handler throw
-    errorSubject.error(new HttpErrorResponse({ error: new Error('not good') }));
-
-    // check that the service indeed emitted a technical error
-    expect(error.status).toBeUndefined();
-    expect(error.message).toBe('not good');
+    expect(error.parameters).toEqual({foo: 'bar'});
   });
 });

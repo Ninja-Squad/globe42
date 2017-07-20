@@ -41,11 +41,22 @@ export class ErrorService implements HttpInterceptor {
   constructor() { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).do(null, error => this._handleError(error));
+    return next.handle(req).do(null, error => this.handleError(error));
   }
 
-  // visible for testing
-  _handleError(error: HttpErrorResponse) {
+  /**
+   * Returns a callback function that can be used by components to react to functional errors and emit them so that
+   * the error component displays them in the usual location.
+   */
+  functionalErrorHandler() : (err: HttpErrorResponse) => void {
+    return (err: HttpErrorResponse) => {
+      if (this.isFunctional(err)) {
+        this.functionalErrors.next(err.error.functionalError);
+      }
+    }
+  }
+
+  private handleError(error: HttpErrorResponse) {
     if (error.error instanceof Error) {
       // the error is not a HTTP response from the backend
       this.technicalErrors.next({ message: error.error.message });
@@ -65,18 +76,6 @@ export class ErrorService implements HttpInterceptor {
           // the error is a an HTTP response, but which doesn't contain a spring boot payload
           this.technicalErrors.next({status: error.status, message: error.message});
         }
-      }
-    }
-  }
-
-  /**
-   * Returns a callback function that can be used by components to react to functional errors and emit them so that
-   * the error component displays them in the usual location.
-   */
-  functionalErrorHandler() : (err: HttpErrorResponse) => void {
-    return (err: HttpErrorResponse) => {
-      if (this.isFunctional(err)) {
-        this.functionalErrors.next(err.error.functionalError);
       }
     }
   }
