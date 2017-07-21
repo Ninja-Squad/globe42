@@ -116,7 +116,8 @@ describe('ErrorComponent', () => {
     component.error = {status: 500, technical: true, message: 'Server error'};
     fixture.detectChanges();
 
-    expect(element.querySelector('ngb-alert').textContent).toContain('Une erreur technique inattendue s\'est produite. Essayez de recharger la page.');
+    expect(element.querySelector('ngb-alert').textContent).toContain(
+      'Une erreur technique inattendue s\'est produite. Essayez de recharger la page.');
     expect(element.querySelector('ngb-alert small').textContent).toContain('500 - Server error');
 
     component.error = null;

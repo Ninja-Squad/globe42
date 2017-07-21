@@ -42,6 +42,9 @@ export class PersonEditComponent implements OnInit {
   adherentCtrl: FormControl;
   entryDateCtrl: FormControl;
 
+  genders: Array<Gender> = GENDER_TRANSLATIONS.map(t => t.key);
+  maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
+
   searchFailed = false;
 
   search = (text: Observable<string>) =>
@@ -58,9 +61,6 @@ export class PersonEditComponent implements OnInit {
           }));
 
   cityFormatter = (result: CityModel) => this.displayCityPipe.transform(result);
-
-  genders: Array<Gender> = GENDER_TRANSLATIONS.map(t => t.key);
-  maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
 
   constructor(private personService: PersonService,
               private searchCityService: SearchCityService,

@@ -36,8 +36,7 @@ export class IncomeSourceEditComponent implements OnInit {
         typeId: this.editedIncomeSource.type.id,
         maxMonthlyAmount: this.editedIncomeSource.maxMonthlyAmount
       }
-    }
-    else {
+    } else {
       this.incomeSource = {
         name: '',
         typeId: null,
@@ -50,8 +49,7 @@ export class IncomeSourceEditComponent implements OnInit {
     let action;
     if (this.editedIncomeSource) {
       action = this.incomeSourceService.update(this.editedIncomeSource.id, this.incomeSource);
-    }
-    else {
+    } else {
       action = this.incomeSourceService.create(this.incomeSource);
     }
     action.subscribe(

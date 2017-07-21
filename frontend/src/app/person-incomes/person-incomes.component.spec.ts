@@ -55,10 +55,10 @@ describe('PersonIncomesComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const incomes = nativeElement.querySelectorAll('div.income-item');
-    expect(incomes.length).toBe(2);
+    const incomeElements = nativeElement.querySelectorAll('div.income-item');
+    expect(incomeElements.length).toBe(2);
 
-    const income1 = incomes[0];
+    const income1 = incomeElements[0];
     expect(income1.textContent).toContain('Allocations familiales');
     expect(income1.textContent).toContain('789,01 € / mois');
 
@@ -71,8 +71,8 @@ describe('PersonIncomesComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const incomes = nativeElement.querySelectorAll('div.income-item');
-    expect(incomes.length).toBe(0);
+    const incomeElements = nativeElement.querySelectorAll('div.income-item');
+    expect(incomeElements.length).toBe(0);
 
     const noIncome = nativeElement.querySelector('#no-income');
     expect(noIncome.textContent).toContain('Aucun revenu\u00A0!');

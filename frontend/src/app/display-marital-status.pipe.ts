@@ -14,7 +14,7 @@ export const MARITAL_STATUS_TRANSLATIONS: Array<{ key: MaritalStatus; translatio
 @Pipe({
   name: 'displayMaritalStatus'
 })
-export class DisplayMaritalStatusPipe extends BaseEnumPipe {
+export class DisplayMaritalStatusPipe extends BaseEnumPipe implements PipeTransform {
 
   constructor() {
     super(MARITAL_STATUS_TRANSLATIONS);

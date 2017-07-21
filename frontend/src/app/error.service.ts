@@ -48,7 +48,7 @@ export class ErrorService implements HttpInterceptor {
    * Returns a callback function that can be used by components to react to functional errors and emit them so that
    * the error component displays them in the usual location.
    */
-  functionalErrorHandler() : (err: HttpErrorResponse) => void {
+  functionalErrorHandler(): (err: HttpErrorResponse) => void {
     return (err: HttpErrorResponse) => {
       if (this.isFunctional(err)) {
         this.functionalErrors.next(err.error.functionalError);
@@ -60,8 +60,7 @@ export class ErrorService implements HttpInterceptor {
     if (error.error instanceof Error) {
       // the error is not a HTTP response from the backend
       this.technicalErrors.next({ message: error.error.message });
-    }
-    else {
+    } else {
       // the error is a response from the backend
       // if the error is a functional error, ignore it: it should be handled by the component.
       // if the error status is 401, ignore it: the component should handle it
@@ -71,8 +70,7 @@ export class ErrorService implements HttpInterceptor {
         if (body && body.message) {
           // the error is a spring boot error
           this.technicalErrors.next({status: error.status, message: body.message});
-        }
-        else {
+        } else {
           // the error is a an HTTP response, but which doesn't contain a spring boot payload
           this.technicalErrors.next({status: error.status, message: error.message});
         }

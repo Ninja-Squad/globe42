@@ -4,10 +4,10 @@ import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-mo
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 
-export type ConfirmOptions = {
+export interface ConfirmOptions {
   message: string;
   title?: string;
-};
+}
 
 @Injectable()
 export class ConfirmService {

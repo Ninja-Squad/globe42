@@ -1,13 +1,29 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmOptions, ConfirmService } from './confirm.service';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs/Observable';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Component, NgModule } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 
 describe('ConfirmService and its modal compoent', () => {
+
+  @Component({
+    template: ''
+  })
+  class TestComponent {
+  }
+
+  @NgModule({
+    imports: [RouterTestingModule, NgbModule.forRoot()],
+    declarations: [ConfirmModalContentComponent, TestComponent],
+    providers: [ConfirmService],
+    entryComponents: [ConfirmModalContentComponent]
+  })
+  class TestModule {
+  }
+
   let modalContent;
   let fixture: ComponentFixture<any>;
 
@@ -81,18 +97,3 @@ describe('ConfirmService and its modal compoent', () => {
     expect(document.querySelector('.modal-content')).toBeFalsy();
   });
 });
-
-@Component({
-  template: ''
-})
-class TestComponent {
-}
-
-@NgModule({
-  imports: [RouterTestingModule, NgbModule.forRoot()],
-  declarations: [ConfirmModalContentComponent, TestComponent],
-  providers: [ConfirmService],
-  entryComponents: [ConfirmModalContentComponent]
-})
-class TestModule {
-}

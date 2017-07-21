@@ -1,4 +1,4 @@
-import { Pipe } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { BaseEnumPipe } from './base-enum-pipe';
 import { Gender } from './models/person.model';
 
@@ -11,7 +11,7 @@ export const GENDER_TRANSLATIONS: Array<{ key: Gender; translation: string; }> =
 @Pipe({
   name: 'displayGender'
 })
-export class DisplayGenderPipe extends BaseEnumPipe {
+export class DisplayGenderPipe extends BaseEnumPipe implements PipeTransform {
 
   constructor() {
     super(GENDER_TRANSLATIONS);
