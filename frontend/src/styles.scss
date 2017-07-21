@@ -4,3 +4,11 @@
 h1 {
   margin-bottom: $spacer-y * 1.5;
 }
+
+/**
+ * When displaying data using form groups, which thus don't contain any input field,
+ * surround them with a .read-only container, to reduce the too large space between rows
+ */
+.read-only-form .form-group {
+  margin-bottom: 0;
+}

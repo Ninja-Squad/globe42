@@ -1,6 +1,6 @@
 <div *ngIf="!situation">Inconnue</div>
 
-<ng-container *ngIf="situation">
+<div *ngIf="situation" class="read-only-form">
   <div class="form-group row">
     <label class="col col-form-label">Parents présents</label>
     <div class="col">
@@ -25,4 +25,4 @@
       <p class="form-control-static">{{ situation.siblingCount | number }}</p>
     </div>
   </div>
-</ng-container>
+</div>
