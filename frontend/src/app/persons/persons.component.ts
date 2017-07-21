@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonModel } from '../models/person.model';
+import { PersonIdentityModel } from '../models/person.model';
 import { ActivatedRoute } from '@angular/router';
 import { sortBy } from '../utils';
 import { FullnamePipe } from '../fullname.pipe';
@@ -12,17 +12,17 @@ import { FormControl } from '@angular/forms';
 })
 export class PersonsComponent implements OnInit {
 
-  persons: Array<PersonModel> = [];
+  persons: Array<PersonIdentityModel> = [];
   filterCtrl: FormControl;
 
-  private allPersons: Array<PersonModel> = [];
+  private allPersons: Array<PersonIdentityModel> = [];
 
   constructor(private route: ActivatedRoute, private fullnamePipe: FullnamePipe) {
     this.filterCtrl = new FormControl('');
   }
 
   ngOnInit() {
-    this.allPersons = sortBy<PersonModel>(this.route.snapshot.data['persons'],
+    this.allPersons = sortBy<PersonIdentityModel>(this.route.snapshot.data['persons'],
       p => this.fullnamePipe.transform(p));
     this.filterCtrl.valueChanges.subscribe(text => this.filter(text));
     this.filter('');

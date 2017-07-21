@@ -33,6 +33,7 @@ public abstract class BaseDaoTest {
     private static final Operation DELETE_ALL = DeleteAll.from("guser",
                                                                "income",
                                                                "person",
+                                                               "family_situation",
                                                                "income_source",
                                                                "income_source_type");
 

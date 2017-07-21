@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { PersonModel } from './models/person.model';
+import { PersonIdentityModel, PersonModel } from './models/person.model';
 import { HttpClient } from '@angular/common/http';
 import { PersonCommand } from './models/person.command';
 
@@ -22,7 +22,7 @@ export class PersonService {
     return this.http.post(`/api/persons`, person);
   }
 
-  list(): Observable<Array<PersonModel>> {
+  list(): Observable<Array<PersonIdentityModel>> {
     return this.http.get('/api/persons');
   }
 

@@ -1,7 +1,11 @@
 package org.globe42.web.persons;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
 import org.globe42.domain.Person;
 
@@ -10,12 +14,9 @@ import org.globe42.domain.Person;
  * @author JB Nizet
  */
 public final class PersonDTO {
-    private final Long id;
-    private final String firstName;
-    private final String lastName;
-    private final String nickName;
+    @JsonUnwrapped
+    private final PersonIdentityDTO identity;
     private final LocalDate birthDate;
-    private final String mediationCode;
     private final String address;
     private final CityDTO city;
     private final String email;
@@ -24,14 +25,17 @@ public final class PersonDTO {
     private final Gender gender;
     private final String phoneNumber;
     private final MaritalStatus maritalStatus;
+    private final Housing housing;
+    private final Integer housingSpace;
+    private final FiscalStatus fiscalStatus;
+    private final LocalDate fiscalStatusDate;
+    private final boolean fiscalStatusUpToDate;
+    private final FamilySituationDTO frenchFamilySituation;
+    private final FamilySituationDTO abroadFamilySituation;
 
     public PersonDTO(Person person) {
-        this.id = person.getId();
-        this.firstName = person.getFirstName();
-        this.lastName = person.getLastName();
-        this.nickName = person.getNickName();
+        this.identity = new PersonIdentityDTO(person);
         this.birthDate = person.getBirthDate();
-        this.mediationCode = person.getMediationCode();
         this.address = person.getAddress();
         this.city = person.getCity() == null ? null : new CityDTO(person.getCity());
         this.email = person.getEmail();
@@ -40,30 +44,21 @@ public final class PersonDTO {
         this.gender = person.getGender();
         this.phoneNumber = person.getPhoneNumber();
         this.maritalStatus = person.getMaritalStatus();
+        this.housing = person.getHousing();
+        this.housingSpace = person.getHousingSpace();
+        this.fiscalStatus = person.getFiscalStatus();
+        this.fiscalStatusDate = person.getFiscalStatusDate();
+        this.fiscalStatusUpToDate = person.isFiscalStatusUpToDate();
+        this.frenchFamilySituation = person.getFrenchFamilySituation() == null ? null : new FamilySituationDTO(person.getFrenchFamilySituation());
+        this.abroadFamilySituation = person.getAbroadFamilySituation() == null ? null : new FamilySituationDTO(person.getAbroadFamilySituation());
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getNickName() {
-        return nickName;
+    public PersonIdentityDTO getIdentity() {
+        return identity;
     }
 
     public LocalDate getBirthDate() {
         return birthDate;
-    }
-
-    public String getMediationCode() {
-        return mediationCode;
     }
 
     public String getAddress() {
@@ -96,5 +91,33 @@ public final class PersonDTO {
 
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
+    }
+
+    public Housing getHousing() {
+        return housing;
+    }
+
+    public Integer getHousingSpace() {
+        return housingSpace;
+    }
+
+    public FiscalStatus getFiscalStatus() {
+        return fiscalStatus;
+    }
+
+    public LocalDate getFiscalStatusDate() {
+        return fiscalStatusDate;
+    }
+
+    public boolean isFiscalStatusUpToDate() {
+        return fiscalStatusUpToDate;
+    }
+
+    public FamilySituationDTO getFrenchFamilySituation() {
+        return frenchFamilySituation;
+    }
+
+    public FamilySituationDTO getAbroadFamilySituation() {
+        return abroadFamilySituation;
     }
 }

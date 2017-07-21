@@ -51,9 +51,9 @@ public class PersonControllerTest extends BaseTest {
     public void shouldList() {
         when(mockPersonDao.findAll()).thenReturn(Collections.singletonList(person));
 
-        List<PersonDTO> result = controller.list();
+        List<PersonIdentityDTO> result = controller.list();
 
-        assertThat(result).extracting(PersonDTO::getId).containsExactly(1L);
+        assertThat(result).extracting(PersonIdentityDTO::getId).containsExactly(1L);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class PersonControllerTest extends BaseTest {
 
         PersonDTO result = controller.get(person.getId());
 
-        assertThat(result.getId()).isEqualTo(person.getId());
+        assertThat(result.getIdentity().getId()).isEqualTo(person.getId());
     }
 
     @Test(expected = NotFoundException.class)
@@ -84,7 +84,7 @@ public class PersonControllerTest extends BaseTest {
         verify(mockPersonDao).save(personArgumentCaptor.capture());
         Person savedPerson = personArgumentCaptor.getValue();
         assertPersonEqualsCommand(savedPerson, command);
-        assertThat(result.getMediationCode()).isEqualTo("L37");
+        assertThat(result.getIdentity().getMediationCode()).isEqualTo("L37");
     }
 
     @Test
@@ -94,7 +94,7 @@ public class PersonControllerTest extends BaseTest {
         when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
         when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
 
-        assertThat(controller.create(command).getMediationCode()).isEqualTo("L37");
+        assertThat(controller.create(command).getIdentity().getMediationCode()).isEqualTo("L37");
     }
 
     @Test
@@ -104,7 +104,7 @@ public class PersonControllerTest extends BaseTest {
         when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
         when(mockPersonDao.nextMediationCode('Z')).thenReturn(76);
 
-        assertThat(controller.create(command).getMediationCode()).isEqualTo("Z76");
+        assertThat(controller.create(command).getIdentity().getMediationCode()).isEqualTo("Z76");
     }
 
     @Test

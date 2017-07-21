@@ -57,9 +57,7 @@ public class PersonControllerMvcTest {
 
         mvc.perform(get("/api/persons"))
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(1))
-           .andExpect(jsonPath("$[0].entryDate").value("2017-05-21"))
-           .andExpect(jsonPath("$[0].adherent").value(true));
+           .andExpect(jsonPath("$[0].id").value(1));
     }
 
     @Test
@@ -68,7 +66,9 @@ public class PersonControllerMvcTest {
 
         mvc.perform(get("/api/persons/{personId}", person.getId()))
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$.id").value(1));
+           .andExpect(jsonPath("$.id").value(1))
+           .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
+           .andExpect(jsonPath("$.entryDate").value("2017-05-21"));
     }
 
     @Test

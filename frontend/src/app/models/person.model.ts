@@ -1,13 +1,16 @@
 export type MaritalStatus = 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 'WIDOWER' | 'DIVORCED' | 'SPLIT';
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 
-export interface PersonModel {
+export interface PersonIdentityModel {
   id: number;
   firstName: string;
   lastName: string;
   nickName: string;
-  birthDate: string;
   mediationCode: string;
+}
+
+export interface PersonModel extends PersonIdentityModel {
+  birthDate: string;
   address: string;
   city: CityModel;
   email: string;

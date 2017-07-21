@@ -9,9 +9,11 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -66,6 +68,27 @@ public class Person {
 
     @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus;
+
+    @Enumerated(EnumType.STRING)
+    private Housing housing;
+
+    /**
+     * The housing space, in square meters
+     */
+    private Integer housingSpace;
+
+    @Enumerated(EnumType.STRING)
+    private FiscalStatus fiscalStatus;
+
+    private LocalDate fiscalStatusDate;
+
+    private boolean fiscalStatusUpToDate;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private FamilySituation frenchFamilySituation;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private FamilySituation abroadFamilySituation;
 
     /**
      * The incomes of the person
@@ -190,6 +213,62 @@ public class Person {
 
     public void setMaritalStatus(MaritalStatus maritalStatus) {
         this.maritalStatus = maritalStatus;
+    }
+
+    public Housing getHousing() {
+        return housing;
+    }
+
+    public void setHousing(Housing housing) {
+        this.housing = housing;
+    }
+
+    public Integer getHousingSpace() {
+        return housingSpace;
+    }
+
+    public void setHousingSpace(Integer housingSpace) {
+        this.housingSpace = housingSpace;
+    }
+
+    public FiscalStatus getFiscalStatus() {
+        return fiscalStatus;
+    }
+
+    public void setFiscalStatus(FiscalStatus fiscalStatus) {
+        this.fiscalStatus = fiscalStatus;
+    }
+
+    public LocalDate getFiscalStatusDate() {
+        return fiscalStatusDate;
+    }
+
+    public void setFiscalStatusDate(LocalDate fiscalStatusDate) {
+        this.fiscalStatusDate = fiscalStatusDate;
+    }
+
+    public boolean isFiscalStatusUpToDate() {
+        return fiscalStatusUpToDate;
+    }
+
+    public void setFiscalStatusUpToDate(boolean fiscalStatusUpToDate) {
+        this.fiscalStatusUpToDate = fiscalStatusUpToDate;
+    }
+
+    public FamilySituation getFrenchFamilySituation() {
+        return frenchFamilySituation;
+    }
+
+    public void setFrenchFamilySituation(FamilySituation frenchFamilySituation) {
+        this.frenchFamilySituation = frenchFamilySituation;
+    }
+
+    public FamilySituation getAbroadFamilySituation() {
+        return abroadFamilySituation;
+    }
+
+    public void setAbroadFamilySituation(FamilySituation abroadFamilySituation) {
+        this.abroadFamilySituation = abroadFamilySituation;
     }
 
     public void addIncome(Income income) {

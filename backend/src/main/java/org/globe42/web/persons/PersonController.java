@@ -36,8 +36,8 @@ public class PersonController {
     }
 
     @GetMapping
-    public List<PersonDTO> list() {
-        return personDao.findAll().stream().map(PersonDTO::new).collect(Collectors.toList());
+    public List<PersonIdentityDTO> list() {
+        return personDao.findAll().stream().map(PersonIdentityDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{personId}")

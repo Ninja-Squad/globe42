@@ -22,6 +22,7 @@ public class PersonDaoTest extends BaseDaoTest {
     public void prepare() {
         Operation person =
             Insert.into("person")
+                .withDefaultValue("fiscal_status_up_to_date", false)
                 .columns("id", "last_name", "mediation_code", "gender", "adherent", "entry_date")
                 .values(1L, "Exbrayat", "E1", Gender.MALE, true, "2017-01-01")
                 .build();
