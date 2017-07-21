@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.globe42.dao.PersonDao;
+import org.globe42.domain.FamilySituation;
+import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
@@ -155,7 +158,14 @@ public class PersonControllerTest extends BaseTest {
                                     LocalDate.of(2017, 4, 13),
                                     Gender.MALE,
                                     "01234567",
-                                    MaritalStatus.CONCUBINAGE);
+                                    MaritalStatus.CONCUBINAGE,
+                                    Housing.F3,
+                                    70,
+                                    FiscalStatus.TAXABLE,
+                                    LocalDate.of(2017, 2, 1),
+                                    true,
+                                    new FamilySituationDTO(false, true, 2, 3),
+                                    new FamilySituationDTO(true, false, 0, 1));
     }
 
     private void assertPersonEqualsCommand(Person person, PersonCommandDTO command) {
@@ -172,5 +182,24 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getGender()).isEqualTo(command.getGender());
         assertThat(person.getPhoneNumber()).isEqualTo(command.getPhoneNumber());
         assertThat(person.getMaritalStatus()).isEqualTo(command.getMaritalStatus());
+        assertThat(person.getHousing()).isEqualTo(command.getHousing());
+        assertThat(person.getHousingSpace()).isEqualTo(command.getHousingSpace());
+        assertThat(person.getFiscalStatus()).isEqualTo(command.getFiscalStatus());
+        assertThat(person.getFiscalStatusDate()).isEqualTo(command.getFiscalStatusDate());
+        assertThat(person.isFiscalStatusUpToDate()).isEqualTo(command.isFiscalStatusUpToDate());
+        assertFamilySituationEqualsCommand(person.getFrenchFamilySituation(), command.getFrenchFamilySituation());
+        assertFamilySituationEqualsCommand(person.getAbroadFamilySituation(), command.getAbroadFamilySituation());
+    }
+
+    private void assertFamilySituationEqualsCommand(FamilySituation familySituation, FamilySituationDTO dto) {
+        if (dto == null) {
+            assertThat(familySituation).isNull();
+        }
+        else {
+            assertThat(familySituation.isParentsPresent()).isEqualTo(dto.isParentsPresent());
+            assertThat(familySituation.isSpousePresent()).isEqualTo(dto.isSpousePresent());
+            assertThat(familySituation.getChildCount()).isEqualTo(dto.getChildCount());
+            assertThat(familySituation.getSiblingCount()).isEqualTo(dto.getSiblingCount());
+        }
     }
 }

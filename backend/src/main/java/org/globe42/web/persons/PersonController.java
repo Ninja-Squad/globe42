@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.City;
+import org.globe42.domain.FamilySituation;
 import org.globe42.domain.Person;
 import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.AdminOnly;
@@ -92,6 +93,23 @@ public class PersonController {
         person.setGender(command.getGender());
         person.setPhoneNumber(command.getPhoneNumber());
         person.setMaritalStatus(command.getMaritalStatus());
+        person.setHousing(command.getHousing());
+        person.setHousingSpace(command.getHousingSpace());
+        person.setFiscalStatus(command.getFiscalStatus());
+        person.setFiscalStatusDate(command.getFiscalStatusDate());
+        person.setFiscalStatusUpToDate(command.isFiscalStatusUpToDate());
+        person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
+        person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
+    }
+
+    private FamilySituation toFamilySituation(FamilySituationDTO dtoOrNull) {
+        if (dtoOrNull == null) {
+            return null;
+        }
+        return new FamilySituation(dtoOrNull.isParentsPresent(),
+                                   dtoOrNull.isSpousePresent(),
+                                   dtoOrNull.getChildCount(),
+                                   dtoOrNull.getSiblingCount());
     }
 
     private char mediationCodeLetter(Person person) {

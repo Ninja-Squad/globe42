@@ -31,6 +31,16 @@ public class FamilySituation {
         this.id = id;
     }
 
+    public FamilySituation(boolean parentsPresent,
+                           boolean spousePresent,
+                           Integer childCount,
+                           Integer siblingCount) {
+        this.parentsPresent = parentsPresent;
+        this.spousePresent = spousePresent;
+        this.childCount = childCount;
+        this.siblingCount = siblingCount;
+    }
+
     public Long getId() {
         return id;
     }

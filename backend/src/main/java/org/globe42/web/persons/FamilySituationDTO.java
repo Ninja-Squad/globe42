@@ -22,10 +22,10 @@ public final class FamilySituationDTO {
     }
 
     @JsonCreator
-    private FamilySituationDTO(@JsonProperty boolean parentsPresent,
-                               @JsonProperty boolean spousePresent,
-                               @JsonProperty Integer childCount,
-                               @JsonProperty Integer siblingCount) {
+    public FamilySituationDTO(@JsonProperty boolean parentsPresent,
+                              @JsonProperty boolean spousePresent,
+                              @JsonProperty Integer childCount,
+                              @JsonProperty Integer siblingCount) {
         this.parentsPresent = parentsPresent;
         this.spousePresent = spousePresent;
         this.childCount = childCount;

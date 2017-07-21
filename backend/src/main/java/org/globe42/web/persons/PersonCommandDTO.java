@@ -6,7 +6,9 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -33,7 +35,16 @@ public final class PersonCommandDTO {
     @NotNull
     private final Gender gender;
     private final String phoneNumber;
-    private MaritalStatus maritalStatus;
+    private final MaritalStatus maritalStatus;
+
+    private final Housing housing;
+    private final Integer housingSpace;
+    private final FiscalStatus fiscalStatus;
+    private final LocalDate fiscalStatusDate;
+    private final boolean fiscalStatusUpToDate;
+    private final FamilySituationDTO frenchFamilySituation;
+    private final FamilySituationDTO abroadFamilySituation;
+
 
     @JsonCreator
     public PersonCommandDTO(@JsonProperty String firstName,
@@ -47,7 +58,14 @@ public final class PersonCommandDTO {
                             @JsonProperty LocalDate entryDate,
                             @JsonProperty Gender gender,
                             @JsonProperty String phoneNumber,
-                            @JsonProperty MaritalStatus maritalStatus) {
+                            @JsonProperty MaritalStatus maritalStatus,
+                            @JsonProperty Housing housing,
+                            @JsonProperty Integer housingSpace,
+                            @JsonProperty FiscalStatus fiscalStatus,
+                            @JsonProperty LocalDate fiscalStatusDate,
+                            @JsonProperty boolean fiscalStatusUpToDate,
+                            @JsonProperty FamilySituationDTO frenchFamilySituation,
+                            @JsonProperty FamilySituationDTO abroadFamilySituation) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nickName = nickName;
@@ -60,6 +78,13 @@ public final class PersonCommandDTO {
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.maritalStatus = maritalStatus;
+        this.housing = housing;
+        this.housingSpace = housingSpace;
+        this.fiscalStatus = fiscalStatus;
+        this.fiscalStatusDate = fiscalStatusDate;
+        this.fiscalStatusUpToDate = fiscalStatusUpToDate;
+        this.frenchFamilySituation = frenchFamilySituation;
+        this.abroadFamilySituation = abroadFamilySituation;
     }
 
     public String getFirstName() {
@@ -108,5 +133,33 @@ public final class PersonCommandDTO {
 
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
+    }
+
+    public Housing getHousing() {
+        return housing;
+    }
+
+    public Integer getHousingSpace() {
+        return housingSpace;
+    }
+
+    public FiscalStatus getFiscalStatus() {
+        return fiscalStatus;
+    }
+
+    public LocalDate getFiscalStatusDate() {
+        return fiscalStatusDate;
+    }
+
+    public boolean isFiscalStatusUpToDate() {
+        return fiscalStatusUpToDate;
+    }
+
+    public FamilySituationDTO getFrenchFamilySituation() {
+        return frenchFamilySituation;
+    }
+
+    public FamilySituationDTO getAbroadFamilySituation() {
+        return abroadFamilySituation;
     }
 }
