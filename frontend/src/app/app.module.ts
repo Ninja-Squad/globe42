@@ -51,6 +51,9 @@ import { PersonIncomeEditComponent } from './person-income-edit/person-income-ed
 import { ErrorService } from './error.service';
 import { ErrorComponent } from './error/error.component';
 import { FullnamePipe } from './fullname.pipe';
+import { DisplayFiscalStatusPipe } from './display-fiscal-status.pipe';
+import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
+import { FamilySituationComponent } from './family-situation/family-situation.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +81,10 @@ import { FullnamePipe } from './fullname.pipe';
     ConfirmModalContentComponent,
     PersonIncomeEditComponent,
     ErrorComponent,
-    FullnamePipe
+    FullnamePipe,
+    DisplayFiscalStatusPipe,
+    PersonFamilySituationComponent,
+    FamilySituationComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

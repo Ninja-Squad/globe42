@@ -26,6 +26,7 @@ import { IncomesResolverService } from './incomes-resolver.service';
 import { PersonLayoutComponent } from './person-layout/person-layout.component';
 import { PersonIncomesComponent } from './person-incomes/person-incomes.component';
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
+import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -57,7 +58,8 @@ export const routes: Routes = [
                 resolve: {
                   incomes: IncomesResolverService
                 }
-              }
+              },
+              { path: 'family', component: PersonFamilySituationComponent },
             ]
           },
           {

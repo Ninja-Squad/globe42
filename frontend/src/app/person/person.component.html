@@ -1,55 +1,93 @@
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Genre</label>
-  <div class="col-sm-10">
-    <p id="gender" class="form-control-static">{{ person.gender | displayGender }}</p>
+<div class="row">
+  <div class="col-lg">
+    <h2>Identité</h2>
+
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Code médiation</label>
+      <div class="col-sm-6">
+        <p id="mediationCode" class="form-control-static">{{ person.mediationCode }}</p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Est adhérent</label>
+      <div class="col-sm-6">
+        <p id="adherent" class="form-control-static">{{ person.adherent ? 'Oui' : 'Non' }}</p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Genre</label>
+      <div class="col-sm-6">
+        <p id="gender" class="form-control-static">{{ person.gender | displayGender }}</p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Né(e) le</label>
+      <div class="col-sm-6">
+        <p id="birthDate" class="form-control-static">{{ person.birthDate }}</p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Statut marital</label>
+      <div class="col-sm-6">
+        <p id="maritalStatus" class="form-control-static">{{ person.maritalStatus | displayMaritalStatus }}</p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
+      <div class="col-sm-6">
+        <p id="entryDate" class="form-control-static">{{ person.entryDate }}</p>
+      </div>
+    </div>
   </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Né(e) le</label>
-  <div class="col-sm-10">
-    <p id="birthDate" class="form-control-static">{{ person.birthDate }}</p>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Adresse</label>
-  <div class="col-sm-10">
-    <p id="fullAddress" class="form-control-static">{{ person.address }}, {{ person.city | displayCity }}</p>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Email</label>
-  <div class="col-sm-10">
-    <p id="email" class="form-control-static">{{ person.email }}</p>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Téléphone</label>
-  <div class="col-sm-10">
-    <p id="phoneNumber" class="form-control-static">{{ person.phoneNumber }}</p>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Statut marital</label>
-  <div class="col-sm-10">
-    <p id="maritalStatus" class="form-control-static">{{ person.maritalStatus | displayMaritalStatus }}</p>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Est adhérent</label>
-  <div class="col-sm-10">
-    <p id="adherent" class="form-control-static">{{ person.adherent ? 'Oui' : 'Non' }}</p>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Entré(e) en France le</label>
-  <div class="col-sm-10">
-    <p id="entryDate" class="form-control-static">{{ person.entryDate }}</p>
-  </div>
-</div>
-<div class="form-group row">
-  <label class="col-sm-2 col-form-label">Code médiation</label>
-  <div class="col-sm-10">
-    <p id="mediationCode" class="form-control-static">{{ person.mediationCode }}</p>
+  <div class="col-lg">
+    <h2>Contact</h2>
+
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Adresse</label>
+      <div class="col-sm-6">
+        <p id="fullAddress" class="form-control-static">{{ person.address }}, {{ person.city | displayCity }}</p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Email</label>
+      <div class="col-sm-6">
+        <p id="email" class="form-control-static">{{ person.email }}</p>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Téléphone</label>
+      <div class="col-sm-6">
+        <p id="phoneNumber" class="form-control-static">{{ person.phoneNumber }}</p>
+      </div>
+    </div>
+
+    <h2>Logement</h2>
+    <p id="housing">
+      <ng-container *ngIf="person.housing">{{ person.housing }}</ng-container>
+      <ng-container *ngIf="person.housing && person.housingSpace">&mdash;</ng-container>
+      <ng-container *ngIf="person.housingSpace">{{ person.housingSpace }} m<sup>2</sup></ng-container>
+      <ng-container *ngIf="!person.housing && !person.housingSpace">Aucune information</ng-container>
+    </p>
+
+    <h2>Situation fiscale</h2>
+
+    <p id="fiscalStatus">
+      <ng-container *ngIf="!person.fiscalStatus">Inconnue</ng-container>
+      <ng-container *ngIf="person.fiscalStatus">
+        {{ person.fiscalStatus | displayFiscalStatus }}
+        <span *ngIf="person.fiscalStatusDate">
+          &mdash; établie le {{ person.fiscalStatusDate | date }}
+        </span>
+        <span class="text-danger" *ngIf="!person.fiscalStatusUpToDate">
+          <span class="fa fa-warning"></span>
+          pas à jour
+        </span>
+        <span class="text-success" *ngIf="person.fiscalStatusUpToDate">
+          <span class="fa fa-check"></span>
+          à jour
+        </span>
+      </ng-container>
+    </p>
   </div>
 </div>
 

@@ -34,13 +34,13 @@ describe('PersonLayoutComponent', () => {
     expect(name.textContent).toContain('John Doe (john)');
   });
 
-  it('should have two nav links and a router outlet', () => {
+  it('should have 3 nav links and a router outlet', () => {
     const fixture = TestBed.createComponent(PersonLayoutComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
     const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(2);
+    expect(links.length).toBe(3);
 
     const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
     expect(outlet).toBeTruthy();

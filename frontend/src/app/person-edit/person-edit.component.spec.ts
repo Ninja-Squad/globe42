@@ -33,11 +33,33 @@ describe('PersonEditComponent', () => {
 
   describe('in edit mode', () => {
     const person: PersonModel = {
-      id: 0, firstName: 'John', lastName: 'Doe', nickName: 'john', birthDate: '1980-01-01',
+      id: 0,
+      firstName: 'John',
+      lastName: 'Doe',
+      nickName: 'john',
       mediationCode: 'code1', address: 'Chemin de la gare',
-      city: cityModel, email: 'john@mail.com', adherent: true, entryDate: '2016-12-01',
-      gender: 'MALE', phoneNumber: '06 12 34 56 78', maritalStatus: 'SINGLE'
+      birthDate: '1980-01-01',
+      city: cityModel,
+      email: 'john@mail.com',
+      adherent: true,
+      entryDate: '2016-12-01',
+      gender: 'MALE',
+      phoneNumber: '06 12 34 56 78',
+      maritalStatus: 'SINGLE',
+      housing: 'F4',
+      housingSpace: 80,
+      fiscalStatus: 'TAXABLE',
+      fiscalStatusUpToDate: true,
+      fiscalStatusDate: '2017-02-01',
+      frenchFamilySituation: {
+        parentsPresent: false,
+        spousePresent: true,
+        childCount: 1,
+        siblingCount: 3
+      },
+      abroadFamilySituation: null
     };
+
     const activatedRoute = {
       snapshot: { data: { person } }
     };
