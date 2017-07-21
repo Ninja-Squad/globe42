@@ -24,7 +24,7 @@ export class PersonIncomesComponent {
     this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer le revenu ${income.source.name}\u00A0?`})
       .switchMap(() => this.incomeService.delete(this.person.id, income.id))
       .switchMap(() => this.incomeService.list(this.person.id))
-      .subscribe(incomes => this.incomes = incomes);
+      .subscribe(incomes => this.incomes = incomes, () => {});
   }
 
   totalMonthlyAmount() {

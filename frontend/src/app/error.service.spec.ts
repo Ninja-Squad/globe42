@@ -1,13 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ErrorService } from './error.service';
-import {
-  HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpEvent, HttpHandler,
-  HttpRequest
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FunctionalErrorModel, TechnicalErrorModel } from './models/error.model';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('ErrorService', () => {
