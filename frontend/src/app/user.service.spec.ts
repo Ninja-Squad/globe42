@@ -151,6 +151,11 @@ describe('UserService', () => {
     expect(actualUsers).toEqual(expectedUsers);
   });
 
+  it('should delete a user', () => {
+    service.delete(2).subscribe(() => {});
+    http.expectOne({ url: '/api/users/2', method: 'DELETE' }).flush(null);
+  });
+
   it('should reset a user password', () => {
     const expectedUser: UserWithPasswordModel = { id: 2 } as UserWithPasswordModel;
 
