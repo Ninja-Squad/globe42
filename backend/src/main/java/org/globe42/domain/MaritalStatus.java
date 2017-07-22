@@ -5,6 +5,7 @@ package org.globe42.domain;
  * @author JB Nizet
  */
 public enum MaritalStatus {
+    UNKNOWN,
     MARRIED,
     SINGLE,
     CONCUBINAGE,

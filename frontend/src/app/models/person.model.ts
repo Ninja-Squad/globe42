@@ -1,6 +1,7 @@
-export type MaritalStatus = 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 'WIDOWER' | 'DIVORCED' | 'SPLIT';
+export type MaritalStatus = 'UNKNOWN' | 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 'WIDOWER' | 'DIVORCED' | 'SPLIT';
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
-export type FiscalStatus = 'TAXABLE' | 'NOT_TAXABLE';
+export type FiscalStatus = 'UNKNOWN' | 'TAXABLE' | 'NOT_TAXABLE';
+export type Housing = 'UNKNOWN' | 'F0' | 'F1' | 'F2' | 'F3' | 'F4' | 'F5' | 'F6';
 
 export interface PersonIdentityModel {
   id: number;
@@ -27,7 +28,7 @@ export interface PersonModel extends PersonIdentityModel {
   gender: Gender;
   phoneNumber: string;
   maritalStatus: MaritalStatus;
-  housing: string;
+  housing: Housing;
   housingSpace: number;
   fiscalStatus: FiscalStatus;
   fiscalStatusDate: string;

@@ -35,16 +35,20 @@ public final class PersonCommandDTO {
     @NotNull
     private final Gender gender;
     private final String phoneNumber;
+
+    @NotNull
     private final MaritalStatus maritalStatus;
 
+    @NotNull
     private final Housing housing;
     private final Integer housingSpace;
+
+    @NotNull
     private final FiscalStatus fiscalStatus;
     private final LocalDate fiscalStatusDate;
     private final boolean fiscalStatusUpToDate;
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
-
 
     @JsonCreator
     public PersonCommandDTO(@JsonProperty String firstName,

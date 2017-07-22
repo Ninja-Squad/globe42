@@ -10,11 +10,11 @@ CREATE SEQUENCE family_situation_seq START WITH 1000;
 
 
 ALTER TABLE person
-  ADD COLUMN housing VARCHAR;
+  ADD COLUMN housing VARCHAR NOT NULL;
 ALTER TABLE person
   ADD COLUMN housing_space INT;
 ALTER TABLE person
-  ADD COLUMN fiscal_status VARCHAR;
+  ADD COLUMN fiscal_status VARCHAR NOT NULL;
 ALTER TABLE person
   ADD COLUMN fiscal_status_date DATE;
 ALTER TABLE person
@@ -30,5 +30,7 @@ ALTER TABLE person
   ADD CONSTRAINT person_fk2 FOREIGN KEY (abroad_family_situation_id) REFERENCES family_situation (id);
 
 UPDATE person set fiscal_status_up_to_date = FALSE;
+UPDATE person set marital_status = 'UNKNOWN' WHERE marital_status IS NULL;
 
-ALTER TABLE person ALTER fiscal_status_up_to_date SET NOT NULL
+ALTER TABLE person ALTER marital_status SET NOT NULL;
+ALTER TABLE person ALTER fiscal_status_up_to_date SET NOT NULL;

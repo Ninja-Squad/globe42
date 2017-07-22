@@ -3,6 +3,7 @@ import { FiscalStatus } from './models/person.model';
 import { BaseEnumPipe } from './base-enum-pipe';
 
 export const FISCAL_STATUS_TRANSLATIONS: Array<{ key: FiscalStatus; translation: string; }> = [
+  {key: 'UNKNOWN', translation: 'Inconnue'},
   {key: 'TAXABLE', translation: 'Imposable'},
   {key: 'NOT_TAXABLE', translation: 'Non imposable'}
 ];

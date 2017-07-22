@@ -10,3 +10,8 @@
     <gl-family-situation [situation]="person.abroadFamilySituation"></gl-family-situation>
   </div>
 </div>
+
+<a class="btn btn-outline-primary" [routerLink]="['/persons', person.id, 'edit']">
+  <span class="fa fa-edit"></span>
+  Éditer
+</a>

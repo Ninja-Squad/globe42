@@ -5,6 +5,7 @@ package org.globe42.domain;
  * @author JB Nizet
  */
 public enum FiscalStatus {
+    UNKNOWN,
     TAXABLE,
     NOT_TAXABLE
 }

@@ -1,4 +1,4 @@
-import { CityModel, Gender, MaritalStatus } from './person.model';
+import { CityModel, FamilySituation, FiscalStatus, Gender, Housing, MaritalStatus } from './person.model';
 
 export interface PersonCommand {
   firstName: string;
@@ -13,5 +13,12 @@ export interface PersonCommand {
   entryDate: string;
   gender: Gender;
   phoneNumber: string;
-  maritalStatus: MaritalStatus
+  maritalStatus: MaritalStatus,
+  housing: Housing;
+  housingSpace: number;
+  fiscalStatus: FiscalStatus;
+  fiscalStatusDate: string;
+  fiscalStatusUpToDate: boolean;
+  frenchFamilySituation: FamilySituation;
+  abroadFamilySituation: FamilySituation;
 }

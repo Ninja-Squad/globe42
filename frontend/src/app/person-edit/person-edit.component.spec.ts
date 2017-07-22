@@ -17,6 +17,9 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DisplayGenderPipe } from '../display-gender.pipe';
 import { SearchCityService } from '../search-city.service';
+import { DisplayHousingPipe } from '../display-housing.pipe';
+import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
+import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -26,10 +29,19 @@ describe('PersonEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, NgbModule.forRoot()],
-    declarations: [PersonEditComponent, DisplayMaritalStatusPipe, DisplayCityPipe, DisplayGenderPipe],
-    providers: [ PersonService, DisplayCityPipe, SearchCityService ]
+    declarations: [
+      PersonEditComponent,
+      DisplayMaritalStatusPipe,
+      DisplayCityPipe,
+      DisplayGenderPipe,
+      DisplayHousingPipe,
+      DisplayFiscalStatusPipe,
+      FamilySituationEditComponent
+    ],
+    providers: [PersonService, DisplayCityPipe, SearchCityService]
   })
-  class TestModule {}
+  class TestModule {
+  }
 
   describe('in edit mode', () => {
     const person: PersonModel = {
@@ -37,7 +49,8 @@ describe('PersonEditComponent', () => {
       firstName: 'John',
       lastName: 'Doe',
       nickName: 'john',
-      mediationCode: 'code1', address: 'Chemin de la gare',
+      mediationCode: 'code1',
+      address: 'Chemin de la gare',
       birthDate: '1980-01-01',
       city: cityModel,
       email: 'john@mail.com',
@@ -61,12 +74,12 @@ describe('PersonEditComponent', () => {
     };
 
     const activatedRoute = {
-      snapshot: { data: { person } }
+      snapshot: {data: {person}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
       imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
     })));
 
     it('should have a title', () => {
@@ -135,12 +148,12 @@ describe('PersonEditComponent', () => {
 
   describe('in create mode', () => {
     const activatedRoute = {
-      snapshot: { data: { person: null } }
+      snapshot: {data: {person: null}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
       imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
     })));
 
     it('should have a title', () => {
@@ -189,8 +202,8 @@ describe('PersonEditComponent', () => {
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe('');
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
-      expect(maritalStatus.selectedIndex).toBe(-1);
-      expect(maritalStatus.options[0].value).toBe('');
+      expect(maritalStatus.selectedIndex).toBe(0);
+      expect(maritalStatus.options[0].value).toBe('UNKNOWN');
       const adherentYes = nativeElement.querySelector('#adherentYes');
       expect(adherentYes.checked).toBe(false);
       const adherentNo = nativeElement.querySelector('#adherentNo');
@@ -253,7 +266,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.city.city).toBe('SAINT-ETIENNE');
       expect(createdPerson.email).toBe('jane@mail.com');
       expect(createdPerson.phoneNumber).toBe('06 13 13 13 13');
-      expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[1].key);
+      expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
       expect(createdPerson.adherent).toBe(true);
       expect(createdPerson.entryDate).toBe('2015-02-02');
 

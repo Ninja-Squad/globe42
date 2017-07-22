@@ -4,88 +4,36 @@
 </h1>
 
 <form [formGroup]="personForm" (ngSubmit)="save()">
+
+  <h2>Identité</h2>
+
   <div class="form-group row">
-    <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
-    <div class="col-sm-10">
-      <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="firstName" class="col-sm-2 col-form-label">Prénom</label>
-    <div class="col-sm-10">
+    <label for="firstName" class="col-sm-3 col-form-label">Prénom</label>
+    <div class="col-sm-9">
       <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName">
     </div>
   </div>
   <div class="form-group row">
-    <label for="nickName" class="col-sm-2 col-form-label">Pseudo</label>
-    <div class="col-sm-10">
+    <label for="lastName" class="col-sm-3 col-form-label">Nom</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="nickName" class="col-sm-3 col-form-label">Pseudo</label>
+    <div class="col-sm-9">
       <input class="form-control" id="nickName" placeholder="Pseudo" formControlName="nickName">
     </div>
   </div>
   <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Genre</label>
-    <div class="col-sm-10">
-      <div ngbRadioGroup name="gender" formControlName="gender">
-        <label class="btn btn-secondary" *ngFor="let gender of genders">
-          <input id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
-        </label>
-      </div>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="birthDate" class="col-sm-2 col-form-label">Date de naissance</label>
-    <div class="col-sm-10 input-group">
-      <div class="input-group-addon" (click)="d.toggle()">
-        <i class="fa fa-calendar" aria-hidden="true"></i>
-      </div>
-      <input class="form-control" id="birthDate" placeholder="1970-01-01"
-             formControlName="birthDate" ngbDatepicker #d="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="mediationCode" class="col-sm-2 col-form-label">Code de médiation</label>
-    <div class="col-sm-10 text-muted form-control-static" id="mediationCode">
+    <label for="mediationCode" class="col-sm-3 col-form-label">Code de médiation</label>
+    <div class="col-sm-9 text-muted form-control-static" id="mediationCode">
       Généré automatiquement
     </div>
   </div>
   <div class="form-group row">
-    <label for="address" class="col-sm-2 col-form-label">Adresse</label>
-    <div class="col-sm-10">
-      <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
-    </div>
-  </div>
-  <div class="form-group row" [class.has-danger]="searchFailed">
-    <label for="city" class="col-sm-2 col-form-label">Ville</label>
-    <ng-template #resultTemplate let-result="result">{{ result | displayCity }}</ng-template>
-    <div class="col-sm-10">
-      <input class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
-             [ngbTypeahead]="search" [resultTemplate]="resultTemplate" [inputFormatter]="cityFormatter">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="email" class="col-sm-2 col-form-label">Email</label>
-    <div class="col-sm-10">
-      <input class="form-control" id="email" placeholder="john@mail.com" formControlName="email">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="phoneNumber" class="col-sm-2 col-form-label">Téléphone</label>
-    <div class="col-sm-10">
-      <input class="form-control" id="phoneNumber" placeholder="06 00 00 00 00" formControlName="phoneNumber">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Statut marital</label>
-    <div class="col-sm-10">
-      <select class="form-control" formControlName="maritalStatus" id="maritalStatus">
-        <option value=""></option>
-        <option *ngFor="let ms of maritalStatuses" [value]="ms">{{ ms | displayMaritalStatus }}</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Est adhérent</label>
-    <div class="col-sm-10">
+    <label class="col-sm-3 col-form-label">Est adhérent</label>
+    <div class="col-sm-9">
       <div ngbRadioGroup name="adherent" formControlName="adherent">
         <label class="btn btn-secondary">
           <input id="adherentYes" type="radio" [value]="true"> Oui
@@ -97,8 +45,36 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="entryDate" class="col-sm-2 col-form-label">Date d'entrée en France</label>
-    <div class="col-sm-10 input-group">
+    <label class="col-sm-3 col-form-label">Genre</label>
+    <div class="col-sm-9">
+      <div ngbRadioGroup name="gender" formControlName="gender">
+        <label class="btn btn-secondary" *ngFor="let gender of genders">
+          <input id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="birthDate" class="col-sm-3 col-form-label">Date de naissance</label>
+    <div class="col-sm-9 input-group">
+      <div class="input-group-addon" (click)="d.toggle()">
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+      </div>
+      <input class="form-control" id="birthDate" placeholder="1970-01-01"
+             formControlName="birthDate" ngbDatepicker #d="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label">Statut marital</label>
+    <div class="col-sm-9">
+      <select class="form-control" formControlName="maritalStatus" id="maritalStatus">
+        <option *ngFor="let ms of maritalStatuses" [value]="ms">{{ ms | displayMaritalStatus }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="entryDate" class="col-sm-3 col-form-label">Date d'entrée en France</label>
+    <div class="col-sm-9 input-group">
       <div class="input-group-addon" (click)="ed.toggle()">
         <i class="fa fa-calendar" aria-hidden="true"></i>
       </div>
@@ -106,9 +82,101 @@
              formControlName="entryDate" ngbDatepicker #ed="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
     </div>
   </div>
+
+  <h2>Contact</h2>
+  <div class="form-group row">
+    <label for="address" class="col-sm-3 col-form-label">Adresse</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
+    </div>
+  </div>
+  <div class="form-group row" [class.has-danger]="searchFailed">
+    <label for="city" class="col-sm-3 col-form-label">Ville</label>
+    <ng-template #resultTemplate let-result="result">{{ result | displayCity }}</ng-template>
+    <div class="col-sm-9">
+      <input class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
+             [ngbTypeahead]="search" [resultTemplate]="resultTemplate" [inputFormatter]="cityFormatter">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="email" class="col-sm-3 col-form-label">Email</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="email" placeholder="john@mail.com" formControlName="email">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="phoneNumber" class="col-sm-3 col-form-label">Téléphone</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="phoneNumber" placeholder="06 00 00 00 00" formControlName="phoneNumber">
+    </div>
+  </div>
+
+  <h2>Logement</h2>
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label" for="housing">Classe de logement</label>
+    <div class="col-sm-9">
+      <select id="housing" class="form-control" formControlName="housing">
+        <option *ngFor="let housing of housings" [value]="housing">{{ housing | displayHousing }}</option>
+      </select>
+    </div>
+  </div>
+  <div *ngIf="housingCtrl.value !== 'UNKNOWN'" class="form-group row">
+    <label for="housingSpace" class="col-sm-3 col-form-label">Surface du logement (m<sup>2</sup>)</label>
+    <div class="col-sm-9">
+      <input type="number" class="form-control" id="housingSpace" formControlName="housingSpace" min="1" />
+    </div>
+  </div>
+
+  <h2>Situation fiscale</h2>
+  <div class="form-group row">
+    <label class="col-sm-3 col-form-label">Situation fiscale</label>
+    <div class="col-sm-9">
+      <div ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
+        <label class="btn btn-secondary" *ngFor="let fiscalStatus of fiscalStatuses">
+          <input id="fiscalStatus{{ fiscalStatus }}" type="radio" [value]="fiscalStatus"> {{ fiscalStatus | displayFiscalStatus }}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row" *ngIf="fiscalStatusCtrl.value !== 'UNKNOWN'">
+    <label for="fiscalSatusDate" class="col-sm-3 col-form-label">Date de mise en place</label>
+    <div class="col-sm-9 input-group">
+      <div class="input-group-addon" (click)="fsd.toggle()">
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+      </div>
+      <input class="form-control" id="fiscalSatusDate" placeholder="2010-01-01"
+             formControlName="fiscalStatusDate" ngbDatepicker #fsd="ngbDatepicker" [minDate]="{year: 1990, month: 1}">
+    </div>
+  </div>
+  <div *ngIf="fiscalStatusCtrl.value !== 'UNKNOWN'" class="form-check row">
+    <div class="col-sm-9 offset-sm-3">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" id="fiscalStatusUpToDate" formControlName="fiscalStatusUpToDate" />
+        A jour
+      </label>
+    </div>
+  </div>
+
+  <h2>Situation familiale</h2>
   <div class="row">
-    <div class="col-sm-10 offset-sm-2">
-      <button class="btn btn-primary" type="submit" [disabled]="personForm.invalid">Enregister</button>
+    <div class="col-md">
+      <h3>En France</h3>
+      <div *ngIf="!frenchFamilySituationGroup">Inconnue &mdash; <button class="btn btn-outline-success btn-sm" (click)="showFrenchFamilySituation()">Renseigner</button></div>
+      <div *ngIf="frenchFamilySituationGroup"><button class="btn btn-outline-danger btn-sm" type="button" (click)="hideFrenchFamilySituation()">Rendre inconnue</button></div>
+      <gl-family-situation-edit *ngIf="frenchFamilySituationGroup" [situation]="frenchFamilySituationGroup" location="french"></gl-family-situation-edit>
+    </div>
+
+    <div class="col-md">
+      <h3>Au pays</h3>
+      <div *ngIf="!abroadFamilySituationGroup">Inconnue &mdash; <button class="btn btn-outline-success btn-sm" (click)="showAbroadFamilySituation()">Renseigner</button></div>
+      <div *ngIf="abroadFamilySituationGroup"><button class="btn btn-outline-danger btn-sm" type="button" (click)="hideAbroadFamilySituation()">Rendre inconnue</button></div>
+      <gl-family-situation-edit *ngIf="abroadFamilySituationGroup" [situation]="abroadFamilySituationGroup" location="abroad"></gl-family-situation-edit>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-9 offset-sm-3">
+      <button class="btn btn-primary" type="submit" [disabled]="personForm.invalid">Enregistrer</button>
       <a class="btn btn-secondary" routerLink="/persons">Annuler</a>
     </div>
   </div>

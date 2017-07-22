@@ -10,6 +10,7 @@ import { DisplayCityPipe } from '../display-city.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { PersonFamilySituationComponent } from '../person-family-situation/person-family-situation.component';
 import { FamilySituationComponent } from '../family-situation/family-situation.component';
+import { DisplayHousingPipe } from '../display-housing.pipe';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -60,7 +61,8 @@ describe('PersonComponent', () => {
       DisplayGenderPipe,
       DisplayMaritalStatusPipe,
       DisplayCityPipe,
-      DisplayFiscalStatusPipe
+      DisplayFiscalStatusPipe,
+      DisplayHousingPipe
     ],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute }
@@ -75,13 +77,14 @@ describe('PersonComponent', () => {
     const gender = nativeElement.querySelector('#gender');
     expect(gender.textContent).toBe('Homme');
     const address = nativeElement.querySelector('#fullAddress');
-    expect(address.textContent).toBe('Chemin de la gare, 42000 SAINT-ETIENNE');
+    expect(address.textContent).toContain('Chemin de la gare');
+    expect(address.textContent).toContain('42000 SAINT-ETIENNE');
     const birthDate = nativeElement.querySelector('#birthDate');
     expect(birthDate.textContent).toBe('1980-01-01');
     const email = nativeElement.querySelector('#email');
-    expect(email.textContent).toBe('john@mail.com');
+    expect(email.textContent).toContain('john@mail.com');
     const phoneNumber = nativeElement.querySelector('#phoneNumber');
-    expect(phoneNumber.textContent).toBe('06 12 34 56 78');
+    expect(phoneNumber.textContent).toContain('06 12 34 56 78');
     const adherent = nativeElement.querySelector('#adherent');
     expect(adherent.textContent).toBe('Oui');
     const entryDate = nativeElement.querySelector('#entryDate');

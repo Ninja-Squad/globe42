@@ -66,19 +66,22 @@ public class Person {
 
     private String phoneNumber;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    private MaritalStatus maritalStatus;
+    private MaritalStatus maritalStatus = MaritalStatus.UNKNOWN;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    private Housing housing;
+    private Housing housing = Housing.UNKNOWN;
 
     /**
      * The housing space, in square meters
      */
     private Integer housingSpace;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    private FiscalStatus fiscalStatus;
+    private FiscalStatus fiscalStatus = FiscalStatus.UNKNOWN;
 
     private LocalDate fiscalStatusDate;
 

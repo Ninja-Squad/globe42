@@ -54,6 +54,8 @@ import { FullnamePipe } from './fullname.pipe';
 import { DisplayFiscalStatusPipe } from './display-fiscal-status.pipe';
 import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 import { FamilySituationComponent } from './family-situation/family-situation.component';
+import { DisplayHousingPipe } from './display-housing.pipe';
+import { FamilySituationEditComponent } from './family-situation-edit/family-situation-edit.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +86,9 @@ import { FamilySituationComponent } from './family-situation/family-situation.co
     FullnamePipe,
     DisplayFiscalStatusPipe,
     PersonFamilySituationComponent,
-    FamilySituationComponent
+    FamilySituationComponent,
+    DisplayHousingPipe,
+    FamilySituationEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

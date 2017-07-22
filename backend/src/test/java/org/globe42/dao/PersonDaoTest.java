@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
+import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
+import org.globe42.domain.MaritalStatus;
 import org.globe42.domain.Person;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +26,9 @@ public class PersonDaoTest extends BaseDaoTest {
         Operation person =
             Insert.into("person")
                 .withDefaultValue("fiscal_status_up_to_date", false)
+                .withDefaultValue("fiscal_status", FiscalStatus.UNKNOWN)
+                .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
+                .withDefaultValue("housing", Housing.UNKNOWN)
                 .columns("id", "last_name", "mediation_code", "gender", "adherent", "entry_date")
                 .values(1L, "Exbrayat", "E1", Gender.MALE, true, "2017-01-01")
                 .build();
