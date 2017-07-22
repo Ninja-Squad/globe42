@@ -3,6 +3,7 @@ package org.globe42.web.persons;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.globe42.domain.City;
+import org.globe42.domain.PostalCity;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -24,6 +25,11 @@ public final class CityDTO {
 
     public CityDTO(City city) {
         this.code = city.getCode();
+        this.city = city.getCity();
+    }
+
+    public CityDTO(PostalCity city) {
+        this.code = city.getPostalCode();
         this.city = city.getCity();
     }
 
