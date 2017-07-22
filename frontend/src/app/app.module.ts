@@ -56,6 +56,7 @@ import { PersonFamilySituationComponent } from './person-family-situation/person
 import { FamilySituationComponent } from './family-situation/family-situation.component';
 import { DisplayHousingPipe } from './display-housing.pipe';
 import { FamilySituationEditComponent } from './family-situation-edit/family-situation-edit.component';
+import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { FamilySituationEditComponent } from './family-situation-edit/family-sit
     PersonFamilySituationComponent,
     FamilySituationComponent,
     DisplayHousingPipe,
-    FamilySituationEditComponent
+    FamilySituationEditComponent,
+    CitiesUploadComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

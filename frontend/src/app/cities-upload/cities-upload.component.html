@@ -1,0 +1,25 @@
+<h1>Insérer les villes de France</h1>
+
+<ngb-alert type="info" [dismissible]="false" id="info-message">
+  <p>
+    Cet écran permet d'insérer les villes de France dans le système, à partir du fichier CSV téléchargeable
+    <a href="https://www.data.gouv.fr/fr/datasets/base-officielle-des-codes-postaux/">ici</a>.
+  </p>
+  <p>
+    Cette opération ne doit être faite qu'une fois (à moins que les communes changent à l'avenir).
+  </p>
+</ngb-alert>
+
+<label class="custom-file" *ngIf="status === 'pending'" id="file-input">
+  <input type="file" class="custom-file-input" (change)="upload($event)" accept=".csv">
+  <span class="custom-file-control"></span>
+</label>
+
+<div *ngIf="status !== 'pending'" id="progress">
+  <div class="text-center text-muted">
+    {{ status === 'uploading' ? 'Téléchargement en cours' : (status === 'processing' ? 'Traitement en cours' : (status === 'done' ? 'Terminé' : 'Erreur')) }}
+  </div>
+  <ngb-progressbar [type]="status === 'failed' ? 'danger' : (status === 'done' ? 'success': 'info')" [max]="1" [value]="progress">
+    {{ progress | percent:'1.0-0' }}
+  </ngb-progressbar>
+</div>

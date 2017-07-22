@@ -27,6 +27,7 @@ import { PersonLayoutComponent } from './person-layout/person-layout.component';
 import { PersonIncomesComponent } from './person-incomes/person-incomes.component';
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
 import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
+import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -153,6 +154,10 @@ export const routes: Routes = [
             }
           }
         ]
+      },
+      {
+        path: 'cities',
+        component: CitiesUploadComponent
       }
     ]
   }

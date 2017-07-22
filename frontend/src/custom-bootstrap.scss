@@ -1,6 +1,15 @@
 // make the placeholders lighter
 $input-color-placeholder:        #dcdedf !default;
 
+$custom-file-text: (
+  placeholder: (
+    fr: "Choisir un fichier..."
+  ),
+  button-label: (
+    fr: "Parcourir"
+  )
+);
+
 // Core variables and mixins
 @import "../node_modules/bootstrap/scss/variables";
 
@@ -26,7 +35,7 @@ $input-color-placeholder:        #dcdedf !default;
 @import "../node_modules/bootstrap/scss/dropdown";
 @import "../node_modules/bootstrap/scss/button-group";
 @import "../node_modules/bootstrap/scss/input-group";
-// @import "../node_modules/bootstrap/scss/custom-forms";
+@import "../node_modules/bootstrap/scss/custom-forms";
 @import "../node_modules/bootstrap/scss/nav";
 @import "../node_modules/bootstrap/scss/navbar";
 @import "../node_modules/bootstrap/scss/card";
