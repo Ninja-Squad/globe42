@@ -108,7 +108,7 @@ describe('UserService', () => {
   });
 
   it('should get a user', () => {
-    const expectedUser: UserModel = { id: 1 } as UserModel;
+    const expectedUser = { id: 1 } as UserModel;
 
     let actualUser;
     service.get(1).subscribe(user => actualUser = user);
@@ -118,7 +118,7 @@ describe('UserService', () => {
   });
 
   it('should update a user', () => {
-    const command: UserCommand = { login: 'jb' } as UserCommand;
+    const command = { login: 'jb' } as UserCommand;
     service.update(2, command).subscribe(() => {});
 
     const testRequest = http.expectOne({ url: '/api/users/2', method: 'PUT' });
@@ -127,8 +127,8 @@ describe('UserService', () => {
   });
 
   it('should create a user', () => {
-    const command: UserCommand = { login: 'jb' } as UserCommand;
-    const expectedUser: UserWithPasswordModel = { id: 2 } as UserWithPasswordModel;
+    const command = { login: 'jb' } as UserCommand;
+    const expectedUser = { id: 2 } as UserWithPasswordModel;
 
     let actualUser;
     service.create(command).subscribe(user => actualUser = user);
@@ -141,7 +141,7 @@ describe('UserService', () => {
   });
 
   it('should list users', () => {
-    const expectedUsers: Array<UserModel> = [{ id: 1 }] as Array<UserModel>;
+    const expectedUsers = [{ id: 1 }] as Array<UserModel>;
 
     let actualUsers;
     service.list().subscribe(users => actualUsers = users);
@@ -157,7 +157,7 @@ describe('UserService', () => {
   });
 
   it('should reset a user password', () => {
-    const expectedUser: UserWithPasswordModel = { id: 2 } as UserWithPasswordModel;
+    const expectedUser = { id: 2 } as UserWithPasswordModel;
 
     let actualUser;
     service.resetPassword(2).subscribe(user => actualUser = user);

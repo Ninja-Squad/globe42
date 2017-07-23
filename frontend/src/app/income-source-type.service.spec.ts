@@ -23,7 +23,7 @@ describe('IncomeSourceTypeService', () => {
   });
 
   it('should get an income type', () => {
-    const expectedIncomeType: IncomeSourceTypeModel = { id: 1 } as IncomeSourceTypeModel;
+    const expectedIncomeType = { id: 1 } as IncomeSourceTypeModel;
 
     let actualIncomeType;
     service.get(1).subscribe(incomeType => actualIncomeType = incomeType);
@@ -33,7 +33,7 @@ describe('IncomeSourceTypeService', () => {
   });
 
   it('should update an income type', () => {
-    const fakeIncomeType: IncomeSourceTypeCommand = { type: 'CAF' } as IncomeSourceTypeCommand;
+    const fakeIncomeType = { type: 'CAF' } as IncomeSourceTypeCommand;
     service.update(2, fakeIncomeType).subscribe(() => {});
 
     const testRequest = http.expectOne({ url: '/api/income-source-types/2', method: 'PUT' });
@@ -42,8 +42,8 @@ describe('IncomeSourceTypeService', () => {
   });
 
   it('should create a income type', () => {
-    const fakeIncomeType: IncomeSourceTypeCommand = { type: 'foo' } as IncomeSourceTypeCommand;
-    const expectedIncomeType: IncomeSourceTypeModel = { id: 2 } as IncomeSourceTypeModel;
+    const fakeIncomeType = { type: 'foo' } as IncomeSourceTypeCommand;
+    const expectedIncomeType = { id: 2 } as IncomeSourceTypeModel;
 
     let actualIncomeType;
     service.create(fakeIncomeType).subscribe(incomeType => actualIncomeType = incomeType);
@@ -56,7 +56,7 @@ describe('IncomeSourceTypeService', () => {
   });
 
   it('should list income types', () => {
-    const expectedIncomeTypes: Array<IncomeSourceTypeModel> = [{ id: 1 }] as Array<IncomeSourceTypeModel>;
+    const expectedIncomeTypes = [{ id: 1 }] as Array<IncomeSourceTypeModel>;
 
     let actualIncomeTypes;
     service.list().subscribe(incomeTypes => actualIncomeTypes = incomeTypes);

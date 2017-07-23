@@ -21,7 +21,7 @@ describe('PersonService', () => {
   });
 
   it('should get a person', () => {
-    const expectedPerson: PersonModel = { id: 1 } as PersonModel;
+    const expectedPerson = { id: 1 } as PersonModel;
 
     let actualPerson;
     service.get(1).subscribe(person => actualPerson = person);
@@ -32,7 +32,7 @@ describe('PersonService', () => {
   });
 
   it('should update a person', () => {
-    const fakePerson: PersonCommand = { firstName: 'Ced' } as PersonCommand;
+    const fakePerson = { firstName: 'Ced' } as PersonCommand;
 
     service.update(2, fakePerson).subscribe(() => {});
 
@@ -42,8 +42,8 @@ describe('PersonService', () => {
   });
 
   it('should create a person', () => {
-    const fakePerson: PersonCommand = { nickName: 'ced' } as PersonCommand;
-    const expectedPerson: PersonModel = { id: 2 } as PersonModel;
+    const fakePerson = { nickName: 'ced' } as PersonCommand;
+    const expectedPerson = { id: 2 } as PersonModel;
 
     let actualPerson;
     service.create(fakePerson).subscribe(person => actualPerson = person);
@@ -56,7 +56,7 @@ describe('PersonService', () => {
   });
 
   it('should list persons', () => {
-    const expectedPersons: Array<PersonModel> = [{ id: 1 }] as Array<PersonModel>;
+    const expectedPersons = [{ id: 1 }] as Array<PersonModel>;
 
     let actualPersons;
     service.list().subscribe(persons => actualPersons = persons);

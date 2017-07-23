@@ -12,7 +12,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LOCALE_ID } from '@angular/core';
 
 describe('PersonIncomesComponent', () => {
-  const incomes: Array<IncomeModel> = [
+  const incomes = [
     {
       id: 12,
       source: { name: 'Allocations familiales'},

@@ -8,7 +8,7 @@ import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonLayoutComponent', () => {
-  const person: PersonModel = {
+  const person = {
     id: 42,
     firstName: 'John',
     lastName: 'Doe',

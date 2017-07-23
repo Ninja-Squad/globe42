@@ -22,7 +22,7 @@ describe('IncomeService', () => {
   });
 
   it('should list incomes of a person', () => {
-    const expectedIncomes: Array<IncomeModel> = [{ id: 1 }] as Array<IncomeModel>;
+    const expectedIncomes = [{ id: 1 }] as Array<IncomeModel>;
 
     let actualIncomes;
     service.list(42).subscribe(incomes => actualIncomes = incomes);
@@ -40,7 +40,7 @@ describe('IncomeService', () => {
 
   it('should create an income for a person', () => {
     const fakeIncomeCommand: IncomeCommand = { sourceId: 12, monthlyAmount: 340 };
-    const expectedIncome: IncomeModel = { id: 2 } as IncomeModel;
+    const expectedIncome = { id: 2 } as IncomeModel;
 
     let actualIncome;
     service.create(42, fakeIncomeCommand).subscribe(income => actualIncome = income);

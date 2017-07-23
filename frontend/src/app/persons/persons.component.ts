@@ -13,13 +13,11 @@ import { FormControl } from '@angular/forms';
 export class PersonsComponent implements OnInit {
 
   persons: Array<PersonIdentityModel> = [];
-  filterCtrl: FormControl;
+  filterCtrl = new FormControl('');
 
   private allPersons: Array<PersonIdentityModel> = [];
 
-  constructor(private route: ActivatedRoute, private fullnamePipe: FullnamePipe) {
-    this.filterCtrl = new FormControl('');
-  }
+  constructor(private route: ActivatedRoute, private fullnamePipe: FullnamePipe) { }
 
   ngOnInit() {
     this.allPersons = sortBy<PersonIdentityModel>(this.route.snapshot.data['persons'],

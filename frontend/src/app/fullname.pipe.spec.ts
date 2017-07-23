@@ -6,7 +6,7 @@ describe('FullnamePipe', () => {
   const pipe = new FullnamePipe();
 
   it('should not display anything if no first name or lastname of nickname', () => {
-    const person: PersonIdentityModel = {} as PersonIdentityModel;
+    const person = {} as PersonIdentityModel;
     expect(pipe.transform(person)).toBe('');
   });
 
