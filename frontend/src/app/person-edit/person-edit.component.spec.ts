@@ -20,6 +20,7 @@ import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
+import { By } from '@angular/platform-browser';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -127,6 +128,34 @@ describe('PersonEditComponent', () => {
       expect(adherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe(person.entryDate);
+      const housing: HTMLSelectElement = nativeElement.querySelector('#housing');
+      expect(housing.options[housing.selectedIndex].value).toBe(person.housing);
+      const housingSpace = nativeElement.querySelector('#housingSpace');
+      expect(+housingSpace.value).toBe(person.housingSpace);
+      const fiscalStatusUnknown = nativeElement.querySelector('#fiscalStatusUNKNOWN');
+      expect(fiscalStatusUnknown.checked).toBe(false);
+      const fiscalStatusNotTaxable = nativeElement.querySelector('#fiscalStatusNOT_TAXABLE');
+      expect(fiscalStatusNotTaxable.checked).toBe(false);
+      const fiscalStatusTaxable = nativeElement.querySelector('#fiscalStatusTAXABLE');
+      expect(fiscalStatusTaxable.checked).toBe(true);
+      const fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
+      expect(fiscalStatusDate.value).toBe(person.fiscalStatusDate);
+      const fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
+      expect(fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
+
+      const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
+      expect(frenchFamilySituation.textContent).not.toContain('Inconnue');
+      expect(frenchFamilySituation.textContent).not.toContain('Renseigner');
+      expect(frenchFamilySituation.textContent).toContain('Rendre inconnue');
+      expect(frenchFamilySituation.querySelector('gl-family-situation-edit')).toBeTruthy();
+      expect(fixture.debugElement.query(By.directive(FamilySituationEditComponent)).componentInstance.situation)
+        .toBe(fixture.componentInstance.frenchFamilySituationGroup);
+
+      const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
+      expect(abroadFamilySituation.textContent).toContain('Inconnue');
+      expect(abroadFamilySituation.textContent).toContain('Renseigner');
+      expect(abroadFamilySituation.textContent).not.toContain('Rendre inconnue');
+      expect(abroadFamilySituation.querySelector('gl-family-situation-edit')).toBeFalsy();
 
       lastName.value = 'Do';
       lastName.dispatchEvent(new Event('input'));
@@ -144,6 +173,36 @@ describe('PersonEditComponent', () => {
       expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
     });
 
+    it('should make family situation known and then unknown', () => {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      fixture.detectChanges();
+      const nativeElement = fixture.nativeElement;
+      const component = fixture.componentInstance;
+
+      expect(component.abroadFamilySituationGroup).toBeFalsy();
+      expect(component.personForm.get('abroadFamilySituation')).toBeFalsy();
+
+      const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
+      const makeKnownButton = abroadFamilySituation.querySelector('button');
+      expect(makeKnownButton.textContent).toContain('Renseigner');
+
+      makeKnownButton.click();
+      fixture.detectChanges();
+      expect(component.abroadFamilySituationGroup).toBeTruthy();
+      expect(component.personForm.get('abroadFamilySituation')).toBeTruthy();
+
+      const familySituationEditComponent: FamilySituationEditComponent =
+        fixture.debugElement.query(By.css('#abroadFamilySituation gl-family-situation-edit')).componentInstance;
+      expect(familySituationEditComponent.situation).toBe(component.abroadFamilySituationGroup);
+
+      const makeUnknownButton = abroadFamilySituation.querySelector('button');
+      expect(makeUnknownButton.textContent).toContain('Rendre inconnue');
+
+      makeUnknownButton.click();
+      fixture.detectChanges();
+      expect(component.abroadFamilySituationGroup).toBeFalsy();
+      expect(component.personForm.get('abroadFamilySituation')).toBeFalsy();
+    });
   });
 
   describe('in create mode', () => {
@@ -210,6 +269,22 @@ describe('PersonEditComponent', () => {
       expect(adherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe('');
+      const housing: HTMLSelectElement = nativeElement.querySelector('#housing');
+      expect(housing.options[housing.selectedIndex].value).toBe('UNKNOWN');
+      let housingSpace = nativeElement.querySelector('#housingSpace');
+      expect(housingSpace).toBeFalsy();
+      const fiscalStatusUnknown = nativeElement.querySelector('#fiscalStatusUNKNOWN');
+      expect(fiscalStatusUnknown.checked).toBe(true);
+      let fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
+      expect(fiscalStatusDate).toBeFalsy();
+      let fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
+      expect(fiscalStatusUpToDate).toBeFalsy();
+
+      const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
+      expect(frenchFamilySituation.textContent).toContain('Inconnue');
+
+      const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
+      expect(abroadFamilySituation.textContent).toContain('Inconnue');
 
       lastName.value = 'Doe';
       lastName.dispatchEvent(new Event('input'));
@@ -247,9 +322,33 @@ describe('PersonEditComponent', () => {
       adherentYes.dispatchEvent(new Event('change'));
       entryDate.value = '2015-02-02';
       entryDate.dispatchEvent(new Event('change'));
+
+      housing.selectedIndex = 1;
+      housing.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+      housingSpace = nativeElement.querySelector('#housingSpace');
+      expect(housingSpace).toBeTruthy();
+      housingSpace.value = '30';
+      housingSpace.dispatchEvent(new Event('input'));
+
+      const fiscalStatusTaxable = nativeElement.querySelector('#fiscalStatusTAXABLE');
+      fiscalStatusTaxable.checked = true;
+      fiscalStatusTaxable.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+      tick();
+
+      fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
+      expect(fiscalStatusDate).toBeTruthy();
+      fiscalStatusDate.value = '2015-01-01';
+      fiscalStatusDate.dispatchEvent(new Event('change'));
+      fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
+      expect(fiscalStatusUpToDate).toBeTruthy();
+      fiscalStatusUpToDate.checked = true;
+      fiscalStatusUpToDate.dispatchEvent(new Event('change'));
+
       nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
       fixture.detectChanges();
-
+      tick();
       expect(entryDate.value).toBe('2015-02-02');
 
       expect(personService.create).toHaveBeenCalled();
@@ -269,6 +368,11 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
       expect(createdPerson.adherent).toBe(true);
       expect(createdPerson.entryDate).toBe('2015-02-02');
+      expect(createdPerson.housing).toBe('F0');
+      expect(createdPerson.housingSpace).toBe(30);
+      expect(createdPerson.fiscalStatus).toBe('TAXABLE');
+      expect(createdPerson.fiscalStatusDate).toBe('2015-01-01');
+      expect(createdPerson.fiscalStatusUpToDate).toBe(true);
 
       expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
     }));

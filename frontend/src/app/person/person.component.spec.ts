@@ -11,6 +11,7 @@ import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { PersonFamilySituationComponent } from '../person-family-situation/person-family-situation.component';
 import { FamilySituationComponent } from '../family-situation/family-situation.component';
 import { DisplayHousingPipe } from '../display-housing.pipe';
+import { LOCALE_ID } from '@angular/core';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -32,17 +33,12 @@ describe('PersonComponent', () => {
     gender: 'MALE',
     phoneNumber: '06 12 34 56 78',
     maritalStatus: 'SINGLE',
-    housing: 'F4',
+    housing: 'F6',
     housingSpace: 80,
     fiscalStatus: 'TAXABLE',
     fiscalStatusUpToDate: true,
     fiscalStatusDate: '2017-02-01',
-    frenchFamilySituation: {
-      parentsPresent: false,
-      spousePresent: true,
-      childCount: 1,
-      siblingCount: 3
-    },
+    frenchFamilySituation: null,
     abroadFamilySituation: null
   };
 
@@ -65,7 +61,8 @@ describe('PersonComponent', () => {
       DisplayHousingPipe
     ],
     providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute }
+      { provide: ActivatedRoute, useValue: activatedRoute },
+      { provide: LOCALE_ID, useValue: 'fr-FR'}
     ]
   })));
 
@@ -93,5 +90,12 @@ describe('PersonComponent', () => {
     expect(mediationCode.textContent).toBe('D1');
     const maritalStatus = nativeElement.querySelector('#maritalStatus');
     expect(maritalStatus.textContent).toBe('Célibataire');
+    const housing = nativeElement.querySelector('#housing');
+    expect(housing.textContent).toContain('F6 ou plus');
+    expect(housing.textContent).toContain('80 m2');
+    const fiscalStatus = nativeElement.querySelector('#fiscalStatus');
+    expect(fiscalStatus.textContent).toContain('Imposable');
+    expect(fiscalStatus.textContent).toContain('établie le 1 févr. 2017');
+    expect(fiscalStatus.textContent).toContain('à jour');
   });
 });
