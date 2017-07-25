@@ -8,7 +8,8 @@
     "build": "ng build --prod",
     "test": "ng test --single-run --code-coverage",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "npm rebuild node-sass"
   },
   "private": true,
   "dependencies": {
