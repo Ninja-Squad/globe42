@@ -19,7 +19,7 @@ export class SearchCityService {
       return Observable.of([]);
     }
 
-    return this.http.get('/api/cities', { params : new HttpParams().set('query', term)});
+    return this.http.get('/api/cities', { params : new HttpParams().set('query', term) });
   }
 
   uploadCities(data: string): Observable<HttpEvent<any>> {

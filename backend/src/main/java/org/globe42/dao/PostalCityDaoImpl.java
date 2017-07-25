@@ -12,7 +12,7 @@ import javax.persistence.TypedQuery;
 import org.globe42.domain.PostalCity;
 
 /**
- * Implementation of custop methods of {@link PostalCityDao}
+ * Implementation of custom methods of {@link PostalCityDao}
  * @author JB Nizet
  */
 public class PostalCityDaoImpl implements PostalCityDaoCustom {

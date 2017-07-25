@@ -14,7 +14,7 @@ import org.junit.Test;
  */
 public class PostalCityUploadParserTest {
     @Test
-    public void shouldParseAndRemoeDuplicates() {
+    public void shouldParseAndRemoveDuplicates() {
         //language=TEXT
         String csv = "Code_commune_INSEE;Nom_commune;Code_postal;Libelle_acheminement;Ligne_5;coordonnees_gps\n" +
             "10227;MAROLLES SOUS LIGNIERES;10130;No no no;;48.0520003827, 3.93246550297\n" +
