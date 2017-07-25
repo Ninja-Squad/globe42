@@ -30,6 +30,11 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-# Yarn cache
-# see https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Caching-with-yarn
-  yarn: true
+    # NPM and node_modules cache
+    # see https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Caching-with-npm
+    - "frontend/.gradle/npm"
+    - "frontend/node_modules"
+  # Yarn cache
+  # see https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Caching-with-yarn
+    - "frontend/.gradle/yarn"
+    - $HOME/.cache/yarn
