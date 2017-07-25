@@ -72,3 +72,11 @@ task flywayCleanTest(type: org.flywaydb.gradle.task.FlywayCleanTask) {
     user = 'globe42'
     password = 'globe42'
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+

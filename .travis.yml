@@ -38,3 +38,12 @@ cache:
   # see https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Caching-with-yarn
     - "frontend/.gradle/yarn"
     - $HOME/.cache/yarn
+
+script:
+  - ./gradlew check jacocoTestReport
+
+after_success:
+# upload java coverage to codecov.io
+- bash <(curl -s https://codecov.io/bash) -cF java
+# upload js coverage to codecov.io
+- npm run codecov
