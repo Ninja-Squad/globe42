@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --prod",
-    "test": "ng test --single-run --code-coverage --no-progress",
+    "test": "ng test --single-run --code-coverage --no-progress --reporters dots",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "npm rebuild node-sass"
