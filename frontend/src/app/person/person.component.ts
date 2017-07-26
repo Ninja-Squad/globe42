@@ -11,11 +11,17 @@ import { PersonModel } from '../models/person.model';
 export class PersonComponent implements OnInit {
 
   person: PersonModel;
+  mapsUrl: string;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.person = this.route.parent.snapshot.data['person'];
+    this.mapsUrl = this.createMapsUrl();
   }
 
+  private createMapsUrl() {
+    const address = `${this.person.address} ${this.person.city.code} ${this.person.city.city}`;
+    return `https://www.google.fr/maps/place/${encodeURIComponent(address)}`;
+  }
 }

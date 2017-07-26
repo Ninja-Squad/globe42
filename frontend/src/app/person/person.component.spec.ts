@@ -42,7 +42,7 @@ describe('PersonComponent', () => {
     abroadFamilySituation: null
   };
 
-  const activatedRoute = {
+  const activatedRoute: any = {
     parent: {
       snapshot: { data: { person } }
     }
@@ -65,6 +65,12 @@ describe('PersonComponent', () => {
       { provide: LOCALE_ID, useValue: 'fr-FR'}
     ]
   })));
+
+  it('should have a maps URL', () => {
+    const component = new PersonComponent(activatedRoute);
+    component.ngOnInit();
+    expect(component.mapsUrl).toBe('https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE');
+  });
 
   it('should display a person', () => {
     const fixture = TestBed.createComponent(PersonComponent);

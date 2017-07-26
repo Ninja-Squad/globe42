@@ -42,19 +42,29 @@
   <div class="col-lg">
     <h2>Contact</h2>
 
-    <p id="fullAddress">
-      <span class="fa fa-home"></span>
-      {{ person.address }}<br/>
-      {{ person.city | displayCity }}
-    </p>
-    <p id="email">
-      <span class="fa fa-envelope"></span>
-      {{ person.email }}
-    </p>
-    <p id="phoneNumber">
-      <span class="fa fa-phone"></span>
-      {{ person.phoneNumber }}
-    </p>
+    <div class="d-flex mb-2" id="fullAddress">
+      <div class="mr-3"><span class="fa fa-home"></span></div>
+      <div>
+        {{ person.address }}<br/>
+        {{ person.city | displayCity }}
+      </div>
+      <div class="ml-3">
+        <a *ngIf="person.address && person.city" [href]="mapsUrl" target="_blank" style="font-size: 1.3rem;"
+           ngbTooltip="Localiser sur une carte" placement="right">
+          <span class="fa fa-map-marker"></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="d-flex mb-2" id="email">
+      <div class="mr-3"><span class="fa fa-envelope"></span></div>
+      <div>{{ person.email }}</div>
+    </div>
+
+    <div class="d-flex mb-2" id="phoneNumber">
+      <div class="mr-3"><span class="fa fa-phone"></span></div>
+      <div>{{ person.phoneNumber }}</div>
+    </div>
 
     <h2>Logement</h2>
     <p id="housing">
