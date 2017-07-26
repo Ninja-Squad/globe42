@@ -35,11 +35,11 @@
     <label class="col-sm-3 col-form-label">Est adhérent</label>
     <div class="col-sm-9">
       <div ngbRadioGroup name="adherent" formControlName="adherent">
-        <label class="btn btn-secondary">
-          <input id="adherentYes" type="radio" [value]="true"> Oui
+        <label class="btn btn-secondary" ngbButtonLabel>
+          <input ngbButton name="adherent" id="adherentYes" type="radio" [value]="true"> Oui
         </label>
-        <label class="btn btn-secondary">
-          <input id="adherentNo" type="radio" [value]="false"> Non
+        <label class="btn btn-secondary" ngbButtonLabel>
+          <input ngbButton name="adherent" id="adherentNo" type="radio" [value]="false"> Non
         </label>
       </div>
     </div>
@@ -48,8 +48,8 @@
     <label class="col-sm-3 col-form-label">Genre</label>
     <div class="col-sm-9">
       <div ngbRadioGroup name="gender" formControlName="gender">
-        <label class="btn btn-secondary" *ngFor="let gender of genders">
-          <input id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
+        <label ngbButtonLabel class="btn btn-secondary" *ngFor="let gender of genders">
+          <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
         </label>
       </div>
     </div>
@@ -132,8 +132,8 @@
     <label class="col-sm-3 col-form-label">Situation fiscale</label>
     <div class="col-sm-9">
       <div ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
-        <label class="btn btn-secondary" *ngFor="let fiscalStatus of fiscalStatuses">
-          <input id="fiscalStatus{{ fiscalStatus }}" type="radio" [value]="fiscalStatus"> {{ fiscalStatus | displayFiscalStatus }}
+        <label ngbButtonLabel class="btn btn-secondary" *ngFor="let fiscalStatus of fiscalStatuses">
+          <input ngbButton name="fiscalStatus" id="fiscalStatus{{ fiscalStatus }}" type="radio" [value]="fiscalStatus"> {{ fiscalStatus | displayFiscalStatus }}
         </label>
       </div>
     </div>

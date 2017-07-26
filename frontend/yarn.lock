@@ -130,9 +130,9 @@
   dependencies:
     tsickle "^0.21.0"
 
-"@ng-bootstrap/ng-bootstrap@^1.0.0-alpha.28":
-  version "1.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-1.0.0-alpha.28.tgz#30a6503bf7f94f9d3187591fb3267b59cc0cdaad"
+"@ng-bootstrap/ng-bootstrap@^1.0.0-alpha.29":
+  version "1.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-1.0.0-alpha.29.tgz#ca2fa1d2dd94e8f077921e59d78ac51075bcdcd6"
 
 "@ngtools/json-schema@1.1.0":
   version "1.1.0"
