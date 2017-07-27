@@ -49,7 +49,7 @@
         {{ person.city | displayCity }}
       </div>
       <div class="ml-3">
-        <a *ngIf="person.address && person.city" [href]="mapsUrl" target="_blank" style="font-size: 1.3rem;"
+        <a *ngIf="mapsUrl" [href]="mapsUrl" target="_blank" style="font-size: 1.3rem;"
            ngbTooltip="Localiser sur une carte" placement="right">
           <span class="fa fa-map-marker"></span>
         </a>

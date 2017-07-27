@@ -90,7 +90,7 @@ export class PersonEditComponent implements OnInit {
     this.genderCtrl = this.fb.control('', Validators.required);
     this.birthDateCtrl = this.fb.control('', Validators.required);
     this.addressCtrl = this.fb.control('', Validators.required);
-    this.cityCtrl = this.fb.control({ }, Validators.required);
+    this.cityCtrl = this.fb.control(null, Validators.required);
     this.emailCtrl = this.fb.control('', [Validators.required, Validators.email]);
     this.phoneNumberCtrl = this.fb.control('', Validators.required);
     this.maritalStatusCtrl = this.fb.control('UNKNOWN');
@@ -169,6 +169,12 @@ export class PersonEditComponent implements OnInit {
       action = this.personService.create(command);
     }
     action.subscribe(() => this.router.navigateByUrl('/persons'))
+  }
+
+  clearIfNoCity(input: HTMLInputElement) {
+    if (!this.cityCtrl.value) {
+      input.value = null;
+    }
   }
 
   private createFamilySituationGroup(): FormGroup {

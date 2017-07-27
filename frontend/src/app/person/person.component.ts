@@ -17,7 +17,7 @@ export class PersonComponent implements OnInit {
 
   ngOnInit() {
     this.person = this.route.parent.snapshot.data['person'];
-    this.mapsUrl = this.createMapsUrl();
+    this.mapsUrl = this.person.city && this.person.address ? this.createMapsUrl() : null;
   }
 
   private createMapsUrl() {

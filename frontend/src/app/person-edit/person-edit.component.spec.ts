@@ -173,6 +173,32 @@ describe('PersonEditComponent', () => {
       expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
     });
 
+    it('should clear the city input on blur if not valid anymore', () =>  {
+      const displayCityPipe = TestBed.get(DisplayCityPipe);
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      // fake typeahead results
+      fixture.componentInstance.search = (text: Observable<string>) => text.map(value => []);
+
+      fixture.detectChanges();
+
+      const nativeElement = fixture.nativeElement;
+      const city: HTMLInputElement = nativeElement.querySelector('#city');
+      expect(city.value).toBe(displayCityPipe.transform(person.city));
+
+      // erase something in the field, which should make its model null
+      city.value = '42000 SAINT-ETIENN';
+      city.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      expect(fixture.componentInstance.cityCtrl.value).toBeFalsy();
+      expect(city.classList).toContain('form-control-warning');
+      expect(city.closest(".form-group").classList).toContain('has-warning');
+
+      // move out of the field, which should clear it
+      city.dispatchEvent(new Event('blur'));
+      fixture.detectChanges();
+      expect(city.value).toBeFalsy();
+    });
+
     it('should make family situation known and then unknown', () => {
       const fixture = TestBed.createComponent(PersonEditComponent);
       fixture.detectChanges();

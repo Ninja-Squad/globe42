@@ -90,12 +90,13 @@
       <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
     </div>
   </div>
-  <div class="form-group row" [class.has-danger]="searchFailed">
+  <div class="form-group row" [class.has-danger]="searchFailed" [class.has-warning]="cityInput.value && !cityCtrl.value">
     <label for="city" class="col-sm-3 col-form-label">Ville</label>
     <ng-template #resultTemplate let-result="result">{{ result | displayCity }}</ng-template>
     <div class="col-sm-9">
-      <input class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
-             [ngbTypeahead]="search" [resultTemplate]="resultTemplate" [inputFormatter]="cityFormatter">
+      <input #cityInput class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
+             [ngbTypeahead]="search" [resultTemplate]="resultTemplate" [inputFormatter]="cityFormatter" [editable]="false"
+             (blur)="clearIfNoCity(cityInput)" [class.form-control-warning]="cityInput.value && !cityCtrl.value">
     </div>
   </div>
   <div class="form-group row">
