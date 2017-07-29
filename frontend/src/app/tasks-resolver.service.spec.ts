@@ -6,6 +6,8 @@ import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { HttpClientModule } from '@angular/common/http';
 import { NowService } from './now.service';
+import { UserService } from './user.service';
+import { JwtInterceptorService } from './jwt-interceptor.service';
 
 describe('TasksResolverService', () => {
   let resolver: TasksResolverService;
@@ -13,7 +15,7 @@ describe('TasksResolverService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [NowService, TaskService, TasksResolverService],
+      providers: [NowService, TaskService, UserService, JwtInterceptorService, TasksResolverService],
       imports: [HttpClientModule]
     });
 

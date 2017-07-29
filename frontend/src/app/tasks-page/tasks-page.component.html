@@ -1,4 +1,4 @@
-<gl-tasks [taskModels]="page.content"></gl-tasks>
+<gl-tasks [taskModels]="page.content" (taskClicked)="onTaskClicked($event)"></gl-tasks>
 
 <div class="d-flex justify-content-center mt-5" *ngIf="page.totalPages > 1">
   <ngb-pagination [collectionSize]="page.totalElements"

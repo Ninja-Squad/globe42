@@ -16,6 +16,8 @@ import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
+import org.globe42.web.exception.BadRequestException;
+import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.CurrentUser;
 import org.globe42.web.users.UserControllerTest;
 import org.globe42.web.util.PageDTO;
@@ -135,6 +137,49 @@ public class TaskControllerTest extends BaseTest {
         assertThat(result.getSize()).isEqualTo(TaskController.PAGE_SIZE);
         assertThat(result.getTotalElements()).isEqualTo(42);
         assertThat(result.getTotalPages()).isEqualTo(3);
+    }
+
+    @Test
+    public void shouldAssign() {
+        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
+        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+
+        controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
+
+        assertThat(task2.getAssignee()).isEqualTo(user);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowWhenAssigningUnexistingTask() {
+        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.empty());
+        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+
+        controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void shouldThrowWhenAssigningToUnexistingUser() {
+        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
+        when(mockUserDao.findById(user.getId())).thenReturn(Optional.empty());
+
+        controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
+    }
+
+    @Test
+    public void shouldChangeStatus() {
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+
+        controller.changeStatus(task1.getId(), new TaskStatusChangeCommandDTO(TaskStatus.DONE));
+
+        assertThat(task1.getStatus()).isEqualTo(TaskStatus.DONE);
+        assertThat(task1.getArchivalInstant()).isNotNull();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowWhenChangingStatusOfUnexistingTask() {
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.empty());
+
+        controller.changeStatus(task1.getId(), new TaskStatusChangeCommandDTO(TaskStatus.DONE));
     }
 
     static Task createTask(Long id, User user, Person person) {

@@ -4,11 +4,14 @@ import { Observable } from 'rxjs/Observable';
 import { TaskModel } from './models/task.model';
 import { NowService } from './now.service';
 import { Page } from './models/page';
+import { UserService } from './user.service';
 
 @Injectable()
 export class TaskService {
 
-  constructor(private http: HttpClient, private nowService: NowService) { }
+  constructor(private http: HttpClient,
+              private nowService: NowService,
+              private userService: UserService) { }
 
   listTodo(): Observable<Array<TaskModel>> {
     return this.http.get('/api/tasks');
@@ -34,5 +37,22 @@ export class TaskService {
 
   listArchived(pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get('/api/tasks', {params: new HttpParams().set('archived', '').set('page', pageNumber.toString())});
+  }
+
+  assignToSelf(taskId: number): Observable<void> {
+    const userId = this.userService.userEvents.getValue().id;
+    return this.http.post<void>(`/api/tasks/${taskId}/assignments`, {userId});
+  }
+
+  markAsDone(taskId: number): Observable<void> {
+    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, {newStatus: 'DONE'});
+  }
+
+  cancel(taskId: number): Observable<void> {
+    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, {newStatus: 'CANCELLED'});
+  }
+
+  resurrect(taskId: number): Observable<void> {
+    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, {newStatus: 'TODO'});
   }
 }

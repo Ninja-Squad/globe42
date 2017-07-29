@@ -1,6 +1,6 @@
-import { async, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TasksComponent } from './tasks.component';
+import { TaskEvent, TasksComponent } from './tasks.component';
 import { TaskModel } from '../models/task.model';
 import { UserModel } from '../models/user.model';
 import { PersonIdentityModel } from '../models/person.model';
@@ -8,6 +8,27 @@ import { FullnamePipe } from '../fullname.pipe';
 import * as moment from 'moment';
 import { NowService } from '../now.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TaskService } from '../task.service';
+import { TasksResolverService } from '../tasks-resolver.service';
+import { ConfirmService } from '../confirm.service';
+import { HttpClientModule } from '@angular/common/http';
+import { UserService } from '../user.service';
+import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
+
+@Component({
+  template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
+})
+class TestComponent {
+  tasks: Array<TaskModel> = [];
+  event: TaskEvent;
+
+  onTaskClicked(event: TaskEvent) {
+    this.event = event;
+  }
+}
 
 describe('TasksComponent', () => {
   let tasks: Array<TaskModel>;
@@ -37,10 +58,15 @@ describe('TasksComponent', () => {
     ];
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [TasksComponent, FullnamePipe],
+      imports: [RouterTestingModule, HttpClientModule, NgbModule.forRoot()],
+      declarations: [TestComponent, TasksComponent, FullnamePipe],
       providers: [
-        NowService
+        NowService,
+        TaskService,
+        TasksResolverService,
+        ConfirmService,
+        UserService,
+        JwtInterceptorService
       ]
     });
     moment.locale('fr');
@@ -48,134 +74,175 @@ describe('TasksComponent', () => {
     spyOn(TestBed.get(NowService), 'now').and.callFake(() => moment('2017-08-01T12:30:00'));
   }));
 
-  it('should compute relative due date', () => {
-    const component = new TasksComponent(TestBed.get(NowService));
-    component.taskModels = tasks;
+  describe('logic', () => {
 
-    const task = component.tasks[0];
-    task.model.dueDate = '2017-08-01';
-    expect(task.relativeDueDate()).toBe('aujourd\'hui');
+    function createComponent() {
+      const component = new TasksComponent(TestBed.get(NowService));
+      component.taskModels = tasks;
+      return component;
+    }
 
-    task.model.dueDate = '2017-08-02';
-    expect(task.relativeDueDate()).toBe('dans un jour');
+    it('should compute relative due date', () => {
+      const component = createComponent();
 
-    task.model.dueDate = '2017-07-31';
-    expect(task.relativeDueDate()).toBe('il y a un jour');
+      const task = component.tasks[0];
+      task.model.dueDate = '2017-08-01';
+      expect(task.relativeDueDate()).toBe('aujourd\'hui');
+
+      task.model.dueDate = '2017-08-02';
+      expect(task.relativeDueDate()).toBe('dans un jour');
+
+      task.model.dueDate = '2017-07-31';
+      expect(task.relativeDueDate()).toBe('il y a un jour');
+    });
+
+    it('should compute due date class', () => {
+      const component = createComponent();
+      component.taskModels = tasks;
+
+      const task = component.tasks[0];
+      // due yesterday
+      task.model.dueDate = '2017-07-31';
+      expect(task.dueDateClass()).toBe('text-danger font-weight-bold');
+
+      // due today
+      task.model.dueDate = '2017-08-01';
+      expect(task.dueDateClass()).toBe('text-danger');
+
+      // due tomorrow
+      task.model.dueDate = '2017-08-02';
+      expect(task.dueDateClass()).toBe('text-warning');
+
+      // due in 6 days
+      task.model.dueDate = '2017-08-07';
+      expect(task.dueDateClass()).toBe('text-warning');
+
+      // due in more than 6 days
+      task.model.dueDate = '2017-08-08';
+      expect(task.dueDateClass()).toBe('');
+    });
+
+    it('should toggle', () => {
+      const component = createComponent();
+      component.taskModels = tasks;
+
+      const task = component.tasks[0];
+      component.toggle(task, new Event('click'));
+      expect(task.opened).toBe(true);
+
+      component.toggle(task, new Event('click'));
+      expect(task.opened).toBe(false);
+    });
   });
 
-  it('should compute due date class', () => {
-    const component = new TasksComponent(TestBed.get(NowService));
-    component.taskModels = tasks;
+  describe('ui', () => {
+    let fixture: ComponentFixture<TestComponent>;
+    let tasksComponent: TasksComponent;
 
-    const task = component.tasks[0];
-    // due yesterday
-    task.model.dueDate = '2017-07-31';
-    expect(task.dueDateClass()).toBe('text-danger font-weight-bold');
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TestComponent);
+      fixture.componentInstance.tasks = tasks;
+      tasksComponent = fixture.debugElement.query(By.directive(TasksComponent)).componentInstance;
+      fixture.detectChanges();
+    });
 
-    // due today
-    task.model.dueDate = '2017-08-01';
-    expect(task.dueDateClass()).toBe('text-danger');
+    it('should display everything but the description and the no task message when not opened', () => {
+      const text = fixture.nativeElement.textContent;
+      expect(text).not.toContain('Rien à faire');
+      expect(text).toContain('Some title');
+      expect(text).toContain('aujourd\'hui');
+      expect(text).not.toContain('Some description');
+      expect(text).toContain('Assignée à admin');
+      expect(text).toContain('Créée par user2');
+      expect(text).toContain('Concerne JB Nizet');
+    });
 
-    // due tomorrow
-    task.model.dueDate = '2017-08-02';
-    expect(task.dueDateClass()).toBe('text-warning');
+    it('should display status instead of due date when DONE', () => {
+      tasks[0].status = 'DONE'
+      fixture.detectChanges();
 
-    // due in 6 days
-    task.model.dueDate = '2017-08-07';
-    expect(task.dueDateClass()).toBe('text-warning');
+      const text = fixture.nativeElement.textContent;
+      expect(text).toContain('Faite');
+      expect(text).not.toContain('aujourd\'hui');
+    });
 
-    // due in more than 6 days
-    task.model.dueDate = '2017-08-08';
-    expect(task.dueDateClass()).toBe('');
-  });
+    it('should display status instead of due date when CANCELLED', () => {
+      tasks[0].status = 'CANCELLED';
+      fixture.detectChanges();
 
-  it('should toggle', () => {
-    const component = new TasksComponent(TestBed.get(NowService));
-    component.taskModels = tasks;
+      const text = fixture.nativeElement.textContent;
+      expect(text).toContain('Annulée');
+      expect(text).not.toContain('aujourd\'hui');
+    });
 
-    const task = component.tasks[0];
-    component.toggle(task, new Event('click'));
-    expect(task.opened).toBe(true);
+    it('should display the description when opened', () => {
+      fixture.nativeElement.querySelector('.task-title').click();
+      fixture.detectChanges();
 
-    component.toggle(task, new Event('click'));
-    expect(task.opened).toBe(false);
-  });
+      const text = fixture.nativeElement.textContent;
 
-  it('should display everything but the description and the no task message when not opened', () => {
-    const fixture = TestBed.createComponent(TasksComponent);
-    fixture.componentInstance.taskModels = tasks;
-    fixture.detectChanges();
+      expect(text).toContain('Some description');
+    });
 
-    const text = fixture.nativeElement.textContent;
-    expect(text).not.toContain('Rien à faire');
-    expect(text).toContain('Some title');
-    expect(text).toContain('aujourd\'hui');
-    expect(text).not.toContain('Some description');
-    expect(text).toContain('Assignée à admin');
-    expect(text).toContain('Créée par user2');
-    expect(text).toContain('Concerne JB Nizet');
-  });
+    it('should not crash when no due date, no assignee, no creator or no concerned person', () => {
+      tasks[0].dueDate = null;
+      tasks[0].assignee = null;
+      tasks[0].creator = null;
+      tasks[0].concernedPerson = null;
+      fixture.detectChanges();
 
-  it('should display status instead of due date when DONE', () => {
-    tasks[0].status = 'DONE'
-    const fixture = TestBed.createComponent(TasksComponent);
-    fixture.componentInstance.taskModels = tasks;
-    fixture.detectChanges();
+      const text = fixture.nativeElement.textContent;
+      expect(text).toContain('Some title');
+    });
 
-    const text = fixture.nativeElement.textContent;
-    expect(text).toContain('Faite');
-    expect(text).not.toContain('aujourd\'hui');
-  });
+    it('should display a message when no task', () => {
+      fixture.componentInstance.tasks = [];
+      fixture.detectChanges();
 
-  it('should display status instead of due date when CANCELLED', () => {
-    tasks[0].status = 'CANCELLED';
-    const fixture = TestBed.createComponent(TasksComponent);
-    fixture.componentInstance.taskModels = tasks;
-    fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toContain('Rien à faire');
+      expect(fixture.nativeElement.querySelectorAll('.task-item').length).toBe(0);
+    });
 
-    const text = fixture.nativeElement.textContent;
-    expect(text).toContain('Annulée');
-    expect(text).not.toContain('aujourd\'hui');
-  });
+    it('should invoke actions', () => {
+      fixture.nativeElement.querySelector('.edit-button').click();
+      fixture.detectChanges();
 
-  it('should display the description when opened', () => {
-    const fixture = TestBed.createComponent(TasksComponent);
-    fixture.componentInstance.taskModels = tasks;
-    fixture.detectChanges();
+      expect(fixture.componentInstance.event).toEqual({
+        type: 'edit',
+        task: tasks[0]
+      });
 
-    fixture.nativeElement.querySelector('.task-title').click();
-    fixture.detectChanges();
+      fixture.nativeElement.querySelector('.assign-button').click();
+      fixture.detectChanges();
 
-    const text = fixture.nativeElement.textContent;
+      expect(fixture.componentInstance.event).toEqual({
+        type: 'assign',
+        task: tasks[0]
+      });
 
-    expect(text).toContain('Some description');
-  });
+      fixture.nativeElement.querySelector('.cancel-button').click();
+      fixture.detectChanges();
+      expect(fixture.componentInstance.event).toEqual({
+        type: 'cancel',
+        task: tasks[0]
+      });
 
-  it('should not crash when no due date, no assignee, no creator or no concerned person', () => {
-    tasks[0].dueDate = null;
-    tasks[0].assignee = null;
-    tasks[0].creator = null;
-    tasks[0].concernedPerson = null;
+      fixture.nativeElement.querySelector('.done-button').click();
+      fixture.detectChanges();
+      expect(fixture.componentInstance.event).toEqual({
+        type: 'markAsDone',
+        task: tasks[0]
+      });
 
-    const fixture = TestBed.createComponent(TasksComponent);
-    fixture.componentInstance.taskModels = tasks;
-    fixture.detectChanges();
-
-    const text = fixture.nativeElement.textContent;
-    expect(text).toContain('Some title');
-  });
-
-  it('should display a message when no task', () => {
-    // I have no idea why, but splicing the data, or assigning an empty array in the route, has no effect at all.
-    // Despite the data being empty before creating the component, it still receives a no-empty array.
-    const fixture = TestBed.createComponent(TasksComponent);
-    fixture.componentInstance.taskModels = tasks;
-    fixture.detectChanges();
-
-    fixture.componentInstance.tasks = [];
-    fixture.detectChanges();
-
-    expect(fixture.nativeElement.textContent).toContain('Rien à faire');
-    expect(fixture.nativeElement.querySelectorAll('.task-item').length).toBe(0);
+      tasks[0].status = 'DONE';
+      fixture.detectChanges();
+      fixture.nativeElement.querySelector('.resurrect-button').click();
+      fixture.detectChanges();
+      expect(fixture.componentInstance.event).toEqual({
+        type: 'resurrect',
+        task: tasks[0]
+      });
+    });
   });
 });
+

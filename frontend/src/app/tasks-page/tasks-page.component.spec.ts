@@ -13,6 +13,11 @@ import { By } from '@angular/platform-browser';
 import { NgbModule, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import { TaskService } from '../task.service';
+import { TasksResolverService } from '../tasks-resolver.service';
+import { HttpClientModule } from '@angular/common/http';
+import { UserService } from '../user.service';
+import { JwtInterceptorService } from '../jwt-interceptor.service';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -50,10 +55,14 @@ describe('TasksPageComponent', () => {
     } as any;
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, NgbModule.forRoot()],
+      imports: [RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
       declarations: [TasksPageComponent, TasksComponent, FullnamePipe],
       providers: [
         NowService,
+        TaskService,
+        TasksResolverService,
+        UserService,
+        JwtInterceptorService,
         { provide: ActivatedRoute, useValue: activatedRoute }
       ]
     });
@@ -66,9 +75,14 @@ describe('TasksPageComponent', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
+    const tasksPageComponent = fixture.componentInstance;
     const tasksComponent: TasksComponent = fixture.debugElement.query(By.directive(TasksComponent)).componentInstance;
-
     expect(tasksComponent.tasks.map(task => task.model)).toEqual(page.content);
+
+    spyOn(tasksPageComponent, 'onTaskClicked');
+    fixture.nativeElement.querySelector('.resurrect-button').click();
+    fixture.detectChanges();
+    expect(tasksPageComponent.onTaskClicked).toHaveBeenCalledWith({type: 'resurrect', task: page.content[0]});
   });
 
   it('should display a pagination component', () => {
@@ -101,4 +115,60 @@ describe('TasksPageComponent', () => {
       expect(router.navigate).toHaveBeenCalledWith(['.'], {relativeTo: activatedRoute, queryParams: {page: '1'}});
     });
   }));
+
+  it('should resurrect a task and refresh', () => {
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    const taskService = TestBed.get(TaskService);
+    const tasksResolverService = TestBed.get(TasksResolverService);
+
+    spyOn(taskService, 'resurrect').and.returnValue(Observable.of(null));
+    const newPage: Page<TaskModel> = {
+      content: page.content,
+      number: 0,
+      size: 3,
+      totalElements: 7,
+      totalPages: 3
+    };
+
+    spyOn(tasksResolverService, 'resolve').and.returnValue(Observable.of(newPage));
+
+    const task = page.content[0];
+
+    fixture.componentInstance.onTaskClicked({task, type: 'resurrect'});
+
+    expect(taskService.resurrect).toHaveBeenCalledWith(task.id);
+    expect(tasksResolverService.resolve).toHaveBeenCalledWith(activatedRoute.snapshot);
+    expect(fixture.componentInstance.page).toBe(newPage);
+  });
+
+  it('should navigate to previous page if current page is obsolete', () => {
+    page.number = 2;
+
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    const taskService = TestBed.get(TaskService);
+    const tasksResolverService = TestBed.get(TasksResolverService);
+
+    spyOn(taskService, 'resurrect').and.returnValue(Observable.of(null));
+    const newPage: Page<TaskModel> = {
+      content: page.content,
+      number: 2,
+      size: 3,
+      totalElements: 6,
+      totalPages: 2
+    };
+
+    spyOn(tasksResolverService, 'resolve').and.returnValue(Observable.of(newPage));
+    const router = TestBed.get(Router);
+    spyOn(router, 'navigate');
+
+    const task = page.content[0];
+
+    fixture.componentInstance.onTaskClicked({task, type: 'resurrect'});
+
+    expect(router.navigate).toHaveBeenCalledWith(['.'], {relativeTo: activatedRoute, queryParams: {page: '1'}});
+  });
 });

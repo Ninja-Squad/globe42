@@ -20,13 +20,13 @@
         <small class="text-muted" *ngIf="task.model.concernedPerson">Concerne <a [routerLink]="['/persons', task.model.concernedPerson.id]">{{ task.model.concernedPerson | fullname }}</a>.</small>
       </div>
       <div class="task-buttons" *ngIf="task.model.status === 'TODO'">
-        <button class="btn btn-secondary btn-sm" ><span class="fa fa-edit"></span></button>
-        <button (click)="assign(task, $event)" class="btn btn-outline-primary btn-sm" ><span class="fa fa-hand-o-right"></span></button>
-        <button class="btn btn-outline-danger btn-sm"><span class="fa fa-trash"></span></button>
-        <button class="btn btn-outline-success btn-sm"><span class="fa fa-check"></span></button>
+        <button (click)="edit(task, $event)" class="btn btn-secondary btn-sm edit-button"><span class="fa fa-edit"></span></button>
+        <button (click)="assign(task, $event)" class="btn btn-outline-primary btn-sm assign-button" ><span class="fa fa-hand-o-right"></span></button>
+        <button (click)="cancel(task, $event)" class="btn btn-outline-danger btn-sm cancel-button"><span class="fa fa-trash"></span></button>
+        <button (click)="markAsDone(task, $event)" class="btn btn-outline-success btn-sm done-button"><span class="fa fa-check"></span></button>
       </div>
       <div class="task-buttons" *ngIf="task.model.status !== 'TODO'">
-        <button class="btn btn-outline-info btn-sm"><span class="fa fa-undo"></span></button>
+        <button (click)="resurrect(task, $event)" class="btn btn-outline-info btn-sm resurrect-button"><span class="fa fa-undo"></span></button>
       </div>
     </div>
   </a>

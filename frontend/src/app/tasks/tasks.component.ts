@@ -1,8 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../models/task.model';
-import { UserModel } from '../models/user.model';
 import * as moment from 'moment';
 import { NowService } from '../now.service';
+import { TasksResolverService } from '../tasks-resolver.service';
+import { TaskService } from '../task.service';
+import { ConfirmService } from '../confirm.service';
+import 'rxjs/add/operator/switchMap';
 
 class Task {
   opened: boolean;
@@ -35,6 +38,13 @@ class Task {
   }
 }
 
+export type TaskEventType = 'edit' | 'assign' | 'markAsDone' | 'cancel' | 'resurrect';
+
+export interface TaskEvent {
+  task: TaskModel;
+  type: TaskEventType;
+}
+
 @Component({
   selector: 'gl-tasks',
   templateUrl: './tasks.component.html',
@@ -43,6 +53,9 @@ class Task {
 export class TasksComponent {
 
   tasks: Array<Task> = [];
+
+  @Output()
+  taskClicked = new EventEmitter<TaskEvent>();
 
   constructor(private nowService: NowService) { }
 
@@ -57,9 +70,29 @@ export class TasksComponent {
     event.preventDefault();
   }
 
+  edit(task: Task, event: Event) {
+    this.handleEvent('edit', task, event);
+  }
+
   assign(task: Task, event: Event) {
-    task.model.assignee = { id: 1, login: 'admin' } as UserModel;
+    this.handleEvent('assign', task, event);
+  }
+
+  markAsDone(task: Task, event: Event) {
+    this.handleEvent('markAsDone', task, event);
+  }
+
+  cancel(task: Task, event: Event) {
+    this.handleEvent('cancel', task, event);
+  }
+
+  resurrect(task: Task, event: Event) {
+    this.handleEvent('resurrect', task, event);
+  }
+
+  private handleEvent(type: TaskEventType, task: Task, event: Event) {
     event.stopPropagation();
     event.preventDefault();
+    this.taskClicked.emit({type, task: task.model});
   }
 }
