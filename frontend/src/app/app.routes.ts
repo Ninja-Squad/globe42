@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { Route, Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { PersonsComponent } from './persons/persons.component';
@@ -28,6 +28,9 @@ import { PersonIncomesComponent } from './person-incomes/person-incomes.componen
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
 import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
+import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
+import { TasksComponent } from './tasks/tasks.component';
+import { TasksResolverService } from './tasks-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -61,6 +64,16 @@ export const routes: Routes = [
                 }
               },
               { path: 'family', component: PersonFamilySituationComponent },
+              {
+                path: 'tasks',
+                component: TasksComponent,
+                data: {
+                  taskListType: 'person'
+                },
+                resolve: {
+                  tasks: TasksResolverService
+                }
+              }
             ]
           },
           {
@@ -156,9 +169,35 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'tasks',
+        component: TasksLayoutComponent,
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'todo' },
+          taskRoute('todo'),
+          taskRoute('urgent'),
+          taskRoute('mine'),
+          taskRoute('unassigned')
+        ]
+      },
+      {
         path: 'cities',
         component: CitiesUploadComponent
       }
     ]
   }
 ];
+
+/**
+ * Creates a task route of a given type
+ * This function has no readon to be exported, other than to make the AOT compiler happy.
+ */
+export function taskRoute(taskListType: string): Route {
+  return {
+    path: taskListType,
+    component: TasksComponent,
+    data: { taskListType },
+    resolve: {
+      tasks: TasksResolverService
+    }
+  }
+}

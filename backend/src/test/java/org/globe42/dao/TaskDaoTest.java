@@ -1,0 +1,112 @@
+package org.globe42.dao;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import com.ninja_squad.dbsetup.Operations;
+import com.ninja_squad.dbsetup.generator.ValueGenerators;
+import com.ninja_squad.dbsetup.operation.Insert;
+import com.ninja_squad.dbsetup.operation.Operation;
+import org.globe42.domain.FiscalStatus;
+import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
+import org.globe42.domain.MaritalStatus;
+import org.globe42.domain.Person;
+import org.globe42.domain.Task;
+import org.globe42.domain.TaskStatus;
+import org.globe42.domain.User;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * Tests for {@link TaskDao}
+ * @author JB Nizet
+ */
+public class TaskDaoTest extends BaseDaoTest {
+
+    @Autowired
+    private TaskDao dao;
+
+    @Before
+    public void prepare() {
+        Operation persons =
+            Insert.into("person")
+                  .withDefaultValue("fiscal_status_up_to_date", false)
+                  .withDefaultValue("fiscal_status", FiscalStatus.UNKNOWN)
+                  .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
+                  .withDefaultValue("housing", Housing.UNKNOWN)
+                  .columns("id", "last_name", "mediation_code", "gender", "adherent", "entry_date")
+                  .values(1L, "Exbrayat", "E1", Gender.MALE, true, "2017-01-01")
+                  .build();
+
+        Operation users = Insert.into("guser")
+                                .columns("id", "login", "password", "admin")
+                                .values(1L, "jb", "hashedPassword", true)
+                                .values(2L, "ced", "hashedPassword", true)
+                                .build();
+        Operation tasks = Insert.into("task")
+                                .withGeneratedValue("description", ValueGenerators.stringSequence("desc_"))
+                                .withGeneratedValue("title", ValueGenerators.stringSequence("title_"))
+                                .columns("id", "status", "due_date", "creator_id", "assignee_id", "concerned_person_id")
+                                .values(1L, TaskStatus.DONE, null, 1L, 1L, null)
+                                .values(2L, TaskStatus.TODO, null, 1L, 2L, null)
+                                .values(3L, TaskStatus.TODO, null, 2L, 1L, null)
+                                .values(4L, TaskStatus.TODO, LocalDate.of(2017, 8, 1), null, null, null)
+                                .values(5L, TaskStatus.TODO, LocalDate.of(2017, 8, 7), null, null, 1L)
+                                .values(6L, TaskStatus.DONE, LocalDate.of(2017, 8, 1), null, null, 1L)
+                                .build();
+
+        dbSetup(Operations.sequenceOf(users, persons, tasks));
+    }
+
+    @Test
+    public void shouldFindTodo() {
+        TRACKER.skipNextLaunch();
+        assertThat(dao.findTodo()).extracting(Task::getId).containsOnly(2L, 3L, 4L, 5L);
+    }
+
+    @Test
+    public void shouldFindTodoByAssignee() {
+        TRACKER.skipNextLaunch();
+        assertThat(dao.findTodoByAssignee(new User(1L))).extracting(Task::getId).containsOnly(3L);
+    }
+
+    @Test
+    public void shouldFindTodoUnassigned() {
+        TRACKER.skipNextLaunch();
+        assertThat(dao.findTodoUnassigned()).extracting(Task::getId).containsOnly(4L, 5L);
+    }
+
+    @Test
+    public void shouldFindTodoBefore() {
+        TRACKER.skipNextLaunch();
+        assertThat(dao.findTodoBefore(LocalDate.of(2017, 8, 1))).extracting(Task::getId).containsOnly(4L);
+    }
+
+    @Test
+    public void shouldFindTodoForPerson() {
+        TRACKER.skipNextLaunch();
+        assertThat(dao.findTodoByConcernedPerson(new Person(1L))).extracting(Task::getId).containsOnly(5L);
+    }
+
+    @Test
+    public void shouldResetCreator() {
+        dao.resetCreatorOnTasksCreatedBy(new User(1L));
+        List<Task> taskList = dao.findAll();
+        assertThat(taskList.stream().filter(task -> task.getCreator() != null))
+            .extracting(task -> task.getCreator().getId())
+            .containsOnly(2L);
+    }
+
+    @Test
+    public void shouldResetAssignee() {
+        dao.resetAssigneeOnTasksAssignedTo(new User(1L));
+        List<Task> taskList = dao.findAll();
+        assertThat(taskList.stream().filter(task -> task.getAssignee() != null))
+            .extracting(task -> task.getAssignee().getId())
+            .containsOnly(2L);
+    }
+}

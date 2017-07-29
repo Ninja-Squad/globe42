@@ -57,6 +57,11 @@ import { FamilySituationComponent } from './family-situation/family-situation.co
 import { DisplayHousingPipe } from './display-housing.pipe';
 import { FamilySituationEditComponent } from './family-situation-edit/family-situation-edit.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
+import { TasksComponent } from './tasks/tasks.component';
+import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
+import { TasksResolverService } from './tasks-resolver.service';
+import { TaskService } from './task.service';
+import * as moment from 'moment';
 
 @NgModule({
   declarations: [
@@ -90,7 +95,9 @@ import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
     FamilySituationComponent,
     DisplayHousingPipe,
     FamilySituationEditComponent,
-    CitiesUploadComponent
+    CitiesUploadComponent,
+    TasksComponent,
+    TasksLayoutComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -139,9 +146,14 @@ import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
       useValue: 'fr-FR'
     },
     ConfirmService,
-    FullnamePipe
+    FullnamePipe,
+    TasksResolverService,
+    TaskService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor() {
+    moment.locale('fr')
+  }
 }

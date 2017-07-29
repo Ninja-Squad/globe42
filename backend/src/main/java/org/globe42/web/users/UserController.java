@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.web.exception.BadRequestException;
@@ -35,15 +36,18 @@ public class UserController {
 
     private final CurrentUser currentUser;
     private final UserDao userDao;
+    private final TaskDao taskDao;
     private final PasswordGenerator passwordGenerator;
     private final PasswordDigester passwordDigester;
 
     public UserController(CurrentUser currentUser,
                           UserDao userDao,
+                          TaskDao taskDao,
                           PasswordGenerator passwordGenerator,
                           PasswordDigester passwordDigester) {
         this.currentUser = currentUser;
         this.userDao = userDao;
+        this.taskDao = taskDao;
         this.passwordGenerator = passwordGenerator;
         this.passwordDigester = passwordDigester;
     }
@@ -109,7 +113,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @AdminOnly
     public void delete(@PathVariable("userId") Long userId) {
-        userDao.findById(userId).ifPresent(userDao::delete);
+        userDao.findById(userId).ifPresent(user -> {
+            taskDao.resetAssigneeOnTasksAssignedTo(user);
+            taskDao.resetCreatorOnTasksCreatedBy(user);
+            userDao.delete(user);
+        });
     }
 
     @PostMapping("/{userId}/password-resets")

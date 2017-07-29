@@ -1,0 +1,25 @@
+<h1>Tâches</h1>
+
+<div class="row">
+  <div class="col-xs-12 col-md-4 col-lg-2">
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="todo" routerLinkActive="active">À faire</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="urgent" routerLinkActive="active">Urgentes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="mine" routerLinkActive="active">Ma liste</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="unassigned" routerLinkActive="active">Non assignées</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+

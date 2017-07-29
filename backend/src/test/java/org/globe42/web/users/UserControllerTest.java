@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
@@ -34,6 +35,9 @@ public class UserControllerTest extends BaseTest{
 
     @Mock
     private UserDao mockUserDao;
+
+    @Mock
+    private TaskDao mockTaskDao;
 
     @Mock
     private PasswordGenerator mockPasswordGenerator;
@@ -175,6 +179,8 @@ public class UserControllerTest extends BaseTest{
 
         controller.delete(userId);
 
+        verify(mockTaskDao).resetAssigneeOnTasksAssignedTo(user);
+        verify(mockTaskDao).resetCreatorOnTasksCreatedBy(user);
         verify(mockUserDao).delete(user);
     }
 

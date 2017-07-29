@@ -1,0 +1,28 @@
+<div class="text-center" *ngIf="tasks.length == 0">
+  <span style="font-size: 60px;" class="fa fa-thumbs-up text-success"></span>
+  <br/>
+  <span class="lead">Rien à faire&nbsp;! Elle est pas belle la vie&nbsp;?</span>
+</div>
+
+<div class="list-group" *ngIf="tasks.length > 0">
+  <a href (click)="toggle(task, $event)" *ngFor="let task of tasks" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h2>{{ task.model.title }}</h2>
+      <small *ngIf="task.model.dueDate" [class]="task.dueDateClass()">{{ task.relativeDueDate() }}</small>
+    </div>
+    <div *ngIf="task.opened" class="task-description">{{ task.model.description }}</div>
+    <div class="d-flex w-100 justify-content-between align-items-start">
+      <div>
+        <small class="text-muted" *ngIf="task.model.creator">Créée par {{ task.model.creator.login }}.</small>
+        <small class="text-muted" *ngIf="task.model.assignee">Assignée à {{ task.model.assignee.login }}.</small>
+        <small class="text-muted" *ngIf="task.model.concernedPerson">Concerne <a [routerLink]="['/persons', task.model.concernedPerson.id]">{{ task.model.concernedPerson | fullname }}</a>.</small>
+      </div>
+      <div class="task-buttons">
+        <button class="btn btn-secondary btn-sm" ><span class="fa fa-edit"></span></button>
+        <button (click)="assign(task, $event)" class="btn btn-outline-primary btn-sm" ><span class="fa fa-hand-o-right"></span></button>
+        <button class="btn btn-outline-danger btn-sm"><span class="fa fa-trash"></span></button>
+        <button class="btn btn-outline-success btn-sm"><span class="fa fa-check"></span></button>
+      </div>
+    </div>
+  </a>
+</div>
