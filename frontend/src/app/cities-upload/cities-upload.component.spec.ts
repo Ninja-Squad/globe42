@@ -5,6 +5,8 @@ import { SearchCityService } from '../search-city.service';
 import { Subject } from 'rxjs/Subject';
 import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NowService } from '../now.service';
+import * as moment from 'moment';
 
 describe('CitiesUploadComponent', () => {
 
@@ -12,13 +14,14 @@ describe('CitiesUploadComponent', () => {
     TestBed.configureTestingModule({
       imports: [NgbModule.forRoot(), HttpClientModule],
       declarations: [CitiesUploadComponent],
-      providers: [SearchCityService]
+      providers: [NowService, SearchCityService]
     });
   }));
 
   it('should upload', fakeAsync(() => {
     const cityService = TestBed.get(SearchCityService);
-    const component = new CitiesUploadComponent(cityService);
+    const nowService = TestBed.get(NowService);
+    const component = new CitiesUploadComponent(cityService, nowService);
 
     expect(component.status).toBe('pending');
 
@@ -32,8 +35,9 @@ describe('CitiesUploadComponent', () => {
     spyOn(fileReader, 'readAsText');
 
     spyOn(component, '_createFileReader').and.returnValue(fileReader);
-    let fakeNow = 0;
-    spyOn(component, '_now').and.callFake(() => fakeNow);
+
+    const fakeNow = moment();
+    spyOn(nowService, 'now').and.callFake(() => moment(fakeNow));
 
     component.upload(fileChangeEvent);
     expect(fileReader.onload).toBeDefined();
@@ -52,7 +56,7 @@ describe('CitiesUploadComponent', () => {
     expect(component.status).toBe('uploading');
 
     // emit first progress event after 5 seconds
-    fakeNow += 5000;
+    fakeNow.add(5, 'seconds');
     fakeEvents.next({
       type: HttpEventType.UploadProgress,
       loaded: 5,
@@ -64,7 +68,7 @@ describe('CitiesUploadComponent', () => {
     expect(component.progress).toBe(5 / 30);
 
     // emit last progress events
-    fakeNow += 5000;
+    fakeNow.add(5, 'seconds');
     fakeEvents.next({
       type: HttpEventType.UploadProgress,
       loaded: 10,
@@ -74,15 +78,15 @@ describe('CitiesUploadComponent', () => {
     expect(component.progress).toBe(10 / 30);
     expect(component.status).toBe('processing');
 
-    fakeNow += 10000;
+    fakeNow.add(10, 'seconds');
     tick(10000);
     expect(component.progress).toBe(20 / 30);
 
-    fakeNow += 5000;
+    fakeNow.add(5, 'seconds');
     tick(5000);
     expect(component.progress).toBe(25 / 30);
 
-    fakeNow += 6000;
+    fakeNow.add(6, 'seconds');
     tick(6000);
     expect(component.progress).toBeLessThan(1);
     expect(component.status).toBe('processing');
@@ -96,7 +100,8 @@ describe('CitiesUploadComponent', () => {
 
   it('should finish if response comes back early', fakeAsync(() => {
     const cityService = TestBed.get(SearchCityService);
-    const component = new CitiesUploadComponent(cityService);
+    const nowService = TestBed.get(NowService);
+    const component = new CitiesUploadComponent(cityService, nowService);
 
     expect(component.status).toBe('pending');
 
@@ -109,8 +114,8 @@ describe('CitiesUploadComponent', () => {
     const fileReader = new FileReader();
     spyOn(fileReader, 'readAsText');
     spyOn(component, '_createFileReader').and.returnValue(fileReader);
-    let fakeNow = 0;
-    spyOn(component, '_now').and.callFake(() => fakeNow);
+    const fakeNow = moment();
+    spyOn(nowService, 'now').and.callFake(() => moment(fakeNow));
 
     component.upload(fileChangeEvent);
     expect(fileReader.onload).toBeDefined();
@@ -129,7 +134,7 @@ describe('CitiesUploadComponent', () => {
     expect(component.status).toBe('uploading');
 
     // emit last progress events
-    fakeNow += 10000;
+    fakeNow.add(10, 'seconds');
     fakeEvents.next({
       type: HttpEventType.UploadProgress,
       loaded: 10,
@@ -139,7 +144,7 @@ describe('CitiesUploadComponent', () => {
     expect(component.progress).toBe(10 / 30);
     expect(component.status).toBe('processing');
 
-    fakeNow += 15000;
+    fakeNow.add(15, 'seconds');
     tick(15000);
     expect(component.progress).toBe(25 / 30);
 
@@ -150,7 +155,7 @@ describe('CitiesUploadComponent', () => {
     expect(component.status).toBe('done');
 
     // let the fake event observable a chance to realize that the processing is done
-    fakeNow += 1000;
+    fakeNow.add(1, 'seconds');
     tick(1000);
   }));
 

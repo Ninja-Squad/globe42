@@ -6,6 +6,7 @@ import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/takeWhile';
+import { NowService } from '../now.service';
 
 const ESTIMATED_PROCESSING_TIME_IN_MILLIS = 20000;
 
@@ -23,7 +24,7 @@ export class CitiesUploadComponent {
    */
   progress: number;
 
-  constructor(private cityService: SearchCityService) { }
+  constructor(private cityService: SearchCityService, private nowService: NowService) { }
 
   upload(fileChangeEvent) {
     const file = fileChangeEvent.target.files[0];
@@ -31,12 +32,12 @@ export class CitiesUploadComponent {
 
     reader.onload = fileLoadedEvent => {
       this.status = 'uploading';
-      const startTime = this._now();
+      const startTime = this.now();
 
       this.cityService.uploadCities(fileLoadedEvent.target['result'])
         .subscribe(progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
-            const elapsedTime = this._now() - startTime;
+            const elapsedTime = this.now() - startTime;
             const estimatedUploadTime = (progressEvent.total / progressEvent.loaded) * elapsedTime;
             const estimatedTotalTime = estimatedUploadTime + ESTIMATED_PROCESSING_TIME_IN_MILLIS;
 
@@ -50,12 +51,12 @@ export class CitiesUploadComponent {
               // - stop before the end, in case the processing time is longer then estimated
               // - stop if we received the response, in case the processing time is shorted than estimated
               Observable.interval(500)
-                .takeWhile(() => (this._now() - startTime) < estimatedTotalTime && this.progress < 1)
-                .subscribe(() => this.progress = (this._now() - startTime) / estimatedTotalTime);
+                .takeWhile(() => (this.now() - startTime) < estimatedTotalTime && this.progress < 1)
+                .subscribe(() => this.progress = (this.now() - startTime) / estimatedTotalTime);
             }
           }
         }, () => {
-          this.progress = 1
+          this.progress = 1;
           this.status = 'failed';
         }, () => {
           this.progress = 1;
@@ -71,8 +72,7 @@ export class CitiesUploadComponent {
     return new FileReader();
   }
 
-  // to ease testing
-  _now() {
-    return new Date().getTime();
+  private now() {
+    return this.nowService.now().valueOf();
   }
 }

@@ -4,29 +4,31 @@ import { TaskModel } from '../models/task.model';
 import { sortBy } from '../utils';
 import { UserModel } from '../models/user.model';
 import * as moment from 'moment';
+import { Moment } from 'moment';
+import { NowService } from '../now.service';
 
 class Task {
   opened: boolean;
 
-  constructor(public model: TaskModel) {}
+  constructor(public model: TaskModel, private nowService: NowService) {}
 
   relativeDueDate(): string {
     const dueMoment = moment(this.model.dueDate);
-    const today = moment().startOf('day');
+    const today = this.nowService.now().startOf('day');
     if (today.isSame(dueMoment)) {
-      return 'Aujourd\'hui';
+      return 'aujourd\'hui';
     }
     return today.to(dueMoment);
   }
 
   dueDateClass() {
     const dueMoment = moment(this.model.dueDate);
-    const today = moment().startOf('day');
+    const today = this.nowService.now().startOf('day');
     const days = dueMoment.diff(today, 'days');
     if (days < 0) {
       return 'text-danger font-weight-bold';
     }
-    if (days == 0) {
+    if (days === 0) {
       return 'text-danger';
     }
     if (days > 0 && days < 7) {
@@ -45,13 +47,12 @@ export class TasksComponent implements OnInit {
 
   tasks: Array<Task>;
 
-  constructor(private route: ActivatedRoute) {
-  }
+  constructor(private route: ActivatedRoute, private nowService: NowService) { }
 
   ngOnInit() {
-    const veryFarInTheFuture = moment().add(1000, 'y');
+    const veryFarInTheFuture = this.nowService.now().add(1000, 'y');
     this.tasks = sortBy<TaskModel>(this.route.snapshot.data['tasks'], task => task.dueDate ? moment(task.dueDate) : veryFarInTheFuture)
-      .map(model => new Task(model));
+      .map(model => new Task(model, this.nowService));
   }
 
   toggle(task: Task, event: Event) {
@@ -65,6 +66,4 @@ export class TasksComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
   }
-
-
 }

@@ -9,7 +9,7 @@ export class TasksResolverService implements Resolve<Array<TaskModel>> {
 
   constructor(private taskService: TaskService) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Array<TaskModel>> {
+  resolve(route: ActivatedRouteSnapshot): Observable<Array<TaskModel>> {
     const listType = route.data['taskListType'];
     switch (listType) {
       case 'todo':

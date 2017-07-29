@@ -62,6 +62,7 @@ import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
 import { TasksResolverService } from './tasks-resolver.service';
 import { TaskService } from './task.service';
 import * as moment from 'moment';
+import { NowService } from './now.service';
 
 @NgModule({
   declarations: [
@@ -148,7 +149,8 @@ import * as moment from 'moment';
     ConfirmService,
     FullnamePipe,
     TasksResolverService,
-    TaskService
+    TaskService,
+    NowService
   ],
   bootstrap: [AppComponent]
 })

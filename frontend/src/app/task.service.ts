@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { TaskModel } from './models/task.model';
-import * as moment from 'moment';
+import { NowService } from './now.service';
 
 @Injectable()
 export class TaskService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private nowService: NowService) { }
 
   listTodo(): Observable<Array<TaskModel>> {
     return this.http.get('/api/tasks');
@@ -15,7 +15,7 @@ export class TaskService {
 
   listUrgent(): Observable<Array<TaskModel>> {
     return this.http.get('/api/tasks', {
-      params: new HttpParams().set('before', moment().add(7, 'd').format('YYYY-MM-DD'))
+      params: new HttpParams().set('before', this.nowService.now().add(7, 'd').format('YYYY-MM-DD'))
     });
   }
 
