@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SearchCityService } from '../search-city.service';
 import { HttpEventType } from '@angular/common/http';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/take';

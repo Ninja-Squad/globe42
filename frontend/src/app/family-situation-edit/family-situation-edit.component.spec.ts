@@ -10,7 +10,7 @@ describe('FamilySituationEditComponent', () => {
   @Component({
     template: '<gl-family-situation-edit [situation]="situation" location="french"></gl-family-situation-edit>'
   })
-  class TestComponent{
+  class TestComponent {
 
     situation: FormGroup;
 

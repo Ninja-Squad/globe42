@@ -15,7 +15,7 @@ describe('FamilySituationComponent', () => {
   @Component({
     template: '<gl-family-situation [situation]="situation"></gl-family-situation>'
   })
-  class TestComponent{
+  class TestComponent {
     situation = situation;
   }
 

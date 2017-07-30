@@ -35,7 +35,7 @@ describe('PersonFamilySituationComponent', () => {
     const fixture = TestBed.createComponent(PersonFamilySituationComponent);
     fixture.detectChanges();
 
-    const titles = fixture.nativeElement.querySelectorAll("h3");
+    const titles = fixture.nativeElement.querySelectorAll('h3');
     expect(titles.length).toBe(2);
     expect(titles[0].textContent).toBe('En France');
     expect(titles[1].textContent).toBe('Au pays');
