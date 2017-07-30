@@ -12,7 +12,7 @@ import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../displa
 import { PersonCommand } from '../models/person.command';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DisplayGenderPipe } from '../display-gender.pipe';
@@ -150,7 +150,7 @@ describe('PersonEditComponent', () => {
       expect(frenchFamilySituation.textContent).toContain('Rendre inconnue');
       expect(frenchFamilySituation.querySelector('gl-family-situation-edit')).toBeTruthy();
       expect(fixture.debugElement.query(By.directive(FamilySituationEditComponent)).componentInstance.situation)
-        .toBe(fixture.componentInstance.frenchFamilySituationGroup);
+        .toBe(fixture.componentInstance.personForm.get('frenchFamilySituation'));
 
       const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
       expect(abroadFamilySituation.textContent).toContain('Inconnue');
@@ -190,7 +190,7 @@ describe('PersonEditComponent', () => {
       city.value = '42000 SAINT-ETIENN';
       city.dispatchEvent(new Event('input'));
       fixture.detectChanges();
-      expect(fixture.componentInstance.cityCtrl.value).toBeFalsy();
+      expect(fixture.componentInstance.personForm.value.city).toBeFalsy();
       expect(city.classList).toContain('form-control-warning');
       expect(city.closest('.form-group').classList).toContain('has-warning');
 
@@ -206,8 +206,7 @@ describe('PersonEditComponent', () => {
       const nativeElement = fixture.nativeElement;
       const component = fixture.componentInstance;
 
-      expect(component.abroadFamilySituationGroup).toBeFalsy();
-      expect(component.personForm.get('abroadFamilySituation')).toBeFalsy();
+      expect(component.personForm.contains('abroadFamilySituation')).toBeFalsy();
 
       const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
       const makeKnownButton = abroadFamilySituation.querySelector('button');
@@ -215,20 +214,18 @@ describe('PersonEditComponent', () => {
 
       makeKnownButton.click();
       fixture.detectChanges();
-      expect(component.abroadFamilySituationGroup).toBeTruthy();
-      expect(component.personForm.get('abroadFamilySituation')).toBeTruthy();
+      expect(component.personForm.contains('abroadFamilySituation')).toBeTruthy();
 
       const familySituationEditComponent: FamilySituationEditComponent =
         fixture.debugElement.query(By.css('#abroadFamilySituation gl-family-situation-edit')).componentInstance;
-      expect(familySituationEditComponent.situation).toBe(component.abroadFamilySituationGroup);
+      expect(familySituationEditComponent.situation).toBe(component.personForm.get('abroadFamilySituation') as FormGroup);
 
       const makeUnknownButton = abroadFamilySituation.querySelector('button');
       expect(makeUnknownButton.textContent).toContain('Rendre inconnue');
 
       makeUnknownButton.click();
       fixture.detectChanges();
-      expect(component.abroadFamilySituationGroup).toBeFalsy();
-      expect(component.personForm.get('abroadFamilySituation')).toBeFalsy();
+      expect(component.personForm.contains('abroadFamilySituation')).toBeFalsy();
     });
   });
 
@@ -409,6 +406,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.nickName).toBe('jane');
       expect(createdPerson.gender).toBe('FEMALE');
       expect(createdPerson.birthDate).toBe('1985-03-03');
+      expect(createdPerson.mediationEnabled).toBe(true);
       expect(createdPerson.mediationCode).toBeUndefined();
       expect(createdPerson.address).toBe('Avenue Liberté');
       expect(createdPerson.city.code).toBe(42000);

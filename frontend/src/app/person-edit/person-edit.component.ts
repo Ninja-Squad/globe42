@@ -31,26 +31,6 @@ export class PersonEditComponent implements OnInit {
   editedPerson: PersonModel | null;
 
   personForm: FormGroup;
-  firstNameCtrl: FormControl;
-  lastNameCtrl: FormControl;
-  nickNameCtrl: FormControl;
-  adherentCtrl: FormControl;
-  birthDateCtrl: FormControl;
-  genderCtrl: FormControl;
-  addressCtrl: FormControl;
-  cityCtrl: FormControl;
-  emailCtrl: FormControl;
-  phoneNumberCtrl: FormControl;
-  mediationEnabledCtrl: FormControl;
-  maritalStatusCtrl: FormControl;
-  entryDateCtrl: FormControl;
-  housingCtrl: FormControl;
-  housingSpaceCtrl: FormControl;
-  fiscalStatusCtrl: FormControl;
-  fiscalStatusDateCtrl: FormControl;
-  fiscalStatusUpToDateCtrl: FormControl;
-  frenchFamilySituationGroup: FormGroup;
-  abroadFamilySituationGroup: FormGroup;
 
   genders: Array<Gender> = GENDER_TRANSLATIONS.map(t => t.key);
   maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
@@ -85,44 +65,25 @@ export class PersonEditComponent implements OnInit {
   ngOnInit() {
     this.editedPerson = this.route.snapshot.data['person'];
 
-    this.firstNameCtrl = this.fb.control('', Validators.required);
-    this.lastNameCtrl = this.fb.control('', Validators.required);
-    this.nickNameCtrl = this.fb.control('');
-    this.genderCtrl = this.fb.control('', Validators.required);
-    this.birthDateCtrl = this.fb.control(null);
-    this.addressCtrl = this.fb.control('');
-    this.cityCtrl = this.fb.control(null);
-    this.emailCtrl = this.fb.control('', [PersonEditComponent.emailOrEmpty]);
-    this.phoneNumberCtrl = this.fb.control('');
-    this.adherentCtrl = this.fb.control(null, Validators.required);
-    this.mediationEnabledCtrl = this.fb.control(false);
-    this.maritalStatusCtrl = this.fb.control('UNKNOWN');
-    this.entryDateCtrl = this.fb.control(null);
-    this.housingCtrl = this.fb.control('UNKNOWN');
-    this.housingSpaceCtrl = this.fb.control(null);
-    this.fiscalStatusCtrl = this.fb.control('UNKNOWN');
-    this.fiscalStatusDateCtrl = this.fb.control(null);
-    this.fiscalStatusUpToDateCtrl = this.fb.control(false);
-
     this.personForm = this.fb.group({
-      firstName: this.firstNameCtrl,
-      lastName: this.lastNameCtrl,
-      nickName: this.nickNameCtrl,
-      gender: this.genderCtrl,
-      birthDate: this.birthDateCtrl,
-      address: this.addressCtrl,
-      city: this.cityCtrl,
-      email: this.emailCtrl,
-      phoneNumber: this.phoneNumberCtrl,
-      adherent: this.adherentCtrl,
-      mediationEnabled: this.mediationEnabledCtrl,
-      maritalStatus: this.maritalStatusCtrl,
-      entryDate: this.entryDateCtrl,
-      housing: this.housingCtrl,
-      housingSpace: this.housingSpaceCtrl,
-      fiscalStatus: this.fiscalStatusCtrl,
-      fiscalStatusDate: this.fiscalStatusDateCtrl,
-      fiscalStatusUpToDate: this.fiscalStatusUpToDateCtrl
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      nickName: '',
+      gender: ['', Validators.required],
+      birthDate: null,
+      address: '',
+      city: null,
+      email: ['', PersonEditComponent.emailOrEmpty],
+      phoneNumber: '',
+      adherent: [null, Validators.required],
+      mediationEnabled: false,
+      maritalStatus: 'UNKNOWN',
+      entryDate: null,
+      housing: 'UNKNOWN',
+      housingSpace: null,
+      fiscalStatus: 'UNKNOWN',
+      fiscalStatusDate: null,
+      fiscalStatusUpToDate: false
     });
 
     if (this.editedPerson) {
@@ -134,37 +95,31 @@ export class PersonEditComponent implements OnInit {
       }
 
       this.personForm.patchValue(this.editedPerson);
-      this.birthDateCtrl.setValue(this.parserFormatter.parse(this.editedPerson.birthDate));
-      this.entryDateCtrl.setValue(this.parserFormatter.parse(this.editedPerson.entryDate));
-      this.fiscalStatusDateCtrl.setValue(this.parserFormatter.parse(this.editedPerson.fiscalStatusDate));
+      ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(name =>
+        this.personForm.get(name).setValue(this.parserFormatter.parse(this.editedPerson[name])));
     }
   }
 
   showFrenchFamilySituation() {
-    this.frenchFamilySituationGroup = this.createFamilySituationGroup();
-    this.personForm.addControl('frenchFamilySituation', this.frenchFamilySituationGroup);
+    this.personForm.addControl('frenchFamilySituation', this.createFamilySituationGroup());
   }
 
   hideFrenchFamilySituation() {
-    this.frenchFamilySituationGroup = null;
     this.personForm.removeControl('frenchFamilySituation');
   }
 
   showAbroadFamilySituation() {
-    this.abroadFamilySituationGroup = this.createFamilySituationGroup();
-    this.personForm.addControl('abroadFamilySituation', this.abroadFamilySituationGroup);
+    this.personForm.addControl('abroadFamilySituation', this.createFamilySituationGroup());
   }
 
   hideAbroadFamilySituation() {
-    this.abroadFamilySituationGroup = null;
     this.personForm.removeControl('abroadFamilySituation');
   }
 
   save() {
     const command: PersonCommand = this.personForm.value;
-    command.birthDate = this.parserFormatter.format(this.birthDateCtrl.value);
-    command.entryDate = this.parserFormatter.format(this.entryDateCtrl.value);
-    command.fiscalStatusDate = this.parserFormatter.format(this.fiscalStatusDateCtrl.value);
+    ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(name =>
+      command[name] = this.parserFormatter.format(this.personForm.value[name]));
 
     let action;
     if (this.editedPerson && this.editedPerson.id !== undefined) {
@@ -176,7 +131,7 @@ export class PersonEditComponent implements OnInit {
   }
 
   clearIfNoCity(input: HTMLInputElement) {
-    if (!this.cityCtrl.value) {
+    if (!this.personForm.value.city) {
       input.value = null;
     }
   }

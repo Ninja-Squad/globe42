@@ -63,13 +63,13 @@
       <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
     </div>
   </div>
-  <div class="form-group row" [class.has-danger]="searchFailed" [class.has-warning]="cityInput.value && !cityCtrl.value">
+  <div class="form-group row" [class.has-danger]="searchFailed" [class.has-warning]="cityInput.value && !personForm.value.city">
     <label for="city" class="col-sm-3 col-form-label">Ville</label>
     <ng-template #resultTemplate let-result="result">{{ result | displayCity }}</ng-template>
     <div class="col-sm-9">
       <input #cityInput class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
              [ngbTypeahead]="search" [resultTemplate]="resultTemplate" [inputFormatter]="cityFormatter" [editable]="false"
-             (blur)="clearIfNoCity(cityInput)" [class.form-control-warning]="cityInput.value && !cityCtrl.value">
+             (blur)="clearIfNoCity(cityInput)" [class.form-control-warning]="cityInput.value && !personForm.value.city">
     </div>
   </div>
   <div class="form-group row">
@@ -98,7 +98,7 @@
     </div>
   </div>
 
-  <ng-container *ngIf="mediationEnabledCtrl.value">
+  <ng-container *ngIf="personForm.value.mediationEnabled">
     <div class="form-group row">
       <label for="mediationCode" class="col-sm-3 col-form-label">Code de médiation</label>
       <div class="col-sm-9 text-muted form-control-static" id="mediationCode">
@@ -135,7 +135,7 @@
         </select>
       </div>
     </div>
-    <div *ngIf="housingCtrl.value !== 'UNKNOWN'" class="form-group row">
+    <div *ngIf="personForm.value.housing !== 'UNKNOWN'" class="form-group row">
       <label for="housingSpace" class="col-sm-3 col-form-label">Surface du logement (m<sup>2</sup>)</label>
       <div class="col-sm-9">
         <input type="number" class="form-control" id="housingSpace" formControlName="housingSpace" min="1" />
@@ -153,7 +153,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group row" *ngIf="fiscalStatusCtrl.value !== 'UNKNOWN'">
+    <div class="form-group row" *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'">
       <label for="fiscalStatusDate" class="col-sm-3 col-form-label">Date de mise en place</label>
       <div class="col-sm-9 input-group">
         <div class="input-group-addon" (click)="fsd.toggle()">
@@ -163,7 +163,7 @@
                formControlName="fiscalStatusDate" ngbDatepicker #fsd="ngbDatepicker" [minDate]="{year: 1990, month: 1}">
       </div>
     </div>
-    <div *ngIf="fiscalStatusCtrl.value !== 'UNKNOWN'" class="form-check row">
+    <div *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'" class="form-check row">
       <div class="col-sm-9 offset-sm-3">
         <label class="form-check-label">
           <input type="checkbox" class="form-check-input" id="fiscalStatusUpToDate" formControlName="fiscalStatusUpToDate" />
@@ -176,16 +176,16 @@
     <div class="row">
       <div class="col-md" id="frenchFamilySituation">
         <h4>En France</h4>
-        <div *ngIf="!frenchFamilySituationGroup">Inconnue &mdash; <button type="button" class="btn btn-outline-success btn-sm" (click)="showFrenchFamilySituation()">Renseigner</button></div>
-        <div *ngIf="frenchFamilySituationGroup"><button type="button" class="btn btn-outline-danger btn-sm" type="button" (click)="hideFrenchFamilySituation()">Rendre inconnue</button></div>
-        <gl-family-situation-edit *ngIf="frenchFamilySituationGroup" [situation]="frenchFamilySituationGroup" location="french"></gl-family-situation-edit>
+        <div *ngIf="!personForm.contains('frenchFamilySituation')">Inconnue &mdash; <button type="button" class="btn btn-outline-success btn-sm" (click)="showFrenchFamilySituation()">Renseigner</button></div>
+        <div *ngIf="personForm.contains('frenchFamilySituation')"><button type="button" class="btn btn-outline-danger btn-sm" type="button" (click)="hideFrenchFamilySituation()">Rendre inconnue</button></div>
+        <gl-family-situation-edit *ngIf="personForm.contains('frenchFamilySituation')" [situation]="personForm.get('frenchFamilySituation')" location="french"></gl-family-situation-edit>
       </div>
 
       <div class="col-md" id="abroadFamilySituation">
         <h4>Au pays</h4>
-        <div *ngIf="!abroadFamilySituationGroup">Inconnue &mdash; <button type="button" class="btn btn-outline-success btn-sm" (click)="showAbroadFamilySituation()">Renseigner</button></div>
-        <div *ngIf="abroadFamilySituationGroup"><button type="button" class="btn btn-outline-danger btn-sm" type="button" (click)="hideAbroadFamilySituation()">Rendre inconnue</button></div>
-        <gl-family-situation-edit *ngIf="abroadFamilySituationGroup" [situation]="abroadFamilySituationGroup" location="abroad"></gl-family-situation-edit>
+        <div *ngIf="!personForm.contains('abroadFamilySituation')">Inconnue &mdash; <button type="button" class="btn btn-outline-success btn-sm" (click)="showAbroadFamilySituation()">Renseigner</button></div>
+        <div *ngIf="personForm.contains('abroadFamilySituation')"><button type="button" class="btn btn-outline-danger btn-sm" type="button" (click)="hideAbroadFamilySituation()">Rendre inconnue</button></div>
+        <gl-family-situation-edit *ngIf="personForm.contains('abroadFamilySituation')" [situation]="personForm.get('abroadFamilySituation')" location="abroad"></gl-family-situation-edit>
       </div>
     </div>
   </ng-container>
