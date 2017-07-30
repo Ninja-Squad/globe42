@@ -12,7 +12,8 @@ describe('PersonLayoutComponent', () => {
     id: 42,
     firstName: 'John',
     lastName: 'Doe',
-    nickName: 'john'
+    nickName: 'john',
+    mediationEnabled: true
   } as PersonModel;
 
   const activatedRoute = {
@@ -44,5 +45,15 @@ describe('PersonLayoutComponent', () => {
 
     const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
     expect(outlet).toBeTruthy();
+  });
+
+  it('should only have 12 nav links if mediation is not enabled', () => {
+    person.mediationEnabled = false;
+    const fixture = TestBed.createComponent(PersonLayoutComponent);
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement;
+    const links = nativeElement.querySelectorAll('a.nav-link');
+    expect(links.length).toBe(2);
   });
 });

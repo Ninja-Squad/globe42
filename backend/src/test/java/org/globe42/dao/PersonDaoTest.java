@@ -29,8 +29,8 @@ public class PersonDaoTest extends BaseDaoTest {
                 .withDefaultValue("fiscal_status", FiscalStatus.UNKNOWN)
                 .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
                 .withDefaultValue("housing", Housing.UNKNOWN)
-                .columns("id", "last_name", "mediation_code", "gender", "adherent", "entry_date")
-                .values(1L, "Exbrayat", "E1", Gender.MALE, true, "2017-01-01")
+                .columns("id", "first_name", "last_name", "mediation_enabled", "gender", "adherent")
+                .values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false)
                 .build();
         dbSetup(person);
     }
@@ -39,8 +39,8 @@ public class PersonDaoTest extends BaseDaoTest {
     public void shouldInsert() {
         Person person = new Person();
         person.setGender(Gender.MALE);
+        person.setFirstName("JB");
         person.setLastName("Nizet");
-        person.setMediationCode("N1");
 
         personDao.save(person);
         personDao.flush();
@@ -51,7 +51,6 @@ public class PersonDaoTest extends BaseDaoTest {
         TRACKER.skipNextLaunch();
         assertThat(personDao.findById(1L)).hasValueSatisfying(p -> {
             assertThat(p.getId()).isEqualTo(1L);
-            assertThat(p.getEntryDate()).isEqualTo("2017-01-01");
         });
     }
 

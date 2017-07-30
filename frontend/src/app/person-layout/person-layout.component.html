@@ -6,10 +6,10 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="info" routerLinkActive="active">Informations</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="person.mediationEnabled">
         <a class="nav-link" routerLink="incomes" routerLinkActive="active">Revenus</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="person.mediationEnabled">
         <a class="nav-link" routerLink="family" routerLinkActive="active">Situation familiale</a>
       </li>
       <li class="nav-item">

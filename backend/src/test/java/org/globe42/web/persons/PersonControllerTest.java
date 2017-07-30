@@ -111,6 +111,15 @@ public class PersonControllerTest extends BaseTest {
     }
 
     @Test
+    public void shouldNotGenerateMediationCodeIfMediationDisabled() {
+        PersonCommandDTO command = createCommand("lacote", false);
+
+        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
+
+        assertThat(controller.create(command).getIdentity().getMediationCode()).isNull();
+    }
+
+    @Test
     public void shouldUpdate() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
         when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
@@ -135,6 +144,21 @@ public class PersonControllerTest extends BaseTest {
         verify(mockPersonDao, never()).nextMediationCode(anyChar());
     }
 
+    @Test
+    public void shouldCreateMediationCodeIfMediationEnabledAndNotBefore() {
+        person.setMediationCode(null);
+        person.setMediationEnabled(false);
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+
+        PersonCommandDTO command = createCommand();
+
+        controller.update(person.getId(), command);
+
+        assertPersonEqualsCommand(person, command);
+        assertThat(person.getMediationCode()).isEqualTo("L37");
+    }
+
     @Test(expected = NotFoundException.class)
     public void shouldThrowIfNotFoundWhenUpdating() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
@@ -147,6 +171,10 @@ public class PersonControllerTest extends BaseTest {
     }
 
     static PersonCommandDTO createCommand(String lastName) {
+        return createCommand(lastName, true);
+    }
+
+    static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled) {
         return new PersonCommandDTO("Cyril",
                                     lastName,
                                     "CEO, Bitch",
@@ -158,6 +186,7 @@ public class PersonControllerTest extends BaseTest {
                                     LocalDate.of(2017, 4, 13),
                                     Gender.MALE,
                                     "01234567",
+                                    mediationEnabled,
                                     MaritalStatus.CONCUBINAGE,
                                     Housing.F3,
                                     70,

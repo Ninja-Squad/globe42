@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -35,14 +35,15 @@ export class PersonEditComponent implements OnInit {
   lastNameCtrl: FormControl;
   nickNameCtrl: FormControl;
   adherentCtrl: FormControl;
-  maritalStatusCtrl: FormControl;
-  entryDateCtrl: FormControl;
   birthDateCtrl: FormControl;
   genderCtrl: FormControl;
   addressCtrl: FormControl;
   cityCtrl: FormControl;
   emailCtrl: FormControl;
   phoneNumberCtrl: FormControl;
+  mediationEnabledCtrl: FormControl;
+  maritalStatusCtrl: FormControl;
+  entryDateCtrl: FormControl;
   housingCtrl: FormControl;
   housingSpaceCtrl: FormControl;
   fiscalStatusCtrl: FormControl;
@@ -86,20 +87,21 @@ export class PersonEditComponent implements OnInit {
 
     this.firstNameCtrl = this.fb.control('', Validators.required);
     this.lastNameCtrl = this.fb.control('', Validators.required);
-    this.nickNameCtrl = this.fb.control('', Validators.required);
+    this.nickNameCtrl = this.fb.control('');
     this.genderCtrl = this.fb.control('', Validators.required);
-    this.birthDateCtrl = this.fb.control('', Validators.required);
-    this.addressCtrl = this.fb.control('', Validators.required);
-    this.cityCtrl = this.fb.control(null, Validators.required);
-    this.emailCtrl = this.fb.control('', [Validators.required, Validators.email]);
-    this.phoneNumberCtrl = this.fb.control('', Validators.required);
+    this.birthDateCtrl = this.fb.control(null);
+    this.addressCtrl = this.fb.control('');
+    this.cityCtrl = this.fb.control(null);
+    this.emailCtrl = this.fb.control('', [PersonEditComponent.emailOrEmpty]);
+    this.phoneNumberCtrl = this.fb.control('');
+    this.adherentCtrl = this.fb.control(null, Validators.required);
+    this.mediationEnabledCtrl = this.fb.control(false);
     this.maritalStatusCtrl = this.fb.control('UNKNOWN');
-    this.adherentCtrl = this.fb.control('', Validators.required);
-    this.entryDateCtrl = this.fb.control('', Validators.required);
+    this.entryDateCtrl = this.fb.control(null);
     this.housingCtrl = this.fb.control('UNKNOWN');
     this.housingSpaceCtrl = this.fb.control(null);
     this.fiscalStatusCtrl = this.fb.control('UNKNOWN');
-    this.fiscalStatusDateCtrl = this.fb.control('');
+    this.fiscalStatusDateCtrl = this.fb.control(null);
     this.fiscalStatusUpToDateCtrl = this.fb.control(false);
 
     this.personForm = this.fb.group({
@@ -112,8 +114,9 @@ export class PersonEditComponent implements OnInit {
       city: this.cityCtrl,
       email: this.emailCtrl,
       phoneNumber: this.phoneNumberCtrl,
-      maritalStatus: this.maritalStatusCtrl,
       adherent: this.adherentCtrl,
+      mediationEnabled: this.mediationEnabledCtrl,
+      maritalStatus: this.maritalStatusCtrl,
       entryDate: this.entryDateCtrl,
       housing: this.housingCtrl,
       housingSpace: this.housingSpaceCtrl,
@@ -121,6 +124,7 @@ export class PersonEditComponent implements OnInit {
       fiscalStatusDate: this.fiscalStatusDateCtrl,
       fiscalStatusUpToDate: this.fiscalStatusUpToDateCtrl
     });
+
     if (this.editedPerson) {
       if (this.editedPerson.frenchFamilySituation) {
         this.showFrenchFamilySituation();
@@ -184,5 +188,12 @@ export class PersonEditComponent implements OnInit {
       childCount: this.fb.control(''),
       siblingCount: this.fb.control('')
     });
+  }
+
+  private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
+    if (!ctrl.value) {
+      return null;
+    }
+    return Validators.email(ctrl);
   }
 }

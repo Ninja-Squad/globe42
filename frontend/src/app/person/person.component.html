@@ -2,7 +2,7 @@
   <div class="col-lg">
     <h2>Identité</h2>
 
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">Code médiation</label>
       <div class="col-sm-6">
         <p id="mediationCode" class="form-control-static">{{ person.mediationCode }}</p>
@@ -23,19 +23,19 @@
     <div class="form-group row">
       <label class="col-sm-6 col-form-label">Né(e) le</label>
       <div class="col-sm-6">
-        <p id="birthDate" class="form-control-static">{{ person.birthDate }}</p>
+        <p id="birthDate" class="form-control-static">{{ person.birthDate | date }}</p>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">Statut marital</label>
       <div class="col-sm-6">
         <p id="maritalStatus" class="form-control-static">{{ person.maritalStatus | displayMaritalStatus }}</p>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
       <div class="col-sm-6">
-        <p id="entryDate" class="form-control-static">{{ person.entryDate }}</p>
+        <p id="entryDate" class="form-control-static">{{ person.entryDate | date }}</p>
       </div>
     </div>
   </div>
@@ -66,30 +66,32 @@
       <div>{{ person.phoneNumber }}</div>
     </div>
 
-    <h2>Logement</h2>
-    <p id="housing">
-      {{ person.housing | displayHousing }}
-      <ng-container *ngIf="person.housingSpace"> &mdash; {{ person.housingSpace }} m<sup>2</sup></ng-container>
-    </p>
+    <ng-container *ngIf="person.mediationEnabled">
+      <h2>Logement</h2>
+      <p id="housing">
+        {{ person.housing | displayHousing }}
+        <ng-container *ngIf="person.housingSpace"> &mdash; {{ person.housingSpace }} m<sup>2</sup></ng-container>
+      </p>
 
-    <h2>Situation fiscale</h2>
+      <h2>Situation fiscale</h2>
 
-    <p id="fiscalStatus">
-      {{ person.fiscalStatus | displayFiscalStatus }}
-      <ng-container *ngIf="person.fiscalStatus !== 'UNKNOWN'">
-        <span *ngIf="person.fiscalStatusDate">
-          &mdash; établie le {{ person.fiscalStatusDate | date }}
-        </span>
-        <span class="text-danger" *ngIf="!person.fiscalStatusUpToDate">
-          <span class="fa fa-warning"></span>
-          pas à jour
-        </span>
-        <span class="text-success" *ngIf="person.fiscalStatusUpToDate">
-          <span class="fa fa-check"></span>
-          à jour
-        </span>
-      </ng-container>
-    </p>
+      <p id="fiscalStatus">
+        {{ person.fiscalStatus | displayFiscalStatus }}
+        <ng-container *ngIf="person.fiscalStatus !== 'UNKNOWN'">
+          <span *ngIf="person.fiscalStatusDate">
+            &mdash; établie le {{ person.fiscalStatusDate | date }}
+          </span>
+          <span class="text-danger" *ngIf="!person.fiscalStatusUpToDate">
+            <span class="fa fa-warning"></span>
+            pas à jour
+          </span>
+          <span class="text-success" *ngIf="person.fiscalStatusUpToDate">
+            <span class="fa fa-check"></span>
+            à jour
+          </span>
+        </ng-container>
+      </p>
+    </ng-container>
   </div>
 </div>
 

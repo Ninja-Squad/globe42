@@ -32,6 +32,7 @@ describe('PersonComponent', () => {
     entryDate: '2016-12-01',
     gender: 'MALE',
     phoneNumber: '06 12 34 56 78',
+    mediationEnabled: true,
     maritalStatus: 'SINGLE',
     housing: 'F6',
     housingSpace: 80,
@@ -83,7 +84,7 @@ describe('PersonComponent', () => {
     expect(address.textContent).toContain('Chemin de la gare');
     expect(address.textContent).toContain('42000 SAINT-ETIENNE');
     const birthDate = nativeElement.querySelector('#birthDate');
-    expect(birthDate.textContent).toBe('1980-01-01');
+    expect(birthDate.textContent).toBe('1 janv. 1980');
     const email = nativeElement.querySelector('#email');
     expect(email.textContent).toContain('john@mail.com');
     const phoneNumber = nativeElement.querySelector('#phoneNumber');
@@ -91,7 +92,7 @@ describe('PersonComponent', () => {
     const adherent = nativeElement.querySelector('#adherent');
     expect(adherent.textContent).toBe('Oui');
     const entryDate = nativeElement.querySelector('#entryDate');
-    expect(entryDate.textContent).toBe('2016-12-01');
+    expect(entryDate.textContent).toBe('1 déc. 2016');
     const mediationCode = nativeElement.querySelector('#mediationCode');
     expect(mediationCode.textContent).toBe('D1');
     const maritalStatus = nativeElement.querySelector('#maritalStatus');
@@ -103,5 +104,16 @@ describe('PersonComponent', () => {
     expect(fiscalStatus.textContent).toContain('Imposable');
     expect(fiscalStatus.textContent).toContain('établie le 1 févr. 2017');
     expect(fiscalStatus.textContent).toContain('à jour');
+  });
+
+  it('should display a person with mediation disabled', () => {
+    person.mediationEnabled = false;
+    const fixture = TestBed.createComponent(PersonComponent);
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement;
+    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'maritalStatus', 'housing', 'fiscalStatus'];
+    mediationDependantElementIds.forEach(id =>
+      expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
   });
 });

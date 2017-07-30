@@ -59,6 +59,7 @@ describe('PersonEditComponent', () => {
       entryDate: '2016-12-01',
       gender: 'MALE',
       phoneNumber: '06 12 34 56 78',
+      mediationEnabled: true,
       maritalStatus: 'SINGLE',
       housing: 'F4',
       housingSpace: 80,
@@ -122,9 +123,9 @@ describe('PersonEditComponent', () => {
       expect(phoneNumber.value).toBe(person.phoneNumber);
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
       expect(maritalStatus.options[maritalStatus.selectedIndex].value).toBe(person.maritalStatus);
-      const adherentYes = nativeElement.querySelector('#adherentYes');
+      const adherentYes = nativeElement.querySelector('#adherenttrue');
       expect(adherentYes.checked).toBe(true);
-      const adherentNo = nativeElement.querySelector('#adherentNo');
+      const adherentNo = nativeElement.querySelector('#adherentfalse');
       expect(adherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe(person.entryDate);
@@ -276,8 +277,6 @@ describe('PersonEditComponent', () => {
       expect(genderOther.checked).toBe(false);
       const birthDate = nativeElement.querySelector('#birthDate');
       expect(birthDate.value).toBe('');
-      const mediationCode = nativeElement.querySelector('#mediationCode');
-      expect(mediationCode.textContent).toContain('Généré automatiquement');
       const address = nativeElement.querySelector('#address');
       expect(address.value).toBe('');
       const city = nativeElement.querySelector('#city');
@@ -286,13 +285,38 @@ describe('PersonEditComponent', () => {
       expect(email.value).toBe('');
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe('');
+      const adherentYes = nativeElement.querySelector('#adherenttrue');
+      expect(adherentYes.checked).toBe(false);
+      const adherentNo = nativeElement.querySelector('#adherentfalse');
+      expect(adherentNo.checked).toBe(false);
+
+      const mediationEnabledYes = nativeElement.querySelector('#mediationEnabledtrue');
+      expect(mediationEnabledYes.checked).toBe(false);
+      const mediationEnabledNo = nativeElement.querySelector('#mediationEnabledfalse');
+      expect(mediationEnabledNo.checked).toBe(true);
+
+      const mediationDependantIds =
+        ['mediationCode', 'maritalStatus', 'entryDate', 'housing', 'fiscalStatusUNKNOWN',
+         'frenchFamilySituation', 'abroadFamilySituation'];
+
+      mediationDependantIds.forEach(id => {
+        expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`);
+      });
+
+      mediationEnabledYes.checked = true;
+      mediationEnabledYes.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+      tick();
+
+      mediationDependantIds.forEach(id => {
+        expect(nativeElement.querySelector(`#${id}`)).toBeTruthy(`#${id} should be present`);
+      });
+
+      const mediationCode = nativeElement.querySelector('#mediationCode');
+      expect(mediationCode.textContent).toContain('Généré automatiquement');
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
       expect(maritalStatus.selectedIndex).toBe(0);
       expect(maritalStatus.options[0].value).toBe('UNKNOWN');
-      const adherentYes = nativeElement.querySelector('#adherentYes');
-      expect(adherentYes.checked).toBe(false);
-      const adherentNo = nativeElement.querySelector('#adherentNo');
-      expect(adherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe('');
       const housing: HTMLSelectElement = nativeElement.querySelector('#housing');

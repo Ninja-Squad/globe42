@@ -52,8 +52,10 @@ public class PersonController {
         Person person = new Person();
         copyCommandToPerson(command, person);
 
-        char mediationCodeLetter = mediationCodeLetter(person);
-        person.setMediationCode(mediationCodeLetter + String.valueOf(personDao.nextMediationCode(mediationCodeLetter)));
+        if (person.isMediationEnabled()) {
+            char mediationCodeLetter = mediationCodeLetter(person);
+            person.setMediationCode(mediationCodeLetter + String.valueOf(personDao.nextMediationCode(mediationCodeLetter)));
+        }
 
         return new PersonDTO(personDao.save(person));
     }
@@ -64,13 +66,24 @@ public class PersonController {
     public void update(@PathVariable("personId") Long id, @Validated @RequestBody PersonCommandDTO command) {
         Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
 
-        char oldMediationCodeLetter = person.getMediationCode().charAt(0);
+        char oldMediationCodeLetter = person.getMediationCode() == null ? 0 : person.getMediationCode().charAt(0);
 
         copyCommandToPerson(command, person);
 
         char newMediationCodeLetter = mediationCodeLetter(person);
+        // if the mediation code letter changes, we change the code, unless the mediation is disabled,
+        // in which case we set it to null.
+        // if mediation is disabled and the letter doesn't change, we leave the code there, but
+        // we don't transfer it to the client. So if mediation is reenabled, the person will keep the old
+        // code.
         if (newMediationCodeLetter != oldMediationCodeLetter) {
-            person.setMediationCode(newMediationCodeLetter + String.valueOf(personDao.nextMediationCode(newMediationCodeLetter)));
+            if (command.isMediationEnabled()) {
+                person.setMediationCode(newMediationCodeLetter + String.valueOf(personDao.nextMediationCode(
+                    newMediationCodeLetter)));
+            }
+            else {
+                person.setMediationCode(null);
+            }
         }
     }
 
@@ -89,17 +102,23 @@ public class PersonController {
 
         person.setEmail(command.getEmail());
         person.setAdherent(command.isAdherent());
-        person.setEntryDate(command.getEntryDate());
         person.setGender(command.getGender());
         person.setPhoneNumber(command.getPhoneNumber());
-        person.setMaritalStatus(command.getMaritalStatus());
-        person.setHousing(command.getHousing());
-        person.setHousingSpace(command.getHousingSpace());
-        person.setFiscalStatus(command.getFiscalStatus());
-        person.setFiscalStatusDate(command.getFiscalStatusDate());
-        person.setFiscalStatusUpToDate(command.isFiscalStatusUpToDate());
-        person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
-        person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
+        person.setMediationEnabled(command.isMediationEnabled());
+
+        // if mediation is disabled, we leave all the mediation-related elements as is
+        // in case mediation is re-enabled later, to not lose valuable information.
+        if (command.isMediationEnabled()) {
+            person.setEntryDate(command.getEntryDate());
+            person.setMaritalStatus(command.getMaritalStatus());
+            person.setHousing(command.getHousing());
+            person.setHousingSpace(command.getHousingSpace());
+            person.setFiscalStatus(command.getFiscalStatus());
+            person.setFiscalStatusDate(command.getFiscalStatusDate());
+            person.setFiscalStatusUpToDate(command.isFiscalStatusUpToDate());
+            person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
+            person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
+        }
     }
 
     private FamilySituation toFamilySituation(FamilySituationDTO dtoOrNull) {

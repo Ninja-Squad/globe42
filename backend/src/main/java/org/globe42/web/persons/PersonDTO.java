@@ -24,6 +24,7 @@ public final class PersonDTO {
     private final LocalDate entryDate;
     private final Gender gender;
     private final String phoneNumber;
+    private final boolean mediationEnabled;
     private final MaritalStatus maritalStatus;
     private final Housing housing;
     private final Integer housingSpace;
@@ -43,6 +44,7 @@ public final class PersonDTO {
         this.entryDate = person.getEntryDate();
         this.gender = person.getGender();
         this.phoneNumber = person.getPhoneNumber();
+        this.mediationEnabled = person.isMediationEnabled();
         this.maritalStatus = person.getMaritalStatus();
         this.housing = person.getHousing();
         this.housingSpace = person.getHousingSpace();
@@ -87,6 +89,10 @@ public final class PersonDTO {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public boolean isMediationEnabled() {
+        return mediationEnabled;
     }
 
     public MaritalStatus getMaritalStatus() {

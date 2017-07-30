@@ -18,7 +18,8 @@ public final class PersonIdentityDTO {
         this.firstName = person.getFirstName();
         this.lastName = person.getLastName();
         this.nickName = person.getNickName();
-        this.mediationCode = person.getMediationCode();
+        // we hide the mediation code if mediation is disabled
+        this.mediationCode = person.isMediationEnabled() ? person.getMediationCode() : null;
     }
 
     public Long getId() {

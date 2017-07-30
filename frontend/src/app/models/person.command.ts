@@ -9,10 +9,11 @@ export interface PersonCommand {
   address: string;
   city: CityModel;
   email: string;
-  adherent: boolean;
-  entryDate: string;
   gender: Gender;
+  adherent: boolean;
   phoneNumber: string;
+  mediationEnabled: boolean;
+  entryDate: string;
   maritalStatus: MaritalStatus,
   housing: Housing;
   housingSpace: number;

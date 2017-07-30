@@ -41,8 +41,8 @@ public class TaskDaoTest extends BaseDaoTest {
                   .withDefaultValue("fiscal_status", FiscalStatus.UNKNOWN)
                   .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
                   .withDefaultValue("housing", Housing.UNKNOWN)
-                  .columns("id", "last_name", "mediation_code", "gender", "adherent", "entry_date")
-                  .values(1L, "Exbrayat", "E1", Gender.MALE, true, "2017-01-01")
+                  .columns("id", "first_name", "last_name", "gender", "adherent", "mediation_enabled")
+                  .values(1L, "Cedric", "Exbrayat", Gender.MALE, true, false)
                   .build();
 
         Operation users = Insert.into("guser")

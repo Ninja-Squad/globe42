@@ -17,6 +17,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author JB Nizet
  */
 public final class PersonCommandDTO {
+    @NotEmpty
     private final String firstName;
 
     @NotEmpty
@@ -35,6 +36,7 @@ public final class PersonCommandDTO {
     @NotNull
     private final Gender gender;
     private final String phoneNumber;
+    private final boolean mediationEnabled;
 
     @NotNull
     private final MaritalStatus maritalStatus;
@@ -62,6 +64,7 @@ public final class PersonCommandDTO {
                             @JsonProperty LocalDate entryDate,
                             @JsonProperty Gender gender,
                             @JsonProperty String phoneNumber,
+                            @JsonProperty boolean mediationEnabled,
                             @JsonProperty MaritalStatus maritalStatus,
                             @JsonProperty Housing housing,
                             @JsonProperty Integer housingSpace,
@@ -81,6 +84,7 @@ public final class PersonCommandDTO {
         this.entryDate = entryDate;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.mediationEnabled = mediationEnabled;
         this.maritalStatus = maritalStatus;
         this.housing = housing;
         this.housingSpace = housingSpace;
@@ -133,6 +137,10 @@ public final class PersonCommandDTO {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public boolean isMediationEnabled() {
+        return mediationEnabled;
     }
 
     public MaritalStatus getMaritalStatus() {
