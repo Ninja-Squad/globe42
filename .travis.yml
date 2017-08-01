@@ -43,7 +43,8 @@ script:
   - ./gradlew check jacocoTestReport
 
 after_success:
-# upload java coverage to codecov.io
-- bash <(curl -s https://codecov.io/bash) -cF java
-# upload js coverage to codecov.io
+# upload code coverage to codecov.io
+- cd frontend
 - npm run codecov
+# check bundle sizes
+- npm run bundlesize

@@ -7,6 +7,7 @@
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --prod",
     "test": "ng test --single-run --code-coverage --no-progress --reporters dots",
+    "bundlesize": "bundlesize",
     "codecov": "codecov",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -36,6 +37,7 @@
     "@types/jasmine": "^2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "^7.0.29",
+    "bundlesize": "^0.13.2",
     "codecov": "^2.2.0",
     "codelyzer": "^3.0.1",
     "jasmine-core": "^2.6.3",
@@ -49,5 +51,15 @@
     "ts-node": "^3.0.6",
     "tslint": "^5.4.3",
     "typescript": "2.3.4"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/main.*.bundle.js",
+      "maxSize": "80Kb"
+    },
+    {
+      "path": "./dist/vendor.*.bundle.js",
+      "maxSize": "210Kb"
+    }
+  ]
 }
