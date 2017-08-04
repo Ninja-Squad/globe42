@@ -5,6 +5,18 @@ package org.globe42.domain;
  * @author JB Nizet
  */
 public enum TaskStatus {
+    /**
+     * The task is still in the todo list
+     */
     TODO,
+
+    /**
+     * The task has been cancelled. It's in the archive list, but can still be resurrected if the user messed up
+     */
+    CANCELLED,
+
+    /**
+     * The task has been mark as done. It's in the archive list, but can still be resurrected if the user messed up
+     */
     DONE;
 }

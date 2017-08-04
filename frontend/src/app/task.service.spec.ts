@@ -6,6 +6,7 @@ import { TaskModel } from './models/task.model';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import { NowService } from './now.service';
+import { Page } from './models/page';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -50,5 +51,18 @@ describe('TaskService', () => {
 
   it('should list tasks concerning person', () => {
     checkList(() => service.listForPerson(42), '/api/tasks?person=42');
+  });
+
+  it('should get a page of archived tasks', () => {
+    const expectedPage = {
+      content: [{id: 1}, {id: 2}] as Array<TaskModel>,
+      number: 2
+    } as Page<TaskModel>
+
+    let actualPage;
+    service.listArchived(2).subscribe(page => actualPage = page);
+
+    http.expectOne({url: '/api/tasks?archived=&page=2', method: 'GET'}).flush(expectedPage);
+    expect(actualPage).toEqual(expectedPage);
   });
 });

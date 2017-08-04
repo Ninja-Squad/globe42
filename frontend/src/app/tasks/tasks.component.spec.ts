@@ -5,14 +5,12 @@ import { TaskModel } from '../models/task.model';
 import { UserModel } from '../models/user.model';
 import { PersonIdentityModel } from '../models/person.model';
 import { FullnamePipe } from '../fullname.pipe';
-import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { NowService } from '../now.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('TasksComponent', () => {
   let tasks: Array<TaskModel>;
-  let activatedRoute: ActivatedRoute;
 
   beforeEach(async(() => {
     tasks = [
@@ -38,20 +36,11 @@ describe('TasksComponent', () => {
       }
     ];
 
-    activatedRoute = {
-      snapshot: {
-        data: {
-          tasks
-        }
-      }
-    } as any;
-
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [TasksComponent, FullnamePipe],
       providers: [
-        NowService,
-        { provide: ActivatedRoute, useValue: activatedRoute }
+        NowService
       ]
     });
     moment.locale('fr');
@@ -59,27 +48,9 @@ describe('TasksComponent', () => {
     spyOn(TestBed.get(NowService), 'now').and.callFake(() => moment('2017-08-01T12:30:00'));
   }));
 
-  it('should wrap and expose tasks in due date order, with  tasks without due date last', () => {
-    tasks.push({
-      id: 14,
-      dueDate: null
-    } as any);
-    tasks.push({
-      id: 13,
-      dueDate: '2017-07-31'
-    } as any);
-
-    const component = new TasksComponent(activatedRoute, TestBed.get(NowService));
-    component.ngOnInit();
-
-    expect(component.tasks.map(task => task.model.id)).toEqual([13, 12, 14]);
-    expect(component.tasks.some(task => task.opened)).toBe(false);
-  });
-
   it('should compute relative due date', () => {
-    const component = new TasksComponent(activatedRoute, TestBed.get(NowService));
-
-    component.ngOnInit();
+    const component = new TasksComponent(TestBed.get(NowService));
+    component.taskModels = tasks;
 
     const task = component.tasks[0];
     task.model.dueDate = '2017-08-01';
@@ -93,8 +64,8 @@ describe('TasksComponent', () => {
   });
 
   it('should compute due date class', () => {
-    const component = new TasksComponent(activatedRoute, TestBed.get(NowService));
-    component.ngOnInit();
+    const component = new TasksComponent(TestBed.get(NowService));
+    component.taskModels = tasks;
 
     const task = component.tasks[0];
     // due yesterday
@@ -119,8 +90,8 @@ describe('TasksComponent', () => {
   });
 
   it('should toggle', () => {
-    const component = new TasksComponent(activatedRoute, TestBed.get(NowService));
-    component.ngOnInit();
+    const component = new TasksComponent(TestBed.get(NowService));
+    component.taskModels = tasks;
 
     const task = component.tasks[0];
     component.toggle(task, new Event('click'));
@@ -132,6 +103,7 @@ describe('TasksComponent', () => {
 
   it('should display everything but the description and the no task message when not opened', () => {
     const fixture = TestBed.createComponent(TasksComponent);
+    fixture.componentInstance.taskModels = tasks;
     fixture.detectChanges();
 
     const text = fixture.nativeElement.textContent;
@@ -144,8 +116,31 @@ describe('TasksComponent', () => {
     expect(text).toContain('Concerne JB Nizet');
   });
 
+  it('should display status instead of due date when DONE', () => {
+    tasks[0].status = 'DONE'
+    const fixture = TestBed.createComponent(TasksComponent);
+    fixture.componentInstance.taskModels = tasks;
+    fixture.detectChanges();
+
+    const text = fixture.nativeElement.textContent;
+    expect(text).toContain('Faite');
+    expect(text).not.toContain('aujourd\'hui');
+  });
+
+  it('should display status instead of due date when CANCELLED', () => {
+    tasks[0].status = 'CANCELLED';
+    const fixture = TestBed.createComponent(TasksComponent);
+    fixture.componentInstance.taskModels = tasks;
+    fixture.detectChanges();
+
+    const text = fixture.nativeElement.textContent;
+    expect(text).toContain('Annulée');
+    expect(text).not.toContain('aujourd\'hui');
+  });
+
   it('should display the description when opened', () => {
     const fixture = TestBed.createComponent(TasksComponent);
+    fixture.componentInstance.taskModels = tasks;
     fixture.detectChanges();
 
     fixture.nativeElement.querySelector('.task-title').click();
@@ -163,6 +158,7 @@ describe('TasksComponent', () => {
     tasks[0].concernedPerson = null;
 
     const fixture = TestBed.createComponent(TasksComponent);
+    fixture.componentInstance.taskModels = tasks;
     fixture.detectChanges();
 
     const text = fixture.nativeElement.textContent;
@@ -173,6 +169,7 @@ describe('TasksComponent', () => {
     // I have no idea why, but splicing the data, or assigning an empty array in the route, has no effect at all.
     // Despite the data being empty before creating the component, it still receives a no-empty array.
     const fixture = TestBed.createComponent(TasksComponent);
+    fixture.componentInstance.taskModels = tasks;
     fixture.detectChanges();
 
     fixture.componentInstance.tasks = [];

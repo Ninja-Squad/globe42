@@ -31,6 +31,8 @@ import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { TasksResolverService } from './tasks-resolver.service';
+import { TasksPageComponent } from './tasks-page/tasks-page.component';
+import { TasksListComponent } from './tasks-list/tasks-list.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -173,10 +175,11 @@ export const routes: Routes = [
         component: TasksLayoutComponent,
         children: [
           { path: '', pathMatch: 'full', redirectTo: 'todo' },
-          taskRoute('todo'),
-          taskRoute('urgent'),
-          taskRoute('mine'),
-          taskRoute('unassigned')
+          taskRoute('todo', TasksListComponent),
+          taskRoute('urgent', TasksListComponent),
+          taskRoute('mine', TasksListComponent),
+          taskRoute('unassigned', TasksListComponent),
+          taskRoute('archived', TasksPageComponent),
         ]
       },
       {
@@ -189,15 +192,16 @@ export const routes: Routes = [
 
 /**
  * Creates a task route of a given type
- * This function has no readon to be exported, other than to make the AOT compiler happy.
+ * This function has no reason to be exported, other than to make the AOT compiler happy.
  */
-export function taskRoute(taskListType: string): Route {
+export function taskRoute(taskListType: string, componentType: any): Route {
   return {
     path: taskListType,
-    component: TasksComponent,
+    component: componentType,
     data: { taskListType },
     resolve: {
       tasks: TasksResolverService
-    }
+    },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   }
 }

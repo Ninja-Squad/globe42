@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { TaskModel } from './models/task.model';
 import { NowService } from './now.service';
+import { Page } from './models/page';
 
 @Injectable()
 export class TaskService {
@@ -29,5 +30,9 @@ export class TaskService {
 
   listUnassigned(): Observable<Array<TaskModel>> {
     return this.http.get(`/api/tasks?unassigned`);
+  }
+
+  listArchived(pageNumber: number): Observable<Page<TaskModel>> {
+    return this.http.get('/api/tasks', {params: new HttpParams().set('archived', '').set('page', pageNumber.toString())});
   }
 }

@@ -1,9 +1,11 @@
 package org.globe42.domain;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -32,7 +34,7 @@ public class Task {
     private String description;
 
     /**
-     * A one-line title shortly describing th task, which appears in the to-do list.
+     * A one-line title shortly describing the task, which appears in the to-do list.
      */
     @NotEmpty
     private String title;
@@ -52,20 +54,26 @@ public class Task {
     /**
      * The user who created the task. If the user is deleted, the creator will be set to null, to avoid losing tasks.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User creator;
 
     /**
      * The user that is assigned to the task. If the user is deleted, the assignee will be set to null, to avoid losing tasks.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User assignee;
 
     /**
      * The person concerned by this task, i.e. for whom the task was created.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Person concernedPerson;
+
+    /**
+     * The instant when the task was archived (marked as done or cancelled). Mainly used to be able to display latest
+     * archived tasks first in the list, to resurrect them easily.
+     */
+    private Instant archivalInstant;
 
     public Task() {
     }
@@ -136,5 +144,13 @@ public class Task {
 
     public void setConcernedPerson(Person concernedPerson) {
         this.concernedPerson = concernedPerson;
+    }
+
+    public Instant getArchivalInstant() {
+        return archivalInstant;
+    }
+
+    public void setArchivalInstant(Instant archivalInstant) {
+        this.archivalInstant = archivalInstant;
     }
 }

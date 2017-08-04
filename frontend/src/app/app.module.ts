@@ -63,6 +63,8 @@ import { TasksResolverService } from './tasks-resolver.service';
 import { TaskService } from './task.service';
 import * as moment from 'moment';
 import { NowService } from './now.service';
+import { TasksPageComponent } from './tasks-page/tasks-page.component';
+import { TasksListComponent } from './tasks-list/tasks-list.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +100,9 @@ import { NowService } from './now.service';
     FamilySituationEditComponent,
     CitiesUploadComponent,
     TasksComponent,
-    TasksLayoutComponent
+    TasksLayoutComponent,
+    TasksPageComponent,
+    TasksListComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -108,7 +112,7 @@ import { NowService } from './now.service';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { enableTracing: true }),
     NgbModule.forRoot()
   ],
   providers: [

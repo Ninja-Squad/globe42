@@ -2,6 +2,7 @@ package org.globe42.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,6 +21,8 @@ import org.globe42.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 /**
  * Tests for {@link TaskDao}
@@ -50,13 +53,13 @@ public class TaskDaoTest extends BaseDaoTest {
         Operation tasks = Insert.into("task")
                                 .withGeneratedValue("description", ValueGenerators.stringSequence("desc_"))
                                 .withGeneratedValue("title", ValueGenerators.stringSequence("title_"))
-                                .columns("id", "status", "due_date", "creator_id", "assignee_id", "concerned_person_id")
-                                .values(1L, TaskStatus.DONE, null, 1L, 1L, null)
-                                .values(2L, TaskStatus.TODO, null, 1L, 2L, null)
-                                .values(3L, TaskStatus.TODO, null, 2L, 1L, null)
-                                .values(4L, TaskStatus.TODO, LocalDate.of(2017, 8, 1), null, null, null)
-                                .values(5L, TaskStatus.TODO, LocalDate.of(2017, 8, 7), null, null, 1L)
-                                .values(6L, TaskStatus.DONE, LocalDate.of(2017, 8, 1), null, null, 1L)
+                                .columns("id", "status", "due_date", "creator_id", "assignee_id", "concerned_person_id", "archival_instant")
+                                .values(1L, TaskStatus.DONE, null, 1L, 1L, null, Instant.parse("2017-08-04T00:00:00Z"))
+                                .values(2L, TaskStatus.TODO, null, 1L, 2L, null, null)
+                                .values(3L, TaskStatus.TODO, null, 2L, 1L, null, null)
+                                .values(4L, TaskStatus.TODO, LocalDate.of(2017, 8, 1), null, null, null, null)
+                                .values(5L, TaskStatus.TODO, LocalDate.of(2017, 8, 7), null, null, 1L, null)
+                                .values(6L, TaskStatus.CANCELLED, LocalDate.of(2017, 8, 1), null, null, 1L, Instant.parse("2017-08-04T12:00:00Z"))
                                 .build();
 
         dbSetup(Operations.sequenceOf(users, persons, tasks));
@@ -93,6 +96,15 @@ public class TaskDaoTest extends BaseDaoTest {
     }
 
     @Test
+    public void shouldFindArchived() {
+        TRACKER.skipNextLaunch();
+        Page<Task> result = dao.findArchived(PageRequest.of(0, 20));
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getTotalPages()).isEqualTo(1);
+        assertThat(result.getContent()).extracting(Task::getId).containsExactly(6L, 1L);
+    }
+
+    @Test
     public void shouldResetCreator() {
         dao.resetCreatorOnTasksCreatedBy(new User(1L));
         List<Task> taskList = dao.findAll();
@@ -109,4 +121,6 @@ public class TaskDaoTest extends BaseDaoTest {
             .extracting(task -> task.getAssignee().getId())
             .containsOnly(2L);
     }
+
+
 }

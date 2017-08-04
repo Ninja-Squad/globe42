@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.globe42.dao.PersonDao;
 import org.globe42.dao.TaskDao;
@@ -17,10 +18,13 @@ import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
 import org.globe42.web.security.CurrentUser;
 import org.globe42.web.users.UserControllerTest;
+import org.globe42.web.util.PageDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 /**
  * Unit tests for {@link TaskController}
@@ -116,6 +120,21 @@ public class TaskControllerTest extends BaseTest {
         List<TaskDTO> result = controller.listForPerson(person.getId());
 
         assertThat(result).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+    }
+
+    @Test
+    public void shouldListArchived() {
+        PageRequest pageRequest = PageRequest.of(2, TaskController.PAGE_SIZE);
+        when(mockTaskDao.findArchived(pageRequest)).thenReturn(
+            new PageImpl<>(Arrays.asList(task1, task2), pageRequest, 42));
+
+        PageDTO<TaskDTO> result = controller.listArchived(Optional.of(2));
+
+        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.getNumber()).isEqualTo(2);
+        assertThat(result.getSize()).isEqualTo(TaskController.PAGE_SIZE);
+        assertThat(result.getTotalElements()).isEqualTo(42);
+        assertThat(result.getTotalPages()).isEqualTo(3);
     }
 
     static Task createTask(Long id, User user, Person person) {

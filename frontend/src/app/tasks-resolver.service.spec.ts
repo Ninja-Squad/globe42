@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { TasksResolverService } from './tasks-resolver.service';
 import { TaskService } from './task.service';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { HttpClientModule } from '@angular/common/http';
 import { NowService } from './now.service';
@@ -56,6 +56,24 @@ describe('TasksResolverService', () => {
     const expected = Observable.of([]);
     spyOn(taskService, 'listUnassigned').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
+  });
+
+  it('should resolve tasks for archived list type', () => {
+    const route = routeWithType('archived');
+    (route as any).queryParamMap = convertToParamMap({})
+    const expected = Observable.of({content: []});
+    spyOn(taskService, 'listArchived').and.returnValue(expected);
+    expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listArchived).toHaveBeenCalledWith(0);
+  });
+
+  it('should resolve tasks for archived list type when page is present', () => {
+    const route = routeWithType('archived');
+    (route as any).queryParamMap = convertToParamMap({page: '2'})
+    const expected = Observable.of({content: []});
+    spyOn(taskService, 'listArchived').and.returnValue(expected);
+    expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listArchived).toHaveBeenCalledWith(2);
   });
 
   it('should resolve tasks for person list type', () => {

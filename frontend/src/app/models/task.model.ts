@@ -6,7 +6,7 @@ export interface TaskModel {
   description: string;
   title: string;
   dueDate: string;
-  status: 'TODO' | 'DONE';
+  status: 'TODO' | 'DONE' | 'CANCELLED';
   assignee: UserModel;
   creator: UserModel;
   concernedPerson: PersonIdentityModel;

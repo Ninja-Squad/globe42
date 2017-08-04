@@ -3,13 +3,14 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { TaskModel } from './models/task.model';
 import { Observable } from 'rxjs/Observable';
 import { TaskService } from './task.service';
+import { Page } from './models/page';
 
 @Injectable()
-export class TasksResolverService implements Resolve<Array<TaskModel>> {
+export class TasksResolverService implements Resolve<Array<TaskModel> | Page<TaskModel>> {
 
   constructor(private taskService: TaskService) { }
 
-  resolve(route: ActivatedRouteSnapshot): Observable<Array<TaskModel>> {
+  resolve(route: ActivatedRouteSnapshot): Observable<Array<TaskModel>> | Observable<Page<TaskModel>> {
     const listType = route.data['taskListType'];
     switch (listType) {
       case 'todo':
@@ -20,6 +21,8 @@ export class TasksResolverService implements Resolve<Array<TaskModel>> {
         return this.taskService.listMine();
       case 'unassigned':
         return this.taskService.listUnassigned();
+      case 'archived':
+        return this.taskService.listArchived(route.queryParamMap.get('page') ? +route.queryParamMap.get('page') : 0);
       case 'person':
         return this.taskService.listForPerson(route.parent.data['person'].id);
       default:

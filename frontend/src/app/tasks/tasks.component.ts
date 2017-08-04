@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
 import { TaskModel } from '../models/task.model';
-import { sortBy } from '../utils';
 import { UserModel } from '../models/user.model';
 import * as moment from 'moment';
-import { Moment } from 'moment';
 import { NowService } from '../now.service';
 
 class Task {
@@ -43,16 +40,15 @@ class Task {
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent {
 
-  tasks: Array<Task>;
+  tasks: Array<Task> = [];
 
-  constructor(private route: ActivatedRoute, private nowService: NowService) { }
+  constructor(private nowService: NowService) { }
 
-  ngOnInit() {
-    const veryFarInTheFuture = this.nowService.now().add(1000, 'y');
-    this.tasks = sortBy<TaskModel>(this.route.snapshot.data['tasks'], task => task.dueDate ? moment(task.dueDate) : veryFarInTheFuture)
-      .map(model => new Task(model, this.nowService));
+  @Input()
+  set taskModels(models: Array<TaskModel>) {
+    this.tasks = models.map(model => new Task(model, this.nowService))
   }
 
   toggle(task: Task, event: Event) {

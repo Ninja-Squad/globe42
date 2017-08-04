@@ -6,7 +6,8 @@ CREATE TABLE task (
   due_date            DATE,
   creator_id          BIGINT,
   assignee_id         BIGINT,
-  concerned_person_id BIGINT
+  concerned_person_id BIGINT,
+  archival_instant    TIMESTAMPTZ
 );
 
 ALTER TABLE task ADD CONSTRAINT task_fk1 FOREIGN KEY (creator_id) REFERENCES guser (id);

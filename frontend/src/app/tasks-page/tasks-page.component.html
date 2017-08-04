@@ -1,0 +1,10 @@
+<gl-tasks [taskModels]="page.content"></gl-tasks>
+
+<div class="d-flex justify-content-center mt-5" *ngIf="page.totalPages > 1">
+  <ngb-pagination [collectionSize]="page.totalElements"
+                  [page]="page.number + 1"
+                  (pageChange)="loadPage($event)"
+                  [maxSize]="5"
+                  [pageSize]="page.size"
+                  [rotate]="true"></ngb-pagination>
+</div>
