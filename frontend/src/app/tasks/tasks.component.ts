@@ -35,7 +35,7 @@ class Task {
   }
 }
 
-export type TaskEventType = 'edit' | 'assign' | 'markAsDone' | 'cancel' | 'resurrect';
+export type TaskEventType = 'edit' | 'assign' | 'markAsDone' | 'cancel' | 'resurrect' | 'unassign';
 
 export interface TaskEvent {
   task: TaskModel;
@@ -85,6 +85,10 @@ export class TasksComponent {
 
   resurrect(task: Task, event: Event) {
     this.handleEvent('resurrect', task, event);
+  }
+
+  unassign(task: Task, event: Event) {
+    this.handleEvent('unassign', task, event);
   }
 
   private handleEvent(type: TaskEventType, task: Task, event: Event) {

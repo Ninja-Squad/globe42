@@ -32,7 +32,7 @@ export class TasksPageComponent implements OnInit {
   }
 
   loadPage(viewPageNumber: number) {
-    this.router.navigate(['.'], {relativeTo: this.route, queryParams: {page: (viewPageNumber - 1).toString()}})
+    this.router.navigate(['.'], {relativeTo: this.route, queryParams: {page: (viewPageNumber - 1).toString()}});
   }
 
   onTaskClicked(event: TaskEvent) {
@@ -49,6 +49,9 @@ export class TasksPageComponent implements OnInit {
       case 'resurrect':
         this.handleEvent(this.taskService.resurrect(event.task.id));
         break;
+      case 'unassign':
+        this.handleEvent(this.taskService.unassign(event.task.id));
+        break;
       case 'edit':
         throw new Error('not implemented yet');
     }
@@ -59,6 +62,8 @@ export class TasksPageComponent implements OnInit {
     action.switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))
       .subscribe(
         page => {
+          // maybe we are displaying a page that doesn't exist anymore
+          // so we check and reload with the last page if needed
           if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
             this.loadPage(page.totalPages);
           } else {

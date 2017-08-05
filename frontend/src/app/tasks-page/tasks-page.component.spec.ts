@@ -127,6 +127,10 @@ describe('TasksPageComponent', () => {
     checkEventHandled('assign', 'assignToSelf');
   });
 
+  it('should unassign a task and refresh', () => {
+    checkEventHandled('unassign', 'unassign');
+  });
+
   it('should mark a task as done and refresh', () => {
     checkEventHandled('markAsDone', 'markAsDone');
   });

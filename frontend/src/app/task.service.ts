@@ -59,4 +59,8 @@ export class TaskService {
   resurrect(taskId: number): Observable<void> {
     return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, {newStatus: 'TODO'});
   }
+
+  unassign(taskId: number): Observable<void> {
+    return this.http.delete<void>(`/api/tasks/${taskId}/assignments`);
+  }
 }
