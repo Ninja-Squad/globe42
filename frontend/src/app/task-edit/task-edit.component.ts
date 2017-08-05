@@ -38,10 +38,11 @@ export class TaskEditComponent implements OnInit {
     assignee: null
   };
 
-  private persons: Array<PersonIdentityModel>;
-  public users: Array<UserModel>;
+  users: Array<UserModel>;
 
   personFormatter = (result: PersonIdentityModel) => this.fullnamePipe.transform(result);
+
+  cancelOrRedirectDestination = ['/tasks'];
 
   personSearch = (text$: Observable<string>) =>
     text$
@@ -49,6 +50,7 @@ export class TaskEditComponent implements OnInit {
       .distinctUntilChanged()
       .map(term => term === '' ? [] : this.persons.filter(person => this.isPersonAccepted(person, term)).slice(0, 10));
 
+  private persons: Array<PersonIdentityModel>;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -69,6 +71,13 @@ export class TaskEditComponent implements OnInit {
       this.task.concernedPerson = this.editedTask.concernedPerson ? this.findWithId(this.persons, this.editedTask.concernedPerson.id) : null;
       this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
     }
+    else {
+      const concernedPersonId = this.route.snapshot.paramMap.get('concerned-person');
+      if (concernedPersonId) {
+        this.task.concernedPerson = this.findWithId(this.persons, +concernedPersonId);
+        this.cancelOrRedirectDestination = ['/persons', concernedPersonId, 'tasks'];
+      }
+    }
   }
 
   save() {
@@ -81,11 +90,11 @@ export class TaskEditComponent implements OnInit {
     };
     if (this.editedTask) {
       this.taskService.update(this.editedTask.id, command)
-        .subscribe(() => this.router.navigate(['/tasks']));
+        .subscribe(() => this.router.navigate(this.cancelOrRedirectDestination));
     }
     else {
       this.taskService.create(command)
-        .subscribe(() => this.router.navigate(['/tasks']));
+        .subscribe(() => this.router.navigate(this.cancelOrRedirectDestination));
     }
   }
 

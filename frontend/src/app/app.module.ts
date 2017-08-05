@@ -66,6 +66,7 @@ import { NowService } from './now.service';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { TaskResolverService } from './task-resolver.service';
+import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { TaskResolverService } from './task-resolver.service';
     TasksComponent,
     TasksLayoutComponent,
     TasksPageComponent,
-    TaskEditComponent
+    TaskEditComponent,
+    PersonTasksComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

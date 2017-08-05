@@ -1,0 +1,9 @@
+<router-outlet></router-outlet>
+
+
+<div class="mt-5">
+  <a class="btn btn-outline-primary" [routerLink]="['/tasks/create', { 'concerned-person': person.id }]">
+    <span class="fa fa-plus"></span>
+    Nouvelle tâche
+  </a>
+</div>

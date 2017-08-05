@@ -76,9 +76,11 @@ describe('TasksResolverService', () => {
   it('should resolve tasks for person list type', () => {
     const route: any = routeWithType('person');
     route.parent = {
-      data: {
-        person: {
-          id: 42
+      parent: {
+        data: {
+          person: {
+            id: 42
+          }
         }
       }
     };
