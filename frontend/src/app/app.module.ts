@@ -64,6 +64,8 @@ import { TaskService } from './task.service';
 import * as moment from 'moment';
 import { NowService } from './now.service';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
+import { TaskEditComponent } from './task-edit/task-edit.component';
+import { TaskResolverService } from './task-resolver.service';
 
 @NgModule({
   declarations: [
@@ -100,7 +102,8 @@ import { TasksPageComponent } from './tasks-page/tasks-page.component';
     CitiesUploadComponent,
     TasksComponent,
     TasksLayoutComponent,
-    TasksPageComponent
+    TasksPageComponent,
+    TaskEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -152,6 +155,7 @@ import { TasksPageComponent } from './tasks-page/tasks-page.component';
     FullnamePipe,
     TasksResolverService,
     TaskService,
+    TaskResolverService,
     NowService
   ],
   bootstrap: [AppComponent]

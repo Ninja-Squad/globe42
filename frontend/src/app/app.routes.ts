@@ -32,6 +32,8 @@ import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { TasksResolverService } from './tasks-resolver.service';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
+import { TaskEditComponent } from './task-edit/task-edit.component';
+import { TaskResolverService } from './task-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -179,6 +181,23 @@ export const routes: Routes = [
           taskRoute('unassigned'),
           taskRoute('archived'),
         ]
+      },
+      {
+        path: 'tasks/create',
+        component: TaskEditComponent,
+        resolve: {
+          persons: PersonsResolverService,
+          users: UsersResolverService
+        }
+      },
+      {
+        path: 'tasks/:id/edit',
+        component: TaskEditComponent,
+        resolve: {
+          persons: PersonsResolverService,
+          users: UsersResolverService,
+          task: TaskResolverService
+        }
       },
       {
         path: 'cities',

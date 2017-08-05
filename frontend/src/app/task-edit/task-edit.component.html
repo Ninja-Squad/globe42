@@ -1,0 +1,55 @@
+<h1 *ngIf="!editedTask">Nouvelle tâche</h1>
+<h1 *ngIf="editedTask">Modification de la tâche <em>{{ editedTask.title }}</em></h1>
+
+<form (ngSubmit)="save()" #taskForm="ngForm">
+  <div class="form-group row">
+    <label for="title" class="col-sm-3 col-form-label">Libellé</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="title" name="title" [(ngModel)]="task.title" required />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="description" class="col-sm-3 col-form-label">Description</label>
+    <div class="col-sm-9">
+      <textarea class="form-control" id="description" name="description" [(ngModel)]="task.description" required
+                style="height: 12rem;"></textarea>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="dueDate" class="col-sm-3 col-form-label">Echéance</label>
+    <div class="col-sm-9 input-group">
+      <div class="input-group-addon" (click)="d.toggle()">
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+      </div>
+      <input class="form-control" id="dueDate" name="dueDate" [(ngModel)]="task.dueDate" ngbDatepicker #d="ngbDatepicker">
+    </div>
+  </div>
+  <div class="form-group row" [class.has-warning]="concernedPersonInput.value && !task.concernedPerson">
+    <label for="title" class="col-sm-3 col-form-label">Concerne</label>
+    <div class="col-sm-9">
+      <input #concernedPersonInput class="form-control" id="concernedPerson" name="concernedPerson" [(ngModel)]="task.concernedPerson"
+             [ngbTypeahead]="personSearch" [resultFormatter]="personFormatter" [inputFormatter]="personFormatter" [editable]="false"
+             (blur)="clearIfNoPerson(concernedPersonInput)" [class.form-control-warning]="concernedPersonInput.value && !task.concernedPerson" />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="assignee" class="col-sm-3 col-form-label">Assignee</label>
+    <div class="col-sm-9">
+      <select class="form-control" id="assignee" name="assignee" [(ngModel)]="task.assignee">
+        <option></option>
+        <hr/>
+        <ng-container *ngFor="let user of users; let index = index">
+          <option  [ngValue]="user">{{ formatUser(user) }}</option>
+          <hr *ngIf="index === 0" />
+        </ng-container>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-9 offset-sm-3">
+      <button class="btn btn-primary" [disabled]="!taskForm.valid" id="save">Enregistrer</button>
+      <a class="btn btn-secondary" routerLink="/tasks">Annuler</a>
+    </div>
+  </div>
+</form>

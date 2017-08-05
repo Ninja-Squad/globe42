@@ -53,7 +53,8 @@ export class TasksPageComponent implements OnInit {
         this.handleEvent(this.taskService.unassign(event.task.id));
         break;
       case 'edit':
-        throw new Error('not implemented yet');
+        this.router.navigate(['/tasks', event.task.id, 'edit']);
+        break;
     }
   }
 

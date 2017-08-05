@@ -5,6 +5,7 @@ import { TaskModel } from './models/task.model';
 import { NowService } from './now.service';
 import { Page } from './models/page';
 import { UserService } from './user.service';
+import { TaskCommand } from './models/task.command';
 
 function pageParams(pageNumber: number): HttpParams {
   return new HttpParams().set('page', pageNumber.toString());
@@ -62,5 +63,17 @@ export class TaskService {
 
   unassign(taskId: number): Observable<void> {
     return this.http.delete<void>(`/api/tasks/${taskId}/assignments`);
+  }
+
+  create(command: TaskCommand): Observable<TaskModel> {
+    return this.http.post('/api/tasks', command);
+  }
+
+  update(id: number, command: TaskCommand): Observable<void> {
+    return this.http.put<void>(`/api/tasks/${id}`, command);
+  }
+
+  get(id: number): Observable<TaskModel> {
+    return this.http.get(`/api/tasks/${id}`);
   }
 }

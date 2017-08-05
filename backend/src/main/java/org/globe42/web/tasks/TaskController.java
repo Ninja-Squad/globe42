@@ -20,7 +20,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for tasks
@@ -81,6 +90,11 @@ public class TaskController {
         return PageDTO.fromPage(taskDao.findArchived(pageRequest(page)), TaskDTO::new);
     }
 
+    @GetMapping("/{taskId}")
+    public TaskDTO get(@PathVariable("taskId") Long taskId) {
+        return new TaskDTO(taskDao.findById(taskId).orElseThrow(NotFoundException::new));
+    }
+
     @PostMapping("/{taskId}/assignments")
     @ResponseStatus(HttpStatus.CREATED)
     public void assign(@PathVariable("taskId") Long taskId, @Validated @RequestBody TaskAssignmentCommandDTO command) {
@@ -106,6 +120,45 @@ public class TaskController {
         if (command.getNewStatus() == TaskStatus.DONE || command.getNewStatus() == TaskStatus.CANCELLED) {
             task.setArchivalInstant(Instant.now());
         }
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public TaskDTO create(@Validated @RequestBody TaskCommandDTO command) {
+        Task task = new Task();
+        task.setCreator(userDao.getOne(currentUser.getUserId()));
+
+        copyCommandToTask(command, task);
+
+        return new TaskDTO(taskDao.save(task));
+    }
+
+    @PutMapping("/{taskId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable("taskId") Long taskId, @Validated @RequestBody TaskCommandDTO command) {
+        Task task = taskDao.findById(taskId).orElseThrow(NotFoundException::new);
+        copyCommandToTask(command, task);
+    }
+
+    private void copyCommandToTask(TaskCommandDTO command, Task task) {
+        task.setDescription(command.getDescription());
+        task.setTitle(command.getTitle());
+        task.setDueDate(command.getDueDate());
+        Person concernedPerson = null;
+        if (command.getConcernedPersonId() != null) {
+            concernedPerson =
+                personDao.findById(command.getConcernedPersonId())
+                         .orElseThrow(() -> new BadRequestException("no person with id "+ command.getConcernedPersonId()));
+        }
+        task.setConcernedPerson(concernedPerson);
+
+        User assignee = null;
+        if (command.getAssigneeId() != null) {
+            assignee =
+                userDao.findById(command.getAssigneeId())
+                       .orElseThrow(() -> new BadRequestException("no user with id "+ command.getAssigneeId()));
+        }
+        task.setAssignee(assignee);
     }
 
     private PageRequest pageRequest(@RequestParam Optional<Integer> page) {
