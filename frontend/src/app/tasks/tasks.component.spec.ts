@@ -195,14 +195,6 @@ describe('TasksComponent', () => {
       expect(text).toContain('Some title');
     });
 
-    it('should display a message when no task', () => {
-      fixture.componentInstance.tasks = [];
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.textContent).toContain('Rien à faire');
-      expect(fixture.nativeElement.querySelectorAll('.task-item').length).toBe(0);
-    });
-
     it('should invoke actions', () => {
       fixture.nativeElement.querySelector('.edit-button').click();
       fixture.detectChanges();

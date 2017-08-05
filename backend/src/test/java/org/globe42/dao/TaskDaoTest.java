@@ -68,37 +68,38 @@ public class TaskDaoTest extends BaseDaoTest {
     @Test
     public void shouldFindTodo() {
         TRACKER.skipNextLaunch();
-        assertThat(dao.findTodo()).extracting(Task::getId).containsOnly(2L, 3L, 4L, 5L);
+        assertThat(dao.findTodo(pageRequest()).getContent()).extracting(Task::getId).containsExactly(4L, 5L, 2L, 3L);
     }
 
     @Test
     public void shouldFindTodoByAssignee() {
         TRACKER.skipNextLaunch();
-        assertThat(dao.findTodoByAssignee(new User(1L))).extracting(Task::getId).containsOnly(3L);
+        assertThat(dao.findTodoByAssignee(new User(1L), pageRequest()).getContent()).extracting(Task::getId).containsExactly(3L);
     }
 
     @Test
     public void shouldFindTodoUnassigned() {
         TRACKER.skipNextLaunch();
-        assertThat(dao.findTodoUnassigned()).extracting(Task::getId).containsOnly(4L, 5L);
+        assertThat(dao.findTodoUnassigned(pageRequest()).getContent()).extracting(Task::getId).containsExactly(4L, 5L);
     }
 
     @Test
     public void shouldFindTodoBefore() {
         TRACKER.skipNextLaunch();
-        assertThat(dao.findTodoBefore(LocalDate.of(2017, 8, 1))).extracting(Task::getId).containsOnly(4L);
+        assertThat(dao.findTodoBefore(LocalDate.of(2017, 8, 1), pageRequest()).getContent())
+            .extracting(Task::getId).containsExactly(4L);
     }
 
     @Test
     public void shouldFindTodoForPerson() {
         TRACKER.skipNextLaunch();
-        assertThat(dao.findTodoByConcernedPerson(new Person(1L))).extracting(Task::getId).containsOnly(5L);
+        assertThat(dao.findTodoByConcernedPerson(new Person(1L), pageRequest()).getContent()).extracting(Task::getId).containsExactly(5L);
     }
 
     @Test
     public void shouldFindArchived() {
         TRACKER.skipNextLaunch();
-        Page<Task> result = dao.findArchived(PageRequest.of(0, 20));
+        Page<Task> result = dao.findArchived(pageRequest());
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getTotalPages()).isEqualTo(1);
         assertThat(result.getContent()).extracting(Task::getId).containsExactly(6L, 1L);
@@ -122,5 +123,7 @@ public class TaskDaoTest extends BaseDaoTest {
             .containsOnly(2L);
     }
 
-
+    PageRequest pageRequest() {
+        return PageRequest.of(0, 20);
+    }
 }

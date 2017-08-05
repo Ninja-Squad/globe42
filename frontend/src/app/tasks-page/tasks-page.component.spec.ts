@@ -5,7 +5,7 @@ import { TaskModel } from '../models/task.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Page } from '../models/page';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TasksComponent } from '../tasks/tasks.component';
+import { TaskEventType, TasksComponent } from '../tasks/tasks.component';
 import { FullnamePipe } from '../fullname.pipe';
 import { NowService } from '../now.service';
 import moment = require('moment');
@@ -21,6 +21,10 @@ import { JwtInterceptorService } from '../jwt-interceptor.service';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
+  let data: {
+    tasks: Page<TaskModel>;
+    taskListType: string;
+  };
   let activatedRoute: ActivatedRoute;
 
   beforeEach(async(() => {
@@ -48,10 +52,13 @@ describe('TasksPageComponent', () => {
       totalPages: 3,
     };
 
+    data = {
+      taskListType: 'todo',
+      tasks: page
+    };
+
     activatedRoute = {
-      data: Observable.of({
-        tasks: page
-      })
+      data: Observable.of(data)
     } as any;
 
     TestBed.configureTestingModule({
@@ -116,34 +123,23 @@ describe('TasksPageComponent', () => {
     });
   }));
 
-  it('should resurrect a task and refresh', () => {
-    const fixture = TestBed.createComponent(TasksPageComponent);
-    fixture.detectChanges();
-
-    const taskService = TestBed.get(TaskService);
-    const tasksResolverService = TestBed.get(TasksResolverService);
-
-    spyOn(taskService, 'resurrect').and.returnValue(Observable.of(null));
-    const newPage: Page<TaskModel> = {
-      content: page.content,
-      number: 0,
-      size: 3,
-      totalElements: 7,
-      totalPages: 3
-    };
-
-    spyOn(tasksResolverService, 'resolve').and.returnValue(Observable.of(newPage));
-
-    const task = page.content[0];
-
-    fixture.componentInstance.onTaskClicked({task, type: 'resurrect'});
-
-    expect(taskService.resurrect).toHaveBeenCalledWith(task.id);
-    expect(tasksResolverService.resolve).toHaveBeenCalledWith(activatedRoute.snapshot);
-    expect(fixture.componentInstance.page).toBe(newPage);
+  it('should assign a task and refresh', () => {
+    checkEventHandled('assign', 'assignToSelf');
   });
 
-  it('should navigate to previous page if current page is obsolete', () => {
+  it('should mark a task as done and refresh', () => {
+    checkEventHandled('markAsDone', 'markAsDone');
+  });
+
+  it('should cancel a task and refresh', () => {
+    checkEventHandled('cancel', 'cancel');
+  });
+
+  it('should resurrect a task and refresh', () => {
+    checkEventHandled('resurrect', 'resurrect');
+  });
+
+  it('should navigate to previous page after task action if current page is obsolete', () => {
     page.number = 2;
 
     const fixture = TestBed.createComponent(TasksPageComponent);
@@ -171,4 +167,57 @@ describe('TasksPageComponent', () => {
 
     expect(router.navigate).toHaveBeenCalledWith(['.'], {relativeTo: activatedRoute, queryParams: {page: '1'}});
   });
+
+  it('should display a success message when list type is not archived and no task', () => {
+    page.number = 0;
+    page.totalElements = 0;
+    page.content = [];
+    page.totalPages = 0;
+
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Rien à faire');
+  });
+
+  it('should display an info message when list type is archived and no task', () => {
+    page.number = 0;
+    page.totalElements = 0;
+    page.content = [];
+    page.totalPages = 0;
+
+    data.taskListType = 'archived';
+
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Aucune tâche archivée');
+  });
+
+  function checkEventHandled(eventType: TaskEventType, tastServiceMethodName: string) {
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    const taskService = TestBed.get(TaskService);
+    const tasksResolverService = TestBed.get(TasksResolverService);
+
+    spyOn(taskService, tastServiceMethodName).and.returnValue(Observable.of(null));
+    const newPage: Page<TaskModel> = {
+      content: page.content,
+      number: 0,
+      size: 3,
+      totalElements: 7,
+      totalPages: 3
+    };
+
+    spyOn(tasksResolverService, 'resolve').and.returnValue(Observable.of(newPage));
+
+    const task = page.content[0];
+
+    fixture.componentInstance.onTaskClicked({task, type: eventType});
+
+    expect(taskService[tastServiceMethodName]).toHaveBeenCalledWith(task.id);
+    expect(tasksResolverService.resolve).toHaveBeenCalledWith(activatedRoute.snapshot);
+    expect(fixture.componentInstance.page).toBe(newPage);
+  }
 });

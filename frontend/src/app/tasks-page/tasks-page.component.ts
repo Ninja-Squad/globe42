@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Page } from '../models/page';
 import { TaskModel } from '../models/task.model';
-import 'rxjs/add/operator/pluck';
 import { TaskEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'gl-tasks-page',
@@ -15,6 +15,7 @@ import { Observable } from "rxjs/Observable";
 })
 export class TasksPageComponent implements OnInit {
 
+  taskListType: string;
   page: Page<TaskModel>;
 
   constructor(private route: ActivatedRoute,
@@ -24,7 +25,10 @@ export class TasksPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => this.page = data.tasks);
+    this.route.data.subscribe(data => {
+      this.page = data.tasks;
+      this.taskListType = data.taskListType;
+    });
   }
 
   loadPage(viewPageNumber: number) {
@@ -32,22 +36,35 @@ export class TasksPageComponent implements OnInit {
   }
 
   onTaskClicked(event: TaskEvent) {
-    const currentPageNumber = this.page.number;
-    if (event.type === 'resurrect') {
-      this.taskService.resurrect(event.task.id)
-        .switchMap(() => this.tasksResolverService.resolve(this.route.snapshot) as Observable<Page<TaskModel>>)
-        .subscribe(
-          page => {
-            if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
-              this.loadPage(page.totalPages);
-            }
-            else {
-              this.page = page;
-            }
-          },
-          () => {});
-    } else {
-      throw new Error('should not happen');
+    switch (event.type) {
+      case 'assign':
+        this.handleEvent(this.taskService.assignToSelf(event.task.id));
+        break;
+      case 'markAsDone':
+        this.handleEvent(this.taskService.markAsDone(event.task.id));
+        break;
+      case 'cancel':
+        this.handleEvent(this.taskService.cancel(event.task.id));
+        break;
+      case 'resurrect':
+        this.handleEvent(this.taskService.resurrect(event.task.id));
+        break;
+      case 'edit':
+        throw new Error('not implemented yet');
     }
+  }
+
+  private handleEvent(action: Observable<void>) {
+    const currentPageNumber = this.page.number;
+    action.switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))
+      .subscribe(
+        page => {
+          if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
+            this.loadPage(page.totalPages);
+          } else {
+            this.page = page;
+          }
+        },
+        () => {});
   }
 }

@@ -2,9 +2,7 @@ package org.globe42.web.tasks;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.globe42.dao.PersonDao;
@@ -58,35 +56,36 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDTO> listTodo() {
-        return taskDao.findTodo().stream().map(TaskDTO::new).collect(Collectors.toList());
+    public PageDTO<TaskDTO> listTodo(@RequestParam Optional<Integer> page) {
+        return PageDTO.fromPage(taskDao.findTodo(pageRequest(page)), TaskDTO::new);
     }
 
     @GetMapping(params = "mine")
-    public List<TaskDTO> listMine() {
+    public PageDTO<TaskDTO> listMine(@RequestParam Optional<Integer> page) {
         User user = userDao.getOne(currentUser.getUserId());
-        return taskDao.findTodoByAssignee(user).stream().map(TaskDTO::new).collect(Collectors.toList());
+        return PageDTO.fromPage(taskDao.findTodoByAssignee(user, pageRequest(page)), TaskDTO::new);
     }
 
     @GetMapping(params = "unassigned")
-    public List<TaskDTO> listUnassigned() {
-        return taskDao.findTodoUnassigned().stream().map(TaskDTO::new).collect(Collectors.toList());
+    public PageDTO<TaskDTO> listUnassigned(@RequestParam Optional<Integer> page) {
+        return PageDTO.fromPage(taskDao.findTodoUnassigned(pageRequest(page)), TaskDTO::new);
     }
 
     @GetMapping(params = "person")
-    public List<TaskDTO> listForPerson(@RequestParam("person") Long personId) {
+    public PageDTO<TaskDTO> listForPerson(@RequestParam("person") Long personId, @RequestParam Optional<Integer> page) {
         Person person = personDao.getOne(personId);
-        return taskDao.findTodoByConcernedPerson(person).stream().map(TaskDTO::new).collect(Collectors.toList());
+        return PageDTO.fromPage(taskDao.findTodoByConcernedPerson(person, pageRequest(page)), TaskDTO::new);
     }
 
     @GetMapping(params = "before")
-    public List<TaskDTO> listTodoBefore(@RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return taskDao.findTodoBefore(date).stream().map(TaskDTO::new).collect(Collectors.toList());
+    public PageDTO<TaskDTO> listTodoBefore(@RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                        @RequestParam Optional<Integer> page) {
+        return PageDTO.fromPage(taskDao.findTodoBefore(date, pageRequest(page)), TaskDTO::new);
     }
 
     @GetMapping(params = "archived")
     public PageDTO<TaskDTO> listArchived(@RequestParam Optional<Integer> page) {
-        return PageDTO.fromPage(taskDao.findArchived(PageRequest.of(page.orElse(0), PAGE_SIZE)), TaskDTO::new);
+        return PageDTO.fromPage(taskDao.findArchived(pageRequest(page)), TaskDTO::new);
     }
 
     @PostMapping("/{taskId}/assignments")
@@ -107,5 +106,9 @@ public class TaskController {
         if (command.getNewStatus() == TaskStatus.DONE || command.getNewStatus() == TaskStatus.CANCELLED) {
             task.setArchivalInstant(Instant.now());
         }
+    }
+
+    private PageRequest pageRequest(@RequestParam Optional<Integer> page) {
+        return PageRequest.of(page.orElse(0), PAGE_SIZE);
     }
 }

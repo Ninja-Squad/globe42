@@ -27,55 +27,50 @@ describe('TasksResolverService', () => {
     const result: any = {
       data: {
         taskListType
-      }
+      },
+      queryParamMap: convertToParamMap({})
     };
     return result;
   }
 
   it('should resolve tasks for todo list type', () => {
     const route = routeWithType('todo');
-    const expected = Observable.of([]);
+    const expected = Observable.of({});
     spyOn(taskService, 'listTodo').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listTodo).toHaveBeenCalledWith(0);
   });
 
   it('should resolve tasks for mine list type', () => {
     const route = routeWithType('mine');
-    const expected = Observable.of([]);
+    const expected = Observable.of({});
     spyOn(taskService, 'listMine').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listMine).toHaveBeenCalledWith(0);
   });
 
   it('should resolve tasks for urgent list type', () => {
     const route = routeWithType('urgent');
-    const expected = Observable.of([]);
+    const expected = Observable.of({});
     spyOn(taskService, 'listUrgent').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listUrgent).toHaveBeenCalledWith(0);
   });
 
   it('should resolve tasks for unassigned list type', () => {
     const route = routeWithType('unassigned');
-    const expected = Observable.of([]);
+    const expected = Observable.of({});
     spyOn(taskService, 'listUnassigned').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listUnassigned).toHaveBeenCalledWith(0);
   });
 
   it('should resolve tasks for archived list type', () => {
     const route = routeWithType('archived');
-    (route as any).queryParamMap = convertToParamMap({})
-    const expected = Observable.of({content: []});
+    const expected = Observable.of({});
     spyOn(taskService, 'listArchived').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listArchived).toHaveBeenCalledWith(0);
-  });
-
-  it('should resolve tasks for archived list type when page is present', () => {
-    const route = routeWithType('archived');
-    (route as any).queryParamMap = convertToParamMap({page: '2'})
-    const expected = Observable.of({content: []});
-    spyOn(taskService, 'listArchived').and.returnValue(expected);
-    expect(resolver.resolve(route)).toBe(expected);
-    expect(taskService.listArchived).toHaveBeenCalledWith(2);
   });
 
   it('should resolve tasks for person list type', () => {
@@ -87,10 +82,19 @@ describe('TasksResolverService', () => {
         }
       }
     };
-    const expected = Observable.of([]);
+    const expected = Observable.of({});
     spyOn(taskService, 'listForPerson').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
-    expect(taskService.listForPerson).toHaveBeenCalledWith(42);
+    expect(taskService.listForPerson).toHaveBeenCalledWith(42, 0);
+  });
+
+  it('should resolve tasks when page is present', () => {
+    const route = routeWithType('archived');
+    (route as any).queryParamMap = convertToParamMap({page: '2'});
+    const expected = Observable.of({});
+    spyOn(taskService, 'listArchived').and.returnValue(expected);
+    expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listArchived).toHaveBeenCalledWith(2);
   });
 
   it('should throw when unknown list type', () => {

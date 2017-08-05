@@ -6,6 +6,10 @@ import { NowService } from './now.service';
 import { Page } from './models/page';
 import { UserService } from './user.service';
 
+function pageParams(pageNumber: number): HttpParams {
+  return new HttpParams().set('page', pageNumber.toString());
+}
+
 @Injectable()
 export class TaskService {
 
@@ -13,30 +17,30 @@ export class TaskService {
               private nowService: NowService,
               private userService: UserService) { }
 
-  listTodo(): Observable<Array<TaskModel>> {
-    return this.http.get('/api/tasks');
+  listTodo(pageNumber: number): Observable<Page<TaskModel>> {
+    return this.http.get('/api/tasks', {params: pageParams(pageNumber)});
   }
 
-  listUrgent(): Observable<Array<TaskModel>> {
+  listUrgent(pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get('/api/tasks', {
-      params: new HttpParams().set('before', this.nowService.now().add(7, 'd').format('YYYY-MM-DD'))
+      params: pageParams(pageNumber).set('before', this.nowService.now().add(7, 'd').format('YYYY-MM-DD'))
     });
   }
 
-  listMine(): Observable<Array<TaskModel>> {
-    return this.http.get('/api/tasks?mine');
+  listMine(pageNumber: number): Observable<Page<TaskModel>> {
+    return this.http.get('/api/tasks', {params: pageParams(pageNumber).set('mine', '')});
   }
 
-  listForPerson(personId: number): Observable<Array<TaskModel>> {
-    return this.http.get(`/api/tasks?person=${personId}`);
+  listForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
+    return this.http.get(`/api/tasks`, {params: pageParams(pageNumber).set('person', personId.toString())});
   }
 
-  listUnassigned(): Observable<Array<TaskModel>> {
-    return this.http.get(`/api/tasks?unassigned`);
+  listUnassigned(pageNumber: number): Observable<Page<TaskModel>> {
+    return this.http.get(`/api/tasks`, {params: pageParams(pageNumber).set('unassigned', '')});
   }
 
   listArchived(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get('/api/tasks', {params: new HttpParams().set('archived', '').set('page', pageNumber.toString())});
+    return this.http.get('/api/tasks', {params: pageParams(pageNumber).set('archived', '')});
   }
 
   assignToSelf(taskId: number): Observable<void> {

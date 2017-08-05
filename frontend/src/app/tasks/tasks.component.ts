@@ -2,9 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import * as moment from 'moment';
 import { NowService } from '../now.service';
-import { TasksResolverService } from '../tasks-resolver.service';
-import { TaskService } from '../task.service';
-import { ConfirmService } from '../confirm.service';
 import 'rxjs/add/operator/switchMap';
 
 class Task {

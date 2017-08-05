@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
@@ -67,12 +68,13 @@ public class TaskControllerTest extends BaseTest {
 
     @Test
     public void shouldListTodo() {
-        when(mockTaskDao.findTodo()).thenReturn(Arrays.asList(task1, task2));
+        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
+        when(mockTaskDao.findTodo(pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
 
-        List<TaskDTO> result = controller.listTodo();
+        PageDTO<TaskDTO> result = controller.listTodo(Optional.empty());
 
-        assertThat(result).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
-        TaskDTO dto1 = result.get(0);
+        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        TaskDTO dto1 = result.getContent().get(0);
         assertThat(dto1.getStatus()).isEqualTo(task1.getStatus());
         assertThat(dto1.getDescription()).isEqualTo(task1.getDescription());
         assertThat(dto1.getTitle()).isEqualTo(task1.getTitle());
@@ -84,11 +86,12 @@ public class TaskControllerTest extends BaseTest {
 
     @Test
     public void shouldListUnassigned() {
-        when(mockTaskDao.findTodoUnassigned()).thenReturn(Arrays.asList(task1, task2));
+        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
+        when(mockTaskDao.findTodoUnassigned(pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
 
-        List<TaskDTO> result = controller.listUnassigned();
+        PageDTO<TaskDTO> result = controller.listUnassigned(Optional.empty());
 
-        assertThat(result).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
     }
 
     @Test
@@ -96,32 +99,35 @@ public class TaskControllerTest extends BaseTest {
         when(mockCurrentUser.getUserId()).thenReturn(user.getId());
         when(mockUserDao.getOne(user.getId())).thenReturn(user);
 
-        when(mockTaskDao.findTodoByAssignee(user)).thenReturn(Arrays.asList(task1, task2));
+        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
+        when(mockTaskDao.findTodoByAssignee(user, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
 
-        List<TaskDTO> result = controller.listMine();
+        PageDTO<TaskDTO> result = controller.listMine(Optional.empty());
 
-        assertThat(result).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
     }
 
     @Test
     public void shouldListBefore() {
         LocalDate maxDate = LocalDate.of(2017, 8, 4);
-        when(mockTaskDao.findTodoBefore(maxDate)).thenReturn(Arrays.asList(task1, task2));
+        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
+        when(mockTaskDao.findTodoBefore(maxDate, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
 
-        List<TaskDTO> result = controller.listTodoBefore(maxDate);
+        PageDTO<TaskDTO> result = controller.listTodoBefore(maxDate, Optional.empty());
 
-        assertThat(result).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
     }
 
     @Test
     public void shouldListForPerson() {
         Person person = new Person(42L);
         when(mockPersonDao.getOne(person.getId())).thenReturn(person);
-        when(mockTaskDao.findTodoByConcernedPerson(person)).thenReturn(Arrays.asList(task1, task2));
+        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
+        when(mockTaskDao.findTodoByConcernedPerson(person, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
 
-        List<TaskDTO> result = controller.listForPerson(person.getId());
+        PageDTO<TaskDTO> result = controller.listForPerson(person.getId(), Optional.empty());
 
-        assertThat(result).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
     }
 
     @Test
@@ -193,5 +199,9 @@ public class TaskControllerTest extends BaseTest {
         task.setConcernedPerson(person);
 
         return task;
+    }
+
+    private Page<Task> singlePage(List<Task> tasks, PageRequest pageRequest) {
+        return new PageImpl<>(tasks, pageRequest, tasks.size());
     }
 }

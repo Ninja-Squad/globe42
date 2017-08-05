@@ -1,3 +1,15 @@
+<div class="text-center" *ngIf="page.totalElements === 0 && taskListType !== 'archived'">
+  <span style="font-size: 60px;" class="fa fa-thumbs-up text-success"></span>
+  <br/>
+  <span class="lead">Rien à faire&nbsp;! Elle est pas belle la vie&nbsp;?</span>
+</div>
+
+<div class="text-center" *ngIf="page.totalElements === 0 && taskListType === 'archived'">
+  <span style="font-size: 60px;" class="fa fa-info text-info"></span>
+  <br/>
+  <span class="lead">Aucune tâche archivée</span>
+</div>
+
 <gl-tasks [taskModels]="page.content" (taskClicked)="onTaskClicked($event)"></gl-tasks>
 
 <div class="d-flex justify-content-center mt-5" *ngIf="page.totalPages > 1">

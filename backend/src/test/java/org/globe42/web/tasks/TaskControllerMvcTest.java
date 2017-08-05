@@ -1,6 +1,8 @@
 package org.globe42.web.tasks;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +30,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -68,34 +74,34 @@ public class TaskControllerMvcTest {
 
     @Test
     public void shouldListTodos() throws Exception {
-        when(mockTaskDao.findTodo()).thenReturn(Collections.singletonList(task));
+        when(mockTaskDao.findTodo(any())).thenReturn(singlePage(Collections.singletonList(task)));
 
         mvc.perform(get("/api/tasks"))
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(task.getId().intValue()))
-           .andExpect(jsonPath("$[0].dueDate").value(task.getDueDate().toString()));
+           .andExpect(jsonPath("$.content.[0].id").value(task.getId().intValue()))
+           .andExpect(jsonPath("$.content.[0].dueDate").value(task.getDueDate().toString()));
     }
 
     @Test
     public void shouldListTodoBefore() throws Exception {
-        when(mockTaskDao.findTodoBefore(LocalDate.of(2017, 8, 1)))
-            .thenReturn(Collections.singletonList(task));
+        when(mockTaskDao.findTodoBefore(eq(LocalDate.of(2017, 8, 1)), any()))
+            .thenReturn(singlePage(Collections.singletonList(task)));
 
         mvc.perform(get("/api/tasks?before=2017-08-01"))
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(task.getId().intValue()));
+           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
     }
 
     @Test
     public void shouldListUnassigned() throws Exception {
-        when(mockTaskDao.findTodoUnassigned())
-            .thenReturn(Collections.singletonList(task));
+        when(mockTaskDao.findTodoUnassigned(any()))
+            .thenReturn(singlePage(Collections.singletonList(task)));
 
         // the equal is not necessary in production, but is mandatory in tests due to a bug. See
         // https://jira.spring.io/browse/SPR-15831
         mvc.perform(get("/api/tasks?unassigned="))
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(task.getId().intValue()));
+           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
     }
 
     @Test
@@ -122,5 +128,9 @@ public class TaskControllerMvcTest {
            .andExpect(status().isCreated());
 
         assertThat(task.getStatus()).isEqualTo(TaskStatus.DONE);
+    }
+
+    private Page<Task> singlePage(List<Task> tasks) {
+        return new PageImpl<>(tasks, PageRequest.of(0, TaskController.PAGE_SIZE), tasks.size());
     }
 }
