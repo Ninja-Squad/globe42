@@ -158,7 +158,7 @@ describe('TasksComponent', () => {
     });
 
     it('should display status instead of due date when DONE', () => {
-      tasks[0].status = 'DONE'
+      tasks[0].status = 'DONE';
       fixture.detectChanges();
 
       const text = fixture.nativeElement.textContent;
@@ -203,6 +203,17 @@ describe('TasksComponent', () => {
         type: 'edit',
         task: tasks[0]
       });
+
+      fixture.nativeElement.querySelector('.unassign-button').click();
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.event).toEqual({
+        type: 'unassign',
+        task: tasks[0]
+      });
+
+      tasks[0].assignee = null;
+      fixture.detectChanges();
 
       fixture.nativeElement.querySelector('.assign-button').click();
       fixture.detectChanges();

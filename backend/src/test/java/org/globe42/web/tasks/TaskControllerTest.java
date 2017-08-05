@@ -172,6 +172,22 @@ public class TaskControllerTest extends BaseTest {
     }
 
     @Test
+    public void shouldUnassign() {
+        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
+
+        controller.unassign(task2.getId());
+
+        assertThat(task2.getAssignee()).isEqualTo(null);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowWhenUnassigningUnexistingTask() {
+        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.empty());
+
+        controller.unassign(task2.getId());
+    }
+
+    @Test
     public void shouldChangeStatus() {
         when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
 

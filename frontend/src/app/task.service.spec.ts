@@ -76,6 +76,18 @@ describe('TaskService', () => {
     expect(ok).toBe(true);
   });
 
+  it('should unassign a task', () => {
+    const userService = TestBed.get(UserService);
+    userService.userEvents.next({ id : 42 });
+
+    let ok = false;
+    service.unassign(1).subscribe(() => ok = true);
+
+    http.expectOne({ url: '/api/tasks/1/assignments', method: 'DELETE' }).flush(null);
+
+    expect(ok).toBe(true);
+  });
+
   it('should cancel a task', () => {
     let ok = false;
     service.cancel(1).subscribe(() => ok = true);
