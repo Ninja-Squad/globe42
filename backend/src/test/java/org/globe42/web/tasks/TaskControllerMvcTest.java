@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,6 +23,7 @@ import org.globe42.domain.Person;
 import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
+import org.globe42.test.Answers;
 import org.globe42.test.GlobeMvcTest;
 import org.globe42.web.security.CurrentUser;
 import org.globe42.web.users.UserControllerTest;
@@ -128,6 +130,30 @@ public class TaskControllerMvcTest {
            .andExpect(status().isCreated());
 
         assertThat(task.getStatus()).isEqualTo(TaskStatus.DONE);
+    }
+
+    @Test
+    public void shouldCreate() throws Exception {
+        TaskCommandDTO command = TaskControllerTest.createCommand(null, null);
+
+        when(mockTaskDao.save(any(Task.class))).thenAnswer(Answers.<Task>modifiedFirstArgument(task -> task.setId(42L)));
+
+        mvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(command)))
+           .andExpect(status().isCreated())
+           .andExpect(jsonPath("$.id").value(42));
+    }
+
+    @Test
+    public void shouldUpdate() throws Exception {
+        TaskCommandDTO command = TaskControllerTest.createCommand(null, null);
+        when(mockTaskDao.findById(task.getId())).thenReturn(Optional.of(task));
+
+        mvc.perform(put("/api/tasks/{id}", task.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(command)))
+           .andExpect(status().isNoContent());
     }
 
     private Page<Task> singlePage(List<Task> tasks) {

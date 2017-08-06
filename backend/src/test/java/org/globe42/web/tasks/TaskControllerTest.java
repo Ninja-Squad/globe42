@@ -1,6 +1,7 @@
 package org.globe42.web.tasks;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import org.globe42.domain.Person;
 import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
+import org.globe42.test.Answers;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
@@ -204,6 +206,74 @@ public class TaskControllerTest extends BaseTest {
         controller.changeStatus(task1.getId(), new TaskStatusChangeCommandDTO(TaskStatus.DONE));
     }
 
+    @Test
+    public void shouldGet() {
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+
+        TaskDTO result = controller.get(task1.getId());
+
+        assertThat(result.getId()).isEqualTo(task1.getId());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowWhenGettingUnexistingTask() {
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.empty());
+        controller.get(task1.getId());
+    }
+
+    @Test
+    public void shouldCreate() {
+        TaskCommandDTO command = createCommand(12L, 13L);
+
+        Person person = new Person(command.getConcernedPersonId());
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+
+        User user = new User(command.getAssigneeId());
+        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+
+        when(mockTaskDao.save(any(Task.class))).thenAnswer(Answers.<Task>modifiedFirstArgument(task -> task.setId(42L)));
+
+        TaskDTO result = controller.create(command);
+        assertThat(result.getId()).isEqualTo(42L);
+        assertThat(result.getTitle()).isEqualTo(command.getTitle());
+        assertThat(result.getDescription()).isEqualTo(command.getDescription());
+        assertThat(result.getDueDate()).isEqualTo(command.getDueDate());
+        assertThat(result.getConcernedPerson().getId()).isEqualTo(person.getId());
+        assertThat(result.getAssignee().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    public void shouldCreateWhenNullReferencesPassedInCommand() {
+        TaskCommandDTO command = createCommand(null, null);
+
+        when(mockTaskDao.save(any(Task.class))).thenAnswer(Answers.<Task>modifiedFirstArgument(task -> task.setId(42L)));
+
+        TaskDTO result = controller.create(command);
+        assertThat(result.getConcernedPerson()).isNull();
+        assertThat(result.getAssignee()).isNull();
+    }
+
+    @Test
+    public void shouldUpdate() {
+        TaskCommandDTO command = createCommand(12L, 13L);
+
+        Person person = new Person(command.getConcernedPersonId());
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+
+        User user = new User(command.getAssigneeId());
+        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+
+        controller.update(task1.getId(), command);
+
+        assertThat(task1.getTitle()).isEqualTo(command.getTitle());
+        assertThat(task1.getDescription()).isEqualTo(command.getDescription());
+        assertThat(task1.getDueDate()).isEqualTo(command.getDueDate());
+        assertThat(task1.getConcernedPerson().getId()).isEqualTo(person.getId());
+        assertThat(task1.getAssignee().getId()).isEqualTo(user.getId());
+    }
+
     static Task createTask(Long id, User user, Person person) {
         Task task = new Task(id);
         task.setStatus(TaskStatus.TODO);
@@ -215,6 +285,14 @@ public class TaskControllerTest extends BaseTest {
         task.setConcernedPerson(person);
 
         return task;
+    }
+
+    static TaskCommandDTO createCommand(Long concernedPersonId, Long assigneeId) {
+        return new TaskCommandDTO("new title",
+                                  "new description",
+                                  LocalDate.now().plusDays(1),
+                                  concernedPersonId,
+                                  assigneeId);
     }
 
     private Page<Task> singlePage(List<Task> tasks, PageRequest pageRequest) {

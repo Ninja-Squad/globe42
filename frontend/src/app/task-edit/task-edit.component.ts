@@ -84,7 +84,7 @@ export class TaskEditComponent implements OnInit {
     const command: TaskCommand = {
       title: this.task.title,
       description: this.task.description,
-      dueDate: this.parserFormatter.format(this.task.dueDate),
+      dueDate: this.task.dueDate ? this.parserFormatter.format(this.task.dueDate) : null,
       concernedPersonId: this.task.concernedPerson ? this.task.concernedPerson.id : null,
       assigneeId: this.task.assignee ? this.task.assignee.id : null
     };
