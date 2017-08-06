@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TaskEventType, TasksComponent } from '../tasks/tasks.component';
 import { FullnamePipe } from '../fullname.pipe';
 import { NowService } from '../now.service';
-import moment = require('moment');
+import * as moment from 'moment';
 import { By } from '@angular/platform-browser';
 import { NgbModule, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
@@ -58,7 +58,12 @@ describe('TasksPageComponent', () => {
     };
 
     activatedRoute = {
-      data: Observable.of(data)
+      data: Observable.of(data),
+      parent: {
+        snapshot: {
+          data: { }
+        }
+      }
     } as any;
 
     TestBed.configureTestingModule({
@@ -70,7 +75,7 @@ describe('TasksPageComponent', () => {
         TasksResolverService,
         UserService,
         JwtInterceptorService,
-        { provide: ActivatedRoute, useValue: activatedRoute }
+        { provide: ActivatedRoute, useFactory: () => activatedRoute }
       ]
     });
     moment.locale('fr');
@@ -92,7 +97,7 @@ describe('TasksPageComponent', () => {
     expect(tasksPageComponent.onTaskClicked).toHaveBeenCalledWith({type: 'resurrect', task: page.content[0]});
   });
 
-  it('should display a pagination component', () => {
+  it('should display a pagination component, and no new task link by default', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
@@ -102,6 +107,8 @@ describe('TasksPageComponent', () => {
     expect(pagination.pageSize).toBe(3);
     expect(pagination.collectionSize).toBe(8);
     expect(pagination.pageCount).toBe(3);
+
+    expect(fixture.nativeElement.querySelector('#newTaskLink')).toBeFalsy();
   });
 
   it('should navigate to other page when clicking page', async(() => {
@@ -141,6 +148,35 @@ describe('TasksPageComponent', () => {
 
   it('should resurrect a task and refresh', () => {
     checkEventHandled('resurrect', 'resurrect');
+  });
+
+  it('should edit a task when list type is not person', () => {
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    const router = TestBed.get(Router);
+    spyOn(router, 'navigate');
+
+    const task = page.content[0];
+    fixture.componentInstance.onTaskClicked({task, type: 'edit'});
+
+    expect(router.navigate).toHaveBeenCalledWith(['/tasks', task.id, 'edit']);
+  });
+
+  it('should edit a task when list type is person', () => {
+    data.taskListType = 'person';
+    activatedRoute.parent.snapshot.data.person = { id: 42 };
+
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    const router = TestBed.get(Router);
+    spyOn(router, 'navigate');
+
+    const task = page.content[0];
+    fixture.componentInstance.onTaskClicked({task, type: 'edit'});
+
+    expect(router.navigate).toHaveBeenCalledWith(['/tasks', task.id, 'edit', { 'concerned-person': 42 }]);
   });
 
   it('should navigate to previous page after task action if current page is obsolete', () => {
@@ -198,14 +234,38 @@ describe('TasksPageComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('Aucune tâche archivée');
   });
 
-  function checkEventHandled(eventType: TaskEventType, tastServiceMethodName: string) {
+  it('should display an info message when list type is archived and no task', () => {
+    page.number = 0;
+    page.totalElements = 0;
+    page.content = [];
+    page.totalPages = 0;
+
+    data.taskListType = 'archived';
+
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Aucune tâche archivée');
+  });
+
+  it('should display a new task link with the concerned person as param is list type is person', () => {
+    data.taskListType = 'person';
+    activatedRoute.parent.snapshot.data.person = { id: 42 };
+
+    const fixture = TestBed.createComponent(TasksPageComponent);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('#newTaskLink').getAttribute('href')).toBe('/tasks/create;concerned-person=42');
+  });
+
+  function checkEventHandled(eventType: TaskEventType, taskServiceMethodName: string) {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
     const taskService = TestBed.get(TaskService);
     const tasksResolverService = TestBed.get(TasksResolverService);
 
-    spyOn(taskService, tastServiceMethodName).and.returnValue(Observable.of(null));
+    spyOn(taskService, taskServiceMethodName).and.returnValue(Observable.of(null));
     const newPage: Page<TaskModel> = {
       content: page.content,
       number: 0,
@@ -220,7 +280,7 @@ describe('TasksPageComponent', () => {
 
     fixture.componentInstance.onTaskClicked({task, type: eventType});
 
-    expect(taskService[tastServiceMethodName]).toHaveBeenCalledWith(task.id);
+    expect(taskService[taskServiceMethodName]).toHaveBeenCalledWith(task.id);
     expect(tasksResolverService.resolve).toHaveBeenCalledWith(activatedRoute.snapshot);
     expect(fixture.componentInstance.page).toBe(newPage);
   }

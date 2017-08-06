@@ -34,7 +34,6 @@ import { TasksResolverService } from './tasks-resolver.service';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { TaskResolverService } from './task-resolver.service';
-import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -70,18 +69,12 @@ export const routes: Routes = [
               { path: 'family', component: PersonFamilySituationComponent },
               {
                 path: 'tasks',
-                component: PersonTasksComponent,
-                children: [
-                  {
-                    path: '',
-                    component: TasksPageComponent,
-                    data: { taskListType: 'person' },
-                    resolve: {
-                      tasks: TasksResolverService
-                    },
-                    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
-                  }
-                ]
+                component: TasksPageComponent,
+                data: { taskListType: 'person' },
+                resolve: {
+                  tasks: TasksResolverService
+                },
+                runGuardsAndResolvers: 'paramsOrQueryParamsChange'
               }
             ]
           },

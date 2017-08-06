@@ -20,3 +20,10 @@
                   [pageSize]="page.size"
                   [rotate]="true"></ngb-pagination>
 </div>
+
+<div class="mt-5" *ngIf="taskListType === 'person'">
+  <a id="newTaskLink" class="btn btn-outline-primary" [routerLink]="['/tasks/create', { 'concerned-person': person?.id }]">
+    <span class="fa fa-plus"></span>
+    Nouvelle tâche
+  </a>
+</div>

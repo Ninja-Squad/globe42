@@ -64,6 +64,11 @@ export class TaskEditComponent implements OnInit {
     this.persons = this.route.snapshot.data.persons;
     this.users = this.sortUsers(this.route.snapshot.data.users);
 
+    const concernedPersonId = this.route.snapshot.paramMap.get('concerned-person');
+    if (concernedPersonId) {
+      this.cancelOrRedirectDestination = ['/persons', concernedPersonId, 'tasks'];
+    }
+
     if (this.editedTask) {
       this.task.title = this.editedTask.title;
       this.task.description = this.editedTask.description;
@@ -72,10 +77,8 @@ export class TaskEditComponent implements OnInit {
       this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
     }
     else {
-      const concernedPersonId = this.route.snapshot.paramMap.get('concerned-person');
       if (concernedPersonId) {
         this.task.concernedPerson = this.findWithId(this.persons, +concernedPersonId);
-        this.cancelOrRedirectDestination = ['/persons', concernedPersonId, 'tasks'];
       }
     }
   }

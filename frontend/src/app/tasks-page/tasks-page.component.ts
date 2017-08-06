@@ -7,6 +7,7 @@ import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
+import { PersonModel } from '../models/person.model';
 
 @Component({
   selector: 'gl-tasks-page',
@@ -18,6 +19,9 @@ export class TasksPageComponent implements OnInit {
   taskListType: string;
   page: Page<TaskModel>;
 
+  // the person, in case the task list type is 'person'. null otherwise
+  person: PersonModel = null;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private taskService: TaskService,
@@ -28,6 +32,7 @@ export class TasksPageComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.page = data.tasks;
       this.taskListType = data.taskListType;
+      this.person = this.taskListType === 'person' ? this.route.parent.snapshot.data.person : null;
     });
   }
 
@@ -53,7 +58,11 @@ export class TasksPageComponent implements OnInit {
         this.handleEvent(this.taskService.unassign(event.task.id));
         break;
       case 'edit':
-        this.router.navigate(['/tasks', event.task.id, 'edit']);
+        const destination: Array<any> = ['/tasks', event.task.id, 'edit'];
+        if (this.person) {
+          destination.push({'concerned-person': this.person.id});
+        }
+        this.router.navigate(destination);
         break;
     }
   }
