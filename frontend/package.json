@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod",
+    "build": "ng build --prod --build-optimizer",
     "test": "ng test --single-run --code-coverage --no-progress --reporters dots",
     "bundlesize": "bundlesize",
     "codecov": "codecov",
@@ -55,11 +55,7 @@
   "bundlesize": [
     {
       "path": "./dist/main.*.bundle.js",
-      "maxSize": "80Kb"
-    },
-    {
-      "path": "./dist/vendor.*.bundle.js",
-      "maxSize": "210Kb"
+      "maxSize": "240Kb"
     }
   ]
 }
