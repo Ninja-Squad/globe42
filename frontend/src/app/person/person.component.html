@@ -99,3 +99,28 @@
   <span class="fa fa-edit"></span>
   Éditer
 </a>
+
+<div class="mt-4">
+  <h2>Notes</h2>
+
+  <div class="text-center" *ngIf="person.notes.length === 0">
+    <span style="font-size: 60px;" class="fa fa-info text-info"></span>
+    <br/>
+    <span class="lead">Aucune note</span>
+  </div>
+
+  <gl-note *ngFor="let note of person.notes; let even = even;" [note]="note"
+           [position]="even ? 'left' : 'right'"
+           [edited]="editedNote === note"
+           [disabled]="editedNote && note !== editedNote"
+           (editionRequested)="editedNote = note"
+           (editionCancelled)="cancelNoteEdition($event)"
+           (editionDone)="saveNote($event)"
+           (deletionRequested)="deleteNote($event)"></gl-note>
+
+  <button type="button" class="btn btn-outline-primary" [disabled]="editedNote" (click)="addNote()">
+    <span class="fa fa-plus"></span>
+    Ajouter une note
+  </button>
+</div>
+

@@ -12,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -169,6 +171,16 @@ public class Person {
      */
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Income> incomes = new HashSet<>();
+
+    /**
+     * The notes added on the person
+     */
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "person_note",
+        joinColumns = @JoinColumn(name = "person_id"),
+        inverseJoinColumns = @JoinColumn(name = "note_id")
+    )
+    private Set<Note> notes = new HashSet<>();
 
     public Person() {
     }
@@ -365,5 +377,17 @@ public class Person {
 
     public Set<Income> getIncomes() {
         return Collections.unmodifiableSet(incomes);
+    }
+
+    public Set<Note> getNotes() {
+        return Collections.unmodifiableSet(notes);
+    }
+
+    public void addNote(Note note) {
+        this.notes.add(note);
+    }
+
+    public void removeNote(Note note) {
+        this.notes.remove(note);
     }
 }

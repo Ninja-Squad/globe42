@@ -12,6 +12,16 @@ import { PersonFamilySituationComponent } from '../person-family-situation/perso
 import { FamilySituationComponent } from '../family-situation/family-situation.component';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { LOCALE_ID } from '@angular/core';
+import { NoteService } from '../note.service';
+import { PersonResolverService } from '../person-resolver.service';
+import { UserService } from '../user.service';
+import { HttpClientModule } from '@angular/common/http';
+import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { PersonService } from '../person.service';
+import { ConfirmService } from '../confirm.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NoteComponent } from '../note/note.component';
+import { FormsModule } from '@angular/forms';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -40,7 +50,8 @@ describe('PersonComponent', () => {
     fiscalStatusUpToDate: true,
     fiscalStatusDate: '2017-02-01',
     frenchFamilySituation: null,
-    abroadFamilySituation: null
+    abroadFamilySituation: null,
+    notes: []
   };
 
   const activatedRoute: any = {
@@ -50,11 +61,12 @@ describe('PersonComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [ RouterTestingModule ],
+    imports: [ RouterTestingModule, HttpClientModule, NgbModule.forRoot(), FormsModule ],
     declarations: [
       PersonComponent,
       PersonFamilySituationComponent,
       FamilySituationComponent,
+      NoteComponent,
       DisplayGenderPipe,
       DisplayMaritalStatusPipe,
       DisplayCityPipe,
@@ -62,13 +74,24 @@ describe('PersonComponent', () => {
       DisplayHousingPipe
     ],
     providers: [
+      NoteService,
+      PersonResolverService,
+      PersonService,
+      UserService,
+      JwtInterceptorService,
+      ConfirmService,
       { provide: ActivatedRoute, useValue: activatedRoute },
       { provide: LOCALE_ID, useValue: 'fr-FR'}
     ]
   })));
 
   it('should have a maps URL', () => {
-    const component = new PersonComponent(activatedRoute);
+    const component = new PersonComponent(
+      activatedRoute,
+      TestBed.get(NoteService),
+      TestBed.get(UserService),
+      TestBed.get(PersonResolverService),
+      TestBed.get(ConfirmService));
     component.ngOnInit();
     expect(component.mapsUrl).toBe('https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE');
   });

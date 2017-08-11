@@ -2,14 +2,13 @@ package org.globe42.web.users;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.globe42.dao.NoteDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
@@ -38,6 +37,9 @@ public class UserControllerTest extends BaseTest{
 
     @Mock
     private TaskDao mockTaskDao;
+
+    @Mock
+    private NoteDao mockNoteDao;
 
     @Mock
     private PasswordGenerator mockPasswordGenerator;
@@ -181,6 +183,7 @@ public class UserControllerTest extends BaseTest{
 
         verify(mockTaskDao).resetAssigneeOnTasksAssignedTo(user);
         verify(mockTaskDao).resetCreatorOnTasksCreatedBy(user);
+        verify(mockNoteDao).resetCreatorOnNotesCreatedBy(user);
         verify(mockUserDao).delete(user);
     }
 

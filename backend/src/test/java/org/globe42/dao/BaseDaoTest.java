@@ -30,7 +30,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 public abstract class BaseDaoTest {
     protected static final DbSetupTracker TRACKER = new DbSetupTracker();
 
-    private static final Operation DELETE_ALL = DeleteAll.from("task",
+    private static final Operation DELETE_ALL = DeleteAll.from("person_note",
+                                                               "note",
+                                                               "task",
                                                                "guser",
                                                                "income",
                                                                "person",

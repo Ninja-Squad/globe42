@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.globe42.dao.NoteDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
@@ -38,6 +39,9 @@ public class UserControllerMvcTest {
 
     @MockBean
     private TaskDao mockTaskDao;
+
+    @MockBean
+    private NoteDao mockNoteDao;
 
     @MockBean
     private PasswordGenerator mockPasswordGenerator;
