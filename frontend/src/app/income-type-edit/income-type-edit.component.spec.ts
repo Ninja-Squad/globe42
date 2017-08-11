@@ -56,7 +56,7 @@ describe('IncomeTypeEditComponent', () => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
-        expect(fixture.componentInstance.incomeType).toEqual({ type: 'CAF' })
+        expect(fixture.componentInstance.incomeType).toEqual({ type: 'CAF' });
 
         const nativeElement = fixture.nativeElement;
         const type = nativeElement.querySelector('#type');

@@ -162,6 +162,6 @@ import { TaskResolverService } from './task-resolver.service';
 })
 export class AppModule {
   constructor() {
-    moment.locale('fr')
+    moment.locale('fr');
   }
 }

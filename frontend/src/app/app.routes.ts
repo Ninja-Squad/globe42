@@ -220,5 +220,5 @@ export function taskRoute(taskListType: string): Route {
       tasks: TasksResolverService
     },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange'
-  }
+  };
 }
