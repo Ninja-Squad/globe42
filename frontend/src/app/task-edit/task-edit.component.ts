@@ -17,8 +17,8 @@ interface TaskFormModel {
   title: string;
   description: string;
   dueDate: NgbDateStruct;
-  concernedPerson: PersonIdentityModel,
-  assignee: UserModel
+  concernedPerson: PersonIdentityModel;
+  assignee: UserModel;
 }
 
 @Component({
@@ -40,17 +40,17 @@ export class TaskEditComponent implements OnInit {
 
   users: Array<UserModel>;
 
-  personFormatter = (result: PersonIdentityModel) => this.fullnamePipe.transform(result);
-
   cancelOrRedirectDestination = ['/tasks'];
+
+  private persons: Array<PersonIdentityModel>;
+
+  personFormatter = (result: PersonIdentityModel) => this.fullnamePipe.transform(result);
 
   personSearch = (text$: Observable<string>) =>
     text$
       .debounceTime(200)
       .distinctUntilChanged()
       .map(term => term === '' ? [] : this.persons.filter(person => this.isPersonAccepted(person, term)).slice(0, 10));
-
-  private persons: Array<PersonIdentityModel>;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -73,10 +73,10 @@ export class TaskEditComponent implements OnInit {
       this.task.title = this.editedTask.title;
       this.task.description = this.editedTask.description;
       this.task.dueDate = this.editedTask.dueDate ? this.parserFormatter.parse(this.editedTask.dueDate) : null;
-      this.task.concernedPerson = this.editedTask.concernedPerson ? this.findWithId(this.persons, this.editedTask.concernedPerson.id) : null;
+      this.task.concernedPerson =
+        this.editedTask.concernedPerson ? this.findWithId(this.persons, this.editedTask.concernedPerson.id) : null;
       this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
-    }
-    else {
+    } else {
       if (concernedPersonId) {
         this.task.concernedPerson = this.findWithId(this.persons, +concernedPersonId);
       }
@@ -94,8 +94,7 @@ export class TaskEditComponent implements OnInit {
     if (this.editedTask) {
       this.taskService.update(this.editedTask.id, command)
         .subscribe(() => this.router.navigate(this.cancelOrRedirectDestination));
-    }
-    else {
+    } else {
       this.taskService.create(command)
         .subscribe(() => this.router.navigate(this.cancelOrRedirectDestination));
     }
@@ -129,7 +128,7 @@ export class TaskEditComponent implements OnInit {
       || (person.mediationCode && person.mediationCode.toLowerCase().includes(s));
   }
 
-  private findWithId<T extends {id: number}>(array: Array<T>, id: number): T {
+  private findWithId<T extends { id: number }>(array: Array<T>, id: number): T {
     return array.filter(element => element.id === id)[0];
   }
 }

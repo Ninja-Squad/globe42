@@ -35,13 +35,13 @@ export class IncomeSourceEditComponent implements OnInit {
         name: this.editedIncomeSource.name,
         typeId: this.editedIncomeSource.type.id,
         maxMonthlyAmount: this.editedIncomeSource.maxMonthlyAmount
-      }
+      };
     } else {
       this.incomeSource = {
         name: '',
         typeId: null,
         maxMonthlyAmount: null
-      }
+      };
     }
   }
 

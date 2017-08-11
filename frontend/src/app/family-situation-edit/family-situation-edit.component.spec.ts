@@ -50,9 +50,9 @@ describe('FamilySituationEditComponent', () => {
 
     const checkboxes = fixture.nativeElement.querySelectorAll('input[type="checkbox"]');
     checkboxes[0].checked = false;
-    checkboxes[0].dispatchEvent(new Event('change'))
+    checkboxes[0].dispatchEvent(new Event('change'));
     checkboxes[1].checked = true;
-    checkboxes[1].dispatchEvent(new Event('change'))
+    checkboxes[1].dispatchEvent(new Event('change'));
 
     const numbers = fixture.nativeElement.querySelectorAll('input[type="number"]');
     numbers[0].value = '2';

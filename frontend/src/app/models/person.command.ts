@@ -14,7 +14,7 @@ export interface PersonCommand {
   phoneNumber: string;
   mediationEnabled: boolean;
   entryDate: string;
-  maritalStatus: MaritalStatus,
+  maritalStatus: MaritalStatus;
   housing: Housing;
   housingSpace: number;
   fiscalStatus: FiscalStatus;

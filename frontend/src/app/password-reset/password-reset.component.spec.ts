@@ -43,7 +43,7 @@ describe('PasswordResetComponent', () => {
 
     const userService = TestBed.get(UserService);
     const updatedUser = {id: 42, login: 'jb', generatedPassword: 'passw0rd'} as UserWithPasswordModel;
-    spyOn(userService, 'resetPassword').and.returnValue(Observable.of(updatedUser))
+    spyOn(userService, 'resetPassword').and.returnValue(Observable.of(updatedUser));
     resetButton.click();
     fixture.detectChanges();
 

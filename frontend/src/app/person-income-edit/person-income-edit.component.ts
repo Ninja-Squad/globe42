@@ -31,7 +31,7 @@ export class PersonIncomeEditComponent implements OnInit {
     this.income = {
       source: null,
       monthlyAmount: null
-    }
+    };
   }
 
   save() {
