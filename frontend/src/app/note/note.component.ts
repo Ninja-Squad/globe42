@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterContentChecked, AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output,
+  ViewChild
+} from '@angular/core';
 import { NoteModel } from '../models/note.model';
 
 export interface NoteEditionEvent {
@@ -11,13 +14,10 @@ export interface NoteEditionEvent {
   templateUrl: './note.component.html',
   styleUrls: ['./note.component.scss']
 })
-export class NoteComponent {
+export class NoteComponent implements AfterContentChecked {
 
   @Input()
   note: NoteModel;
-
-  @Input()
-  position: 'left' | 'right' = 'left';
 
   @Input()
   disabled = false;
@@ -37,6 +37,11 @@ export class NoteComponent {
   editedText: string;
   rowCount: number;
 
+  private shouldGiveFocus = false;
+
+  @ViewChild('textArea')
+  private textArea: ElementRef;
+
   private _edited = false;
 
   get edited() {
@@ -51,8 +56,8 @@ export class NoteComponent {
       if (this.rowCount < 2) {
         this.rowCount = 2;
       }
-    }
-    else {
+      this.shouldGiveFocus = true;
+    } else {
       this.editedText = null;
     }
     this._edited = value;
@@ -72,5 +77,12 @@ export class NoteComponent {
 
   save() {
     this.editionDone.emit({id: this.note.id, text: this.editedText});
+  }
+
+  ngAfterContentChecked(): void {
+    if (this.shouldGiveFocus && this.textArea && this.textArea.nativeElement) {
+      this.textArea.nativeElement.focus();
+      this.shouldGiveFocus = false;
+    }
   }
 }

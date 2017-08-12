@@ -4,9 +4,13 @@ import { Observable } from 'rxjs/Observable';
 import { NoteModel } from './models/note.model';
 
 @Injectable()
-export class NoteService {
+export class PersonNoteService {
 
   constructor(private http: HttpClient) { }
+
+  list(personId: number): Observable<Array<NoteModel>> {
+    return this.http.get<Array<NoteModel>>(`/api/persons/${personId}/notes`);
+  }
 
   create(personId: number, text: string): Observable<NoteModel> {
     const command = { text };

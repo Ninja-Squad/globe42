@@ -1,11 +1,11 @@
-<div class="small text-muted" [class.text-right]="position === 'right'">
+<div class="small text-muted">
   <ng-container *ngIf="note.creator">
     {{ note.creator.login }}
     &mdash;
   </ng-container>
   {{ note.creationInstant | date }}
 </div>
-<div class="bubble text-muted" [class.bubble-right]="position === 'right'">
+<div class="bubble text-muted">
   <ng-container *ngIf="!edited">
     <div style="white-space: pre-line;">{{ note.text }}</div>
     <div class="text-right">
@@ -19,8 +19,8 @@
   </ng-container>
   <ng-container *ngIf="edited">
     <form>
-      <textarea #text="ngModel" name="text" [(ngModel)]="editedText" style="width: 100%;" [rows]="rowCount" required></textarea>
-      <div class="text-right">
+      <textarea #textArea #text="ngModel" name="text" class="form-control" [(ngModel)]="editedText" style="width: 100%;" [rows]="rowCount" required></textarea>
+      <div class="text-right mt-2">
         <button type="submit" class="btn btn-sm btn-primary" [disabled]="text.invalid" (click)="save()">
           <span class="fa fa-check"></span>
           Enregistrer

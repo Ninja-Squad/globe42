@@ -1,16 +1,12 @@
 package org.globe42.web.persons;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.Note;
 import org.globe42.domain.Person;
 
 /**
@@ -37,7 +33,6 @@ public final class PersonDTO {
     private final boolean fiscalStatusUpToDate;
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
-    private final List<NoteDTO> notes;
 
     public PersonDTO(Person person) {
         this.identity = new PersonIdentityDTO(person);
@@ -58,10 +53,6 @@ public final class PersonDTO {
         this.fiscalStatusUpToDate = person.isFiscalStatusUpToDate();
         this.frenchFamilySituation = person.getFrenchFamilySituation() == null ? null : new FamilySituationDTO(person.getFrenchFamilySituation());
         this.abroadFamilySituation = person.getAbroadFamilySituation() == null ? null : new FamilySituationDTO(person.getAbroadFamilySituation());
-        this.notes = person.getNotes()
-                           .stream()
-                           .sorted(Comparator.comparing(Note::getCreationInstant))
-                           .map(NoteDTO::new).collect(Collectors.toList());
     }
 
     public PersonIdentityDTO getIdentity() {
@@ -134,9 +125,5 @@ public final class PersonDTO {
 
     public FamilySituationDTO getAbroadFamilySituation() {
         return abroadFamilySituation;
-    }
-
-    public List<NoteDTO> getNotes() {
-        return notes;
     }
 }

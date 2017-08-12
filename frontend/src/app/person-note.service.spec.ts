@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { NoteService } from './note.service';
+import { PersonNoteService } from './person-note.service';
 
 describe('NoteService', () => {
   // TODO

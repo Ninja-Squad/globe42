@@ -38,7 +38,6 @@ export interface PersonModel extends PersonIdentityModel {
   fiscalStatusUpToDate: boolean;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
-  notes: Array<NoteModel>;
 }
 
 export interface CityModel {

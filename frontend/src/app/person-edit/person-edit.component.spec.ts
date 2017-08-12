@@ -72,8 +72,7 @@ describe('PersonEditComponent', () => {
         childCount: 1,
         siblingCount: 3
       },
-      abroadFamilySituation: null,
-      notes: []
+      abroadFamilySituation: null
     };
 
     const activatedRoute = {

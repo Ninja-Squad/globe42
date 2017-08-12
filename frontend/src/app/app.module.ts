@@ -67,7 +67,8 @@ import { TasksPageComponent } from './tasks-page/tasks-page.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { TaskResolverService } from './task-resolver.service';
 import { NoteComponent } from './note/note.component';
-import { NoteService } from './note.service';
+import { PersonNoteService } from './person-note.service';
+import { PersonNotesComponent } from './person-notes/person-notes.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { NoteService } from './note.service';
     TasksLayoutComponent,
     TasksPageComponent,
     TaskEditComponent,
-    NoteComponent
+    NoteComponent,
+    PersonNotesComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -160,7 +162,7 @@ import { NoteService } from './note.service';
     TaskService,
     TaskResolverService,
     NowService,
-    NoteService
+    PersonNoteService
   ],
   bootstrap: [AppComponent]
 })

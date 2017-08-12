@@ -1,6 +1,9 @@
 package org.globe42.web.persons;
 
 import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.globe42.dao.PersonDao;
@@ -11,6 +14,7 @@ import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.CurrentUser;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,6 +39,16 @@ public class PersonNoteController {
         this.personDao = personDao;
         this.currentUser = currentUser;
         this.userDao = userDao;
+    }
+
+    @GetMapping
+    public List<NoteDTO> list(@PathVariable("personId") Long personId) {
+        Person person = personDao.findById(personId).orElseThrow(NotFoundException::new);
+        return person.getNotes()
+                     .stream()
+                     .sorted(Comparator.comparing(Note::getCreationInstant))
+                     .map(NoteDTO::new)
+                     .collect(Collectors.toList());
     }
 
     @PostMapping

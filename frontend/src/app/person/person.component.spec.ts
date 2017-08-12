@@ -11,8 +11,8 @@ import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { PersonFamilySituationComponent } from '../person-family-situation/person-family-situation.component';
 import { FamilySituationComponent } from '../family-situation/family-situation.component';
 import { DisplayHousingPipe } from '../display-housing.pipe';
-import { LOCALE_ID } from '@angular/core';
-import { NoteService } from '../note.service';
+import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
+import { PersonNoteService } from '../person-note.service';
 import { PersonResolverService } from '../person-resolver.service';
 import { UserService } from '../user.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,6 +22,7 @@ import { ConfirmService } from '../confirm.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NoteComponent } from '../note/note.component';
 import { FormsModule } from '@angular/forms';
+import { PersonNotesComponent } from '../person-notes/person-notes.component';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -50,8 +51,7 @@ describe('PersonComponent', () => {
     fiscalStatusUpToDate: true,
     fiscalStatusDate: '2017-02-01',
     frenchFamilySituation: null,
-    abroadFamilySituation: null,
-    notes: []
+    abroadFamilySituation: null
   };
 
   const activatedRoute: any = {
@@ -64,9 +64,6 @@ describe('PersonComponent', () => {
     imports: [ RouterTestingModule, HttpClientModule, NgbModule.forRoot(), FormsModule ],
     declarations: [
       PersonComponent,
-      PersonFamilySituationComponent,
-      FamilySituationComponent,
-      NoteComponent,
       DisplayGenderPipe,
       DisplayMaritalStatusPipe,
       DisplayCityPipe,
@@ -74,24 +71,14 @@ describe('PersonComponent', () => {
       DisplayHousingPipe
     ],
     providers: [
-      NoteService,
-      PersonResolverService,
-      PersonService,
-      UserService,
-      JwtInterceptorService,
-      ConfirmService,
       { provide: ActivatedRoute, useValue: activatedRoute },
       { provide: LOCALE_ID, useValue: 'fr-FR'}
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
   })));
 
   it('should have a maps URL', () => {
-    const component = new PersonComponent(
-      activatedRoute,
-      TestBed.get(NoteService),
-      TestBed.get(UserService),
-      TestBed.get(PersonResolverService),
-      TestBed.get(ConfirmService));
+    const component = new PersonComponent(activatedRoute);
     component.ngOnInit();
     expect(component.mapsUrl).toBe('https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE');
   });
