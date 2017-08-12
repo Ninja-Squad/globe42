@@ -12,13 +12,13 @@
 
   <gl-note *ngFor="let note of notes" [note]="note"
            [edited]="editedNote === note"
-           [disabled]="editedNote && note !== editedNote"
+           [disabled]="!!editedNote && note !== editedNote"
            (editionRequested)="editedNote = note"
            (editionCancelled)="cancelNoteEdition($event)"
            (editionDone)="saveNote($event)"
            (deletionRequested)="deleteNote($event)"></gl-note>
 
-  <button type="button" class="btn btn-outline-primary" [disabled]="editedNote" (click)="addNote()">
+  <button type="button" class="btn btn-outline-primary" [disabled]="editedNote" (click)="addNote()" id="addNote">
     <span class="fa fa-plus"></span>
     Ajouter une note
   </button>

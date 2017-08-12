@@ -10,6 +10,7 @@ import { PersonModel } from '../models/person.model';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'gl-person-notes',
@@ -31,10 +32,11 @@ export class PersonNotesComponent implements OnInit {
               private confirmService: ConfirmService) { }
 
   ngOnInit(): void {
-    const notes$ = this.personNoteService.list(this.person.id).share();
-    // display the spinner after 300ms, unless the notes have loaded before
-    Observable.of(true).delay(300).takeUntil(notes$).subscribe(() => this.spinnerDisplayed = true);
-    notes$.subscribe(notes => {
+    // display the spinner after 300ms, unless the notes have loaded before. Note: Observable.delay is untestable,
+    // see https://github.com/angular/angular/issues/10127
+    window.setTimeout(() => this.spinnerDisplayed = !this.notes);
+
+    this.personNoteService.list(this.person.id).subscribe(notes => {
       this.notes = notes;
       this.spinnerDisplayed = false;
     });
@@ -71,7 +73,7 @@ export class PersonNotesComponent implements OnInit {
     }).subscribe(() => {
       const action = this.personNoteService.delete(this.person.id, note.id);
       this.reloadAfterAction(action);
-    });
+    }, () => {});
   }
 
   private reloadAfterAction(action: Observable<any>) {
