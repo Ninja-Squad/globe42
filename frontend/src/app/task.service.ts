@@ -19,29 +19,29 @@ export class TaskService {
               private userService: UserService) { }
 
   listTodo(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get('/api/tasks', {params: pageParams(pageNumber)});
+    return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber)});
   }
 
   listUrgent(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get('/api/tasks', {
+    return this.http.get<Page<TaskModel>>('/api/tasks', {
       params: pageParams(pageNumber).set('before', this.nowService.now().add(7, 'd').format('YYYY-MM-DD'))
     });
   }
 
   listMine(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get('/api/tasks', {params: pageParams(pageNumber).set('mine', '')});
+    return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber).set('mine', '')});
   }
 
   listForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get(`/api/tasks`, {params: pageParams(pageNumber).set('person', personId.toString())});
+    return this.http.get<Page<TaskModel>>(`/api/tasks`, {params: pageParams(pageNumber).set('person', personId.toString())});
   }
 
   listUnassigned(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get(`/api/tasks`, {params: pageParams(pageNumber).set('unassigned', '')});
+    return this.http.get<Page<TaskModel>>(`/api/tasks`, {params: pageParams(pageNumber).set('unassigned', '')});
   }
 
   listArchived(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get('/api/tasks', {params: pageParams(pageNumber).set('archived', '')});
+    return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber).set('archived', '')});
   }
 
   assignToSelf(taskId: number): Observable<void> {
@@ -66,7 +66,7 @@ export class TaskService {
   }
 
   create(command: TaskCommand): Observable<TaskModel> {
-    return this.http.post('/api/tasks', command);
+    return this.http.post<TaskModel>('/api/tasks', command);
   }
 
   update(id: number, command: TaskCommand): Observable<void> {
@@ -74,6 +74,6 @@ export class TaskService {
   }
 
   get(id: number): Observable<TaskModel> {
-    return this.http.get(`/api/tasks/${id}`);
+    return this.http.get<TaskModel>(`/api/tasks/${id}`);
   }
 }

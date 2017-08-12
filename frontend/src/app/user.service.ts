@@ -57,15 +57,15 @@ export class UserService {
   }
 
   list(): Observable<Array<UserModel>> {
-    return this.http.get('/api/users');
+    return this.http.get<Array<UserModel>>('/api/users');
   }
 
   create(command: UserCommand): Observable<UserWithPasswordModel> {
-    return this.http.post('/api/users', command);
+    return this.http.post<UserWithPasswordModel>('/api/users', command);
   }
 
   get(id: number): Observable<UserModel> {
-    return this.http.get(`/api/users/${id}`);
+    return this.http.get<UserModel>(`/api/users/${id}`);
   }
 
   update(id: number, user: UserCommand): Observable<void> {
@@ -77,6 +77,6 @@ export class UserService {
   }
 
   resetPassword(id: number): Observable<UserWithPasswordModel> {
-    return this.http.post(`/api/users/${id}/password-resets`, null);
+    return this.http.post<UserWithPasswordModel>(`/api/users/${id}/password-resets`, null);
   }
 }

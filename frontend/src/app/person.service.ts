@@ -11,7 +11,7 @@ export class PersonService {
   constructor(private http: HttpClient) { }
 
   get(id: number): Observable<PersonModel> {
-    return this.http.get(`/api/persons/${id}`);
+    return this.http.get<PersonModel>(`/api/persons/${id}`);
   }
 
   update(id: number, person: PersonCommand): Observable<void> {
@@ -19,11 +19,11 @@ export class PersonService {
   }
 
   create(person: PersonCommand): Observable<PersonModel> {
-    return this.http.post(`/api/persons`, person);
+    return this.http.post<PersonModel>(`/api/persons`, person);
   }
 
   list(): Observable<Array<PersonIdentityModel>> {
-    return this.http.get('/api/persons');
+    return this.http.get<Array<PersonIdentityModel>>('/api/persons');
   }
 
 }

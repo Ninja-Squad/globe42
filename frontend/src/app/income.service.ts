@@ -10,7 +10,7 @@ export class IncomeService {
   constructor(private http: HttpClient) { }
 
   list(personId: number): Observable<Array<IncomeModel>> {
-    return this.http.get(`/api/persons/${personId}/incomes`);
+    return this.http.get<Array<IncomeModel>>(`/api/persons/${personId}/incomes`);
   }
 
   delete(personId: number, incomeId: number): Observable<void> {
@@ -18,6 +18,6 @@ export class IncomeService {
   }
 
   create(personId: number, command: IncomeCommand): Observable<IncomeModel> {
-    return this.http.post(`/api/persons/${personId}/incomes`, command);
+    return this.http.post<IncomeModel>(`/api/persons/${personId}/incomes`, command);
   }
 }

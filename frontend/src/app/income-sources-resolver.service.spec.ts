@@ -14,7 +14,7 @@ describe('IncomeSourcesResolverService', () => {
 
   it('should retrieve sources', () => {
     const incomeSourceService = TestBed.get(IncomeSourceService);
-    const expectedResults: Observable<Array<IncomeSourceModel>> = Observable.of([{ id: 42, name: 'Allocations Familiales' }]);
+    const expectedResults = Observable.of([{ id: 42, name: 'Allocations Familiales' }] as Array<IncomeSourceModel>);
 
     spyOn(incomeSourceService, 'list').and.returnValue(expectedResults);
 

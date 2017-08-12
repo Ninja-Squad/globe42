@@ -13,11 +13,11 @@ export class IncomeSourceService {
   constructor(private http: HttpClient) { }
 
   list(): Observable<Array<IncomeSourceModel>> {
-    return this.http.get('/api/income-sources');
+    return this.http.get<Array<IncomeSourceModel>>('/api/income-sources');
   }
 
   create(incomeSource: IncomeSourceCommand): Observable<IncomeSourceModel> {
-    return this.http.post('/api/income-sources', incomeSource);
+    return this.http.post<IncomeSourceModel>('/api/income-sources', incomeSource);
   }
 
   update(id: number, incomeSource: IncomeSourceCommand): Observable<void> {
@@ -25,6 +25,6 @@ export class IncomeSourceService {
   }
 
   get(id: number): Observable<IncomeSourceModel> {
-    return this.http.get(`/api/income-sources/${id}`);
+    return this.http.get<IncomeSourceModel>(`/api/income-sources/${id}`);
   }
 }

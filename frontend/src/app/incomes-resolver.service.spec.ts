@@ -14,7 +14,7 @@ describe('IncomesResolverService', () => {
 
   it('should retrieve the incomes of the person stored in the data of the parent route', () => {
     const incomeService = TestBed.get(IncomeService);
-    const expectedResults: Observable<Array<IncomeModel>> = Observable.of([{ id: 23 }]);
+    const expectedResults = Observable.of([{ id: 23 }] as Array<IncomeModel>);
 
     spyOn(incomeService, 'list').and.returnValue(expectedResults);
 

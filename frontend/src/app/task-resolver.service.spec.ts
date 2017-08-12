@@ -18,7 +18,7 @@ describe('TaskResolverService', () => {
 
   it('should resolve a task', () => {
     const taskService = TestBed.get(TaskService);
-    const expectedResult: Observable<TaskModel> = Observable.of({ id: 42 });
+    const expectedResult = Observable.of({ id: 42 } as TaskModel);
 
     spyOn(taskService, 'get').and.returnValue(expectedResult);
 

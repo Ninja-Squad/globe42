@@ -16,7 +16,7 @@ describe('PersonResolverService', () => {
 
   it('should retrieve a person', () => {
     const personService = TestBed.get(PersonService);
-    const expectedResult: Observable<PersonModel> = Observable.of({ firstName: 'John', lastName: 'Doe' });
+    const expectedResult = Observable.of({ firstName: 'John', lastName: 'Doe' } as PersonModel);
 
     spyOn(personService, 'get').and.returnValue(expectedResult);
 
