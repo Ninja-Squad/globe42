@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
  * @author JB Nizet
  */
 public interface NoteDao extends JpaRepository<Note, Long> {
-    @Query("update Task task set task.creator = null where task.creator = :user")
+    @Query("update Note note set note.creator = null where note.creator = :user")
     @Modifying
     void resetCreatorOnNotesCreatedBy(@Param("user") User user);
 }
