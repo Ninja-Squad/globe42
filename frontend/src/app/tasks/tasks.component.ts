@@ -58,7 +58,7 @@ export class TasksComponent {
 
   @Input()
   set taskModels(models: Array<TaskModel>) {
-    this.tasks = models.map(model => new Task(model, this.nowService))
+    this.tasks = models.map(model => new Task(model, this.nowService));
   }
 
   toggle(task: Task, event: Event) {

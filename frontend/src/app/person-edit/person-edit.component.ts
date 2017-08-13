@@ -39,6 +39,13 @@ export class PersonEditComponent implements OnInit {
 
   searchFailed = false;
 
+  private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
+    if (!ctrl.value) {
+      return null;
+    }
+    return Validators.email(ctrl);
+  }
+
   search = (text: Observable<string>) =>
     text
       .filter(query => query.length > 1)
@@ -127,7 +134,7 @@ export class PersonEditComponent implements OnInit {
     } else {
       action = this.personService.create(command);
     }
-    action.subscribe(() => this.router.navigateByUrl('/persons'))
+    action.subscribe(() => this.router.navigateByUrl('/persons'));
   }
 
   clearIfNoCity(input: HTMLInputElement) {
@@ -143,12 +150,5 @@ export class PersonEditComponent implements OnInit {
       childCount: this.fb.control(''),
       siblingCount: this.fb.control('')
     });
-  }
-
-  private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
-    if (!ctrl.value) {
-      return null;
-    }
-    return Validators.email(ctrl);
   }
 }

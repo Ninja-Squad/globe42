@@ -333,7 +333,7 @@ describe('TaskEditComponent', () => {
         saveButton.click();
         fixture.detectChanges();
 
-        expect(taskService.update).toHaveBeenCalledWith(42,{
+        expect(taskService.update).toHaveBeenCalledWith(42, {
           title: 'test title',
           description: 'test description',
           dueDate: '2018-01-02',

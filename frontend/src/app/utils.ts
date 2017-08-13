@@ -39,7 +39,7 @@ export function interpolate(template: string, parameters: {[key: string]: any}):
     do {
       result = result.replace(searchValue, replaceValue);
     }
-    while (result.indexOf(searchValue) >= 0)
+    while (result.indexOf(searchValue) >= 0);
   });
   return result;
 }

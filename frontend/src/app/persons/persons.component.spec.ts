@@ -21,7 +21,7 @@ describe('PersonsComponent', () => {
       imports: [RouterTestingModule, ReactiveFormsModule],
       declarations: [PersonsComponent, FullnamePipe],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }, FullnamePipe]
-    })
+    });
   }));
 
   it('should expose persons sorted by full name', () => {

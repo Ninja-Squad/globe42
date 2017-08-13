@@ -53,7 +53,7 @@ export class ErrorService implements HttpInterceptor {
       if (this.isFunctional(err)) {
         this.functionalErrors.next(err.error.functionalError);
       }
-    }
+    };
   }
 
   private handleError(error: HttpErrorResponse) {
