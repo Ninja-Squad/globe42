@@ -173,6 +173,14 @@ public class Person {
     private Set<Income> incomes = new HashSet<>();
 
     /**
+     * The Healthcare Cover. Only requested to mediation-enabled persons, and unknown by default (so, technically
+     * mandatory, but can be left as unknown)
+     */
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private HealthcareCover healthcareCover = HealthcareCover.UNKNOWN;
+
+    /**
      * The notes added on the person
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -377,6 +385,14 @@ public class Person {
 
     public Set<Income> getIncomes() {
         return Collections.unmodifiableSet(incomes);
+    }
+
+    public HealthcareCover getHealthcareCover() {
+        return healthcareCover;
+    }
+
+    public void setHealthcareCover(HealthcareCover healthcareCover) {
+        this.healthcareCover = healthcareCover;
     }
 
     public Set<Note> getNotes() {

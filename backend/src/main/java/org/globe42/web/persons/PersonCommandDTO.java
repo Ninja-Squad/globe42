@@ -6,10 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.globe42.domain.FiscalStatus;
-import org.globe42.domain.Gender;
-import org.globe42.domain.Housing;
-import org.globe42.domain.MaritalStatus;
+import org.globe42.domain.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -49,6 +46,7 @@ public final class PersonCommandDTO {
     private final FiscalStatus fiscalStatus;
     private final LocalDate fiscalStatusDate;
     private final boolean fiscalStatusUpToDate;
+    private final HealthcareCover healthcareCover;
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
 
@@ -71,6 +69,7 @@ public final class PersonCommandDTO {
                             @JsonProperty FiscalStatus fiscalStatus,
                             @JsonProperty LocalDate fiscalStatusDate,
                             @JsonProperty boolean fiscalStatusUpToDate,
+                            @JsonProperty HealthcareCover healthcareCover,
                             @JsonProperty FamilySituationDTO frenchFamilySituation,
                             @JsonProperty FamilySituationDTO abroadFamilySituation) {
         this.firstName = firstName;
@@ -91,6 +90,7 @@ public final class PersonCommandDTO {
         this.fiscalStatus = fiscalStatus;
         this.fiscalStatusDate = fiscalStatusDate;
         this.fiscalStatusUpToDate = fiscalStatusUpToDate;
+        this.healthcareCover = healthcareCover;
         this.frenchFamilySituation = frenchFamilySituation;
         this.abroadFamilySituation = abroadFamilySituation;
     }
@@ -166,6 +166,8 @@ public final class PersonCommandDTO {
     public boolean isFiscalStatusUpToDate() {
         return fiscalStatusUpToDate;
     }
+
+    public HealthcareCover getHealthcareCover() { return healthcareCover; }
 
     public FamilySituationDTO getFrenchFamilySituation() {
         return frenchFamilySituation;

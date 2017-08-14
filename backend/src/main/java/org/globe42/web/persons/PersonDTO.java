@@ -3,11 +3,7 @@ package org.globe42.web.persons;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import org.globe42.domain.FiscalStatus;
-import org.globe42.domain.Gender;
-import org.globe42.domain.Housing;
-import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.Person;
+import org.globe42.domain.*;
 
 /**
  * DTO for Person
@@ -31,8 +27,10 @@ public final class PersonDTO {
     private final FiscalStatus fiscalStatus;
     private final LocalDate fiscalStatusDate;
     private final boolean fiscalStatusUpToDate;
+    private final HealthcareCover healthcareCover;
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
+
 
     public PersonDTO(Person person) {
         this.identity = new PersonIdentityDTO(person);
@@ -51,8 +49,10 @@ public final class PersonDTO {
         this.fiscalStatus = person.getFiscalStatus();
         this.fiscalStatusDate = person.getFiscalStatusDate();
         this.fiscalStatusUpToDate = person.isFiscalStatusUpToDate();
+        this.healthcareCover = person.getHealthcareCover();
         this.frenchFamilySituation = person.getFrenchFamilySituation() == null ? null : new FamilySituationDTO(person.getFrenchFamilySituation());
         this.abroadFamilySituation = person.getAbroadFamilySituation() == null ? null : new FamilySituationDTO(person.getAbroadFamilySituation());
+
     }
 
     public PersonIdentityDTO getIdentity() {
@@ -117,6 +117,10 @@ public final class PersonDTO {
 
     public boolean isFiscalStatusUpToDate() {
         return fiscalStatusUpToDate;
+    }
+
+    public HealthcareCover getHealthcareCover() {
+        return healthcareCover;
     }
 
     public FamilySituationDTO getFrenchFamilySituation() {
