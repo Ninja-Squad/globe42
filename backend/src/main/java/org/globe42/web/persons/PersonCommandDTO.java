@@ -6,7 +6,11 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.globe42.domain.*;
+import org.globe42.domain.FiscalStatus;
+import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
+import org.globe42.domain.MaritalStatus;
+import org.globe42.domain.HealthcareCover;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**

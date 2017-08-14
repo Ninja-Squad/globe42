@@ -4,7 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
-import org.globe42.domain.*;
+import org.globe42.domain.FiscalStatus;
+import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
+import org.globe42.domain.MaritalStatus;
+import org.globe42.domain.HealthcareCover;
+import org.globe42.domain.Person;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

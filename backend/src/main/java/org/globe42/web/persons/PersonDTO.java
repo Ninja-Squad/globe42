@@ -3,7 +3,12 @@ package org.globe42.web.persons;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import org.globe42.domain.*;
+import org.globe42.domain.FiscalStatus;
+import org.globe42.domain.Gender;
+import org.globe42.domain.Housing;
+import org.globe42.domain.MaritalStatus;
+import org.globe42.domain.HealthcareCover;
+import org.globe42.domain.Person;
 
 /**
  * DTO for Person
