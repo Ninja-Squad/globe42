@@ -20,6 +20,7 @@ import { GENDER_TRANSLATIONS } from '../display-gender.pipe';
 import { PersonCommand } from '../models/person.command';
 import { HOUSING_TRANSLATIONS } from '../display-housing.pipe';
 import { FISCAL_STATUS_TRANSLATIONS } from '../display-fiscal-status.pipe';
+import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
 
 @Component({
   selector: 'gl-person-edit',
@@ -36,6 +37,7 @@ export class PersonEditComponent implements OnInit {
   maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
   housings = HOUSING_TRANSLATIONS.map(t => t.key);
   fiscalStatuses = FISCAL_STATUS_TRANSLATIONS.map(t => t.key);
+  healthCareCoverages = HEALTH_CARE_COVERAGE_TRANSLATIONS.map(t => t.key);
 
   searchFailed = false;
 
@@ -85,6 +87,7 @@ export class PersonEditComponent implements OnInit {
       adherent: [null, Validators.required],
       mediationEnabled: false,
       maritalStatus: 'UNKNOWN',
+      healthCareCoverage: 'UNKNOWN',
       entryDate: null,
       housing: 'UNKNOWN',
       housingSpace: null,

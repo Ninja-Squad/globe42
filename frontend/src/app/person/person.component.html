@@ -33,6 +33,12 @@
       </div>
     </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
+      <label class="col-sm-6 col-form-label">Couverture médicale</label>
+      <div class="col-sm-6">
+        <p id="healthCareCoverage" class="form-control-static">{{ person.healthCareCoverage | displayHealthCareCoverage }}</p>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
       <div class="col-sm-6">
         <p id="entryDate" class="form-control-static">{{ person.entryDate | date }}</p>

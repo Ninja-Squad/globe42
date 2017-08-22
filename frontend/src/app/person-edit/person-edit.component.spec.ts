@@ -19,6 +19,7 @@ import { DisplayGenderPipe } from '../display-gender.pipe';
 import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
+import { DisplayHealthCareCoveragePipe, HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
 import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
 import { By } from '@angular/platform-browser';
 
@@ -37,6 +38,7 @@ describe('PersonEditComponent', () => {
       DisplayGenderPipe,
       DisplayHousingPipe,
       DisplayFiscalStatusPipe,
+      DisplayHealthCareCoveragePipe,
       FamilySituationEditComponent
     ],
     providers: [PersonService, DisplayCityPipe, SearchCityService]
@@ -66,6 +68,7 @@ describe('PersonEditComponent', () => {
       fiscalStatus: 'TAXABLE',
       fiscalStatusUpToDate: true,
       fiscalStatusDate: '2017-02-01',
+      healthCareCoverage: 'AME',
       frenchFamilySituation: {
         parentsPresent: false,
         spousePresent: true,
@@ -143,6 +146,8 @@ describe('PersonEditComponent', () => {
       expect(fiscalStatusDate.value).toBe(person.fiscalStatusDate);
       const fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
       expect(fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
+      const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
+      expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe(person.healthCareCoverage);
 
       const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
       expect(frenchFamilySituation.textContent).not.toContain('Inconnue');

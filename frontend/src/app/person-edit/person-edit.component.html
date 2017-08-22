@@ -121,7 +121,16 @@
       <label class="col-sm-3 col-form-label">Statut marital</label>
       <div class="col-sm-9">
         <select class="form-control" formControlName="maritalStatus" id="maritalStatus">
-          <option *ngFor="let ms of maritalStatuses" [value]="ms">{{ ms | displayMaritalStatus }}</option>
+          <option *ngFor="let ms of maritalStatuses" [value]="ms">{{ hc | displayMaritalStatus }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Couverture médicale</label>
+      <div class="col-sm-9">
+        <select class="form-control" formControlName="healthCareCoverage" id="healthCareCoverage">
+          <option *ngFor="let ms of healthCareCoverages" [value]="ms">{{ ms | displayHealthCareCoverage }}</option>
         </select>
       </div>
     </div>

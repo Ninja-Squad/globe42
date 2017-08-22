@@ -4,6 +4,7 @@ export type MaritalStatus = 'UNKNOWN' | 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 export type FiscalStatus = 'UNKNOWN' | 'TAXABLE' | 'NOT_TAXABLE';
 export type Housing = 'UNKNOWN' | 'F0' | 'F1' | 'F2' | 'F3' | 'F4' | 'F5' | 'F6';
+export type HealthCareCoverage = 'UNKNOWN' | 'GENERAL' | 'MSA' | 'RSI' | 'AME' | 'CMU' | 'SPECIAL';
 
 export interface PersonIdentityModel {
   id: number;
@@ -36,6 +37,7 @@ export interface PersonModel extends PersonIdentityModel {
   fiscalStatus: FiscalStatus;
   fiscalStatusDate: string;
   fiscalStatusUpToDate: boolean;
+  healthCareCoverage:HealthCareCoverage;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
 }

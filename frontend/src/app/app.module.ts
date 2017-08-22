@@ -55,6 +55,7 @@ import { DisplayFiscalStatusPipe } from './display-fiscal-status.pipe';
 import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 import { FamilySituationComponent } from './family-situation/family-situation.component';
 import { DisplayHousingPipe } from './display-housing.pipe';
+import { DisplayHealthCareCoveragePipe } from './display-health-care-coverage.pipe'
 import { FamilySituationEditComponent } from './family-situation-edit/family-situation-edit.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 import { TasksComponent } from './tasks/tasks.component';
@@ -98,6 +99,7 @@ import { PersonNotesComponent } from './person-notes/person-notes.component';
     ErrorComponent,
     FullnamePipe,
     DisplayFiscalStatusPipe,
+    DisplayHealthCareCoveragePipe,
     PersonFamilySituationComponent,
     FamilySituationComponent,
     DisplayHousingPipe,

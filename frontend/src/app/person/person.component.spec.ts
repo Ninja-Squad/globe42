@@ -8,6 +8,7 @@ import { DisplayGenderPipe } from '../display-gender.pipe';
 import { DisplayMaritalStatusPipe } from '../display-marital-status.pipe';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
+import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
 import { PersonFamilySituationComponent } from '../person-family-situation/person-family-situation.component';
 import { FamilySituationComponent } from '../family-situation/family-situation.component';
 import { DisplayHousingPipe } from '../display-housing.pipe';
@@ -23,6 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NoteComponent } from '../note/note.component';
 import { FormsModule } from '@angular/forms';
 import { PersonNotesComponent } from '../person-notes/person-notes.component';
+
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -48,8 +50,9 @@ describe('PersonComponent', () => {
     housing: 'F6',
     housingSpace: 80,
     fiscalStatus: 'TAXABLE',
-    fiscalStatusUpToDate: true,
     fiscalStatusDate: '2017-02-01',
+    fiscalStatusUpToDate: true,
+    healthCareCoverage: 'AME',
     frenchFamilySituation: null,
     abroadFamilySituation: null
   };
@@ -68,7 +71,8 @@ describe('PersonComponent', () => {
       DisplayMaritalStatusPipe,
       DisplayCityPipe,
       DisplayFiscalStatusPipe,
-      DisplayHousingPipe
+      DisplayHousingPipe,
+      DisplayHealthCareCoveragePipe
     ],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },
@@ -114,6 +118,8 @@ describe('PersonComponent', () => {
     expect(fiscalStatus.textContent).toContain('Imposable');
     expect(fiscalStatus.textContent).toContain('établie le 1 févr. 2017');
     expect(fiscalStatus.textContent).toContain('à jour');
+    const healthCareCoverage = nativeElement.querySelector('#healthCareCoverage');
+    expect(healthCareCoverage.textContent).toContain('Aide médicale de l\'Etat');
   });
 
   it('should display a person with mediation disabled', () => {
@@ -122,7 +128,7 @@ describe('PersonComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'maritalStatus', 'housing', 'fiscalStatus'];
+    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'maritalStatus', 'housing', 'fiscalStatus', 'healthCareCoverage'];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
   });
