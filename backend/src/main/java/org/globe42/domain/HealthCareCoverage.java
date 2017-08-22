@@ -1,10 +1,10 @@
 package org.globe42.domain;
 
 /**
- * The Healthcare Cover of a person
+ * The Health Care Coverage of a person
  *  @author A Crepet
  */
-public enum HealthcareCover {
+public enum HealthCareCoverage {
     UNKNOWN,
     GENERAL,
     MSA,

@@ -173,12 +173,12 @@ public class Person {
     private Set<Income> incomes = new HashSet<>();
 
     /**
-     * The Healthcare Cover. Only requested to mediation-enabled persons, and unknown by default (so, technically
+     * The Health Care Coverage. Only requested to mediation-enabled persons, and unknown by default (so, technically
      * mandatory, but can be left as unknown)
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private HealthcareCover healthcareCover = HealthcareCover.UNKNOWN;
+    private HealthCareCoverage healthCareCoverage = HealthCareCoverage.UNKNOWN;
 
     /**
      * The notes added on the person
@@ -387,12 +387,12 @@ public class Person {
         return Collections.unmodifiableSet(incomes);
     }
 
-    public HealthcareCover getHealthcareCover() {
-        return healthcareCover;
+    public HealthCareCoverage getHealthCareCoverage() {
+        return healthCareCoverage;
     }
 
-    public void setHealthcareCover(HealthcareCover healthcareCover) {
-        this.healthcareCover = healthcareCover;
+    public void setHealthCareCoverage(HealthCareCoverage healthCareCoverage) {
+        this.healthCareCoverage = healthCareCoverage;
     }
 
     public Set<Note> getNotes() {

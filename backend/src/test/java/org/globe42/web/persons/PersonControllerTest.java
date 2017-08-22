@@ -17,7 +17,7 @@ import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.HealthcareCover;
+import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.NotFoundException;
@@ -194,7 +194,7 @@ public class PersonControllerTest extends BaseTest {
                                     FiscalStatus.TAXABLE,
                                     LocalDate.of(2017, 2, 1),
                                     true,
-                                    HealthcareCover.GENERAL,
+                                    HealthCareCoverage.GENERAL,
                                     new FamilySituationDTO(false, true, 2, 3),
                                     new FamilySituationDTO(true, false, 0, 1));
     }
@@ -218,7 +218,7 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getFiscalStatus()).isEqualTo(command.getFiscalStatus());
         assertThat(person.getFiscalStatusDate()).isEqualTo(command.getFiscalStatusDate());
         assertThat(person.isFiscalStatusUpToDate()).isEqualTo(command.isFiscalStatusUpToDate());
-        assertThat(person.getHealthcareCover()).isEqualTo(command.getHealthcareCover());
+        assertThat(person.getHealthCareCoverage()).isEqualTo(command.getHealthCareCoverage());
         assertFamilySituationEqualsCommand(person.getFrenchFamilySituation(), command.getFrenchFamilySituation());
         assertFamilySituationEqualsCommand(person.getAbroadFamilySituation(), command.getAbroadFamilySituation());
     }

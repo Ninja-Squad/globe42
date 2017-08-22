@@ -14,7 +14,7 @@ import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.HealthcareCover;
+import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Person;
 import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
@@ -42,7 +42,7 @@ public class TaskDaoTest extends BaseDaoTest {
                   .withDefaultValue("fiscal_status", FiscalStatus.UNKNOWN)
                   .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
                   .withDefaultValue("housing", Housing.UNKNOWN)
-                  .withDefaultValue("healthcare_cover", HealthcareCover.UNKNOWN)
+                  .withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
                   .columns("id", "first_name", "last_name", "gender", "adherent", "mediation_enabled")
                   .values(1L, "Cedric", "Exbrayat", Gender.MALE, true, false)
                   .build();

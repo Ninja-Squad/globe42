@@ -8,7 +8,7 @@ import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.HealthcareCover;
+import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Person;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class PersonDaoTest extends BaseDaoTest {
                 .withDefaultValue("fiscal_status", FiscalStatus.UNKNOWN)
                 .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
                 .withDefaultValue("housing", Housing.UNKNOWN)
-                .withDefaultValue("healthcare_cover", HealthcareCover.UNKNOWN)
+                .withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
                 .columns("id", "first_name", "last_name", "mediation_enabled", "gender", "adherent")
                 .values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false)
                 .build();
