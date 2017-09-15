@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../task.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskCommand } from '../models/task.command';
-import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { PersonIdentityModel } from '../models/person.model';
 import { FullnamePipe } from '../fullname.pipe';
 import { Observable } from 'rxjs/Observable';
@@ -10,7 +10,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
-import { sortBy } from '../utils';
+import { isoToDate, sortBy, dateToIso } from '../utils';
 import { TaskModel } from '../models/task.model';
 
 interface TaskFormModel {
@@ -55,7 +55,6 @@ export class TaskEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private router: Router,
-              private parserFormatter: NgbDateParserFormatter,
               private fullnamePipe: FullnamePipe,
               private userService: UserService) { }
 
@@ -72,7 +71,7 @@ export class TaskEditComponent implements OnInit {
     if (this.editedTask) {
       this.task.title = this.editedTask.title;
       this.task.description = this.editedTask.description;
-      this.task.dueDate = this.editedTask.dueDate ? this.parserFormatter.parse(this.editedTask.dueDate) : null;
+      this.task.dueDate = isoToDate(this.editedTask.dueDate);
       this.task.concernedPerson =
         this.editedTask.concernedPerson ? this.findWithId(this.persons, this.editedTask.concernedPerson.id) : null;
       this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
@@ -87,7 +86,7 @@ export class TaskEditComponent implements OnInit {
     const command: TaskCommand = {
       title: this.task.title,
       description: this.task.description,
-      dueDate: this.task.dueDate ? this.parserFormatter.format(this.task.dueDate) : null,
+      dueDate: dateToIso(this.task.dueDate),
       concernedPersonId: this.task.concernedPerson ? this.task.concernedPerson.id : null,
       assigneeId: this.task.assignee ? this.task.assignee.id : null
     };

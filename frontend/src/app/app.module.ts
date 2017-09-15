@@ -3,7 +3,7 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgbDatepickerI18n, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbDatepickerI18n, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { routes } from './app.routes';
 import { AppComponent } from './app.component';
@@ -70,6 +70,7 @@ import { TaskResolverService } from './task-resolver.service';
 import { NoteComponent } from './note/note.component';
 import { PersonNoteService } from './person-note.service';
 import { PersonNotesComponent } from './person-notes/person-notes.component';
+import { FrenchDateParserFormatterService } from './french-date-parser-formatter.service';
 
 @NgModule({
   declarations: [
@@ -131,6 +132,7 @@ import { PersonNotesComponent } from './person-notes/person-notes.component';
     PersonResolverService,
     PersonsResolverService,
     { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
+    { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
     AuthenticatedGuard,
     IncomeTypesResolverService,
     IncomeSourceTypeService,

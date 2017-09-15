@@ -4,6 +4,9 @@
  *
  * Usages of this method could be replaced by Lodash's sortBy method
  */
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { padNumber, toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+
 export function sortBy<T>(array: Array<T>, extractor: (T) => any): Array<T> {
   const result = array.slice();
   result.sort((e1, e2) => {
@@ -42,4 +45,24 @@ export function interpolate(template: string, parameters: {[key: string]: any}):
     while (result.indexOf(searchValue) >= 0);
   });
   return result;
+}
+
+/**
+ * Takes an NgbDateStruct and transforms it to an ISO date string (yyyy-MM-dd). If the given date is falsy,
+ * returns null.
+ */
+export function dateToIso(date: NgbDateStruct): string {
+  return date ? `${date.year}-${padNumber(date.month)}-${padNumber(date.day)}` : null;
+}
+
+/**
+ * Takes an ISO date string (yyyy-MM-dd) and transforms it into an NgbDateStruct. If the given value is falsy,
+ * returns null.
+ */
+export function isoToDate(value: string): NgbDateStruct {
+  if (value) {
+    const dateParts = value.trim().split('-');
+    return {year: toInteger(dateParts[0]), month: toInteger(dateParts[1]), day: toInteger(dateParts[2])};
+  }
+  return null;
 }

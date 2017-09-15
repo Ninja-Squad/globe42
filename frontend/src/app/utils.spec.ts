@@ -1,4 +1,4 @@
-import { sortBy, interpolate } from './utils';
+import { sortBy, interpolate, dateToIso, isoToDate } from './utils';
 
 describe('utils', () => {
   it('should sort by', () => {
@@ -20,5 +20,17 @@ describe('utils', () => {
     expect(interpolate(template, { w: 'world', score: 9, total: 10 })).toBe(
       'Hello world, the world is 9/10 today'
     );
+  });
+
+  it('should transform an NgbDateStruct to an ISO string', () => {
+    expect(dateToIso(null)).toBeNull();
+    expect(dateToIso({year: 2012, month: 11, day: 23})).toBe('2012-11-23');
+    expect(dateToIso({year: 2012, month: 5, day: 2})).toBe('2012-05-02');
+  });
+
+  it('should transform an ISO string to an NgbDateStruct', () => {
+    expect(isoToDate(null)).toBeNull();
+    expect(isoToDate('2012-11-23')).toEqual({year: 2012, month: 11, day: 23});
+    expect(isoToDate('2012-05-02')).toEqual({year: 2012, month: 5, day: 2});
   });
 });

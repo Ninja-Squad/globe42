@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DisplayGenderPipe } from '../display-gender.pipe';
 import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
@@ -22,6 +22,7 @@ import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe, HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
 import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
 import { By } from '@angular/platform-browser';
+import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -41,7 +42,12 @@ describe('PersonEditComponent', () => {
       DisplayHealthCareCoveragePipe,
       FamilySituationEditComponent
     ],
-    providers: [PersonService, DisplayCityPipe, SearchCityService]
+    providers: [
+      PersonService,
+      DisplayCityPipe,
+      SearchCityService,
+      { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService }
+    ]
   })
   class TestModule {
   }
@@ -113,7 +119,7 @@ describe('PersonEditComponent', () => {
       const gender = nativeElement.querySelector('#genderMALE');
       expect(gender.checked).toBe(true);
       const birthDate = nativeElement.querySelector('#birthDate');
-      expect(birthDate.value).toBe(person.birthDate);
+      expect(birthDate.value).toBe('01/01/1980');
       const mediationCode = nativeElement.querySelector('#mediationCode');
       expect(mediationCode.textContent).toContain('Généré automatiquement');
       const address = nativeElement.querySelector('#address');
@@ -131,7 +137,7 @@ describe('PersonEditComponent', () => {
       const adherentNo = nativeElement.querySelector('#adherentfalse');
       expect(adherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
-      expect(entryDate.value).toBe(person.entryDate);
+      expect(entryDate.value).toBe('01/12/2016');
       const housing: HTMLSelectElement = nativeElement.querySelector('#housing');
       expect(housing.options[housing.selectedIndex].value).toBe(person.housing);
       const housingSpace = nativeElement.querySelector('#housingSpace');
@@ -143,7 +149,7 @@ describe('PersonEditComponent', () => {
       const fiscalStatusTaxable = nativeElement.querySelector('#fiscalStatusTAXABLE');
       expect(fiscalStatusTaxable.checked).toBe(true);
       const fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
-      expect(fiscalStatusDate.value).toBe(person.fiscalStatusDate);
+      expect(fiscalStatusDate.value).toBe('01/02/2017');
       const fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
       expect(fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
       const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
@@ -346,7 +352,7 @@ describe('PersonEditComponent', () => {
       nickName.dispatchEvent(new Event('input'));
       genderFemale.checked = true;
       genderFemale.dispatchEvent(new Event('change'));
-      birthDate.value = '1985-03-03';
+      birthDate.value = '03/03/1985';
       birthDate.dispatchEvent(new Event('change'));
       address.value = 'Avenue Liberté';
       address.dispatchEvent(new Event('input'));
@@ -372,7 +378,7 @@ describe('PersonEditComponent', () => {
       maritalStatus.dispatchEvent(new Event('change'));
       adherentYes.checked = true;
       adherentYes.dispatchEvent(new Event('change'));
-      entryDate.value = '2015-02-02';
+      entryDate.value = '02/02/2015';
       entryDate.dispatchEvent(new Event('change'));
 
       housing.selectedIndex = 1;
@@ -391,7 +397,7 @@ describe('PersonEditComponent', () => {
 
       fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
       expect(fiscalStatusDate).toBeTruthy();
-      fiscalStatusDate.value = '2015-01-01';
+      fiscalStatusDate.value = '01/01/2015';
       fiscalStatusDate.dispatchEvent(new Event('change'));
       fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
       expect(fiscalStatusUpToDate).toBeTruthy();
@@ -401,7 +407,7 @@ describe('PersonEditComponent', () => {
       nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
       fixture.detectChanges();
       tick();
-      expect(entryDate.value).toBe('2015-02-02');
+      expect(entryDate.value).toBe('02/02/2015');
 
       expect(personService.create).toHaveBeenCalled();
 

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/filter';
@@ -21,6 +20,7 @@ import { PersonCommand } from '../models/person.command';
 import { HOUSING_TRANSLATIONS } from '../display-housing.pipe';
 import { FISCAL_STATUS_TRANSLATIONS } from '../display-fiscal-status.pipe';
 import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
+import { isoToDate, dateToIso } from '../utils';
 
 @Component({
   selector: 'gl-person-edit',
@@ -68,8 +68,7 @@ export class PersonEditComponent implements OnInit {
               private displayCityPipe: DisplayCityPipe,
               private route: ActivatedRoute,
               private router: Router,
-              private fb: FormBuilder,
-              private parserFormatter: NgbDateParserFormatter) { }
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.editedPerson = this.route.snapshot.data['person'];
@@ -105,8 +104,8 @@ export class PersonEditComponent implements OnInit {
       }
 
       this.personForm.patchValue(this.editedPerson);
-      ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(name =>
-        this.personForm.get(name).setValue(this.parserFormatter.parse(this.editedPerson[name])));
+      ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(property =>
+        this.personForm.get(property).setValue(isoToDate(this.editedPerson[property])));
     }
   }
 
@@ -128,8 +127,8 @@ export class PersonEditComponent implements OnInit {
 
   save() {
     const command: PersonCommand = this.personForm.value;
-    ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(name =>
-      command[name] = this.parserFormatter.format(this.personForm.value[name]));
+    ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(property =>
+      command[property] = dateToIso(this.personForm.value[property]));
 
     let action;
     if (this.editedPerson && this.editedPerson.id !== undefined) {
