@@ -41,7 +41,7 @@ describe('PersonLayoutComponent', () => {
 
     const nativeElement = fixture.nativeElement;
     const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(4);
+    expect(links.length).toBe(5);
 
     const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
     expect(outlet).toBeTruthy();
@@ -54,6 +54,6 @@ describe('PersonLayoutComponent', () => {
 
     const nativeElement = fixture.nativeElement;
     const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(2);
+    expect(links.length).toBe(3);
   });
 });

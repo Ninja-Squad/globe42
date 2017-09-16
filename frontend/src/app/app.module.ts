@@ -71,6 +71,9 @@ import { NoteComponent } from './note/note.component';
 import { PersonNoteService } from './person-note.service';
 import { PersonNotesComponent } from './person-notes/person-notes.component';
 import { FrenchDateParserFormatterService } from './french-date-parser-formatter.service';
+import { PersonFilesComponent } from './person-files/person-files.component';
+import { PersonFileService } from './person-file.service';
+import { FileSizePipe } from './file-size.pipe';
 
 @NgModule({
   declarations: [
@@ -111,7 +114,9 @@ import { FrenchDateParserFormatterService } from './french-date-parser-formatter
     TasksPageComponent,
     TaskEditComponent,
     NoteComponent,
-    PersonNotesComponent
+    PersonNotesComponent,
+    PersonFilesComponent,
+    FileSizePipe
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -166,7 +171,8 @@ import { FrenchDateParserFormatterService } from './french-date-parser-formatter
     TaskService,
     TaskResolverService,
     NowService,
-    PersonNoteService
+    PersonNoteService,
+    PersonFileService
   ],
   bootstrap: [AppComponent]
 })

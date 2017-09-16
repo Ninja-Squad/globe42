@@ -1,5 +1,7 @@
 package org.globe42.web.security;
 
+import java.util.Arrays;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,16 +38,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     }
 
     private Long extractUserIdFromToken(HttpServletRequest request) {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header == null) {
+        String token = extractToken(request);
+        if (token == null) {
             return null;
         }
-
-        if (!header.startsWith(BEARER_PREFIX)) {
-            return null;
-        }
-
-        String token = header.substring(BEARER_PREFIX.length()).trim();
 
         try {
             Claims claims = jwtHelper.extractClaims(token);
@@ -53,6 +49,26 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
         catch (Exception e) {
             throw new UnauthorizedException();
+        }
+    }
+
+    private String extractToken(HttpServletRequest request) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header != null) {
+            if (!header.startsWith(BEARER_PREFIX)) {
+                return null;
+            }
+            return header.substring(BEARER_PREFIX.length()).trim();
+        }
+        else if (request.getCookies() != null) {
+            return Arrays.stream(request.getCookies())
+                         .filter(cookie -> cookie.getName().equals("globe42_token"))
+                         .map(Cookie::getValue)
+                         .findAny()
+                         .orElse(null);
+        }
+        else {
+            return null;
         }
     }
 }

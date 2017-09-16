@@ -3,6 +3,8 @@ package org.globe42.web.security;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import javax.servlet.http.Cookie;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.impl.DefaultClaims;
@@ -31,7 +33,7 @@ public class AuthenticationInterceptorTest extends BaseTest {
     private AuthenticationInterceptor interceptor;
 
     @Test(expected = UnauthorizedException.class)
-    public void shouldThrowIfNoHeader() {
+    public void shouldThrowIfNoHeaderAndNoCookie() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         interceptor.preHandle(request, null, null);
     }
@@ -66,9 +68,23 @@ public class AuthenticationInterceptorTest extends BaseTest {
     }
 
     @Test
-    public void shouldSetCurrentUserIfValidToken() {
+    public void shouldSetCurrentUserIfValidTokenInHeader() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello");
+
+        Claims claims = new DefaultClaims();
+        claims.setSubject("1234");
+        when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
+
+        interceptor.preHandle(request, null, null);
+
+        assertThat(currentUser.getUserId()).isEqualTo(1234L);
+    }
+
+    @Test
+    public void shouldSetCurrentUserIfValidTokenInCookie() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setCookies(new Cookie("globe42_token", "hello"));
 
         Claims claims = new DefaultClaims();
         claims.setSubject("1234");

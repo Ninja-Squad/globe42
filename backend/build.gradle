@@ -46,16 +46,20 @@ bootJar {
 bootRun {
     args '--spring.profiles.active=demo'
     args '--globe42.secretKey=QMwbcwa19VV02Oy5T7LSWyV+/wZrOsRRfhCR6TkapsY='
+    args '--globe42.googleCloudStorageCredentialsPath=' + rootProject.file('secrets/google-cloud-storage-dev.json')
 }
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'io.jsonwebtoken:jjwt:0.7.0'
+    compile 'com.google.cloud:google-cloud-storage:1.5.1'
+
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
+
     runtime 'org.postgresql:postgresql:9.4.1212'
     runtime 'org.flywaydb:flyway-core'
-    compile 'io.jsonwebtoken:jjwt:0.7.0'
 }
 
 // remove default tasks added by flyway plugin

@@ -28,6 +28,7 @@ export class UserService {
 
   storeLoggedInUser(user: UserModel) {
     window.localStorage.setItem('rememberMe', JSON.stringify(user));
+    document.cookie = `globe42_token=${user.token};path=/`;
     this.userEvents.next(user);
   }
 
@@ -42,6 +43,7 @@ export class UserService {
   logout() {
     this.userEvents.next(null);
     window.localStorage.removeItem('rememberMe');
+    document.cookie = `globe42_token=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   }
 
   isLoggedIn(): boolean {

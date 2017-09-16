@@ -1,24 +1,25 @@
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { padNumber, toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+
 /**
  * Creates a sorted copy of an array, by extracting a value from each element using the given extractor,
  * and comparing the values.
  *
  * Usages of this method could be replaced by Lodash's sortBy method
  */
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { padNumber, toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
-
-export function sortBy<T>(array: Array<T>, extractor: (T) => any): Array<T> {
+export function sortBy<T>(array: Array<T>, extractor: (T) => any, reverse = false): Array<T> {
   const result = array.slice();
   result.sort((e1, e2) => {
     const v1 = extractor(e1);
     const v2 = extractor(e2);
+    let r = 0;
     if (v1 < v2) {
-      return -1;
+      r = -1;
     }
     if (v1 > v2) {
-      return 1;
+      r = 1;
     }
-    return 0;
+    return reverse ? - r : r;
   });
   return result;
 }
