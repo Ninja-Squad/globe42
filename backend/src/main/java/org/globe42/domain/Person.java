@@ -173,6 +173,12 @@ public class Person {
     private Set<Income> incomes = new HashSet<>();
 
     /**
+     * The charges of the person. Only requested to mediation-enabled persons
+     */
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Charge> charges = new HashSet<>();
+
+    /**
      * The Health Care Coverage. Only requested to mediation-enabled persons, and unknown by default (so, technically
      * mandatory, but can be left as unknown)
      */
@@ -385,6 +391,20 @@ public class Person {
 
     public Set<Income> getIncomes() {
         return Collections.unmodifiableSet(incomes);
+    }
+
+    public void addCharge(Charge charge) {
+        charge.setPerson(this);
+        this.charges.add(charge);
+    }
+
+    public void removeCharge(Charge charge) {
+        charge.setPerson(null);
+        this.charges.remove(charge);
+    }
+
+    public Set<Charge> getCharges() {
+        return Collections.unmodifiableSet(charges);
     }
 
     public HealthCareCoverage getHealthCareCoverage() {
