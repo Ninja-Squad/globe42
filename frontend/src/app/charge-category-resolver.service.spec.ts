@@ -14,10 +14,10 @@ describe('ChargeCategoryResolverService', () => {
   }));
 
   it('should retrieve a type', () => {
-    const incomeSourceTypeService = TestBed.get(ChargeCategoryService);
+    const chargeCategoryService = TestBed.get(ChargeCategoryService);
     const expectedResult: Observable<ChargeCategoryModel> = Observable.of({ id: 42, name: 'rental' });
 
-    spyOn(incomeSourceTypeService, 'get').and.returnValue(expectedResult);
+    spyOn(chargeCategoryService, 'get').and.returnValue(expectedResult);
 
     const resolver = TestBed.get(ChargeCategoryResolverService);
     const params = { id: '42' } as Params;
@@ -27,6 +27,6 @@ describe('ChargeCategoryResolverService', () => {
     const result = resolver.resolve(routeSnapshot);
 
     expect(result).toBe(expectedResult);
-    expect(incomeSourceTypeService.get).toHaveBeenCalledWith(42);
+    expect(chargeCategoryService.get).toHaveBeenCalledWith(42);
   });
 });

@@ -1,0 +1,35 @@
+<h1>
+  <ng-container *ngIf="editedChargeType">Modification du type de charge {{ editedChargeType.name }}</ng-container>
+  <ng-container *ngIf="!editedChargeType">Nouveau type de charge</ng-container>
+</h1>
+
+<form (ngSubmit)="save()" #chargeTypeForm="ngForm">
+  <div class="form-group row">
+    <label for="name" class="col-sm-3 col-form-label">Nom</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="name" name="name" [(ngModel)]="chargeType.name" required />
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="category" class="col-sm-3 col-form-label">Type</label>
+    <div class="col-sm-9">
+      <select class="form-control" id="category" name="category" [(ngModel)]="chargeType.categoryId" required>
+        <option value=""></option>
+        <option *ngFor="let category of chargeCategories" [ngValue]="category.id">{{ category.name }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="maxMonthlyAmount" class="col-sm-3 col-form-label">Montant mensuel maximum</label>
+    <div class="col-sm-9">
+      <input type="number" class="form-control" id="maxMonthlyAmount" name="maxMonthlyAmount"
+             [(ngModel)]="chargeType.maxMonthlyAmount" min="1" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-9 offset-sm-3">
+      <button class="btn btn-primary" [disabled]="!chargeTypeForm.valid" id="save">Enregistrer</button>
+      <a class="btn btn-secondary" routerLink="/charge-types">Annuler</a>
+    </div>
+  </div>
+</form>

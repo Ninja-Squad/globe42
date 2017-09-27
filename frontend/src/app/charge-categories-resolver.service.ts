@@ -12,6 +12,4 @@ export class ChargeCategoriesResolverService implements Resolve<Array<ChargeCate
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Array<ChargeCategoryModel>> {
     return this.chargeCategoryService.list();
   }
-
-
 }

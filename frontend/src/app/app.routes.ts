@@ -38,6 +38,10 @@ import { ChargeCategoriesComponent } from './charge-categories/charge-categories
 import { ChargeCategoryResolverService } from './charge-category-resolver.service';
 import { ChargeCategoriesResolverService } from './charge-categories-resolver.service';
 import { ChargeCategoryEditComponent } from './charge-category-edit/charge-category-edit.component';
+import { ChargeTypesComponent } from './charge-types/charge-types.component';
+import { ChargeTypesResolverService } from './charge-types-resolver.service';
+import { ChargeTypeEditComponent } from './charge-type-edit/charge-type-edit.component';
+import { ChargeTypeResolverService } from './charge-type-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -163,6 +167,33 @@ export const routes: Routes = [
             component: ChargeCategoryEditComponent,
             resolve: {
               chargeCategory: ChargeCategoryResolverService
+            }
+          }
+        ]
+      },
+      {
+        path: 'charge-types',
+        children: [
+          {
+            path: '',
+            component: ChargeTypesComponent,
+            resolve: {
+              chargeTypes: ChargeTypesResolverService
+            }
+          },
+          {
+            path: 'create',
+            component: ChargeTypeEditComponent,
+            resolve: {
+              chargeCategories: ChargeCategoriesResolverService
+            }
+          },
+          {
+            path: ':id/edit',
+            component: ChargeTypeEditComponent,
+            resolve: {
+              chargeType: ChargeTypeResolverService,
+              chargeCategories: ChargeCategoriesResolverService
             }
           }
         ]

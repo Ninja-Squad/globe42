@@ -79,6 +79,11 @@ import { ChargeCategoryService } from './charge-category.service';
 import { ChargeCategoryResolverService } from './charge-category-resolver.service';
 import { ChargeCategoriesResolverService } from './charge-categories-resolver.service';
 import { ChargeCategoryEditComponent } from './charge-category-edit/charge-category-edit.component';
+import { ChargeTypesComponent } from './charge-types/charge-types.component';
+import { ChargeTypeService } from './charge-type.service';
+import { ChargeTypesResolverService } from './charge-types-resolver.service';
+import { ChargeTypeEditComponent } from './charge-type-edit/charge-type-edit.component';
+import { ChargeTypeResolverService } from './charge-type-resolver.service';
 
 @NgModule({
   declarations: [
@@ -124,7 +129,9 @@ import { ChargeCategoryEditComponent } from './charge-category-edit/charge-categ
     FileSizePipe,
     PersonNotesComponent,
     ChargeCategoriesComponent,
-    ChargeCategoryEditComponent
+    ChargeCategoryEditComponent,
+    ChargeTypesComponent,
+    ChargeTypeEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -156,6 +163,9 @@ import { ChargeCategoryEditComponent } from './charge-category-edit/charge-categ
     ChargeCategoryService,
     ChargeCategoryResolverService,
     ChargeCategoriesResolverService,
+    ChargeTypeService,
+    ChargeTypesResolverService,
+    ChargeTypeResolverService,
     UsersResolverService,
     IncomeService,
     IncomesResolverService,
