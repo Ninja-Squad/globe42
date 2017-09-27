@@ -24,7 +24,7 @@ import { IncomeSourceEditComponent } from './income-source-edit/income-source-ed
 import { IncomeSourceResolverService } from './income-source-resolver.service';
 import { IncomesResolverService } from './incomes-resolver.service';
 import { PersonLayoutComponent } from './person-layout/person-layout.component';
-import { PersonIncomesComponent } from './person-incomes/person-incomes.component';
+import { PersonResourcesComponent } from './person-resources/person-resources.component';
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
 import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
@@ -42,6 +42,8 @@ import { ChargeTypesComponent } from './charge-types/charge-types.component';
 import { ChargeTypesResolverService } from './charge-types-resolver.service';
 import { ChargeTypeEditComponent } from './charge-type-edit/charge-type-edit.component';
 import { ChargeTypeResolverService } from './charge-type-resolver.service';
+import { ChargesResolverService } from './charges-resolver.service';
+import { PersonChargeEditComponent } from './person-charge-edit/person-charge-edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -68,10 +70,11 @@ export const routes: Routes = [
               { path: '', pathMatch: 'full', redirectTo: 'info' },
               { path: 'info', component: PersonComponent },
               {
-                path: 'incomes',
-                component: PersonIncomesComponent,
+                path: 'resources',
+                component: PersonResourcesComponent,
                 resolve: {
-                  incomes: IncomesResolverService
+                  incomes: IncomesResolverService,
+                  charges: ChargesResolverService,
                 }
               },
               { path: 'family', component: PersonFamilySituationComponent },
@@ -100,6 +103,14 @@ export const routes: Routes = [
             resolve: {
               person: PersonResolverService,
               incomeSources: IncomeSourcesResolverService
+            }
+          },
+          {
+            path: ':id/charges/create',
+            component: PersonChargeEditComponent,
+            resolve: {
+              person: PersonResolverService,
+              chargeTypes: ChargeTypesResolverService
             }
           }
         ]

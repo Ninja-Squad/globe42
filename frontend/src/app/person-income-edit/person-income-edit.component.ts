@@ -40,6 +40,6 @@ export class PersonIncomeEditComponent implements OnInit {
       monthlyAmount: this.income.monthlyAmount
     };
     this.incomeService.create(this.person.id, command)
-      .subscribe(() => this.router.navigate(['persons', this.person.id, 'incomes']));
+      .subscribe(() => this.router.navigate(['persons', this.person.id, 'resources']));
   }
 }

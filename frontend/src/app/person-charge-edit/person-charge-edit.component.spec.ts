@@ -1,19 +1,18 @@
-import { async, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PersonIncomeEditComponent } from './person-income-edit.component';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IncomeService } from '../income.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import { NgModule } from '@angular/core';
+import { PersonChargeEditComponent } from './person-charge-edit.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { FullnamePipe } from '../fullname.pipe';
+import { NgModule } from '@angular/core';
+import { ChargeService } from '../charge.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
-describe('PersonIncomeEditComponent', () => {
-  const incomeSources = [
+describe('PersonChargeEditComponent', () => {
+  const chargeTypes = [
     { id: 1, name: 'B' },
     { id: 2, name: 'A' }
   ];
@@ -22,14 +21,14 @@ describe('PersonIncomeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe],
-    providers: [IncomeService]
+    declarations: [PersonChargeEditComponent, FullnamePipe],
+    providers: [ChargeService]
   })
   class TestModule {}
 
   describe('in creation mode', () => {
     const activatedRoute = {
-      snapshot: { data: { person, incomeSources } }
+      snapshot: { data: { person, chargeTypes } }
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
@@ -38,30 +37,30 @@ describe('PersonIncomeEditComponent', () => {
     })));
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(PersonIncomeEditComponent);
+      const fixture = TestBed.createComponent(PersonChargeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Créer un nouveau revenu pour Jean-Baptiste Nizet (JB)');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Créer une nouvelle charge pour Jean-Baptiste Nizet (JB)');
     });
 
-    it('should expose sorted income sources', () => {
-      const fixture = TestBed.createComponent(PersonIncomeEditComponent);
-      fixture.detectChanges();
-
-      const component = fixture.componentInstance;
-      expect(component.incomeSources.map(t => t.name)).toEqual(['A', 'B']);
-    });
-
-    it('should expose a default income', () => {
-      const fixture = TestBed.createComponent(PersonIncomeEditComponent);
+    it('should expose sorted charge types', () => {
+      const fixture = TestBed.createComponent(PersonChargeEditComponent);
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
-      expect(component.income).toEqual({ source: null, monthlyAmount: null });
+      expect(component.chargeTypes.map(t => t.name)).toEqual(['A', 'B']);
     });
 
-    it('should display the income in a form, and have the save button disabled', () => {
-      const fixture = TestBed.createComponent(PersonIncomeEditComponent);
+    it('should expose a default charge', () => {
+      const fixture = TestBed.createComponent(PersonChargeEditComponent);
+      fixture.detectChanges();
+
+      const component = fixture.componentInstance;
+      expect(component.charge).toEqual({ type: null, monthlyAmount: null });
+    });
+
+    it('should display the charge in a form, and have the save button disabled', () => {
+      const fixture = TestBed.createComponent(PersonChargeEditComponent);
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
@@ -69,9 +68,9 @@ describe('PersonIncomeEditComponent', () => {
 
         const nativeElement = fixture.nativeElement;
 
-        const source: HTMLSelectElement = nativeElement.querySelector('#source');
+        const source: HTMLSelectElement = nativeElement.querySelector('#type');
         expect(source.selectedIndex).toBe(-1);
-        expect(source.options.length).toBe(incomeSources.length + 1);
+        expect(source.options.length).toBe(chargeTypes.length + 1);
 
 
         const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
@@ -82,8 +81,8 @@ describe('PersonIncomeEditComponent', () => {
       });
     });
 
-    it('should save the income and navigate to the income list', () => {
-      const incomeService = TestBed.get(IncomeService);
+    it('should save the charge and navigate to the resource list', () => {
+      const incomeService = TestBed.get(ChargeService);
       const router = TestBed.get(Router);
 
       spyOn(incomeService, 'create').and.returnValue(Observable.of({
@@ -91,7 +90,7 @@ describe('PersonIncomeEditComponent', () => {
       }));
       spyOn(router, 'navigate');
 
-      const fixture = TestBed.createComponent(PersonIncomeEditComponent);
+      const fixture = TestBed.createComponent(PersonChargeEditComponent);
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
@@ -99,9 +98,9 @@ describe('PersonIncomeEditComponent', () => {
 
         const nativeElement = fixture.nativeElement;
 
-        const source: HTMLSelectElement = nativeElement.querySelector('#source');
-        source.selectedIndex = 1;
-        source.dispatchEvent(new Event('change'));
+        const type: HTMLSelectElement = nativeElement.querySelector('#type');
+        type.selectedIndex = 1;
+        type.dispatchEvent(new Event('change'));
 
         const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
         monthlyAmount.value = '123';
@@ -114,7 +113,7 @@ describe('PersonIncomeEditComponent', () => {
 
         save.click();
 
-        expect(incomeService.create).toHaveBeenCalledWith(42, { sourceId: 2, monthlyAmount: 123 });
+        expect(incomeService.create).toHaveBeenCalledWith(42, { typeId: 2, monthlyAmount: 123 });
 
         fixture.detectChanges();
 

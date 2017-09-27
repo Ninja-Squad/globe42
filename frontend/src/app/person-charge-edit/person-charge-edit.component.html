@@ -1,0 +1,26 @@
+<h1 id="fullName">Créer une nouvelle charge pour {{ person | fullname }}</h1>
+
+<form (ngSubmit)="save()" #chargeForm="ngForm">
+  <div class="form-group row">
+    <label for="type" class="col-sm-3 col-form-label">Type de charge</label>
+    <div class="col-sm-9">
+      <select class="form-control" id="type" name="type" [(ngModel)]="charge.type" required>
+        <option value=""></option>
+        <option *ngFor="let type of chargeTypes" [ngValue]="type">{{ type.name }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="monthlyAmount" class="col-sm-3 col-form-label">Montant mensuel</label>
+    <div class="col-sm-9">
+      <input type="number" class="form-control" id="monthlyAmount" name="monthlyAmount" min="1" [max]="charge.type?.maxMonthlyAmount"
+             [(ngModel)]="charge.monthlyAmount"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-9 offset-sm-3">
+      <button class="btn btn-primary" [disabled]="!chargeForm.valid" id="save">Enregistrer</button>
+      <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'resources']">Annuler</a>
+    </div>
+  </div>
+</form>

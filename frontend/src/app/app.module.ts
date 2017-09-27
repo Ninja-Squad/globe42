@@ -44,7 +44,7 @@ import { IncomeSourceTypeService } from './income-source-type.service';
 import { IncomesResolverService } from './incomes-resolver.service';
 import { PersonLayoutComponent } from './person-layout/person-layout.component';
 import { IncomeService } from './income.service';
-import { PersonIncomesComponent } from './person-incomes/person-incomes.component';
+import { PersonResourcesComponent } from './person-resources/person-resources.component';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 import { ConfirmService } from './confirm.service';
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
@@ -55,7 +55,7 @@ import { DisplayFiscalStatusPipe } from './display-fiscal-status.pipe';
 import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 import { FamilySituationComponent } from './family-situation/family-situation.component';
 import { DisplayHousingPipe } from './display-housing.pipe';
-import { DisplayHealthCareCoveragePipe } from './display-health-care-coverage.pipe'
+import { DisplayHealthCareCoveragePipe } from './display-health-care-coverage.pipe';
 import { FamilySituationEditComponent } from './family-situation-edit/family-situation-edit.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 import { TasksComponent } from './tasks/tasks.component';
@@ -84,6 +84,9 @@ import { ChargeTypeService } from './charge-type.service';
 import { ChargeTypesResolverService } from './charge-types-resolver.service';
 import { ChargeTypeEditComponent } from './charge-type-edit/charge-type-edit.component';
 import { ChargeTypeResolverService } from './charge-type-resolver.service';
+import { ChargeService } from './charge.service';
+import { ChargesResolverService } from './charges-resolver.service';
+import { PersonChargeEditComponent } from './person-charge-edit/person-charge-edit.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +109,7 @@ import { ChargeTypeResolverService } from './charge-type-resolver.service';
     DisplayMaritalStatusPipe,
     IncomeSourcesComponent,
     IncomeSourceEditComponent,
-    PersonIncomesComponent,
+    PersonResourcesComponent,
     PersonLayoutComponent,
     ConfirmModalContentComponent,
     PersonIncomeEditComponent,
@@ -131,7 +134,8 @@ import { ChargeTypeResolverService } from './charge-type-resolver.service';
     ChargeCategoriesComponent,
     ChargeCategoryEditComponent,
     ChargeTypesComponent,
-    ChargeTypeEditComponent
+    ChargeTypeEditComponent,
+    PersonChargeEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -169,6 +173,8 @@ import { ChargeTypeResolverService } from './charge-type-resolver.service';
     UsersResolverService,
     IncomeService,
     IncomesResolverService,
+    ChargeService,
+    ChargesResolverService,
     UserResolverService,
     JwtInterceptorService,
     ErrorService,

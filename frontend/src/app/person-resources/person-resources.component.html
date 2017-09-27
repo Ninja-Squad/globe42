@@ -1,0 +1,75 @@
+<h2>Revenus</h2>
+
+<div *ngIf="incomes.length == 0" class="text-center" id="no-income">
+  <span style="font-size: 60px;" class="fa fa-info-circle text-info"></span>
+  <br/>
+  <span class="lead">Aucun revenu&nbsp;!</span>
+</div>
+
+<div class="row align-items-center mb-2 income-item" *ngFor="let income of incomes">
+  <div class="col-sm">
+    {{ income.source.name }}
+  </div>
+  <div class="col-sm text-right">
+    {{ income.monthlyAmount | currency:'EUR':true }} / mois
+  </div>
+  <div class="col-sm text-right">
+    <button class="btn btn-danger btn-sm delete-income-button" (click)="deleteIncome(income)">
+      <span class="fa fa-trash"></span>
+      Supprimer
+    </button>
+  </div>
+</div>
+
+<div *ngIf="incomes.length" class="row align-items-center mb-2" id="total-income">
+  <div class="col-sm"><strong>Total des revenus</strong></div>
+  <div class="col-sm text-right"><strong>{{ totalMonthlyIncomeAmount() | currency:'EUR':true }} / mois</strong></div>
+  <div class="col-sm"></div>
+</div>
+
+<h2 class="mt-5">Charges</h2>
+
+<div *ngIf="charges.length == 0" class="text-center" id="no-charge">
+  <span style="font-size: 60px;" class="fa fa-info-circle text-info"></span>
+  <br/>
+  <span class="lead">Aucune charge&nbsp;!</span>
+</div>
+
+<div class="row align-items-center mb-2 charge-item" *ngFor="let charge of charges">
+  <div class="col-sm">
+    {{ charge.type.name }}
+  </div>
+  <div class="col-sm text-right">
+    {{ charge.monthlyAmount | currency:'EUR':true }} / mois
+  </div>
+  <div class="col-sm text-right">
+    <button class="btn btn-danger btn-sm delete-charge-button" (click)="deleteCharge(charge)">
+      <span class="fa fa-trash"></span>
+      Supprimer
+    </button>
+  </div>
+</div>
+
+<div *ngIf="charges.length" class="row align-items-center mb-2" id="total-charge">
+  <div class="col-sm"><strong>Total des charges</strong></div>
+  <div class="col-sm text-right"><strong>{{ totalMonthlyChargeAmount() | currency:'EUR':true }} / mois</strong></div>
+  <div class="col-sm"></div>
+</div>
+
+<hr/>
+
+<div *ngIf="charges.length || incomes.length" class="row align-items-center mb-5" id="total">
+  <div class="col-sm"><strong>Reste à vivre</strong></div>
+  <div class="col-sm text-right"><strong>{{ totalMonthlyAmount() | currency:'EUR':true }} / mois</strong></div>
+  <div class="col-sm"></div>
+</div>
+
+<a [routerLink]="['/persons', person.id , 'incomes', 'create']" class="btn btn-outline-primary">
+  <span class="fa fa-plus"></span>
+  Ajouter un revenu
+</a>
+
+<a [routerLink]="['/persons', person.id , 'charges', 'create']" class="btn btn-outline-primary">
+  <span class="fa fa-plus"></span>
+  Ajouter une charge
+</a>
