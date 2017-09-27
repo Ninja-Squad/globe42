@@ -74,6 +74,11 @@ import { FrenchDateParserFormatterService } from './french-date-parser-formatter
 import { PersonFilesComponent } from './person-files/person-files.component';
 import { PersonFileService } from './person-file.service';
 import { FileSizePipe } from './file-size.pipe';
+import { ChargeCategoriesComponent } from './charge-categories/charge-categories.component';
+import { ChargeCategoryService } from './charge-category.service';
+import { ChargeCategoryResolverService } from './charge-category-resolver.service';
+import { ChargeCategoriesResolverService } from './charge-categories-resolver.service';
+import { ChargeCategoryEditComponent } from './charge-category-edit/charge-category-edit.component';
 
 @NgModule({
   declarations: [
@@ -116,7 +121,10 @@ import { FileSizePipe } from './file-size.pipe';
     NoteComponent,
     PersonNotesComponent,
     PersonFilesComponent,
-    FileSizePipe
+    FileSizePipe,
+    PersonNotesComponent,
+    ChargeCategoriesComponent,
+    ChargeCategoryEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -145,6 +153,9 @@ import { FileSizePipe } from './file-size.pipe';
     IncomeTypeResolverService,
     IncomeSourcesResolverService,
     IncomeSourceResolverService,
+    ChargeCategoryService,
+    ChargeCategoryResolverService,
+    ChargeCategoriesResolverService,
     UsersResolverService,
     IncomeService,
     IncomesResolverService,

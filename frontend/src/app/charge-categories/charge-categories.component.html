@@ -1,0 +1,16 @@
+<h1>Catégories de charge</h1>
+
+<div class="row mb-2 align-items-center charge-category-item" *ngFor="let chargeCategory of chargeCategories">
+  <div class="col-sm"><a [routerLink]="['/charge-categories', chargeCategory.id, 'edit']">{{ chargeCategory.name }}</a></div>
+  <div class="col-sm text-right">
+    <a class="btn btn-secondary btn-sm" [routerLink]="['/charge-categories', chargeCategory.id, 'edit']">
+      <span class="fa fa-edit"></span>
+      Éditer
+    </a>
+  </div>
+</div>
+
+<a class="btn btn-outline-primary" routerLink="/charge-categories/create">
+  <span class="fa fa-plus"></span>
+  Nouvelle catégorie de charge
+</a>

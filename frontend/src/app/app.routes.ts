@@ -34,6 +34,10 @@ import { TasksPageComponent } from './tasks-page/tasks-page.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { TaskResolverService } from './task-resolver.service';
 import { PersonFilesComponent } from './person-files/person-files.component';
+import { ChargeCategoriesComponent } from './charge-categories/charge-categories.component';
+import { ChargeCategoryResolverService } from './charge-category-resolver.service';
+import { ChargeCategoriesResolverService } from './charge-categories-resolver.service';
+import { ChargeCategoryEditComponent } from './charge-category-edit/charge-category-edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -139,6 +143,26 @@ export const routes: Routes = [
             resolve: {
               incomeSource: IncomeSourceResolverService,
               incomeSourceTypes: IncomeTypesResolverService
+            }
+          }
+        ]
+      },
+      {
+        path: 'charge-categories',
+        children: [
+          {
+            path: '',
+            component: ChargeCategoriesComponent,
+            resolve: {
+              chargeCategories: ChargeCategoriesResolverService
+            }
+          },
+          { path: 'create', component: ChargeCategoryEditComponent },
+          {
+            path: ':id/edit',
+            component: ChargeCategoryEditComponent,
+            resolve: {
+              chargeCategory: ChargeCategoryResolverService
             }
           }
         ]
