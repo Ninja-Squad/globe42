@@ -27,5 +27,5 @@ spring:
 ---
 spring:
   profiles: demo
-flyway:
-  locations: classpath:/db/migration,classpath:/demo/db/migration
+  flyway:
+    locations: classpath:/db/migration,classpath:/demo/db/migration
