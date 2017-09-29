@@ -2,8 +2,8 @@ package org.globe42.web.exception;
 
 import java.util.Map;
 
-import org.springframework.boot.autoconfigure.web.servlet.error.DefaultErrorAttributes;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorAttributes;
+import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.WebRequest;
