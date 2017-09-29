@@ -35,6 +35,7 @@ public abstract class BaseDaoTest {
                                                                "task",
                                                                "guser",
                                                                "income",
+                                                               "participation",
                                                                "person",
                                                                "family_situation",
                                                                "income_source",

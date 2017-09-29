@@ -196,6 +196,12 @@ public class Person {
     )
     private Set<Note> notes = new HashSet<>();
 
+    /**
+     * The participations to activity types of the person
+     */
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Participation> participations = new HashSet<>();
+
     public Person() {
     }
 
@@ -425,5 +431,18 @@ public class Person {
 
     public void removeNote(Note note) {
         this.notes.remove(note);
+    }
+
+    public Set<Participation> getParticipations() {
+        return Collections.unmodifiableSet(participations);
+    }
+
+    public void addParticipation(Participation participation) {
+        participation.setPerson(this);
+        participations.add(participation);
+    }
+
+    public void removeParticipation(Participation participation) {
+        participations.remove(participation);
     }
 }

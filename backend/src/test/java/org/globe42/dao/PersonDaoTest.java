@@ -2,8 +2,10 @@ package org.globe42.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
+import org.globe42.domain.ActivityType;
 import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
 import org.globe42.domain.Housing;
@@ -34,7 +36,14 @@ public class PersonDaoTest extends BaseDaoTest {
                 .columns("id", "first_name", "last_name", "mediation_enabled", "gender", "adherent")
                 .values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false)
                 .build();
-        dbSetup(person);
+
+        Operation participations =
+            Insert.into("participation")
+                .columns("id", "activity_type", "person_id")
+                .values(1L, ActivityType.MEAL, 1L)
+                .build();
+
+        dbSetup(Operations.sequenceOf(person, participations));
     }
 
     @Test
@@ -54,6 +63,13 @@ public class PersonDaoTest extends BaseDaoTest {
         assertThat(personDao.findById(1L)).hasValueSatisfying(p -> {
             assertThat(p.getId()).isEqualTo(1L);
         });
+    }
+
+    @Test
+    public void shouldFindParticipants() {
+        TRACKER.skipNextLaunch();
+        assertThat(personDao.findParticipants(ActivityType.MEAL)).hasSize(1);
+        assertThat(personDao.findParticipants(ActivityType.SOCIAL_MEDIATION)).isEmpty();
     }
 
     @Test
