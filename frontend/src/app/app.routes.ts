@@ -29,11 +29,11 @@ import { PersonIncomeEditComponent } from './person-income-edit/person-income-ed
 import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
-import { TasksComponent } from './tasks/tasks.component';
 import { TasksResolverService } from './tasks-resolver.service';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { TaskResolverService } from './task-resolver.service';
+import { PersonFilesComponent } from './person-files/person-files.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -75,7 +75,8 @@ export const routes: Routes = [
                   tasks: TasksResolverService
                 },
                 runGuardsAndResolvers: 'paramsOrQueryParamsChange'
-              }
+              },
+              { path: 'files', component: PersonFilesComponent }
             ]
           },
           {

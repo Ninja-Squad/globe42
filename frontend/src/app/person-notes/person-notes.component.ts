@@ -34,7 +34,7 @@ export class PersonNotesComponent implements OnInit {
   ngOnInit(): void {
     // display the spinner after 300ms, unless the notes have loaded before. Note: Observable.delay is untestable,
     // see https://github.com/angular/angular/issues/10127
-    window.setTimeout(() => this.spinnerDisplayed = !this.notes);
+    window.setTimeout(() => this.spinnerDisplayed = !this.notes, 300);
 
     this.personNoteService.list(this.person.id).subscribe(notes => {
       this.notes = notes;

@@ -1,0 +1,75 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FileModel } from '../models/file.model';
+import { PersonFileService } from '../person-file.service';
+import { PersonModel } from '../models/person.model';
+import { ConfirmService } from '../confirm.service';
+import { sortBy } from '../utils';
+import { HttpEventType } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/observable/forkJoin';
+
+@Component({
+  selector: 'gl-person-files',
+  templateUrl: './person-files.component.html',
+  styleUrls: ['./person-files.component.scss']
+})
+export class PersonFilesComponent implements OnInit {
+
+  private person: PersonModel;
+  loading = false;
+  uploading = false;
+  uploadProgress: number;
+  files: Array<FileModel>;
+
+  constructor(route: ActivatedRoute,
+              private personFileService: PersonFileService,
+              private confirmService: ConfirmService) {
+    this.person = route.parent.snapshot.data['person'];
+  }
+
+  ngOnInit(): void {
+    this.loadFiles();
+  }
+
+  url(file: FileModel): string {
+    return this.personFileService.url(this.person.id, file.name);
+  }
+
+  delete(file: FileModel) {
+    this.confirmService.confirm({
+      message: 'Voulez-vous vraiment supprimer ce document\u00A0?'
+    }).switchMap(() => this.personFileService.delete(this.person.id, file.name))
+      .subscribe(() => this.loadFiles());
+  }
+
+  upload(fileChangeEvent) {
+    this.uploading = true;
+
+    const file = fileChangeEvent.target.files[0];
+
+    this.personFileService.create(this.person.id, file)
+      .finally(() => this.uploading = false)
+      .subscribe(
+        progressEvent => {
+          if (progressEvent.type === HttpEventType.UploadProgress) {
+            this.uploadProgress = progressEvent.loaded / progressEvent.total;
+          }
+        },
+        () => {},
+        () => this.loadFiles());
+  }
+
+  private loadFiles() {
+    // display the spinner after 300ms, unless the notes have loaded before. Note: Observable.delay is untestable,
+    // see https://github.com/angular/angular/issues/10127
+    window.setTimeout(() => this.loading = !this.files, 300);
+
+    this.personFileService.list(this.person.id)
+      .subscribe(files => {
+        this.loading = false;
+        this.files = sortBy(files, file => file.creationInstant, true);
+      });
+  }
+}
