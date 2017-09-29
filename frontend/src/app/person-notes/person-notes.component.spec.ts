@@ -15,7 +15,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import 'rxjs/add/operator/debounceTime';
 import { Subject } from 'rxjs/Subject';
 import { By } from '@angular/platform-browser';
-import createSpyObj = jasmine.createSpyObj;
 import { UserModel } from '../models/user.model';
 
 describe('PersonNotesComponent', () => {

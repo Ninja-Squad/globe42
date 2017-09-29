@@ -35,25 +35,25 @@ describe('PersonLayoutComponent', () => {
     expect(name.textContent).toContain('John Doe (john)');
   });
 
-  it('should have 4 nav links and a router outlet', () => {
+  it('should have 6 nav links and a router outlet', () => {
     const fixture = TestBed.createComponent(PersonLayoutComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
     const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(5);
+    expect(links.length).toBe(6);
 
     const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
     expect(outlet).toBeTruthy();
   });
 
-  it('should only have 12 nav links if mediation is not enabled', () => {
+  it('should only have 4 nav links if mediation is not enabled', () => {
     person.mediationEnabled = false;
     const fixture = TestBed.createComponent(PersonLayoutComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
     const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(3);
+    expect(links.length).toBe(4);
   });
 });

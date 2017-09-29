@@ -1,0 +1,8 @@
+<h2>Participants aux activités de type <em>{{ activityType | displayActivityType}}</em></h2>
+
+<div class="row align-items-center mb-2 person-item" *ngFor="let person of participants">
+  <div class="col-sm">
+    <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
+  </div>
+  <div class="col-sm">{{ person.mediationCode }}</div>
+</div>

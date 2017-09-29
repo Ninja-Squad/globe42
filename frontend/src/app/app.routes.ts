@@ -44,6 +44,12 @@ import { ChargeTypeEditComponent } from './charge-type-edit/charge-type-edit.com
 import { ChargeTypeResolverService } from './charge-type-resolver.service';
 import { ChargesResolverService } from './charges-resolver.service';
 import { PersonChargeEditComponent } from './person-charge-edit/person-charge-edit.component';
+import { ParticipationsResolverService } from './participations-resolver.service';
+import { PersonParticipationsComponent } from './person-participations/person-participations.component';
+import { ActivityTypesComponent } from './activity-types/activity-types.component';
+import { ACTIVITY_TYPE_TRANSLATIONS } from './display-activity-type.pipe';
+import { ParticipantsComponent } from './participants/participants.component';
+import { ParticipantsResolverService } from './participants-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -87,7 +93,14 @@ export const routes: Routes = [
                 },
                 runGuardsAndResolvers: 'paramsOrQueryParamsChange'
               },
-              { path: 'files', component: PersonFilesComponent }
+              { path: 'files', component: PersonFilesComponent },
+              {
+                path: 'participations',
+                component: PersonParticipationsComponent,
+                resolve: {
+                  participations: ParticipationsResolverService
+                }
+              }
             ]
           },
           {
@@ -269,6 +282,20 @@ export const routes: Routes = [
       {
         path: 'cities',
         component: CitiesUploadComponent
+      },
+      {
+        path: 'activity-types',
+        component: ActivityTypesComponent,
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: ACTIVITY_TYPE_TRANSLATIONS[0].key },
+          {
+            path: ':activityType',
+            component: ParticipantsComponent,
+            resolve: {
+              participants: ParticipantsResolverService
+            }
+          }
+        ]
       }
     ]
   }

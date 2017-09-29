@@ -1,0 +1,9 @@
+<p id="message">{{ person | fullname }} participe aux types d'activités suivants&nbsp;:</p>
+
+<div *ngFor="let item of items" class="form-check ml-5">
+  <label class="form-check-label">
+    <input id="activityType-{{ item.activityType }}" type="checkbox" class="form-check-input"
+           [(ngModel)]="item.selected" (ngModelChange)="selectionChanged(item)" />
+    {{ item.activityType | displayActivityType }}
+  </label>
+</div>

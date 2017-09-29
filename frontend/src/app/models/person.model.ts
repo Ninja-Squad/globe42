@@ -1,5 +1,3 @@
-import { NoteModel } from './note.model';
-
 export type MaritalStatus = 'UNKNOWN' | 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 'WIDOWER' | 'DIVORCED' | 'SPLIT';
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 export type FiscalStatus = 'UNKNOWN' | 'TAXABLE' | 'NOT_TAXABLE';

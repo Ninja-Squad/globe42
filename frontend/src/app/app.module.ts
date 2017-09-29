@@ -87,6 +87,13 @@ import { ChargeTypeResolverService } from './charge-type-resolver.service';
 import { ChargeService } from './charge.service';
 import { ChargesResolverService } from './charges-resolver.service';
 import { PersonChargeEditComponent } from './person-charge-edit/person-charge-edit.component';
+import { PersonParticipationsComponent } from './person-participations/person-participations.component';
+import { ParticipationsResolverService } from './participations-resolver.service';
+import { ParticipationService } from './participation.service';
+import { DisplayActivityTypePipe } from './display-activity-type.pipe';
+import { ActivityTypesComponent } from './activity-types/activity-types.component';
+import { ParticipantsComponent } from './participants/participants.component';
+import { ParticipantsResolverService } from './participants-resolver.service';
 
 @NgModule({
   declarations: [
@@ -135,7 +142,11 @@ import { PersonChargeEditComponent } from './person-charge-edit/person-charge-ed
     ChargeCategoryEditComponent,
     ChargeTypesComponent,
     ChargeTypeEditComponent,
-    PersonChargeEditComponent
+    PersonChargeEditComponent,
+    PersonParticipationsComponent,
+    DisplayActivityTypePipe,
+    ActivityTypesComponent,
+    ParticipantsComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -199,7 +210,10 @@ import { PersonChargeEditComponent } from './person-charge-edit/person-charge-ed
     TaskResolverService,
     NowService,
     PersonNoteService,
-    PersonFileService
+    PersonFileService,
+    ParticipationService,
+    ParticipationsResolverService,
+    ParticipantsResolverService
   ],
   bootstrap: [AppComponent]
 })

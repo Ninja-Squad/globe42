@@ -1,0 +1,15 @@
+<h1>Types d'activités</h1>
+
+<div class="row">
+  <div class="col-xs-12 col-md-4 col-lg-3">
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item" *ngFor="let activityType of activityTypes">
+        <a class="nav-link" [routerLink]="activityType" routerLinkActive="active">{{ activityType | displayActivityType }}</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <router-outlet></router-outlet>
+  </div>
+</div>
