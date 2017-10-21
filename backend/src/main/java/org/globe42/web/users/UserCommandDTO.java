@@ -1,8 +1,9 @@
 package org.globe42.web.users;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Command passed to create or update a user

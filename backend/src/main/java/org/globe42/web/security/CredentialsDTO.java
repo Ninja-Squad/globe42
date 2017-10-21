@@ -1,8 +1,9 @@
 package org.globe42.web.security;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Credentials sent by a user to authenticate

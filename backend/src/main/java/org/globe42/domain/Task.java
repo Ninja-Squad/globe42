@@ -10,9 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * A task, which appears in the to-do list. When it's done, the task is simply being deleted.

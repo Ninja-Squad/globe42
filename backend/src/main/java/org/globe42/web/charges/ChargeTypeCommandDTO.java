@@ -1,11 +1,11 @@
 package org.globe42.web.charges;
 
 import java.math.BigDecimal;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Command used to create or update a charge type

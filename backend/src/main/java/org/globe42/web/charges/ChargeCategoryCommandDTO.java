@@ -1,8 +1,9 @@
 package org.globe42.web.charges;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Command sent to create or update a charge category

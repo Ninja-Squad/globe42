@@ -2,16 +2,16 @@ package org.globe42.web.persons;
 
 import java.time.LocalDate;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.HealthCareCoverage;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Command sent to create or update a person

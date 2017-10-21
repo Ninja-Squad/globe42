@@ -6,9 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * A type of charge, belonging to a charge category. The same type is shared by many persons, through the {@link Charge}

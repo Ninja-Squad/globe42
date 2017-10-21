@@ -6,9 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * A source of income. The same source is shared by many persons, through the {@link Income} entity.

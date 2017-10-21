@@ -1,10 +1,10 @@
 package org.globe42.web.tasks;
 
 import java.time.LocalDate;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Command used to create or edit a task
