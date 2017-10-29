@@ -13,6 +13,7 @@ import org.globe42.dao.PersonDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.Person;
+import org.globe42.domain.SpentTime;
 import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
@@ -274,6 +275,49 @@ public class TaskControllerTest extends BaseTest {
         assertThat(task1.getAssignee().getId()).isEqualTo(user.getId());
     }
 
+    @Test
+    public void shouldListSpentTimes() {
+        task1.addSpentTime(createSpentTime(1L, 10, user));
+        task1.addSpentTime(createSpentTime(2L, 15, null));
+
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+
+        List<SpentTimeDTO> result = controller.listSpentTimes(task1.getId());
+        assertThat(result).hasSize(2);
+        SpentTimeDTO spentTime1 = result.stream().filter(sp -> sp.getId().equals(1L)).findAny().get();
+        assertThat(spentTime1.getCreator().getId()).isEqualTo(user.getId());
+        assertThat(spentTime1.getMinutes()).isEqualTo(10);
+        assertThat(spentTime1.getCreationInstant()).isNotNull();
+
+        SpentTimeDTO spentTime2 = result.stream().filter(sp -> sp.getId().equals(2L)).findAny().get();
+        assertThat(spentTime2.getCreator()).isNull();
+    }
+
+    @Test
+    public void shouldAddSpentTime() {
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+        when(mockCurrentUser.getUserId()).thenReturn(user.getId());
+        when(mockUserDao.getOne(user.getId())).thenReturn(user);
+
+        SpentTimeCommandDTO command = new SpentTimeCommandDTO(10);
+        SpentTimeDTO result = controller.addSpentTime(task1.getId(), command);
+
+        assertThat(task1.getSpentTimes()).hasSize(1);
+        assertThat(result.getMinutes()).isEqualTo(10);
+        assertThat(result.getCreator().getId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    public void shouldDeleteSpentTime() {
+        SpentTime spentTime = createSpentTime(1L, 10, user);
+        task1.addSpentTime(spentTime);
+        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+        controller.deleteSpentTime(task1.getId(), spentTime.getId());
+        assertThat(task1.getSpentTimes().isEmpty());
+
+        controller.deleteSpentTime(task1.getId(), spentTime.getId());
+    }
+
     static Task createTask(Long id, User user, Person person) {
         Task task = new Task(id);
         task.setStatus(TaskStatus.TODO);
@@ -293,6 +337,13 @@ public class TaskControllerTest extends BaseTest {
                                   LocalDate.now().plusDays(1),
                                   concernedPersonId,
                                   assigneeId);
+    }
+
+    static SpentTime createSpentTime(Long id, int minutes, User creator) {
+        SpentTime spentTime = new SpentTime(id);
+        spentTime.setMinutes(minutes);
+        spentTime.setCreator(creator);
+        return spentTime;
     }
 
     private Page<Task> singlePage(List<Task> tasks, PageRequest pageRequest) {

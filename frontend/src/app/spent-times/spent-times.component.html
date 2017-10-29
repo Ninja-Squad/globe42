@@ -1,0 +1,7 @@
+<ul>
+  <li *ngFor="let spentTime of spentTimes">
+    {{ spentTime.creationInstant | date:'medium' }}: {{ spentTime.minutes | duration }}
+    <ng-container *ngIf="spentTime.creator">par {{ spentTime.creator.login }}</ng-container>
+    <a href="#" (click)="delete(spentTime, $event)"><span class="fa fa-trash"></span> Supprimer</a>
+  </li>
+</ul>

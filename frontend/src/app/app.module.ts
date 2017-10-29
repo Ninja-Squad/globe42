@@ -101,6 +101,9 @@ import { MinValidatorDirective } from './min-validator.directive';
 import { MaxValidatorDirective } from './max-validator.directive';
 
 registerLocaleData(localeFr);
+import { DurationPipe } from './duration.pipe';
+import { SpentTimesComponent } from './spent-times/spent-times.component';
+import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
 
 @NgModule({
   declarations: [
@@ -155,7 +158,10 @@ registerLocaleData(localeFr);
     ActivityTypesComponent,
     ParticipantsComponent,
     MinValidatorDirective,
-    MaxValidatorDirective
+    MaxValidatorDirective,
+    DurationPipe,
+    SpentTimesComponent,
+    SpentTimeAddComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

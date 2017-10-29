@@ -10,4 +10,5 @@ export interface TaskModel {
   assignee: UserModel;
   creator: UserModel;
   concernedPerson: PersonIdentityModel;
+  totalSpentTimeInMinutes: number;
 }

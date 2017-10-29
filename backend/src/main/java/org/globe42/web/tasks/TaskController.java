@@ -2,13 +2,16 @@ package org.globe42.web.tasks;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.globe42.dao.PersonDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.Person;
+import org.globe42.domain.SpentTime;
 import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
@@ -138,6 +141,36 @@ public class TaskController {
     public void update(@PathVariable("taskId") Long taskId, @Validated @RequestBody TaskCommandDTO command) {
         Task task = taskDao.findById(taskId).orElseThrow(NotFoundException::new);
         copyCommandToTask(command, task);
+    }
+
+    @GetMapping("/{taskId}/spent-times")
+    public List<SpentTimeDTO> listSpentTimes(@PathVariable("taskId") Long taskId) {
+        Task task = taskDao.findById(taskId).orElseThrow(() -> new NotFoundException("no task with ID " + taskId));
+        return task.getSpentTimes().stream().map(SpentTimeDTO::new).collect(Collectors.toList());
+    }
+
+    @PostMapping("/{taskId}/spent-times")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SpentTimeDTO addSpentTime(@PathVariable("taskId") Long taskId, @Validated @RequestBody SpentTimeCommandDTO command) {
+        Task task = taskDao.findById(taskId).orElseThrow(() -> new NotFoundException("no task with ID " + taskId));
+        SpentTime spentTime = new SpentTime();
+        spentTime.setCreator(userDao.getOne(currentUser.getUserId()));
+        spentTime.setMinutes(command.getMinutes());
+
+        task.addSpentTime(spentTime);
+        taskDao.flush();
+        return new SpentTimeDTO(spentTime);
+    }
+
+    @DeleteMapping("/{taskId}/spent-times/{spentTimeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSpentTime(@PathVariable("taskId") Long taskId, @PathVariable("spentTimeId") Long spentTimeId) {
+        Task task = taskDao.findById(taskId).orElseThrow(() -> new NotFoundException("no task with ID " + taskId));
+        task.getSpentTimes()
+            .stream()
+            .filter(st -> st.getId().equals(spentTimeId))
+            .findAny()
+            .ifPresent(task::removeSpentTime);
     }
 
     private void copyCommandToTask(TaskCommandDTO command, Task task) {

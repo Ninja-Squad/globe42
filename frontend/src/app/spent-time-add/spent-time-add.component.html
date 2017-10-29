@@ -1,0 +1,13 @@
+<form class="form-inline" (ngSubmit)="add()" #addForm="ngForm">
+  <div class="form-group">
+    <input type="number" class="form-control form-control-sm" style="width: 4rem;" name="hours" [(ngModel)]="model.hours" required min="0"/>
+    &nbsp;h
+  </div>
+  <div class="form-group">
+    <input type="number" class="form-control form-control-sm ml-sm-2" style="width: 4rem;" name="minutes" [(ngModel)]="model.minutes" required min="0"/>
+    &nbsp;m.
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-sm ml-sm-2" [disabled]="addForm.invalid || !isAddable()">Ajouter</button>
+  <button type="button" class="btn btn-danger btn-sm ml-sm-2" (click)="cancel()">Annuler</button>
+</form>

@@ -55,6 +55,7 @@ public class TaskDaoTest extends BaseDaoTest {
         Operation tasks = Insert.into("task")
                                 .withGeneratedValue("description", ValueGenerators.stringSequence("desc_"))
                                 .withGeneratedValue("title", ValueGenerators.stringSequence("title_"))
+                                .withDefaultValue("total_spent_time_in_minutes", 0)
                                 .columns("id", "status", "due_date", "creator_id", "assignee_id", "concerned_person_id", "archival_instant")
                                 .values(1L, TaskStatus.DONE, null, 1L, 1L, null, Instant.parse("2017-08-04T00:00:00Z"))
                                 .values(2L, TaskStatus.TODO, null, 1L, 2L, null, null)

@@ -18,6 +18,9 @@ import { TasksResolverService } from '../tasks-resolver.service';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../user.service';
 import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { SpentTimesComponent } from '../spent-times/spent-times.component';
+import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.component';
+import { DurationPipe } from '../duration.pipe';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -37,6 +40,7 @@ describe('TasksPageComponent', () => {
           title: 'Some title',
           dueDate: '2017-08-01',
           status: 'DONE',
+          totalSpentTimeInMinutes: 0,
           assignee: null,
           creator: null,
           concernedPerson: null
@@ -66,9 +70,19 @@ describe('TasksPageComponent', () => {
       }
     } as any;
 
+    TestBed.overrideTemplate(SpentTimeAddComponent, '');
+    TestBed.overrideTemplate(SpentTimesComponent, '');
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
-      declarations: [TasksPageComponent, TasksComponent, FullnamePipe],
+      declarations: [
+        TasksPageComponent,
+        TasksComponent,
+        FullnamePipe,
+        SpentTimesComponent,
+        SpentTimeAddComponent,
+        DurationPipe
+      ],
       providers: [
         NowService,
         TaskService,

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.globe42.dao.NoteDao;
+import org.globe42.dao.SpentTimeDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
@@ -40,6 +41,9 @@ public class UserControllerTest extends BaseTest{
 
     @Mock
     private NoteDao mockNoteDao;
+
+    @Mock
+    private SpentTimeDao mockSpentTimeDao;
 
     @Mock
     private PasswordGenerator mockPasswordGenerator;
@@ -184,6 +188,7 @@ public class UserControllerTest extends BaseTest{
         verify(mockTaskDao).resetAssigneeOnTasksAssignedTo(user);
         verify(mockTaskDao).resetCreatorOnTasksCreatedBy(user);
         verify(mockNoteDao).resetCreatorOnNotesCreatedBy(user);
+        verify(mockSpentTimeDao).resetCreatorOnSpentTimesCreatedBy(user);
         verify(mockUserDao).delete(user);
     }
 

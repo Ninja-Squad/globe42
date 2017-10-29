@@ -6,6 +6,8 @@ import { NowService } from './now.service';
 import { Page } from './models/page';
 import { UserService } from './user.service';
 import { TaskCommand } from './models/task.command';
+import { SpentTimeModel } from './models/spent-time.model';
+import { sortBy } from './utils';
 
 function pageParams(pageNumber: number): HttpParams {
   return new HttpParams().set('page', pageNumber.toString());
@@ -75,5 +77,18 @@ export class TaskService {
 
   get(id: number): Observable<TaskModel> {
     return this.http.get<TaskModel>(`/api/tasks/${id}`);
+  }
+
+  listSpentTimes(taskId: number): Observable<Array<SpentTimeModel>> {
+    return this.http.get<Array<SpentTimeModel>>(`/api/tasks/${taskId}/spent-times`)
+      .map(list => sortBy(list, spentTime => spentTime.creationInstant, true));
+  }
+
+  deleteSpentTime(taskId: number, spentTimeId: number): Observable<void> {
+    return this.http.delete<void>(`/api/tasks/${taskId}/spent-times/${spentTimeId}`);
+  }
+
+  addSpentTime(taskId: number, minutes: number): Observable<SpentTimeModel> {
+    return this.http.post<SpentTimeModel>(`/api/tasks/${taskId}/spent-times`, { minutes });
   }
 }

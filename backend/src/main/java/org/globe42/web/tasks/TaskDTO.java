@@ -20,6 +20,7 @@ public final class TaskDTO {
     private final UserDTO creator;
     private final UserDTO assignee;
     private final PersonIdentityDTO concernedPerson;
+    private final int totalSpentTimeInMinutes;
 
     public TaskDTO(Task task) {
         this.id = task.getId();
@@ -30,6 +31,7 @@ public final class TaskDTO {
         this.creator = task.getCreator() == null ? null : new UserDTO(task.getCreator());
         this.assignee = task.getAssignee() == null ? null : new UserDTO(task.getAssignee());
         this.concernedPerson = task.getConcernedPerson() == null ? null : new PersonIdentityDTO(task.getConcernedPerson());
+        this.totalSpentTimeInMinutes = task.getTotalSpentTimeInMinutes();
     }
 
     public Long getId() {
@@ -62,5 +64,9 @@ public final class TaskDTO {
 
     public PersonIdentityDTO getConcernedPerson() {
         return concernedPerson;
+    }
+
+    public int getTotalSpentTimeInMinutes() {
+        return totalSpentTimeInMinutes;
     }
 }

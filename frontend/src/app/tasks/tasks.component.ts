@@ -3,9 +3,12 @@ import { TaskModel } from '../models/task.model';
 import * as moment from 'moment';
 import { NowService } from '../now.service';
 import 'rxjs/add/operator/switchMap';
+import { SpentTimeModel } from '../models/spent-time.model';
 
 class Task {
-  opened: boolean;
+  opened = false;
+  spentTimesOpened = false;
+  addSpentTimeOpened = false;
 
   constructor(public model: TaskModel, private nowService: NowService) {}
 
@@ -40,6 +43,11 @@ export type TaskEventType = 'edit' | 'assign' | 'markAsDone' | 'cancel' | 'resur
 export interface TaskEvent {
   task: TaskModel;
   type: TaskEventType;
+}
+
+export interface SpentTimeEvent {
+  task: TaskModel;
+  spentTime: SpentTimeModel;
 }
 
 @Component({
@@ -89,6 +97,44 @@ export class TasksComponent {
 
   unassign(task: Task, event: Event) {
     this.handleEvent('unassign', task, event);
+  }
+
+  toggleSpentTimes(task: Task, event: Event) {
+    task.spentTimesOpened = !task.spentTimesOpened;
+    if (task.spentTimesOpened) {
+      task.addSpentTimeOpened = false;
+    }
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  toggleAddSpentTime(task: Task, event: Event) {
+    task.addSpentTimeOpened = !task.addSpentTimeOpened;
+    if (task.addSpentTimeOpened) {
+      task.spentTimesOpened = false;
+    }
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+  onSpentTimeDeleted(event: SpentTimeEvent) {
+    // we could reload the task, or even ask the parent to reload the whole list,
+    // but it's faster and simpler to just update the total spent time of the task, and
+    // to hide the details
+    event.task.totalSpentTimeInMinutes -= event.spentTime.minutes;
+    this.tasks.find(task => task.model.id === event.task.id).spentTimesOpened = false;
+  }
+
+  onSpentTimeAdded(event: SpentTimeEvent) {
+    // we could reload the task, or even ask the parent to reload the whole list,
+    // but it's faster and simpler to just update the total spent time of the task, and
+    // to hide the add form
+    event.task.totalSpentTimeInMinutes += event.spentTime.minutes;
+    this.tasks.find(task => task.model.id === event.task.id).addSpentTimeOpened = false;
   }
 
   private handleEvent(type: TaskEventType, task: Task, event: Event) {

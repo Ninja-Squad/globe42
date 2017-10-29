@@ -2,6 +2,10 @@ package org.globe42.domain;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -73,6 +78,18 @@ public class Task {
      * archived tasks first in the list, to resurrect them easily.
      */
     private Instant archivalInstant;
+
+    /**
+     * The total spent time, in minutes, on this task. This value is recomputed every time a spent time is added or
+     * delete for the task
+     */
+    private int totalSpentTimeInMinutes;
+
+    /**
+     * The list of time pieces spent on the task
+     */
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SpentTime> spentTimes = new HashSet<>();
 
     public Task() {
     }
@@ -151,5 +168,28 @@ public class Task {
 
     public void setArchivalInstant(Instant archivalInstant) {
         this.archivalInstant = archivalInstant;
+    }
+
+    public int getTotalSpentTimeInMinutes() {
+        return totalSpentTimeInMinutes;
+    }
+
+    public Set<SpentTime> getSpentTimes() {
+        return Collections.unmodifiableSet(spentTimes);
+    }
+
+    public void addSpentTime(SpentTime spentTime) {
+        spentTime.setTask(this);
+        this.spentTimes.add(spentTime);
+        recomputeTotalSpentTime();
+    }
+
+    public void removeSpentTime(SpentTime spentTime) {
+        this.spentTimes.remove(spentTime);
+        recomputeTotalSpentTime();
+    }
+
+    private void recomputeTotalSpentTime() {
+        this.totalSpentTimeInMinutes = this.spentTimes.stream().mapToInt(SpentTime::getMinutes).sum();
     }
 }

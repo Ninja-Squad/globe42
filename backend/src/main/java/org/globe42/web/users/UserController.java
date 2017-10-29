@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.globe42.dao.NoteDao;
+import org.globe42.dao.SpentTimeDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
@@ -39,6 +40,7 @@ public class UserController {
     private final UserDao userDao;
     private final TaskDao taskDao;
     private final NoteDao noteDao;
+    private final SpentTimeDao spentTimeDao;
     private final PasswordGenerator passwordGenerator;
     private final PasswordDigester passwordDigester;
 
@@ -46,12 +48,14 @@ public class UserController {
                           UserDao userDao,
                           TaskDao taskDao,
                           NoteDao noteDao,
+                          SpentTimeDao spentTimeDao,
                           PasswordGenerator passwordGenerator,
                           PasswordDigester passwordDigester) {
         this.currentUser = currentUser;
         this.userDao = userDao;
         this.taskDao = taskDao;
         this.noteDao = noteDao;
+        this.spentTimeDao = spentTimeDao;
         this.passwordGenerator = passwordGenerator;
         this.passwordDigester = passwordDigester;
     }
@@ -121,6 +125,7 @@ public class UserController {
             taskDao.resetAssigneeOnTasksAssignedTo(user);
             taskDao.resetCreatorOnTasksCreatedBy(user);
             noteDao.resetCreatorOnNotesCreatedBy(user);
+            spentTimeDao.resetCreatorOnSpentTimesCreatedBy(user);
             userDao.delete(user);
         });
     }

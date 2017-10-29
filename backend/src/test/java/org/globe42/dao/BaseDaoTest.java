@@ -32,6 +32,7 @@ public abstract class BaseDaoTest {
 
     private static final Operation DELETE_ALL = DeleteAll.from("person_note",
                                                                "note",
+                                                               "spent_time",
                                                                "task",
                                                                "guser",
                                                                "income",

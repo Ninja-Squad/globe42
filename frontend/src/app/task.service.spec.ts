@@ -9,6 +9,7 @@ import { NowService } from './now.service';
 import { Page } from './models/page';
 import { UserService } from './user.service';
 import { JwtInterceptorService } from './jwt-interceptor.service';
+import { SpentTimeModel } from './models/spent-time.model';
 import { HttpTester } from './http-tester.spec';
 import { UserModel } from './models/user.model';
 
@@ -80,5 +81,23 @@ describe('TaskService', () => {
 
   it('should resurrect a task', () => {
     httpTester.testPost('/api/tasks/1/status-changes', { newStatus: 'TODO' }, null, service.resurrect(1));
+  });
+
+  it('should list spent times', () => {
+    const expectedSpentTimes = [{ id: 1 }] as Array<SpentTimeModel>;
+    httpTester.testGet('/api/tasks/42/spent-times', expectedSpentTimes, service.listSpentTimes(42));
+  });
+
+  it('should create a spent time', () => {
+    const expectedSpentTime = { id: 1 } as SpentTimeModel;
+    httpTester.testPost(
+      '/api/tasks/42/spent-times',
+      { minutes: 10 },
+      expectedSpentTime,
+      service.addSpentTime(42, 10));
+  });
+
+  it('should delete a spent time', () => {
+    httpTester.testDelete('/api/tasks/42/spent-times/1', service.deleteSpentTime(42, 1));
   });
 });

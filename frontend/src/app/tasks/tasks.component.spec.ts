@@ -17,6 +17,12 @@ import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { SpentTimesComponent } from '../spent-times/spent-times.component';
+import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.component';
+import { DurationPipe } from '../duration.pipe';
+import { SpentTimeModel } from '../models/spent-time.model';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -41,6 +47,7 @@ describe('TasksComponent', () => {
         title: 'Some title',
         dueDate: '2017-08-01',
         status: 'TODO',
+        totalSpentTimeInMinutes: 0,
         assignee: {
           id: 1,
           login: 'admin'
@@ -57,9 +64,19 @@ describe('TasksComponent', () => {
       }
     ];
 
+    TestBed.overrideTemplate(SpentTimeAddComponent, '');
+    TestBed.overrideTemplate(SpentTimesComponent, '');
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientModule, NgbModule.forRoot()],
-      declarations: [TestComponent, TasksComponent, FullnamePipe],
+      declarations: [
+        TestComponent,
+        TasksComponent,
+        FullnamePipe,
+        SpentTimesComponent,
+        SpentTimeAddComponent,
+        DurationPipe,
+      ],
       providers: [
         NowService,
         TaskService,
@@ -155,6 +172,72 @@ describe('TasksComponent', () => {
       expect(text).toContain('Assignée à admin');
       expect(text).toContain('Créée par user2');
       expect(text).toContain('Concerne JB Nizet');
+      expect(text).toContain('0h00m');
+    });
+
+    it('should add a spent time, and close on cancel', () => {
+      fixture.nativeElement.querySelector('a.add-spent-time-link').click();
+      fixture.detectChanges();
+
+      const spentTimeAddDebugElement = fixture.debugElement.query(By.directive(SpentTimeAddComponent));
+      expect(spentTimeAddDebugElement).toBeTruthy();
+      const spentTimeAddComponent: SpentTimeAddComponent = spentTimeAddDebugElement.componentInstance;
+      spentTimeAddComponent.cancel();
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.directive(SpentTimeAddComponent))).toBeFalsy();
+    });
+
+    it('should add a spent time, recompute total spent time and close when added', () => {
+      expect(fixture.nativeElement.querySelector('a.spent-times-link')).toBeFalsy();
+
+      fixture.nativeElement.querySelector('a.add-spent-time-link').click();
+      fixture.detectChanges();
+
+      const spentTimeAddDebugElement = fixture.debugElement.query(By.directive(SpentTimeAddComponent));
+      expect(spentTimeAddDebugElement).toBeTruthy();
+      const spentTimeAddComponent: SpentTimeAddComponent = spentTimeAddDebugElement.componentInstance;
+      spentTimeAddComponent.spentTimeAdded.emit({
+        task: tasks[0],
+        spentTime: {
+          id: 1,
+          minutes: 100
+        } as SpentTimeModel
+      });
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.directive(SpentTimeAddComponent))).toBeFalsy();
+      const spentTimesLink = fixture.nativeElement.querySelector('a.spent-times-link');
+      expect(spentTimesLink).toBeTruthy();
+      expect(spentTimesLink.textContent).toContain('1h40m');
+    });
+
+    it('should display spent times and recompute total spent time when deleted', () => {
+      tasks[0].totalSpentTimeInMinutes = 100;
+      fixture.detectChanges();
+      const spentTimesLink = fixture.nativeElement.querySelector('a.spent-times-link');
+      expect(spentTimesLink).toBeTruthy();
+
+      const taskService = TestBed.get(TaskService);
+      spyOn(taskService, 'listSpentTimes').and.returnValue(Observable.of([]));
+
+      fixture.nativeElement.querySelector('a.spent-times-link').click();
+      fixture.detectChanges();
+
+      const spentTimesDebugElement = fixture.debugElement.query(By.directive(SpentTimesComponent));
+      expect(spentTimesDebugElement).toBeTruthy();
+      const spentTimesComponent: SpentTimesComponent = spentTimesDebugElement.componentInstance;
+      spentTimesComponent.spentTimeDeleted.emit({
+        task: tasks[0],
+        spentTime: {
+          id: 1,
+          minutes: 10
+        } as SpentTimeModel
+      });
+      fixture.detectChanges();
+
+      expect(spentTimesLink.textContent).toContain('1h30m');
+      expect(fixture.debugElement.query(By.directive(SpentTimesComponent))).toBeFalsy();
     });
 
     it('should display status instead of due date when DONE', () => {
