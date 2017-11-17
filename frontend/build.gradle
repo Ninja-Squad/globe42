@@ -15,6 +15,8 @@ node {
   download = true
 }
 
+npmInstall.enabled = false
+
 npm_run_build {
   dependsOn 'yarn_install'
   inputs.dir 'src'
