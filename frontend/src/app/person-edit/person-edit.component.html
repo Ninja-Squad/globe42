@@ -3,7 +3,7 @@
   <ng-container *ngIf="!editedPerson">Nouvel adhérent</ng-container>
 </h1>
 
-<form [formGroup]="personForm" (ngSubmit)="save()">
+<form [formGroup]="personForm" #formDirective="ngForm" (ngSubmit)="formDirective.valid && save()">
 
   <h2>Identité</h2>
 
@@ -28,8 +28,8 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Est adhérent</label>
     <div class="col-sm-9">
-      <div ngbRadioGroup name="adherent" formControlName="adherent">
-        <label ngbButtonLabel class="btn btn-secondary" *ngFor="let value of [true, false]">
+      <div class="btn-group" ngbRadioGroup name="adherent" formControlName="adherent">
+        <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
           <input ngbButton name="adherent" id="adherent{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
         </label>
       </div>
@@ -38,8 +38,8 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Genre</label>
     <div class="col-sm-9">
-      <div ngbRadioGroup name="gender" formControlName="gender">
-        <label ngbButtonLabel class="btn btn-secondary" *ngFor="let gender of genders">
+      <div class="btn-group" ngbRadioGroup name="gender" formControlName="gender">
+        <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let gender of genders">
           <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
         </label>
       </div>
@@ -63,13 +63,13 @@
       <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
     </div>
   </div>
-  <div class="form-group row" [class.has-danger]="searchFailed" [class.has-warning]="cityInput.value && !personForm.value.city">
+  <div class="form-group row" [class.has-danger]="searchFailed">
     <label for="city" class="col-sm-3 col-form-label">Ville</label>
     <ng-template #resultTemplate let-result="result">{{ result | displayCity }}</ng-template>
     <div class="col-sm-9">
       <input #cityInput class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
              [ngbTypeahead]="search" [resultTemplate]="resultTemplate" [inputFormatter]="cityFormatter" [editable]="false"
-             (blur)="clearIfNoCity(cityInput)" [class.form-control-warning]="cityInput.value && !personForm.value.city">
+             (blur)="clearIfNoCity(cityInput)" [class.is-warning]="cityInput.value && !personForm.value.city">
     </div>
   </div>
   <div class="form-group row">
@@ -90,8 +90,8 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Médiation activée pour cet adhérent</label>
     <div class="col-sm-9">
-      <div ngbRadioGroup name="gender" formControlName="mediationEnabled">
-        <label ngbButtonLabel class="btn btn-secondary" *ngFor="let value of [true, false]">
+      <div class="btn-group" ngbRadioGroup name="gender" formControlName="mediationEnabled">
+        <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
           <input ngbButton name="mediationEnabled" id="mediationEnabled{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
         </label>
       </div>
@@ -155,8 +155,8 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">Situation fiscale</label>
       <div class="col-sm-9">
-        <div ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
-          <label ngbButtonLabel class="btn btn-secondary" *ngFor="let fiscalStatus of fiscalStatuses">
+        <div class="btn-group" ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
+          <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let fiscalStatus of fiscalStatuses">
             <input ngbButton name="fiscalStatus" id="fiscalStatus{{ fiscalStatus }}" type="radio" [value]="fiscalStatus"> {{ fiscalStatus | displayFiscalStatus }}
           </label>
         </div>
@@ -201,7 +201,7 @@
 
   <div class="row">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary" type="submit" [disabled]="personForm.invalid">Enregistrer</button>
+      <button class="btn btn-primary" type="submit">Enregistrer</button>
       <a class="btn btn-secondary" routerLink="/persons">Annuler</a>
     </div>
   </div>

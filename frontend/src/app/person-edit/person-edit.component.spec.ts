@@ -202,8 +202,7 @@ describe('PersonEditComponent', () => {
       city.dispatchEvent(new Event('input'));
       fixture.detectChanges();
       expect(fixture.componentInstance.personForm.value.city).toBeFalsy();
-      expect(city.classList).toContain('form-control-warning');
-      expect(city.closest('.form-group').classList).toContain('has-warning');
+      expect(city.classList).toContain('is-warning');
 
       // move out of the field, which should clear it
       city.dispatchEvent(new Event('blur'));

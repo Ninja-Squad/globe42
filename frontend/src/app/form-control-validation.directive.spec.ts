@@ -5,19 +5,21 @@ import { TestBed } from '@angular/core/testing';
 
 @Component({
   template: `
-    <form [formGroup]="personForm">
+    <form [formGroup]="personForm" (ngSubmit)="submit()">
       <div class="form-group row">
         <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
         <div class="col-sm-10">
           <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
         </div>
       </div>
+      <button id="save">Save</button>
     </form>`
 })
 class FormComponent {
   personForm = new FormGroup({
     lastName: new FormControl('', Validators.required)
   });
+  submit() {}
 }
 
 describe('FormControlValidationDirective', () => {
@@ -27,17 +29,31 @@ describe('FormControlValidationDirective', () => {
     declarations: [FormComponent, FormControlValidationDirective]
   }));
 
-  it('should add the has-danger CSS class', () => {
+  it('should add the is-invalid CSS class when touched', () => {
     const fixture = TestBed.createComponent(FormComponent);
     fixture.detectChanges();
 
     const lastName = fixture.nativeElement.querySelector('#lastName');
-    lastName.value = '';
-    lastName.dispatchEvent(new Event('input'));
+    expect(lastName.classList).not.toContain('is-invalid');
+
+    lastName.dispatchEvent(new Event('blur'));
 
     fixture.detectChanges();
 
-    const group = fixture.nativeElement.querySelector('.form-group');
-    expect(group.classList).toContain('has-danger');
+    expect(lastName.classList).toContain('is-invalid');
+  });
+
+  it('should add the is-invalid CSS class when enclosing form is submitted', () => {
+    const fixture = TestBed.createComponent(FormComponent);
+    fixture.detectChanges();
+
+    const lastName = fixture.nativeElement.querySelector('#lastName');
+    expect(lastName.classList).not.toContain('is-invalid');
+
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('#save');
+    button.click();
+    fixture.detectChanges();
+
+    expect(lastName.classList).toContain('is-invalid');
   });
 });

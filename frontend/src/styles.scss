@@ -2,7 +2,7 @@
 @import 'custom-bootstrap';
 
 h1 {
-  margin-bottom: $spacer-y * 1.5;
+  margin-bottom: $spacer * 1.5;
 }
 
 /**
@@ -11,4 +11,15 @@ h1 {
  */
 .read-only-form .form-group {
   margin-bottom: 0;
+}
+
+.form-control.is-warning {
+  border-color: $yellow;
+  &:focus {
+    box-shadow: 0 0 0 .2rem rgba($yellow,.25);
+  }
+}
+
+ngb-datepicker-navigation button {
+  border: none;
 }

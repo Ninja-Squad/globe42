@@ -1,12 +1,13 @@
+@import "../../../node_modules/bootstrap/scss/functions";
 @import "../../../node_modules/bootstrap/scss/variables";
 
 h2 {
-  font-size: $font-size-h5;
+  font-size: $h5-font-size;
 }
 
 .task-description {
   white-space: pre-line;
-  border-left: 5px solid $gray-light;
+  border-left: 5px solid $gray-400;
   padding-left: 10px;
 }
 

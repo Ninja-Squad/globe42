@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+
 import {
   HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,
   HttpResponse
 } from '@angular/common/http';
+
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
 
 /**
  * Workaround for https://github.com/angular/angular/issues/18680, that should be removed as soon as the issue is fixed.

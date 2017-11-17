@@ -1,6 +1,7 @@
+@import "../../../node_modules/bootstrap/scss/functions";
 @import "../../../node_modules/bootstrap/scss/variables";
 
 #total-income {
-  border-top: 3px solid $gray-lighter;
+  border-top: 3px solid $gray-300;
   padding-top: .5em;
 }

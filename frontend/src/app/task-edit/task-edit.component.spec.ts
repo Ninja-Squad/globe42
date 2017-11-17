@@ -92,7 +92,7 @@ describe('TaskEditComponent', () => {
         expect(assigneeSelect.options[3].textContent).toBe('cyril');
         expect(assigneeSelect.selectedIndex).toBe(-1);
 
-        expect(element.querySelector('#save').disabled).toBe(true);
+        expect(element.querySelector('#save').disabled).toBe(false);
         expect(element.querySelector('#cancel').getAttribute('href')).toBe('/tasks');
       });
     });
@@ -160,7 +160,7 @@ describe('TaskEditComponent', () => {
         fixture.detectChanges();
 
         expect(fixture.componentInstance.task.concernedPerson).toBeFalsy();
-        expect(personInput.classList).toContain('form-control-warning');
+        expect(personInput.classList).toContain('is-warning');
 
         personInput.dispatchEvent(new Event('blur'));
         fixture.detectChanges();

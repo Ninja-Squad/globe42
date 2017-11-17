@@ -1,18 +1,18 @@
 /* tslint:disable:directive-selector */
-import { ContentChild, Directive, HostBinding } from '@angular/core';
+import { Directive, HostBinding, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '.form-group:not([ngbNoFormControlValidation]),[ngbFormControlValidation]'
+  selector: '.form-control:not([ngbNoFormControlValidation]),[ngbFormControlValidation]'
 })
 export class FormControlValidationDirective {
 
-  @ContentChild(NgControl)
-  ngControl: NgControl;
+  constructor(@Optional() private ngControl: NgControl) { }
 
-  constructor() { }
-
-  @HostBinding('class.has-danger') get hasDanger() {
-    return this.ngControl && this.ngControl.dirty && this.ngControl.invalid;
+  @HostBinding('class.is-invalid') get isInvalid() {
+    return this.ngControl
+      && this.ngControl
+      && this.ngControl.invalid
+      && (this.ngControl.touched || (this.ngControl['formDirective'] && this.ngControl['formDirective'].submitted));
   }
 }
