@@ -1,5 +1,6 @@
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { padNumber, toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+import { HttpHeaders } from '@angular/common/http';
 
 /**
  * Creates a sorted copy of an array, by extracting a value from each element using the given extractor,
@@ -67,3 +68,4 @@ export function isoToDate(value: string): NgbDateStruct {
   }
   return null;
 }
+

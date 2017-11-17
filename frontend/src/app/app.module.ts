@@ -94,6 +94,11 @@ import { DisplayActivityTypePipe } from './display-activity-type.pipe';
 import { ActivityTypesComponent } from './activity-types/activity-types.component';
 import { ParticipantsComponent } from './participants/participants.component';
 import { ParticipantsResolverService } from './participants-resolver.service';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { EmptyResponseBodyErrorInterceptorService } from './empty-response-body-error-interceptor.service';
+
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
@@ -197,6 +202,11 @@ import { ParticipantsResolverService } from './participants-resolver.service';
     {
       provide: HTTP_INTERCEPTORS,
       useExisting: ErrorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: EmptyResponseBodyErrorInterceptorService,
       multi: true
     },
     {

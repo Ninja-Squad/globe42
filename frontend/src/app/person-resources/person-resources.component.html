@@ -11,7 +11,7 @@
     {{ income.source.name }}
   </div>
   <div class="col-sm text-right">
-    {{ income.monthlyAmount | currency:'EUR':true }} / mois
+    {{ income.monthlyAmount | currency:'EUR':'symbol-narrow' }} / mois
   </div>
   <div class="col-sm text-right">
     <button class="btn btn-danger btn-sm delete-income-button" (click)="deleteIncome(income)">
@@ -23,7 +23,7 @@
 
 <div *ngIf="incomes.length" class="row align-items-center mb-2" id="total-income">
   <div class="col-sm"><strong>Total des revenus</strong></div>
-  <div class="col-sm text-right"><strong>{{ totalMonthlyIncomeAmount() | currency:'EUR':true }} / mois</strong></div>
+  <div class="col-sm text-right"><strong>{{ totalMonthlyIncomeAmount() | currency:'EUR':'symbol-narrow' }} / mois</strong></div>
   <div class="col-sm"></div>
 </div>
 
@@ -40,7 +40,7 @@
     {{ charge.type.name }}
   </div>
   <div class="col-sm text-right">
-    {{ charge.monthlyAmount | currency:'EUR':true }} / mois
+    {{ charge.monthlyAmount | currency:'EUR':'symbol-narrow' }} / mois
   </div>
   <div class="col-sm text-right">
     <button class="btn btn-danger btn-sm delete-charge-button" (click)="deleteCharge(charge)">
@@ -52,7 +52,7 @@
 
 <div *ngIf="charges.length" class="row align-items-center mb-2" id="total-charge">
   <div class="col-sm"><strong>Total des charges</strong></div>
-  <div class="col-sm text-right"><strong>{{ totalMonthlyChargeAmount() | currency:'EUR':true }} / mois</strong></div>
+  <div class="col-sm text-right"><strong>{{ totalMonthlyChargeAmount() | currency:'EUR':'symbol-narrow' }} / mois</strong></div>
   <div class="col-sm"></div>
 </div>
 
@@ -60,7 +60,7 @@
 
 <div *ngIf="charges.length || incomes.length" class="row align-items-center mb-5" id="total">
   <div class="col-sm"><strong>Reste à vivre</strong></div>
-  <div class="col-sm text-right"><strong>{{ totalMonthlyAmount() | currency:'EUR':true }} / mois</strong></div>
+  <div class="col-sm text-right"><strong>{{ totalMonthlyAmount() | currency:'EUR':'symbol-narrow' }} / mois</strong></div>
   <div class="col-sm"></div>
 </div>
 
