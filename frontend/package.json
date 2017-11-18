@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --build-optimizer",
+    "build": "ng build --prod",
     "test": "ng test --single-run --code-coverage --no-progress --reporters dots",
     "bundlesize": "bundlesize",
     "codecov": "codecov",
@@ -39,7 +39,7 @@
     "@types/node": "^7.0.29",
     "bundlesize": "^0.13.2",
     "codecov": "^2.2.0",
-    "codelyzer": "~3.2.0",
+    "codelyzer": "~4.0.1",
     "jasmine-core": "^2.6.3",
     "jasmine-spec-reporter": "^4.1.0",
     "karma": "^1.7.0",
