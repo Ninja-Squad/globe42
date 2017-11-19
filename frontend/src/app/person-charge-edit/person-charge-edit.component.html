@@ -14,7 +14,10 @@
     <label for="monthlyAmount" class="col-sm-3 col-form-label">Montant mensuel</label>
     <div class="col-sm-9">
       <input type="number" class="form-control" id="monthlyAmount" name="monthlyAmount" min="1" [max]="charge.type?.maxMonthlyAmount"
-             [(ngModel)]="charge.monthlyAmount"/>
+             [(ngModel)]="charge.monthlyAmount" #monthlyAmountCtrl="ngModel"/>
+      <div class="invalid-feedback" *ngIf="monthlyAmountCtrl.hasError('max')">
+        Le montant ne peut pas dépasser la valeur maximale pour ce type de charge&nbsp;: {{ monthlyAmountCtrl.errors['max'].max | currency:'EUR' }}
+      </div>
     </div>
   </div>
   <div class="row">

@@ -1,3 +1,4 @@
+
 <h1 id="fullName">Créer un nouveau revenu pour {{ person | fullname }}</h1>
 
 <form (ngSubmit)="save()" #incomeForm="ngForm">
@@ -14,7 +15,10 @@
     <label for="monthlyAmount" class="col-sm-3 col-form-label">Montant mensuel</label>
     <div class="col-sm-9">
       <input type="number" class="form-control" id="monthlyAmount" name="monthlyAmount" min="1" [max]="income.source?.maxMonthlyAmount"
-             [(ngModel)]="income.monthlyAmount"/>
+             [(ngModel)]="income.monthlyAmount" #monthlyAmountCtrl="ngModel"/>
+      <div class="invalid-feedback" *ngIf="monthlyAmountCtrl.hasError('max')">
+        Le montant ne peut pas dépasser la valeur maximale pour cette source de revenu&nbsp;: {{ monthlyAmountCtrl.errors['max'].max | currency:'EUR' }}
+      </div>
     </div>
   </div>
   <div class="row">

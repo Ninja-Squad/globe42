@@ -97,6 +97,8 @@ import { ParticipantsResolverService } from './participants-resolver.service';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { EmptyResponseBodyErrorInterceptorService } from './empty-response-body-error-interceptor.service';
+import { MinValidatorDirective } from './min-validator.directive';
+import { MaxValidatorDirective } from './max-validator.directive';
 
 registerLocaleData(localeFr);
 
@@ -151,7 +153,9 @@ registerLocaleData(localeFr);
     PersonParticipationsComponent,
     DisplayActivityTypePipe,
     ActivityTypesComponent,
-    ParticipantsComponent
+    ParticipantsComponent,
+    MinValidatorDirective,
+    MaxValidatorDirective
   ],
   entryComponents: [
     ConfirmModalContentComponent
