@@ -1,12 +1,13 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { IncomeService } from './income.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { IncomeModel } from './models/income.model';
 import { IncomeCommand } from './models/income.command';
+import { HttpTester } from './http-tester.spec';
 
 describe('IncomeService', () => {
-  let http: HttpTestingController;
+  let httpTester: HttpTester;
   let service: IncomeService;
 
   beforeEach(() => {
@@ -17,40 +18,27 @@ describe('IncomeService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    http = TestBed.get(HttpTestingController);
+    const http = TestBed.get(HttpTestingController);
+    httpTester = new HttpTester(http);
     service = TestBed.get(IncomeService);
   });
 
   it('should list incomes of a person', () => {
     const expectedIncomes = [{ id: 1 }] as Array<IncomeModel>;
-
-    let actualIncomes;
-    service.list(42).subscribe(incomes => actualIncomes = incomes);
-
-    http.expectOne({url: '/api/persons/42/incomes', method: 'GET'}).flush(expectedIncomes);
-
-    expect(actualIncomes).toEqual(expectedIncomes);
+    httpTester.testGet('/api/persons/42/incomes', expectedIncomes, service.list(42));
   });
 
   it('should delete an income of a person', () => {
-    service.delete(42, 12).subscribe();
-
-    http.expectOne({url: '/api/persons/42/incomes/12', method: 'DELETE'}).flush(null);
+    httpTester.testDelete('/api/persons/42/incomes/12', service.delete(42, 12));
   });
 
   it('should create an income for a person', () => {
     const fakeIncomeCommand: IncomeCommand = { sourceId: 12, monthlyAmount: 340 };
     const expectedIncome = { id: 2 } as IncomeModel;
-
-    let actualIncome;
-    service.create(42, fakeIncomeCommand).subscribe(income => actualIncome = income);
-
-    const testRequest = http.expectOne({ url: '/api/persons/42/incomes', method: 'POST' });
-    expect(testRequest.request.body).toEqual(fakeIncomeCommand);
-    testRequest.flush(expectedIncome);
-
-    expect(actualIncome).toEqual(expectedIncome);
+    httpTester.testPost(
+      '/api/persons/42/incomes',
+      fakeIncomeCommand,
+      expectedIncome,
+      service.create(42, fakeIncomeCommand));
   });
-
-
 });

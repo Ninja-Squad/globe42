@@ -6,11 +6,13 @@ import { JwtInterceptorService } from './jwt-interceptor.service';
 import { UserModel } from './models/user.model';
 import { UserCommand } from './models/user.command';
 import { UserWithPasswordModel } from './models/user-with-password.model';
+import { HttpTester } from './http-tester.spec';
 
 describe('UserService', () => {
 
   let service: UserService;
   let http: HttpTestingController;
+  let httpTester: HttpTester;
   let jwtInterceptor: JwtInterceptorService;
   const originalLocalStorage = window.localStorage;
   const mockLocalStorage = {
@@ -34,6 +36,7 @@ describe('UserService', () => {
 
     service = TestBed.get(UserService);
     http = TestBed.get(HttpTestingController);
+    httpTester = new HttpTester(http);
     jwtInterceptor = TestBed.get(JwtInterceptorService);
     // we use this instead of jasmine.spyOn to make it pass on Firefox
     // https://github.com/jasmine/jasmine/issues/299
@@ -48,15 +51,9 @@ describe('UserService', () => {
     // spy on the store method
     spyOn(service, 'storeLoggedInUser');
 
-    let actualUser;
-    service.authenticate(credentials).subscribe(user => actualUser = user);
+    httpTester.testPost('/api/authentication', credentials, globeUser, service.authenticate(credentials));
 
-    const testRequest = http.expectOne({ url: '/api/authentication', method: 'POST' });
-    expect(testRequest.request.body).toEqual(credentials);
-    testRequest.flush(globeUser);
-
-    expect(actualUser).toEqual(globeUser);
-    expect(service.storeLoggedInUser).toHaveBeenCalledWith(actualUser);
+    expect(service.storeLoggedInUser).toHaveBeenCalledWith(globeUser);
   });
 
   it('should store the logged in user', () => {
@@ -109,85 +106,46 @@ describe('UserService', () => {
 
   it('should get a user', () => {
     const expectedUser = { id: 1 } as UserModel;
-
-    let actualUser;
-    service.get(1).subscribe(user => actualUser = user);
-    http.expectOne({url: '/api/users/1', method: 'GET'}).flush(expectedUser);
-
-    expect(actualUser).toEqual(expectedUser);
+    httpTester.testGet('/api/users/1', expectedUser, service.get(1));
   });
 
   it('should update a user', () => {
     const command = { login: 'jb' } as UserCommand;
-    service.update(2, command).subscribe(() => {});
-
-    const testRequest = http.expectOne({ url: '/api/users/2', method: 'PUT' });
-    expect(testRequest.request.body).toEqual(command);
-    testRequest.flush(null);
+    httpTester.testPut('/api/users/2', command, service.update(2, command));
   });
 
   it('should create a user', () => {
     const command = { login: 'jb' } as UserCommand;
     const expectedUser = { id: 2 } as UserWithPasswordModel;
-
-    let actualUser;
-    service.create(command).subscribe(user => actualUser = user);
-
-    const testRequest = http.expectOne({ url: '/api/users', method: 'POST' });
-    expect(testRequest.request.body).toEqual(command);
-    testRequest.flush(expectedUser);
-
-    expect(actualUser).toEqual(expectedUser);
+    httpTester.testPost('/api/users', command, expectedUser, service.create(command));
   });
 
   it('should list users', () => {
     const expectedUsers = [{ id: 1 }] as Array<UserModel>;
-
-    let actualUsers;
-    service.list().subscribe(users => actualUsers = users);
-
-    http.expectOne({url: '/api/users', method: 'GET'}).flush(expectedUsers);
-
-    expect(actualUsers).toEqual(expectedUsers);
+    httpTester.testGet('/api/users', expectedUsers, service.list());
   });
 
   it('should delete a user', () => {
-    service.delete(2).subscribe(() => {});
-    http.expectOne({ url: '/api/users/2', method: 'DELETE' }).flush(null);
+    httpTester.testDelete('/api/users/2', service.delete(2));
   });
 
   it('should reset a user password', () => {
     const expectedUser = { id: 2 } as UserWithPasswordModel;
-
-    let actualUser;
-    service.resetPassword(2).subscribe(user => actualUser = user);
-
-    const testRequest = http.expectOne({ url: '/api/users/2/password-resets', method: 'POST' });
-    expect(testRequest.request.body).toBeNull();
-    testRequest.flush(expectedUser);
-
-    expect(actualUser).toEqual(expectedUser);
+    httpTester.testPost('/api/users/2/password-resets', null, expectedUser, service.resetPassword(2));
   });
 
   it('should change the current user password', () => {
-    service.changePassword('secret').subscribe(() => {});
-
-    const testRequest = http.expectOne({url: '/api/users/me/passwords', method: 'PUT'});
-    expect(testRequest.request.body).toEqual({ newPassword: 'secret' });
-    testRequest.flush(null);
+    httpTester.testPut('/api/users/me/passwords', { newPassword: 'secret' }, service.changePassword('secret'));
   });
 
   it('should check the current user password', () => {
     service.userEvents.next({login: 'jb'} as UserModel);
 
-    let ok = false;
-    service.checkPassword('secret').subscribe(() => ok = true);
-
-    const testRequest = http.expectOne({ url: '/api/authentication', method: 'POST' });
-    expect(testRequest.request.body).toEqual({login: 'jb', password: 'secret'});
-    testRequest.flush({id: 2});
-
-    expect(ok).toBe(true);
+    httpTester.testPost(
+      '/api/authentication',
+      {login: 'jb', password: 'secret'},
+      null,
+      service.checkPassword('secret'));
   });
 
   it('should check the current user password with failure', () => {

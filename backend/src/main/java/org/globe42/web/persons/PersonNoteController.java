@@ -12,6 +12,7 @@ import org.globe42.domain.Note;
 import org.globe42.domain.Person;
 import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.CurrentUser;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -52,6 +54,7 @@ public class PersonNoteController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public NoteDTO create(@PathVariable("personId") Long personId, @Validated @RequestBody NoteCommandDTO command) {
         Person person = personDao.findById(personId).orElseThrow(NotFoundException::new);
 
@@ -67,6 +70,7 @@ public class PersonNoteController {
     }
 
     @PutMapping("/{noteId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable("personId") Long personId,
                        @PathVariable("noteId") Long noteId,
                        @Validated @RequestBody NoteCommandDTO command) {
@@ -79,6 +83,7 @@ public class PersonNoteController {
     }
 
     @DeleteMapping("/{noteId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("personId") Long personId,
                        @PathVariable("noteId") Long noteId) {
         Person person = personDao.findById(personId).orElseThrow(NotFoundException::new);

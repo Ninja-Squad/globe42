@@ -4,11 +4,12 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { PersonService } from './person.service';
 import { PersonModel } from './models/person.model';
 import { PersonCommand } from './models/person.command';
+import { HttpTester } from './http-tester.spec';
 
 describe('PersonService', () => {
 
   let service: PersonService;
-  let http: HttpTestingController;
+  let httpTester: HttpTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,52 +18,27 @@ describe('PersonService', () => {
     });
 
     service = TestBed.get(PersonService);
-    http = TestBed.get(HttpTestingController);
+    httpTester = new HttpTester(TestBed.get(HttpTestingController));
   });
 
   it('should get a person', () => {
     const expectedPerson = { id: 1 } as PersonModel;
-
-    let actualPerson;
-    service.get(1).subscribe(person => actualPerson = person);
-
-    http.expectOne({url: '/api/persons/1', method: 'GET'}).flush(expectedPerson);
-    expect(actualPerson).toEqual(expectedPerson);
-
+    httpTester.testGet('/api/persons/1', expectedPerson, service.get(1));
   });
 
   it('should update a person', () => {
     const fakePerson = { firstName: 'Ced' } as PersonCommand;
-
-    service.update(2, fakePerson).subscribe(() => {});
-
-    const testRequest = http.expectOne({url: '/api/persons/2', method: 'PUT'});
-    expect(testRequest.request.body).toEqual(fakePerson);
-    testRequest.flush(null);
+    httpTester.testPut('/api/persons/2', fakePerson, service.update(2, fakePerson));
   });
 
   it('should create a person', () => {
     const fakePerson = { nickName: 'ced' } as PersonCommand;
     const expectedPerson = { id: 2 } as PersonModel;
-
-    let actualPerson;
-    service.create(fakePerson).subscribe(person => actualPerson = person);
-
-    const testRequest = http.expectOne({ url: '/api/persons', method: 'POST' });
-    expect(testRequest.request.body).toEqual(fakePerson);
-    testRequest.flush(expectedPerson);
-
-    expect(actualPerson).toEqual(expectedPerson);
+    httpTester.testPost('/api/persons', fakePerson, expectedPerson, service.create(fakePerson));
   });
 
   it('should list persons', () => {
     const expectedPersons = [{ id: 1 }] as Array<PersonModel>;
-
-    let actualPersons;
-    service.list().subscribe(persons => actualPersons = persons);
-
-    http.expectOne({url: '/api/persons', method: 'GET'}).flush(expectedPersons);
-
-    expect(actualPersons).toEqual(expectedPersons);
+    httpTester.testGet('/api/persons', expectedPersons, service.list());
   });
 });

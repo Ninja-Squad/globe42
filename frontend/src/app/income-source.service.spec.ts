@@ -4,10 +4,11 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { IncomeSourceCommand } from './models/income-source.command';
 import { IncomeSourceModel } from './models/income-source.model';
 import { IncomeSourceService } from './income-source.service';
+import { HttpTester } from './http-tester.spec';
 
 describe('IncomeSourceService', () => {
 
-  let http: HttpTestingController;
+  let httpTester: HttpTester;
   let service: IncomeSourceService;
 
   beforeEach(() => {
@@ -18,51 +19,29 @@ describe('IncomeSourceService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    http = TestBed.get(HttpTestingController);
+    const http = TestBed.get(HttpTestingController);
+    httpTester = new HttpTester(http);
     service = TestBed.get(IncomeSourceService);
   });
 
   it('should get an income source', () => {
     const expectedIncomeSource = { id: 1 } as IncomeSourceModel;
-
-    let actualIncomeSource;
-    service.get(1).subscribe(incomeSource => actualIncomeSource = incomeSource);
-    http.expectOne({url: '/api/income-sources/1', method: 'GET'}).flush(expectedIncomeSource);
-
-    expect(actualIncomeSource).toEqual(expectedIncomeSource);
+    httpTester.testGet('/api/income-sources/1', expectedIncomeSource, service.get(1));
   });
 
   it('should update an income source', () => {
     const fakeIncomeSourceCommand = { name: 'foo' } as IncomeSourceCommand;
-    service.update(2, fakeIncomeSourceCommand).subscribe(() => {});
-
-    const testRequest = http.expectOne({ url: '/api/income-sources/2', method: 'PUT' });
-    expect(testRequest.request.body).toEqual(fakeIncomeSourceCommand);
-    testRequest.flush(null);
+    httpTester.testPut('/api/income-sources/2', fakeIncomeSourceCommand, service.update(2, fakeIncomeSourceCommand));
   });
 
   it('should create a income source', () => {
     const fakeIncomeSourceCommand = { name: 'foo' } as IncomeSourceCommand;
     const expectedIncomeSource = { id: 2 } as IncomeSourceModel;
-
-    let actualIncomeSource;
-    service.create(fakeIncomeSourceCommand).subscribe(incomeSource => actualIncomeSource = incomeSource);
-
-    const testRequest = http.expectOne({ url: '/api/income-sources', method: 'POST' });
-    expect(testRequest.request.body).toEqual(fakeIncomeSourceCommand);
-    testRequest.flush(expectedIncomeSource);
-
-    expect(actualIncomeSource).toEqual(expectedIncomeSource);
+    httpTester.testPost('/api/income-sources', fakeIncomeSourceCommand, expectedIncomeSource, service.create(fakeIncomeSourceCommand));
   });
 
   it('should list income sources', () => {
     const expectedIncomeSources = [{ id: 1 }] as Array<IncomeSourceModel>;
-
-    let actualIncomeSources;
-    service.list().subscribe(incomeSources => actualIncomeSources = incomeSources);
-
-    http.expectOne({url: '/api/income-sources', method: 'GET'}).flush(expectedIncomeSources);
-
-    expect(actualIncomeSources).toEqual(expectedIncomeSources);
+    httpTester.testGet('/api/income-sources', expectedIncomeSources, service.list());
   });
 });

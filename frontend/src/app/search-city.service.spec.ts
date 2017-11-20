@@ -3,11 +3,12 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { SearchCityService } from './search-city.service';
 import { CityModel } from './models/person.model';
+import { HttpTester } from './http-tester.spec';
 
 describe('SearchCityService', () => {
 
   let service: SearchCityService;
-  let http: HttpTestingController;
+  let httpTester: HttpTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -16,7 +17,7 @@ describe('SearchCityService', () => {
     });
 
     service = TestBed.get(SearchCityService);
-    http = TestBed.get(HttpTestingController);
+    httpTester = new HttpTester(TestBed.get(HttpTestingController));
   });
 
   it('should return empty array for empty term', async(() => {
@@ -24,13 +25,8 @@ describe('SearchCityService', () => {
   }));
 
   it('should request the city API', () => {
-    const city: CityModel = { city: 'SAINT-ETIENNE', code: 42000 };
-    const expectedResult = [city];
-    let actualResult = [];
-    service.search('SAINT').subscribe(result => actualResult = result);
-    http.expectOne({ url: '/api/cities?query=SAINT', method: 'GET' }).flush(expectedResult);
-
-    expect(actualResult).toEqual(expectedResult);
+    const expectedResult = [{ city: 'SAINT-ETIENNE', code: 42000 }] as Array<CityModel>;
+    httpTester.testGet('/api/cities?query=SAINT', expectedResult, service.search('SAINT'));
   });
 
 });

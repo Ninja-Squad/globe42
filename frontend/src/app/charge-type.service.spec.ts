@@ -4,10 +4,11 @@ import { ChargeTypeService } from './charge-type.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ChargeTypeModel } from './models/charge-type.model';
 import { ChargeTypeCommand } from './models/charge-type.command';
+import { HttpTester } from './http-tester.spec';
 
 describe('ChargeTypeService', () => {
 
-  let http: HttpTestingController;
+  let httpTester: HttpTester;
   let service: ChargeTypeService;
 
   beforeEach(() => {
@@ -18,51 +19,29 @@ describe('ChargeTypeService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    http = TestBed.get(HttpTestingController);
+    const http = TestBed.get(HttpTestingController);
+    httpTester = new HttpTester(http);
     service = TestBed.get(ChargeTypeService);
   });
 
   it('should get a charge type', () => {
     const expectedChargeType = { id: 1 } as ChargeTypeModel;
-
-    let actualChargeType;
-    service.get(1).subscribe(chargeType => actualChargeType = chargeType);
-    http.expectOne({url: '/api/charge-types/1', method: 'GET'}).flush(expectedChargeType);
-
-    expect(actualChargeType).toEqual(expectedChargeType);
+    httpTester.testGet('/api/charge-types/1', expectedChargeType, service.get(1));
   });
 
   it('should update a charge type', () => {
     const fakeChargeType = { name: 'rental' } as ChargeTypeCommand;
-    service.update(2, fakeChargeType).subscribe(() => {});
-
-    const testRequest = http.expectOne({ url: '/api/charge-types/2', method: 'PUT' });
-    expect(testRequest.request.body).toEqual(fakeChargeType);
-    testRequest.flush(null);
+    httpTester.testPut('/api/charge-types/2', fakeChargeType, service.update(2, fakeChargeType));
   });
 
   it('should create a charge type', () => {
     const fakeChargeType = { name: 'foo' } as ChargeTypeCommand;
     const expectedChargeType = { id: 2 } as ChargeTypeModel;
-
-    let actualChargeType;
-    service.create(fakeChargeType).subscribe(chargeType => actualChargeType = chargeType);
-
-    const testRequest = http.expectOne({ url: '/api/charge-types', method: 'POST' });
-    expect(testRequest.request.body).toEqual(fakeChargeType);
-    testRequest.flush(expectedChargeType);
-
-    expect(actualChargeType).toEqual(expectedChargeType);
+    httpTester.testPost('/api/charge-types', fakeChargeType, expectedChargeType, service.create(fakeChargeType));
   });
 
   it('should list charge types', () => {
     const expectedChargeTypes = [{ id: 1 }] as Array<ChargeTypeModel>;
-
-    let actualChargeTypes;
-    service.list().subscribe(chargeTypes => actualChargeTypes = chargeTypes);
-
-    http.expectOne({url: '/api/charge-types', method: 'GET'}).flush(expectedChargeTypes);
-
-    expect(actualChargeTypes).toEqual(expectedChargeTypes);
+    httpTester.testGet('/api/charge-types', expectedChargeTypes, service.list());
   });
 });

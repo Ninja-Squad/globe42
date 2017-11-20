@@ -3,10 +3,12 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { FileModel } from './models/file.model';
 import { HttpEvent, HttpResponse } from '@angular/common/http';
+import { HttpTester } from './http-tester.spec';
 
 describe('PersonFileService', () => {
   let service: PersonFileService;
   let http: HttpTestingController;
+  let httpTester: HttpTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -16,16 +18,12 @@ describe('PersonFileService', () => {
 
     service = TestBed.get(PersonFileService);
     http = TestBed.get(HttpTestingController);
+    httpTester = new HttpTester(http);
   });
 
   it('should list person files', () => {
     const expected: Array<FileModel> = [];
-
-    let actual: Array<FileModel>;
-    service.list(1).subscribe(files => actual = files);
-
-    http.expectOne({url: '/api/persons/1/files', method: 'GET'}).flush(expected);
-    expect(actual).toEqual(expected);
+    httpTester.testGet('/api/persons/1/files', expected, service.list(1));
   });
 
   it('should give the url of a file', () => {
@@ -59,9 +57,6 @@ describe('PersonFileService', () => {
   });
 
   it('should delete a file', () => {
-    let ok = false;
-    service.delete(1, 'test 1.txt').subscribe(() => ok = true);
-    http.expectOne({ url: '/api/persons/1/files/test%201.txt', method: 'DELETE' }).flush(null);
-    expect(ok).toBe(true);
+    httpTester.testDelete('/api/persons/1/files/test%201.txt', service.delete(1, 'test 1.txt'));
   });
 });

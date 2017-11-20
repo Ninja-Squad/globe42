@@ -9,10 +9,13 @@ import { NowService } from './now.service';
 import { Page } from './models/page';
 import { UserService } from './user.service';
 import { JwtInterceptorService } from './jwt-interceptor.service';
+import { HttpTester } from './http-tester.spec';
+import { UserModel } from './models/user.model';
 
 describe('TaskService', () => {
   let service: TaskService;
-  let http: HttpTestingController;
+  let httpTester: HttpTester;
+  let userService: UserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,7 +24,8 @@ describe('TaskService', () => {
     });
 
     service = TestBed.get(TaskService);
-    http = TestBed.get(HttpTestingController);
+    userService = TestBed.get(UserService);
+    httpTester = new HttpTester(TestBed.get(HttpTestingController));
     spyOn(TestBed.get(NowService), 'now').and.callFake(() => moment('2017-08-02T15:30:00'));
   });
 
@@ -30,12 +34,7 @@ describe('TaskService', () => {
       content: [{id: 1}, {id: 2}] as Array<TaskModel>,
       number: 2
     } as Page<TaskModel>;
-
-    let actualPage;
-    methodToTest().subscribe(page => actualPage = page);
-
-    http.expectOne({url: expectedUrl, method: 'GET'}).flush(expectedPage);
-    expect(actualPage).toEqual(expectedPage);
+    httpTester.testGet(expectedUrl, expectedPage, methodToTest());
   }
 
   it('should list todo tasks', () => {
@@ -63,61 +62,23 @@ describe('TaskService', () => {
   });
 
   it('should assign to current user', () => {
-    const userService = TestBed.get(UserService);
-    userService.userEvents.next({ id : 42 });
-
-    let ok = false;
-    service.assignToSelf(1).subscribe(() => ok = true);
-
-    const testRequest = http.expectOne({ url: '/api/tasks/1/assignments', method: 'POST' });
-    expect(testRequest.request.body).toEqual({ userId: 42 });
-    testRequest.flush(null);
-
-    expect(ok).toBe(true);
+    userService.userEvents.next({ id : 42 } as UserModel);
+    httpTester.testPost('/api/tasks/1/assignments', { userId: 42 }, null, service.assignToSelf(1));
   });
 
   it('should unassign a task', () => {
-    const userService = TestBed.get(UserService);
-    userService.userEvents.next({ id : 42 });
-
-    let ok = false;
-    service.unassign(1).subscribe(() => ok = true);
-
-    http.expectOne({ url: '/api/tasks/1/assignments', method: 'DELETE' }).flush(null);
-
-    expect(ok).toBe(true);
+    httpTester.testDelete('/api/tasks/1/assignments', service.unassign(1));
   });
 
   it('should cancel a task', () => {
-    let ok = false;
-    service.cancel(1).subscribe(() => ok = true);
-
-    const testRequest = http.expectOne({ url: '/api/tasks/1/status-changes', method: 'POST' });
-    expect(testRequest.request.body).toEqual({ newStatus: 'CANCELLED' });
-    testRequest.flush(null);
-
-    expect(ok).toBe(true);
+    httpTester.testPost('/api/tasks/1/status-changes', { newStatus: 'CANCELLED' }, null, service.cancel(1));
   });
 
   it('should mark a task as done', () => {
-    let ok = false;
-    service.markAsDone(1).subscribe(() => ok = true);
-
-    const testRequest = http.expectOne({ url: '/api/tasks/1/status-changes', method: 'POST' });
-    expect(testRequest.request.body).toEqual({ newStatus: 'DONE' });
-    testRequest.flush(null);
-
-    expect(ok).toBe(true);
+    httpTester.testPost('/api/tasks/1/status-changes', { newStatus: 'DONE' }, null, service.markAsDone(1));
   });
 
   it('should resurrect a task', () => {
-    let ok = false;
-    service.resurrect(1).subscribe(() => ok = true);
-
-    const testRequest = http.expectOne({ url: '/api/tasks/1/status-changes', method: 'POST' });
-    expect(testRequest.request.body).toEqual({ newStatus: 'TODO' });
-    testRequest.flush(null);
-
-    expect(ok).toBe(true);
+    httpTester.testPost('/api/tasks/1/status-changes', { newStatus: 'TODO' }, null, service.resurrect(1));
   });
 });
