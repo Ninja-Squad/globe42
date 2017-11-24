@@ -3,7 +3,7 @@ import { Directive, HostBinding, Optional } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '.form-control:not([ngbNoFormControlValidation]),[ngbFormControlValidation]'
+  selector: '.form-control:not([glFormControlValidation]),[glFormControlValidation],[ngbRadioGroup]'
 })
 export class FormControlValidationDirective {
 

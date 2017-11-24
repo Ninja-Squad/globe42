@@ -11,12 +11,14 @@
     <label for="firstName" class="col-sm-3 col-form-label">Prénom</label>
     <div class="col-sm-9">
       <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName">
+      <div class="invalid-feedback" *ngIf="personForm.get('firstName').hasError('required')">Le prénom est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
     <label for="lastName" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
       <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
+      <div class="invalid-feedback" *ngIf="personForm.get('lastName').hasError('required')">Le nom est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
@@ -33,6 +35,7 @@
           <input ngbButton name="adherent" id="adherent{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
         </label>
       </div>
+      <div class="invalid-feedback" *ngIf="personForm.get('adherent').hasError('required')">L'état de l'adhésion est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
@@ -43,6 +46,7 @@
           <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
         </label>
       </div>
+      <div class="invalid-feedback" *ngIf="personForm.get('gender').hasError('required')">Le genre est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
@@ -75,7 +79,8 @@
   <div class="form-group row">
     <label for="email" class="col-sm-3 col-form-label">Email</label>
     <div class="col-sm-9">
-      <input class="form-control" id="email" placeholder="john@mail.com" formControlName="email">
+      <input class="form-control" type="email" id="email" placeholder="john@mail.com" formControlName="email">
+      <div class="invalid-feedback" *ngIf="personForm.get('email').hasError('email')">L'email est invalide</div>
     </div>
   </div>
   <div class="form-group row">

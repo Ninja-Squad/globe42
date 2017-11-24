@@ -20,6 +20,24 @@ h1 {
   }
 }
 
+.btn-group label {
+  margin-bottom: 0;
+}
+
+.btn-group.is-invalid {
+  label {
+    border: 1px solid $red;
+    &:focus {
+      box-shadow: 0 0 0 .2rem rgba($red,.25);
+    }
+  }
+
+  ~ .#{invalid}-feedback {
+    display: block;
+  }
+}
+
 ngb-datepicker-navigation button {
   border: none;
 }
+
