@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M5'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M6'
         classpath 'org.flywaydb:flyway-gradle-plugin:4.2.0'
         classpath 'org.postgresql:postgresql:9.4.1212'
     }
@@ -60,7 +60,7 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
 
-    runtime 'org.postgresql:postgresql:9.4.1212'
+    runtime 'org.postgresql:postgresql:42.1.4'
     runtime 'org.flywaydb:flyway-core'
 }
 
