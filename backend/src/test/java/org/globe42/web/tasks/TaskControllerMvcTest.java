@@ -110,7 +110,7 @@ public class TaskControllerMvcTest {
     public void shouldAssign() throws Exception {
         when(mockTaskDao.findById(task.getId())).thenReturn(Optional.of(task));
         User otherUser = new User(5433L);
-        when(mockUserDao.findById(otherUser.getId())).thenReturn(Optional.of(otherUser));
+        when(mockUserDao.findNotDeletedById(otherUser.getId())).thenReturn(Optional.of(otherUser));
 
         mvc.perform(post("/api/tasks/{taskId}/assignments", task.getId())
                 .contentType(MediaType.APPLICATION_JSON)

@@ -102,8 +102,8 @@ public class TaskController {
     @ResponseStatus(HttpStatus.CREATED)
     public void assign(@PathVariable("taskId") Long taskId, @Validated @RequestBody TaskAssignmentCommandDTO command) {
         Task task = taskDao.findById(taskId).orElseThrow(() -> new NotFoundException("no task with ID " + taskId));
-        User user = userDao.findById(command.getUserId()).orElseThrow(
-            () -> new BadRequestException("user " + command.getUserId() + "doesn't exist"));
+        User user = userDao.findNotDeletedById(command.getUserId()).orElseThrow(
+            () -> new BadRequestException("user " + command.getUserId() + " doesn't exist"));
 
         task.setAssignee(user);
     }
@@ -188,7 +188,7 @@ public class TaskController {
         User assignee = null;
         if (command.getAssigneeId() != null) {
             assignee =
-                userDao.findById(command.getAssigneeId())
+                userDao.findNotDeletedById(command.getAssigneeId())
                        .orElseThrow(() -> new BadRequestException("no user with id "+ command.getAssigneeId()));
         }
         task.setAssignee(assignee);

@@ -67,7 +67,7 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void shouldGetCurrentUser() {
         User user = createUser(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
         CurrentUserDTO result = controller.getCurrentUser();
         assertThat(result.getId()).isEqualTo(user.getId());
@@ -76,7 +76,7 @@ public class UserControllerTest extends BaseTest{
 
     @Test(expected = NotFoundException.class)
     public void shouldThrowWhenGettingCurrentUserIfNotFound() {
-        when(mockUserDao.findById(userId)).thenReturn(Optional.empty());
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
 
         controller.getCurrentUser();
     }
@@ -84,7 +84,7 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void shouldChangePasswordOfCurrentUser() {
         User user = createUser(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
         ChangePasswordCommandDTO command = new ChangePasswordCommandDTO("newPassword");
         when(mockPasswordDigester.hash(command.getNewPassword())).thenReturn("hashed");
@@ -97,7 +97,7 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void shouldList() {
         User user = createUser(userId);
-        when(mockUserDao.findAll()).thenReturn(Collections.singletonList(user));
+        when(mockUserDao.findNotDeleted()).thenReturn(Collections.singletonList(user));
 
         List<UserDTO> result = controller.list();
         assertThat(result).hasSize(1);
@@ -108,7 +108,7 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void shouldGet() {
         User user = createUser(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
         UserDTO result = controller.get(userId);
         assertThat(result.getId()).isEqualTo(user.getId());
@@ -116,7 +116,7 @@ public class UserControllerTest extends BaseTest{
 
     @Test(expected = NotFoundException.class)
     public void shouldThrowWhenGettingIfNotFound() {
-        when(mockUserDao.findById(userId)).thenReturn(Optional.empty());
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
         controller.get(userId);
     }
 
@@ -149,7 +149,7 @@ public class UserControllerTest extends BaseTest{
     public void shouldUpdate() {
         UserCommandDTO command = new UserCommandDTO("test", true);
         User user = createUser(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
         controller.update(userId, command);
         assertThat(user.getLogin()).isEqualTo(command.getLogin());
@@ -160,9 +160,9 @@ public class UserControllerTest extends BaseTest{
     public void shouldThrowWhenUpdatingWithExistingLogin() {
         UserCommandDTO command = new UserCommandDTO("test", false);
         User user = createUser(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
-        when(mockUserDao.findByLogin(command.getLogin())).thenReturn(Optional.of(createUser(4567L)));
+        when(mockUserDao.findNotDeletedByLogin(command.getLogin())).thenReturn(Optional.of(createUser(4567L)));
 
         controller.update(userId, command);
     }
@@ -171,9 +171,9 @@ public class UserControllerTest extends BaseTest{
     public void shouldNotThrowWhenUpdatingWithSameLogin() {
         User user = createUser(userId);
         UserCommandDTO command = new UserCommandDTO(user.getLogin(), false);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
-        when(mockUserDao.findByLogin(command.getLogin())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedByLogin(command.getLogin())).thenReturn(Optional.of(user));
 
         controller.update(userId, command);
     }
@@ -181,20 +181,16 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void shouldDelete() {
         User user = createUser(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
         controller.delete(userId);
 
-        verify(mockTaskDao).resetAssigneeOnTasksAssignedTo(user);
-        verify(mockTaskDao).resetCreatorOnTasksCreatedBy(user);
-        verify(mockNoteDao).resetCreatorOnNotesCreatedBy(user);
-        verify(mockSpentTimeDao).resetCreatorOnSpentTimesCreatedBy(user);
-        verify(mockUserDao).delete(user);
+        assertThat(user.isDeleted()).isTrue();
     }
 
     @Test
     public void shouldNotDoAnythingWhenDeletingUnexistingUser() {
-        when(mockUserDao.findById(userId)).thenReturn(Optional.empty());
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
 
         controller.delete(userId);
 
@@ -204,7 +200,7 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void shouldResetPassword() {
         User user = createUser(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
         when(mockPasswordGenerator.generatePassword()).thenReturn("password");
         when(mockPasswordDigester.hash("password")).thenReturn("hashed");

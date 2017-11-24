@@ -54,7 +54,7 @@ public class AdminOnlyAspectTest extends BaseTest {
         User user = new User(userId);
         user.setAdmin(true);
 
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
 
         aspect.checkUserIsAdmin(null);
     }

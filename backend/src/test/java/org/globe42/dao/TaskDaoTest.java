@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
 
 import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.generator.ValueGenerators;
@@ -12,9 +11,9 @@ import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
 import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Person;
 import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
@@ -48,9 +47,10 @@ public class TaskDaoTest extends BaseDaoTest {
                   .build();
 
         Operation users = Insert.into("guser")
-                                .columns("id", "login", "password", "admin")
-                                .values(1L, "jb", "hashedPassword", true)
-                                .values(2L, "ced", "hashedPassword", true)
+                                .columns("id", "login", "password", "admin", "deleted")
+                                .values(1L, "jb", "hashedPassword", true, false)
+                                .values(2L, "ced", "hashedPassword", true, false)
+                                .values(3L, "old", "hashedPassword", true, true)
                                 .build();
         Operation tasks = Insert.into("task")
                                 .withGeneratedValue("description", ValueGenerators.stringSequence("desc_"))
@@ -60,9 +60,9 @@ public class TaskDaoTest extends BaseDaoTest {
                                 .values(1L, TaskStatus.DONE, null, 1L, 1L, null, Instant.parse("2017-08-04T00:00:00Z"))
                                 .values(2L, TaskStatus.TODO, null, 1L, 2L, null, null)
                                 .values(3L, TaskStatus.TODO, null, 2L, 1L, null, null)
-                                .values(4L, TaskStatus.TODO, LocalDate.of(2017, 8, 1), null, null, null, null)
-                                .values(5L, TaskStatus.TODO, LocalDate.of(2017, 8, 7), null, null, 1L, null)
-                                .values(6L, TaskStatus.CANCELLED, LocalDate.of(2017, 8, 1), null, null, 1L, Instant.parse("2017-08-04T12:00:00Z"))
+                                .values(4L, TaskStatus.TODO, LocalDate.of(2017, 8, 1), 3L, null, null, null)
+                                .values(5L, TaskStatus.TODO, LocalDate.of(2017, 8, 7), 3L, null, 1L, null)
+                                .values(6L, TaskStatus.CANCELLED, LocalDate.of(2017, 8, 1), 3L, null, 1L, Instant.parse("2017-08-04T12:00:00Z"))
                                 .build();
 
         dbSetup(Operations.sequenceOf(users, persons, tasks));
@@ -106,24 +106,6 @@ public class TaskDaoTest extends BaseDaoTest {
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getTotalPages()).isEqualTo(1);
         assertThat(result.getContent()).extracting(Task::getId).containsExactly(6L, 1L);
-    }
-
-    @Test
-    public void shouldResetCreator() {
-        dao.resetCreatorOnTasksCreatedBy(new User(1L));
-        List<Task> taskList = dao.findAll();
-        assertThat(taskList.stream().filter(task -> task.getCreator() != null))
-            .extracting(task -> task.getCreator().getId())
-            .containsOnly(2L);
-    }
-
-    @Test
-    public void shouldResetAssignee() {
-        dao.resetAssigneeOnTasksAssignedTo(new User(1L));
-        List<Task> taskList = dao.findAll();
-        assertThat(taskList.stream().filter(task -> task.getAssignee() != null))
-            .extracting(task -> task.getAssignee().getId())
-            .containsOnly(2L);
     }
 
     PageRequest pageRequest() {

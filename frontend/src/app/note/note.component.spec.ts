@@ -29,17 +29,6 @@ describe('NoteComponent', () => {
     expect(fixture.nativeElement.querySelector('form')).toBeFalsy();
   });
 
-  it('should display a note without creator', () => {
-    TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note"></gl-note>');
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.note.creator = null;
-    fixture.detectChanges();
-
-    const textContent = fixture.nativeElement.textContent;
-    expect(textContent).toContain('9 août 2017');
-    expect(textContent).toContain('hello world');
-  });
-
   it('should request to be edited', () => {
     TestBed.overrideTemplate(
       TestComponent,

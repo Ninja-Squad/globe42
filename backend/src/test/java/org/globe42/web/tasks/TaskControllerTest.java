@@ -151,7 +151,7 @@ public class TaskControllerTest extends BaseTest {
     @Test
     public void shouldAssign() {
         when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
 
@@ -161,7 +161,7 @@ public class TaskControllerTest extends BaseTest {
     @Test(expected = NotFoundException.class)
     public void shouldThrowWhenAssigningUnexistingTask() {
         when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.empty());
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
     }
@@ -169,7 +169,7 @@ public class TaskControllerTest extends BaseTest {
     @Test(expected = BadRequestException.class)
     public void shouldThrowWhenAssigningToUnexistingUser() {
         when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.empty());
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.empty());
 
         controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
     }
@@ -230,7 +230,7 @@ public class TaskControllerTest extends BaseTest {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
 
         User user = new User(command.getAssigneeId());
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         when(mockTaskDao.save(any(Task.class))).thenAnswer(Answers.<Task>modifiedFirstArgument(task -> task.setId(42L)));
 
@@ -262,7 +262,7 @@ public class TaskControllerTest extends BaseTest {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
 
         User user = new User(command.getAssigneeId());
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
 

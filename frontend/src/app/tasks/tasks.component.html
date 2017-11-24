@@ -12,7 +12,7 @@
     <div class="d-flex w-100 justify-content-between align-items-start">
       <div class="small text-muted">
         <div>
-          <span *ngIf="task.model.creator">Créée par {{ task.model.creator.login }}.</span>
+          Créée par {{ task.model.creator.login }}.
           <span *ngIf="task.model.assignee">Assignée à {{ task.model.assignee.login }}.</span>
           <span *ngIf="task.model.concernedPerson">Concerne <a [routerLink]="['/persons', task.model.concernedPerson.id]">{{ task.model.concernedPerson | fullname }}</a>.</span>
         </div>

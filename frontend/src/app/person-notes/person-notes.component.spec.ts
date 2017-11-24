@@ -38,13 +38,19 @@ describe('PersonNotesComponent', () => {
       {
         id: 1,
         text: 'note 1',
-        creator: null,
+        creator: {
+          id: 1,
+          login: 'admin'
+        } as UserModel,
         creationInstant: '2017-08-09T12:00:00.000Z'
       },
       {
         id: 2,
         text: 'note 2',
-        creator: null,
+        creator: {
+          id: 1,
+          login: 'admin'
+        } as UserModel,
         creationInstant: '2017-08-10T12:00:00.000Z'
       }
     ];

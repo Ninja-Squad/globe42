@@ -33,7 +33,7 @@ public class AuthenticationController {
 
     @PostMapping
     public AuthenticatedUserDTO authenticate(@RequestBody CredentialsDTO credentials) {
-        User user = userDao.findByLogin(credentials.getLogin()).orElseThrow(UnauthorizedException::new);
+        User user = userDao.findNotDeletedByLogin(credentials.getLogin()).orElseThrow(UnauthorizedException::new);
         if (!passwordDigester.match(credentials.getPassword(), user.getPassword())) {
             throw new UnauthorizedException();
         }

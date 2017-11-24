@@ -63,7 +63,7 @@ public class UserControllerMvcTest {
     public void shouldGetCurrentUser() throws Exception {
         User user = UserControllerTest.createUser(42L);
         when(mockCurrentUser.getUserId()).thenReturn(user.getId());
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         mvc.perform(get("/api/users/me"))
            .andExpect(status().isOk())
@@ -76,7 +76,7 @@ public class UserControllerMvcTest {
     public void shouldChangePasswordOfCurrentUser() throws Exception {
         User user = UserControllerTest.createUser(42L);
         when(mockCurrentUser.getUserId()).thenReturn(user.getId());
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         ChangePasswordCommandDTO command = new ChangePasswordCommandDTO("newPassword");
 
@@ -89,7 +89,7 @@ public class UserControllerMvcTest {
     @Test
     public void shouldList() throws Exception {
         User user = UserControllerTest.createUser(42L);
-        when(mockUserDao.findAll()).thenReturn(Collections.singletonList(user));
+        when(mockUserDao.findNotDeleted()).thenReturn(Collections.singletonList(user));
 
         mvc.perform(get("/api/users"))
            .andExpect(status().isOk())
@@ -116,7 +116,7 @@ public class UserControllerMvcTest {
     @Test
     public void shouldUpdate() throws Exception {
         User user = UserControllerTest.createUser(42L);
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         UserCommandDTO command = new UserCommandDTO("test", true);
 
@@ -129,7 +129,7 @@ public class UserControllerMvcTest {
     @Test
     public void shouldDelete() throws Exception {
         User user = UserControllerTest.createUser(42L);
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         mvc.perform(delete("/api/users/{userId}", user.getId()))
            .andExpect(status().isNoContent());
@@ -138,7 +138,7 @@ public class UserControllerMvcTest {
     @Test
     public void shouldResetPassword() throws Exception {
         User user = UserControllerTest.createUser(42L);
-        when(mockUserDao.findById(user.getId())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
         when(mockPasswordGenerator.generatePassword()).thenReturn("password");
         when(mockPasswordDigester.hash("password")).thenReturn("hashed");

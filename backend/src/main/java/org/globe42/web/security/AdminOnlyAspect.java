@@ -27,6 +27,6 @@ public class AdminOnlyAspect {
 
     @Before("@annotation(adminOnly)")
     public void checkUserIsAdmin(AdminOnly adminOnly) {
-        userDao.findById(currentUser.getUserId()).filter(User::isAdmin).orElseThrow(ForbiddenException::new);
+        userDao.findNotDeletedById(currentUser.getUserId()).filter(User::isAdmin).orElseThrow(ForbiddenException::new);
     }
 }

@@ -62,27 +62,27 @@ public class UserController {
 
     @GetMapping("/me")
     public CurrentUserDTO getCurrentUser() {
-        User user = userDao.findById(currentUser.getUserId()).orElseThrow(NotFoundException::new);
+        User user = userDao.findNotDeletedById(currentUser.getUserId()).orElseThrow(NotFoundException::new);
         return new CurrentUserDTO(user);
     }
 
     @PutMapping("/me/passwords")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@Validated @RequestBody ChangePasswordCommandDTO command) {
-        User user = userDao.findById(currentUser.getUserId()).orElseThrow(NotFoundException::new);
+        User user = userDao.findNotDeletedById(currentUser.getUserId()).orElseThrow(NotFoundException::new);
         user.setPassword(passwordDigester.hash(command.getNewPassword()));
     }
 
     @GetMapping
     @AdminOnly
     public List<UserDTO> list() {
-        return userDao.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
+        return userDao.findNotDeleted().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{userId}")
     @AdminOnly
     public UserDTO get(@PathVariable("userId") Long userId) {
-        return userDao.findById(userId).map(UserDTO::new).orElseThrow(NotFoundException::new);
+        return userDao.findNotDeletedById(userId).map(UserDTO::new).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping
@@ -108,9 +108,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @AdminOnly
     public void update(@PathVariable("userId") Long userId, @Validated @RequestBody UserCommandDTO command) {
-        User user = userDao.findById(userId).orElseThrow(() -> new NotFoundException("No user with ID " + userId));
+        User user = userDao.findNotDeletedById(userId).orElseThrow(() -> new NotFoundException("No user with ID " + userId));
 
-        userDao.findByLogin(command.getLogin()).filter(other -> !other.getId().equals(userId)).ifPresent(other -> {
+        userDao.findNotDeletedByLogin(command.getLogin()).filter(other -> !other.getId().equals(userId)).ifPresent(other -> {
             throw new BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
         });
 
@@ -121,12 +121,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @AdminOnly
     public void delete(@PathVariable("userId") Long userId) {
-        userDao.findById(userId).ifPresent(user -> {
-            taskDao.resetAssigneeOnTasksAssignedTo(user);
-            taskDao.resetCreatorOnTasksCreatedBy(user);
-            noteDao.resetCreatorOnNotesCreatedBy(user);
-            spentTimeDao.resetCreatorOnSpentTimesCreatedBy(user);
-            userDao.delete(user);
+        userDao.findNotDeletedById(userId).ifPresent(user -> {
+            user.setDeleted(true);
         });
     }
 
@@ -134,7 +130,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @AdminOnly
     public UserWithPasswordDTO resetPassword(@PathVariable("userId") Long userId) {
-        User user = userDao.findById(userId).orElseThrow(() -> new NotFoundException("No user with ID " + userId));
+        User user = userDao.findNotDeletedById(userId).orElseThrow(() -> new NotFoundException("No user with ID " + userId));
         String generatedPassword = passwordGenerator.generatePassword();
         user.setPassword(passwordDigester.hash(generatedPassword));
         return new UserWithPasswordDTO(user, generatedPassword);

@@ -34,7 +34,7 @@ public class AuthenticationControllerTest extends BaseTest {
     public void shouldThrowWhenUnknownUser() {
         CredentialsDTO credentials = createCredentials();
 
-        when(mockUserDao.findByLogin(credentials.getLogin())).thenReturn(Optional.empty());
+        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.empty());
 
         controller.authenticate(credentials);
     }
@@ -44,7 +44,7 @@ public class AuthenticationControllerTest extends BaseTest {
         CredentialsDTO credentials = createCredentials();
 
         User user = createUser();
-        when(mockUserDao.findByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
         when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(false);
 
         controller.authenticate(credentials);
@@ -55,7 +55,7 @@ public class AuthenticationControllerTest extends BaseTest {
         CredentialsDTO credentials = createCredentials();
 
         User user = createUser();
-        when(mockUserDao.findByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
         when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(true);
         String token = "token";
         when(mockJwtHelper.buildToken(user.getId())).thenReturn(token);

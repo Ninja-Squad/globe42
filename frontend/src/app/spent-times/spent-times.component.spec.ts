@@ -110,7 +110,7 @@ describe('SpentTimesComponent', () => {
         {
           id: 2,
           minutes: 12,
-          creator: null,
+          creator: { login: 'Ced' },
           creationInstant: '2018-11-03T14:13:00.000Z'
         },
         {
@@ -133,7 +133,7 @@ describe('SpentTimesComponent', () => {
 
       // avoid using contains because the exact value depends on the browser timezone
       expect(itemElements[0].textContent).toMatch(/\d nov. 2018 à \d\d:13:00: 0h12m/);
-      expect(itemElements[0].textContent).not.toContain('par');
+      expect(itemElements[0].textContent).toContain('par Ced');
       expect(itemElements[1].textContent).toMatch(/\d nov. 2018 à \d\d:13:00: 1h40m/);
       expect(itemElements[1].textContent).toContain('par JB');
     });

@@ -267,10 +267,9 @@ describe('TasksComponent', () => {
       expect(text).toContain('Some description');
     });
 
-    it('should not crash when no due date, no assignee, no creator or no concerned person', () => {
+    it('should not crash when no due date, no assignee or no concerned person', () => {
       tasks[0].dueDate = null;
       tasks[0].assignee = null;
-      tasks[0].creator = null;
       tasks[0].concernedPerson = null;
       fixture.detectChanges();
 

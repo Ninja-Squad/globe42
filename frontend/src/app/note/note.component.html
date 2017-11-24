@@ -1,9 +1,5 @@
 <div class="small text-muted">
-  <ng-container *ngIf="note.creator">
-    {{ note.creator.login }}
-    &mdash;
-  </ng-container>
-  {{ note.creationInstant | date }}
+  {{ note.creator.login }} &mdash; {{ note.creationInstant | date }}
 </div>
 <div class="bubble text-muted">
   <ng-container *ngIf="!edited">

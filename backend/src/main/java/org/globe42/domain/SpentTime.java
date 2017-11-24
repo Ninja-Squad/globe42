@@ -40,8 +40,8 @@ public class SpentTime {
 
     /**
      * The user which recorded this time spent on the task (another person might have spent the actual time).
-     * If the user is deleted, the creator will be set to null, to avoid losing spent times.
      */
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User creator;
 

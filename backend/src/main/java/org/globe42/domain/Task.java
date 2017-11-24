@@ -56,13 +56,14 @@ public class Task {
     private LocalDate dueDate;
 
     /**
-     * The user who created the task. If the user is deleted, the creator will be set to null, to avoid losing tasks.
+     * The user who created the task.
      */
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User creator;
 
     /**
-     * The user that is assigned to the task. If the user is deleted, the assignee will be set to null, to avoid losing tasks.
+     * The user that is assigned to the task.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     private User assignee;

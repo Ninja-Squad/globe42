@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Note {
@@ -28,8 +29,9 @@ public class Note {
     private String text;
 
     /**
-     * The user who created the task. If the user is deleted, the creator will be set to null, to avoid losing tasks.
+     * The user who created the task.
      */
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User creator;
 

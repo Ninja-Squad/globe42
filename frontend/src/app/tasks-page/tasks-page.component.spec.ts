@@ -21,6 +21,7 @@ import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { SpentTimesComponent } from '../spent-times/spent-times.component';
 import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.component';
 import { DurationPipe } from '../duration.pipe';
+import { UserModel } from '../models/user.model';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -42,7 +43,10 @@ describe('TasksPageComponent', () => {
           status: 'DONE',
           totalSpentTimeInMinutes: 0,
           assignee: null,
-          creator: null,
+          creator: {
+            id: 1,
+            login: 'admin'
+          } as UserModel,
           concernedPerson: null
         }
       );
@@ -179,7 +183,7 @@ describe('TasksPageComponent', () => {
 
   it('should edit a task when list type is person', () => {
     data.taskListType = 'person';
-    activatedRoute.parent.snapshot.data.person = { id: 42 };
+    activatedRoute.parent.snapshot.data['person'] = { id: 42 };
 
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
@@ -264,7 +268,7 @@ describe('TasksPageComponent', () => {
 
   it('should display a new task link with the concerned person as param is list type is person', () => {
     data.taskListType = 'person';
-    activatedRoute.parent.snapshot.data.person = { id: 42 };
+    activatedRoute.parent.snapshot.data['person'] = { id: 42 };
 
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();

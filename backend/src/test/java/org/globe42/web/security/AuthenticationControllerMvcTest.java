@@ -48,7 +48,7 @@ public class AuthenticationControllerMvcTest {
         CredentialsDTO credentials = createCredentials();
 
         User user = createUser();
-        when(mockUserDao.findByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
+        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
         when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(true);
         String token = "token";
         when(mockJwtHelper.buildToken(user.getId())).thenReturn(token);

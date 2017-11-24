@@ -36,6 +36,13 @@ public class User {
      */
     private boolean admin;
 
+    /**
+     * Indicates that this user has been (logically) deleted. We keep the user in the database in order to remember
+     * that he/she was the creator of tasks, notes, etc. But once deleted, a user doesn't appear in the list of users
+     * anymore, and can't log in anymore.
+     */
+    private boolean deleted;
+
     public User() {
     }
 
@@ -73,5 +80,13 @@ public class User {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

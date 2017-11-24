@@ -8,7 +8,6 @@ import org.globe42.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -41,14 +40,6 @@ public interface TaskDao extends JpaRepository<Task, Long> {
         + " where task.status = org.globe42.domain.TaskStatus.TODO and task.dueDate <= :maxDate"
         + " order by task.dueDate, task.id")
     Page<Task> findTodoBefore(@Param("maxDate") LocalDate maxDate, Pageable page);
-
-    @Query("update Task task set task.assignee = null where task.assignee = :user")
-    @Modifying
-    void resetAssigneeOnTasksAssignedTo(@Param("user") User user);
-
-    @Query("update Task task set task.creator = null where task.creator = :user")
-    @Modifying
-    void resetCreatorOnTasksCreatedBy(@Param("user") User user);
 
     @Query("select task from Task task where task.status <> org.globe42.domain.TaskStatus.TODO"
            + " order by task.archivalInstant desc")
