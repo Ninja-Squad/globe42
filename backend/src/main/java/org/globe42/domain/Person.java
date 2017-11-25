@@ -97,6 +97,11 @@ public class Person {
     private String phoneNumber;
 
     /**
+     * The name of individual who accompanies the person. Requested to all persons, but not mandatory
+     */
+    private String attendant;
+
+    /**
      * Is mediation enabled for the person or not. Requested to all persons, and mandatory.
      */
     private boolean mediationEnabled;
@@ -295,6 +300,10 @@ public class Person {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public String getAttendant() { return attendant; }
+
+    public void setAttendant(String attendant) { this.attendant = attendant; }
 
     public boolean isMediationEnabled() {
         return mediationEnabled;

@@ -83,6 +83,7 @@ export class PersonEditComponent implements OnInit {
       city: null,
       email: ['', PersonEditComponent.emailOrEmpty],
       phoneNumber: '',
+      attendant: '',
       adherent: [null, Validators.required],
       mediationEnabled: false,
       maritalStatus: 'UNKNOWN',

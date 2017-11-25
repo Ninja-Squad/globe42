@@ -45,6 +45,7 @@ describe('PersonComponent', () => {
     entryDate: '2016-12-01',
     gender: 'MALE',
     phoneNumber: '06 12 34 56 78',
+    attendant: 'Paul',
     mediationEnabled: true,
     maritalStatus: 'SINGLE',
     housing: 'F6',
@@ -103,6 +104,8 @@ describe('PersonComponent', () => {
     expect(email.textContent).toContain('john@mail.com');
     const phoneNumber = nativeElement.querySelector('#phoneNumber');
     expect(phoneNumber.textContent).toContain('06 12 34 56 78');
+    const attendant = nativeElement.querySelector('#attendant');
+    expect(attendant.textContent).toContain('Paul');
     const adherent = nativeElement.querySelector('#adherent');
     expect(adherent.textContent).toBe('Oui');
     const entryDate = nativeElement.querySelector('#entryDate');

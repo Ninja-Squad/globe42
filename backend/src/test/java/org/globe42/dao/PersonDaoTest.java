@@ -52,6 +52,7 @@ public class PersonDaoTest extends BaseDaoTest {
         person.setGender(Gender.MALE);
         person.setFirstName("JB");
         person.setLastName("Nizet");
+        person.setAttendant("Paul");
 
         personDao.save(person);
         personDao.flush();

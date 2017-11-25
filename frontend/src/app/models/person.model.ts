@@ -28,6 +28,7 @@ export interface PersonModel extends PersonIdentityModel {
   entryDate: string;
   gender: Gender;
   phoneNumber: string;
+  attendant: string;
   mediationEnabled: boolean;
   maritalStatus: MaritalStatus;
   housing: Housing;

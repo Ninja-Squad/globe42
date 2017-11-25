@@ -37,6 +37,7 @@ public final class PersonCommandDTO {
     @NotNull
     private final Gender gender;
     private final String phoneNumber;
+    private final String attendant;
     private final boolean mediationEnabled;
 
     @NotNull
@@ -66,6 +67,7 @@ public final class PersonCommandDTO {
                             @JsonProperty LocalDate entryDate,
                             @JsonProperty Gender gender,
                             @JsonProperty String phoneNumber,
+                            @JsonProperty String attendant,
                             @JsonProperty boolean mediationEnabled,
                             @JsonProperty MaritalStatus maritalStatus,
                             @JsonProperty Housing housing,
@@ -87,6 +89,7 @@ public final class PersonCommandDTO {
         this.entryDate = entryDate;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.attendant = attendant;
         this.mediationEnabled = mediationEnabled;
         this.maritalStatus = maritalStatus;
         this.housing = housing;
@@ -141,6 +144,10 @@ public final class PersonCommandDTO {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getAttendant() {
+        return attendant;
     }
 
     public boolean isMediationEnabled() {

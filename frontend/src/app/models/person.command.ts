@@ -12,6 +12,7 @@ export interface PersonCommand {
   gender: Gender;
   adherent: boolean;
   phoneNumber: string;
+  attendant: string;
   mediationEnabled: boolean;
   entryDate: string;
   maritalStatus: MaritalStatus;

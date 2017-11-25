@@ -72,6 +72,11 @@
       <div>{{ person.phoneNumber }}</div>
     </div>
 
+    <div class="d-flex mb-2" id="attendant">
+      <div class="mr-3"><span class="fa fa-user-o"></span></div>
+      <div>{{ person.attendant }}</div>
+    </div>
+
     <ng-container *ngIf="person.mediationEnabled">
       <h2>Logement</h2>
       <p id="housing">

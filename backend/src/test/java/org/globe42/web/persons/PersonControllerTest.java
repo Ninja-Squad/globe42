@@ -187,6 +187,7 @@ public class PersonControllerTest extends BaseTest {
                                     LocalDate.of(2017, 4, 13),
                                     Gender.MALE,
                                     "01234567",
+                                    "Nadia DURAND",
                                     mediationEnabled,
                                     MaritalStatus.CONCUBINAGE,
                                     Housing.F3,
@@ -212,6 +213,7 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getEntryDate()).isEqualTo(command.getEntryDate());
         assertThat(person.getGender()).isEqualTo(command.getGender());
         assertThat(person.getPhoneNumber()).isEqualTo(command.getPhoneNumber());
+        assertThat(person.getAttendant()).isEqualTo(command.getAttendant());
         assertThat(person.getMaritalStatus()).isEqualTo(command.getMaritalStatus());
         assertThat(person.getHousing()).isEqualTo(command.getHousing());
         assertThat(person.getHousingSpace()).isEqualTo(command.getHousingSpace());

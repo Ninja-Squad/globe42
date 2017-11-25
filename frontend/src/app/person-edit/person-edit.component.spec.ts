@@ -67,6 +67,7 @@ describe('PersonEditComponent', () => {
       entryDate: '2016-12-01',
       gender: 'MALE',
       phoneNumber: '06 12 34 56 78',
+      attendant: 'Paul',
       mediationEnabled: true,
       maritalStatus: 'SINGLE',
       housing: 'F4',
@@ -130,6 +131,8 @@ describe('PersonEditComponent', () => {
       expect(email.value).toBe(person.email);
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe(person.phoneNumber);
+      const attendant = nativeElement.querySelector('#attendant');
+      expect(attendant.value).toBe(person.attendant);
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
       expect(maritalStatus.options[maritalStatus.selectedIndex].value).toBe(person.maritalStatus);
       const adherentYes = nativeElement.querySelector('#adherenttrue');
@@ -292,6 +295,8 @@ describe('PersonEditComponent', () => {
       expect(email.value).toBe('');
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe('');
+      const attendant = nativeElement.querySelector('#attendant');
+      expect(attendant.value).toBe('');
       const adherentYes = nativeElement.querySelector('#adherenttrue');
       expect(adherentYes.checked).toBe(false);
       const adherentNo = nativeElement.querySelector('#adherentfalse');
@@ -373,6 +378,8 @@ describe('PersonEditComponent', () => {
       email.dispatchEvent(new Event('input'));
       phoneNumber.value = '06 13 13 13 13';
       phoneNumber.dispatchEvent(new Event('input'));
+      attendant.value = 'Paulette';
+      attendant.dispatchEvent(new Event('input'));
       maritalStatus.selectedIndex = 2;
       maritalStatus.dispatchEvent(new Event('change'));
       adherentYes.checked = true;
@@ -423,6 +430,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.city.city).toBe('SAINT-ETIENNE');
       expect(createdPerson.email).toBe('jane@mail.com');
       expect(createdPerson.phoneNumber).toBe('06 13 13 13 13');
+      expect(createdPerson.attendant).toBe('Paulette');
       expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
       expect(createdPerson.adherent).toBe(true);
       expect(createdPerson.entryDate).toBe('2015-02-02');

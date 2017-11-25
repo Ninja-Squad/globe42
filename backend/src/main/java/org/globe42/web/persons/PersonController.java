@@ -104,6 +104,7 @@ public class PersonController {
         person.setAdherent(command.isAdherent());
         person.setGender(command.getGender());
         person.setPhoneNumber(command.getPhoneNumber());
+        person.setAttendant(command.getAttendant());
         person.setMediationEnabled(command.isMediationEnabled());
 
         // if mediation is disabled, we leave all the mediation-related elements as is
