@@ -26,13 +26,19 @@ public final class PersonDTO {
     private final Gender gender;
     private final String phoneNumber;
     private final boolean mediationEnabled;
+    private final LocalDate firstMediationAppointmentDate;
     private final MaritalStatus maritalStatus;
     private final Housing housing;
     private final Integer housingSpace;
+    private final String hostName;
     private final FiscalStatus fiscalStatus;
     private final LocalDate fiscalStatusDate;
     private final boolean fiscalStatusUpToDate;
     private final HealthCareCoverage healthCareCoverage;
+    private final String accompanying;
+    private final String socialSecurityNumber;
+    private final String cafNumber;
+
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
 
@@ -48,13 +54,18 @@ public final class PersonDTO {
         this.gender = person.getGender();
         this.phoneNumber = person.getPhoneNumber();
         this.mediationEnabled = person.isMediationEnabled();
+        this.firstMediationAppointmentDate = person.getFirstMediationAppointmentDate();
         this.maritalStatus = person.getMaritalStatus();
         this.housing = person.getHousing();
         this.housingSpace = person.getHousingSpace();
+        this.hostName = person.getHostName();
         this.fiscalStatus = person.getFiscalStatus();
         this.fiscalStatusDate = person.getFiscalStatusDate();
         this.fiscalStatusUpToDate = person.isFiscalStatusUpToDate();
         this.healthCareCoverage = person.getHealthCareCoverage();
+        this.accompanying = person.getAccompanying();
+        this.socialSecurityNumber = person.getSocialSecurityNumber();
+        this.cafNumber = person.getCafNumber();
         this.frenchFamilySituation = person.getFrenchFamilySituation() == null ? null : new FamilySituationDTO(person.getFrenchFamilySituation());
         this.abroadFamilySituation = person.getAbroadFamilySituation() == null ? null : new FamilySituationDTO(person.getAbroadFamilySituation());
 
@@ -100,6 +111,8 @@ public final class PersonDTO {
         return mediationEnabled;
     }
 
+    public LocalDate getFirstMediationAppointmentDate() { return firstMediationAppointmentDate; }
+
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
     }
@@ -111,6 +124,8 @@ public final class PersonDTO {
     public Integer getHousingSpace() {
         return housingSpace;
     }
+
+    public String getHostName() { return hostName; }
 
     public FiscalStatus getFiscalStatus() {
         return fiscalStatus;
@@ -127,6 +142,12 @@ public final class PersonDTO {
     public HealthCareCoverage getHealthCareCoverage() {
         return healthCareCoverage;
     }
+
+    public String getAccompanying() { return accompanying; }
+
+    public String getSocialSecurityNumber() { return socialSecurityNumber; }
+
+    public String getCafNumber() { return cafNumber; }
 
     public FamilySituationDTO getFrenchFamilySituation() {
         return frenchFamilySituation;

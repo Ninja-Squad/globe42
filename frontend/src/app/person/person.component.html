@@ -1,7 +1,6 @@
 <div class="row read-only-form">
   <div class="col-lg">
     <h2>Identité</h2>
-
     <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">Code médiation</label>
       <div class="col-sm-6">
@@ -26,10 +25,28 @@
         <p id="birthDate" class="form-control-static">{{ person.birthDate | date }}</p>
       </div>
     </div>
+    <div class="form-group row">
+      <label class="col-sm-6 col-form-label">Nom de naissance</label>
+      <div class="col-sm-6">
+        <p id="birthName" class="form-control-static">{{ person.birthName }}</p>
+      </div>
+    </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">Statut marital</label>
       <div class="col-sm-6">
         <p id="maritalStatus" class="form-control-static">{{ person.maritalStatus | displayMaritalStatus }}</p>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="person.mediationEnabled">
+      <label class="col-sm-6 col-form-label">Numéro de Sécurité Sociale</label>
+      <div class="col-sm-6">
+        <p id="socialSecurityNumber" class="form-control-static">{{ person.socialSecurityNumber }}</p>
+      </div>
+    </div>
+    <div class="form-group row" *ngIf="person.mediationEnabled">
+      <label class="col-sm-6 col-form-label">Numéro CAF</label>
+      <div class="col-sm-6">
+        <p id="cafNumber" class="form-control-static">{{ person.cafNumber }}</p>
       </div>
     </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
@@ -72,17 +89,24 @@
       <div>{{ person.phoneNumber }}</div>
     </div>
 
-    <div class="d-flex mb-2" id="attendant">
-      <div class="mr-3"><span class="fa fa-user-o"></span></div>
-      <div>{{ person.attendant }}</div>
+    <div class="d-flex mb-2" id="accompanying"  *ngIf="person.mediationEnabled">
+      <div class="mr-3"><span class="fa fa-users" title="accompagnant"></span></div>
+      <div>{{ person.accompanying }}</div>
     </div>
 
-    <ng-container *ngIf="person.mediationEnabled">
+    <div class="d-flex mb-2" id="firstMediationAppointmentDate"  *ngIf="person.mediationEnabled">
+      <div class="mr-3"><span class="fa fa-calendar"></span></div>
+      <div>{{ person.firstMediationAppointmentDate | date }}</div>
+    </div>
+
+
       <h2>Logement</h2>
       <p id="housing">
         {{ person.housing | displayHousing }}
         <ng-container *ngIf="person.housingSpace"> &mdash; {{ person.housingSpace }} m<sup>2</sup></ng-container>
       </p>
+      <ng-container *ngIf="person.hostName">Hébergé par {{ person.hostName }}</ng-container>
+
 
       <h2>Situation fiscale</h2>
 
@@ -102,7 +126,6 @@
           </span>
         </ng-container>
       </p>
-    </ng-container>
   </div>
 </div>
 

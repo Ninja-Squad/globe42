@@ -76,6 +76,7 @@ export class PersonEditComponent implements OnInit {
     this.personForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
+      birthName: '',
       nickName: '',
       gender: ['', Validators.required],
       birthDate: null,
@@ -83,14 +84,18 @@ export class PersonEditComponent implements OnInit {
       city: null,
       email: ['', PersonEditComponent.emailOrEmpty],
       phoneNumber: '',
-      attendant: '',
-      adherent: [null, Validators.required],
+      adherent: false,
       mediationEnabled: false,
+      firstMediationAppointmentDate: null,
       maritalStatus: 'UNKNOWN',
       healthCareCoverage: 'UNKNOWN',
+      accompanying: '',
+      socialSecurityNumber: '',
+      cafNumber: '',
       entryDate: null,
       housing: 'UNKNOWN',
       housingSpace: null,
+      hostName: '',
       fiscalStatus: 'UNKNOWN',
       fiscalStatusDate: null,
       fiscalStatusUpToDate: false
@@ -128,7 +133,7 @@ export class PersonEditComponent implements OnInit {
 
   save() {
     const command: PersonCommand = this.personForm.value;
-    ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(property =>
+    ['birthDate', 'entryDate', 'fiscalStatusDate', 'firstMediationAppointmentDate'].forEach(property =>
       command[property] = dateToIso(this.personForm.value[property]));
 
     let action;

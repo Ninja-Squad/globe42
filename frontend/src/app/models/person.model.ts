@@ -8,6 +8,7 @@ export interface PersonIdentityModel {
   id: number;
   firstName: string;
   lastName: string;
+  birthName: string;
   nickName: string;
   mediationCode: string;
 }
@@ -28,15 +29,19 @@ export interface PersonModel extends PersonIdentityModel {
   entryDate: string;
   gender: Gender;
   phoneNumber: string;
-  attendant: string;
   mediationEnabled: boolean;
+  firstMediationAppointmentDate: string;
   maritalStatus: MaritalStatus;
   housing: Housing;
   housingSpace: number;
+  hostName: string;
   fiscalStatus: FiscalStatus;
   fiscalStatusDate: string;
   fiscalStatusUpToDate: boolean;
   healthCareCoverage: HealthCareCoverage;
+  accompanying: string;
+  socialSecurityNumber: string;
+  cafNumber: string;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
 }

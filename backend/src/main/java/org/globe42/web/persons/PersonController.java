@@ -90,6 +90,7 @@ public class PersonController {
     private void copyCommandToPerson(PersonCommandDTO command, Person person) {
         person.setFirstName(command.getFirstName());
         person.setLastName(command.getLastName());
+        person.setBirthName(command.getBirthName());
         person.setNickName(command.getNickName());
         person.setBirthDate(command.getBirthDate());
         person.setAddress(command.getAddress());
@@ -104,20 +105,24 @@ public class PersonController {
         person.setAdherent(command.isAdherent());
         person.setGender(command.getGender());
         person.setPhoneNumber(command.getPhoneNumber());
-        person.setAttendant(command.getAttendant());
         person.setMediationEnabled(command.isMediationEnabled());
 
         // if mediation is disabled, we leave all the mediation-related elements as is
         // in case mediation is re-enabled later, to not lose valuable information.
         if (command.isMediationEnabled()) {
             person.setEntryDate(command.getEntryDate());
+            person.setFirstMediationAppointmentDate(command.getFirstMediationAppointmentDate());
             person.setMaritalStatus(command.getMaritalStatus());
             person.setHousing(command.getHousing());
             person.setHousingSpace(command.getHousingSpace());
+            person.setHostName(command.getHostName());
             person.setFiscalStatus(command.getFiscalStatus());
             person.setFiscalStatusDate(command.getFiscalStatusDate());
             person.setFiscalStatusUpToDate(command.isFiscalStatusUpToDate());
             person.setHealthCareCoverage(command.getHealthCareCoverage());
+            person.setAccompanying(command.getAccompanying());
+            person.setSocialSecurityNumber(command.getSocialSecurityNumber());
+            person.setCafNumber(command.getCafNumber());
             person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
             person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
         }

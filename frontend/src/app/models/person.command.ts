@@ -3,6 +3,7 @@ import { CityModel, FamilySituation, FiscalStatus, Gender, Housing, MaritalStatu
 export interface PersonCommand {
   firstName: string;
   lastName: string;
+  birthName: string;
   nickName: string;
   birthDate: string;
   mediationCode: string;
@@ -12,15 +13,19 @@ export interface PersonCommand {
   gender: Gender;
   adherent: boolean;
   phoneNumber: string;
-  attendant: string;
   mediationEnabled: boolean;
   entryDate: string;
+  firstMediationAppointmentDate: string;
   maritalStatus: MaritalStatus;
   housing: Housing;
   housingSpace: number;
+  hostName: string;
   fiscalStatus: FiscalStatus;
   fiscalStatusDate: string;
   fiscalStatusUpToDate: boolean;
+  accompanying: string;
+  socialSecurityNumber: string;
+  cafNumber: string;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
 }

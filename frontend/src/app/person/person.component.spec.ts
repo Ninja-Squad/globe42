@@ -35,6 +35,7 @@ describe('PersonComponent', () => {
     id: 0,
     firstName: 'John',
     lastName: 'Doe',
+    birthName: 'Abba',
     nickName: 'john',
     mediationCode: 'D1',
     birthDate: '1980-01-01',
@@ -45,15 +46,19 @@ describe('PersonComponent', () => {
     entryDate: '2016-12-01',
     gender: 'MALE',
     phoneNumber: '06 12 34 56 78',
-    attendant: 'Paul',
     mediationEnabled: true,
+    firstMediationAppointmentDate: '2017-12-01',
     maritalStatus: 'SINGLE',
     housing: 'F6',
     housingSpace: 80,
+    hostName: 'Bruno Mala',
     fiscalStatus: 'TAXABLE',
     fiscalStatusDate: '2017-02-01',
     fiscalStatusUpToDate: true,
     healthCareCoverage: 'AME',
+    accompanying: 'Paul',
+    socialSecurityNumber: '277126912340454',
+    cafNumber: '123765',
     frenchFamilySituation: null,
     abroadFamilySituation: null
   };
@@ -104,25 +109,33 @@ describe('PersonComponent', () => {
     expect(email.textContent).toContain('john@mail.com');
     const phoneNumber = nativeElement.querySelector('#phoneNumber');
     expect(phoneNumber.textContent).toContain('06 12 34 56 78');
-    const attendant = nativeElement.querySelector('#attendant');
-    expect(attendant.textContent).toContain('Paul');
     const adherent = nativeElement.querySelector('#adherent');
     expect(adherent.textContent).toBe('Oui');
     const entryDate = nativeElement.querySelector('#entryDate');
     expect(entryDate.textContent).toBe('1 déc. 2016');
     const mediationCode = nativeElement.querySelector('#mediationCode');
     expect(mediationCode.textContent).toBe('D1');
+    const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
+    //expect(firstMediationAppointmentDate.textContent).toBe('2017-12-01');
     const maritalStatus = nativeElement.querySelector('#maritalStatus');
     expect(maritalStatus.textContent).toBe('Célibataire');
     const housing = nativeElement.querySelector('#housing');
     expect(housing.textContent).toContain('F6 ou plus');
     expect(housing.textContent).toContain('80 m2');
+    const hostName = nativeElement.querySelector('#hostName');
+    //expect(hostName.textContent).toContain('Bruno Mala');
     const fiscalStatus = nativeElement.querySelector('#fiscalStatus');
     expect(fiscalStatus.textContent).toContain('Imposable');
     expect(fiscalStatus.textContent).toContain('établie le 1 févr. 2017');
     expect(fiscalStatus.textContent).toContain('à jour');
     const healthCareCoverage = nativeElement.querySelector('#healthCareCoverage');
     expect(healthCareCoverage.textContent).toContain('Aide médicale de l\'Etat');
+    const accompanying = nativeElement.querySelector('#accompanying');
+    expect(accompanying.textContent).toContain('Paul');
+    const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');
+    expect(socialSecurityNumber.textContent).toContain('277126912340454');
+    const cafNumber = nativeElement.querySelector('#cafNumber');
+    expect(cafNumber.textContent).toContain('123765');
   });
 
   it('should display a person with mediation disabled', () => {
@@ -131,7 +144,7 @@ describe('PersonComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'maritalStatus', 'housing', 'fiscalStatus', 'healthCareCoverage'];
+    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'maritalStatus', 'healthCareCoverage'];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
   });

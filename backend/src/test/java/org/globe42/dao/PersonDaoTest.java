@@ -33,8 +33,8 @@ public class PersonDaoTest extends BaseDaoTest {
                 .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
                 .withDefaultValue("housing", Housing.UNKNOWN)
                 .withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
-                .columns("id", "first_name", "last_name", "mediation_enabled", "gender", "adherent")
-                .values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false)
+                .columns("id", "first_name", "last_name", "birth_name", "mediation_enabled", "gender", "adherent")
+                .values(1L, "Cédric", "Exbrayat", "Lambert", false, Gender.MALE, false)
                 .build();
 
         Operation participations =
@@ -52,7 +52,10 @@ public class PersonDaoTest extends BaseDaoTest {
         person.setGender(Gender.MALE);
         person.setFirstName("JB");
         person.setLastName("Nizet");
-        person.setAttendant("Paul");
+        person.setAccompanying("Paul");
+        person.setSocialSecurityNumber("5654389076543124");
+        person.setCafNumber("765344");
+        person.setHostName("Brigitte");
 
         personDao.save(person);
         personDao.flush();

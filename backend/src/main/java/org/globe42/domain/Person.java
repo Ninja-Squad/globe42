@@ -52,6 +52,12 @@ public class Person {
     private String lastName;
 
     /**
+     * The birth name, requested to all persons, but not mandatory.
+     * The birth name could be the maiden name of a married woman, for instance
+     */
+    private String birthName;
+
+    /**
      * The nick name, requested to all persons, but not mandatory
      */
     private String nickName;
@@ -69,7 +75,7 @@ public class Person {
     private LocalDate birthDate;
 
     /**
-     * Is the person an official member of the association. Requested to all persons, and mandatory.
+     * Is the person an official member of the association. Requested to all persons, but not mandatory.
      */
     private boolean adherent;
 
@@ -97,11 +103,6 @@ public class Person {
     private String phoneNumber;
 
     /**
-     * The name of individual who accompanies the person. Requested to all persons, but not mandatory
-     */
-    private String attendant;
-
-    /**
      * Is mediation enabled for the person or not. Requested to all persons, and mandatory.
      */
     private boolean mediationEnabled;
@@ -111,6 +112,11 @@ public class Person {
      * last name, and from a sequence.
      */
     private String mediationCode;
+
+    /**
+     * The date of first mediation appointment. Only requested to mediation-enabled persons, but not mandatory
+     */
+    private LocalDate firstMediationAppointmentDate;
 
     /**
      * The date of entry in France. Only requested to mediation-enabled persons, but not mandatory
@@ -137,6 +143,11 @@ public class Person {
      * The housing space, in square meters. Only requested to mediation-enabled persons, and not mandatory
      */
     private Integer housingSpace;
+
+    /**
+     * The name of the host, requested to all persons, but not mandatory.
+     */
+    private String hostName;
 
     /**
      * The fiscal status. Only requested to mediation-enabled persons, and unknown by default (so, technically
@@ -191,6 +202,23 @@ public class Person {
     private HealthCareCoverage healthCareCoverage = HealthCareCoverage.UNKNOWN;
 
     /**
+     * The name of the accompanying. Requested to all persons, but not mandatory
+     */
+    private String accompanying;
+
+    /**
+     * The social security number of the person. Requested to all persons, but not mandatory.
+     * In positions 6 and 7 of this number we have the 'place of birth" and we can have letters for people born abroad.
+     * So we must have 'String' for the Type of this attribute.
+     */
+    private String socialSecurityNumber;
+
+    /**
+     * The CAF number of the person. CAF = "Caisse Allocations Familiales" in French. Requested to all persons, but not mandatory
+     */
+    private String cafNumber;
+
+    /**
      * The notes added on the person
      */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -236,6 +264,10 @@ public class Person {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getBirthName() { return birthName; }
+
+    public void setBirthName(String birthName) { this.birthName = birthName; }
 
     public String getNickName() {
         return nickName;
@@ -301,10 +333,6 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAttendant() { return attendant; }
-
-    public void setAttendant(String attendant) { this.attendant = attendant; }
-
     public boolean isMediationEnabled() {
         return mediationEnabled;
     }
@@ -320,6 +348,10 @@ public class Person {
     public void setMediationCode(String mediationCode) {
         this.mediationCode = mediationCode;
     }
+
+    public LocalDate getFirstMediationAppointmentDate() { return firstMediationAppointmentDate; }
+
+    public void setFirstMediationAppointmentDate(LocalDate firstMediationAppointmentDate) { this.firstMediationAppointmentDate = firstMediationAppointmentDate; }
 
     public LocalDate getEntryDate() {
         return entryDate;
@@ -352,6 +384,10 @@ public class Person {
     public void setHousingSpace(Integer housingSpace) {
         this.housingSpace = housingSpace;
     }
+
+    public String getHostName() { return hostName; }
+
+    public void setHostName(String hostName) { this.hostName = hostName; }
 
     public FiscalStatus getFiscalStatus() {
         return fiscalStatus;
@@ -429,6 +465,18 @@ public class Person {
         this.healthCareCoverage = healthCareCoverage;
     }
 
+    public String getAccompanying() { return accompanying; }
+
+    public void setAccompanying(String accompanying) { this.accompanying = accompanying; }
+
+    public String getSocialSecurityNumber() { return socialSecurityNumber; }
+
+    public void setSocialSecurityNumber(String socialSecurityNumber) { this.socialSecurityNumber = socialSecurityNumber; }
+
+    public String getCafNumber() { return cafNumber; }
+
+    public void setCafNumber(String cafNumber) { this.cafNumber = cafNumber; }
+
     public Set<Note> getNotes() {
         return Collections.unmodifiableSet(notes);
     }
@@ -453,4 +501,5 @@ public class Person {
     public void removeParticipation(Participation participation) {
         participations.remove(participation);
     }
+
 }

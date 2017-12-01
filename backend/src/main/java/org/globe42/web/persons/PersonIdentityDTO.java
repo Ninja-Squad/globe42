@@ -10,12 +10,14 @@ public final class PersonIdentityDTO {
     private final Long id;
     private final String firstName;
     private final String lastName;
+    private final String birthName;
     private final String nickName;
     private final String mediationCode;
 
     public PersonIdentityDTO(Person person) {
         this.id = person.getId();
         this.firstName = person.getFirstName();
+        this.birthName = person.getBirthName();
         this.lastName = person.getLastName();
         this.nickName = person.getNickName();
         // we hide the mediation code if mediation is disabled
@@ -32,6 +34,10 @@ public final class PersonIdentityDTO {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getBirthName() {
+        return birthName;
     }
 
     public String getNickName() {

@@ -23,6 +23,7 @@ public final class PersonCommandDTO {
 
     @NotEmpty
     private final String lastName;
+    private final String birthName;
     private final String nickName;
 
     private final LocalDate birthDate;
@@ -37,8 +38,8 @@ public final class PersonCommandDTO {
     @NotNull
     private final Gender gender;
     private final String phoneNumber;
-    private final String attendant;
     private final boolean mediationEnabled;
+    private final LocalDate firstMediationAppointmentDate;
 
     @NotNull
     private final MaritalStatus maritalStatus;
@@ -46,18 +47,23 @@ public final class PersonCommandDTO {
     @NotNull
     private final Housing housing;
     private final Integer housingSpace;
+    private final String hostName;
 
     @NotNull
     private final FiscalStatus fiscalStatus;
     private final LocalDate fiscalStatusDate;
     private final boolean fiscalStatusUpToDate;
     private final HealthCareCoverage healthCareCoverage;
+    private final String accompanying;
+    private final String socialSecurityNumber;
+    private final String cafNumber;
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
 
     @JsonCreator
     public PersonCommandDTO(@JsonProperty String firstName,
                             @JsonProperty String lastName,
+                            @JsonProperty String birthName,
                             @JsonProperty String nickName,
                             @JsonProperty LocalDate birthDate,
                             @JsonProperty String address,
@@ -67,19 +73,24 @@ public final class PersonCommandDTO {
                             @JsonProperty LocalDate entryDate,
                             @JsonProperty Gender gender,
                             @JsonProperty String phoneNumber,
-                            @JsonProperty String attendant,
                             @JsonProperty boolean mediationEnabled,
+                            @JsonProperty LocalDate firstMediationAppointmentDate,
                             @JsonProperty MaritalStatus maritalStatus,
                             @JsonProperty Housing housing,
                             @JsonProperty Integer housingSpace,
+                            @JsonProperty String hostName,
                             @JsonProperty FiscalStatus fiscalStatus,
                             @JsonProperty LocalDate fiscalStatusDate,
                             @JsonProperty boolean fiscalStatusUpToDate,
                             @JsonProperty HealthCareCoverage healthCareCoverage,
+                            @JsonProperty String accompanying,
+                            @JsonProperty String socialSecurityNumber,
+                            @JsonProperty String cafNumber,
                             @JsonProperty FamilySituationDTO frenchFamilySituation,
                             @JsonProperty FamilySituationDTO abroadFamilySituation) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.birthName = birthName;
         this.nickName = nickName;
         this.birthDate = birthDate;
         this.address = address;
@@ -89,15 +100,19 @@ public final class PersonCommandDTO {
         this.entryDate = entryDate;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
-        this.attendant = attendant;
         this.mediationEnabled = mediationEnabled;
+        this.firstMediationAppointmentDate = firstMediationAppointmentDate;
         this.maritalStatus = maritalStatus;
         this.housing = housing;
         this.housingSpace = housingSpace;
+        this.hostName = hostName;
         this.fiscalStatus = fiscalStatus;
         this.fiscalStatusDate = fiscalStatusDate;
         this.fiscalStatusUpToDate = fiscalStatusUpToDate;
         this.healthCareCoverage = healthCareCoverage;
+        this.accompanying = accompanying;
+        this.socialSecurityNumber = socialSecurityNumber;
+        this.cafNumber = cafNumber;
         this.frenchFamilySituation = frenchFamilySituation;
         this.abroadFamilySituation = abroadFamilySituation;
     }
@@ -109,6 +124,8 @@ public final class PersonCommandDTO {
     public String getLastName() {
         return lastName;
     }
+
+    public String getBirthName() { return birthName; }
 
     public String getNickName() {
         return nickName;
@@ -146,13 +163,11 @@ public final class PersonCommandDTO {
         return phoneNumber;
     }
 
-    public String getAttendant() {
-        return attendant;
-    }
-
     public boolean isMediationEnabled() {
         return mediationEnabled;
     }
+
+    public LocalDate getFirstMediationAppointmentDate() { return firstMediationAppointmentDate; }
 
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
@@ -165,6 +180,8 @@ public final class PersonCommandDTO {
     public Integer getHousingSpace() {
         return housingSpace;
     }
+
+    public String getHostName() { return hostName; }
 
     public FiscalStatus getFiscalStatus() {
         return fiscalStatus;
@@ -181,6 +198,12 @@ public final class PersonCommandDTO {
     public HealthCareCoverage getHealthCareCoverage() {
         return healthCareCoverage;
     }
+
+    public String getAccompanying() { return accompanying; }
+
+    public String getSocialSecurityNumber() { return socialSecurityNumber; }
+
+    public String getCafNumber() { return cafNumber; }
 
     public FamilySituationDTO getFrenchFamilySituation() {
         return frenchFamilySituation;

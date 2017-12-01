@@ -178,6 +178,7 @@ public class PersonControllerTest extends BaseTest {
     static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled) {
         return new PersonCommandDTO("Cyril",
                                     lastName,
+                                    "Lacote du chateau",
                                     "CEO, Bitch",
                                     LocalDate.of(1977, 9, 12),
                                     "somewhere",
@@ -187,15 +188,19 @@ public class PersonControllerTest extends BaseTest {
                                     LocalDate.of(2017, 4, 13),
                                     Gender.MALE,
                                     "01234567",
-                                    "Nadia DURAND",
                                     mediationEnabled,
+                                    LocalDate.of(2017, 12, 01),
                                     MaritalStatus.CONCUBINAGE,
                                     Housing.F3,
                                     70,
+                                    "Bruno Mala",
                                     FiscalStatus.TAXABLE,
                                     LocalDate.of(2017, 2, 1),
                                     true,
                                     HealthCareCoverage.GENERAL,
+                                    "Nadia DURAND",
+                                    "277126912340454",
+                                    "123765",
                                     new FamilySituationDTO(false, true, 2, 3),
                                     new FamilySituationDTO(true, false, 0, 1));
     }
@@ -203,6 +208,7 @@ public class PersonControllerTest extends BaseTest {
     private void assertPersonEqualsCommand(Person person, PersonCommandDTO command) {
         assertThat(person.getFirstName()).isEqualTo(command.getFirstName());
         assertThat(person.getLastName()).isEqualTo(command.getLastName());
+        assertThat(person.getBirthName()).isEqualTo(command.getBirthName());
         assertThat(person.getNickName()).isEqualTo(command.getNickName());
         assertThat(person.getBirthDate()).isEqualTo(command.getBirthDate());
         assertThat(person.getAddress()).isEqualTo(command.getAddress());
@@ -213,14 +219,17 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getEntryDate()).isEqualTo(command.getEntryDate());
         assertThat(person.getGender()).isEqualTo(command.getGender());
         assertThat(person.getPhoneNumber()).isEqualTo(command.getPhoneNumber());
-        assertThat(person.getAttendant()).isEqualTo(command.getAttendant());
         assertThat(person.getMaritalStatus()).isEqualTo(command.getMaritalStatus());
         assertThat(person.getHousing()).isEqualTo(command.getHousing());
         assertThat(person.getHousingSpace()).isEqualTo(command.getHousingSpace());
+        assertThat(person.getHostName()).isEqualTo(command.getHostName());
         assertThat(person.getFiscalStatus()).isEqualTo(command.getFiscalStatus());
         assertThat(person.getFiscalStatusDate()).isEqualTo(command.getFiscalStatusDate());
         assertThat(person.isFiscalStatusUpToDate()).isEqualTo(command.isFiscalStatusUpToDate());
         assertThat(person.getHealthCareCoverage()).isEqualTo(command.getHealthCareCoverage());
+        assertThat(person.getAccompanying()).isEqualTo(command.getAccompanying());
+        assertThat(person.getSocialSecurityNumber()).isEqualTo(command.getSocialSecurityNumber());
+        assertThat(person.getCafNumber()).isEqualTo(command.getCafNumber());
         assertFamilySituationEqualsCommand(person.getFrenchFamilySituation(), command.getFrenchFamilySituation());
         assertFamilySituationEqualsCommand(person.getAbroadFamilySituation(), command.getAbroadFamilySituation());
     }
