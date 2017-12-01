@@ -2,5 +2,9 @@
   "/api": {
     "target": "http://localhost:9000",
     "secure": false
+  },
+  "/actuator": {
+    "target": "http://localhost:9000",
+    "secure": false
   }
 }

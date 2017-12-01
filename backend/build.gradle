@@ -52,6 +52,7 @@ bootRun {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'io.jsonwebtoken:jjwt:0.7.0'
     compile 'com.google.cloud:google-cloud-storage:1.5.1'
 
