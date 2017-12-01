@@ -96,7 +96,6 @@ import { ParticipantsComponent } from './participants/participants.component';
 import { ParticipantsResolverService } from './participants-resolver.service';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { EmptyResponseBodyErrorInterceptorService } from './empty-response-body-error-interceptor.service';
 import { MinValidatorDirective } from './min-validator.directive';
 import { MaxValidatorDirective } from './max-validator.directive';
 
@@ -212,11 +211,6 @@ import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component
     {
       provide: HTTP_INTERCEPTORS,
       useExisting: ErrorService,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: EmptyResponseBodyErrorInterceptorService,
       multi: true
     },
     {

@@ -6,6 +6,25 @@ import { Component, LOCALE_ID } from '@angular/core';
 import { NoteModel } from '../models/note.model';
 import { UserModel } from '../models/user.model';
 
+@Component({
+  template: ''
+})
+class TestComponent {
+  note: NoteModel = {
+    id: 42,
+    text: 'hello world',
+    creator: {
+      login: 'admin'
+    } as UserModel,
+    creationInstant: '2017-08-09T12:01:02.000Z'
+  };
+
+  noteEvent: NoteModel;
+  editionEvent: NoteEditionEvent;
+
+  edited = false;
+}
+
 describe('NoteComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -174,22 +193,3 @@ describe('NoteComponent', () => {
     });
   });
 });
-
-@Component({
-  template: ''
-})
-class TestComponent {
-  note: NoteModel = {
-    id: 42,
-    text: 'hello world',
-    creator: {
-      login: 'admin'
-    } as UserModel,
-    creationInstant: '2017-08-09T12:01:02.000Z'
-  };
-
-  noteEvent: NoteModel;
-  editionEvent: NoteEditionEvent;
-
-  edited = false;
-}

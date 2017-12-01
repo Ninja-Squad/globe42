@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M6'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M7'
         classpath 'org.flywaydb:flyway-gradle-plugin:4.2.0'
         classpath 'org.postgresql:postgresql:9.4.1212'
     }
@@ -44,11 +44,9 @@ bootJar {
 }
 
 bootRun {
-    execSpec {
-        args '--spring.profiles.active=demo'
-        args '--globe42.secretKey=QMwbcwa19VV02Oy5T7LSWyV+/wZrOsRRfhCR6TkapsY='
-        args '--globe42.googleCloudStorageCredentialsPath=' + rootProject.file('secrets/google-cloud-storage-dev.json')
-    }
+    args '--spring.profiles.active=demo'
+    args '--globe42.secretKey=QMwbcwa19VV02Oy5T7LSWyV+/wZrOsRRfhCR6TkapsY='
+    args '--globe42.googleCloudStorageCredentialsPath=' + rootProject.file('secrets/google-cloud-storage-dev.json')
 }
 
 dependencies {
