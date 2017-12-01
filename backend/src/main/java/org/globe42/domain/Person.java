@@ -234,6 +234,11 @@ public class Person {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Participation> participations = new HashSet<>();
 
+    /**
+     * Flag indicating that the given person is logically deleted
+     */
+    private boolean deleted;
+
     public Person() {
     }
 
@@ -526,4 +531,11 @@ public class Person {
         participations.remove(participation);
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

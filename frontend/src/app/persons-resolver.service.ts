@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { PersonIdentityModel } from './models/person.model';
@@ -10,7 +10,8 @@ export class PersonsResolverService implements Resolve<Array<PersonIdentityModel
 
   constructor(private personService: PersonService) { }
 
-  resolve(): Observable<Array<PersonIdentityModel>> {
-    return this.personService.list();
+  resolve(route: ActivatedRouteSnapshot): Observable<Array<PersonIdentityModel>> {
+    const listType = route.data['personListType'];
+    return (listType === 'deleted') ? this.personService.listDeleted() : this.personService.list();
   }
 }

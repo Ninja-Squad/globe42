@@ -44,6 +44,7 @@ export interface PersonModel extends PersonIdentityModel {
   cafNumber: string;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
+  deleted: boolean;
 }
 
 export interface CityModel {

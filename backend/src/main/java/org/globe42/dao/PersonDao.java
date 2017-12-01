@@ -15,6 +15,13 @@ import org.springframework.data.repository.query.Param;
 public interface PersonDao extends JpaRepository<Person, Long>, PersonDaoCustom {
     @Query("select person from Participation participation"
         + " join participation.person person"
-        + " where participation.activityType = :activityType")
+        + " where participation.activityType = :activityType"
+        + " and person.deleted = false")
     List<Person> findParticipants(@Param("activityType") ActivityType activityType);
+
+    @Query("select person from Person person where person.deleted = false")
+    List<Person> findNotDeleted();
+
+    @Query("select person from Person person where person.deleted = true")
+    List<Person> findDeleted();
 }

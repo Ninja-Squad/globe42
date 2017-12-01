@@ -103,6 +103,7 @@ registerLocaleData(localeFr);
 import { DurationPipe } from './duration.pipe';
 import { SpentTimesComponent } from './spent-times/spent-times.component';
 import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
+import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 
 @NgModule({
   declarations: [
@@ -160,7 +161,8 @@ import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component
     MaxValidatorDirective,
     DurationPipe,
     SpentTimesComponent,
-    SpentTimeAddComponent
+    SpentTimeAddComponent,
+    PersonsLayoutComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

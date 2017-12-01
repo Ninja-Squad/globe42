@@ -9,9 +9,9 @@ import org.globe42.domain.City;
 import org.globe42.domain.FamilySituation;
 import org.globe42.domain.Person;
 import org.globe42.web.exception.NotFoundException;
-import org.globe42.web.security.AdminOnly;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +38,12 @@ public class PersonController {
 
     @GetMapping
     public List<PersonIdentityDTO> list() {
-        return personDao.findAll().stream().map(PersonIdentityDTO::new).collect(Collectors.toList());
+        return personDao.findNotDeleted().stream().map(PersonIdentityDTO::new).collect(Collectors.toList());
+    }
+
+    @GetMapping(params = "deleted")
+    public List<PersonIdentityDTO> listDeleted() {
+        return personDao.findDeleted().stream().map(PersonIdentityDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/{personId}")
@@ -62,7 +67,6 @@ public class PersonController {
 
     @PutMapping("/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @AdminOnly
     public void update(@PathVariable("personId") Long id, @Validated @RequestBody PersonCommandDTO command) {
         Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
 
@@ -85,6 +89,20 @@ public class PersonController {
                 person.setMediationCode(null);
             }
         }
+    }
+
+    @DeleteMapping("/{personId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("personId") Long id) {
+        Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
+        person.setDeleted(true);
+    }
+
+    @DeleteMapping("/{personId}/deletion")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resurrect(@PathVariable("personId") Long id) {
+        Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
+        person.setDeleted(false);
     }
 
     private void copyCommandToPerson(PersonCommandDTO command, Person person) {

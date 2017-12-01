@@ -26,4 +26,15 @@ export class PersonService {
     return this.http.get<Array<PersonIdentityModel>>('/api/persons');
   }
 
+  listDeleted(): Observable<Array<PersonIdentityModel>> {
+    return this.http.get<Array<PersonIdentityModel>>('/api/persons?deleted=true');
+  }
+
+  delete(id: number) {
+    return this.http.delete<void>(`/api/persons/${id}`);
+  }
+
+  resurrect(id: number) {
+    return this.http.delete<void>(`/api/persons/${id}/deletion`);
+  }
 }

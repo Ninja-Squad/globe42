@@ -33,14 +33,16 @@ public class PersonDaoTest extends BaseDaoTest {
                 .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
                 .withDefaultValue("housing", Housing.UNKNOWN)
                 .withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
-                .columns("id", "first_name", "last_name", "birth_name", "mediation_enabled", "gender", "adherent")
-                .values(1L, "Cédric", "Exbrayat", "Lambert", false, Gender.MALE, false)
+                .columns("id", "first_name", "last_name", "mediation_enabled", "gender", "adherent", "deleted")
+                .values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false, false)
+                .values(2L, "Old", "Oldie", false, Gender.MALE, false, true)
                 .build();
 
         Operation participations =
             Insert.into("participation")
                 .columns("id", "activity_type", "person_id")
                 .values(1L, ActivityType.MEAL, 1L)
+                .values(2L, ActivityType.MEAL, 2L)
                 .build();
 
         dbSetup(Operations.sequenceOf(person, participations));
@@ -71,7 +73,7 @@ public class PersonDaoTest extends BaseDaoTest {
     @Test
     public void shouldFindParticipants() {
         TRACKER.skipNextLaunch();
-        assertThat(personDao.findParticipants(ActivityType.MEAL)).hasSize(1);
+        assertThat(personDao.findParticipants(ActivityType.MEAL)).extracting(Person::getId).containsOnly(1L);
         assertThat(personDao.findParticipants(ActivityType.SOCIAL_MEDIATION)).isEmpty();
     }
 
@@ -83,5 +85,15 @@ public class PersonDaoTest extends BaseDaoTest {
         assertThat(result).isEqualTo(2);
         result = personDao.nextMediationCode('a');
         assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldFindNotDeleted() {
+        assertThat(personDao.findNotDeleted()).extracting(Person::getId).containsOnly(1L);
+    }
+
+    @Test
+    public void shouldFindDeleted() {
+        assertThat(personDao.findDeleted()).extracting(Person::getId).containsOnly(2L);
     }
 }

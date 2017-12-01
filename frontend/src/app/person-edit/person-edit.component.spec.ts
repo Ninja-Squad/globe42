@@ -23,6 +23,7 @@ import { DisplayHealthCareCoveragePipe, HEALTH_CARE_COVERAGE_TRANSLATIONS } from
 import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
 import { By } from '@angular/platform-browser';
 import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -40,7 +41,8 @@ describe('PersonEditComponent', () => {
       DisplayHousingPipe,
       DisplayFiscalStatusPipe,
       DisplayHealthCareCoveragePipe,
-      FamilySituationEditComponent
+      FamilySituationEditComponent,
+      FullnamePipe
     ],
     providers: [
       PersonService,
@@ -87,7 +89,8 @@ describe('PersonEditComponent', () => {
         childCount: 1,
         siblingCount: 3
       },
-      abroadFamilySituation: null
+      abroadFamilySituation: null,
+      deleted: false
     };
 
     const activatedRoute = {

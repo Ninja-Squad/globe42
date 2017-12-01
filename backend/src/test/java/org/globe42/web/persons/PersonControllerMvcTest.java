@@ -53,9 +53,18 @@ public class PersonControllerMvcTest {
 
     @Test
     public void shouldList() throws Exception {
-        when(mockPersonDao.findAll()).thenReturn(Collections.singletonList(person));
+        when(mockPersonDao.findNotDeleted()).thenReturn(Collections.singletonList(person));
 
         mvc.perform(get("/api/persons"))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$[0].id").value(1));
+    }
+
+    @Test
+    public void shouldListDeleted() throws Exception {
+        when(mockPersonDao.findDeleted()).thenReturn(Collections.singletonList(person));
+
+        mvc.perform(get("/api/persons").param("deleted", ""))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$[0].id").value(1));
     }
@@ -97,6 +106,22 @@ public class PersonControllerMvcTest {
         mvc.perform(put("/api/persons/{personId}", person.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
+           .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void shouldDelete() throws Exception {
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+
+        mvc.perform(delete("/api/persons/{personId}", person.getId()))
+           .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void shouldResurrect() throws Exception {
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+
+        mvc.perform(delete("/api/persons/{personId}/deletion", person.getId()))
            .andExpect(status().isNoContent());
     }
 }

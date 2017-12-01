@@ -41,4 +41,12 @@ describe('PersonService', () => {
     const expectedPersons = [{ id: 1 }] as Array<PersonModel>;
     httpTester.testGet('/api/persons', expectedPersons, service.list());
   });
+
+  it('should delete a person', () => {
+    httpTester.testDelete('/api/persons/1', service.delete(1));
+  });
+
+  it('should resurrect a person', () => {
+    httpTester.testDelete('/api/persons/1/deletion', service.resurrect(1));
+  });
 });

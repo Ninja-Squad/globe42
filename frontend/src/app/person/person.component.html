@@ -138,6 +138,14 @@
     <span class="fa fa-edit"></span>
     Éditer
   </a>
+  <button *ngIf="!person.deleted" id="delete-person-button" type="button" class="btn btn-outline-danger" (click)="delete()">
+    <span class="fa fa-trash"></span>
+    Supprimer
+  </button>
+  <button *ngIf="person.deleted" id="resurrect-person-button" type="button" class="btn btn-outline-danger" (click)="resurrect()">
+    <span class="fa fa-undo"></span>
+    Restaurer
+  </button>
 </div>
 
 <div class="mt-2">

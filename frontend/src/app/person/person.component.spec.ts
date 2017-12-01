@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PersonComponent } from './person.component';
 import { CityModel, PersonModel } from '../models/person.model';
@@ -9,22 +9,15 @@ import { DisplayMaritalStatusPipe } from '../display-marital-status.pipe';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
-import { PersonFamilySituationComponent } from '../person-family-situation/person-family-situation.component';
-import { FamilySituationComponent } from '../family-situation/family-situation.component';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
-import { PersonNoteService } from '../person-note.service';
-import { PersonResolverService } from '../person-resolver.service';
-import { UserService } from '../user.service';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
-import { PersonService } from '../person.service';
 import { ConfirmService } from '../confirm.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NoteComponent } from '../note/note.component';
 import { FormsModule } from '@angular/forms';
-import { PersonNotesComponent } from '../person-notes/person-notes.component';
-
+import { PersonService } from '../person.service';
+import { FullnamePipe } from '../fullname.pipe';
+import { Observable } from 'rxjs/Observable';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -60,7 +53,8 @@ describe('PersonComponent', () => {
     socialSecurityNumber: '277126912340454',
     cafNumber: '123765',
     frenchFamilySituation: null,
-    abroadFamilySituation: null
+    abroadFamilySituation: null,
+    deleted: false
   };
 
   const activatedRoute: any = {
@@ -82,13 +76,16 @@ describe('PersonComponent', () => {
     ],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: LOCALE_ID, useValue: 'fr-FR'}
+      { provide: LOCALE_ID, useValue: 'fr-FR'},
+      ConfirmService,
+      PersonService,
+      FullnamePipe
     ],
     schemas: [NO_ERRORS_SCHEMA]
   })));
 
   it('should have a maps URL', () => {
-    const component = new PersonComponent(activatedRoute);
+    const component = new PersonComponent(activatedRoute, null, null, null, null);
     component.ngOnInit();
     expect(component.mapsUrl).toBe('https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE');
   });
@@ -145,5 +142,89 @@ describe('PersonComponent', () => {
     const mediationDependantElementIds = ['entryDate', 'mediationCode', 'housing', 'fiscalStatus', 'firstMediationAppointmentDate', 'maritalStatus', 'healthCareCoverage'];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
+  });
+
+  it('should delete a person if confirmed', () => {
+    const fixture = TestBed.createComponent(PersonComponent);
+    fixture.detectChanges();
+
+    const confirmService = TestBed.get(ConfirmService);
+    const personService = TestBed.get(PersonService);
+    const router = TestBed.get(Router);
+
+    spyOn(confirmService, 'confirm').and.returnValue(Observable.of('ok'));
+    spyOn(personService, 'delete').and.returnValue(Observable.of(null));
+    spyOn(router, 'navigate');
+
+    expect(fixture.nativeElement.querySelector('#resurrect-person-button')).toBeFalsy();
+    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector('#delete-person-button');
+    deleteButton.click();
+
+    fixture.detectChanges();
+    expect(router.navigate).toHaveBeenCalledWith(['/persons']);
+    expect(personService.delete).toHaveBeenCalledWith(person.id);
+  });
+
+  it('should not delete a person if not confirmed', () => {
+    const fixture = TestBed.createComponent(PersonComponent);
+    fixture.detectChanges();
+
+    const confirmService = TestBed.get(ConfirmService);
+    const personService = TestBed.get(PersonService);
+    const router = TestBed.get(Router);
+
+    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw('nok'));
+    spyOn(personService, 'delete').and.returnValue(Observable.of(null));
+    spyOn(router, 'navigate');
+
+    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector('#delete-person-button');
+    deleteButton.click();
+
+    fixture.detectChanges();
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(personService.delete).not.toHaveBeenCalled();
+  });
+
+  it('should resurrect a person if confirmed', () => {
+    person.deleted = true;
+    const fixture = TestBed.createComponent(PersonComponent);
+    fixture.detectChanges();
+
+    const confirmService = TestBed.get(ConfirmService);
+    const personService = TestBed.get(PersonService);
+    const router = TestBed.get(Router);
+
+    spyOn(confirmService, 'confirm').and.returnValue(Observable.of('ok'));
+    spyOn(personService, 'resurrect').and.returnValue(Observable.of(null));
+    spyOn(router, 'navigate');
+
+    expect(fixture.nativeElement.querySelector('#delete-person-button')).toBeFalsy();
+    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector('#resurrect-person-button');
+    resurrectButton.click();
+
+    fixture.detectChanges();
+    expect(router.navigate).toHaveBeenCalledWith(['/persons']);
+    expect(personService.resurrect).toHaveBeenCalledWith(person.id);
+  });
+
+  it('should not resurrect a person if not confirmed', () => {
+    person.deleted = true;
+    const fixture = TestBed.createComponent(PersonComponent);
+    fixture.detectChanges();
+
+    const confirmService = TestBed.get(ConfirmService);
+    const personService = TestBed.get(PersonService);
+    const router = TestBed.get(Router);
+
+    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw('nok'));
+    spyOn(personService, 'resurrect').and.returnValue(Observable.of(null));
+    spyOn(router, 'navigate');
+
+    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector('#resurrect-person-button');
+    resurrectButton.click();
+
+    fixture.detectChanges();
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(personService.resurrect).not.toHaveBeenCalled();
   });
 });

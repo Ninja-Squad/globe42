@@ -45,6 +45,10 @@ ngb-datepicker-navigation button {
   border: none;
 }
 
+.deleted {
+  color: $danger;
+  text-decoration: line-through;
+}
 .footer-chuck {
   height: 14px;
   vertical-align: text-bottom;

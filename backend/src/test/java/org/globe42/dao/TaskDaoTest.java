@@ -42,6 +42,7 @@ public class TaskDaoTest extends BaseDaoTest {
                   .withDefaultValue("marital_status", MaritalStatus.UNKNOWN)
                   .withDefaultValue("housing", Housing.UNKNOWN)
                   .withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
+                  .withDefaultValue("deleted", false)
                   .columns("id", "first_name", "last_name", "gender", "adherent", "mediation_enabled")
                   .values(1L, "Cedric", "Exbrayat", Gender.MALE, true, false)
                   .build();

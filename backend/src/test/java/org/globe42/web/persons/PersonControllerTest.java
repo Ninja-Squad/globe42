@@ -53,9 +53,18 @@ public class PersonControllerTest extends BaseTest {
 
     @Test
     public void shouldList() {
-        when(mockPersonDao.findAll()).thenReturn(Collections.singletonList(person));
+        when(mockPersonDao.findNotDeleted()).thenReturn(Collections.singletonList(person));
 
         List<PersonIdentityDTO> result = controller.list();
+
+        assertThat(result).extracting(PersonIdentityDTO::getId).containsExactly(1L);
+    }
+
+    @Test
+    public void shouldListDeleted() {
+        when(mockPersonDao.findDeleted()).thenReturn(Collections.singletonList(person));
+
+        List<PersonIdentityDTO> result = controller.listDeleted();
 
         assertThat(result).extracting(PersonIdentityDTO::getId).containsExactly(1L);
     }
@@ -165,6 +174,39 @@ public class PersonControllerTest extends BaseTest {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
 
         controller.update(person.getId(), createCommand());
+    }
+
+    @Test
+    public void shouldDelete() {
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+
+        controller.delete(person.getId());
+
+        assertThat(person.isDeleted()).isTrue();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowIfNotFoundWhenDeleting() {
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
+
+        controller.delete(person.getId());
+    }
+
+    @Test
+    public void shouldResurrect() {
+        person.setDeleted(true);
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+
+        controller.resurrect(person.getId());
+
+        assertThat(person.isDeleted()).isFalse();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldThrowIfNotFoundWhenResurrecting() {
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
+
+        controller.resurrect(person.getId());
     }
 
     static PersonCommandDTO createCommand() {

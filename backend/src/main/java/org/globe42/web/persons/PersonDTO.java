@@ -42,7 +42,7 @@ public final class PersonDTO {
 
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
-
+    private boolean deleted;
 
     public PersonDTO(Person person) {
         this.identity = new PersonIdentityDTO(person);
@@ -70,7 +70,7 @@ public final class PersonDTO {
         this.cafNumber = person.getCafNumber();
         this.frenchFamilySituation = person.getFrenchFamilySituation() == null ? null : new FamilySituationDTO(person.getFrenchFamilySituation());
         this.abroadFamilySituation = person.getAbroadFamilySituation() == null ? null : new FamilySituationDTO(person.getAbroadFamilySituation());
-
+        this.deleted = person.isDeleted();
     }
 
     public PersonIdentityDTO getIdentity() {
@@ -161,5 +161,9 @@ public final class PersonDTO {
 
     public FamilySituationDTO getAbroadFamilySituation() {
         return abroadFamilySituation;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }

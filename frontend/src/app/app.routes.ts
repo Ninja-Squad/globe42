@@ -50,6 +50,7 @@ import { ActivityTypesComponent } from './activity-types/activity-types.componen
 import { ACTIVITY_TYPE_TRANSLATIONS } from './display-activity-type.pipe';
 import { ParticipantsComponent } from './participants/participants.component';
 import { ParticipantsResolverService } from './participants-resolver.service';
+import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -60,12 +61,14 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            component: PersonsComponent,
-            resolve: {
-              persons: PersonsResolverService
-            }
+            component: PersonsLayoutComponent,
+            children: [
+              {path: '', pathMatch: 'full', redirectTo: 'active'},
+              personsRoute('active'),
+              personsRoute('deleted'),
+            ]
           },
-          { path: 'create', component: PersonEditComponent },
+          {path: 'create', component: PersonEditComponent},
           {
             path: ':id',
             component: PersonLayoutComponent,
@@ -73,8 +76,8 @@ export const routes: Routes = [
               person: PersonResolverService
             },
             children: [
-              { path: '', pathMatch: 'full', redirectTo: 'info' },
-              { path: 'info', component: PersonComponent },
+              {path: '', pathMatch: 'full', redirectTo: 'info'},
+              {path: 'info', component: PersonComponent},
               {
                 path: 'resources',
                 component: PersonResourcesComponent,
@@ -83,17 +86,17 @@ export const routes: Routes = [
                   charges: ChargesResolverService,
                 }
               },
-              { path: 'family', component: PersonFamilySituationComponent },
+              {path: 'family', component: PersonFamilySituationComponent},
               {
                 path: 'tasks',
                 component: TasksPageComponent,
-                data: { taskListType: 'person' },
+                data: {taskListType: 'person'},
                 resolve: {
                   tasks: TasksResolverService
                 },
                 runGuardsAndResolvers: 'paramsOrQueryParamsChange'
               },
-              { path: 'files', component: PersonFilesComponent },
+              {path: 'files', component: PersonFilesComponent},
               {
                 path: 'participations',
                 component: PersonParticipationsComponent,
@@ -312,6 +315,22 @@ export function taskRoute(taskListType: string): Route {
     data: { taskListType },
     resolve: {
       tasks: TasksResolverService
+    },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+  };
+}
+
+/**
+ * Creates a persons route of a given type
+ * This function has no reason to be exported, other than to make the AOT compiler happy.
+ */
+export function personsRoute(personListType: string): Route {
+  return {
+    path: personListType,
+    component: PersonsComponent,
+    data: { personListType },
+    resolve: {
+      persons: PersonsResolverService
     },
     runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   };
