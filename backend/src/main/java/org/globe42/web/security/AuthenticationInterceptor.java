@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.jsonwebtoken.Claims;
+import org.globe42.dao.UserDao;
 import org.globe42.web.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,13 +26,16 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
     private CurrentUser currentUser;
 
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) {
         Long userId = extractUserIdFromToken(request);
         currentUser.setUserId(userId);
-        if (userId == null) {
+        if (userId == null || !userDao.existsNotDeletedById(userId)) {
             throw new UnauthorizedException();
         }
         return true;

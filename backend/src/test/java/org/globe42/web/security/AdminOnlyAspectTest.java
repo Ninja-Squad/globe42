@@ -2,8 +2,6 @@ package org.globe42.web.security;
 
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
@@ -27,22 +25,10 @@ public class AdminOnlyAspectTest extends BaseTest {
     private AdminOnlyAspect aspect;
 
     @Test(expected = ForbiddenException.class)
-    public void shouldThrowIfNoCurrentUser() {
+    public void shouldThrowIfNoCurrentUserOrCurrentUserNotAdmin() {
         long userId = 42L;
         when(mockCurrentUser.getUserId()).thenReturn(userId);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.empty());
-
-        aspect.checkUserIsAdmin(null);
-    }
-
-    @Test(expected = ForbiddenException.class)
-    public void shouldThrowIfCurrentUserIsNotAdmin() {
-        long userId = 42L;
-        when(mockCurrentUser.getUserId()).thenReturn(userId);
-        User user = new User(userId);
-        user.setAdmin(false);
-
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false);
 
         aspect.checkUserIsAdmin(null);
     }
@@ -54,7 +40,7 @@ public class AdminOnlyAspectTest extends BaseTest {
         User user = new User(userId);
         user.setAdmin(true);
 
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(true);
 
         aspect.checkUserIsAdmin(null);
     }

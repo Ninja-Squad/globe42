@@ -8,6 +8,7 @@ import javax.servlet.http.Cookie;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.impl.DefaultClaims;
+import org.globe42.dao.UserDao;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.UnauthorizedException;
 import org.junit.Test;
@@ -28,6 +29,9 @@ public class AuthenticationInterceptorTest extends BaseTest {
 
     @Mock
     private JwtHelper mockJwtHelper;
+
+    @Mock
+    private UserDao mockUserDao;
 
     @InjectMocks
     private AuthenticationInterceptor interceptor;
@@ -67,6 +71,19 @@ public class AuthenticationInterceptorTest extends BaseTest {
         interceptor.preHandle(request, null, null);
     }
 
+    @Test(expected = UnauthorizedException.class)
+    public void shouldThrowIfUserDoesNotExist() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello");
+
+        Claims claims = new DefaultClaims();
+        claims.setSubject("1234");
+        when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
+        when(mockUserDao.existsNotDeletedById(1234L)).thenReturn(false);
+
+        interceptor.preHandle(request, null, null);
+    }
+
     @Test
     public void shouldSetCurrentUserIfValidTokenInHeader() {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -75,6 +92,7 @@ public class AuthenticationInterceptorTest extends BaseTest {
         Claims claims = new DefaultClaims();
         claims.setSubject("1234");
         when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
+        when(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true);
 
         interceptor.preHandle(request, null, null);
 
@@ -89,6 +107,7 @@ public class AuthenticationInterceptorTest extends BaseTest {
         Claims claims = new DefaultClaims();
         claims.setSubject("1234");
         when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
+        when(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true);
 
         interceptor.preHandle(request, null, null);
 

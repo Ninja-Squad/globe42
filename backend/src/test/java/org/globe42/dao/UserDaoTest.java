@@ -24,6 +24,7 @@ public class UserDaoTest extends BaseDaoTest {
             .columns("id", "login", "password", "admin", "deleted")
             .values(1L, "jb", "hashedPassword", true, false)
             .values(2L, "old", "hashedPassword", true, true)
+            .values(3L, "notadmin", "hashedPassword", false, false)
             .build();
 
         dbSetup(users);
@@ -32,7 +33,7 @@ public class UserDaoTest extends BaseDaoTest {
     @Test
     public void shouldFindNotDeleted() {
         TRACKER.skipNextLaunch();
-        assertThat(userDao.findNotDeleted()).extracting(User::getId).containsOnly(1L);
+        assertThat(userDao.findNotDeleted()).extracting(User::getId).containsOnly(1L, 3L);
     }
 
     @Test
@@ -57,5 +58,23 @@ public class UserDaoTest extends BaseDaoTest {
         assertThat(userDao.findNotDeletedById(1L)).isNotEmpty();
         assertThat(userDao.findNotDeletedById(2L)).isEmpty();
         assertThat(userDao.findNotDeletedById(1234L)).isEmpty();
+    }
+
+    @Test
+    public void shouldExistsNotDeletedById() {
+        TRACKER.skipNextLaunch();
+        assertThat(userDao.existsNotDeletedById(1L)).isTrue();
+        assertThat(userDao.existsNotDeletedById(2L)).isFalse();
+        assertThat(userDao.existsNotDeletedById(3L)).isTrue();
+        assertThat(userDao.existsNotDeletedById(1234L)).isFalse();
+    }
+
+    @Test
+    public void shouldExistsNotDeletedAdminById() {
+        TRACKER.skipNextLaunch();
+        assertThat(userDao.existsNotDeletedAdminById(1L)).isTrue();
+        assertThat(userDao.existsNotDeletedAdminById(2L)).isFalse();
+        assertThat(userDao.existsNotDeletedAdminById(3L)).isFalse();
+        assertThat(userDao.existsNotDeletedAdminById(1234L)).isFalse();
     }
 }

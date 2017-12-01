@@ -2,10 +2,7 @@ package org.globe42.web.security;
 
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
 import org.globe42.dao.UserDao;
-import org.globe42.domain.User;
 import org.globe42.web.exception.ForbiddenException;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,9 +36,7 @@ public class AdminOnlyIntegrationTest {
     public void prepare() {
         long userId = 42L;
         when(mockCurrentUser.getUserId()).thenReturn(userId);
-        User user = new User(userId);
-        user.setAdmin(false);
-        when(mockUserDao.findById(userId)).thenReturn(Optional.of(user));
+        when(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false);
     }
 
     @Test(expected = ForbiddenException.class)

@@ -3,7 +3,6 @@ package org.globe42.web.security;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.globe42.dao.UserDao;
-import org.globe42.domain.User;
 import org.globe42.web.exception.ForbiddenException;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +26,8 @@ public class AdminOnlyAspect {
 
     @Before("@annotation(adminOnly)")
     public void checkUserIsAdmin(AdminOnly adminOnly) {
-        userDao.findNotDeletedById(currentUser.getUserId()).filter(User::isAdmin).orElseThrow(ForbiddenException::new);
+        if (!userDao.existsNotDeletedAdminById(currentUser.getUserId())) {
+            throw new ForbiddenException();
+        }
     }
 }

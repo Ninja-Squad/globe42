@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
  * DAO for the {@link org.globe42.domain.User} entity
  * @author JB Nizet
  */
-public interface UserDao extends JpaRepository<User, Long> {
+public interface UserDao extends JpaRepository<User, Long>, UserDaoCustom {
 
     @Query("select u from User u where u.deleted = false")
     List<User> findNotDeleted();
