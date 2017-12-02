@@ -116,14 +116,12 @@ describe('PersonComponent', () => {
     const mediationCode = nativeElement.querySelector('#mediationCode');
     expect(mediationCode.textContent).toBe('D1');
     const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
-    //expect(firstMediationAppointmentDate.textContent).toBe('2017-12-01');
+    expect(firstMediationAppointmentDate.textContent).toBe('1 déc. 2017');
     const maritalStatus = nativeElement.querySelector('#maritalStatus');
     expect(maritalStatus.textContent).toBe('Célibataire');
     const housing = nativeElement.querySelector('#housing');
     expect(housing.textContent).toContain('F6 ou plus');
     expect(housing.textContent).toContain('80 m2');
-    const hostName = nativeElement.querySelector('#hostName');
-    //expect(hostName.textContent).toContain('Bruno Mala');
     const fiscalStatus = nativeElement.querySelector('#fiscalStatus');
     expect(fiscalStatus.textContent).toContain('Imposable');
     expect(fiscalStatus.textContent).toContain('établie le 1 févr. 2017');
@@ -144,7 +142,7 @@ describe('PersonComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'maritalStatus', 'healthCareCoverage'];
+    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'firstMediationAppointmentDate', 'maritalStatus', 'healthCareCoverage'];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
   });

@@ -110,7 +110,7 @@ export class PersonEditComponent implements OnInit {
       }
 
       this.personForm.patchValue(this.editedPerson);
-      ['birthDate', 'entryDate', 'fiscalStatusDate'].forEach(property =>
+      ['birthDate', 'entryDate', 'firstMediationAppointmentDate', 'fiscalStatusDate'].forEach(property =>
         this.personForm.get(property).setValue(isoToDate(this.editedPerson[property])));
     }
   }

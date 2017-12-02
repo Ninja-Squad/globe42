@@ -2,66 +2,78 @@
   <div class="col-lg">
     <h2>Identité</h2>
     <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Code médiation</label>
+      <label class="col-sm-6">Code médiation</label>
       <div class="col-sm-6">
         <p id="mediationCode" class="form-control-static">{{ person.mediationCode }}</p>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-sm-6 col-form-label">Est adhérent</label>
+      <label class="col-sm-6">Est adhérent</label>
       <div class="col-sm-6">
         <p id="adherent" class="form-control-static">{{ person.adherent ? 'Oui' : 'Non' }}</p>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-sm-6 col-form-label">Genre</label>
+      <label class="col-sm-6">Genre</label>
       <div class="col-sm-6">
         <p id="gender" class="form-control-static">{{ person.gender | displayGender }}</p>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-sm-6 col-form-label">Né(e) le</label>
+      <label class="col-sm-6">Né(e) le</label>
       <div class="col-sm-6">
         <p id="birthDate" class="form-control-static">{{ person.birthDate | date }}</p>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-sm-6 col-form-label">Nom de naissance</label>
+      <label class="col-sm-6">Nom de naissance</label>
       <div class="col-sm-6">
         <p id="birthName" class="form-control-static">{{ person.birthName }}</p>
       </div>
     </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Statut marital</label>
+      <label class="col-sm-6">Statut marital</label>
       <div class="col-sm-6">
         <p id="maritalStatus" class="form-control-static">{{ person.maritalStatus | displayMaritalStatus }}</p>
       </div>
     </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Numéro de Sécurité Sociale</label>
+      <label class="col-sm-6">Numéro de Sécurité Sociale</label>
       <div class="col-sm-6">
         <p id="socialSecurityNumber" class="form-control-static">{{ person.socialSecurityNumber }}</p>
       </div>
     </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Numéro CAF</label>
+      <label class="col-sm-6">Numéro CAF</label>
       <div class="col-sm-6">
         <p id="cafNumber" class="form-control-static">{{ person.cafNumber }}</p>
       </div>
     </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Couverture médicale</label>
+      <label class="col-sm-6">Couverture médicale</label>
       <div class="col-sm-6">
         <p id="healthCareCoverage" class="form-control-static">{{ person.healthCareCoverage | displayHealthCareCoverage }}</p>
       </div>
     </div>
+
+    <hr class="separator">
+
+    <h2>Informations</h2>
+
     <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
+      <label class="col-sm-6">Entré(e) en France le</label>
       <div class="col-sm-6">
         <p id="entryDate" class="form-control-static">{{ person.entryDate | date }}</p>
       </div>
     </div>
+    <div class="form-group row" *ngIf="person.mediationEnabled">
+      <div class="col-sm-6"><span class="fa fa-calendar"></span> Date 1<sup>er</sup> RDV médiation</div>
+      <div class="col-sm-6" id="firstMediationAppointmentDate">{{ person.firstMediationAppointmentDate | date }}</div>
+    </div>
+    <hr class="separator">
+
   </div>
+
   <div class="col-lg">
     <h2>Contact</h2>
 
@@ -91,22 +103,19 @@
 
     <div class="d-flex mb-2" id="accompanying"  *ngIf="person.mediationEnabled">
       <div class="mr-3"><span class="fa fa-users" title="accompagnant"></span></div>
-      <div>{{ person.accompanying }}</div>
+      <div>{{ person.accompanying }} (accompagnant)</div>
     </div>
 
-    <div class="d-flex mb-2" id="firstMediationAppointmentDate"  *ngIf="person.mediationEnabled">
-      <div class="mr-3"><span class="fa fa-calendar"></span></div>
-      <div>{{ person.firstMediationAppointmentDate | date }}</div>
-    </div>
+    <hr class="separator">
 
-
-      <h2>Logement</h2>
+    <h2>Logement</h2>
       <p id="housing">
         {{ person.housing | displayHousing }}
         <ng-container *ngIf="person.housingSpace"> &mdash; {{ person.housingSpace }} m<sup>2</sup></ng-container>
       </p>
       <ng-container *ngIf="person.hostName">Hébergé par {{ person.hostName }}</ng-container>
 
+      <hr class="separator">
 
       <h2>Situation fiscale</h2>
 
@@ -128,11 +137,12 @@
       </p>
   </div>
 </div>
-
-<a class="btn btn-outline-primary" [routerLink]="['/persons', person.id, 'edit']">
-  <span class="fa fa-edit"></span>
-  Éditer
-</a>
+<div class="mt-4">
+  <a class="btn btn-outline-primary" [routerLink]="['/persons', person.id, 'edit']">
+    <span class="fa fa-edit"></span>
+    Éditer
+  </a>
+</div>
 
 <div class="mt-4">
   <h2>Notes</h2>

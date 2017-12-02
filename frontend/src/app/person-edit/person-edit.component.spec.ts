@@ -138,8 +138,8 @@ describe('PersonEditComponent', () => {
       expect(email.value).toBe(person.email);
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe(person.phoneNumber);
-     // const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
-    //  expect(firstMediationAppointmentDate.value).toBe(person.firstMediationAppointmentDate);
+      const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
+      expect(firstMediationAppointmentDate.value).toBe('01/12/2017');
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
       expect(maritalStatus.options[maritalStatus.selectedIndex].value).toBe(person.maritalStatus);
       const adherentYes = nativeElement.querySelector('#adherenttrue');
@@ -191,15 +191,15 @@ describe('PersonEditComponent', () => {
       nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
       fixture.detectChanges();
 
-      //expect(personService.update).toHaveBeenCalled();
+      expect(personService.update).toHaveBeenCalled();
 
       const idUpdated = personService.update.calls.argsFor(0)[0];
-      //expect(idUpdated).toBe(0);
+      expect(idUpdated).toBe(0);
       const personUpdated = personService.update.calls.argsFor(0)[1];
-      //expect(personUpdated.lastName).toBe('Do');
-      //expect(personUpdated.firstName).toBe('John');
+      expect(personUpdated.lastName).toBe('Do');
+      expect(personUpdated.firstName).toBe('John');
 
-      //expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
+      expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
     });
 
     it('should clear the city input on blur if not valid anymore', () =>  {
