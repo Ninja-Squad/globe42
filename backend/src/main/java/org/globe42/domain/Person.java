@@ -75,7 +75,7 @@ public class Person {
     private LocalDate birthDate;
 
     /**
-     * Is the person an official member of the association. Requested to all persons, but not mandatory.
+     * Is the person an official member of the association. Requested to all persons, and mandatory.
      */
     private boolean adherent;
 
@@ -202,19 +202,19 @@ public class Person {
     private HealthCareCoverage healthCareCoverage = HealthCareCoverage.UNKNOWN;
 
     /**
-     * The name of the accompanying. Requested to all persons, but not mandatory
+     * The name of the accompanying. Only requested to mediation-enabled persons, and not mandatory
      */
     private String accompanying;
 
     /**
-     * The social security number of the person. Requested to all persons, but not mandatory.
+     * The social security number of the person. Only requested to mediation-enabled persons, and not mandatory.
      * In positions 6 and 7 of this number we have the 'place of birth" and we can have letters for people born abroad.
      * So we must have 'String' for the Type of this attribute.
      */
     private String socialSecurityNumber;
 
     /**
-     * The CAF number of the person. CAF = "Caisse Allocations Familiales" in French. Requested to all persons, but not mandatory
+     * The CAF number of the person. CAF = "Caisse Allocations Familiales" in French. Only requested to mediation-enabled persons, and not mandatory
      */
     private String cafNumber;
 
@@ -265,9 +265,13 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getBirthName() { return birthName; }
+    public String getBirthName() {
+        return birthName;
+    }
 
-    public void setBirthName(String birthName) { this.birthName = birthName; }
+    public void setBirthName(String birthName) {
+        this.birthName = birthName;
+    }
 
     public String getNickName() {
         return nickName;
@@ -349,9 +353,13 @@ public class Person {
         this.mediationCode = mediationCode;
     }
 
-    public LocalDate getFirstMediationAppointmentDate() { return firstMediationAppointmentDate; }
+    public LocalDate getFirstMediationAppointmentDate() {
+        return firstMediationAppointmentDate;
+    }
 
-    public void setFirstMediationAppointmentDate(LocalDate firstMediationAppointmentDate) { this.firstMediationAppointmentDate = firstMediationAppointmentDate; }
+    public void setFirstMediationAppointmentDate(LocalDate firstMediationAppointmentDate) {
+        this.firstMediationAppointmentDate = firstMediationAppointmentDate;
+    }
 
     public LocalDate getEntryDate() {
         return entryDate;
@@ -385,9 +393,13 @@ public class Person {
         this.housingSpace = housingSpace;
     }
 
-    public String getHostName() { return hostName; }
+    public String getHostName() {
+        return hostName;
+    }
 
-    public void setHostName(String hostName) { this.hostName = hostName; }
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
 
     public FiscalStatus getFiscalStatus() {
         return fiscalStatus;
@@ -465,17 +477,29 @@ public class Person {
         this.healthCareCoverage = healthCareCoverage;
     }
 
-    public String getAccompanying() { return accompanying; }
+    public String getAccompanying() {
+        return accompanying;
+    }
 
-    public void setAccompanying(String accompanying) { this.accompanying = accompanying; }
+    public void setAccompanying(String accompanying) {
+        this.accompanying = accompanying;
+    }
 
-    public String getSocialSecurityNumber() { return socialSecurityNumber; }
+    public String getSocialSecurityNumber() {
+        return socialSecurityNumber;
+    }
 
-    public void setSocialSecurityNumber(String socialSecurityNumber) { this.socialSecurityNumber = socialSecurityNumber; }
+    public void setSocialSecurityNumber(String socialSecurityNumber) {
+        this.socialSecurityNumber = socialSecurityNumber;
+    }
 
-    public String getCafNumber() { return cafNumber; }
+    public String getCafNumber() {
+        return cafNumber;
+    }
 
-    public void setCafNumber(String cafNumber) { this.cafNumber = cafNumber; }
+    public void setCafNumber(String cafNumber) {
+        this.cafNumber = cafNumber;
+    }
 
     public Set<Note> getNotes() {
         return Collections.unmodifiableSet(notes);

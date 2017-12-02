@@ -142,7 +142,7 @@ describe('PersonComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'firstMediationAppointmentDate', 'maritalStatus', 'healthCareCoverage'];
+    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'housing', 'fiscalStatus', 'firstMediationAppointmentDate', 'maritalStatus', 'healthCareCoverage'];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
   });

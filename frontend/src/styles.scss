@@ -5,6 +5,10 @@ h1 {
   margin-bottom: $spacer * 1.5;
 }
 
+h2 {
+  margin-top: $spacer * 1.5;
+}
+
 /**
  * When displaying data using form groups, which thus don't contain any input field,
  * surround them with a .read-only container, to reduce the too large space between rows
@@ -44,25 +48,4 @@ ngb-datepicker-navigation button {
 .footer-chuck {
   height: 14px;
   vertical-align: text-bottom;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  margin-bottom: 60px; /* Margin bottom by footer height */
-}
-.footer {
-  position: absolute;
-  text-align: right;
-  margin-top: 40px;
-  bottom: 0;
-  width: 100%;
-  font-size: 0.8em;
-  height: 60px; /* Set the fixed height of the footer here */
-  line-height: 60px; /* Vertically center the text there */
-  background-color: #f5f5f5;
 }

@@ -52,7 +52,6 @@ public class PersonDaoTest extends BaseDaoTest {
         person.setGender(Gender.MALE);
         person.setFirstName("JB");
         person.setLastName("Nizet");
-        person.setAccompanying("Paul");
         person.setSocialSecurityNumber("5654389076543124");
         person.setCafNumber("765344");
         person.setHostName("Brigitte");
