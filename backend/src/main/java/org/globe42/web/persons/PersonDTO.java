@@ -17,6 +17,7 @@ import org.globe42.domain.Person;
 public final class PersonDTO {
     @JsonUnwrapped
     private final PersonIdentityDTO identity;
+    private final String birthName;
     private final LocalDate birthDate;
     private final String address;
     private final CityDTO city;
@@ -45,6 +46,7 @@ public final class PersonDTO {
 
     public PersonDTO(Person person) {
         this.identity = new PersonIdentityDTO(person);
+        this.birthName = person.getBirthName();
         this.birthDate = person.getBirthDate();
         this.address = person.getAddress();
         this.city = person.getCity() == null ? null : new CityDTO(person.getCity());
@@ -73,6 +75,10 @@ public final class PersonDTO {
 
     public PersonIdentityDTO getIdentity() {
         return identity;
+    }
+
+    public String getBirthName() {
+        return birthName;
     }
 
     public LocalDate getBirthDate() {

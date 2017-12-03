@@ -8,7 +8,6 @@ export interface PersonIdentityModel {
   id: number;
   firstName: string;
   lastName: string;
-  birthName: string;
   nickName: string;
   mediationCode: string;
 }
@@ -21,6 +20,7 @@ export interface FamilySituation {
 }
 
 export interface PersonModel extends PersonIdentityModel {
+  birthName: string;
   birthDate: string;
   address: string;
   city: CityModel;
