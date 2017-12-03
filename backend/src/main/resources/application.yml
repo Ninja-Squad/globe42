@@ -15,7 +15,7 @@ spring:
     username: globe42
     password: globe42
     hikari:
-      maximum-pool-size: 5
+      maximum-pool-size: 4
   servlet:
     multipart:
       max-file-size: 10MB
