@@ -20,8 +20,8 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.common.io.ByteStreams;
 import org.globe42.test.BaseTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -40,7 +40,7 @@ public class StorageServiceTest extends BaseTest {
 
     private Blob blob;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         blob = mock(Blob.class);
         doReturn("foo/hello.txt").when(blob).getName();

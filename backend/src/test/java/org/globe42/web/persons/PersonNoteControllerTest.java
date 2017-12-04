@@ -1,6 +1,7 @@
 package org.globe42.web.persons;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
@@ -16,8 +17,8 @@ import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.CurrentUser;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -42,7 +43,7 @@ public class PersonNoteControllerTest extends BaseTest {
     private Note note1;
     private Note note2;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         User creator = new User(34L);
         creator.setLogin("JB");
@@ -81,10 +82,11 @@ public class PersonNoteControllerTest extends BaseTest {
         assertThat(result.get(1).getCreator()).isNull();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenListingForUnknownPerson() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
-        controller.list(person.getId());
+
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.list(person.getId()));
     }
 
     @Test
@@ -100,11 +102,12 @@ public class PersonNoteControllerTest extends BaseTest {
         assertThat(result.getCreator().getId()).isEqualTo(mockCurrentUser.getUserId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenCreatingForUnknownPerson() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
         NoteCommandDTO command = new NoteCommandDTO("test3");
-        controller.create(person.getId(), command);
+
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(person.getId(), command));
     }
 
     @Test
@@ -117,18 +120,22 @@ public class PersonNoteControllerTest extends BaseTest {
         assertThat(note1.getText()).isEqualTo(command.getText());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenUpdatingForUnknownPerson() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
         NoteCommandDTO command = new NoteCommandDTO("test3");
-        controller.update(person.getId(), note1.getId(), command);
+
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.update(person.getId(), note1.getId(), command));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenUpdatingUnknownNote() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
         NoteCommandDTO command = new NoteCommandDTO("test3");
-        controller.update(person.getId(), 87654L, command);
+
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.update(person.getId(), 87654L, command));
     }
 
     @Test
@@ -140,10 +147,12 @@ public class PersonNoteControllerTest extends BaseTest {
         assertThat(person.getNotes()).containsOnly(note2);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenDeletingForUnknownPerson() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
-        controller.delete(person.getId(), note1.getId());
+
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.delete(person.getId(), note1.getId()));
     }
 
     @Test

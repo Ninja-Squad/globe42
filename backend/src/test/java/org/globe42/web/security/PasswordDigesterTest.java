@@ -2,7 +2,7 @@ package org.globe42.web.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link PasswordDigester}

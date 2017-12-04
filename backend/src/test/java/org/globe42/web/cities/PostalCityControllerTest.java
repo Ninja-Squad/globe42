@@ -11,7 +11,7 @@ import org.globe42.dao.PostalCityDao;
 import org.globe42.domain.PostalCity;
 import org.globe42.test.BaseTest;
 import org.globe42.web.persons.CityDTO;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 

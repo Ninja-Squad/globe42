@@ -9,7 +9,7 @@ import java.util.List;
 import org.globe42.dao.TaskCategoryDao;
 import org.globe42.domain.TaskCategory;
 import org.globe42.test.BaseTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 

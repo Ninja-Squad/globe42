@@ -20,15 +20,13 @@ import org.globe42.storage.FileDTO;
 import org.globe42.storage.ReadableFile;
 import org.globe42.storage.StorageService;
 import org.globe42.test.GlobeMvcTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -36,7 +34,6 @@ import org.springframework.test.web.servlet.MvcResult;
  * MVC tests for {@link PersonFileController}
  * @author JB Nizet
  */
-@RunWith(SpringRunner.class)
 @GlobeMvcTest(PersonFileController.class)
 public class PersonFileControllerMvcTest {
 
@@ -52,7 +49,7 @@ public class PersonFileControllerMvcTest {
     private Person person;
     private String directory;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         person = new Person(1000L);
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));

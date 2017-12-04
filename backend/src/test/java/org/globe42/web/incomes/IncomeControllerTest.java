@@ -1,6 +1,7 @@
 package org.globe42.web.incomes;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -21,7 +22,7 @@ import org.globe42.test.Answers;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -59,12 +60,12 @@ public class IncomeControllerTest extends BaseTest {
         assertThat(result.get(0).getMonthlyAmount()).isEqualTo(income.getMonthlyAmount());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfPersonNotFound() {
         Long personId = 42L;
         when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
 
-        controller.list(personId);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.list(personId));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class IncomeControllerTest extends BaseTest {
         verify(mockIncomeDao, never()).delete(any());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldRejectDeletionIfNotInCorrectPerson() {
         Long incomeId = 12L;
         Long personId = 42L;
@@ -99,7 +100,7 @@ public class IncomeControllerTest extends BaseTest {
 
         when(mockIncomeDao.findById(incomeId)).thenReturn(Optional.of(income));
 
-        controller.delete(456L, incomeId);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.delete(456L, incomeId));
     }
 
     @Test
@@ -124,7 +125,7 @@ public class IncomeControllerTest extends BaseTest {
         assertThat(result.getSource().getId()).isEqualTo(command.getSourceId());
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenCreatingForUnknownPerson() {
         Long personId = 42L;
         Long sourceId = 12L;
@@ -134,10 +135,11 @@ public class IncomeControllerTest extends BaseTest {
         when(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.empty());
 
         IncomeCommandDTO command = new IncomeCommandDTO(sourceId, BigDecimal.TEN);
-        controller.create(personId, command);
+
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenCreatingWithTooLargeAmount() {
         Long personId = 42L;
         Long sourceId = 12L;
@@ -149,10 +151,10 @@ public class IncomeControllerTest extends BaseTest {
         when(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.of(source));
 
         IncomeCommandDTO command = new IncomeCommandDTO(sourceId, BigDecimal.TEN);
-        controller.create(personId, command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenCreatingForUnknownSource() {
         Long personId = 42L;
         Long sourceId = 12L;
@@ -160,7 +162,8 @@ public class IncomeControllerTest extends BaseTest {
         when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
 
         IncomeCommandDTO command = new IncomeCommandDTO(sourceId, BigDecimal.TEN);
-        controller.create(personId, command);
+
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(personId, command));
     }
 
     static Income createIncome(Long id) {

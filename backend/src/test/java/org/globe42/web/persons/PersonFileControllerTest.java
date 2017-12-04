@@ -23,8 +23,8 @@ import org.globe42.storage.FileDTO;
 import org.globe42.storage.ReadableFile;
 import org.globe42.storage.StorageService;
 import org.globe42.test.BaseTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
@@ -51,7 +51,7 @@ public class PersonFileControllerTest extends BaseTest {
     private Person person;
     private String directory;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         person = new Person(1000L);
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));

@@ -13,8 +13,8 @@ import java.util.Optional;
 import org.globe42.dao.IncomeSourceTypeDao;
 import org.globe42.domain.IncomeSourceType;
 import org.globe42.test.BaseTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -37,7 +37,7 @@ public class IncomeSourceTypeControllerTest extends BaseTest {
 
     private IncomeSourceType incomeSourceType;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         incomeSourceType = new IncomeSourceType(1L, "CAF");
     }

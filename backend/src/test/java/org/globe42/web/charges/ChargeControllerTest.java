@@ -1,6 +1,7 @@
 package org.globe42.web.charges;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -19,7 +20,7 @@ import org.globe42.test.Answers;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -57,12 +58,12 @@ public class ChargeControllerTest extends BaseTest {
         assertThat(result.get(0).getMonthlyAmount()).isEqualTo(charge.getMonthlyAmount());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfPersonNotFound() {
         Long personId = 42L;
         when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
 
-        controller.list(personId);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.list(personId));
     }
 
     @Test
@@ -88,7 +89,7 @@ public class ChargeControllerTest extends BaseTest {
         verify(mockChargeDao, never()).delete(any());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldRejectDeletionIfNotInCorrectPerson() {
         Long chargeId = 12L;
         Long personId = 42L;
@@ -97,7 +98,7 @@ public class ChargeControllerTest extends BaseTest {
 
         when(mockChargeDao.findById(chargeId)).thenReturn(Optional.of(charge));
 
-        controller.delete(456L, chargeId);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.delete(456L, chargeId));
     }
 
     @Test
@@ -122,7 +123,7 @@ public class ChargeControllerTest extends BaseTest {
         assertThat(result.getType().getId()).isEqualTo(command.getTypeId());
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenCreatingForUnknownPerson() {
         Long personId = 42L;
         Long typeId = 12L;
@@ -132,10 +133,10 @@ public class ChargeControllerTest extends BaseTest {
         when(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.empty());
 
         ChargeCommandDTO command = new ChargeCommandDTO(typeId, BigDecimal.TEN);
-        controller.create(personId, command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenCreatingWithTooLargeAmount() {
         Long personId = 42L;
         Long typeId = 12L;
@@ -147,10 +148,10 @@ public class ChargeControllerTest extends BaseTest {
         when(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.of(type));
 
         ChargeCommandDTO command = new ChargeCommandDTO(typeId, BigDecimal.TEN);
-        controller.create(personId, command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenCreatingForUnknownType() {
         Long personId = 42L;
         Long typeId = 12L;
@@ -158,7 +159,7 @@ public class ChargeControllerTest extends BaseTest {
         when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
 
         ChargeCommandDTO command = new ChargeCommandDTO(typeId, BigDecimal.TEN);
-        controller.create(personId, command);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(personId, command));
     }
 
     static Charge createCharge(Long id) {

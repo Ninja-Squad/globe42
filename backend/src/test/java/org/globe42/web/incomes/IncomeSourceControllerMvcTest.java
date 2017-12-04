@@ -16,20 +16,17 @@ import org.globe42.dao.IncomeSourceTypeDao;
 import org.globe42.domain.IncomeSource;
 import org.globe42.domain.IncomeSourceType;
 import org.globe42.test.GlobeMvcTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * MVC tests for {@link IncomeSourceController}
  * @author JB Nizet
  */
-@RunWith(SpringRunner.class)
 @GlobeMvcTest(IncomeSourceController.class)
 public class IncomeSourceControllerMvcTest {
 
@@ -47,7 +44,7 @@ public class IncomeSourceControllerMvcTest {
 
     private IncomeSource incomeSource;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         incomeSource = new IncomeSource(42L);
         incomeSource.setName("source 1");

@@ -8,6 +8,7 @@ buildscript {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RC2'
         classpath 'org.flywaydb:flyway-gradle-plugin:5.0.3'
         classpath 'org.postgresql:postgresql:9.4.1212'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
     }
 }
 
@@ -15,6 +16,8 @@ plugins {
     id "org.flywaydb.flyway" version "5.0.3"
     id "com.gorylenko.gradle-git-properties" version "1.4.17"
 }
+
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -57,11 +60,18 @@ dependencies {
     compile 'io.jsonwebtoken:jjwt:0.7.0'
     compile 'com.google.cloud:google-cloud-storage:1.5.1'
 
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+    }
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.2'
+    // To avoid compiler warnings about @API annotations in JUnit code.
+    testCompile('org.apiguardian:apiguardian-api:1.0.0')
 
     runtime 'org.postgresql:postgresql:42.1.4'
     runtime 'org.flywaydb:flyway-core:4.2.0' // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
+
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.2'
 }
 
 // remove default tasks added by flyway plugin

@@ -14,8 +14,8 @@ import com.ninja_squad.dbsetup.operation.Operation;
 import org.globe42.domain.SpentTimeStatistic;
 import org.globe42.domain.TaskStatus;
 import org.globe42.web.tasks.SpentTimeStatisticsCriteriaDTO;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -27,7 +27,7 @@ public class SpentTimeDaoTest extends BaseDaoTest {
     @Autowired
     private SpentTimeDao dao;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         Operation users = Insert.into("guser")
                                 .withDefaultValue("password", "hashedPassword")
