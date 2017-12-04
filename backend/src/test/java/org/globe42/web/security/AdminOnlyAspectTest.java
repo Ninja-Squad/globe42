@@ -2,11 +2,12 @@ package org.globe42.web.security;
 
 import static org.mockito.Mockito.when;
 
+import org.assertj.core.api.Assertions;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.ForbiddenException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -24,13 +25,14 @@ public class AdminOnlyAspectTest extends BaseTest {
     @InjectMocks
     private AdminOnlyAspect aspect;
 
-    @Test(expected = ForbiddenException.class)
+    @Test
     public void shouldThrowIfNoCurrentUserOrCurrentUserNotAdmin() {
         long userId = 42L;
         when(mockCurrentUser.getUserId()).thenReturn(userId);
         when(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false);
 
-        aspect.checkUserIsAdmin(null);
+        Assertions.assertThatExceptionOfType(ForbiddenException.class).isThrownBy(
+            () -> aspect.checkUserIsAdmin(null));
     }
 
     @Test

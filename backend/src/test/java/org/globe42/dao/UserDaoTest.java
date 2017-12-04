@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
 import org.globe42.domain.User;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -18,7 +18,7 @@ public class UserDaoTest extends BaseDaoTest {
     @Autowired
     private UserDao userDao;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         Operation users = Insert.into("guser")
             .columns("id", "login", "password", "admin", "deleted")

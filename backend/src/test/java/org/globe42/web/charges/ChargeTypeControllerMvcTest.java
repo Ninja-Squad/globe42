@@ -16,20 +16,17 @@ import org.globe42.dao.ChargeTypeDao;
 import org.globe42.domain.ChargeCategory;
 import org.globe42.domain.ChargeType;
 import org.globe42.test.GlobeMvcTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * MVC tests for {@link ChargeTypeController}
  * @author JB Nizet
  */
-@RunWith(SpringRunner.class)
 @GlobeMvcTest(ChargeTypeController.class)
 public class ChargeTypeControllerMvcTest {
 
@@ -47,7 +44,7 @@ public class ChargeTypeControllerMvcTest {
 
     private ChargeType chargeType;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         chargeType = new ChargeType(42L);
         chargeType.setName("source 1");

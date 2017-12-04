@@ -1,6 +1,7 @@
 package org.globe42.web.users;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -18,8 +19,8 @@ import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.CurrentUser;
 import org.globe42.web.security.PasswordDigester;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -29,7 +30,7 @@ import org.mockito.Mock;
  * Unit tests for {@link UserController}
  * @author JB Nizet
  */
-public class UserControllerTest extends BaseTest{
+public class UserControllerTest extends BaseTest {
     @Mock
     private CurrentUser mockCurrentUser;
 
@@ -59,7 +60,7 @@ public class UserControllerTest extends BaseTest{
 
     private Long userId = 42L;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         when(mockCurrentUser.getUserId()).thenReturn(userId);
     }
@@ -74,11 +75,11 @@ public class UserControllerTest extends BaseTest{
         assertThat(result.getLogin()).isEqualTo(user.getLogin());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenGettingCurrentUserIfNotFound() {
         when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
 
-        controller.getCurrentUser();
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.getCurrentUser());
     }
 
     @Test
@@ -114,10 +115,10 @@ public class UserControllerTest extends BaseTest{
         assertThat(result.getId()).isEqualTo(user.getId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenGettingIfNotFound() {
         when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
-        controller.get(userId);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(userId));
     }
 
     @Test
@@ -136,13 +137,13 @@ public class UserControllerTest extends BaseTest{
         assertThat(userCaptor.getValue().getPassword()).isEqualTo("hashed");
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenCreatingWithExistingLogin() {
         UserCommandDTO command = new UserCommandDTO("test", false);
 
         when(mockUserDao.existsByLogin(command.getLogin())).thenReturn(true);
 
-        controller.create(command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(command));
     }
 
     @Test
@@ -156,7 +157,7 @@ public class UserControllerTest extends BaseTest{
         assertThat(user.isAdmin()).isEqualTo(command.isAdmin());
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenUpdatingWithExistingLogin() {
         UserCommandDTO command = new UserCommandDTO("test", false);
         User user = createUser(userId);
@@ -164,7 +165,7 @@ public class UserControllerTest extends BaseTest{
 
         when(mockUserDao.findNotDeletedByLogin(command.getLogin())).thenReturn(Optional.of(createUser(4567L)));
 
-        controller.update(userId, command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.update(userId, command));
     }
 
     @Test

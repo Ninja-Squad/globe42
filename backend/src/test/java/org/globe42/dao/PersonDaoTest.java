@@ -8,12 +8,12 @@ import com.ninja_squad.dbsetup.operation.Operation;
 import org.globe42.domain.ActivityType;
 import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Person;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -24,7 +24,7 @@ public class PersonDaoTest extends BaseDaoTest {
     @Autowired
     private PersonDao personDao;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         Operation person =
             Insert.into("person")

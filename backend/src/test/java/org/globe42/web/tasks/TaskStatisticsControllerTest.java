@@ -10,7 +10,7 @@ import org.globe42.domain.SpentTimeStatistic;
 import org.globe42.domain.TaskCategory;
 import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -19,6 +19,7 @@ import org.mockito.Mock;
  * @author JB Nizet
  */
 public class TaskStatisticsControllerTest extends BaseTest {
+
     @Mock
     private SpentTimeDao mockSpentTimeDao;
 

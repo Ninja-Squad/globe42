@@ -13,18 +13,15 @@ import java.util.List;
 import org.globe42.dao.PostalCityDao;
 import org.globe42.domain.PostalCity;
 import org.globe42.test.GlobeMvcTest;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * MVC tests for {@link PostalCityController}
  * @author JB Nizet
  */
-@RunWith(SpringRunner.class)
 @GlobeMvcTest(PostalCityController.class)
 public class PostalCityControllerMvcTest {
 

@@ -10,11 +10,9 @@ import java.util.Collections;
 import org.globe42.dao.IncomeSourceTypeDao;
 import org.globe42.domain.IncomeSourceType;
 import org.globe42.test.GlobeMvcTest;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
@@ -22,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
  * @author JB Nizet
  */
 @GlobeMvcTest(IncomeSourceTypeController.class)
-@RunWith(SpringRunner.class)
 public class IncomeSourceTypeControllerMvcTest {
 
     @MockBean

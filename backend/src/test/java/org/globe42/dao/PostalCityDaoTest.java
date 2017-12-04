@@ -8,8 +8,8 @@ import java.util.List;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
 import org.globe42.domain.PostalCity;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -20,7 +20,7 @@ public class PostalCityDaoTest extends BaseDaoTest {
     @Autowired
     private PostalCityDao dao;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         Operation person =
             Insert.into("postal_city")

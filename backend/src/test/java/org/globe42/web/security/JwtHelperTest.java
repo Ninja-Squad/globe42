@@ -3,8 +3,8 @@ package org.globe42.web.security;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.jsonwebtoken.Claims;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for JwtHelper
@@ -13,7 +13,7 @@ import org.junit.Test;
 public class JwtHelperTest {
     private JwtHelper jwtHelper;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         jwtHelper = new JwtHelper("someSecretKey");
     }

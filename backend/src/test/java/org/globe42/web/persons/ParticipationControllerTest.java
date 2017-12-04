@@ -11,8 +11,8 @@ import org.globe42.domain.ActivityType;
 import org.globe42.domain.Participation;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -30,7 +30,7 @@ public class ParticipationControllerTest extends BaseTest {
     private Person person;
     private Participation mealParticipation;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         person = new Person(42L);
         mealParticipation = new Participation(34L);

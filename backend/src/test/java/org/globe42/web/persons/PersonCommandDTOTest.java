@@ -6,18 +6,18 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.globe42.domain.Gender;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * Unit tests for {@link PersonCommandDTO}
  * @author JB Nizet
  */
 @JsonTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class PersonCommandDTOTest {
 
     @Autowired
