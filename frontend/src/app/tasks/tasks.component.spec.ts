@@ -45,6 +45,10 @@ describe('TasksComponent', () => {
         id: 12,
         description: 'Some description',
         title: 'Some title',
+        category: {
+          id: 6,
+          name: 'Various'
+        },
         dueDate: '2017-08-01',
         status: 'TODO',
         totalSpentTimeInMinutes: 0,
@@ -167,6 +171,7 @@ describe('TasksComponent', () => {
       const text = fixture.nativeElement.textContent;
       expect(text).not.toContain('Rien à faire');
       expect(text).toContain('Some title');
+      expect(text).toContain('#Various');
       expect(text).toContain('aujourd\'hui');
       expect(text).not.toContain('Some description');
       expect(text).toContain('Assignée à admin');

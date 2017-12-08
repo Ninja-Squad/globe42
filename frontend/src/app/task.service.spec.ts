@@ -12,6 +12,7 @@ import { JwtInterceptorService } from './jwt-interceptor.service';
 import { SpentTimeModel } from './models/spent-time.model';
 import { HttpTester } from './http-tester.spec';
 import { UserModel } from './models/user.model';
+import { TaskCategoryModel } from './models/task-category.model';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -99,5 +100,16 @@ describe('TaskService', () => {
 
   it('should delete a spent time', () => {
     httpTester.testDelete('/api/tasks/42/spent-times/1', service.deleteSpentTime(42, 1));
+  });
+
+  it('should list and sort task categories', () => {
+    const categories = [{ id: 1, name: 'b' }, { id: 2, name: 'a' }] as Array<TaskCategoryModel>;
+
+    let actualCategories: Array<TaskCategoryModel> = null;
+    service.listCategories().subscribe(result => actualCategories = result);
+
+    TestBed.get(HttpTestingController).expectOne({url: '/api/task-categories', method: 'GET'}).flush(categories);
+
+    expect(actualCategories).toEqual([{ id: 2, name: 'a' }, { id: 1, name: 'b' }]);
   });
 });

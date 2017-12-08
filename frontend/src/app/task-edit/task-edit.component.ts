@@ -12,10 +12,12 @@ import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
 import { isoToDate, sortBy, dateToIso } from '../utils';
 import { TaskModel } from '../models/task.model';
+import { TaskCategoryModel } from '../models/task-category.model';
 
 interface TaskFormModel {
   title: string;
   description: string;
+  category: TaskCategoryModel;
   dueDate: NgbDateStruct;
   concernedPerson: PersonIdentityModel;
   assignee: UserModel;
@@ -33,12 +35,14 @@ export class TaskEditComponent implements OnInit {
   task: TaskFormModel = {
     title: '',
     description: '',
+    category: null,
     dueDate: null,
     concernedPerson: null,
     assignee: null
   };
 
   users: Array<UserModel>;
+  categories: Array<TaskCategoryModel>;
 
   cancelOrRedirectDestination = ['/tasks'];
 
@@ -62,6 +66,7 @@ export class TaskEditComponent implements OnInit {
     this.editedTask = this.route.snapshot.data.task;
     this.persons = this.route.snapshot.data.persons;
     this.users = this.sortUsers(this.route.snapshot.data.users);
+    this.categories = this.route.snapshot.data.categories;
 
     const concernedPersonId = this.route.snapshot.paramMap.get('concerned-person');
     if (concernedPersonId) {
@@ -71,6 +76,7 @@ export class TaskEditComponent implements OnInit {
     if (this.editedTask) {
       this.task.title = this.editedTask.title;
       this.task.description = this.editedTask.description;
+      this.task.category = this.findWithId(this.categories, this.editedTask.category.id);
       this.task.dueDate = isoToDate(this.editedTask.dueDate);
       this.task.concernedPerson =
         this.editedTask.concernedPerson ? this.findWithId(this.persons, this.editedTask.concernedPerson.id) : null;
@@ -86,6 +92,7 @@ export class TaskEditComponent implements OnInit {
     const command: TaskCommand = {
       title: this.task.title,
       description: this.task.description,
+      categoryId: this.task.category.id,
       dueDate: dateToIso(this.task.dueDate),
       concernedPersonId: this.task.concernedPerson ? this.task.concernedPerson.id : null,
       assigneeId: this.task.assignee ? this.task.assignee.id : null

@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 import { TaskCommand } from './models/task.command';
 import { SpentTimeModel } from './models/spent-time.model';
 import { sortBy } from './utils';
+import { TaskCategoryModel } from './models/task-category.model';
 
 function pageParams(pageNumber: number): HttpParams {
   return new HttpParams().set('page', pageNumber.toString());
@@ -90,5 +91,10 @@ export class TaskService {
 
   addSpentTime(taskId: number, minutes: number): Observable<SpentTimeModel> {
     return this.http.post<SpentTimeModel>(`/api/tasks/${taskId}/spent-times`, { minutes });
+  }
+
+  listCategories(): Observable<Array<TaskCategoryModel>> {
+    return this.http.get<Array<TaskCategoryModel>>('/api/task-categories')
+      .map(categories => sortBy(categories, c => c.name));
   }
 }

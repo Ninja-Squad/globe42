@@ -2,7 +2,10 @@
   <div *ngFor="let task of tasks" class="list-group-item flex-column align-items-start">
     <a href (click)="toggle(task, $event)" class="list-group-item-action">
       <div class="d-flex w-100 justify-content-between task-title">
-        <h2>{{ task.model.title }}</h2>
+        <div>
+          <h2>{{ task.model.title }}</h2>
+          <small class="text-muted">#{{ task.model.category.name }}</small>
+        </div>
         <small *ngIf="task.model.status === 'TODO' && task.model.dueDate" [class]="task.dueDateClass()">{{ task.relativeDueDate() }}</small>
         <small *ngIf="task.model.status === 'DONE'" class="text-success"><span class="fa fa-check"></span> Faite</small>
         <small *ngIf="task.model.status === 'CANCELLED'" class="text-danger"><span class="fa fa-times"></span> Annulée</small>

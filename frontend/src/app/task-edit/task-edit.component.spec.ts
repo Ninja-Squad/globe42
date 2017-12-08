@@ -16,11 +16,13 @@ import { NowService } from '../now.service';
 import { Observable } from 'rxjs/Observable';
 import { TaskModel } from '../models/task.model';
 import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
+import { TaskCategoryModel } from '../models/task-category.model';
 
 describe('TaskEditComponent', () => {
 
   let persons: Array<PersonIdentityModel>;
   let users: Array<UserModel>;
+  let categories: Array<TaskCategoryModel>;
 
   beforeEach(async(() => {
     persons = [
@@ -33,6 +35,11 @@ describe('TaskEditComponent', () => {
       { id: 5, login: 'agnes', admin: false },
       { id: 3, login: 'admin', admin: true }
     ];
+
+    categories = [
+      { id: 6, name: 'Various' },
+      { id: 7, name: 'Meal' },
+    ];
   }));
 
   function prepareModule(task: TaskModel, concernedPersonId: number) {
@@ -41,6 +48,7 @@ describe('TaskEditComponent', () => {
         data: {
           persons,
           users,
+          categories,
           task
         },
         paramMap: convertToParamMap(concernedPersonId ? {'concerned-person': concernedPersonId.toString()} : {})
@@ -83,6 +91,11 @@ describe('TaskEditComponent', () => {
 
         expect(element.querySelector('input#title').value).toBe('');
         expect(element.querySelector('textarea#description').value).toBe('');
+        expect(element.querySelector('select#category').value).toBe('');
+        const categorySelect: HTMLSelectElement = element.querySelector('select#category');
+        expect(categorySelect.options[0].textContent).toBe('');
+        expect(categorySelect.options[1].textContent).toBe('Various');
+        expect(categorySelect.options[2].textContent).toBe('Meal');
         expect(element.querySelector('input#dueDate').value).toBe('');
         expect(element.querySelector('input#concernedPerson').value).toBe('');
         const assigneeSelect: HTMLSelectElement = element.querySelector('select#assignee');
@@ -188,6 +201,11 @@ describe('TaskEditComponent', () => {
         description.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
+        const category: HTMLSelectElement = element.querySelector('#category');
+        category.selectedIndex = 1;
+        category.dispatchEvent(new Event('change'));
+        fixture.detectChanges();
+
         const saveButton = element.querySelector('#save');
         expect(saveButton.disabled).toBe(false);
 
@@ -217,6 +235,7 @@ describe('TaskEditComponent', () => {
         expect(taskService.create).toHaveBeenCalledWith({
           title: 'test title',
           description: 'test description',
+          categoryId: 6,
           dueDate: '2018-01-02',
           concernedPersonId: 1,
           assigneeId: 3
@@ -248,6 +267,11 @@ describe('TaskEditComponent', () => {
         title.value = 'test title';
         title.dispatchEvent(new Event('input'));
 
+        const category: HTMLSelectElement = element.querySelector('#category');
+        category.selectedIndex = 1;
+        category.dispatchEvent(new Event('change'));
+        fixture.detectChanges();
+
         const description = element.querySelector('#description');
         description.value = 'test description';
         description.dispatchEvent(new Event('input'));
@@ -265,6 +289,7 @@ describe('TaskEditComponent', () => {
         expect(taskService.create).toHaveBeenCalledWith({
           title: 'test title',
           description: 'test description',
+          categoryId: 6,
           dueDate: null,
           concernedPersonId: 1,
           assigneeId: null
@@ -280,6 +305,10 @@ describe('TaskEditComponent', () => {
       const task = {
         id: 42,
         title: 'test title',
+        category: {
+          id: 7,
+          name: 'Meal'
+        },
         description: 'test description',
         dueDate: '2018-01-02',
         concernedPerson: {id: 1} as PersonIdentityModel,
@@ -302,6 +331,10 @@ describe('TaskEditComponent', () => {
         expect(element.querySelector('input#title').value).toBe('test title');
 
         expect(element.querySelector('textarea#description').value).toBe('test description');
+
+        const categorySelect: HTMLSelectElement = element.querySelector('select#category');
+        expect(categorySelect.selectedIndex).toBe(2);
+        expect(fixture.componentInstance.task.category).toEqual(categories[1]);
 
         expect(element.querySelector('input#dueDate').value).toBe('02/01/2018');
         expect(fixture.componentInstance.task.dueDate).toEqual({year: 2018, month: 1, day: 2} as NgbDateStruct);
@@ -338,6 +371,7 @@ describe('TaskEditComponent', () => {
         expect(taskService.update).toHaveBeenCalledWith(42, {
           title: 'test title',
           description: 'test description',
+          categoryId: 7,
           dueDate: '2018-01-02',
           concernedPersonId: 1,
           assigneeId: 3

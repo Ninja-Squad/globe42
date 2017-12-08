@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.globe42.dao.PersonDao;
+import org.globe42.dao.TaskCategoryDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.Person;
@@ -48,15 +49,18 @@ public class TaskController {
     private final TaskDao taskDao;
     private final UserDao userDao;
     private final PersonDao personDao;
+    private final TaskCategoryDao taskCategoryDao;
     private final CurrentUser currentUser;
 
     public TaskController(TaskDao taskDao,
                           UserDao userDao,
                           PersonDao personDao,
+                          TaskCategoryDao taskCategoryDao,
                           CurrentUser currentUser) {
         this.taskDao = taskDao;
         this.userDao = userDao;
         this.personDao = personDao;
+        this.taskCategoryDao = taskCategoryDao;
         this.currentUser = currentUser;
     }
 
@@ -176,6 +180,8 @@ public class TaskController {
     private void copyCommandToTask(TaskCommandDTO command, Task task) {
         task.setDescription(command.getDescription());
         task.setTitle(command.getTitle());
+        task.setCategory(taskCategoryDao.findById(command.getCategoryId()).orElseThrow(
+            () -> new BadRequestException("No category with ID " + command.getCategoryId())));
         task.setDueDate(command.getDueDate());
         Person concernedPerson = null;
         if (command.getConcernedPersonId() != null) {

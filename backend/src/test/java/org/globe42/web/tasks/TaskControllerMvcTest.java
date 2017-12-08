@@ -17,10 +17,12 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.globe42.dao.PersonDao;
+import org.globe42.dao.TaskCategoryDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.Person;
 import org.globe42.domain.Task;
+import org.globe42.domain.TaskCategory;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
 import org.globe42.test.Answers;
@@ -54,6 +56,9 @@ public class TaskControllerMvcTest {
     private UserDao mockUserDao;
 
     @MockBean
+    private TaskCategoryDao mockTaskCategoryDao;
+
+    @MockBean
     private PersonDao mockPersonDao;
 
     @MockBean
@@ -70,8 +75,11 @@ public class TaskControllerMvcTest {
 
     @Before
     public void prepare() {
+        TaskCategory variousCategory = new TaskCategory(TaskControllerTest.VARIOUS_CATEGORY_ID, "Various");
+        when(mockTaskCategoryDao.findById(variousCategory.getId())).thenReturn(Optional.of(variousCategory));
+
         user = UserControllerTest.createUser(2L);
-        task = TaskControllerTest.createTask(23L, user, new Person(45L));
+        task = TaskControllerTest.createTask(23L, user, new Person(45L), variousCategory);
     }
 
     @Test

@@ -2,6 +2,7 @@ package org.globe42.web.tasks;
 
 import java.time.LocalDate;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,6 +18,9 @@ public final class TaskCommandDTO {
     @NotEmpty
     private final String description;
 
+    @NotNull
+    private Long categoryId;
+
     private final LocalDate dueDate;
 
     private final Long concernedPersonId;
@@ -26,11 +30,13 @@ public final class TaskCommandDTO {
     @JsonCreator
     public TaskCommandDTO(@JsonProperty("title") String title,
                           @JsonProperty("description") String description,
+                          @JsonProperty("categoryId") Long categoryId,
                           @JsonProperty("dueDate") LocalDate dueDate,
                           @JsonProperty("concernedPersonId") Long concernedPersonId,
                           @JsonProperty("assigneeId") Long assigneeId) {
         this.title = title;
         this.description = description;
+        this.categoryId = categoryId;
         this.dueDate = dueDate;
         this.concernedPersonId = concernedPersonId;
         this.assigneeId = assigneeId;
@@ -42,6 +48,10 @@ public final class TaskCommandDTO {
 
     public String getDescription() {
         return description;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
     }
 
     public LocalDate getDueDate() {

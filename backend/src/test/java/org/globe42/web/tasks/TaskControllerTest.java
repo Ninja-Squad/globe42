@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.globe42.dao.PersonDao;
+import org.globe42.dao.TaskCategoryDao;
 import org.globe42.dao.TaskDao;
 import org.globe42.dao.UserDao;
 import org.globe42.domain.Person;
 import org.globe42.domain.SpentTime;
 import org.globe42.domain.Task;
+import org.globe42.domain.TaskCategory;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
 import org.globe42.test.Answers;
@@ -37,6 +39,9 @@ import org.springframework.data.domain.PageRequest;
  * @author JB Nizet
  */
 public class TaskControllerTest extends BaseTest {
+
+    public static final Long VARIOUS_CATEGORY_ID = 6L;
+
     @Mock
     private TaskDao mockTaskDao;
 
@@ -47,6 +52,9 @@ public class TaskControllerTest extends BaseTest {
     private PersonDao mockPersonDao;
 
     @Mock
+    private TaskCategoryDao mockTaskCategoryDao;
+
+    @Mock
     private CurrentUser mockCurrentUser;
 
     @InjectMocks
@@ -55,18 +63,26 @@ public class TaskControllerTest extends BaseTest {
     private Task task1;
     private Task task2;
     private User user;
+    private TaskCategory variousCategory;
+    private TaskCategory mealCategory;
 
     @Before
     public void prepare() {
         user = UserControllerTest.createUser(1L);
         Person person = new Person(2L);
 
-        task1 = createTask(23L, user, person);
+        variousCategory = new TaskCategory(VARIOUS_CATEGORY_ID, "Various");
+        when(mockTaskCategoryDao.findById(variousCategory.getId())).thenReturn(Optional.of(variousCategory));
+        mealCategory = new TaskCategory(10L, "Meal");
+        when(mockTaskCategoryDao.findById(mealCategory.getId())).thenReturn(Optional.of(mealCategory));
+
+        task1 = createTask(23L, user, person, mealCategory);
 
         task2 = new Task(24L);
         task2.setStatus(TaskStatus.TODO);
         task2.setDescription("description2");
         task2.setTitle("title2");
+        task2.setCategory(variousCategory);
     }
 
     @Test
@@ -81,6 +97,8 @@ public class TaskControllerTest extends BaseTest {
         assertThat(dto1.getStatus()).isEqualTo(task1.getStatus());
         assertThat(dto1.getDescription()).isEqualTo(task1.getDescription());
         assertThat(dto1.getTitle()).isEqualTo(task1.getTitle());
+        assertThat(dto1.getCategory().getId()).isEqualTo(task1.getCategory().getId());
+        assertThat(dto1.getCategory().getName()).isEqualTo(task1.getCategory().getName());
         assertThat(dto1.getDueDate()).isEqualTo(task1.getDueDate());
         assertThat(dto1.getCreator().getId()).isEqualTo(task1.getCreator().getId());
         assertThat(dto1.getAssignee().getId()).isEqualTo(task1.getAssignee().getId());
@@ -237,6 +255,7 @@ public class TaskControllerTest extends BaseTest {
         TaskDTO result = controller.create(command);
         assertThat(result.getId()).isEqualTo(42L);
         assertThat(result.getTitle()).isEqualTo(command.getTitle());
+        assertThat(result.getCategory().getId()).isEqualTo(variousCategory.getId());
         assertThat(result.getDescription()).isEqualTo(command.getDescription());
         assertThat(result.getDueDate()).isEqualTo(command.getDueDate());
         assertThat(result.getConcernedPerson().getId()).isEqualTo(person.getId());
@@ -270,6 +289,7 @@ public class TaskControllerTest extends BaseTest {
 
         assertThat(task1.getTitle()).isEqualTo(command.getTitle());
         assertThat(task1.getDescription()).isEqualTo(command.getDescription());
+        assertThat(task1.getCategory().getId()).isEqualTo(command.getCategoryId());
         assertThat(task1.getDueDate()).isEqualTo(command.getDueDate());
         assertThat(task1.getConcernedPerson().getId()).isEqualTo(person.getId());
         assertThat(task1.getAssignee().getId()).isEqualTo(user.getId());
@@ -318,11 +338,12 @@ public class TaskControllerTest extends BaseTest {
         controller.deleteSpentTime(task1.getId(), spentTime.getId());
     }
 
-    static Task createTask(Long id, User user, Person person) {
+    static Task createTask(Long id, User user, Person person, TaskCategory category) {
         Task task = new Task(id);
         task.setStatus(TaskStatus.TODO);
         task.setDescription("description");
         task.setTitle("title");
+        task.setCategory(category);
         task.setDueDate(LocalDate.of(2017, 8, 1));
         task.setAssignee(user);
         task.setCreator(user);
@@ -334,6 +355,7 @@ public class TaskControllerTest extends BaseTest {
     static TaskCommandDTO createCommand(Long concernedPersonId, Long assigneeId) {
         return new TaskCommandDTO("new title",
                                   "new description",
+                                  VARIOUS_CATEGORY_ID,
                                   LocalDate.now().plusDays(1),
                                   concernedPersonId,
                                   assigneeId);

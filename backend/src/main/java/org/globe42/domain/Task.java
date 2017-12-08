@@ -43,6 +43,10 @@ public class Task {
     @NotEmpty
     private String title;
 
+    @NotNull
+    @ManyToOne
+    private TaskCategory category;
+
     /**
      * The status of the task. {@link TaskStatus#TODO} by default
      */
@@ -121,6 +125,14 @@ public class Task {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public TaskCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(TaskCategory category) {
+        this.category = category;
     }
 
     public TaskStatus getStatus() {

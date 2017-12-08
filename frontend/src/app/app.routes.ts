@@ -51,6 +51,7 @@ import { ACTIVITY_TYPE_TRANSLATIONS } from './display-activity-type.pipe';
 import { ParticipantsComponent } from './participants/participants.component';
 import { ParticipantsResolverService } from './participants-resolver.service';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
+import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -270,7 +271,8 @@ export const routes: Routes = [
         component: TaskEditComponent,
         resolve: {
           persons: PersonsResolverService,
-          users: UsersResolverService
+          users: UsersResolverService,
+          categories: TaskCategoriesResolverService
         }
       },
       {
@@ -279,7 +281,8 @@ export const routes: Routes = [
         resolve: {
           persons: PersonsResolverService,
           users: UsersResolverService,
-          task: TaskResolverService
+          task: TaskResolverService,
+          categories: TaskCategoriesResolverService
         }
       },
       {

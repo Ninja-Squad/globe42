@@ -39,6 +39,10 @@ describe('TasksPageComponent', () => {
           id: i,
           description: 'Some description',
           title: 'Some title',
+          category: {
+            id: 6,
+            name: 'Various'
+          },
           dueDate: '2017-08-01',
           status: 'DONE',
           totalSpentTimeInMinutes: 0,

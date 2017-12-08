@@ -15,6 +15,7 @@ public final class TaskDTO {
     private final Long id;
     private final String description;
     private final String title;
+    private TaskCategoryDTO category;
     private final TaskStatus status;
     private final LocalDate dueDate;
     private final UserDTO creator;
@@ -26,6 +27,7 @@ public final class TaskDTO {
         this.id = task.getId();
         this.description = task.getDescription();
         this.title = task.getTitle();
+        this.category = new TaskCategoryDTO(task.getCategory());
         this.status = task.getStatus();
         this.dueDate = task.getDueDate();
         this.creator = task.getCreator() == null ? null : new UserDTO(task.getCreator());
@@ -44,6 +46,10 @@ public final class TaskDTO {
 
     public String getTitle() {
         return title;
+    }
+
+    public TaskCategoryDTO getCategory() {
+        return category;
     }
 
     public TaskStatus getStatus() {

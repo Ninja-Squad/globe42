@@ -21,12 +21,12 @@ import { SearchCityService } from './search-city.service';
 import { DisplayCityPipe } from './display-city.pipe';
 import { DisplayGenderPipe } from './display-gender.pipe';
 import { LoginComponent } from './login/login.component';
-import { UserService } from 'app/user.service';
-import { AuthenticatedGuard } from 'app/authenticated.guard';
+import { UserService } from './user.service';
+import { AuthenticatedGuard } from './authenticated.guard';
 import { IncomeTypesComponent } from './income-types/income-types.component';
-import { IncomeTypesResolverService } from 'app/income-types-resolver.service';
+import { IncomeTypesResolverService } from './income-types-resolver.service';
 import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';
-import { IncomeTypeResolverService } from 'app/income-type-resolver.service';
+import { IncomeTypeResolverService } from './income-type-resolver.service';
 import { PasswordChangeComponent } from './password-change/password-change.component';
 import { UsersComponent } from './users/users.component';
 import { UsersResolverService } from './users-resolver.service';
@@ -104,6 +104,7 @@ import { DurationPipe } from './duration.pipe';
 import { SpentTimesComponent } from './spent-times/spent-times.component';
 import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
+import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 
 @NgModule({
   declarations: [
@@ -229,7 +230,8 @@ import { PersonsLayoutComponent } from './persons-layout/persons-layout.componen
     PersonFileService,
     ParticipationService,
     ParticipationsResolverService,
-    ParticipantsResolverService
+    ParticipantsResolverService,
+    TaskCategoriesResolverService
   ],
   bootstrap: [AppComponent]
 })
