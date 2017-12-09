@@ -1,8 +1,18 @@
 <h2>Participants aux activités de type <em>{{ activityType | displayActivityType }}</em></h2>
 
-<div class="row align-items-center mb-2 person-item" *ngFor="let person of participants">
-  <div class="col-sm">
+<div class="row mb-2 person-item" *ngFor="let person of participants">
+  <div class="col-sm-8 col-lg-3">
     <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
   </div>
-  <div class="col-sm">{{ person.mediationCode }}</div>
+  <div class="col-sm-4 col-lg-2">{{ person.mediationCode }}</div>
+  <div class="col-sm-8 col-lg-4">
+    <ng-container *ngIf="person.email">
+      <span class="fa fa-envelope"></span>&nbsp;{{ person.email }}
+    </ng-container>
+  </div>
+  <div class="col-sm-4 col-lg-3">
+    <ng-container *ngIf="person.email">
+      <span class="fa fa-phone"></span>&nbsp;{{ person.phoneNumber }}
+    </ng-container>
+  </div>
 </div>

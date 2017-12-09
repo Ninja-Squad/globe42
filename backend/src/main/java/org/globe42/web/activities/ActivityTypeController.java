@@ -28,10 +28,10 @@ public class ActivityTypeController {
     }
 
     @GetMapping
-    public List<PersonIdentityDTO> list(@PathVariable("activityType") ActivityType activityType) {
+    public List<ParticipantDTO> list(@PathVariable("activityType") ActivityType activityType) {
         return personDao.findParticipants(activityType)
             .stream()
-            .map(PersonIdentityDTO::new)
+            .map(ParticipantDTO::new)
             .collect(Collectors.toList());
     }
 }

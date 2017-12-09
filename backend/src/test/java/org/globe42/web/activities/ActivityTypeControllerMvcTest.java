@@ -34,10 +34,12 @@ public class ActivityTypeControllerMvcTest {
     @Test
     public void shouldListParticipants() throws Exception {
         Person person = new Person(42L);
+        person.setEmail("john@doe.com");
         when(mockPersonDao.findParticipants(ActivityType.MEAL)).thenReturn(Arrays.asList(person));
 
         mvc.perform(get("/api/activity-types/{activityType}/participants", ActivityType.MEAL))
            .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(42));
+           .andExpect(jsonPath("$[0].id").value(42))
+           .andExpect(jsonPath("$[0].email").value(person.getEmail()));
     }
 }

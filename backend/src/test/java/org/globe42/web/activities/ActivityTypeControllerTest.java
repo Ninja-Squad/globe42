@@ -31,7 +31,7 @@ public class ActivityTypeControllerTest extends BaseTest {
         Person person = new Person(42L);
         when(mockPersonDao.findParticipants(ActivityType.MEAL)).thenReturn(Arrays.asList(person));
 
-        List<PersonIdentityDTO> result = controller.list(ActivityType.MEAL);
-        assertThat(result).extracting(PersonIdentityDTO::getId).containsExactly(42L);
+        List<ParticipantDTO> result = controller.list(ActivityType.MEAL);
+        assertThat(result).extracting(p -> p.getIdentity().getId()).containsExactly(42L);
     }
 }

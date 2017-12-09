@@ -4,6 +4,7 @@ import { PersonIdentityModel } from '../models/person.model';
 import { sortBy } from '../utils';
 import { FullnamePipe } from '../fullname.pipe';
 import { ActivityType } from '../models/participation.model';
+import { ParticipantModel } from '../models/participant.model';
 
 @Component({
   selector: 'gl-participants',
@@ -12,7 +13,7 @@ import { ActivityType } from '../models/participation.model';
 })
 export class ParticipantsComponent implements OnInit {
 
-  participants: Array<PersonIdentityModel>;
+  participants: Array<ParticipantModel>;
   activityType: ActivityType;
 
   constructor(private route: ActivatedRoute, private fullnamePipe: FullnamePipe) { }

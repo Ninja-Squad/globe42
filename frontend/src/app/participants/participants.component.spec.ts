@@ -5,8 +5,8 @@ import { FullnamePipe } from '../fullname.pipe';
 import { DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
-import { PersonIdentityModel } from '../models/person.model';
 import { Subject } from 'rxjs/Subject';
+import { ParticipantModel } from '../models/participant.model';
 
 describe('ParticipantsComponent', () => {
   let component: ParticipantsComponent;
@@ -41,7 +41,7 @@ describe('ParticipantsComponent', () => {
     const participants = [
       { id: 42, firstName: 'JB', lastName: 'Nizet'},
       { id: 43, firstName: 'Agnès', lastName: 'Crepet' }
-    ] as Array<PersonIdentityModel>;
+    ] as Array<ParticipantModel>;
 
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType : 'MEAL' }));
@@ -51,7 +51,7 @@ describe('ParticipantsComponent', () => {
   });
 
   it('should have a title', () => {
-    const participants = [] as Array<PersonIdentityModel>;
+    const participants = [] as Array<ParticipantModel>;
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType : 'MEAL' }));
 
@@ -59,11 +59,11 @@ describe('ParticipantsComponent', () => {
     expect(fixture.nativeElement.querySelector('h2').textContent).toBe('Participants aux activités de type Repas');
   });
 
-  it('should display links and mediation code', () => {
+  it('should display links, mediation code, email and phone', () => {
     const participants = [
       { id: 42, firstName: 'JB', lastName: 'Nizet'},
-      { id: 43, firstName: 'Agnès', lastName: 'Crepet', mediationCode: 'C1' }
-    ] as Array<PersonIdentityModel>;
+      { id: 43, firstName: 'Agnès', lastName: 'Crepet', mediationCode: 'C1', email: 'agnes@mail.com', phoneNumber: '0987654321' }
+    ] as Array<ParticipantModel>;
 
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType : 'MEAL' }));
@@ -74,5 +74,7 @@ describe('ParticipantsComponent', () => {
     expect(divs.length).toBe(2);
     expect(divs[0].querySelector('a').textContent).toBe('Agnès Crepet');
     expect(divs[0].textContent).toContain('C1');
+    expect(divs[0].textContent).toContain('agnes@mail.com');
+    expect(divs[0].textContent).toContain('0987654321');
   });
 });
