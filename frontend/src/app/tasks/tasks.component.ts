@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../models/task.model';
-import * as moment from 'moment';
+import { DateTime } from 'luxon';
 import { NowService } from '../now.service';
 import 'rxjs/add/operator/switchMap';
 import { SpentTimeModel } from '../models/spent-time.model';
@@ -13,18 +13,28 @@ class Task {
   constructor(public model: TaskModel, private nowService: NowService) {}
 
   relativeDueDate(): string {
-    const dueMoment = moment(this.model.dueDate);
+    const dueDateTime = DateTime.fromISO(this.model.dueDate);
     const today = this.nowService.now().startOf('day');
-    if (today.isSame(dueMoment)) {
+    if (today.equals(dueDateTime)) {
       return 'aujourd\'hui';
     }
-    return today.to(dueMoment);
+    const days = dueDateTime.diff(today, ['days']).days;
+    if (days === 0) {
+      return 'aujourd\'hui';
+    }
+    if (days > 0) {
+      return `dans ${days} jour${days > 1 ? 's' : ''}`;
+    }
+    if (days < 0) {
+      const d = Math.abs(days);
+      return `il y a ${d} jour${d > 1 ? 's' : ''}`;
+    }
   }
 
   dueDateClass() {
-    const dueMoment = moment(this.model.dueDate);
+    const dueDateTime = DateTime.fromISO(this.model.dueDate);
     const today = this.nowService.now().startOf('day');
-    const days = dueMoment.diff(today, 'days');
+    const days = dueDateTime.diff(today, ['days']).days;
     if (days < 0) {
       return 'text-danger font-weight-bold';
     }

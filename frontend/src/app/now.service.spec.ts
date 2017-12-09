@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { NowService } from './now.service';
-import * as moment from 'moment';
 
 describe('NowService', () => {
   beforeEach(() => {
@@ -11,7 +10,7 @@ describe('NowService', () => {
 
   it('should return now', () => {
     const nowService = TestBed.get(NowService);
-    expect(nowService.now().diff(moment.now(), 'seconds')).toBeLessThan(1);
+    expect(Math.abs(nowService.now().diffNow().as('milliseconds'))).toBeLessThan(1000);
     expect(nowService.now()).not.toBe(nowService.now());
   });
 });

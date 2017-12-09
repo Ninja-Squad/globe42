@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { PersonNoteService } from '../person-note.service';
 import { ConfirmService } from '../confirm.service';
-import * as moment from 'moment';
+import { DateTime } from 'luxon';
 import { NoteModel } from '../models/note.model';
 import { NoteEditionEvent } from '../note/note.component';
 import { Observable } from 'rxjs/Observable';
@@ -46,7 +46,7 @@ export class PersonNotesComponent implements OnInit {
     this.editedNote = {
       id: null,
       text: '',
-      creationInstant: moment().toISOString(),
+      creationInstant: DateTime.utc().toISO(),
       creator: this.userService.userEvents.getValue()
     };
     this.notes.push(this.editedNote);

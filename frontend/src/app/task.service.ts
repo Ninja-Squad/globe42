@@ -27,7 +27,7 @@ export class TaskService {
 
   listUrgent(pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get<Page<TaskModel>>('/api/tasks', {
-      params: pageParams(pageNumber).set('before', this.nowService.now().add(7, 'd').format('YYYY-MM-DD'))
+      params: pageParams(pageNumber).set('before', this.nowService.now().plus({ days: 7 }).toISODate())
     });
   }
 

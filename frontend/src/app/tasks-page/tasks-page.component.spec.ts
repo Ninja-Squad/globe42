@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TaskEventType, TasksComponent } from '../tasks/tasks.component';
 import { FullnamePipe } from '../fullname.pipe';
 import { NowService } from '../now.service';
-import * as moment from 'moment';
+import { DateTime } from 'luxon';
 import { By } from '@angular/platform-browser';
 import { NgbModule, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
@@ -100,9 +100,8 @@ describe('TasksPageComponent', () => {
         { provide: ActivatedRoute, useFactory: () => activatedRoute }
       ]
     });
-    moment.locale('fr');
 
-    spyOn(TestBed.get(NowService), 'now').and.callFake(() => moment('2017-08-01T12:30:00'));
+    spyOn(TestBed.get(NowService), 'now').and.callFake(() => DateTime.fromISO('2017-08-01T12:30:00'));
   }));
 
   it('should display tasks in a task list', () => {

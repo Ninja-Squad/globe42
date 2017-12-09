@@ -62,7 +62,6 @@ import { TasksComponent } from './tasks/tasks.component';
 import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
 import { TasksResolverService } from './tasks-resolver.service';
 import { TaskService } from './task.service';
-import * as moment from 'moment';
 import { NowService } from './now.service';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
@@ -98,6 +97,7 @@ import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { MinValidatorDirective } from './min-validator.directive';
 import { MaxValidatorDirective } from './max-validator.directive';
+import { Settings } from 'luxon';
 import { DurationPipe } from './duration.pipe';
 import { SpentTimesComponent } from './spent-times/spent-times.component';
 import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
@@ -239,6 +239,7 @@ registerLocaleData(localeFr);
 })
 export class AppModule {
   constructor() {
-    moment.locale('fr');
+    Settings.defaultLocale = 'fr';
+    Settings.defaultZoneName = 'Europe/Paris';
   }
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Moment } from 'moment/moment';
-import * as moment from 'moment';
+import { DateTime } from 'luxon';
 
 /**
  * A service providing the current time, as a Moment.
@@ -8,7 +7,7 @@ import * as moment from 'moment';
  */
 @Injectable()
 export class NowService {
-  now(): Moment {
-    return moment();
+  now(): DateTime {
+    return DateTime.local();
   }
 }

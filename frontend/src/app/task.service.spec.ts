@@ -4,7 +4,6 @@ import { TaskService } from './task.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TaskModel } from './models/task.model';
 import { Observable } from 'rxjs/Observable';
-import * as moment from 'moment';
 import { NowService } from './now.service';
 import { Page } from './models/page';
 import { UserService } from './user.service';
@@ -13,6 +12,7 @@ import { SpentTimeModel } from './models/spent-time.model';
 import { HttpTester } from './http-tester.spec';
 import { UserModel } from './models/user.model';
 import { TaskCategoryModel } from './models/task-category.model';
+import { DateTime } from 'luxon';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -28,7 +28,7 @@ describe('TaskService', () => {
     service = TestBed.get(TaskService);
     userService = TestBed.get(UserService);
     httpTester = new HttpTester(TestBed.get(HttpTestingController));
-    spyOn(TestBed.get(NowService), 'now').and.callFake(() => moment('2017-08-02T15:30:00'));
+    spyOn(TestBed.get(NowService), 'now').and.callFake(() => DateTime.fromISO('2017-08-02T15:30:00'));
   });
 
   function checkPage(methodToTest: () => Observable<Page<TaskModel>>, expectedUrl: string) {

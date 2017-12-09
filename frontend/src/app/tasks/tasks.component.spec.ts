@@ -5,7 +5,7 @@ import { TaskModel } from '../models/task.model';
 import { UserModel } from '../models/user.model';
 import { PersonIdentityModel } from '../models/person.model';
 import { FullnamePipe } from '../fullname.pipe';
-import * as moment from 'moment';
+import { DateTime } from 'luxon';
 import { NowService } from '../now.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TaskService } from '../task.service';
@@ -90,9 +90,8 @@ describe('TasksComponent', () => {
         JwtInterceptorService
       ]
     });
-    moment.locale('fr');
 
-    spyOn(TestBed.get(NowService), 'now').and.callFake(() => moment('2017-08-01T12:30:00'));
+    spyOn(TestBed.get(NowService), 'now').and.callFake(() => DateTime.fromISO('2017-08-01T12:30:00'));
   }));
 
   describe('logic', () => {
@@ -111,10 +110,16 @@ describe('TasksComponent', () => {
       expect(task.relativeDueDate()).toBe('aujourd\'hui');
 
       task.model.dueDate = '2017-08-02';
-      expect(task.relativeDueDate()).toBe('dans un jour');
+      expect(task.relativeDueDate()).toBe('dans 1 jour');
+
+      task.model.dueDate = '2017-08-04';
+      expect(task.relativeDueDate()).toBe('dans 3 jours');
 
       task.model.dueDate = '2017-07-31';
-      expect(task.relativeDueDate()).toBe('il y a un jour');
+      expect(task.relativeDueDate()).toBe('il y a 1 jour');
+
+      task.model.dueDate = '2017-07-29';
+      expect(task.relativeDueDate()).toBe('il y a 3 jours');
     });
 
     it('should compute due date class', () => {
