@@ -56,7 +56,7 @@ describe('PersonEditComponent', () => {
 
   describe('in edit mode', () => {
     const person: PersonModel = {
-      id: 0,
+      id: 42,
       firstName: 'John',
       lastName: 'Doe',
       birthName: 'Abba',
@@ -113,7 +113,7 @@ describe('PersonEditComponent', () => {
       const personService = TestBed.get(PersonService);
       spyOn(personService, 'update').and.returnValue(Observable.of(person));
       const router = TestBed.get(Router);
-      spyOn(router, 'navigateByUrl');
+      spyOn(router, 'navigate');
       const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       fixture.detectChanges();
@@ -197,12 +197,12 @@ describe('PersonEditComponent', () => {
       expect(personService.update).toHaveBeenCalled();
 
       const idUpdated = personService.update.calls.argsFor(0)[0];
-      expect(idUpdated).toBe(0);
+      expect(idUpdated).toBe(42);
       const personUpdated = personService.update.calls.argsFor(0)[1];
       expect(personUpdated.lastName).toBe('Do');
       expect(personUpdated.firstName).toBe('John');
 
-      expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
+      expect(router.navigate).toHaveBeenCalledWith(['persons', 42]);
     });
 
     it('should clear the city input on blur if not valid anymore', () =>  {
@@ -279,9 +279,9 @@ describe('PersonEditComponent', () => {
 
     it('should create and save a new person', fakeAsync(() => {
       const personService = TestBed.get(PersonService);
-      spyOn(personService, 'create').and.returnValue(Observable.of(null));
+      spyOn(personService, 'create').and.returnValue(Observable.of({id: 43} as PersonModel));
       const router = TestBed.get(Router);
-      spyOn(router, 'navigateByUrl');
+      spyOn(router, 'navigate');
       const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
@@ -479,7 +479,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.fiscalStatusDate).toBe('2015-01-01');
       expect(createdPerson.fiscalStatusUpToDate).toBe(true);
 
-      expect(router.navigateByUrl).toHaveBeenCalledWith('/persons');
+      expect(router.navigate).toHaveBeenCalledWith(['persons', 43]);
     }));
   });
 });

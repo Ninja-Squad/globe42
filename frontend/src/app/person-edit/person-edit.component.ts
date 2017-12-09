@@ -138,11 +138,11 @@ export class PersonEditComponent implements OnInit {
 
     let action;
     if (this.editedPerson && this.editedPerson.id !== undefined) {
-      action = this.personService.update(this.editedPerson.id, command);
+      action = this.personService.update(this.editedPerson.id, command).map(() => this.editedPerson.id);
     } else {
-      action = this.personService.create(command);
+      action = this.personService.create(command).map(createdPerson => createdPerson.id);
     }
-    action.subscribe(() => this.router.navigateByUrl('/persons'));
+    action.subscribe((personId) => this.router.navigate(['persons', personId]));
   }
 
   clearIfNoCity(input: HTMLInputElement) {
