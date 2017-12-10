@@ -10,7 +10,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
-import { isoToDate, sortBy, dateToIso } from '../utils';
+import { sortBy } from '../utils';
 import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
 
@@ -18,7 +18,7 @@ interface TaskFormModel {
   title: string;
   description: string;
   category: TaskCategoryModel;
-  dueDate: NgbDateStruct;
+  dueDate: string;
   concernedPerson: PersonIdentityModel;
   assignee: UserModel;
 }
@@ -77,7 +77,7 @@ export class TaskEditComponent implements OnInit {
       this.task.title = this.editedTask.title;
       this.task.description = this.editedTask.description;
       this.task.category = this.findWithId(this.categories, this.editedTask.category.id);
-      this.task.dueDate = isoToDate(this.editedTask.dueDate);
+      this.task.dueDate = this.editedTask.dueDate;
       this.task.concernedPerson =
         this.editedTask.concernedPerson ? this.findWithId(this.persons, this.editedTask.concernedPerson.id) : null;
       this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
@@ -93,7 +93,7 @@ export class TaskEditComponent implements OnInit {
       title: this.task.title,
       description: this.task.description,
       categoryId: this.task.category.id,
-      dueDate: dateToIso(this.task.dueDate),
+      dueDate: this.task.dueDate,
       concernedPersonId: this.task.concernedPerson ? this.task.concernedPerson.id : null,
       assigneeId: this.task.assignee ? this.task.assignee.id : null
     };

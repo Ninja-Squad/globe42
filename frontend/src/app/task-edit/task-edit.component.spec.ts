@@ -3,7 +3,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { TaskEditComponent } from './task-edit.component';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbDateParserFormatter, NgbDateStruct, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbDateStruct, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FullnamePipe } from '../fullname.pipe';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { PersonIdentityModel } from '../models/person.model';
@@ -17,6 +17,7 @@ import { Observable } from 'rxjs/Observable';
 import { TaskModel } from '../models/task.model';
 import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
 import { TaskCategoryModel } from '../models/task-category.model';
+import { DateStringAdapterService } from '../date-string-adapter.service';
 
 describe('TaskEditComponent', () => {
 
@@ -64,8 +65,9 @@ describe('TaskEditComponent', () => {
         FullnamePipe,
         UserService,
         JwtInterceptorService,
-        {provide: ActivatedRoute, useValue: activatedRoute},
-        { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService }
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
+        { provide: NgbDateAdapter, useClass: DateStringAdapterService }
       ]
     });
 
@@ -214,7 +216,7 @@ describe('TaskEditComponent', () => {
         dueDate.dispatchEvent(new Event('change'));
         fixture.detectChanges();
         tick();
-        expect(fixture.componentInstance.task.dueDate).toEqual({year: 2018, month: 1, day: 2} as NgbDateStruct);
+        expect(fixture.componentInstance.task.dueDate).toBe('2018-01-02');
 
         checkPersonTypeaheadWorks(fixture, 'ced');
         fixture.nativeElement.querySelector('button.dropdown-item').click();
@@ -337,7 +339,7 @@ describe('TaskEditComponent', () => {
         expect(fixture.componentInstance.task.category).toEqual(categories[1]);
 
         expect(element.querySelector('input#dueDate').value).toBe('02/01/2018');
-        expect(fixture.componentInstance.task.dueDate).toEqual({year: 2018, month: 1, day: 2} as NgbDateStruct);
+        expect(fixture.componentInstance.task.dueDate).toBe('2018-01-02');
 
         expect(element.querySelector('input#concernedPerson').value).toBe('Cedric Exbrayat (Hype)');
         expect(fixture.componentInstance.task.concernedPerson).toEqual(persons[0]);

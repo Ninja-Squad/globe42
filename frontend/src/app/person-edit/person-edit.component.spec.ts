@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DisplayGenderPipe } from '../display-gender.pipe';
 import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
@@ -24,6 +24,7 @@ import { FamilySituationEditComponent } from '../family-situation-edit/family-si
 import { By } from '@angular/platform-browser';
 import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
 import { FullnamePipe } from '../fullname.pipe';
+import { DateStringAdapterService } from '../date-string-adapter.service';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -48,7 +49,8 @@ describe('PersonEditComponent', () => {
       PersonService,
       DisplayCityPipe,
       SearchCityService,
-      { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService }
+      { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
+      { provide: NgbDateAdapter, useClass: DateStringAdapterService }
     ]
   })
   class TestModule {
@@ -115,6 +117,7 @@ describe('PersonEditComponent', () => {
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
       const displayCityPipe = TestBed.get(DisplayCityPipe);
+
       const fixture = TestBed.createComponent(PersonEditComponent);
       fixture.detectChanges();
 
@@ -422,7 +425,7 @@ describe('PersonEditComponent', () => {
       housingSpace.value = '30';
       housingSpace.dispatchEvent(new Event('input'));
       hostName.value = 'Bruno';
-      hostName.dispatchEvent(new Event('change'))
+      hostName.dispatchEvent(new Event('change'));
       accompanying.value = 'Paulette';
       accompanying.dispatchEvent(new Event('input'));
       socialSecurityNumber.value = '453287654309876';
@@ -454,7 +457,7 @@ describe('PersonEditComponent', () => {
       const createdPerson = personService.create.calls.argsFor(0)[0] as PersonCommand;
       expect(createdPerson.lastName).toBe('Doe');
       expect(createdPerson.firstName).toBe('Jane');
-      expect(createdPerson.birthName).toBe('Jos')
+      expect(createdPerson.birthName).toBe('Jos');
       expect(createdPerson.nickName).toBe('jane');
       expect(createdPerson.gender).toBe('FEMALE');
       expect(createdPerson.birthDate).toBe('1985-03-03');
@@ -471,7 +474,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.entryDate).toBe('2015-02-02');
       expect(createdPerson.housing).toBe('F0');
       expect(createdPerson.housingSpace).toBe(30);
-      expect(createdPerson.hostName).toBe('')
+      expect(createdPerson.hostName).toBe('');
       expect(createdPerson.accompanying).toBe('Paulette');
       expect(createdPerson.socialSecurityNumber).toBe('453287654309876');
       expect(createdPerson.cafNumber).toBe('78654');

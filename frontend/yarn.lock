@@ -145,9 +145,9 @@
   dependencies:
     tslib "^1.7.1"
 
-"@ng-bootstrap/ng-bootstrap@^1.0.0-beta.7":
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-1.0.0-beta.7.tgz#58bc81f610028f40526529ce40483a95028163b0"
+"@ng-bootstrap/ng-bootstrap@^1.0.0-beta.8":
+  version "1.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-1.0.0-beta.8.tgz#04871e24d1c8a78bcf5a0476edc25044d28abb09"
 
 "@ngtools/json-schema@1.1.0", "@ngtools/json-schema@^1.1.0":
   version "1.1.0"

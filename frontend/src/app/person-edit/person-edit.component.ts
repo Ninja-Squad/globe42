@@ -20,7 +20,6 @@ import { PersonCommand } from '../models/person.command';
 import { HOUSING_TRANSLATIONS } from '../display-housing.pipe';
 import { FISCAL_STATUS_TRANSLATIONS } from '../display-fiscal-status.pipe';
 import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
-import { isoToDate, dateToIso } from '../utils';
 
 @Component({
   selector: 'gl-person-edit',
@@ -110,8 +109,6 @@ export class PersonEditComponent implements OnInit {
       }
 
       this.personForm.patchValue(this.editedPerson);
-      ['birthDate', 'entryDate', 'firstMediationAppointmentDate', 'fiscalStatusDate'].forEach(property =>
-        this.personForm.get(property).setValue(isoToDate(this.editedPerson[property])));
     }
   }
 
@@ -133,8 +130,6 @@ export class PersonEditComponent implements OnInit {
 
   save() {
     const command: PersonCommand = this.personForm.value;
-    ['birthDate', 'entryDate', 'fiscalStatusDate', 'firstMediationAppointmentDate'].forEach(property =>
-      command[property] = dateToIso(this.personForm.value[property]));
 
     let action;
     if (this.editedPerson && this.editedPerson.id !== undefined) {

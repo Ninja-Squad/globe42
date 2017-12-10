@@ -3,7 +3,7 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgbDateParserFormatter, NgbDatepickerI18n, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerI18n, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { routes } from './app.routes';
 import { AppComponent } from './app.component';
@@ -105,6 +105,7 @@ import { SpentTimesComponent } from './spent-times/spent-times.component';
 import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
+import { DateStringAdapterService } from './date-string-adapter.service';
 
 @NgModule({
   declarations: [
@@ -231,7 +232,8 @@ import { TaskCategoriesResolverService } from './task-categories-resolver.servic
     ParticipationService,
     ParticipationsResolverService,
     ParticipantsResolverService,
-    TaskCategoriesResolverService
+    TaskCategoriesResolverService,
+    {provide: NgbDateAdapter, useClass: DateStringAdapterService}
   ],
   bootstrap: [AppComponent]
 })
