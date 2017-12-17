@@ -54,6 +54,7 @@ public final class PersonCommandDTO {
     private final LocalDate fiscalStatusDate;
     private final boolean fiscalStatusUpToDate;
     private final HealthCareCoverage healthCareCoverage;
+    private final String healthInsurance;
     private final String accompanying;
     private final String socialSecurityNumber;
     private final String cafNumber;
@@ -83,6 +84,7 @@ public final class PersonCommandDTO {
                             @JsonProperty LocalDate fiscalStatusDate,
                             @JsonProperty boolean fiscalStatusUpToDate,
                             @JsonProperty HealthCareCoverage healthCareCoverage,
+                            @JsonProperty String healthInsurance,
                             @JsonProperty String accompanying,
                             @JsonProperty String socialSecurityNumber,
                             @JsonProperty String cafNumber,
@@ -110,6 +112,7 @@ public final class PersonCommandDTO {
         this.fiscalStatusDate = fiscalStatusDate;
         this.fiscalStatusUpToDate = fiscalStatusUpToDate;
         this.healthCareCoverage = healthCareCoverage;
+        this.healthInsurance = healthInsurance;
         this.accompanying = accompanying;
         this.socialSecurityNumber = socialSecurityNumber;
         this.cafNumber = cafNumber;
@@ -198,6 +201,8 @@ public final class PersonCommandDTO {
     public HealthCareCoverage getHealthCareCoverage() {
         return healthCareCoverage;
     }
+
+    public String getHealthInsurance() { return healthInsurance; }
 
     public String getAccompanying() { return accompanying; }
 

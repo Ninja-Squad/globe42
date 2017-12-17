@@ -36,6 +36,7 @@ public final class PersonDTO {
     private final LocalDate fiscalStatusDate;
     private final boolean fiscalStatusUpToDate;
     private final HealthCareCoverage healthCareCoverage;
+    private final String healthInsurance;
     private final String accompanying;
     private final String socialSecurityNumber;
     private final String cafNumber;
@@ -65,6 +66,7 @@ public final class PersonDTO {
         this.fiscalStatusDate = person.getFiscalStatusDate();
         this.fiscalStatusUpToDate = person.isFiscalStatusUpToDate();
         this.healthCareCoverage = person.getHealthCareCoverage();
+        this.healthInsurance = person.getHealthInsurance();
         this.accompanying = person.getAccompanying();
         this.socialSecurityNumber = person.getSocialSecurityNumber();
         this.cafNumber = person.getCafNumber();
@@ -148,6 +150,8 @@ public final class PersonDTO {
     public HealthCareCoverage getHealthCareCoverage() {
         return healthCareCoverage;
     }
+
+    public String getHealthInsurance() { return healthInsurance; }
 
     public String getAccompanying() { return accompanying; }
 

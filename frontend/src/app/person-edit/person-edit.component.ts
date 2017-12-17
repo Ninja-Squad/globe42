@@ -88,6 +88,7 @@ export class PersonEditComponent implements OnInit {
       firstMediationAppointmentDate: null,
       maritalStatus: 'UNKNOWN',
       healthCareCoverage: 'UNKNOWN',
+      healthInsurance: '',
       accompanying: '',
       socialSecurityNumber: '',
       cafNumber: '',

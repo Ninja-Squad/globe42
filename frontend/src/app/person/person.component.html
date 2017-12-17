@@ -55,6 +55,12 @@
         <p id="healthCareCoverage" class="form-control-plaintext">{{ person.healthCareCoverage | displayHealthCareCoverage }}</p>
       </div>
     </div>
+    <div class="form-group row" *ngIf="person.mediationEnabled">
+      <label class="col-sm-6 col-form-label">Mutuelle</label>
+      <div class="col-sm-6">
+        <p id="healthInsurance" class="form-control-plaintext">{{ person.healthInsurance }}</p>
+      </div>
+    </div>
 
     <h2>Informations</h2>
 

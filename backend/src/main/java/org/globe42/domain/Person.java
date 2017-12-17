@@ -202,6 +202,11 @@ public class Person {
     private HealthCareCoverage healthCareCoverage = HealthCareCoverage.UNKNOWN;
 
     /**
+     * The Health Insurance. Only requested to mediation-enabled persons, and not mandatory
+     */
+    private String healthInsurance;
+
+    /**
      * The name of the accompanying. Only requested to mediation-enabled persons, and not mandatory
      */
     private String accompanying;
@@ -480,6 +485,14 @@ public class Person {
 
     public void setHealthCareCoverage(HealthCareCoverage healthCareCoverage) {
         this.healthCareCoverage = healthCareCoverage;
+    }
+
+    public String getHealthInsurance() {
+        return healthInsurance;
+    }
+
+    public void setHealthInsurance(String healthInsurance) {
+        this.healthInsurance = healthInsurance;
     }
 
     public String getAccompanying() {

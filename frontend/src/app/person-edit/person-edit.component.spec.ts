@@ -82,6 +82,7 @@ describe('PersonEditComponent', () => {
       fiscalStatusUpToDate: true,
       fiscalStatusDate: '2017-02-01',
       healthCareCoverage: 'AME',
+      healthInsurance: 'AXA',
       accompanying: 'Paul',
       socialSecurityNumber: '234765498056734',
       cafNumber: '56734',
@@ -172,6 +173,8 @@ describe('PersonEditComponent', () => {
       expect(fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
       const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
       expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe(person.healthCareCoverage);
+      const healthInsurance = nativeElement.querySelector('#healthInsurance');
+      expect(healthInsurance.value).toBe(person.healthInsurance);
       const accompanying = nativeElement.querySelector('#accompanying');
       expect(accompanying.value).toBe(person.accompanying);
       const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');

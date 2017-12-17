@@ -1,4 +1,7 @@
-import { CityModel, FamilySituation, FiscalStatus, Gender, Housing, MaritalStatus } from './person.model';
+import {
+  CityModel, FamilySituation, FiscalStatus, Gender, HealthCareCoverage, Housing,
+  MaritalStatus
+} from './person.model';
 
 export interface PersonCommand {
   firstName: string;
@@ -26,6 +29,8 @@ export interface PersonCommand {
   accompanying: string;
   socialSecurityNumber: string;
   cafNumber: string;
+  healthCareCoverage: HealthCareCoverage;
+  healthInsurance: string;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
 }

@@ -49,6 +49,7 @@ describe('PersonComponent', () => {
     fiscalStatusDate: '2017-02-01',
     fiscalStatusUpToDate: true,
     healthCareCoverage: 'AME',
+    healthInsurance: 'AXA',
     accompanying: 'Paul',
     socialSecurityNumber: '277126912340454',
     cafNumber: '123765',
@@ -125,6 +126,8 @@ describe('PersonComponent', () => {
     expect(fiscalStatus.textContent).toContain('à jour');
     const healthCareCoverage = nativeElement.querySelector('#healthCareCoverage');
     expect(healthCareCoverage.textContent).toContain('Aide médicale de l\'Etat');
+    const healthInsurance = nativeElement.querySelector('#healthInsurance');
+    expect(healthInsurance.textContent).toContain('AXA');
     const accompanying = nativeElement.querySelector('#accompanying');
     expect(accompanying.textContent).toContain('Paul');
     const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');
@@ -139,7 +142,7 @@ describe('PersonComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'housing', 'fiscalStatus', 'firstMediationAppointmentDate', 'maritalStatus', 'healthCareCoverage'];
+    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'housing', 'fiscalStatus', 'firstMediationAppointmentDate', 'maritalStatus', 'healthCareCoverage', 'healthInsurance'];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
   });
