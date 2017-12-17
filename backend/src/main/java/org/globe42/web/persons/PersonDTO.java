@@ -119,7 +119,9 @@ public final class PersonDTO {
         return mediationEnabled;
     }
 
-    public LocalDate getFirstMediationAppointmentDate() { return firstMediationAppointmentDate; }
+    public LocalDate getFirstMediationAppointmentDate() {
+        return firstMediationAppointmentDate;
+    }
 
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
@@ -133,7 +135,9 @@ public final class PersonDTO {
         return housingSpace;
     }
 
-    public String getHostName() { return hostName; }
+    public String getHostName() {
+        return hostName;
+    }
 
     public FiscalStatus getFiscalStatus() {
         return fiscalStatus;
@@ -151,13 +155,21 @@ public final class PersonDTO {
         return healthCareCoverage;
     }
 
-    public String getHealthInsurance() { return healthInsurance; }
+    public String getHealthInsurance() {
+        return healthInsurance;
+    }
 
-    public String getAccompanying() { return accompanying; }
+    public String getAccompanying() {
+        return accompanying;
+    }
 
-    public String getSocialSecurityNumber() { return socialSecurityNumber; }
+    public String getSocialSecurityNumber() {
+        return socialSecurityNumber;
+    }
 
-    public String getCafNumber() { return cafNumber; }
+    public String getCafNumber() {
+        return cafNumber;
+    }
 
     public FamilySituationDTO getFrenchFamilySituation() {
         return frenchFamilySituation;
