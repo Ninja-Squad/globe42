@@ -37,6 +37,14 @@
         <p id="maritalStatus" class="form-control-plaintext">{{ person.maritalStatus | displayMaritalStatus }}</p>
       </div>
     </div>
+    <div class="form-group row" *ngIf="person.mediationEnabled && person.spouse">
+      <label class="col-sm-6 col-form-label">En couple avec</label>
+      <div class="col-sm-6">
+        <p id="spouse" class="form-control-plaintext">
+          <a [routerLink]="['/persons', person.spouse.id]">{{ person.spouse | fullname }}</a>
+        </p>
+      </div>
+    </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">N° de Sécurité Sociale</label>
       <div class="col-sm-6">

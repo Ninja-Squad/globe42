@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.globe42.dao.CoupleDao;
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.Person;
 import org.globe42.test.GlobeMvcTest;
@@ -34,6 +35,9 @@ public class PersonControllerMvcTest {
 
     @MockBean
     private PersonDao mockPersonDao;
+
+    @MockBean
+    private CoupleDao mockCoupleDao;
 
     @Autowired
     private ObjectMapper objectMapper;

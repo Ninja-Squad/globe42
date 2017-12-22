@@ -1,17 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/catch';
-
 import { PersonService } from '../person.service';
-import { CityModel, Gender, MaritalStatus, PersonModel } from '../models/person.model';
+import { Gender, MaritalStatus, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
@@ -20,13 +11,16 @@ import { PersonCommand } from '../models/person.command';
 import { HOUSING_TRANSLATIONS } from '../display-housing.pipe';
 import { FISCAL_STATUS_TRANSLATIONS } from '../display-fiscal-status.pipe';
 import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
+import { PersonTypeahead } from '../person/person-typeahead';
+import { FullnamePipe } from '../fullname.pipe';
+import { CityTypeahead } from './city-typeahead';
 
 @Component({
   selector: 'gl-person-edit',
   templateUrl: './person-edit.component.html',
   styleUrls: ['./person-edit.component.scss']
 })
-export class PersonEditComponent implements OnInit {
+export class PersonEditComponent {
 
   editedPerson: PersonModel | null;
 
@@ -38,7 +32,8 @@ export class PersonEditComponent implements OnInit {
   fiscalStatuses = FISCAL_STATUS_TRANSLATIONS.map(t => t.key);
   healthCareCoverages = HEALTH_CARE_COVERAGE_TRANSLATIONS.map(t => t.key);
 
-  searchFailed = false;
+  cityTypeahead: CityTypeahead;
+  spouseTypeahead: PersonTypeahead;
 
   private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
     if (!ctrl.value) {
@@ -47,30 +42,22 @@ export class PersonEditComponent implements OnInit {
     return Validators.email(ctrl);
   }
 
-  search = (text: Observable<string>) =>
-    text
-      .filter(query => query.length > 1)
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .switchMap(term =>
-        this.searchCityService.search(term)
-          .do(() => this.searchFailed = false)
-          .catch(() => {
-            this.searchFailed = true;
-            return Observable.of([]);
-          }));
-
-  cityFormatter = (result: CityModel) => this.displayCityPipe.transform(result);
-
   constructor(private personService: PersonService,
               private searchCityService: SearchCityService,
               private displayCityPipe: DisplayCityPipe,
               private route: ActivatedRoute,
               private router: Router,
-              private fb: FormBuilder) { }
-
-  ngOnInit() {
+              private fb: FormBuilder,
+              private fullnamePipe: FullnamePipe) {
     this.editedPerson = this.route.snapshot.data['person'];
+
+    let persons = this.route.snapshot.data['persons'];
+    if (this.editedPerson) {
+      persons = persons.filter(p => p.id !== this.editedPerson.id);
+    }
+
+    this.cityTypeahead = new CityTypeahead(this.searchCityService, this.displayCityPipe);
+    this.spouseTypeahead = new PersonTypeahead(persons, this.fullnamePipe);
 
     this.personForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -87,6 +74,7 @@ export class PersonEditComponent implements OnInit {
       mediationEnabled: false,
       firstMediationAppointmentDate: null,
       maritalStatus: 'UNKNOWN',
+      spouse: null,
       healthCareCoverage: 'UNKNOWN',
       healthInsurance: '',
       accompanying: '',
@@ -130,7 +118,12 @@ export class PersonEditComponent implements OnInit {
   }
 
   save() {
-    const command: PersonCommand = this.personForm.value;
+    const formValue = this.personForm.value;
+
+    formValue.spouseId = formValue.spouse ? formValue.spouse.id : null;
+    delete formValue.spouse;
+
+    const command: PersonCommand = formValue;
 
     let action;
     if (this.editedPerson && this.editedPerson.id !== undefined) {
@@ -139,12 +132,6 @@ export class PersonEditComponent implements OnInit {
       action = this.personService.create(command).map(createdPerson => createdPerson.id);
     }
     action.subscribe((personId) => this.router.navigate(['persons', personId]));
-  }
-
-  clearIfNoCity(input: HTMLInputElement) {
-    if (!this.personForm.value.city) {
-      input.value = null;
-    }
   }
 
   private createFamilySituationGroup(): FormGroup {

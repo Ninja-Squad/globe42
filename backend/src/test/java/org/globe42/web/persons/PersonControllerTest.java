@@ -11,13 +11,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.globe42.dao.CoupleDao;
 import org.globe42.dao.PersonDao;
+import org.globe42.domain.Couple;
 import org.globe42.domain.FamilySituation;
 import org.globe42.domain.FiscalStatus;
 import org.globe42.domain.Gender;
+import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.NotFoundException;
@@ -37,11 +39,17 @@ public class PersonControllerTest extends BaseTest {
     @Mock
     private PersonDao mockPersonDao;
 
+    @Mock
+    private CoupleDao mockCoupleDao;
+
     @InjectMocks
     private PersonController controller;
 
     @Captor
     private ArgumentCaptor<Person> personArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<Couple> coupleArgumentCaptor;
 
     private Person person;
 
@@ -122,11 +130,32 @@ public class PersonControllerTest extends BaseTest {
 
     @Test
     public void shouldNotGenerateMediationCodeIfMediationDisabled() {
-        PersonCommandDTO command = createCommand("lacote", false);
+        PersonCommandDTO command = createCommand("lacote", false, null);
 
         when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
 
         assertThat(controller.create(command).getIdentity().getMediationCode()).isNull();
+    }
+
+    @Test
+    public void shouldCreateWithSpouse() {
+        long spouseId = 200L;
+        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
+
+        Person agnes = new Person(spouseId);
+        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
+        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+
+        PersonDTO result = controller.create(command);
+
+        verify(mockPersonDao).save(personArgumentCaptor.capture());
+        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
+
+        Person savedPerson = personArgumentCaptor.getValue();
+        assertPersonEqualsCommand(savedPerson, command);
+        assertThat(savedPerson.getSpouse()).isEqualTo(agnes);
+        assertThat(agnes.getSpouse()).isEqualTo(savedPerson);
     }
 
     @Test
@@ -167,6 +196,64 @@ public class PersonControllerTest extends BaseTest {
 
         assertPersonEqualsCommand(person, command);
         assertThat(person.getMediationCode()).isEqualTo("L37");
+    }
+
+    @Test
+    public void shouldUpdateWithSpouseWhenNoSpouseBefore() {
+        long spouseId = 200L;
+        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
+
+        Person agnes = new Person(spouseId);
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+
+        controller.update(person.getId(), command);
+
+        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
+        assertThat(person.getSpouse()).isEqualTo(agnes);
+        assertThat(agnes.getSpouse()).isEqualTo(person);
+    }
+
+    @Test
+    public void shouldUpdateWithSpouseWhenOtherSpouseBefore() {
+        long spouseId = 200L;
+        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
+
+        Person previousSpouse = new Person(100L);
+        Couple previousCouple = new Couple(person, previousSpouse);
+        person.setCouple(previousCouple);
+
+        Person agnes = new Person(spouseId);
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+
+        controller.update(person.getId(), command);
+
+        verify(mockCoupleDao).delete(previousCouple);
+        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
+        assertThat(person.getSpouse()).isEqualTo(agnes);
+        assertThat(agnes.getSpouse()).isEqualTo(person);
+        assertThat(previousSpouse.getSpouse()).isNull();
+    }
+
+    @Test
+    public void shouldUpdateWithoutSpouseWhenOtherSpouseBefore() {
+        PersonCommandDTO command = createCommand("Lacote", true, null);
+
+        Person previousSpouse = new Person(100L);
+        Couple previousCouple = new Couple(person, previousSpouse);
+        person.setCouple(previousCouple);
+
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+
+        controller.update(person.getId(), command);
+
+        verify(mockCoupleDao).delete(previousCouple);
+        assertThat(person.getSpouse()).isNull();
+        assertThat(previousSpouse.getSpouse()).isNull();
     }
 
     @Test(expected = NotFoundException.class)
@@ -214,10 +301,10 @@ public class PersonControllerTest extends BaseTest {
     }
 
     static PersonCommandDTO createCommand(String lastName) {
-        return createCommand(lastName, true);
+        return createCommand(lastName, true, null);
     }
 
-    static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled) {
+    static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled, Long spouseId) {
         return new PersonCommandDTO("Cyril",
                                     lastName,
                                     "Lacote du chateau",
@@ -233,6 +320,7 @@ public class PersonControllerTest extends BaseTest {
                                     mediationEnabled,
                                     LocalDate.of(2017, 12, 01),
                                     MaritalStatus.CONCUBINAGE,
+                                    spouseId,
                                     Housing.F3,
                                     70,
                                     "Bruno Mala",
@@ -263,6 +351,12 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getGender()).isEqualTo(command.getGender());
         assertThat(person.getPhoneNumber()).isEqualTo(command.getPhoneNumber());
         assertThat(person.getMaritalStatus()).isEqualTo(command.getMaritalStatus());
+        if (command.getSpouseId() == null) {
+            assertThat(person.getSpouse()).isNull();
+        }
+        else {
+            assertThat(person.getSpouse().getId()).isEqualTo(command.getSpouseId());
+        }
         assertThat(person.getHousing()).isEqualTo(command.getHousing());
         assertThat(person.getHousingSpace()).isEqualTo(command.getHousingSpace());
         assertThat(person.getHostName()).isEqualTo(command.getHostName());

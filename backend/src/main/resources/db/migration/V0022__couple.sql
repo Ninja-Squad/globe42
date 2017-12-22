@@ -1,0 +1,10 @@
+CREATE TABLE couple (
+  id BIGINT PRIMARY KEY
+);
+
+CREATE SEQUENCE couple_seq START WITH 1000;
+
+ALTER TABLE person
+  ADD COLUMN couple_id BIGINT;
+ALTER TABLE person
+  ADD CONSTRAINT person_fk3 FOREIGN KEY (couple_id) REFERENCES couple (id);

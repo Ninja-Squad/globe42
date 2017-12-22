@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { PersonService } from '../person.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -41,7 +42,14 @@ describe('PersonComponent', () => {
     phoneNumber: '06 12 34 56 78',
     mediationEnabled: true,
     firstMediationAppointmentDate: '2017-12-01',
-    maritalStatus: 'SINGLE',
+    maritalStatus: 'MARRIED',
+    spouse: {
+      id: 43,
+      firstName: 'Jane',
+      lastName: 'Doe',
+      nickName: null,
+      mediationCode: 'D2'
+    },
     housing: 'F6',
     housingSpace: 80,
     hostName: 'Bruno Mala',
@@ -60,7 +68,7 @@ describe('PersonComponent', () => {
 
   const activatedRoute: any = {
     parent: {
-      snapshot: { data: { person } }
+      data: Observable.of({ person })
     }
   };
 
@@ -73,7 +81,8 @@ describe('PersonComponent', () => {
       DisplayCityPipe,
       DisplayFiscalStatusPipe,
       DisplayHousingPipe,
-      DisplayHealthCareCoveragePipe
+      DisplayHealthCareCoveragePipe,
+      FullnamePipe
     ],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },
@@ -116,7 +125,9 @@ describe('PersonComponent', () => {
     const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
     expect(firstMediationAppointmentDate.textContent).toBe('1 déc. 2017');
     const maritalStatus = nativeElement.querySelector('#maritalStatus');
-    expect(maritalStatus.textContent).toBe('Célibataire');
+    expect(maritalStatus.textContent).toBe('Marié(e)');
+    const spouse = nativeElement.querySelector('#spouse');
+    expect(spouse.textContent).toContain('Jane Doe');
     const housing = nativeElement.querySelector('#housing');
     expect(housing.textContent).toContain('F6 ou plus');
     expect(housing.textContent).toContain('80 m2');
@@ -142,7 +153,17 @@ describe('PersonComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const mediationDependantElementIds = ['entryDate', 'mediationCode', 'housing', 'fiscalStatus', 'firstMediationAppointmentDate', 'maritalStatus', 'healthCareCoverage', 'healthInsurance'];
+    const mediationDependantElementIds = [
+      'entryDate',
+      'mediationCode',
+      'housing',
+      'fiscalStatus',
+      'firstMediationAppointmentDate',
+      'maritalStatus',
+      'spouse',
+      'healthCareCoverage',
+      'healthInsurance'
+    ];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
   });

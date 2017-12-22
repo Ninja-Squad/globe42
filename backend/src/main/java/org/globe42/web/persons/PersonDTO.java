@@ -40,6 +40,7 @@ public final class PersonDTO {
     private final String accompanying;
     private final String socialSecurityNumber;
     private final String cafNumber;
+    private PersonIdentityDTO spouse;
 
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
@@ -70,6 +71,8 @@ public final class PersonDTO {
         this.accompanying = person.getAccompanying();
         this.socialSecurityNumber = person.getSocialSecurityNumber();
         this.cafNumber = person.getCafNumber();
+        Person spouse = person.getSpouse();
+        this.spouse = spouse == null ? null : new PersonIdentityDTO(spouse);
         this.frenchFamilySituation = person.getFrenchFamilySituation() == null ? null : new FamilySituationDTO(person.getFrenchFamilySituation());
         this.abroadFamilySituation = person.getAbroadFamilySituation() == null ? null : new FamilySituationDTO(person.getAbroadFamilySituation());
         this.deleted = person.isDeleted();
@@ -169,6 +172,10 @@ public final class PersonDTO {
 
     public String getCafNumber() {
         return cafNumber;
+    }
+
+    public PersonIdentityDTO getSpouse() {
+        return spouse;
     }
 
     public FamilySituationDTO getFrenchFamilySituation() {

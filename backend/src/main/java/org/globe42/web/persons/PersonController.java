@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import org.globe42.dao.CoupleDao;
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.City;
+import org.globe42.domain.Couple;
 import org.globe42.domain.FamilySituation;
 import org.globe42.domain.Person;
+import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -31,9 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PersonController {
 
     private final PersonDao personDao;
+    private final CoupleDao coupleDao;
 
-    public PersonController(PersonDao personDao) {
+    public PersonController(PersonDao personDao, CoupleDao coupleDao) {
         this.personDao = personDao;
+        this.coupleDao = coupleDao;
     }
 
     @GetMapping
@@ -144,6 +149,7 @@ public class PersonController {
             person.setCafNumber(command.getCafNumber());
             person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
             person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
+            handleCouple(person, command.getSpouseId());
         }
     }
 
@@ -163,5 +169,21 @@ public class PersonController {
             letter = 'Z';
         }
         return letter;
+    }
+
+    private void handleCouple(Person person, Long spouseId) {
+        Person currentSpouse = person.getSpouse();
+        if (currentSpouse != null && !currentSpouse.getId().equals(spouseId)) {
+            Couple couple = person.getCouple();
+            currentSpouse.setCouple(null);
+            person.setCouple(null);
+            coupleDao.delete(couple);
+        }
+
+        if (spouseId != null && (currentSpouse == null || !currentSpouse.getId().equals(spouseId))) {
+            Person newSpouse = personDao.findById(spouseId).orElseThrow(() -> new BadRequestException("No person with ID " + spouseId));
+            Couple newCouple = new Couple(person, newSpouse);
+            coupleDao.save(newCouple);
+        }
     }
 }

@@ -40,7 +40,8 @@
     <label for="title" class="col-sm-3 col-form-label">Concerne</label>
     <div class="col-sm-9">
       <input #concernedPersonInput class="form-control" id="concernedPerson" name="concernedPerson" [(ngModel)]="task.concernedPerson"
-             [ngbTypeahead]="personSearch" [resultFormatter]="personFormatter" [inputFormatter]="personFormatter" [editable]="false"
+             [ngbTypeahead]="personTypeahead.searcher" [resultFormatter]="personTypeahead.formatter"
+             [inputFormatter]="personTypeahead.formatter" [editable]="false"
              (blur)="clearIfNoPerson(concernedPersonInput)" [class.is-warning]="concernedPersonInput.value && !task.concernedPerson" />
     </div>
   </div>

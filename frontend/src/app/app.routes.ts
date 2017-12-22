@@ -69,7 +69,13 @@ export const routes: Routes = [
               personsRoute('deleted'),
             ]
           },
-          {path: 'create', component: PersonEditComponent},
+          {
+            path: 'create',
+            component: PersonEditComponent,
+            resolve: {
+              persons: PersonsResolverService
+            }
+          },
           {
             path: ':id',
             component: PersonLayoutComponent,
@@ -111,7 +117,8 @@ export const routes: Routes = [
             path: ':id/edit',
             component: PersonEditComponent,
             resolve: {
-              person: PersonResolverService
+              person: PersonResolverService,
+              persons: PersonsResolverService
             }
           },
           {

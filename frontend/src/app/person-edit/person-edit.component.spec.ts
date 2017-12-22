@@ -6,7 +6,7 @@ import 'rxjs/add/observable/of';
 
 import { PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
-import { CityModel, PersonModel } from '../models/person.model';
+import { CityModel, PersonIdentityModel, PersonModel } from '../models/person.model';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { PersonCommand } from '../models/person.command';
@@ -32,6 +32,24 @@ describe('PersonEditComponent', () => {
     city: 'SAINT-ETIENNE'
   };
 
+  const persons = [
+    {
+      id: 1,
+      firstName: 'Jane',
+      lastName: 'Doe'
+    },
+    {
+      id: 2,
+      firstName: 'Jack',
+      lastName: 'Malone'
+    },
+    {
+      id: 42,
+      firstName: 'John',
+      lastName: 'Doe'
+    }
+  ] as Array<PersonIdentityModel>;
+
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, NgbModule.forRoot()],
     declarations: [
@@ -49,6 +67,7 @@ describe('PersonEditComponent', () => {
       PersonService,
       DisplayCityPipe,
       SearchCityService,
+      FullnamePipe,
       { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
       { provide: NgbDateAdapter, useClass: DateStringAdapterService }
     ]
@@ -63,7 +82,7 @@ describe('PersonEditComponent', () => {
       lastName: 'Doe',
       birthName: 'Abba',
       nickName: 'john',
-      mediationCode: 'code1',
+      mediationCode: 'D1',
       address: 'Chemin de la gare',
       birthDate: '1980-01-01',
       city: cityModel,
@@ -74,7 +93,14 @@ describe('PersonEditComponent', () => {
       phoneNumber: '06 12 34 56 78',
       mediationEnabled: true,
       firstMediationAppointmentDate: '2017-12-01',
-      maritalStatus: 'SINGLE',
+      maritalStatus: 'MARRIED',
+      spouse: {
+        id: 43,
+        firstName: 'Jane',
+        lastName: 'Doe',
+        nickName: null,
+        mediationCode: 'D2'
+      },
       housing: 'F4',
       housingSpace: 80,
       hostName: 'Bruno Mala',
@@ -97,7 +123,7 @@ describe('PersonEditComponent', () => {
     };
 
     const activatedRoute = {
-      snapshot: {data: {person}}
+      snapshot: {data: {person, persons}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
@@ -149,6 +175,8 @@ describe('PersonEditComponent', () => {
       expect(firstMediationAppointmentDate.value).toBe('01/12/2017');
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
       expect(maritalStatus.options[maritalStatus.selectedIndex].value).toBe(person.maritalStatus);
+      const spouse: HTMLInputElement = nativeElement.querySelector('#spouse');
+      expect(spouse.value).toBe('Jane Doe');
       const adherentYes = nativeElement.querySelector('#adherenttrue');
       expect(adherentYes.checked).toBe(true);
       const adherentNo = nativeElement.querySelector('#adherentfalse');
@@ -215,7 +243,7 @@ describe('PersonEditComponent', () => {
       const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
-      fixture.componentInstance.search = (text: Observable<string>) => text.map(value => []);
+      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.map(value => []);
 
       fixture.detectChanges();
 
@@ -234,6 +262,30 @@ describe('PersonEditComponent', () => {
       city.dispatchEvent(new Event('blur'));
       fixture.detectChanges();
       expect(city.value).toBeFalsy();
+    });
+
+    it('should clear the spouse input on blur if not valid anymore', () =>  {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      // fake typeahead results
+      fixture.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.map(value => []);
+
+      fixture.detectChanges();
+
+      const nativeElement = fixture.nativeElement;
+      const spouse: HTMLInputElement = nativeElement.querySelector('#spouse');
+      expect(spouse.value).toBe('Jane Doe');
+
+      // erase something in the field, which should make its model null
+      spouse.value = 'Jane';
+      spouse.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      expect(fixture.componentInstance.personForm.value.spouse).toBeFalsy();
+      expect(spouse.classList).toContain('is-warning');
+
+      // move out of the field, which should clear it
+      spouse.dispatchEvent(new Event('blur'));
+      fixture.detectChanges();
+      expect(spouse.value).toBeFalsy();
     });
 
     it('should make family situation known and then unknown', () => {
@@ -267,7 +319,7 @@ describe('PersonEditComponent', () => {
 
   describe('in create mode', () => {
     const activatedRoute = {
-      snapshot: {data: {person: null}}
+      snapshot: {data: {person: null, persons}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
@@ -291,7 +343,7 @@ describe('PersonEditComponent', () => {
       const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
-      fixture.componentInstance.search = (text: Observable<string>) => Observable.of([cityModel]);
+      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => Observable.of([cityModel]);
 
       fixture.detectChanges();
 
@@ -330,9 +382,19 @@ describe('PersonEditComponent', () => {
       const mediationEnabledNo = nativeElement.querySelector('#mediationEnabledfalse');
       expect(mediationEnabledNo.checked).toBe(true);
 
-      const mediationDependantIds =
-        ['mediationCode', 'firstMediationAppointmentDate', 'maritalStatus', 'entryDate', 'housing', 'hostName', 'fiscalStatusUNKNOWN',
-          'socialSecurityNumber', 'cafNumber', 'frenchFamilySituation', 'abroadFamilySituation'];
+      const mediationDependantIds = [
+        'mediationCode',
+        'firstMediationAppointmentDate',
+        'maritalStatus',
+        'entryDate',
+        'housing',
+        'hostName',
+        'fiscalStatusUNKNOWN',
+        'socialSecurityNumber',
+        'cafNumber',
+        'frenchFamilySituation',
+        'abroadFamilySituation'
+      ];
 
       mediationDependantIds.forEach(id => {
         expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`);
@@ -353,6 +415,8 @@ describe('PersonEditComponent', () => {
       expect(firstMediationAppointmentDate.value).toBe('');
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
       expect(maritalStatus.selectedIndex).toBe(0);
+      const spouse: HTMLSelectElement = nativeElement.querySelector('#spouse');
+      expect(spouse.value).toBe('');
       expect(maritalStatus.options[0].value).toBe('UNKNOWN');
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe('');
@@ -401,10 +465,10 @@ describe('PersonEditComponent', () => {
       fixture.detectChanges();
       tick();
       // select first result
-      const result = nativeElement.querySelector('button');
-      expect(result.textContent)
+      const cityResult = nativeElement.querySelector('ngb-typeahead-window button');
+      expect(cityResult.textContent)
         .toContain(displayCityPipe.transform(cityModel));
-      result.dispatchEvent(new Event('click'));
+      cityResult.dispatchEvent(new Event('click'));
       fixture.detectChanges();
       tick();
 
@@ -414,6 +478,19 @@ describe('PersonEditComponent', () => {
       phoneNumber.dispatchEvent(new Event('input'));
       maritalStatus.selectedIndex = 2;
       maritalStatus.dispatchEvent(new Event('change'));
+
+      // trigger city typeahead
+      spouse.value = 'Jane';
+      spouse.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      tick(500);
+      // select first result
+      const spouseResult = nativeElement.querySelector('ngb-typeahead-window button');
+      expect(spouseResult.textContent).toContain('Jane Doe');
+      spouseResult.dispatchEvent(new Event('click'));
+      fixture.detectChanges();
+      tick();
+
       adherentYes.checked = true;
       adherentYes.dispatchEvent(new Event('change'));
       entryDate.value = '02/02/2015';
@@ -473,6 +550,8 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.phoneNumber).toBe('06 13 13 13 13');
       expect(createdPerson.firstMediationAppointmentDate).toBe('2017-02-02');
       expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
+      expect(createdPerson.spouseId).toBe(1);
+      expect(createdPerson['spouse']).not.toBeDefined();
       expect(createdPerson.adherent).toBe(true);
       expect(createdPerson.entryDate).toBe('2015-02-02');
       expect(createdPerson.housing).toBe('F0');

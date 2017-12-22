@@ -43,6 +43,7 @@ public final class PersonCommandDTO {
 
     @NotNull
     private final MaritalStatus maritalStatus;
+    private final Long spouseId;
 
     @NotNull
     private final Housing housing;
@@ -77,6 +78,7 @@ public final class PersonCommandDTO {
                             @JsonProperty boolean mediationEnabled,
                             @JsonProperty LocalDate firstMediationAppointmentDate,
                             @JsonProperty MaritalStatus maritalStatus,
+                            @JsonProperty Long spouseId,
                             @JsonProperty Housing housing,
                             @JsonProperty Integer housingSpace,
                             @JsonProperty String hostName,
@@ -105,6 +107,7 @@ public final class PersonCommandDTO {
         this.mediationEnabled = mediationEnabled;
         this.firstMediationAppointmentDate = firstMediationAppointmentDate;
         this.maritalStatus = maritalStatus;
+        this.spouseId = spouseId;
         this.housing = housing;
         this.housingSpace = housingSpace;
         this.hostName = hostName;
@@ -174,6 +177,10 @@ public final class PersonCommandDTO {
 
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
+    }
+
+    public Long getSpouseId() {
+        return spouseId;
     }
 
     public Housing getHousing() {

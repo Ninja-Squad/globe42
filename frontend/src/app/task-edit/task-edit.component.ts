@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../task.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskCommand } from '../models/task.command';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { PersonIdentityModel } from '../models/person.model';
 import { FullnamePipe } from '../fullname.pipe';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { UserModel } from '../models/user.model';
@@ -13,6 +11,7 @@ import { UserService } from '../user.service';
 import { sortBy } from '../utils';
 import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
+import { PersonTypeahead } from '../person/person-typeahead';
 
 interface TaskFormModel {
   title: string;
@@ -45,16 +44,7 @@ export class TaskEditComponent implements OnInit {
   categories: Array<TaskCategoryModel>;
 
   cancelOrRedirectDestination = ['/tasks'];
-
-  private persons: Array<PersonIdentityModel>;
-
-  personFormatter = (result: PersonIdentityModel) => this.fullnamePipe.transform(result);
-
-  personSearch = (text$: Observable<string>) =>
-    text$
-      .debounceTime(200)
-      .distinctUntilChanged()
-      .map(term => term === '' ? [] : this.persons.filter(person => this.isPersonAccepted(person, term)).slice(0, 10));
+  personTypeahead: PersonTypeahead;
 
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
@@ -64,7 +54,7 @@ export class TaskEditComponent implements OnInit {
 
   ngOnInit() {
     this.editedTask = this.route.snapshot.data.task;
-    this.persons = this.route.snapshot.data.persons;
+    this.personTypeahead = new PersonTypeahead(this.route.snapshot.data.persons, this.fullnamePipe);
     this.users = this.sortUsers(this.route.snapshot.data.users);
     this.categories = this.route.snapshot.data.categories;
 
@@ -79,11 +69,11 @@ export class TaskEditComponent implements OnInit {
       this.task.category = this.findWithId(this.categories, this.editedTask.category.id);
       this.task.dueDate = this.editedTask.dueDate;
       this.task.concernedPerson =
-        this.editedTask.concernedPerson ? this.findWithId(this.persons, this.editedTask.concernedPerson.id) : null;
+        this.editedTask.concernedPerson ? this.findWithId(this.personTypeahead.persons, this.editedTask.concernedPerson.id) : null;
       this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
     } else {
       if (concernedPersonId) {
-        this.task.concernedPerson = this.findWithId(this.persons, +concernedPersonId);
+        this.task.concernedPerson = this.findWithId(this.personTypeahead.persons, +concernedPersonId);
       }
     }
   }
@@ -124,14 +114,6 @@ export class TaskEditComponent implements OnInit {
     const result = sortBy(users.filter(u => u !== me), u => u.login);
     result.unshift(me);
     return result;
-  }
-
-  private isPersonAccepted(person: PersonIdentityModel, term: string): boolean {
-    const s = term.toLowerCase();
-    return person.firstName.toLowerCase().includes(s)
-      || person.lastName.toLowerCase().includes(s)
-      || (person.nickName && person.nickName.toLowerCase().includes(s))
-      || (person.mediationCode && person.mediationCode.toLowerCase().includes(s));
   }
 
   private findWithId<T extends { id: number }>(array: Array<T>, id: number): T {

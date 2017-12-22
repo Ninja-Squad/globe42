@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PersonModel } from '../models/person.model';
+import 'rxjs/add/operator/pluck';
 
 @Component({
   selector: 'gl-person-layout',
@@ -12,6 +13,6 @@ export class PersonLayoutComponent {
   person: PersonModel;
 
   constructor(private route: ActivatedRoute) {
-    this.person = route.snapshot.data['person'];
+    route.data.pluck('person').subscribe((person: PersonModel) => this.person = person);
   }
 }

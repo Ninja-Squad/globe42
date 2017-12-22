@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -130,6 +131,15 @@ public class Person {
     @NotNull
     @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus = MaritalStatus.UNKNOWN;
+
+    /**
+     * The couple (marriage, PACS, etc.) in which the person is engaged with another person. Only requested to
+     * mediation-enabled persons, and not mandatory. Note that it would make sense to only have a couple if
+     * for some marital statuses, but no such check is made for now (in case we would preserve this association
+     * for later).
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Couple couple;
 
     /**
      * The housing kind. Only requested to mediation-enabled persons, and unknown by default (so, technically
@@ -542,6 +552,21 @@ public class Person {
 
     public void removeParticipation(Participation participation) {
         participations.remove(participation);
+    }
+
+    public Couple getCouple() {
+        return couple;
+    }
+
+    public void setCouple(Couple couple) {
+        this.couple = couple;
+    }
+
+    public Person getSpouse() {
+        if (this.couple == null) {
+            return null;
+        }
+        return couple.getSpouseOf(this);
     }
 
     public boolean isDeleted() {
