@@ -11,6 +11,9 @@ import { Observable } from 'rxjs/Observable';
 import { NowService } from '../now.service';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/observable/empty';
+import { UserModel } from '../models/user.model';
+import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
+import 'rxjs/add/operator/pluck';
 
 export interface CategoryStatistic {
   category: TaskCategoryModel;
@@ -48,8 +51,12 @@ const COLORS = [
 export class SpentTimeStatisticsComponent implements OnInit {
 
   criteriaForm: FormGroup;
+
+  statisticsModel: SpentTimeStatisticsModel;
   chartConfiguration: ChartConfiguration;
   categoryStatistics: Array<CategoryStatistic>;
+
+  users: Array<UserModel>;
 
   constructor(fb: FormBuilder,
               private taskService: TaskService,
@@ -57,15 +64,18 @@ export class SpentTimeStatisticsComponent implements OnInit {
               private route: ActivatedRoute,
               private nowService: NowService) {
     this.criteriaForm = fb.group({
-      from: null,
-      to: null
+      from: null as string,
+      to: null as string,
+      by: null as number,
     });
   }
 
   ngOnInit() {
+    this.users = this.route.snapshot.data['users'];
+
     // If no param, default to the current month
     const paramMap = this.route.snapshot.queryParamMap;
-    if (!paramMap.get('from') && !paramMap.get('to')) {
+    if (!paramMap.get('from') && !paramMap.get('to') && !paramMap.get('by')) {
       this.criteriaForm.setValue( {
         from: this.nowService.now().startOf('month').toISODate(),
         to: this.nowService.now().endOf('month').toISODate()
@@ -73,19 +83,33 @@ export class SpentTimeStatisticsComponent implements OnInit {
     } else {
       this.criteriaForm.setValue( {
         from: paramMap.get('from'),
-        to: paramMap.get('to')
+        to: paramMap.get('to'),
+        by: +paramMap.get('by')
       });
     }
 
+    // when criteria change, we update the URL
+    // when from or to changes, we reload the statistics
     Observable.of(this.criteriaForm.value).concat(this.criteriaForm.valueChanges)
       .filter(() => this.criteriaForm.valid)
       .do(value => this.router.navigate(['tasks/statistics'], { queryParams: value, replaceUrl: true }))
-      .switchMap(() => this.taskService.spentTimeStatistics(this.criteriaForm.value).catch(() => Observable.empty()))
+      .map(value => ({ from: value.from, to: value.to }))
+      .distinctUntilChanged((v1, v2) => v1.from === v2.from && v1.to === v2.to)
+      .switchMap(value => this.taskService.spentTimeStatistics(value).catch(() => Observable.empty<SpentTimeStatisticsModel>()))
       .subscribe(stats => this.updateState(stats));
+
+    // when by changes, no need to reload the statistics, but the chart must be updated
+    // note: using the valueChanges on the "by" form control doesn't change because the event is emitted before
+    // the value of the form group is updated
+    this.criteriaForm.valueChanges
+      .pluck('by')
+      .distinctUntilChanged()
+      .subscribe(() => this.updateState(this.statisticsModel));
   }
 
-  private updateState(stats) {
-    this.categoryStatistics = this.createCategoryStatistics(stats);
+  private updateState(statisticsModel: SpentTimeStatisticsModel) {
+    this.statisticsModel = statisticsModel;
+    this.categoryStatistics = this.createCategoryStatistics();
     this.chartConfiguration = this.createChartConfiguration();
   }
 
@@ -118,20 +142,22 @@ export class SpentTimeStatisticsComponent implements OnInit {
     };
   }
 
-  private createCategoryStatistics(stats): Array<CategoryStatistic> {
+  private createCategoryStatistics(): Array<CategoryStatistic> {
     const categoryStatisticsByCategoryId = new Map<number, CategoryStatistic>();
-    stats.statistics.forEach(stat => {
-      const categoryId = stat.category.id;
-      let categoryStatistic = categoryStatisticsByCategoryId.get(categoryId);
-      if (!categoryStatistic) {
-        categoryStatistic = {
-          category: stat.category,
-          minutes: 0
-        };
-        categoryStatisticsByCategoryId.set(categoryId, categoryStatistic);
-      }
-      categoryStatistic.minutes += stat.minutes;
-    });
+    this.statisticsModel.statistics
+      .filter(stat => (this.criteriaForm.value.by === 0) || (stat.user.id === this.criteriaForm.value.by))
+      .forEach(stat => {
+        const categoryId = stat.category.id;
+        let categoryStatistic = categoryStatisticsByCategoryId.get(categoryId);
+        if (!categoryStatistic) {
+          categoryStatistic = {
+            category: stat.category,
+            minutes: 0
+          };
+          categoryStatisticsByCategoryId.set(categoryId, categoryStatistic);
+        }
+        categoryStatistic.minutes += stat.minutes;
+      });
 
     return sortBy(Array.from(categoryStatisticsByCategoryId.values()), c => c.category.name);
   }

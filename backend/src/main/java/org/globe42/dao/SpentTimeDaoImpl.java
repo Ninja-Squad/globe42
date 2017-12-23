@@ -30,7 +30,7 @@ public class SpentTimeDaoImpl implements SpentTimeDaoCustom {
             "select category.id, creator.id, sum(spentTime.minutes) from SpentTime spentTime"
                 + " join spentTime.task task "
                 + " join task.category category "
-                + " join task.creator creator "
+                + " join spentTime.creator creator "
                 + spentTimeStatisticsWhereClause(criteria)
                 + " group by category.id, creator.id";
 

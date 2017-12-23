@@ -272,7 +272,7 @@ export const routes: Routes = [
           taskRoute('mine'),
           taskRoute('unassigned'),
           taskRoute('archived'),
-          { path: 'statistics', component: SpentTimeStatisticsComponent }
+          { path: 'statistics', component: SpentTimeStatisticsComponent, resolve: { users : UsersResolverService } }
         ]
       },
       {
