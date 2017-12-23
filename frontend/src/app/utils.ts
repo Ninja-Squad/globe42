@@ -68,3 +68,13 @@ export function isoToDate(value: string): NgbDateStruct {
   return null;
 }
 
+/**
+ * Takes a number of minutes and transforms it to a duration string of the for 'HhMMm'
+ */
+export function minutesToDuration(minutes: number) {
+  return `${Math.trunc(minutes / 60)}h${leftPadZero(minutes % 60)}m`;
+}
+
+function leftPadZero(n: number): string {
+  return n < 10 ? `0${n}` : `${n}`;
+}

@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * DAO for {@link SpentTime}
  * @author JB Nizet
  */
-public interface SpentTimeDao extends JpaRepository<SpentTime, Long> {
+public interface SpentTimeDao extends JpaRepository<SpentTime, Long>, SpentTimeDaoCustom {
 }

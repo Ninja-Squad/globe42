@@ -52,6 +52,7 @@ import { ParticipantsComponent } from './participants/participants.component';
 import { ParticipantsResolverService } from './participants-resolver.service';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
+import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time-statistics.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -271,6 +272,7 @@ export const routes: Routes = [
           taskRoute('mine'),
           taskRoute('unassigned'),
           taskRoute('archived'),
+          { path: 'statistics', component: SpentTimeStatisticsComponent }
         ]
       },
       {

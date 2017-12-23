@@ -101,9 +101,10 @@ import { SpentTimesComponent } from './spent-times/spent-times.component';
 import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
-import { DateStringAdapterService } from './globe-ngb/date-string-adapter.service';
 import { CurrentUserModule } from './current-user/current-user.module';
 import { GlobeNgbModule } from './globe-ngb/globe-ngb.module';
+import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time-statistics.component';
+import { ChartComponent } from './chart/chart.component';
 
 registerLocaleData(localeFr);
 
@@ -164,7 +165,9 @@ registerLocaleData(localeFr);
     DurationPipe,
     SpentTimesComponent,
     SpentTimeAddComponent,
-    PersonsLayoutComponent
+    PersonsLayoutComponent,
+    SpentTimeStatisticsComponent,
+    ChartComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

@@ -1,0 +1,41 @@
+<h1>Statistiques</h1>
+
+<form [formGroup]="criteriaForm" class="form-inline mb-4">
+  <label for="from" class="mr-2">Du</label>
+  <div class="input-group mr-2">
+    <div class="input-group-addon" (click)="from.toggle()">
+      <i class="fa fa-calendar" aria-hidden="true"></i>
+    </div>
+    <input class="form-control" id="from" formControlName="from" ngbDatepicker #from="ngbDatepicker" [minDate]="{year: 2017, month: 1}">
+  </div>
+
+  <label for="to" class="mr-2">au</label>
+  <div class="input-group">
+    <div class="input-group-addon" (click)="to.toggle()">
+      <i class="fa fa-calendar" aria-hidden="true"></i>
+    </div>
+    <input class="form-control" id="to" formControlName="to" ngbDatepicker #to="ngbDatepicker" [minDate]="{year: 2017, month: 1}">
+  </div>
+</form>
+
+<div class="row" *ngIf="chartConfiguration">
+  <div class="col-md-8">
+    <gl-chart [configuration]="chartConfiguration"></gl-chart>
+  </div>
+  <div class="col-md-4 mt-4 mt-md-0">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Catégorie</th>
+          <th class="text-right">Temps passé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stat of categoryStatistics">
+          <td>{{ stat.category.name }}</td>
+          <td class="text-right">{{ stat.minutes | duration }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

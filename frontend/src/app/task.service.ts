@@ -9,6 +9,8 @@ import { SpentTimeModel } from './models/spent-time.model';
 import { sortBy } from './utils';
 import { TaskCategoryModel } from './models/task-category.model';
 import { CurrentUserService } from './current-user/current-user.service';
+import { SpentTimeStatisticsCriteria } from './models/spent-time-statistics.criteria';
+import { SpentTimeStatisticsModel } from './models/spent-time-statistics.model';
 
 function pageParams(pageNumber: number): HttpParams {
   return new HttpParams().set('page', pageNumber.toString());
@@ -96,5 +98,16 @@ export class TaskService {
   listCategories(): Observable<Array<TaskCategoryModel>> {
     return this.http.get<Array<TaskCategoryModel>>('/api/task-categories')
       .map(categories => sortBy(categories, c => c.name));
+  }
+
+  spentTimeStatistics(criteria: SpentTimeStatisticsCriteria): Observable<SpentTimeStatisticsModel> {
+    let params = new HttpParams();
+    for (const key of Object.keys(criteria)) {
+      if (criteria[key]) {
+        params = params.set(key, criteria[key]);
+      }
+    }
+
+    return this.http.get<SpentTimeStatisticsModel>('/api/task-statistics/spent-times', { params });
   }
 }
