@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { FamilySituationComponent } from './family-situation.component';
 import { FamilySituation } from '../models/person.model';

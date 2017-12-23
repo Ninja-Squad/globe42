@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PersonIdentityModel } from '../models/person.model';
 import { sortBy } from '../utils';
 import { FullnamePipe } from '../fullname.pipe';
 import { ActivityType } from '../models/participation.model';

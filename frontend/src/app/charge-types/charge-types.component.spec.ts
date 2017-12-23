@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { ChargeTypesComponent } from './charge-types.component';
 import { ChargeTypeModel } from '../models/charge-type.model';

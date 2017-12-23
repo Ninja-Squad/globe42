@@ -1,10 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { FamilySituationEditComponent } from './family-situation-edit.component';
-import { FamilySituation } from '../models/person.model';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 describe('FamilySituationEditComponent', () => {
   @Component({

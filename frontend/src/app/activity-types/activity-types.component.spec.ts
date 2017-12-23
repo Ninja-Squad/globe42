@@ -4,7 +4,7 @@ import { ActivityTypesComponent } from './activity-types.component';
 import { ACTIVITY_TYPE_TRANSLATIONS, DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
-import { RouterLinkWithHref, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 describe('ActivityTypesComponent', () => {
   let component: ActivityTypesComponent;

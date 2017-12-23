@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { PersonChargeEditComponent } from './person-charge-edit.component';
 import { CommonModule } from '@angular/common';

@@ -5,7 +5,6 @@ import { Component, LOCALE_ID } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
-import Spy = jasmine.Spy;
 import { Observable } from 'rxjs/Observable';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { Subject } from 'rxjs/Subject';
@@ -15,6 +14,7 @@ import { DurationPipe } from '../duration.pipe';
 import { NowService } from '../now.service';
 import { UserService } from '../user.service';
 import { JwtInterceptorService } from '../jwt-interceptor.service';
+import Spy = jasmine.Spy;
 
 @Component({
   template: `<gl-spent-times [taskModel]="taskModel" (spentTimeDeleted)="storeDeletedSpentTime($event)"></gl-spent-times>`

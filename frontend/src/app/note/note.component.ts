@@ -1,7 +1,4 @@
-import {
-  AfterContentChecked, AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output,
-  ViewChild
-} from '@angular/core';
+import { AfterContentChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NoteModel } from '../models/note.model';
 
 export interface NoteEditionEvent {

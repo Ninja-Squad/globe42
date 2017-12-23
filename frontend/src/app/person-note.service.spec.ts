@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonNoteService } from './person-note.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';

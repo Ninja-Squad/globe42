@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { IncomeSourceCommand } from './models/income-source.command';
-import { IncomeSourceTypeModel } from './models/income-source-type.model';
 import { IncomeSourceModel } from './models/income-source.model';
-import { IncomeSourceTypeCommand } from './models/income-source-type.command';
 
 @Injectable()
 export class IncomeSourceService {

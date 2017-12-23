@@ -4,7 +4,6 @@ import { PersonsLayoutComponent } from './persons-layout.component';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouterOutlet } from '@angular/router';
-import { TasksLayoutComponent } from '../tasks-layout/tasks-layout.component';
 
 describe('PersonsLayoutComponent', () => {
   beforeEach(async(() => TestBed.configureTestingModule({

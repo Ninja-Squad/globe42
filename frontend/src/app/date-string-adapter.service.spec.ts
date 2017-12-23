@@ -1,5 +1,3 @@
-import { TestBed, inject } from '@angular/core/testing';
-
 import { DateStringAdapterService } from './date-string-adapter.service';
 
 describe('DateStringAdapterService', () => {

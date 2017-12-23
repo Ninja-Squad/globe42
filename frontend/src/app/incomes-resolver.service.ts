@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { IncomeModel } from './models/income.model';
 import { Observable } from 'rxjs/Observable';
 import { PersonModel } from './models/person.model';

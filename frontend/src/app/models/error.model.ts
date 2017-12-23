@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 export interface FunctionalErrorModel {
   code: string;
   parameters?: { [key: string]: any };

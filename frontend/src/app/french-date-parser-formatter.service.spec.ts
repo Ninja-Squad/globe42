@@ -1,5 +1,3 @@
-import { TestBed, inject } from '@angular/core/testing';
-
 import { FrenchDateParserFormatterService } from './french-date-parser-formatter.service';
 
 describe('FrenchDateParserFormatterService', () => {

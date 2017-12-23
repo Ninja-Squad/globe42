@@ -3,7 +3,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { TaskEditComponent } from './task-edit.component';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbDateAdapter, NgbDateParserFormatter, NgbDateStruct, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FullnamePipe } from '../fullname.pipe';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { PersonIdentityModel } from '../models/person.model';
@@ -134,8 +134,6 @@ describe('TaskEditComponent', () => {
       fixture.whenStable().then(() => {
         fixture.detectChanges();
         tick();
-
-        const element = fixture.nativeElement;
 
         // search by first name
         checkPersonTypeaheadWorks(fixture, 'ced');

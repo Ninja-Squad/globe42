@@ -6,7 +6,6 @@ import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
 import { sortBy } from '../utils';
 import { HttpEventType } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/forkJoin';
 

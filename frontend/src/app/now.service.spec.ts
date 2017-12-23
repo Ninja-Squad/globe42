@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { NowService } from './now.service';
+import * as moment from 'moment';
 
 describe('NowService', () => {
   beforeEach(() => {
@@ -9,7 +9,9 @@ describe('NowService', () => {
     });
   });
 
-  it('should be created', inject([NowService], (service: NowService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should return now', () => {
+    const nowService = TestBed.get(NowService);
+    expect(nowService.now().diff(moment.now(), 'seconds')).toBeLessThan(1);
+    expect(nowService.now()).not.toBe(nowService.now());
+  });
 });

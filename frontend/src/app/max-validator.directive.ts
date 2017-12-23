@@ -1,4 +1,5 @@
 /* tslint:disable:directive-selector */
+/* tslint:disable:no-use-before-declare */
 import { Directive, forwardRef, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator, ValidatorFn, Validators } from '@angular/forms';
 

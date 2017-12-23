@@ -19,7 +19,7 @@ import { DisplayGenderPipe } from '../display-gender.pipe';
 import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
-import { DisplayHealthCareCoveragePipe, HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
+import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
 import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
 import { By } from '@angular/platform-browser';
 import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
@@ -243,7 +243,7 @@ describe('PersonEditComponent', () => {
       const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
-      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.map(value => []);
+      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.map(() => []);
 
       fixture.detectChanges();
 
@@ -267,7 +267,7 @@ describe('PersonEditComponent', () => {
     it('should clear the spouse input on blur if not valid anymore', () =>  {
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
-      fixture.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.map(value => []);
+      fixture.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.map(() => []);
 
       fixture.detectChanges();
 

@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { IncomeSourceResolverService } from './income-source-resolver.service';
 import { HttpClientModule } from '@angular/common/http';

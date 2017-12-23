@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';

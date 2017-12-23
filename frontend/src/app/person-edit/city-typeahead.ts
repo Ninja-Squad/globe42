@@ -13,21 +13,23 @@ import { DisplayCityPipe } from '../display-city.pipe';
 export class CityTypeahead {
 
   searchFailed = false;
+  searcher: (text$: Observable<string>) => Observable<Array<CityModel>>;
+  formatter: (result: CityModel) => string;
 
-  searcher = (text$: Observable<string>) =>
-    text$
-      .filter(query => query.length > 1)
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .switchMap(term =>
-        this.searchCityService.search(term)
-          .do(() => this.searchFailed = false)
-          .catch(() => {
-            this.searchFailed = true;
-            return Observable.of([]);
-          }));
+  constructor(private searchCityService: SearchCityService, private displayCityPipe: DisplayCityPipe) {
+    this.searcher = (text$: Observable<string>) =>
+      text$
+        .filter(query => query.length > 1)
+        .debounceTime(300)
+        .distinctUntilChanged()
+        .switchMap(term =>
+          this.searchCityService.search(term)
+            .do(() => this.searchFailed = false)
+            .catch(() => {
+              this.searchFailed = true;
+              return Observable.of([]);
+            }));
 
-  formatter = (result: CityModel) => this.displayCityPipe.transform(result);
-
-  constructor(private searchCityService: SearchCityService, private displayCityPipe: DisplayCityPipe) {}
+    this.formatter = (result: CityModel) => this.displayCityPipe.transform(result);
+  }
 }

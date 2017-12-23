@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ChargeCategoryResolverService } from './charge-category-resolver.service';
 import { ChargeCategoryService } from './charge-category.service';

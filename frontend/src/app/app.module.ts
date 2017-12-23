@@ -98,14 +98,14 @@ import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { MinValidatorDirective } from './min-validator.directive';
 import { MaxValidatorDirective } from './max-validator.directive';
-
-registerLocaleData(localeFr);
 import { DurationPipe } from './duration.pipe';
 import { SpentTimesComponent } from './spent-times/spent-times.component';
 import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 import { DateStringAdapterService } from './date-string-adapter.service';
+
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [

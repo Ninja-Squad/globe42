@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import { TaskService } from '../task.service';
-import { SpentTimeModel } from '../models/spent-time.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 
 @Component({

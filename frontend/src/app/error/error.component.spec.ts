@@ -1,8 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { ErrorComponent } from './error.component';
-import { AppModule } from '../app.module';
-import { RouterTestingModule } from '@angular/router/testing';
 import { ErrorService } from '../error.service';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
@@ -89,7 +87,6 @@ describe('ErrorComponent', () => {
   it('should react to navigation end events', () => {
     const fixture = TestBed.createComponent(ErrorComponent);
     const component = fixture.componentInstance;
-    const router = TestBed.get(Router);
 
     component.error = {technical: false, message: 'Hello JB'};
 

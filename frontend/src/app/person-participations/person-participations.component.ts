@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActivityType, ParticipationModel } from '../models/participation.model';
 import { ACTIVITY_TYPE_TRANSLATIONS } from '../display-activity-type.pipe';
 import { ParticipationService } from '../participation.service';
 import { PersonModel } from '../models/person.model';
-import { partition } from 'rxjs/operator/partition';
 
 export interface ParticipationItem {
   id: number;

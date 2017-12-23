@@ -1,4 +1,4 @@
-import { sortBy, interpolate, dateToIso, isoToDate } from './utils';
+import { dateToIso, interpolate, isoToDate, sortBy } from './utils';
 
 describe('utils', () => {
   it('should sort by', () => {

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { NoteComponent, NoteEditionEvent } from './note.component';
 import { FormsModule } from '@angular/forms';
