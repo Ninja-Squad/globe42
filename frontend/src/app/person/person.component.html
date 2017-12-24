@@ -70,7 +70,7 @@
       </div>
     </div>
 
-    <h2>Informations</h2>
+    <h2 class="mt-3">Informations</h2>
 
     <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
@@ -87,7 +87,7 @@
   </div>
 
   <div class="col-lg">
-    <h2>Contact</h2>
+    <h2 class="mt-3 mt-lg-0">Contact</h2>
 
     <div class="d-flex mb-2" id="fullAddress">
       <div class="mr-3"><span class="fa fa-home"></span></div>
@@ -119,14 +119,14 @@
     </div>
 
     <div *ngIf="person.mediationEnabled">
-      <h2>Logement</h2>
+      <h2 class="mt-3">Logement</h2>
       <p id="housing">
           {{ person.housing | displayHousing }}
           <ng-container *ngIf="person.housingSpace"> &mdash; {{ person.housingSpace }} m<sup>2</sup></ng-container>
       </p>
       <ng-container *ngIf="person.hostName">Hébergé par {{ person.hostName }}</ng-container>
 
-      <h2>Situation fiscale</h2>
+      <h2 class="mt-3">Situation fiscale</h2>
 
       <p id="fiscalStatus">
         {{ person.fiscalStatus | displayFiscalStatus }}
@@ -162,7 +162,7 @@
   </button>
 </div>
 
-<div class="mt-2">
+<div class="mt-3">
   <h2>Notes</h2>
 
   <gl-person-notes [person]="person"></gl-person-notes>

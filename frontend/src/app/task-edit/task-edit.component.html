@@ -33,7 +33,7 @@
       <div class="input-group-addon" (click)="d.toggle()">
         <i class="fa fa-calendar" aria-hidden="true"></i>
       </div>
-      <input class="form-control" id="dueDate" name="dueDate" [(ngModel)]="task.dueDate" ngbDatepicker #d="ngbDatepicker">
+      <input class="form-control" id="dueDate" name="dueDate" [(ngModel)]="task.dueDate" ngbDatepicker #d="ngbDatepicker" [minDate]="{year: 2017, month: 1}" />
     </div>
   </div>
   <div class="form-group row">
