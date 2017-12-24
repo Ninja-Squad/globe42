@@ -137,7 +137,8 @@ export class SpentTimeStatisticsComponent implements OnInit {
               return `${categoryName}: ${duration}`;
             }
           }
-        }
+        },
+        aspectRatio: 1
       }
     };
   }
