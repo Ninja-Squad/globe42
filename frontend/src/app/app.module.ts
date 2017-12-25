@@ -15,7 +15,7 @@ import { PersonComponent } from './person/person.component';
 import { PersonEditComponent } from './person-edit/person-edit.component';
 import { PersonResolverService } from './person-resolver.service';
 import { PersonsResolverService } from './persons-resolver.service';
-import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
+import { FrenchDatepickerI18nService } from './globe-ngb/french-datepicker-i18n.service';
 import { FormControlValidationDirective } from './form-control-validation.directive';
 import { SearchCityService } from './search-city.service';
 import { DisplayCityPipe } from './display-city.pipe';
@@ -67,7 +67,7 @@ import { TaskResolverService } from './task-resolver.service';
 import { NoteComponent } from './note/note.component';
 import { PersonNoteService } from './person-note.service';
 import { PersonNotesComponent } from './person-notes/person-notes.component';
-import { FrenchDateParserFormatterService } from './french-date-parser-formatter.service';
+import { FrenchDateParserFormatterService } from './globe-ngb/french-date-parser-formatter.service';
 import { PersonFilesComponent } from './person-files/person-files.component';
 import { PersonFileService } from './person-file.service';
 import { FileSizePipe } from './file-size.pipe';
@@ -101,8 +101,9 @@ import { SpentTimesComponent } from './spent-times/spent-times.component';
 import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
-import { DateStringAdapterService } from './date-string-adapter.service';
+import { DateStringAdapterService } from './globe-ngb/date-string-adapter.service';
 import { CurrentUserModule } from './current-user/current-user.module';
+import { GlobeNgbModule } from './globe-ngb/globe-ngb.module';
 
 registerLocaleData(localeFr);
 
@@ -174,7 +175,7 @@ registerLocaleData(localeFr);
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    NgbModule.forRoot(),
+    GlobeNgbModule.forRoot(),
     CurrentUserModule.forRoot()
   ],
   providers: [
@@ -184,8 +185,6 @@ registerLocaleData(localeFr);
     DisplayCityPipe,
     PersonResolverService,
     PersonsResolverService,
-    { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
-    { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
     IncomeTypesResolverService,
     IncomeSourceTypeService,
     IncomeSourceService,
@@ -225,8 +224,7 @@ registerLocaleData(localeFr);
     ParticipationService,
     ParticipationsResolverService,
     ParticipantsResolverService,
-    TaskCategoriesResolverService,
-    {provide: NgbDateAdapter, useClass: DateStringAdapterService}
+    TaskCategoriesResolverService
   ],
   bootstrap: [AppComponent]
 })

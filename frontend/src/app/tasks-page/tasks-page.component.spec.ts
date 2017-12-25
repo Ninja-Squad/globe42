@@ -10,7 +10,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { NowService } from '../now.service';
 import { DateTime } from 'luxon';
 import { By } from '@angular/platform-browser';
-import { NgbModule, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { TaskService } from '../task.service';
@@ -21,6 +21,7 @@ import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.componen
 import { DurationPipe } from '../duration.pipe';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -81,7 +82,7 @@ describe('TasksPageComponent', () => {
     TestBed.overrideTemplate(SpentTimesComponent, '');
 
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, GlobeNgbModule.forRoot(), HttpClientModule],
       declarations: [
         TasksPageComponent,
         TasksComponent,

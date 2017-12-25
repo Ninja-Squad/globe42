@@ -13,11 +13,11 @@ import { DisplayHousingPipe } from '../display-housing.pipe';
 import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmService } from '../confirm.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { PersonService } from '../person.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { Observable } from 'rxjs/Observable';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import 'rxjs/add/observable/of';
 
 describe('PersonComponent', () => {
@@ -73,7 +73,7 @@ describe('PersonComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [ RouterTestingModule, HttpClientModule, NgbModule.forRoot(), FormsModule ],
+    imports: [ RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot(), FormsModule ],
     declarations: [
       PersonComponent,
       DisplayGenderPipe,

@@ -3,7 +3,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { TaskEditComponent } from './task-edit.component';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbDateAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { FullnamePipe } from '../fullname.pipe';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { PersonIdentityModel } from '../models/person.model';
@@ -13,11 +13,12 @@ import { TaskService } from '../task.service';
 import { NowService } from '../now.service';
 import { Observable } from 'rxjs/Observable';
 import { TaskModel } from '../models/task.model';
-import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
+import { FrenchDateParserFormatterService } from '../globe-ngb/french-date-parser-formatter.service';
 import { TaskCategoryModel } from '../models/task-category.model';
-import { DateStringAdapterService } from '../date-string-adapter.service';
+import { DateStringAdapterService } from '../globe-ngb/date-string-adapter.service';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('TaskEditComponent', () => {
 
@@ -57,15 +58,13 @@ describe('TaskEditComponent', () => {
     } as any;
 
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), FormsModule, RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
+      imports: [CurrentUserModule.forRoot(), FormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), HttpClientModule],
       declarations: [TaskEditComponent],
       providers: [
         TaskService,
         NowService,
         FullnamePipe,
-        { provide: ActivatedRoute, useValue: activatedRoute },
-        { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
-        { provide: NgbDateAdapter, useClass: DateStringAdapterService }
+        { provide: ActivatedRoute, useValue: activatedRoute }
       ]
     });
 

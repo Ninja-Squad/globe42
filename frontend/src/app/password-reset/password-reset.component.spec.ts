@@ -5,9 +5,9 @@ import { UserModel } from '../models/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { UserWithPasswordModel } from '../models/user-with-password.model';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../user.service';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('PasswordResetComponent', () => {
   const user: UserModel = {id: 42, login: 'jb', admin: false};
@@ -17,7 +17,7 @@ describe('PasswordResetComponent', () => {
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [ HttpClientModule, NgbModule.forRoot() ],
+    imports: [ HttpClientModule, GlobeNgbModule.forRoot() ],
     declarations: [ PasswordResetComponent ],
     providers: [
       UserService,

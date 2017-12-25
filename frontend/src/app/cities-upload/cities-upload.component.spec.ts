@@ -4,15 +4,15 @@ import { CitiesUploadComponent } from './cities-upload.component';
 import { SearchCityService } from '../search-city.service';
 import { Subject } from 'rxjs/Subject';
 import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NowService } from '../now.service';
 import { DateTime } from 'luxon';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('CitiesUploadComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NgbModule.forRoot(), HttpClientModule],
+      imports: [GlobeNgbModule.forRoot(), HttpClientModule],
       declarations: [CitiesUploadComponent],
       providers: [NowService, SearchCityService]
     });

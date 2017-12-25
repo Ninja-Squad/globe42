@@ -12,7 +12,6 @@ import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
 import { ConfirmService } from '../confirm.service';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { SpentTimesComponent } from '../spent-times/spent-times.component';
@@ -22,6 +21,7 @@ import { SpentTimeModel } from '../models/spent-time.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { CurrentUserModule } from '../current-user/current-user.module';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -71,7 +71,7 @@ describe('TasksComponent', () => {
     TestBed.overrideTemplate(SpentTimesComponent, '');
 
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot()],
       declarations: [
         TestComponent,
         TasksComponent,

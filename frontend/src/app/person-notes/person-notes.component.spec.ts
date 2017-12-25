@@ -9,13 +9,13 @@ import { PersonModel } from '../models/person.model';
 import { NoteModel } from '../models/note.model';
 import { Observable } from 'rxjs/Observable';
 import { ConfirmService } from '../confirm.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import 'rxjs/add/operator/debounceTime';
 import { Subject } from 'rxjs/Subject';
 import { By } from '@angular/platform-browser';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('PersonNotesComponent', () => {
 
@@ -24,7 +24,7 @@ describe('PersonNotesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), FormsModule, HttpClientModule, NgbModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), FormsModule, HttpClientModule, GlobeNgbModule.forRoot()],
       declarations: [PersonNotesComponent, NoteComponent],
       providers: [
         PersonNoteService,

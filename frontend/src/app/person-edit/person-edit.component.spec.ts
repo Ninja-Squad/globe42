@@ -14,7 +14,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { NgbDateAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DisplayGenderPipe } from '../display-gender.pipe';
 import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
@@ -22,9 +21,8 @@ import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
 import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
 import { By } from '@angular/platform-browser';
-import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
 import { FullnamePipe } from '../fullname.pipe';
-import { DateStringAdapterService } from '../date-string-adapter.service';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -51,7 +49,7 @@ describe('PersonEditComponent', () => {
   ] as Array<PersonIdentityModel>;
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, NgbModule.forRoot()],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
     declarations: [
       PersonEditComponent,
       DisplayMaritalStatusPipe,
@@ -67,9 +65,7 @@ describe('PersonEditComponent', () => {
       PersonService,
       DisplayCityPipe,
       SearchCityService,
-      FullnamePipe,
-      { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
-      { provide: NgbDateAdapter, useClass: DateStringAdapterService }
+      FullnamePipe
     ]
   })
   class TestModule {

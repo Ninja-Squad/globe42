@@ -1,7 +1,7 @@
 import { PersonFilesComponent } from './person-files.component';
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
-import { NgbModule, NgbProgressbar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap';
 import { FileModel } from '../models/file.model';
 import { PersonModel } from '../models/person.model';
 import { PersonFileService } from '../person-file.service';
@@ -13,6 +13,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { By } from '@angular/platform-browser';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('PersonFilesComponent', () => {
   const person = { id: 42 } as PersonModel;
@@ -30,7 +31,7 @@ describe('PersonFilesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterTestingModule, NgbModule.forRoot()],
+      imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
       declarations: [PersonFilesComponent, FileSizePipe],
       providers: [
         PersonFileService,

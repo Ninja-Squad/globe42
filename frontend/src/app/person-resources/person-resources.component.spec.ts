@@ -8,10 +8,10 @@ import { ConfirmService } from '../confirm.service';
 import { Observable } from 'rxjs/Observable';
 import { IncomeService } from '../income.service';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LOCALE_ID } from '@angular/core';
 import { ChargeModel } from '../models/charge.model';
 import { ChargeService } from '../charge.service';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('PersonResourcesComponent', () => {
   const incomes = [
@@ -56,7 +56,7 @@ describe('PersonResourcesComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule, RouterTestingModule, NgbModule.forRoot()],
+    imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
     declarations: [PersonResourcesComponent],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },

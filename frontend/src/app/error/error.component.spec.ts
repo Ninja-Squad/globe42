@@ -4,7 +4,7 @@ import { ErrorComponent } from './error.component';
 import { ErrorService } from '../error.service';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('ErrorComponent', () => {
 
@@ -17,7 +17,7 @@ describe('ErrorComponent', () => {
     fakeRouter = {events: new Subject<any>()};
 
     TestBed.configureTestingModule({
-      imports: [NgbModule.forRoot()],
+      imports: [GlobeNgbModule.forRoot()],
       declarations: [ErrorComponent],
       providers: [
         {provide: Router, useValue: fakeRouter},
