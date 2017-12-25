@@ -6,13 +6,13 @@ buildscript {
 
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M7'
-        classpath 'org.flywaydb:flyway-gradle-plugin:4.2.0'
+        classpath 'org.flywaydb:flyway-gradle-plugin:5.0.3'
         classpath 'org.postgresql:postgresql:9.4.1212'
     }
 }
 
 plugins {
-    id "org.flywaydb.flyway" version "4.2.0"
+    id "org.flywaydb.flyway" version "5.0.3"
     id "com.gorylenko.gradle-git-properties" version "1.4.17"
 }
 
@@ -61,7 +61,7 @@ dependencies {
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
 
     runtime 'org.postgresql:postgresql:42.1.4'
-    runtime 'org.flywaydb:flyway-core'
+    runtime 'org.flywaydb:flyway-core:5.0.3'
 }
 
 // remove default tasks added by flyway plugin
