@@ -54,7 +54,7 @@ describe('ChargeCategoryEditComponent', () => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
-        expect(fixture.componentInstance.chargeCategory).toEqual({ name: 'rental' });
+        expect(fixture.componentInstance.chargeCategory).toEqual({name: 'rental'});
 
         const nativeElement = fixture.nativeElement;
         const type = nativeElement.querySelector('#name');
@@ -62,11 +62,10 @@ describe('ChargeCategoryEditComponent', () => {
 
         type.value = 'Charges locatives';
         type.dispatchEvent(new Event('input'));
-        nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
-        fixture.detectChanges();
+
+        nativeElement.querySelector('#save').click();
 
         expect(chargeCategoryService.update).toHaveBeenCalledWith(42, { name: 'Charges locatives' });
-
         expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');
       });
     }));
@@ -107,9 +106,7 @@ describe('ChargeCategoryEditComponent', () => {
       type.value = 'Charges locatives';
 
       type.dispatchEvent(new Event('input'));
-      nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
-      fixture.detectChanges();
-      tick();
+      nativeElement.querySelector('#save').click();
 
       expect(chargeCategoryService.create).toHaveBeenCalledWith({ name: 'Charges locatives' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');

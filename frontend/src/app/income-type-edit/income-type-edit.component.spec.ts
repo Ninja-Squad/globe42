@@ -64,8 +64,7 @@ describe('IncomeTypeEditComponent', () => {
 
         type.value = 'Caisse Allocations Familiales';
         type.dispatchEvent(new Event('input'));
-        nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
-        fixture.detectChanges();
+        nativeElement.querySelector('#save').click();
 
         expect(incomeSourceTypeService.update).toHaveBeenCalledWith(42, { type: 'Caisse Allocations Familiales' });
 
@@ -109,9 +108,7 @@ describe('IncomeTypeEditComponent', () => {
       type.value = 'CAF';
 
       type.dispatchEvent(new Event('input'));
-      nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
-      fixture.detectChanges();
-      tick();
+      nativeElement.querySelector('#save').click();
 
       expect(incomeSourceTypeService.create).toHaveBeenCalledWith({ type: 'CAF' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');

@@ -225,8 +225,7 @@ describe('PersonEditComponent', () => {
 
       lastName.value = 'Do';
       lastName.dispatchEvent(new Event('input'));
-      nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
-      fixture.detectChanges();
+      nativeElement.querySelector('#save').click();
 
       expect(personService.update).toHaveBeenCalled();
 
@@ -527,7 +526,7 @@ describe('PersonEditComponent', () => {
       fiscalStatusUpToDate.checked = true;
       fiscalStatusUpToDate.dispatchEvent(new Event('change'));
 
-      nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+      nativeElement.querySelector('#save').click();
       fixture.detectChanges();
       tick();
       expect(entryDate.value).toBe('02/02/2015');

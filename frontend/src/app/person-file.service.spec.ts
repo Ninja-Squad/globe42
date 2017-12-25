@@ -43,7 +43,11 @@ describe('PersonFileService', () => {
 
     const testRequest = http.expectOne({ url: '/api/persons/1/files', method: 'POST' });
     const body: FormData = testRequest.request.body;
-    expect(body.has('file')).toBeTruthy();
+
+    // Safari sucks: it doesn't support inspecting the form data
+    if (!window.navigator.userAgent.includes('Safari/')) {
+      expect(body.has('file')).toBeTruthy();
+    }
 
     const expected: FileModel = {
       name: 'test 1.txt',
