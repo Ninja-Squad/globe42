@@ -12,8 +12,6 @@ import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
 import { ConfirmService } from '../confirm.service';
 import { HttpClientModule } from '@angular/common/http';
-import { UserService } from '../user.service';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -23,6 +21,7 @@ import { DurationPipe } from '../duration.pipe';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import { CurrentUserModule } from '../current-user/current-user.module';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -72,7 +71,7 @@ describe('TasksComponent', () => {
     TestBed.overrideTemplate(SpentTimesComponent, '');
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientModule, NgbModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModule.forRoot()],
       declarations: [
         TestComponent,
         TasksComponent,
@@ -85,9 +84,7 @@ describe('TasksComponent', () => {
         NowService,
         TaskService,
         TasksResolverService,
-        ConfirmService,
-        UserService,
-        JwtInterceptorService
+        ConfirmService
       ]
     });
 

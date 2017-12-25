@@ -6,13 +6,12 @@ import { TaskModel } from '../models/task.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
 import { NowService } from '../now.service';
-import { UserService } from '../user.service';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import { CurrentUserModule } from '../current-user/current-user.module';
 
 @Component({
   template: `<gl-spent-time-add [taskModel]="task"
@@ -44,11 +43,9 @@ describe('SpentTimeAddComponent', () => {
       declarations: [SpentTimeAddComponent, TestComponent],
       providers: [
         TaskService,
-        NowService,
-        UserService,
-        JwtInterceptorService
+        NowService
       ],
-      imports: [HttpClientModule, FormsModule]
+      imports: [CurrentUserModule.forRoot(), HttpClientModule, FormsModule]
     });
 
     fixture = TestBed.createComponent(TestComponent);

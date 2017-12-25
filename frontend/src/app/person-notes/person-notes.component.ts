@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from '../user.service';
 import { PersonNoteService } from '../person-note.service';
 import { ConfirmService } from '../confirm.service';
 import { DateTime } from 'luxon';
@@ -11,6 +10,7 @@ import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/debounceTime';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 @Component({
   selector: 'gl-person-notes',
@@ -28,7 +28,7 @@ export class PersonNotesComponent implements OnInit {
   editedNote: NoteModel;
 
   constructor(private personNoteService: PersonNoteService,
-              private userService: UserService,
+              private currentUserService: CurrentUserService,
               private confirmService: ConfirmService) { }
 
   ngOnInit(): void {
@@ -47,7 +47,7 @@ export class PersonNotesComponent implements OnInit {
       id: null,
       text: '',
       creationInstant: DateTime.utc().toISO(),
-      creator: this.userService.userEvents.getValue()
+      creator: this.currentUserService.userEvents.getValue()
     };
     this.notes.push(this.editedNote);
   }

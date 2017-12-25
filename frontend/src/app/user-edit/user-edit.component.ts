@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../user.service';
 import { UserCommand } from '../models/user.command';
 import { UserWithPasswordModel } from '../models/user-with-password.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { ErrorService } from '../error.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'gl-user-edit',

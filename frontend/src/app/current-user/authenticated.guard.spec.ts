@@ -1,25 +1,24 @@
 import { AuthenticatedGuard } from './authenticated.guard';
 import { RouterTestingModule } from '@angular/router/testing';
-import { UserService } from './user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { JwtInterceptorService } from './jwt-interceptor.service';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { CurrentUserModule } from './current-user.module';
+import { CurrentUserService } from './current-user.service';
 
 describe('AuthenticatedGuard', () => {
 
   let guard: AuthenticatedGuard;
-  let userService: UserService;
+  let userService: CurrentUserService;
   let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AuthenticatedGuard, UserService, JwtInterceptorService],
-      imports: [RouterTestingModule, HttpClientTestingModule]
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     });
 
     guard = TestBed.get(AuthenticatedGuard);
-    userService = TestBed.get(UserService);
+    userService = TestBed.get(CurrentUserService);
     router = TestBed.get(Router);
 
   });

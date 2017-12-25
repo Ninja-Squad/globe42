@@ -7,7 +7,7 @@ import { PersonEditComponent } from './person-edit/person-edit.component';
 import { PersonResolverService } from './person-resolver.service';
 import { PersonsResolverService } from './persons-resolver.service';
 import { LoginComponent } from './login/login.component';
-import { AuthenticatedGuard } from './authenticated.guard';
+import { AuthenticatedGuard } from './current-user/authenticated.guard';
 import { IncomeTypesComponent } from './income-types/income-types.component';
 import { IncomeTypesResolverService } from './income-types-resolver.service';
 import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';

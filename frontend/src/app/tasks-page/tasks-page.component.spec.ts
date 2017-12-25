@@ -16,12 +16,11 @@ import 'rxjs/add/observable/of';
 import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
 import { HttpClientModule } from '@angular/common/http';
-import { UserService } from '../user.service';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { SpentTimesComponent } from '../spent-times/spent-times.component';
 import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.component';
 import { DurationPipe } from '../duration.pipe';
 import { UserModel } from '../models/user.model';
+import { CurrentUserModule } from '../current-user/current-user.module';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -82,7 +81,7 @@ describe('TasksPageComponent', () => {
     TestBed.overrideTemplate(SpentTimesComponent, '');
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
       declarations: [
         TasksPageComponent,
         TasksComponent,
@@ -95,8 +94,6 @@ describe('TasksPageComponent', () => {
         NowService,
         TaskService,
         TasksResolverService,
-        UserService,
-        JwtInterceptorService,
         { provide: ActivatedRoute, useFactory: () => activatedRoute }
       ]
     });

@@ -1,25 +1,23 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { PasswordChangeComponent } from './password-change.component';
-import { UserService } from '../user.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { CurrentUserModule } from '../current-user/current-user.module';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 describe('PasswordChangeComponent', () => {
 
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule, FormsModule],
+    imports: [CurrentUserModule.forRoot(), HttpClientModule, FormsModule],
     declarations: [PasswordChangeComponent],
     providers: [
-      { provide: Router, useValue: fakeRouter },
-      UserService,
-      JwtInterceptorService
+      { provide: Router, useValue: fakeRouter }
     ]
   })));
 
@@ -94,7 +92,7 @@ describe('PasswordChangeComponent', () => {
 
     fixture.detectChanges();
 
-    const userService = TestBed.get(UserService);
+    const userService = TestBed.get(CurrentUserService);
     spyOn(userService, 'checkPassword').and.returnValue(Observable.of(null));
     spyOn(userService, 'changePassword').and.returnValue(Observable.of(null));
 
@@ -118,7 +116,7 @@ describe('PasswordChangeComponent', () => {
 
     fixture.detectChanges();
 
-    const userService = TestBed.get(UserService);
+    const userService = TestBed.get(CurrentUserService);
     spyOn(userService, 'checkPassword').and.returnValue(Observable.throw(null));
     spyOn(userService, 'changePassword');
 
@@ -141,7 +139,7 @@ describe('PasswordChangeComponent', () => {
 
     fixture.detectChanges();
 
-    const userService = TestBed.get(UserService);
+    const userService = TestBed.get(CurrentUserService);
     spyOn(userService, 'checkPassword').and.returnValue(Observable.of(null));
     spyOn(userService, 'changePassword').and.returnValue(Observable.throw(null));
 

@@ -22,7 +22,6 @@ import { DisplayCityPipe } from './display-city.pipe';
 import { DisplayGenderPipe } from './display-gender.pipe';
 import { LoginComponent } from './login/login.component';
 import { UserService } from './user.service';
-import { AuthenticatedGuard } from './authenticated.guard';
 import { IncomeTypesComponent } from './income-types/income-types.component';
 import { IncomeTypesResolverService } from './income-types-resolver.service';
 import { IncomeTypeEditComponent } from './income-type-edit/income-type-edit.component';
@@ -33,7 +32,6 @@ import { UsersResolverService } from './users-resolver.service';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserResolverService } from './user-resolver.service';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
-import { JwtInterceptorService } from './jwt-interceptor.service';
 import { DisplayMaritalStatusPipe } from './display-marital-status.pipe';
 import { IncomeSourcesComponent } from './income-sources/income-sources.component';
 import { IncomeSourcesResolverService } from './income-sources-resolver.service';
@@ -104,6 +102,7 @@ import { SpentTimeAddComponent } from './spent-time-add/spent-time-add.component
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 import { DateStringAdapterService } from './date-string-adapter.service';
+import { CurrentUserModule } from './current-user/current-user.module';
 
 registerLocaleData(localeFr);
 
@@ -175,7 +174,8 @@ registerLocaleData(localeFr);
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    CurrentUserModule.forRoot()
   ],
   providers: [
     PersonService,
@@ -186,7 +186,6 @@ registerLocaleData(localeFr);
     PersonsResolverService,
     { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
     { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
-    AuthenticatedGuard,
     IncomeTypesResolverService,
     IncomeSourceTypeService,
     IncomeSourceService,
@@ -205,13 +204,7 @@ registerLocaleData(localeFr);
     ChargeService,
     ChargesResolverService,
     UserResolverService,
-    JwtInterceptorService,
     ErrorService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useExisting: JwtInterceptorService,
-      multi: true
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useExisting: ErrorService,

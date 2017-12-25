@@ -8,9 +8,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { PersonIdentityModel } from '../models/person.model';
 import { UserModel } from '../models/user.model';
-import { UserService } from '../user.service';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { TaskService } from '../task.service';
 import { NowService } from '../now.service';
 import { Observable } from 'rxjs/Observable';
@@ -18,6 +16,8 @@ import { TaskModel } from '../models/task.model';
 import { FrenchDateParserFormatterService } from '../french-date-parser-formatter.service';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { DateStringAdapterService } from '../date-string-adapter.service';
+import { CurrentUserModule } from '../current-user/current-user.module';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 describe('TaskEditComponent', () => {
 
@@ -57,14 +57,12 @@ describe('TaskEditComponent', () => {
     } as any;
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
+      imports: [CurrentUserModule.forRoot(), FormsModule, RouterTestingModule, NgbModule.forRoot(), HttpClientModule],
       declarations: [TaskEditComponent],
       providers: [
         TaskService,
         NowService,
         FullnamePipe,
-        UserService,
-        JwtInterceptorService,
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
         { provide: NgbDateAdapter, useClass: DateStringAdapterService }
@@ -72,7 +70,7 @@ describe('TaskEditComponent', () => {
     });
 
     // different object on purpose
-    TestBed.get(UserService).userEvents.next({id: 3, login: 'admin', admin: false});
+    TestBed.get(CurrentUserService).userEvents.next({id: 3, login: 'admin', admin: false});
   }
 
   describe('creation mode', () => {

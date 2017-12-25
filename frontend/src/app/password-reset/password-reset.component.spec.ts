@@ -3,12 +3,11 @@ import { async, TestBed } from '@angular/core/testing';
 import { PasswordResetComponent } from './password-reset.component';
 import { UserModel } from '../models/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../user.service';
 import { Observable } from 'rxjs/Observable';
 import { UserWithPasswordModel } from '../models/user-with-password.model';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { UserService } from '../user.service';
 
 describe('PasswordResetComponent', () => {
   const user: UserModel = {id: 42, login: 'jb', admin: false};
@@ -21,10 +20,9 @@ describe('PasswordResetComponent', () => {
     imports: [ HttpClientModule, NgbModule.forRoot() ],
     declarations: [ PasswordResetComponent ],
     providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: Router, useValue: fakeRouter },
       UserService,
-      JwtInterceptorService
+      { provide: ActivatedRoute, useValue: activatedRoute },
+      { provide: Router, useValue: fakeRouter }
     ]
   })));
 

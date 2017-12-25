@@ -12,8 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import 'rxjs/add/observable/of';
 import { DurationPipe } from '../duration.pipe';
 import { NowService } from '../now.service';
-import { UserService } from '../user.service';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { CurrentUserModule } from '../current-user/current-user.module';
 import Spy = jasmine.Spy;
 
 @Component({
@@ -98,11 +97,9 @@ describe('SpentTimesComponent', () => {
         providers: [
           TaskService,
           NowService,
-          UserService,
-          JwtInterceptorService,
           { provide: LOCALE_ID, useValue: 'fr-FR' }
         ],
-        imports: [HttpClientModule]
+        imports: [CurrentUserModule.forRoot(), HttpClientModule]
       });
 
       const taskService = TestBed.get(TaskService);

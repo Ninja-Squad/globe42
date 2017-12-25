@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { ConfirmService } from '../confirm.service';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -13,6 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
+import { CurrentUserModule } from '../current-user/current-user.module';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 describe('UsersComponent', () => {
   const users: Array<UserModel> = [
@@ -23,22 +24,23 @@ describe('UsersComponent', () => {
     snapshot: { data: { users } }
   };
 
+  let currentUserService;
   let userService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientModule, NgbModalModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModalModule.forRoot()],
       declarations: [UsersComponent],
       providers: [
         {provide: ActivatedRoute, useValue: activatedRoute},
         UserService,
-        JwtInterceptorService,
         ConfirmService
       ]
     });
 
     userService = TestBed.get(UserService);
-    userService.userEvents = new BehaviorSubject<UserModel>({ id: 42 } as UserModel);
+    currentUserService = TestBed.get(CurrentUserService);
+    currentUserService.userEvents = new BehaviorSubject<UserModel>({ id: 42 } as UserModel);
   }));
 
   it('should expose sorted users', () => {

@@ -5,8 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NoteComponent } from '../note/note.component';
 import { PersonNoteService } from '../person-note.service';
-import { UserService } from '../user.service';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
 import { PersonModel } from '../models/person.model';
 import { NoteModel } from '../models/note.model';
 import { Observable } from 'rxjs/Observable';
@@ -16,6 +14,8 @@ import 'rxjs/add/operator/debounceTime';
 import { Subject } from 'rxjs/Subject';
 import { By } from '@angular/platform-browser';
 import { UserModel } from '../models/user.model';
+import { CurrentUserModule } from '../current-user/current-user.module';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 describe('PersonNotesComponent', () => {
 
@@ -24,12 +24,10 @@ describe('PersonNotesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpClientModule, NgbModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), FormsModule, HttpClientModule, NgbModule.forRoot()],
       declarations: [PersonNotesComponent, NoteComponent],
       providers: [
         PersonNoteService,
-        UserService,
-        JwtInterceptorService,
         ConfirmService
       ]
     });
@@ -55,7 +53,7 @@ describe('PersonNotesComponent', () => {
       }
     ];
 
-    const userService = TestBed.get(UserService);
+    const userService = TestBed.get(CurrentUserService);
     userService.userEvents.next({ login: 'admin' } as UserModel);
   }));
 

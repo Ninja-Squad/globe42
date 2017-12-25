@@ -6,27 +6,27 @@ import { TaskModel } from './models/task.model';
 import { Observable } from 'rxjs/Observable';
 import { NowService } from './now.service';
 import { Page } from './models/page';
-import { UserService } from './user.service';
-import { JwtInterceptorService } from './jwt-interceptor.service';
 import { SpentTimeModel } from './models/spent-time.model';
 import { HttpTester } from './http-tester.spec';
 import { UserModel } from './models/user.model';
 import { TaskCategoryModel } from './models/task-category.model';
+import { CurrentUserModule } from './current-user/current-user.module';
+import { CurrentUserService } from './current-user/current-user.service';
 import { DateTime } from 'luxon';
 
 describe('TaskService', () => {
   let service: TaskService;
   let httpTester: HttpTester;
-  let userService: UserService;
+  let currentUserService: CurrentUserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UserService, JwtInterceptorService, NowService, TaskService],
-      imports: [ HttpClientTestingModule ]
+      providers: [NowService, TaskService],
+      imports: [ CurrentUserModule.forRoot(), HttpClientTestingModule ]
     });
 
     service = TestBed.get(TaskService);
-    userService = TestBed.get(UserService);
+    currentUserService = TestBed.get(CurrentUserService);
     httpTester = new HttpTester(TestBed.get(HttpTestingController));
     spyOn(TestBed.get(NowService), 'now').and.callFake(() => DateTime.fromISO('2017-08-02T15:30:00'));
   });
@@ -64,7 +64,7 @@ describe('TaskService', () => {
   });
 
   it('should assign to current user', () => {
-    userService.userEvents.next({ id : 42 } as UserModel);
+    currentUserService.userEvents.next({ id : 42 } as UserModel);
     httpTester.testPost('/api/tasks/1/assignments', { userId: 42 }, null, service.assignToSelf(1));
   });
 

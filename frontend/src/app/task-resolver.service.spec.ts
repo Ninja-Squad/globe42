@@ -7,13 +7,12 @@ import { Observable } from 'rxjs/Observable';
 import { TaskModel } from './models/task.model';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { NowService } from './now.service';
-import { UserService } from './user.service';
-import { JwtInterceptorService } from './jwt-interceptor.service';
+import { CurrentUserModule } from './current-user/current-user.module';
 
 describe('TaskResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [TaskResolverService, TaskService, NowService, UserService, JwtInterceptorService],
-    imports: [HttpClientModule]
+    providers: [TaskResolverService, TaskService, NowService],
+    imports: [CurrentUserModule.forRoot(), HttpClientModule]
   }));
 
   it('should resolve a task', () => {

@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
 import { LoginComponent } from './login.component';
-import { UserService } from '../user.service';
 import { FormsModule } from '@angular/forms';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 describe('LoginComponent', () => {
 
@@ -15,7 +15,7 @@ describe('LoginComponent', () => {
     imports: [FormsModule],
     declarations: [LoginComponent],
     providers: [
-      { provide: UserService, useValue: fakeUserService },
+      { provide: CurrentUserService, useValue: fakeUserService },
       { provide: Router, useValue: fakeRouter }
     ]
   })));

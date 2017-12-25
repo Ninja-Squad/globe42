@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { sortBy } from '../utils';
 import { ConfirmService } from '../confirm.service';
-import { UserService } from '../user.service';
 import 'rxjs/add/operator/switchMap';
+import { UserService } from '../user.service';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 @Component({
   selector: 'gl-users',
@@ -17,7 +18,8 @@ export class UsersComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private confirmService: ConfirmService,
-              private userService: UserService) { }
+              private userService: UserService,
+              private currentUserService: CurrentUserService) { }
 
   ngOnInit() {
     this.users = sortBy<UserModel>(this.route.snapshot.data['users'], u => u.login);
@@ -31,6 +33,6 @@ export class UsersComponent implements OnInit {
   }
 
   isCurrentUser(user) {
-    return this.userService.userEvents.getValue().id === user.id;
+    return this.currentUserService.userEvents.getValue().id === user.id;
   }
 }

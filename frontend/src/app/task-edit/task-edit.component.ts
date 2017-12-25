@@ -7,11 +7,11 @@ import { FullnamePipe } from '../fullname.pipe';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { UserModel } from '../models/user.model';
-import { UserService } from '../user.service';
 import { sortBy } from '../utils';
 import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { PersonTypeahead } from '../person/person-typeahead';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 interface TaskFormModel {
   title: string;
@@ -50,7 +50,7 @@ export class TaskEditComponent implements OnInit {
               private taskService: TaskService,
               private router: Router,
               private fullnamePipe: FullnamePipe,
-              private userService: UserService) { }
+              private currentUserService: CurrentUserService) { }
 
   ngOnInit() {
     this.editedTask = this.route.snapshot.data.task;
@@ -103,14 +103,14 @@ export class TaskEditComponent implements OnInit {
   }
 
   formatUser(user: UserModel) {
-    if (user.id === this.userService.userEvents.getValue().id) {
+    if (user.id === this.currentUserService.userEvents.getValue().id) {
       return 'Moi';
     }
     return user.login;
   }
 
   private sortUsers(users: Array<UserModel>): Array<UserModel> {
-    const me = users.filter(u => u.id === this.userService.userEvents.getValue().id)[0];
+    const me = users.filter(u => u.id === this.currentUserService.userEvents.getValue().id)[0];
     const result = sortBy(users.filter(u => u !== me), u => u.login);
     result.unshift(me);
     return result;

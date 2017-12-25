@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { UserService } from '../user.service';
 import { UserModel } from '../models/user.model';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 @Component({
   selector: 'gl-menu',
@@ -16,11 +16,11 @@ export class MenuComponent implements OnInit, OnDestroy {
   user: UserModel | null;
   userEventsSubscription: Subscription;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private currentUserService: CurrentUserService, private router: Router) {
   }
 
   ngOnInit() {
-    this.userEventsSubscription = this.userService.userEvents
+    this.userEventsSubscription = this.currentUserService.userEvents
       .subscribe(user => this.user = user);
   }
 
@@ -36,7 +36,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   logout(event) {
     event.preventDefault();
-    this.userService.logout();
+    this.currentUserService.logout();
     this.router.navigate(['/']);
   }
 

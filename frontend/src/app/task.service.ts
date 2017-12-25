@@ -4,11 +4,11 @@ import { Observable } from 'rxjs/Observable';
 import { TaskModel } from './models/task.model';
 import { NowService } from './now.service';
 import { Page } from './models/page';
-import { UserService } from './user.service';
 import { TaskCommand } from './models/task.command';
 import { SpentTimeModel } from './models/spent-time.model';
 import { sortBy } from './utils';
 import { TaskCategoryModel } from './models/task-category.model';
+import { CurrentUserService } from './current-user/current-user.service';
 
 function pageParams(pageNumber: number): HttpParams {
   return new HttpParams().set('page', pageNumber.toString());
@@ -19,7 +19,7 @@ export class TaskService {
 
   constructor(private http: HttpClient,
               private nowService: NowService,
-              private userService: UserService) { }
+              private userService: CurrentUserService) { }
 
   listTodo(pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber)});

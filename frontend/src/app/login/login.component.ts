@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserService } from '../user.service';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 @Component({
   selector: 'gl-login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   };
   authenticationFailed = false;
 
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router, private currentUserService: CurrentUserService) {
   }
 
   ngOnInit() {
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   authenticate() {
     this.authenticationFailed = false;
-    this.userService.authenticate(this.credentials)
+    this.currentUserService.authenticate(this.credentials)
       .subscribe(
         () => this.router.navigate(['/']),
         () => this.authenticationFailed = true

@@ -3,18 +3,17 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HomeComponent } from './home.component';
 import { UserModel } from '../models/user.model';
-import { UserService } from '../user.service';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtInterceptorService } from '../jwt-interceptor.service';
+import { CurrentUserModule } from '../current-user/current-user.module';
+import { CurrentUserService } from '../current-user/current-user.service';
 
 describe('HomeComponent', () => {
 
-  const fakeUserService = { userEvents: new BehaviorSubject<UserModel>(undefined) } as UserService;
+  const fakeUserService = { userEvents: new BehaviorSubject<UserModel>(undefined) } as CurrentUserService;
 
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientModule],
-    declarations: [HomeComponent],
-    providers: [UserService, JwtInterceptorService]
+    imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule],
+    declarations: [HomeComponent]
   }));
 
   it('display a link to go the login', () => {
