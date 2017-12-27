@@ -182,6 +182,14 @@ public class PersonController {
 
         if (spouseId != null && (currentSpouse == null || !currentSpouse.getId().equals(spouseId))) {
             Person newSpouse = personDao.findById(spouseId).orElseThrow(() -> new BadRequestException("No person with ID " + spouseId));
+
+            Couple newSpouseCurrentCouple = newSpouse.getCouple();
+            if (newSpouseCurrentCouple != null) {
+                newSpouse.getSpouse().setCouple(null);
+                newSpouse.setCouple(null);
+                coupleDao.delete(newSpouseCurrentCouple);
+            }
+
             Couple newCouple = new Couple(person, newSpouse);
             coupleDao.save(newCouple);
         }

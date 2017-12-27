@@ -256,6 +256,29 @@ public class PersonControllerTest extends BaseTest {
         assertThat(previousSpouse.getSpouse()).isNull();
     }
 
+    @Test
+    public void shouldDeleteCoupleOfNewSpouse() {
+        long spouseId = 200L;
+        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
+
+        Person agnes = new Person(spouseId);
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+
+        Person previousSpouseOfAgnes = new Person(100L);
+        Couple previousCoupleOfAgnes = new Couple(person, previousSpouseOfAgnes);
+
+        controller.update(person.getId(), command);
+
+        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
+        assertThat(person.getSpouse()).isEqualTo(agnes);
+        assertThat(agnes.getSpouse()).isEqualTo(person);
+
+        assertThat(previousSpouseOfAgnes.getSpouse()).isNull();
+        verify(mockCoupleDao).delete(previousCoupleOfAgnes);
+    }
+
     @Test(expected = NotFoundException.class)
     public void shouldThrowIfNotFoundWhenUpdating() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
