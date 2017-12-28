@@ -310,6 +310,54 @@ describe('PersonEditComponent', () => {
       fixture.detectChanges();
       expect(component.personForm.contains('abroadFamilySituation')).toBeFalsy();
     });
+
+    it('should warn if selecting a spouse already in couple with someone else', () => {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      fixture.detectChanges();
+      const nativeElement = fixture.nativeElement;
+      const component = fixture.componentInstance;
+
+      const personService = TestBed.get(PersonService);
+      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: { id: 54 } }));
+
+      component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
+      fixture.detectChanges();
+
+      expect(component.spouseIsInCouple).toBe(true);
+      expect(nativeElement.textContent).toContain(`Jackie Doe est déjà en couple avec quelqu'un d'autre`);
+    });
+
+    it('should not warn if selecting a spouse not already in couple with someone else', () => {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      fixture.detectChanges();
+      const nativeElement = fixture.nativeElement;
+      const component = fixture.componentInstance;
+
+      const personService = TestBed.get(PersonService);
+      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: null }));
+
+      component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
+      fixture.detectChanges();
+
+      expect(component.spouseIsInCouple).toBe(false);
+      expect(nativeElement.textContent).not.toContain(`Jackie Doe est déjà en couple avec quelqu'un d'autre`);
+    });
+
+    it('should not warn if selecting the current spouse of the edited person', () => {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      fixture.detectChanges();
+      const nativeElement = fixture.nativeElement;
+      const component = fixture.componentInstance;
+
+      const personService = TestBed.get(PersonService);
+      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: { id: 42 } }));
+
+      component.personForm.get('spouse').setValue({ id: 43, firstName: 'Jane', lastName: 'Doe' });
+      fixture.detectChanges();
+
+      expect(component.spouseIsInCouple).toBe(false);
+      expect(nativeElement.textContent).not.toContain(`Jane Doe est déjà en couple avec quelqu'un d'autre`);
+    });
   });
 
   describe('in create mode', () => {
@@ -475,6 +523,7 @@ describe('PersonEditComponent', () => {
       maritalStatus.dispatchEvent(new Event('change'));
 
       // trigger city typeahead
+      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: null }));
       spouse.value = 'Jane';
       spouse.dispatchEvent(new Event('input'));
       fixture.detectChanges();

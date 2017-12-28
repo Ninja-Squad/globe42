@@ -14,6 +14,9 @@ import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-covera
 import { PersonTypeahead } from '../person/person-typeahead';
 import { FullnamePipe } from '../fullname.pipe';
 import { CityTypeahead } from './city-typeahead';
+import { Observable } from 'rxjs/Observable';
+import { sortBy } from '../utils';
+import 'rxjs/add/observable/empty';
 
 @Component({
   selector: 'gl-person-edit',
@@ -35,6 +38,8 @@ export class PersonEditComponent {
   cityTypeahead: CityTypeahead;
   spouseTypeahead: PersonTypeahead;
 
+  spouseIsInCouple = false;
+
   private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
     if (!ctrl.value) {
       return null;
@@ -55,6 +60,7 @@ export class PersonEditComponent {
     if (this.editedPerson) {
       persons = persons.filter(p => p.id !== this.editedPerson.id);
     }
+    persons = sortBy(persons, p => fullnamePipe.transform(p));
 
     this.cityTypeahead = new CityTypeahead(this.searchCityService, this.displayCityPipe);
     this.spouseTypeahead = new PersonTypeahead(persons, this.fullnamePipe);
@@ -99,6 +105,12 @@ export class PersonEditComponent {
 
       this.personForm.patchValue(this.editedPerson);
     }
+
+    this.personForm.get('spouse').valueChanges
+      .do(() => this.spouseIsInCouple = false)
+      .switchMap(spouse => spouse ? this.personService.get(spouse.id) : Observable.empty<PersonModel>())
+      .subscribe(spouse =>
+        this.spouseIsInCouple = !!(spouse.spouse && (!this.editedPerson || (spouse.spouse.id !== this.editedPerson.id))));
   }
 
   showFrenchFamilySituation() {

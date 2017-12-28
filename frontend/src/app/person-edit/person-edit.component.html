@@ -161,6 +161,10 @@
         <input class="form-control" formControlName="spouse" id="spouse"
                [ngbTypeahead]="spouseTypeahead.searcher" [resultFormatter]="spouseTypeahead.formatter"
                [inputFormatter]="spouseTypeahead.formatter" [editable]="false" />
+        <div class="warning-feedback" *ngIf="spouseIsInCouple">
+          <span class="fa fa-warning"></span>
+          {{ personForm.value.spouse | fullname }} est déjà en couple avec quelqu'un d'autre
+        </div>
       </div>
     </div>
 

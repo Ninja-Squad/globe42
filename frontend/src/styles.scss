@@ -20,6 +20,12 @@ h1 {
   }
 }
 
+.warning-feedback {
+  margin-top: .25rem;
+  font-size: .875rem;
+  color: $warning;
+}
+
 .btn-group label {
   margin-bottom: 0;
 }
