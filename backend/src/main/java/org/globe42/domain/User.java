@@ -50,6 +50,11 @@ public class User {
         this.id = id;
     }
 
+    public User(Long id, String login) {
+        this.id = id;
+        this.login = login;
+    }
+
     public Long getId() {
         return id;
     }
