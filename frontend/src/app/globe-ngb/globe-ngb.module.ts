@@ -8,10 +8,13 @@ import { FrenchDateParserFormatterService } from './french-date-parser-formatter
 import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date-struct';
 
-const DATEPICKER_CONFIG = {
-  minDate: { year: 1900, month: 1, day: 1 },
-  maxDate: { year: 2099, month: 12, day: 31 }
-} as NgbDatepickerConfig;
+export class GlobeNgbDatepickerConfig extends NgbDatepickerConfig {
+  constructor() {
+    super();
+    this.minDate = { year: 1900, month: 1, day: 1 };
+    this.maxDate = { year: 2099, month: 12, day: 31 };
+  }
+}
 
 @NgModule({
   imports: [
@@ -37,7 +40,7 @@ export class GlobeNgbModule {
     { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
     { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
     { provide: NgbDateAdapter, useClass: DateStringAdapterService },
-    { provide: NgbDatepickerConfig, useValue: DATEPICKER_CONFIG }
+    { provide: NgbDatepickerConfig, useClass: GlobeNgbDatepickerConfig }
   ]
 })
 export class GlobeNgbRootModule {}
