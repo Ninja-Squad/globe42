@@ -4,18 +4,20 @@ import { FullnamePipe } from '../fullname.pipe';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
+import { sortBy } from '../utils';
 
 /**
  * Class used to help implementing a person typeahead
  */
 export class PersonTypeahead {
 
+  persons: Array<PersonIdentityModel>;
   searcher: (text$: Observable<string>) => Observable<Array<PersonIdentityModel>>;
   formatter: (result: PersonIdentityModel) => string;
 
-  constructor(public persons: Array<PersonIdentityModel>,
+  constructor(persons: Array<PersonIdentityModel>,
               private fullnamePipe: FullnamePipe) {
-
+    this.persons = sortBy(persons, p => fullnamePipe.transform(p));
     this.searcher = (text$: Observable<string>) =>
       text$
         .debounceTime(200)

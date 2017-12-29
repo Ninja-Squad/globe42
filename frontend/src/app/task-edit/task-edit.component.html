@@ -39,10 +39,9 @@
   <div class="form-group row">
     <label for="title" class="col-sm-3 col-form-label">Concerne</label>
     <div class="col-sm-9">
-      <input #concernedPersonInput class="form-control" id="concernedPerson" name="concernedPerson" [(ngModel)]="task.concernedPerson"
+      <input class="form-control" id="concernedPerson" name="concernedPerson" [(ngModel)]="task.concernedPerson"
              [ngbTypeahead]="personTypeahead.searcher" [resultFormatter]="personTypeahead.formatter"
-             [inputFormatter]="personTypeahead.formatter" [editable]="false"
-             (blur)="clearIfNoPerson(concernedPersonInput)" [class.is-warning]="concernedPersonInput.value && !task.concernedPerson" />
+             [inputFormatter]="personTypeahead.formatter" [editable]="false" />
     </div>
   </div>
   <div class="form-group row">

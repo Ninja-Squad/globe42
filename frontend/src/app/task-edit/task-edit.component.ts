@@ -96,12 +96,6 @@ export class TaskEditComponent implements OnInit {
     }
   }
 
-  clearIfNoPerson(concernedPersonInput: HTMLInputElement) {
-    if (!this.task.concernedPerson) {
-      concernedPersonInput.value = '';
-    }
-  }
-
   formatUser(user: UserModel) {
     if (user.id === this.currentUserService.userEvents.getValue().id) {
       return 'Moi';

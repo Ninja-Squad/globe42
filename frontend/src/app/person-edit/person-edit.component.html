@@ -77,11 +77,9 @@
     <label for="city" class="col-sm-3 col-form-label">Ville</label>
     <ng-template #resultTemplate let-result="result">{{ result | displayCity }}</ng-template>
     <div class="col-sm-9">
-      <input #cityInput class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
-             [ngbTypeahead]="cityTypeahead.searcher" [resultTemplate]="resultTemplate" [inputFormatter]="cityTypeahead.formatter" [editable]="false"
-             (blur)="!personForm.value.city && (cityInput.value = '')"
-             [class.is-warning]="cityInput.value && !personForm.value.city && !cityTypeahead.searchFailed"
-             [class.is-invalid]="cityTypeahead.searchFailed">
+      <input class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
+             [ngbTypeahead]="cityTypeahead.searcher" [resultTemplate]="resultTemplate" [inputFormatter]="cityTypeahead.formatter"
+             [editable]="false" [class.is-invalid]="cityTypeahead.searchFailed">
     </div>
   </div>
   <div class="form-group row">
@@ -160,10 +158,9 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">En couple avec</label>
       <div class="col-sm-9">
-        <input #spouseInput class="form-control" formControlName="spouse" id="spouse"
+        <input class="form-control" formControlName="spouse" id="spouse"
                [ngbTypeahead]="spouseTypeahead.searcher" [resultFormatter]="spouseTypeahead.formatter"
-               [inputFormatter]="spouseTypeahead.formatter" [editable]="false"
-               (blur)="!personForm.value.spouse && (spouseInput.value = '')" [class.is-warning]="spouseInput.value && !personForm.value.spouse" />
+               [inputFormatter]="spouseTypeahead.formatter" [editable]="false" />
       </div>
     </div>
 
