@@ -1,18 +1,18 @@
 <div [formGroup]="situation">
-  <div class="form-check row">
+  <div class="row">
     <div class="col-sm-6 offset-sm-6">
-      <label class="form-check-label">
-        <input type="checkbox" class="form-check-input" formControlName="parentsPresent" />
-        Parents présents
-      </label>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" formControlName="parentsPresent" [id]="location + '-parents'" />
+        <label class="form-check-label" [for]="location + '-parents'">Parents présents</label>
+      </div>
     </div>
   </div>
-  <div class="form-check row">
+  <div class="row">
     <div class="col-sm-6 offset-sm-6">
-      <label class="form-check-label">
-        <input type="checkbox" class="form-check-input" formControlName="spousePresent" />
-        Époux(se) présent(e)
-      </label>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" formControlName="spousePresent" [id]="location + '-spouse'" />
+        <label class="form-check-label" [for]="location + '-spouse'">Époux(se) présent(e)</label>
+      </div>
     </div>
   </div>
   <div class="form-group row">

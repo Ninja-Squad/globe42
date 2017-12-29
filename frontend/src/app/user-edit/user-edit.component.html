@@ -18,16 +18,12 @@
     <label class="col-sm-2 col-form-label">Role</label>
     <div class="col-sm-10">
       <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="admin" id="role-no-admin" [(ngModel)]="user.admin" [value]="false">
-          Simple utilisateur
-        </label>
+        <input class="form-check-input" type="radio" name="admin" id="role-no-admin" [(ngModel)]="user.admin" [value]="false">
+        <label class="form-check-label" for="role-no-admin">Simple utilisateur</label>
       </div>
       <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="admin" id="role-admin" [(ngModel)]="user.admin" [value]="true">
-          Administrateur
-        </label>
+        <input class="form-check-input" type="radio" name="admin" id="role-admin" [(ngModel)]="user.admin" [value]="true">
+        <label class="form-check-label" for="role-admin">Administrateur</label>
       </div>
     </div>
   </div>

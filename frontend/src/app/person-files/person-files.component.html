@@ -24,10 +24,10 @@
 
 <div class="row mt-5 align-items-center">
   <div class="col">
-    <label class="custom-file" id="file-input">
-      <input [disabled]="loading || uploading" type="file" class="custom-file-input" (change)="upload($event)">
-      <span class="custom-file-control"></span>
-    </label>
+    <div class="custom-file" id="file-input">
+      <input [disabled]="loading || uploading" type="file" class="custom-file-input" (change)="upload($event)" />
+      <label class="custom-file-label">Choisir un fichier...</label>
+    </div>
   </div>
   <div class="col">
     <ngb-progressbar *ngIf="uploading" type="success" [max]="1" [value]="uploadProgress" [striped]="uploadProgress >= 1" [animated]="uploadProgress >= 1">

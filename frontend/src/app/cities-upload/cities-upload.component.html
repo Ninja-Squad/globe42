@@ -10,10 +10,10 @@
   </p>
 </ngb-alert>
 
-<label class="custom-file" *ngIf="status === 'pending'" id="file-input">
+<div class="custom-file" *ngIf="status === 'pending'" id="file-input">
   <input type="file" class="custom-file-input" (change)="upload($event)" accept=".csv">
-  <span class="custom-file-control"></span>
-</label>
+  <label class="custom-file-label">Choisir un fichier...</label>
+</div>
 
 <div *ngIf="status !== 'pending'" id="progress">
   <div class="text-center text-muted">

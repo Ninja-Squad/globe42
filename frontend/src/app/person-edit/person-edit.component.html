@@ -36,7 +36,7 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Est adhérent</label>
     <div class="col-sm-9">
-      <div class="btn-group" ngbRadioGroup name="adherent" formControlName="adherent">
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="adherent" formControlName="adherent">
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
           <input ngbButton name="adherent" id="adherent{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
         </label>
@@ -47,7 +47,7 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Genre</label>
     <div class="col-sm-9">
-      <div class="btn-group" ngbRadioGroup name="gender" formControlName="gender">
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="gender" formControlName="gender">
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let gender of genders">
           <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
         </label>
@@ -58,8 +58,8 @@
   <div class="form-group row">
     <label for="birthDate" class="col-sm-3 col-form-label">Date de naissance</label>
     <div class="col-sm-9 input-group">
-      <div class="input-group-addon" (click)="d.toggle()">
-        <i class="fa fa-calendar" aria-hidden="true"></i>
+      <div class="input-group-prepend" (click)="d.toggle()">
+        <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
       </div>
       <input class="form-control" id="birthDate" placeholder="23/12/1970"
              formControlName="birthDate" ngbDatepicker #d="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
@@ -101,7 +101,7 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Médiation activée pour cet adhérent</label>
     <div class="col-sm-9">
-      <div class="btn-group" ngbRadioGroup name="gender" formControlName="mediationEnabled">
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="gender" formControlName="mediationEnabled">
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
           <input ngbButton name="mediationEnabled" id="mediationEnabled{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
         </label>
@@ -120,8 +120,8 @@
     <div class="form-group row">
       <label for="entryDate" class="col-sm-3 col-form-label">Date d'entrée en France</label>
       <div class="col-sm-9 input-group">
-        <div class="input-group-addon" (click)="ed.toggle()">
-          <i class="fa fa-calendar" aria-hidden="true"></i>
+        <div class="input-group-prepend" (click)="ed.toggle()">
+          <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
         </div>
         <input class="form-control" id="entryDate" placeholder="01/01/2010"
                formControlName="entryDate" ngbDatepicker #ed="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
@@ -138,8 +138,8 @@
     <div class="form-group row">
       <label for="firstMediationAppointmentDate" class="col-sm-3 col-form-label">1<sup>er</sup> RDV médiation</label>
       <div class="col-sm-9 input-group">
-        <div class="input-group-addon" (click)="fd.toggle()">
-          <i class="fa fa-calendar" aria-hidden="true"></i>
+        <div class="input-group-prepend" (click)="fd.toggle()">
+          <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
         </div>
         <input class="form-control" id="firstMediationAppointmentDate" placeholder="01/01/2017"
                formControlName="firstMediationAppointmentDate" ngbDatepicker #fd="ngbDatepicker" [minDate]="{year: 2012, month: 1}">
@@ -224,7 +224,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">Situation fiscale</label>
       <div class="col-sm-9">
-        <div class="btn-group" ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
           <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let fiscalStatus of fiscalStatuses">
             <input ngbButton name="fiscalStatus" id="fiscalStatus{{ fiscalStatus }}" type="radio" [value]="fiscalStatus"> {{ fiscalStatus | displayFiscalStatus }}
           </label>
@@ -234,19 +234,19 @@
     <div class="form-group row" *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'">
       <label for="fiscalStatusDate" class="col-sm-3 col-form-label">Date de mise en place</label>
       <div class="col-sm-9 input-group">
-        <div class="input-group-addon" (click)="fsd.toggle()">
-          <i class="fa fa-calendar" aria-hidden="true"></i>
+        <div class="input-group-prepend" (click)="fsd.toggle()">
+          <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
         </div>
         <input class="form-control" id="fiscalStatusDate" placeholder="01/01/2016"
                formControlName="fiscalStatusDate" ngbDatepicker #fsd="ngbDatepicker" [minDate]="{year: 1990, month: 1}">
       </div>
     </div>
-    <div *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'" class="form-check row">
+    <div class="row">
       <div class="col-sm-9 offset-sm-3">
-        <label class="form-check-label">
+        <div *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'" class="form-check">
           <input type="checkbox" class="form-check-input" id="fiscalStatusUpToDate" formControlName="fiscalStatusUpToDate" />
-          A jour
-        </label>
+          <label class="form-check-label" for="fiscalStatusUpToDate">A jour</label>
+        </div>
       </div>
     </div>
 
