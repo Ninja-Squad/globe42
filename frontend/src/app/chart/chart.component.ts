@@ -1,4 +1,7 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { Chart, ChartConfiguration } from 'chart.js';
 
 @Component({
@@ -6,7 +9,7 @@ import { Chart, ChartConfiguration } from 'chart.js';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss']
 })
-export class ChartComponent implements AfterViewInit, OnChanges {
+export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() configuration: ChartConfiguration;
   @ViewChild('canvas') canvas: ElementRef;
@@ -19,6 +22,12 @@ export class ChartComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.createChart();
+  }
+
+  ngOnDestroy() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 
   private createChart() {

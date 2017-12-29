@@ -112,4 +112,27 @@ describe('TaskService', () => {
 
     expect(actualCategories).toEqual([{ id: 2, name: 'a' }, { id: 1, name: 'b' }]);
   });
+
+  it('should get spent time statistics', () => {
+    const expectedSpentTimeStatistics = { statistics: [] };
+    httpTester.testGet(
+      '/api/task-statistics/spent-times',
+      expectedSpentTimeStatistics,
+      service.spentTimeStatistics({ from: null, to: null }));
+
+    httpTester.testGet(
+      '/api/task-statistics/spent-times?from=2017-12-01',
+      expectedSpentTimeStatistics,
+      service.spentTimeStatistics({ from: '2017-12-01', to: null }));
+
+    httpTester.testGet(
+      '/api/task-statistics/spent-times?to=2017-12-01',
+      expectedSpentTimeStatistics,
+      service.spentTimeStatistics({ from: null, to: '2017-12-01' }));
+
+    httpTester.testGet(
+      '/api/task-statistics/spent-times?from=2017-12-01&to=2017-12-31',
+      expectedSpentTimeStatistics,
+      service.spentTimeStatistics({ from: '2017-12-01', to: '2017-12-31' }));
+  });
 });

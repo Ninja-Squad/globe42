@@ -21,7 +21,7 @@ export class TaskService {
 
   constructor(private http: HttpClient,
               private nowService: NowService,
-              private userService: CurrentUserService) { }
+              private currentUserService: CurrentUserService) { }
 
   listTodo(pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber)});
@@ -50,7 +50,7 @@ export class TaskService {
   }
 
   assignToSelf(taskId: number): Observable<void> {
-    const userId = this.userService.userEvents.getValue().id;
+    const userId = this.currentUserService.userEvents.getValue().id;
     return this.http.post<void>(`/api/tasks/${taskId}/assignments`, {userId});
   }
 

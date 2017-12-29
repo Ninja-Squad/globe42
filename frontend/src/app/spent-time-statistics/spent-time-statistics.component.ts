@@ -43,6 +43,8 @@ const COLORS = [
   '#808080'
 ];
 
+const ALL_USERS = 0;
+
 @Component({
   selector: 'gl-spent-time-statistics',
   templateUrl: './spent-time-statistics.component.html',
@@ -66,19 +68,20 @@ export class SpentTimeStatisticsComponent implements OnInit {
     this.criteriaForm = fb.group({
       from: null as string,
       to: null as string,
-      by: null as number,
+      by: ALL_USERS,
     });
   }
 
   ngOnInit() {
-    this.users = this.route.snapshot.data['users'];
+    this.users = sortBy(this.route.snapshot.data['users'], user => user.login);
 
     // If no param, default to the current month
     const paramMap = this.route.snapshot.queryParamMap;
     if (!paramMap.get('from') && !paramMap.get('to') && !paramMap.get('by')) {
       this.criteriaForm.setValue( {
         from: this.nowService.now().startOf('month').toISODate(),
-        to: this.nowService.now().endOf('month').toISODate()
+        to: this.nowService.now().endOf('month').toISODate(),
+        by: ALL_USERS
       });
     } else {
       this.criteriaForm.setValue( {
@@ -146,7 +149,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
   private createCategoryStatistics(): Array<CategoryStatistic> {
     const categoryStatisticsByCategoryId = new Map<number, CategoryStatistic>();
     this.statisticsModel.statistics
-      .filter(stat => (this.criteriaForm.value.by === 0) || (stat.user.id === this.criteriaForm.value.by))
+      .filter(stat => (this.criteriaForm.value.by === ALL_USERS) || (stat.user.id === this.criteriaForm.value.by))
       .forEach(stat => {
         const categoryId = stat.category.id;
         let categoryStatistic = categoryStatisticsByCategoryId.get(categoryId);
