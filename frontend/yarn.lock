@@ -190,6 +190,10 @@
   dependencies:
     "@types/jasmine" "*"
 
+"@types/luxon@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-0.2.2.tgz#ca83c1026980b111254ef78587ee027483e57df4"
+
 "@types/node@^6.0.46":
   version "6.0.85"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.85.tgz#ec02bfe54a61044f2be44f13b389c6a0e8ee05ae"
