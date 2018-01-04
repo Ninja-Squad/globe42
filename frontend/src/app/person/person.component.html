@@ -80,7 +80,9 @@
     </div>
     <div class="form-group row" *ngIf="person.mediationEnabled">
       <label class="col-sm-6 col-form-label">1<sup>er</sup> RDV médiation</label>
-      <div class="col-sm-6" id="firstMediationAppointmentDate">{{ person.firstMediationAppointmentDate | date }}</div>
+      <div class="col-sm-6">
+        <p id="firstMediationAppointmentDate" class="form-control-plaintext">{{ person.firstMediationAppointmentDate | date }}</p>
+      </div>
     </div>
 
 
