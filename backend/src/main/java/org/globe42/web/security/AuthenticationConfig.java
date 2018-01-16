@@ -1,26 +1,28 @@
 package org.globe42.web.security;
 
+import java.util.Arrays;
+
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Configuration of the WebMvc application
  * @author JB Nizet
  */
 @Configuration
-public class AuthenticationConfig implements WebMvcConfigurer {
+public class AuthenticationConfig {
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor())
-                .addPathPatterns("/api/**/*")
-                .excludePathPatterns("/api/authentication");
+    @Bean
+    public FilterRegistrationBean<AuthenticationFilter> authenticationFilterRegistration() {
+        FilterRegistrationBean<AuthenticationFilter> filterRegistrationBean =
+            new FilterRegistrationBean<>(authenticationFilter());
+        filterRegistrationBean.setUrlPatterns(Arrays.asList("/api/*", "/actuator", "/actuator/*"));
+        return filterRegistrationBean;
     }
 
     @Bean
-    public AuthenticationInterceptor authenticationInterceptor() {
-        return new AuthenticationInterceptor();
+    public AuthenticationFilter authenticationFilter() {
+        return new AuthenticationFilter();
     }
 }
