@@ -42,11 +42,6 @@ h1 {
   }
 }
 
-// temporary fix for https://github.com/twbs/bootstrap/issues/25158
-.btn-outline-secondary:not([disabled]):not(.disabled).active {
-  color: $white;
-}
-
 .deleted {
   color: $danger;
   text-decoration: line-through;
