@@ -26,15 +26,15 @@ export class CitiesUploadComponent {
 
   constructor(private cityService: SearchCityService, private nowService: NowService) { }
 
-  upload(fileChangeEvent) {
-    const file = fileChangeEvent.target.files[0];
+  upload(fileChangeEvent: Event) {
+    const file = (fileChangeEvent.target as HTMLInputElement).files[0];
     const reader = this._createFileReader();
 
-    reader.onload = fileLoadedEvent => {
+    reader.onload = (fileLoadedEvent: Event) => {
       this.status = 'uploading';
       const startTime = this.now();
 
-      this.cityService.uploadCities(fileLoadedEvent.target['result'])
+      this.cityService.uploadCities((fileLoadedEvent.target as any).result)
         .subscribe(progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
             const elapsedTime = this.now() - startTime;

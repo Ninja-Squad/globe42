@@ -44,9 +44,9 @@ export class HttpTester {
     }
   }
 
-  testPut<T>(url: string,
-             command: any,
-             observable: Observable<void>) {
+  testPut(url: string,
+          command: any,
+          observable: Observable<void>) {
     let ok = false;
     observable.subscribe(() => ok = true);
 

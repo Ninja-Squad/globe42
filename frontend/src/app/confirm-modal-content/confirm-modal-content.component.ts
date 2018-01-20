@@ -8,8 +8,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ConfirmModalContentComponent {
 
-  @Input() message;
-  @Input() title;
+  @Input() message: string;
+  @Input() title: string;
 
   constructor(public activeModal: NgbActiveModal) {}
 }

@@ -134,7 +134,8 @@ describe('PersonFilesComponent', () => {
           name: files[1].name
         }]
       }
-    };
+    } as any;
+
     fixture.componentInstance.upload(fileChangeEvent);
     fixture.detectChanges();
 

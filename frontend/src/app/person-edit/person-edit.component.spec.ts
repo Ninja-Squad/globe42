@@ -362,7 +362,7 @@ describe('PersonEditComponent', () => {
 
   describe('in create mode', () => {
     const activatedRoute = {
-      snapshot: {data: {person: null, persons}}
+      snapshot: {data: {person: null as PersonModel, persons}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
@@ -595,7 +595,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.firstMediationAppointmentDate).toBe('2017-02-02');
       expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
       expect(createdPerson.spouseId).toBe(1);
-      expect(createdPerson['spouse']).not.toBeDefined();
+      expect((createdPerson as any).spouse).not.toBeDefined();
       expect(createdPerson.adherent).toBe(true);
       expect(createdPerson.entryDate).toBe('2015-02-02');
       expect(createdPerson.housing).toBe('F0');

@@ -13,6 +13,7 @@ import { TaskCategoryModel } from './models/task-category.model';
 import { CurrentUserModule } from './current-user/current-user.module';
 import { CurrentUserService } from './current-user/current-user.service';
 import { DateTime } from 'luxon';
+import { SpentTimeStatisticsModel } from './models/spent-time-statistics.model';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -114,7 +115,7 @@ describe('TaskService', () => {
   });
 
   it('should get spent time statistics', () => {
-    const expectedSpentTimeStatistics = { statistics: [] };
+    const expectedSpentTimeStatistics: SpentTimeStatisticsModel = { statistics: [] };
     httpTester.testGet(
       '/api/task-statistics/spent-times',
       expectedSpentTimeStatistics,

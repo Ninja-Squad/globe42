@@ -7,7 +7,7 @@ import { padNumber, toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
  *
  * Usages of this method could be replaced by Lodash's sortBy method
  */
-export function sortBy<T>(array: Array<T>, extractor: (T) => any, reverse = false): Array<T> {
+export function sortBy<T>(array: Array<T>, extractor: (t: T) => any, reverse = false): Array<T> {
   const result = array.slice();
   result.sort((e1, e2) => {
     const v1 = extractor(e1);

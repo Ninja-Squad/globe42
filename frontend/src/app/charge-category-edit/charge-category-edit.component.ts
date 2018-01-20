@@ -4,6 +4,7 @@ import { ChargeCategoryCommand } from '../models/charge-category.command';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
 import { ErrorService } from '../error.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'gl-charge-category-edit',
@@ -25,7 +26,7 @@ export class ChargeCategoryEditComponent implements OnInit {
   }
 
   save() {
-    let action;
+    let action: Observable<ChargeCategoryModel | void>;
     if (this.editedChargeCategory) {
       action = this.chargeCategoryService.update(this.editedChargeCategory.id, this.chargeCategory);
     } else {

@@ -15,9 +15,9 @@ describe('CurrentUserService', () => {
   const originalLocalStorage = window.localStorage;
 
   const mockLocalStorage = {
-    setItem: (key, value) => {},
-    getItem: key => null,
-    removeItem: key => {}
+    setItem: (key: string, value: string) => {},
+    getItem: (key: string) => null as string,
+    removeItem: (key: string) => {}
   };
 
   const globeUser = {

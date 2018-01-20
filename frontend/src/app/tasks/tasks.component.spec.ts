@@ -160,12 +160,10 @@ describe('TasksComponent', () => {
 
   describe('ui', () => {
     let fixture: ComponentFixture<TestComponent>;
-    let tasksComponent: TasksComponent;
 
     beforeEach(() => {
       fixture = TestBed.createComponent(TestComponent);
       fixture.componentInstance.tasks = tasks;
-      tasksComponent = fixture.debugElement.query(By.directive(TasksComponent)).componentInstance;
       fixture.detectChanges();
     });
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PersonModel } from '../models/person.model';
-import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'gl-person-layout',
@@ -12,7 +12,7 @@ export class PersonLayoutComponent {
 
   person: PersonModel;
 
-  constructor(private route: ActivatedRoute) {
-    route.data.pluck('person').subscribe((person: PersonModel) => this.person = person);
+  constructor(route: ActivatedRoute) {
+    route.data.map(data => data.person as PersonModel).subscribe(person => this.person = person);
   }
 }

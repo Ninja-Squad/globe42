@@ -6,6 +6,15 @@
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
+    "noImplicitAny": true,
+    "strictNullChecks": false, // would be nice, but requires a big effort
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false, // easy, but only spots overrides that don't use one of the params
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "target": "es5",
     "typeRoots": [

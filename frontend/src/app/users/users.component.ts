@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit {
       .subscribe(users => this.users = sortBy(users, u => u.login), () => {});
   }
 
-  isCurrentUser(user) {
+  isCurrentUser(user: UserModel) {
     return this.currentUserService.userEvents.getValue().id === user.id;
   }
 }

@@ -75,7 +75,6 @@ describe('PersonParticipationsComponent', () => {
       const socialMediationItem: ParticipationItem = component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0];
       socialMediationItem.selected = true;
 
-      const participation = { id: 22 } as ParticipationModel;
       spyOn(participationService, 'create').and.returnValue(Observable.throw('error'));
 
       component.selectionChanged(socialMediationItem);

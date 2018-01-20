@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { PersonService } from '../person.service';
-import { Gender, MaritalStatus, PersonModel } from '../models/person.model';
+import { Gender, MaritalStatus, PersonIdentityModel, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
@@ -56,7 +56,7 @@ export class PersonEditComponent {
               private fullnamePipe: FullnamePipe) {
     this.editedPerson = this.route.snapshot.data['person'];
 
-    let persons = this.route.snapshot.data['persons'];
+    let persons: Array<PersonIdentityModel> = this.route.snapshot.data['persons'];
     if (this.editedPerson) {
       persons = persons.filter(p => p.id !== this.editedPerson.id);
     }

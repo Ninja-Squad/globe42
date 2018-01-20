@@ -8,7 +8,7 @@ export interface TechnicalErrorModel {
   message: string;
 }
 
-export const ERRORS = Object.freeze({
+export const ERRORS: { [key: string]: string } = Object.freeze({
   USER_LOGIN_ALREADY_EXISTS: 'Un utilisateur ayant le même identifiant existe déjà.',
   INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS: 'Un type de revenu du même nom existe déjà.',
   INCOME_SOURCE_NAME_ALREADY_EXISTS: 'Une source de revenu du même nom existe déjà.',

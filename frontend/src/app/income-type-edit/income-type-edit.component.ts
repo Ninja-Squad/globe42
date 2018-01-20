@@ -5,6 +5,7 @@ import { IncomeSourceTypeCommand } from '../models/income-source-type.command';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceTypeService } from '../income-source-type.service';
 import { ErrorService } from '../error.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'gl-income-type-edit',
@@ -27,7 +28,7 @@ export class IncomeTypeEditComponent implements OnInit {
   }
 
   save() {
-    let action;
+    let action: Observable<IncomeSourceTypeModel | void>;
     if (this.editedIncomeType) {
       action = this.incomeSourceTypeService.update(this.editedIncomeType.id, this.incomeType);
     } else {

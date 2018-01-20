@@ -24,7 +24,7 @@ describe('ConfirmService and its modal compoent', () => {
   class TestModule {
   }
 
-  let modalContent;
+  let modalContent: HTMLElement;
   let fixture: ComponentFixture<any>;
 
   beforeEach(async(() => {

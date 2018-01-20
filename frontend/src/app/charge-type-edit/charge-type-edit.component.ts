@@ -6,6 +6,7 @@ import { ChargeTypeCommand } from '../models/charge-type.command';
 import { ChargeTypeService } from '../charge-type.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from '../error.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'gl-charge-type-edit',
@@ -46,7 +47,7 @@ export class ChargeTypeEditComponent implements OnInit {
   }
 
   save() {
-    let action;
+    let action: Observable<ChargeTypeModel | void>;
     if (this.editedChargeType) {
       action = this.chargeTypeService.update(this.editedChargeType.id, this.chargeType);
     } else {

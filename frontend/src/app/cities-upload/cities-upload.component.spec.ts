@@ -29,7 +29,7 @@ describe('CitiesUploadComponent', () => {
       target: {
         files: ['fakeFile']
       }
-    };
+    } as any;
 
     const fileReader = new FileReader();
     spyOn(fileReader, 'readAsText');
@@ -109,7 +109,7 @@ describe('CitiesUploadComponent', () => {
       target: {
         files: ['fakeFile']
       }
-    };
+    } as any;
 
     const fileReader = new FileReader();
     spyOn(fileReader, 'readAsText');

@@ -25,10 +25,8 @@ class Task {
     if (days > 0) {
       return `dans ${days} jour${days > 1 ? 's' : ''}`;
     }
-    if (days < 0) {
-      const d = Math.abs(days);
-      return `il y a ${d} jour${d > 1 ? 's' : ''}`;
-    }
+    const d = Math.abs(days);
+    return `il y a ${d} jour${d > 1 ? 's' : ''}`;
   }
 
   dueDateClass() {

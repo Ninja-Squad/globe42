@@ -103,8 +103,9 @@ export class TaskService {
   spentTimeStatistics(criteria: SpentTimeStatisticsCriteria): Observable<SpentTimeStatisticsModel> {
     let params = new HttpParams();
     for (const key of Object.keys(criteria)) {
-      if (criteria[key]) {
-        params = params.set(key, criteria[key]);
+      const criterion: string = (criteria as any)[key];
+      if (criterion) {
+        params = params.set(key, criterion);
       }
     }
 

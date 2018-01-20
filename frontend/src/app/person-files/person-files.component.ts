@@ -43,10 +43,10 @@ export class PersonFilesComponent implements OnInit {
       .subscribe(() => this.loadFiles());
   }
 
-  upload(fileChangeEvent) {
+  upload(fileChangeEvent: Event) {
     this.uploading = true;
 
-    const file = fileChangeEvent.target.files[0];
+    const file = (fileChangeEvent.target as HTMLInputElement).files[0];
 
     this.personFileService.create(this.person.id, file)
       .finally(() => this.uploading = false)

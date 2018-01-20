@@ -24,8 +24,8 @@ describe('UsersComponent', () => {
     snapshot: { data: { users } }
   };
 
-  let currentUserService;
-  let userService;
+  let currentUserService: CurrentUserService;
+  let userService: UserService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

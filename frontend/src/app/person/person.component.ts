@@ -6,7 +6,6 @@ import { NoteModel } from '../models/note.model';
 import { ConfirmService } from '../confirm.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { PersonService } from '../person.service';
-import 'rxjs/add/operator/pluck';
 
 @Component({
   selector: 'gl-person',
@@ -27,7 +26,7 @@ export class PersonComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.route.parent.data.pluck('person').subscribe((person: PersonModel) => {
+    this.route.parent.data.map(data => data.person as PersonModel).subscribe(person => {
       this.person = person;
       this.mapsUrl = this.person.city && this.person.address ? this.createMapsUrl() : null;
     });

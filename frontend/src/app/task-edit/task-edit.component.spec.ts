@@ -3,7 +3,6 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { TaskEditComponent } from './task-edit.component';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbDateAdapter, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { FullnamePipe } from '../fullname.pipe';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { PersonIdentityModel } from '../models/person.model';
@@ -13,9 +12,7 @@ import { TaskService } from '../task.service';
 import { NowService } from '../now.service';
 import { Observable } from 'rxjs/Observable';
 import { TaskModel } from '../models/task.model';
-import { FrenchDateParserFormatterService } from '../globe-ngb/french-date-parser-formatter.service';
 import { TaskCategoryModel } from '../models/task-category.model';
-import { DateStringAdapterService } from '../globe-ngb/date-string-adapter.service';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';

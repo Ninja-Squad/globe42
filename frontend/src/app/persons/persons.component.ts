@@ -26,7 +26,7 @@ export class PersonsComponent implements OnInit {
     this.filter('');
   }
 
-  private filter(text) {
+  private filter(text: string) {
     const value = text.trim().toLowerCase();
     if (!value) {
       this.persons = this.allPersons;
