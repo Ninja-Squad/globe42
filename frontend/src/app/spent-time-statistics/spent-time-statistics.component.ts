@@ -9,7 +9,7 @@ import { NowService } from '../now.service';
 import { UserModel } from '../models/user.model';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
 import { of } from 'rxjs/observable/of';
-import { catchError, concat, distinctUntilChanged, filter, map, pluck, switchMap, tap } from 'rxjs/operators';
+import { catchError, concat, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
 export interface CategoryStatistic {
@@ -105,7 +105,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
     // note: using the valueChanges on the "by" form control doesn't change because the event is emitted before
     // the value of the form group is updated
     this.criteriaForm.valueChanges.pipe(
-      pluck('by'),
+      map(value => value.by),
       distinctUntilChanged()
     ).subscribe(() => this.updateState(this.statisticsModel));
   }
