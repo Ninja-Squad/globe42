@@ -3,14 +3,14 @@ import { ParticipationModel } from '../models/participation.model';
 import { ACTIVITY_TYPE_TRANSLATIONS, DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { PersonModel } from '../models/person.model';
 import { ParticipationService } from '../participation.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { ActivatedRoute } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { FullnamePipe } from '../fullname.pipe';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs/observable/of';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 describe('PersonParticipationsComponent', () => {
 
@@ -63,7 +63,7 @@ describe('PersonParticipationsComponent', () => {
       socialMediationItem.selected = true;
 
       const participation = { id: 22 } as ParticipationModel;
-      spyOn(participationService, 'create').and.returnValue(Observable.of(participation));
+      spyOn(participationService, 'create').and.returnValue(of(participation));
 
       component.selectionChanged(socialMediationItem);
 
@@ -75,7 +75,7 @@ describe('PersonParticipationsComponent', () => {
       const socialMediationItem: ParticipationItem = component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0];
       socialMediationItem.selected = true;
 
-      spyOn(participationService, 'create').and.returnValue(Observable.throw('error'));
+      spyOn(participationService, 'create').and.returnValue(ErrorObservable.create('error'));
 
       component.selectionChanged(socialMediationItem);
 
@@ -88,7 +88,7 @@ describe('PersonParticipationsComponent', () => {
       const mealItem: ParticipationItem = component.items.filter(item => item.activityType === 'MEAL')[0];
       const participationId = mealItem.id;
       mealItem.selected = false;
-      spyOn(participationService, 'delete').and.returnValue(Observable.of(null));
+      spyOn(participationService, 'delete').and.returnValue(of(null));
 
       component.selectionChanged(mealItem);
 
@@ -100,7 +100,7 @@ describe('PersonParticipationsComponent', () => {
       const mealItem: ParticipationItem = component.items.filter(item => item.activityType === 'MEAL')[0];
       const participationId = mealItem.id;
       mealItem.selected = false;
-      spyOn(participationService, 'delete').and.returnValue(Observable.throw('error'));
+      spyOn(participationService, 'delete').and.returnValue(ErrorObservable.create('error'));
 
       component.selectionChanged(mealItem);
 

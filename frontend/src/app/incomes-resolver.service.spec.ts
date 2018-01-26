@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { IncomesResolverService } from './incomes-resolver.service';
 import { IncomeService } from './income.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { IncomeModel } from './models/income.model';
+import { of } from 'rxjs/observable/of';
 
 describe('IncomesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -14,7 +14,7 @@ describe('IncomesResolverService', () => {
 
   it('should retrieve the incomes of the person stored in the data of the parent route', () => {
     const incomeService = TestBed.get(IncomeService);
-    const expectedResults = Observable.of([{ id: 23 }] as Array<IncomeModel>);
+    const expectedResults = of([{ id: 23 }] as Array<IncomeModel>);
 
     spyOn(incomeService, 'list').and.returnValue(expectedResults);
 

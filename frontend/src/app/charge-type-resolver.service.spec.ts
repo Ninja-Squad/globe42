@@ -6,6 +6,7 @@ import { ChargeTypeModel } from './models/charge-type.model';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ChargeTypeService } from './charge-type.service';
+import { of } from 'rxjs/observable/of';
 
 describe('ChargeTypeResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -15,7 +16,7 @@ describe('ChargeTypeResolverService', () => {
 
   it('should retrieve a type', () => {
     const chargeTypeService = TestBed.get(ChargeTypeService);
-    const expectedResult: Observable<ChargeTypeModel> = Observable.of({ id: 42, name: 'Mortgage' } as ChargeTypeModel);
+    const expectedResult: Observable<ChargeTypeModel> = of({ id: 42, name: 'Mortgage' } as ChargeTypeModel);
 
     spyOn(chargeTypeService, 'get').and.returnValue(expectedResult);
 

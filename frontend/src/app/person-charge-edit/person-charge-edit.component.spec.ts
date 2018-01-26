@@ -9,7 +9,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { NgModule } from '@angular/core';
 import { ChargeService } from '../charge.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 describe('PersonChargeEditComponent', () => {
   const chargeTypes = [
@@ -85,7 +85,7 @@ describe('PersonChargeEditComponent', () => {
       const incomeService = TestBed.get(ChargeService);
       const router = TestBed.get(Router);
 
-      spyOn(incomeService, 'create').and.returnValue(Observable.of({
+      spyOn(incomeService, 'create').and.returnValue(of({
         id: 42
       }));
       spyOn(router, 'navigate');

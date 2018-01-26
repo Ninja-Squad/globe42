@@ -9,9 +9,8 @@ import { NowService } from '../now.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { CurrentUserModule } from '../current-user/current-user.module';
+import { of } from 'rxjs/observable/of';
 
 @Component({
   template: `<gl-spent-time-add [taskModel]="task"
@@ -79,7 +78,7 @@ describe('SpentTimeAddComponent', () => {
 
     const taskService = TestBed.get(TaskService);
     const spentTime = { id: 1 } as SpentTimeModel;
-    spyOn(taskService, 'addSpentTime').and.returnValue(Observable.of(spentTime));
+    spyOn(taskService, 'addSpentTime').and.returnValue(of(spentTime));
 
     addButton.click();
     fixture.detectChanges();

@@ -5,13 +5,14 @@ import { IncomeModel } from '../models/income.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmService } from '../confirm.service';
-import { Observable } from 'rxjs/Observable';
 import { IncomeService } from '../income.service';
 import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID } from '@angular/core';
 import { ChargeModel } from '../models/charge.model';
 import { ChargeService } from '../charge.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { of } from 'rxjs/observable/of';
 
 describe('PersonResourcesComponent', () => {
   const incomes = [
@@ -114,7 +115,7 @@ describe('PersonResourcesComponent', () => {
 
     const confirmService = TestBed.get(ConfirmService);
     const incomeService = TestBed.get(IncomeService);
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw(null));
+    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create(null));
     spyOn(incomeService, 'delete');
 
     const nativeElement = fixture.nativeElement;
@@ -133,8 +134,8 @@ describe('PersonResourcesComponent', () => {
 
     const confirmService = TestBed.get(ConfirmService);
     const incomeService = TestBed.get(IncomeService);
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.of(null));
-    spyOn(incomeService, 'delete').and.returnValue(Observable.of(null));
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
+    spyOn(incomeService, 'delete').and.returnValue(of(null));
 
     const newIncomes = [
       {
@@ -143,7 +144,7 @@ describe('PersonResourcesComponent', () => {
         monthlyAmount: 500
       }
     ] as Array<IncomeModel>;
-    spyOn(incomeService, 'list').and.returnValue(Observable.of(newIncomes));
+    spyOn(incomeService, 'list').and.returnValue(of(newIncomes));
 
     const nativeElement = fixture.nativeElement;
     const deleteButton: HTMLButtonElement = nativeElement.querySelectorAll('.delete-income-button')[0];
@@ -203,7 +204,7 @@ describe('PersonResourcesComponent', () => {
 
     const confirmService = TestBed.get(ConfirmService);
     const chargeService = TestBed.get(IncomeService);
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw(null));
+    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create(null));
     spyOn(chargeService, 'delete');
 
     const nativeElement = fixture.nativeElement;
@@ -222,8 +223,8 @@ describe('PersonResourcesComponent', () => {
 
     const confirmService = TestBed.get(ConfirmService);
     const chargeService = TestBed.get(ChargeService);
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.of(null));
-    spyOn(chargeService, 'delete').and.returnValue(Observable.of(null));
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
+    spyOn(chargeService, 'delete').and.returnValue(of(null));
 
     const newCharges = [
       {
@@ -232,7 +233,7 @@ describe('PersonResourcesComponent', () => {
         monthlyAmount: 50
       }
     ] as Array<ChargeModel>;
-    spyOn(chargeService, 'list').and.returnValue(Observable.of(newCharges));
+    spyOn(chargeService, 'list').and.returnValue(of(newCharges));
 
     const nativeElement = fixture.nativeElement;
     const deleteButton: HTMLButtonElement = nativeElement.querySelectorAll('.delete-charge-button')[0];

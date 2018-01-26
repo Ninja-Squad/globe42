@@ -5,15 +5,12 @@ import { ChartConfiguration } from 'chart.js';
 import { minutesToDuration, sortBy } from '../utils';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { Observable } from 'rxjs/Observable';
 import { NowService } from '../now.service';
-import 'rxjs/add/operator/concat';
-import 'rxjs/add/observable/empty';
 import { UserModel } from '../models/user.model';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
-import 'rxjs/add/operator/pluck';
+import { of } from 'rxjs/observable/of';
+import { catchError, concat, distinctUntilChanged, filter, map, pluck, switchMap, tap } from 'rxjs/operators';
+import { empty } from 'rxjs/observable/empty';
 
 export interface CategoryStatistic {
   category: TaskCategoryModel;
@@ -93,21 +90,24 @@ export class SpentTimeStatisticsComponent implements OnInit {
 
     // when criteria change, we update the URL
     // when from or to changes, we reload the statistics
-    Observable.of(this.criteriaForm.value).concat(this.criteriaForm.valueChanges)
-      .filter(() => this.criteriaForm.valid)
-      .do(value => this.router.navigate(['tasks/statistics'], { queryParams: value, replaceUrl: true }))
-      .map(value => ({ from: value.from, to: value.to }))
-      .distinctUntilChanged((v1, v2) => v1.from === v2.from && v1.to === v2.to)
-      .switchMap(value => this.taskService.spentTimeStatistics(value).catch(() => Observable.empty<SpentTimeStatisticsModel>()))
-      .subscribe(stats => this.updateState(stats));
+    of(this.criteriaForm.value).pipe(
+      concat(this.criteriaForm.valueChanges)
+    ).pipe(
+      filter(() => this.criteriaForm.valid),
+      tap(value => this.router.navigate(['tasks/statistics'], { queryParams: value, replaceUrl: true })),
+      map(value => ({ from: value.from, to: value.to })),
+      distinctUntilChanged((v1, v2) => v1.from === v2.from && v1.to === v2.to),
+      switchMap(value => this.taskService.spentTimeStatistics(value)
+        .pipe(catchError(() => empty<SpentTimeStatisticsModel>())))
+    ).subscribe(stats => this.updateState(stats));
 
     // when by changes, no need to reload the statistics, but the chart must be updated
     // note: using the valueChanges on the "by" form control doesn't change because the event is emitted before
     // the value of the form group is updated
-    this.criteriaForm.valueChanges
-      .pluck('by')
-      .distinctUntilChanged()
-      .subscribe(() => this.updateState(this.statisticsModel));
+    this.criteriaForm.valueChanges.pipe(
+      pluck('by'),
+      distinctUntilChanged()
+    ).subscribe(() => this.updateState(this.statisticsModel));
   }
 
   private updateState(statisticsModel: SpentTimeStatisticsModel) {

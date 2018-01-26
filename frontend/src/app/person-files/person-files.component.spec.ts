@@ -6,14 +6,13 @@ import { FileModel } from '../models/file.model';
 import { PersonModel } from '../models/person.model';
 import { PersonFileService } from '../person-file.service';
 import { ConfirmService } from '../confirm.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { FileSizePipe } from '../file-size.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { By } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { of } from 'rxjs/observable/of';
 
 describe('PersonFilesComponent', () => {
   const person = { id: 42 } as PersonModel;
@@ -56,7 +55,7 @@ describe('PersonFilesComponent', () => {
 
   it('should display files', () => {
     const personFileService = TestBed.get(PersonFileService);
-    spyOn(personFileService, 'list').and.returnValue(Observable.of(files));
+    spyOn(personFileService, 'list').and.returnValue(of(files));
 
     const fixture = TestBed.createComponent(PersonFilesComponent);
     fixture.detectChanges();
@@ -67,7 +66,7 @@ describe('PersonFilesComponent', () => {
 
   it('should display no file message if no files', () => {
     const personFileService = TestBed.get(PersonFileService);
-    spyOn(personFileService, 'list').and.returnValue(Observable.of([]));
+    spyOn(personFileService, 'list').and.returnValue(of([]));
 
     const fixture = TestBed.createComponent(PersonFilesComponent);
     fixture.detectChanges();
@@ -99,9 +98,9 @@ describe('PersonFilesComponent', () => {
     // create component with 2 files
     const personFileService = TestBed.get(PersonFileService);
     const confirmService = TestBed.get(ConfirmService);
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.of('ok'));
-    spyOn(personFileService, 'delete').and.returnValue(Observable.of(null));
-    spyOn(personFileService, 'list').and.returnValues(Observable.of(files), Observable.of([files[1]]));
+    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    spyOn(personFileService, 'delete').and.returnValue(of(null));
+    spyOn(personFileService, 'list').and.returnValues(of(files), of([files[1]]));
 
     const fixture = TestBed.createComponent(PersonFilesComponent);
     fixture.detectChanges();
@@ -119,7 +118,7 @@ describe('PersonFilesComponent', () => {
   it('should upload a file', () => {
     // create component with 1 file
     const personFileService = TestBed.get(PersonFileService);
-    spyOn(personFileService, 'list').and.returnValues(Observable.of([files[0]]), Observable.of([files]));
+    spyOn(personFileService, 'list').and.returnValues(of([files[0]]), of([files]));
 
     const fakeEvents = new Subject<any>();
     spyOn(personFileService, 'create').and.returnValues(fakeEvents);

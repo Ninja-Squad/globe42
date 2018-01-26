@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../models/user.model';
 import { Observable } from 'rxjs/Observable';
 import { JwtInterceptorService } from './jwt-interceptor.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class CurrentUserService {
@@ -17,8 +18,9 @@ export class CurrentUserService {
   }
 
   authenticate(credentials: { login: string; password: string }) {
-    return this.http.post<UserModel>('/api/authentication', credentials)
-      .do(user => this.storeLoggedInUser(user));
+    return this.http.post<UserModel>('/api/authentication', credentials).pipe(
+      tap(user => this.storeLoggedInUser(user))
+    );
   }
 
   storeLoggedInUser(user: UserModel) {

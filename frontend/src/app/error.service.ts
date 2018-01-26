@@ -3,6 +3,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { FunctionalErrorModel, TechnicalErrorModel } from './models/error.model';
+import { tap } from 'rxjs/operators';
 
 /**
  * Service which acts as an HTTP interceptor, in order to emit HTTP errors (which are then consumed by the
@@ -41,7 +42,9 @@ export class ErrorService implements HttpInterceptor {
   constructor() { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).do(null, error => this.handleError(error));
+    return next.handle(req).pipe(
+      tap(null, error => this.handleError(error))
+    );
   }
 
   /**

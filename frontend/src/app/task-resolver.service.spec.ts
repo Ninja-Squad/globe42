@@ -3,11 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { TaskResolverService } from './task-resolver.service';
 import { TaskService } from './task.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { TaskModel } from './models/task.model';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { NowService } from './now.service';
 import { CurrentUserModule } from './current-user/current-user.module';
+import { of } from 'rxjs/observable/of';
 
 describe('TaskResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -17,7 +17,7 @@ describe('TaskResolverService', () => {
 
   it('should resolve a task', () => {
     const taskService = TestBed.get(TaskService);
-    const expectedResult = Observable.of({ id: 42 } as TaskModel);
+    const expectedResult = of({ id: 42 } as TaskModel);
 
     spyOn(taskService, 'get').and.returnValue(expectedResult);
 

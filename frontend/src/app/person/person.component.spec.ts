@@ -16,9 +16,9 @@ import { ConfirmService } from '../confirm.service';
 import { FormsModule } from '@angular/forms';
 import { PersonService } from '../person.service';
 import { FullnamePipe } from '../fullname.pipe';
-import { Observable } from 'rxjs/Observable';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import 'rxjs/add/observable/of';
+import { of } from 'rxjs/observable/of';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -68,7 +68,7 @@ describe('PersonComponent', () => {
 
   const activatedRoute: any = {
     parent: {
-      data: Observable.of({ person })
+      data: of({ person })
     }
   };
 
@@ -176,8 +176,8 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.of('ok'));
-    spyOn(personService, 'delete').and.returnValue(Observable.of(null));
+    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
     expect(fixture.nativeElement.querySelector('#resurrect-person-button')).toBeFalsy();
@@ -197,8 +197,8 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw('nok'));
-    spyOn(personService, 'delete').and.returnValue(Observable.of(null));
+    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nok'));
+    spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
     const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector('#delete-person-button');
@@ -218,8 +218,8 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.of('ok'));
-    spyOn(personService, 'resurrect').and.returnValue(Observable.of(null));
+    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
     expect(fixture.nativeElement.querySelector('#delete-person-button')).toBeFalsy();
@@ -240,8 +240,8 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw('nok'));
-    spyOn(personService, 'resurrect').and.returnValue(Observable.of(null));
+    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nok'));
+    spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
     const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector('#resurrect-person-button');

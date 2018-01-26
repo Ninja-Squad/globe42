@@ -8,8 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeTypeService } from '../charge-type.service';
 import { ErrorService } from '../error.service';
 import { NgModule } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { ChargeTypeModel } from '../models/charge-type.model';
+import { of } from 'rxjs/observable/of';
 
 describe('ChargeTypeEditComponent', () => {
 
@@ -93,7 +93,7 @@ describe('ChargeTypeEditComponent', () => {
       const chargeTypeService = TestBed.get(ChargeTypeService);
       const router = TestBed.get(Router);
 
-      spyOn(chargeTypeService, 'create').and.returnValue(Observable.of({
+      spyOn(chargeTypeService, 'create').and.returnValue(of({
         id: 42
       }));
 
@@ -193,7 +193,7 @@ describe('ChargeTypeEditComponent', () => {
       const chargeTypeService = TestBed.get(ChargeTypeService);
       const router = TestBed.get(Router);
 
-      spyOn(chargeTypeService, 'update').and.returnValue(Observable.of(null));
+      spyOn(chargeTypeService, 'update').and.returnValue(of(null));
 
       const fixture = TestBed.createComponent(ChargeTypeEditComponent);
       fixture.detectChanges();

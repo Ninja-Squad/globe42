@@ -1,3 +1,4 @@
+/* tslint:disable:deprecation (false positive) */
 import { MinValidatorDirective } from './min-validator.directive';
 import { Component } from '@angular/core';
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';

@@ -10,12 +10,12 @@ import { UserModel } from '../models/user.model';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskService } from '../task.service';
 import { NowService } from '../now.service';
-import { Observable } from 'rxjs/Observable';
 import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { of } from 'rxjs/observable/of';
 
 describe('TaskEditComponent', () => {
 
@@ -220,7 +220,7 @@ describe('TaskEditComponent', () => {
 
         const taskService = TestBed.get(TaskService);
         const router = TestBed.get(Router);
-        spyOn(taskService, 'create').and.returnValue(Observable.of({id: 42}));
+        spyOn(taskService, 'create').and.returnValue(of({id: 42}));
         spyOn(router, 'navigate');
 
         saveButton.click();
@@ -273,7 +273,7 @@ describe('TaskEditComponent', () => {
 
         const taskService = TestBed.get(TaskService);
         const router = TestBed.get(Router);
-        spyOn(taskService, 'create').and.returnValue(Observable.of({id: 42}));
+        spyOn(taskService, 'create').and.returnValue(of({id: 42}));
         spyOn(router, 'navigate');
 
         const saveButton = element.querySelector('#save');
@@ -355,7 +355,7 @@ describe('TaskEditComponent', () => {
 
         const taskService = TestBed.get(TaskService);
         const router = TestBed.get(Router);
-        spyOn(taskService, 'update').and.returnValue(Observable.of(null));
+        spyOn(taskService, 'update').and.returnValue(of(null));
         spyOn(router, 'navigate');
 
         const saveButton = element.querySelector('#save');

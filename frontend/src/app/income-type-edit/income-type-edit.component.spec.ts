@@ -1,8 +1,5 @@
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-
 import { IncomeTypeEditComponent } from './income-type-edit.component';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceTypeService } from '../income-source-type.service';
@@ -11,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ErrorService } from '../error.service';
+import { of } from 'rxjs/observable/of';
 
 describe('IncomeTypeEditComponent', () => {
 
@@ -50,7 +48,7 @@ describe('IncomeTypeEditComponent', () => {
 
     it('should edit and update an existing income type', async(() => {
       const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
-      spyOn(incomeSourceTypeService, 'update').and.returnValue(Observable.of(incomeType));
+      spyOn(incomeSourceTypeService, 'update').and.returnValue(of(incomeType));
       const router = TestBed.get(Router);
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
@@ -93,7 +91,7 @@ describe('IncomeTypeEditComponent', () => {
 
     it('should create and save a new income type', fakeAsync(() => {
       const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
-      spyOn(incomeSourceTypeService, 'create').and.returnValue(Observable.of(null));
+      spyOn(incomeSourceTypeService, 'create').and.returnValue(of(null));
       const router = TestBed.get(Router);
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
 

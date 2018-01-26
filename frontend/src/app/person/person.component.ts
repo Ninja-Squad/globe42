@@ -6,6 +6,7 @@ import { NoteModel } from '../models/note.model';
 import { ConfirmService } from '../confirm.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { PersonService } from '../person.service';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-person',
@@ -26,7 +27,9 @@ export class PersonComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.route.parent.data.map(data => data.person as PersonModel).subscribe(person => {
+    this.route.parent.data.pipe(
+      map(data => data.person as PersonModel)
+    ).subscribe(person => {
       this.person = person;
       this.mapsUrl = this.person.city && this.person.address ? this.createMapsUrl() : null;
     });
@@ -34,16 +37,16 @@ export class PersonComponent implements OnInit {
 
   delete() {
     this.confirmService.confirm(
-      { message: `Voulez-vous vraiment supprimer ${this.fullnamePipe.transform(this.person)}\u00a0?`})
-      .switchMap(() => this.personService.delete(this.person.id))
-      .subscribe(() => this.router.navigate(['/persons']), () => {});
+      { message: `Voulez-vous vraiment supprimer ${this.fullnamePipe.transform(this.person)}\u00a0?`}).pipe(
+      switchMap(() => this.personService.delete(this.person.id))
+    ).subscribe(() => this.router.navigate(['/persons']), () => {});
   }
 
   resurrect() {
     this.confirmService.confirm(
-      { message: `Voulez-vous vraiment annuler la suppression de ${this.fullnamePipe.transform(this.person)}\u00a0?`})
-      .switchMap(() => this.personService.resurrect(this.person.id))
-      .subscribe(() => this.router.navigate(['/persons']), () => {});
+      { message: `Voulez-vous vraiment annuler la suppression de ${this.fullnamePipe.transform(this.person)}\u00a0?`}).pipe(
+      switchMap(() => this.personService.resurrect(this.person.id))
+    ).subscribe(() => this.router.navigate(['/persons']), () => {});
   }
 
   private createMapsUrl() {

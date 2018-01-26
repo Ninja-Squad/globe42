@@ -14,9 +14,9 @@ import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-covera
 import { PersonTypeahead } from '../person/person-typeahead';
 import { FullnamePipe } from '../fullname.pipe';
 import { CityTypeahead } from './city-typeahead';
-import { Observable } from 'rxjs/Observable';
 import { sortBy } from '../utils';
-import 'rxjs/add/observable/empty';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { empty } from 'rxjs/observable/empty';
 
 @Component({
   selector: 'gl-person-edit',
@@ -106,11 +106,12 @@ export class PersonEditComponent {
       this.personForm.patchValue(this.editedPerson);
     }
 
-    this.personForm.get('spouse').valueChanges
-      .do(() => this.spouseIsInCouple = false)
-      .switchMap(spouse => spouse ? this.personService.get(spouse.id) : Observable.empty<PersonModel>())
-      .subscribe(spouse =>
-        this.spouseIsInCouple = !!(spouse.spouse && (!this.editedPerson || (spouse.spouse.id !== this.editedPerson.id))));
+    this.personForm.get('spouse').valueChanges.pipe(
+      tap(() => this.spouseIsInCouple = false),
+      switchMap(spouse => spouse ? this.personService.get(spouse.id) : empty<PersonModel>())
+    ).subscribe(spouse =>
+      this.spouseIsInCouple = !!(spouse.spouse && (!this.editedPerson || (spouse.spouse.id !== this.editedPerson.id)))
+    );
   }
 
   showFrenchFamilySituation() {
@@ -139,9 +140,13 @@ export class PersonEditComponent {
 
     let action;
     if (this.editedPerson && this.editedPerson.id !== undefined) {
-      action = this.personService.update(this.editedPerson.id, command).map(() => this.editedPerson.id);
+      action = this.personService.update(this.editedPerson.id, command).pipe(
+        map(() => this.editedPerson.id)
+      );
     } else {
-      action = this.personService.create(command).map(createdPerson => createdPerson.id);
+      action = this.personService.create(command).pipe(
+        map(createdPerson => createdPerson.id)
+      );
     }
     action.subscribe((personId) => this.router.navigate(['persons', personId]));
   }

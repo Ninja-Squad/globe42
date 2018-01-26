@@ -8,8 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
 import { ErrorService } from '../error.service';
-import { Observable } from 'rxjs/Observable';
 import { ChargeCategoryModel } from '../models/charge-category.model';
+import { of } from 'rxjs/observable/of';
 
 describe('ChargeCategoryEditComponent', () => {
   const fakeRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
@@ -48,7 +48,7 @@ describe('ChargeCategoryEditComponent', () => {
 
     it('should edit and update an existing charge category', async(() => {
       const chargeCategoryService = TestBed.get(ChargeCategoryService);
-      spyOn(chargeCategoryService, 'update').and.returnValue(Observable.of(chargeCategory));
+      spyOn(chargeCategoryService, 'update').and.returnValue(of(chargeCategory));
       const router = TestBed.get(Router);
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
       fixture.detectChanges();
@@ -91,7 +91,7 @@ describe('ChargeCategoryEditComponent', () => {
 
     it('should create and save a new charge category', fakeAsync(() => {
       const chargeCategoryService = TestBed.get(ChargeCategoryService);
-      spyOn(chargeCategoryService, 'create').and.returnValue(Observable.of(null));
+      spyOn(chargeCategoryService, 'create').and.returnValue(of(null));
       const router = TestBed.get(Router);
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
 

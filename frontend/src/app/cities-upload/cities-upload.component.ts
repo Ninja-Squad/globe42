@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import { SearchCityService } from '../search-city.service';
 import { HttpEventType } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/interval';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/takeWhile';
 import { NowService } from '../now.service';
+import { interval } from 'rxjs/observable/interval';
+import { takeWhile } from 'rxjs/operators';
 
 const ESTIMATED_PROCESSING_TIME_IN_MILLIS = 20000;
 
@@ -50,9 +47,9 @@ export class CitiesUploadComponent {
               // generate fake progress every half-second but
               // - stop before the end, in case the processing time is longer then estimated
               // - stop if we received the response, in case the processing time is shorted than estimated
-              Observable.interval(500)
-                .takeWhile(() => (this.now() - startTime) < estimatedTotalTime && this.progress < 1)
-                .subscribe(() => this.progress = (this.now() - startTime) / estimatedTotalTime);
+              interval(500).pipe(
+                takeWhile(() => (this.now() - startTime) < estimatedTotalTime && this.progress < 1)
+              ).subscribe(() => this.progress = (this.now() - startTime) / estimatedTotalTime);
             }
           }
         }, () => {

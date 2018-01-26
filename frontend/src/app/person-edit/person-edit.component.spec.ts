@@ -2,8 +2,6 @@ import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-
 import { PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
 import { CityModel, PersonIdentityModel, PersonModel } from '../models/person.model';
@@ -23,6 +21,8 @@ import { FamilySituationEditComponent } from '../family-situation-edit/family-si
 import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { map } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -136,7 +136,7 @@ describe('PersonEditComponent', () => {
 
     it('should edit and update an existing person', () => {
       const personService = TestBed.get(PersonService);
-      spyOn(personService, 'update').and.returnValue(Observable.of(person));
+      spyOn(personService, 'update').and.returnValue(of(person));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
       const displayCityPipe = TestBed.get(DisplayCityPipe);
@@ -238,7 +238,7 @@ describe('PersonEditComponent', () => {
       const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
-      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.map(() => []);
+      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
 
       fixture.detectChanges();
 
@@ -262,7 +262,7 @@ describe('PersonEditComponent', () => {
     it('should clear the spouse input on blur if not valid anymore', () =>  {
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
-      fixture.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.map(() => []);
+      fixture.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
 
       fixture.detectChanges();
 
@@ -318,7 +318,7 @@ describe('PersonEditComponent', () => {
       const component = fixture.componentInstance;
 
       const personService = TestBed.get(PersonService);
-      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: { id: 54 } }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 54 } }));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
       fixture.detectChanges();
@@ -334,7 +334,7 @@ describe('PersonEditComponent', () => {
       const component = fixture.componentInstance;
 
       const personService = TestBed.get(PersonService);
-      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: null }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
       fixture.detectChanges();
@@ -350,7 +350,7 @@ describe('PersonEditComponent', () => {
       const component = fixture.componentInstance;
 
       const personService = TestBed.get(PersonService);
-      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: { id: 42 } }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 42 } }));
 
       component.personForm.get('spouse').setValue({ id: 43, firstName: 'Jane', lastName: 'Doe' });
       fixture.detectChanges();
@@ -380,13 +380,13 @@ describe('PersonEditComponent', () => {
 
     it('should create and save a new person', fakeAsync(() => {
       const personService = TestBed.get(PersonService);
-      spyOn(personService, 'create').and.returnValue(Observable.of({id: 43} as PersonModel));
+      spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
       const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
-      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => Observable.of([cityModel]);
+      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => of([cityModel]);
 
       fixture.detectChanges();
 
@@ -523,7 +523,7 @@ describe('PersonEditComponent', () => {
       maritalStatus.dispatchEvent(new Event('change'));
 
       // trigger city typeahead
-      spyOn(personService, 'get').and.returnValue(Observable.of({ spouse: null }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
       spouse.value = 'Jane';
       spouse.dispatchEvent(new Event('input'));
       fixture.detectChanges();

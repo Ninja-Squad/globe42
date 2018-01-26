@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-password-change',
@@ -20,10 +21,11 @@ export class PasswordChangeComponent {
 
   changePassword() {
     this.passwordChangeFailed = false;
-    this.currentUserService.checkPassword(this.model.oldPassword)
-      .switchMap(() => this.currentUserService.changePassword(this.model.newPassword))
-      .subscribe(
-        () => this.router.navigate(['/']),
-        () => this.passwordChangeFailed = true);
+    this.currentUserService.checkPassword(this.model.oldPassword).pipe(
+      switchMap(() => this.currentUserService.changePassword(this.model.newPassword))
+    ).subscribe(
+      () => this.router.navigate(['/']),
+      () => this.passwordChangeFailed = true
+    );
   }
 }

@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/map';
-
 import { CityModel } from './models/person.model';
+import { of } from 'rxjs/observable/of';
 
 @Injectable()
 export class SearchCityService {
@@ -16,7 +14,7 @@ export class SearchCityService {
    */
   search(term: string): Observable<Array<CityModel>> {
     if (term === '') {
-      return Observable.of([]);
+      return of([]);
     }
 
     return this.http.get<Array<CityModel>>('/api/cities', { params : new HttpParams().set('query', term) });

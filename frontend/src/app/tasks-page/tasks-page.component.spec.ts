@@ -11,8 +11,6 @@ import { NowService } from '../now.service';
 import { DateTime } from 'luxon';
 import { By } from '@angular/platform-browser';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,6 +20,7 @@ import { DurationPipe } from '../duration.pipe';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { of } from 'rxjs/observable/of';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -70,7 +69,7 @@ describe('TasksPageComponent', () => {
     };
 
     activatedRoute = {
-      data: Observable.of(data),
+      data: of(data),
       parent: {
         snapshot: {
           data: { }
@@ -207,7 +206,7 @@ describe('TasksPageComponent', () => {
     const taskService = TestBed.get(TaskService);
     const tasksResolverService = TestBed.get(TasksResolverService);
 
-    spyOn(taskService, 'resurrect').and.returnValue(Observable.of(null));
+    spyOn(taskService, 'resurrect').and.returnValue(of(null));
     const newPage: Page<TaskModel> = {
       content: page.content,
       number: 2,
@@ -216,7 +215,7 @@ describe('TasksPageComponent', () => {
       totalPages: 2
     };
 
-    spyOn(tasksResolverService, 'resolve').and.returnValue(Observable.of(newPage));
+    spyOn(tasksResolverService, 'resolve').and.returnValue(of(newPage));
     const router = TestBed.get(Router);
     spyOn(router, 'navigate');
 
@@ -284,7 +283,7 @@ describe('TasksPageComponent', () => {
     const taskService = TestBed.get(TaskService);
     const tasksResolverService = TestBed.get(TasksResolverService);
 
-    spyOn(taskService, taskServiceMethodName).and.returnValue(Observable.of(null));
+    spyOn(taskService, taskServiceMethodName).and.returnValue(of(null));
     const newPage: Page<TaskModel> = {
       content: page.content,
       number: 0,
@@ -293,7 +292,7 @@ describe('TasksPageComponent', () => {
       totalPages: 3
     };
 
-    spyOn(tasksResolverService, 'resolve').and.returnValue(Observable.of(newPage));
+    spyOn(tasksResolverService, 'resolve').and.returnValue(of(newPage));
 
     const task = page.content[0];
 

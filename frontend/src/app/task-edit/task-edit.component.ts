@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TaskCommand } from '../models/task.command';
 import { PersonIdentityModel } from '../models/person.model';
 import { FullnamePipe } from '../fullname.pipe';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 import { UserModel } from '../models/user.model';
 import { sortBy } from '../utils';
 import { TaskModel } from '../models/task.model';

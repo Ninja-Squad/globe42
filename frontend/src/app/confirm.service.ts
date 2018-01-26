@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
+import { from } from 'rxjs/observable/from';
 
 export interface ConfirmOptions {
   message: string;
@@ -18,6 +18,6 @@ export class ConfirmService {
     const modalRef = this.modalService.open(ConfirmModalContentComponent);
     modalRef.componentInstance.title = options.title || 'Confirmation';
     modalRef.componentInstance.message = options.message;
-    return Observable.from(modalRef.result);
+    return from(modalRef.result);
   }
 }

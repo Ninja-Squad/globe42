@@ -7,15 +7,15 @@ import { NoteComponent } from '../note/note.component';
 import { PersonNoteService } from '../person-note.service';
 import { PersonModel } from '../models/person.model';
 import { NoteModel } from '../models/note.model';
-import { Observable } from 'rxjs/Observable';
 import { ConfirmService } from '../confirm.service';
-import 'rxjs/add/operator/debounceTime';
 import { Subject } from 'rxjs/Subject';
 import { By } from '@angular/platform-browser';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { of } from 'rxjs/observable/of';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 describe('PersonNotesComponent', () => {
 
@@ -59,7 +59,7 @@ describe('PersonNotesComponent', () => {
 
   it('should display notes', () => {
     const personNoteService = TestBed.get(PersonNoteService);
-    spyOn(personNoteService, 'list').and.returnValue(Observable.of(notes));
+    spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
@@ -70,7 +70,7 @@ describe('PersonNotesComponent', () => {
 
   it('should display no note message if no notes', () => {
     const personNoteService = TestBed.get(PersonNoteService);
-    spyOn(personNoteService, 'list').and.returnValue(Observable.of([]));
+    spyOn(personNoteService, 'list').and.returnValue(of([]));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
@@ -103,7 +103,7 @@ describe('PersonNotesComponent', () => {
   it('should disable other notes when editing one', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
-    spyOn(personNoteService, 'list').and.returnValue(Observable.of(notes));
+    spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
@@ -132,9 +132,9 @@ describe('PersonNotesComponent', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
     const confirmService = TestBed.get(ConfirmService);
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.of('ok'));
-    spyOn(personNoteService, 'delete').and.returnValue(Observable.of(null));
-    spyOn(personNoteService, 'list').and.returnValues(Observable.of(notes), Observable.of([notes[1]]));
+    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    spyOn(personNoteService, 'delete').and.returnValue(of(null));
+    spyOn(personNoteService, 'list').and.returnValues(of(notes), of([notes[1]]));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
@@ -155,9 +155,9 @@ describe('PersonNotesComponent', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
     const confirmService = TestBed.get(ConfirmService);
-    spyOn(personNoteService, 'list').and.returnValue(Observable.of(notes));
-    spyOn(personNoteService, 'delete').and.returnValue(Observable.of(null));
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw('nok'));
+    spyOn(personNoteService, 'list').and.returnValue(of(notes));
+    spyOn(personNoteService, 'delete').and.returnValue(of(null));
+    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nok'));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
@@ -175,8 +175,8 @@ describe('PersonNotesComponent', () => {
   it('should update note', async(() => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
-    spyOn(personNoteService, 'update').and.returnValue(Observable.of(null));
-    spyOn(personNoteService, 'list').and.returnValues(Observable.of(notes), Observable.of(notes));
+    spyOn(personNoteService, 'update').and.returnValue(of(null));
+    spyOn(personNoteService, 'list').and.returnValues(of(notes), of(notes));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
@@ -212,8 +212,8 @@ describe('PersonNotesComponent', () => {
   it('should add a note at the end when creating, and remove it when cancelling', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
-    spyOn(personNoteService, 'update').and.returnValue(Observable.of(null));
-    spyOn(personNoteService, 'list').and.returnValue(Observable.of(notes));
+    spyOn(personNoteService, 'update').and.returnValue(of(null));
+    spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
@@ -258,8 +258,8 @@ describe('PersonNotesComponent', () => {
     };
 
     const personNoteService = TestBed.get(PersonNoteService);
-    spyOn(personNoteService, 'create').and.returnValue(Observable.of(newNote));
-    spyOn(personNoteService, 'list').and.returnValues(Observable.of(notes), Observable.of([notes[0], notes[1], newNote]));
+    spyOn(personNoteService, 'create').and.returnValue(of(newNote));
+    spyOn(personNoteService, 'list').and.returnValues(of(notes), of([notes[0], notes[1], newNote]));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;

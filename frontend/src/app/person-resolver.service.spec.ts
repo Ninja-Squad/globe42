@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-
 import { PersonResolverService } from './person-resolver.service';
 import { PersonService } from './person.service';
 import { PersonModel } from './models/person.model';
+import { of } from 'rxjs/observable/of';
 
 describe('PersonResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -16,7 +14,7 @@ describe('PersonResolverService', () => {
 
   it('should retrieve a person', () => {
     const personService = TestBed.get(PersonService);
-    const expectedResult = Observable.of({ firstName: 'John', lastName: 'Doe' } as PersonModel);
+    const expectedResult = of({ firstName: 'John', lastName: 'Doe' } as PersonModel);
 
     spyOn(personService, 'get').and.returnValue(expectedResult);
 

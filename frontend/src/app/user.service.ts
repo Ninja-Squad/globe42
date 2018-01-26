@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/do';
-
 import { UserModel } from './models/user.model';
 import { Observable } from 'rxjs/Observable';
 import { UserCommand } from './models/user.command';

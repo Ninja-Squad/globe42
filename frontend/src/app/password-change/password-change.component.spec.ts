@@ -1,13 +1,12 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { PasswordChangeComponent } from './password-change.component';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { of } from 'rxjs/observable/of';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 describe('PasswordChangeComponent', () => {
 
@@ -93,8 +92,8 @@ describe('PasswordChangeComponent', () => {
     fixture.detectChanges();
 
     const userService = TestBed.get(CurrentUserService);
-    spyOn(userService, 'checkPassword').and.returnValue(Observable.of(null));
-    spyOn(userService, 'changePassword').and.returnValue(Observable.of(null));
+    spyOn(userService, 'checkPassword').and.returnValue(of(null));
+    spyOn(userService, 'changePassword').and.returnValue(of(null));
 
     const componentInstance = fixture.componentInstance;
     componentInstance.model.oldPassword = 'old';
@@ -117,7 +116,7 @@ describe('PasswordChangeComponent', () => {
     fixture.detectChanges();
 
     const userService = TestBed.get(CurrentUserService);
-    spyOn(userService, 'checkPassword').and.returnValue(Observable.throw(null));
+    spyOn(userService, 'checkPassword').and.returnValue(ErrorObservable.create(null));
     spyOn(userService, 'changePassword');
 
     const componentInstance = fixture.componentInstance;
@@ -140,8 +139,8 @@ describe('PasswordChangeComponent', () => {
     fixture.detectChanges();
 
     const userService = TestBed.get(CurrentUserService);
-    spyOn(userService, 'checkPassword').and.returnValue(Observable.of(null));
-    spyOn(userService, 'changePassword').and.returnValue(Observable.throw(null));
+    spyOn(userService, 'checkPassword').and.returnValue(of(null));
+    spyOn(userService, 'changePassword').and.returnValue(ErrorObservable.create(null));
 
     const componentInstance = fixture.componentInstance;
     componentInstance.model.oldPassword = 'old';

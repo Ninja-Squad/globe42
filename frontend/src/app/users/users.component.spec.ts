@@ -6,14 +6,13 @@ import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
 import { ConfirmService } from '../confirm.service';
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { of } from 'rxjs/observable/of';
 
 describe('UsersComponent', () => {
   const users: Array<UserModel> = [
@@ -74,7 +73,7 @@ describe('UsersComponent', () => {
     const confirmService = TestBed.get(ConfirmService);
 
     spyOn(userService, 'delete');
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.throw('nope'));
+    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nope'));
 
     const fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();
@@ -88,9 +87,9 @@ describe('UsersComponent', () => {
   it('should delete after confirmation', () => {
     const confirmService = TestBed.get(ConfirmService);
 
-    spyOn(userService, 'delete').and.returnValue(Observable.of(null));
-    spyOn(userService, 'list').and.returnValue(Observable.of(users));
-    spyOn(confirmService, 'confirm').and.returnValue(Observable.of('ok'));
+    spyOn(userService, 'delete').and.returnValue(of(null));
+    spyOn(userService, 'list').and.returnValue(of(users));
+    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
 
     const fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();

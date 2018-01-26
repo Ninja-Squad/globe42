@@ -6,11 +6,8 @@ import { NoteModel } from '../models/note.model';
 import { NoteEditionEvent } from '../note/note.component';
 import { Observable } from 'rxjs/Observable';
 import { PersonModel } from '../models/person.model';
-import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/debounceTime';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-person-notes',
@@ -32,7 +29,7 @@ export class PersonNotesComponent implements OnInit {
               private confirmService: ConfirmService) { }
 
   ngOnInit(): void {
-    // display the spinner after 300ms, unless the notes have loaded before. Note: Observable.delay is untestable,
+    // display the spinner after 300ms, unless the notes have loaded before. Note: delay() is untestable,
     // see https://github.com/angular/angular/issues/10127
     window.setTimeout(() => this.spinnerDisplayed = !this.notes, 300);
 
@@ -77,11 +74,11 @@ export class PersonNotesComponent implements OnInit {
   }
 
   private reloadAfterAction(action: Observable<any>) {
-    action
-      .switchMap(() => this.personNoteService.list(this.person.id))
-      .subscribe(notes => {
-        this.editedNote = null;
-        this.notes = notes;
-      });
+    action.pipe(
+      switchMap(() => this.personNoteService.list(this.person.id))
+    ).subscribe(notes => {
+      this.editedNote = null;
+      this.notes = notes;
+    });
   }
 }

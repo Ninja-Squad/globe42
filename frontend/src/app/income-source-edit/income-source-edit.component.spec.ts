@@ -2,7 +2,6 @@ import { async, TestBed } from '@angular/core/testing';
 
 import { IncomeSourceEditComponent } from './income-source-edit.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeSourceService } from '../income-source.service';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ErrorService } from '../error.service';
+import { of } from 'rxjs/observable/of';
 
 describe('IncomeSourceEditComponent', () => {
 
@@ -93,7 +93,7 @@ describe('IncomeSourceEditComponent', () => {
       const incomeSourceService = TestBed.get(IncomeSourceService);
       const router = TestBed.get(Router);
 
-      spyOn(incomeSourceService, 'create').and.returnValue(Observable.of({
+      spyOn(incomeSourceService, 'create').and.returnValue(of({
         id: 42
       }));
 
@@ -193,7 +193,7 @@ describe('IncomeSourceEditComponent', () => {
       const incomeSourceService = TestBed.get(IncomeSourceService);
       const router = TestBed.get(Router);
 
-      spyOn(incomeSourceService, 'update').and.returnValue(Observable.of(null));
+      spyOn(incomeSourceService, 'update').and.returnValue(of(null));
 
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
       fixture.detectChanges();

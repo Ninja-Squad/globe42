@@ -5,15 +5,14 @@ import { Component, LOCALE_ID } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
-import { Observable } from 'rxjs/Observable';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { Subject } from 'rxjs/Subject';
 import { HttpClientModule } from '@angular/common/http';
-import 'rxjs/add/observable/of';
 import { DurationPipe } from '../duration.pipe';
 import { NowService } from '../now.service';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import Spy = jasmine.Spy;
+import { of } from 'rxjs/observable/of';
 
 @Component({
   template: `<gl-spent-times [taskModel]="taskModel" (spentTimeDeleted)="storeDeletedSpentTime($event)"></gl-spent-times>`
@@ -43,7 +42,7 @@ describe('SpentTimesComponent', () => {
           id: 1
         }
       ] as Array<SpentTimeModel>;
-      (taskService.listSpentTimes as Spy).and.returnValue(Observable.of(spentTimes));
+      (taskService.listSpentTimes as Spy).and.returnValue(of(spentTimes));
 
       const component = new SpentTimesComponent(taskService);
       component.taskModel = task;
@@ -103,7 +102,7 @@ describe('SpentTimesComponent', () => {
       });
 
       const taskService = TestBed.get(TaskService);
-      spyOn(taskService, 'listSpentTimes').and.returnValue(Observable.of([
+      spyOn(taskService, 'listSpentTimes').and.returnValue(of([
         {
           id: 2,
           minutes: 12,
@@ -118,7 +117,7 @@ describe('SpentTimesComponent', () => {
         }
       ]));
 
-      spyOn(taskService, 'deleteSpentTime').and.returnValue(Observable.of(null));
+      spyOn(taskService, 'deleteSpentTime').and.returnValue(of(null));
 
       fixture = TestBed.createComponent(TestComponent);
       fixture.detectChanges();

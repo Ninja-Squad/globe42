@@ -18,10 +18,9 @@ import { SpentTimesComponent } from '../spent-times/spent-times.component';
 import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.component';
 import { DurationPipe } from '../duration.pipe';
 import { SpentTimeModel } from '../models/spent-time.model';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { of } from 'rxjs/observable/of';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -224,7 +223,7 @@ describe('TasksComponent', () => {
       expect(spentTimesLink).toBeTruthy();
 
       const taskService = TestBed.get(TaskService);
-      spyOn(taskService, 'listSpentTimes').and.returnValue(Observable.of([]));
+      spyOn(taskService, 'listSpentTimes').and.returnValue(of([]));
 
       fixture.nativeElement.querySelector('a.spent-times-link').click();
       fixture.detectChanges();

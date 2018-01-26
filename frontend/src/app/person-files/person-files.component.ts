@@ -6,8 +6,7 @@ import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
 import { sortBy } from '../utils';
 import { HttpEventType } from '@angular/common/http';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/forkJoin';
+import { finalize, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-person-files',
@@ -39,8 +38,9 @@ export class PersonFilesComponent implements OnInit {
   delete(file: FileModel) {
     this.confirmService.confirm({
       message: 'Voulez-vous vraiment supprimer ce document\u00A0?'
-    }).switchMap(() => this.personFileService.delete(this.person.id, file.name))
-      .subscribe(() => this.loadFiles());
+    }).pipe(
+      switchMap(() => this.personFileService.delete(this.person.id, file.name))
+    ).subscribe(() => this.loadFiles());
   }
 
   upload(fileChangeEvent: Event) {
@@ -49,8 +49,9 @@ export class PersonFilesComponent implements OnInit {
     const file = (fileChangeEvent.target as HTMLInputElement).files[0];
 
     this.personFileService.create(this.person.id, file)
-      .finally(() => this.uploading = false)
-      .subscribe(
+      .pipe(
+        finalize(() => this.uploading = false)
+      ).subscribe(
         progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
             this.uploadProgress = progressEvent.loaded / progressEvent.total;
@@ -61,7 +62,7 @@ export class PersonFilesComponent implements OnInit {
   }
 
   private loadFiles() {
-    // display the spinner after 300ms, unless the notes have loaded before. Note: Observable.delay is untestable,
+    // display the spinner after 300ms, unless the notes have loaded before. Note: delay() is untestable,
     // see https://github.com/angular/angular/issues/10127
     window.setTimeout(() => this.loading = !this.files, 300);
 

@@ -11,6 +11,7 @@ import { TaskCategoryModel } from './models/task-category.model';
 import { CurrentUserService } from './current-user/current-user.service';
 import { SpentTimeStatisticsCriteria } from './models/spent-time-statistics.criteria';
 import { SpentTimeStatisticsModel } from './models/spent-time-statistics.model';
+import { map } from 'rxjs/operators';
 
 function pageParams(pageNumber: number): HttpParams {
   return new HttpParams().set('page', pageNumber.toString());
@@ -83,8 +84,9 @@ export class TaskService {
   }
 
   listSpentTimes(taskId: number): Observable<Array<SpentTimeModel>> {
-    return this.http.get<Array<SpentTimeModel>>(`/api/tasks/${taskId}/spent-times`)
-      .map(list => sortBy(list, spentTime => spentTime.creationInstant, true));
+    return this.http.get<Array<SpentTimeModel>>(`/api/tasks/${taskId}/spent-times`).pipe(
+      map(list => sortBy(list, spentTime => spentTime.creationInstant, true))
+    );
   }
 
   deleteSpentTime(taskId: number, spentTimeId: number): Observable<void> {
@@ -96,8 +98,9 @@ export class TaskService {
   }
 
   listCategories(): Observable<Array<TaskCategoryModel>> {
-    return this.http.get<Array<TaskCategoryModel>>('/api/task-categories')
-      .map(categories => sortBy(categories, c => c.name));
+    return this.http.get<Array<TaskCategoryModel>>('/api/task-categories').pipe(
+      map(categories => sortBy(categories, c => c.name))
+    );
   }
 
   spentTimeStatistics(criteria: SpentTimeStatisticsCriteria): Observable<SpentTimeStatisticsModel> {

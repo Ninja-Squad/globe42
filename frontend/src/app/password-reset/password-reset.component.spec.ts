@@ -3,11 +3,11 @@ import { async, TestBed } from '@angular/core/testing';
 import { PasswordResetComponent } from './password-reset.component';
 import { UserModel } from '../models/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { UserWithPasswordModel } from '../models/user-with-password.model';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { of } from 'rxjs/observable/of';
 
 describe('PasswordResetComponent', () => {
   const user: UserModel = {id: 42, login: 'jb', admin: false};
@@ -41,7 +41,7 @@ describe('PasswordResetComponent', () => {
 
     const userService = TestBed.get(UserService);
     const updatedUser = {id: 42, login: 'jb', generatedPassword: 'passw0rd'} as UserWithPasswordModel;
-    spyOn(userService, 'resetPassword').and.returnValue(Observable.of(updatedUser));
+    spyOn(userService, 'resetPassword').and.returnValue(of(updatedUser));
     resetButton.click();
     fixture.detectChanges();
 

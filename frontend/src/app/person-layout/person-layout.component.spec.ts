@@ -6,8 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { of } from 'rxjs/observable/of';
 
 describe('PersonLayoutComponent', () => {
   const person = {
@@ -19,7 +18,7 @@ describe('PersonLayoutComponent', () => {
   } as PersonModel;
 
   const activatedRoute = {
-    data: Observable.of({ person }),
+    data: of({ person }),
     snapshot: {}
   };
 

@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import { DateTime } from 'luxon';
 import { NowService } from '../now.service';
-import 'rxjs/add/operator/switchMap';
 import { SpentTimeModel } from '../models/spent-time.model';
 
 class Task {

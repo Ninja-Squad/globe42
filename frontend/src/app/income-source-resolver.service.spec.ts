@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { IncomeSourceModel } from './models/income-source.model';
 import { IncomeSourceService } from './income-source.service';
+import { of } from 'rxjs/observable/of';
 
 describe('IncomeSourceResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -15,7 +16,7 @@ describe('IncomeSourceResolverService', () => {
 
   it('should retrieve a source', () => {
     const incomeSourceService = TestBed.get(IncomeSourceService);
-    const expectedResult: Observable<IncomeSourceModel> = Observable.of({ id: 42, name: 'Allocations Familiales' } as IncomeSourceModel);
+    const expectedResult: Observable<IncomeSourceModel> = of({ id: 42, name: 'Allocations Familiales' } as IncomeSourceModel);
 
     spyOn(incomeSourceService, 'get').and.returnValue(expectedResult);
 

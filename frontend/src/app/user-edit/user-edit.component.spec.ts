@@ -3,7 +3,6 @@ import { async, TestBed } from '@angular/core/testing';
 import { UserEditComponent } from './user-edit.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { UserModel } from '../models/user.model';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ErrorService } from '../error.service';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { of } from 'rxjs/observable/of';
 
 describe('UserEditComponent', () => {
 
@@ -76,7 +76,7 @@ describe('UserEditComponent', () => {
 
     it('should save the user and display the result', () => {
       const userService = TestBed.get(UserService);
-      spyOn(userService, 'create').and.returnValue(Observable.of({
+      spyOn(userService, 'create').and.returnValue(of({
         login: 'foo',
         generatedPassword: 'passw0rd'
       }));
@@ -175,7 +175,7 @@ describe('UserEditComponent', () => {
       const userService = TestBed.get(UserService);
       const router = TestBed.get(Router);
 
-      spyOn(userService, 'update').and.returnValue(Observable.of(null));
+      spyOn(userService, 'update').and.returnValue(of(null));
       spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(UserEditComponent);

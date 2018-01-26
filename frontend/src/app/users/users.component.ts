@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { sortBy } from '../utils';
 import { ConfirmService } from '../confirm.service';
-import 'rxjs/add/operator/switchMap';
 import { UserService } from '../user.service';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-users',
@@ -26,10 +26,10 @@ export class UsersComponent implements OnInit {
   }
 
   delete(user: UserModel) {
-    this.confirmService.confirm({message: `Voulez-vous vraiment supprimer l\'utilisateur ${user.login}\u00A0?`})
-      .switchMap(() => this.userService.delete(user.id))
-      .switchMap(() => this.userService.list())
-      .subscribe(users => this.users = sortBy(users, u => u.login), () => {});
+    this.confirmService.confirm({message: `Voulez-vous vraiment supprimer l\'utilisateur ${user.login}\u00A0?`}).pipe(
+      switchMap(() => this.userService.delete(user.id)),
+      switchMap(() => this.userService.list())
+    ).subscribe(users => this.users = sortBy(users, u => u.login), () => {});
   }
 
   isCurrentUser(user: UserModel) {

@@ -117,6 +117,7 @@
       "check-separator",
       "check-type"
     ],
+    "no-import-side-effect": [true, {"ignore-module": "(core-js/.*|zone\\.js/.*)$"}],
     "directive-selector": [
       true,
       "attribute",

@@ -2,10 +2,10 @@ import { TestBed } from '@angular/core/testing';
 
 import { UserResolverService } from './user-resolver.service';
 import { UserModel } from './models/user.model';
-import { Observable } from 'rxjs/Observable';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './user.service';
+import { of } from 'rxjs/observable/of';
 
 describe('UserResolverService', () => {
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('UserResolverService', () => {
 
   it('should resolve the user', () => {
     const userService = TestBed.get(UserService);
-    const expectedResult = Observable.of({id: 42} as UserModel);
+    const expectedResult = of({id: 42} as UserModel);
     spyOn(userService, 'get').and.returnValue(expectedResult);
 
     const resolver = TestBed.get(UserResolverService);

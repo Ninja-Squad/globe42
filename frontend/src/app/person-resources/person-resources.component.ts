@@ -6,6 +6,7 @@ import { IncomeService } from '../income.service';
 import { PersonModel } from '../models/person.model';
 import { ChargeModel } from '../models/charge.model';
 import { ChargeService } from '../charge.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-person-resources',
@@ -28,17 +29,17 @@ export class PersonResourcesComponent {
   }
 
   deleteIncome(income: IncomeModel) {
-    this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer le revenu ${income.source.name}\u00A0?`})
-      .switchMap(() => this.incomeService.delete(this.person.id, income.id))
-      .switchMap(() => this.incomeService.list(this.person.id))
-      .subscribe(incomes => this.incomes = incomes, () => {});
+    this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer le revenu ${income.source.name}\u00A0?`}).pipe(
+      switchMap(() => this.incomeService.delete(this.person.id, income.id)),
+      switchMap(() => this.incomeService.list(this.person.id))
+    ).subscribe(incomes => this.incomes = incomes, () => {});
   }
 
   deleteCharge(charge: ChargeModel) {
-    this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer la charge ${charge.type.name}\u00A0?`})
-      .switchMap(() => this.chargeService.delete(this.person.id, charge.id))
-      .switchMap(() => this.chargeService.list(this.person.id))
-      .subscribe(charges => this.charges = charges, () => {});
+    this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer la charge ${charge.type.name}\u00A0?`}).pipe(
+      switchMap(() => this.chargeService.delete(this.person.id, charge.id)),
+      switchMap(() => this.chargeService.list(this.person.id))
+    ).subscribe(charges => this.charges = charges, () => {});
   }
 
   totalMonthlyIncomeAmount() {

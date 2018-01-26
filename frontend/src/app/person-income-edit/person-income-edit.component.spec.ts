@@ -4,13 +4,12 @@ import { PersonIncomeEditComponent } from './person-income-edit.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncomeService } from '../income.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FullnamePipe } from '../fullname.pipe';
+import { of } from 'rxjs/observable/of';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -86,7 +85,7 @@ describe('PersonIncomeEditComponent', () => {
       const incomeService = TestBed.get(IncomeService);
       const router = TestBed.get(Router);
 
-      spyOn(incomeService, 'create').and.returnValue(Observable.of({
+      spyOn(incomeService, 'create').and.returnValue(of({
         id: 42
       }));
       spyOn(router, 'navigate');

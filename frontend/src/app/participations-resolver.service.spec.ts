@@ -4,8 +4,8 @@ import { ParticipationsResolverService } from './participations-resolver.service
 import { ParticipationService } from './participation.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ParticipationModel } from './models/participation.model';
-import { Observable } from 'rxjs/Observable';
 import { PersonModel } from './models/person.model';
+import { of } from 'rxjs/observable/of';
 
 describe('ParticipationsResolverService', () => {
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('ParticipationsResolverService', () => {
 
   it('should resolve the list of participations of a person', () => {
     const participationService = TestBed.get(ParticipationService);
-    const participations = Observable.of([{ id: 1 }] as Array<ParticipationModel>);
+    const participations = of([{ id: 1 }] as Array<ParticipationModel>);
 
     spyOn(participationService, 'list').and.returnValue(participations);
 

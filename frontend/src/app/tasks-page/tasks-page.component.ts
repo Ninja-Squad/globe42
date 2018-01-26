@@ -6,8 +6,8 @@ import { TaskEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/switchMap';
 import { PersonModel } from '../models/person.model';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-tasks-page',
@@ -69,17 +69,17 @@ export class TasksPageComponent implements OnInit {
 
   private handleEvent(action: Observable<void>) {
     const currentPageNumber = this.page.number;
-    action.switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))
-      .subscribe(
-        page => {
-          // maybe we are displaying a page that doesn't exist anymore
-          // so we check and reload with the last page if needed
-          if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
-            this.loadPage(page.totalPages);
-          } else {
-            this.page = page;
-          }
-        },
-        () => {});
+    action.pipe(
+      switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))
+    ).subscribe(page => {
+      // maybe we are displaying a page that doesn't exist anymore
+      // so we check and reload with the last page if needed
+      if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
+        this.loadPage(page.totalPages);
+      } else {
+        this.page = page;
+      }
+    },
+    () => {});
   }
 }

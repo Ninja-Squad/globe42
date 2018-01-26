@@ -6,18 +6,17 @@ import { NowService } from '../now.service';
 import { DateTime } from 'luxon';
 import { TaskService } from '../task.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import 'rxjs/add/observable/of';
 import { ChartComponent } from '../chart/chart.component';
 import { DurationPipe } from '../duration.pipe';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
-import 'rxjs/add/observable/empty';
 import { UserModel } from '../models/user.model';
 import { ChartColor } from 'chart.js';
 import { By } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
+import { empty } from 'rxjs/observable/empty';
+import { of } from 'rxjs/observable/of';
 
 class FakeNowService extends NowService {
   now(): DateTime {
@@ -57,7 +56,7 @@ describe('SpentTimeStatisticsComponent', () => {
     });
 
     const taskService = TestBed.get(TaskService);
-    spyOn(taskService, 'spentTimeStatistics').and.returnValue(Observable.empty());
+    spyOn(taskService, 'spentTimeStatistics').and.returnValue(empty());
   });
 
   it('should create form with current month and all users selected', () => {
@@ -104,7 +103,7 @@ describe('SpentTimeStatisticsComponent', () => {
     const statisticsModel: SpentTimeStatisticsModel = {
       statistics: []
     };
-    taskService.spentTimeStatistics.and.returnValue(Observable.of(statisticsModel));
+    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -142,7 +141,7 @@ describe('SpentTimeStatisticsComponent', () => {
         }
       ]
     };
-    taskService.spentTimeStatistics.and.returnValue(Observable.of(statisticsModel));
+    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -192,7 +191,7 @@ describe('SpentTimeStatisticsComponent', () => {
         }
       ]
     };
-    taskService.spentTimeStatistics.and.returnValue(Observable.of(statisticsModel));
+    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -238,7 +237,7 @@ describe('SpentTimeStatisticsComponent', () => {
       ]
     };
 
-    taskService.spentTimeStatistics.and.returnValues(Observable.of(statisticsModel1), Observable.of(statisticsModel2));
+    taskService.spentTimeStatistics.and.returnValues(of(statisticsModel1), of(statisticsModel2));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -277,7 +276,7 @@ describe('SpentTimeStatisticsComponent', () => {
         }
       ]
     };
-    taskService.spentTimeStatistics.and.returnValue(Observable.of(statisticsModel));
+    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
 

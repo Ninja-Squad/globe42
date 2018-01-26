@@ -3,12 +3,12 @@ import { TestBed } from '@angular/core/testing';
 import { TasksResolverService } from './tasks-resolver.service';
 import { TaskService } from './task.service';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { HttpClientModule } from '@angular/common/http';
 import { NowService } from './now.service';
 import { TaskModel } from './models/task.model';
 import { Page } from './models/page';
 import { CurrentUserModule } from './current-user/current-user.module';
+import { of } from 'rxjs/observable/of';
 
 describe('TasksResolverService', () => {
   let resolver: TasksResolverService;
@@ -36,7 +36,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for todo list type', () => {
     const route = routeWithType('todo');
-    const expected = Observable.of({} as Page<TaskModel>);
+    const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listTodo').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listTodo).toHaveBeenCalledWith(0);
@@ -44,7 +44,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for mine list type', () => {
     const route = routeWithType('mine');
-    const expected = Observable.of({} as Page<TaskModel>);
+    const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listMine').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listMine).toHaveBeenCalledWith(0);
@@ -52,7 +52,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for urgent list type', () => {
     const route = routeWithType('urgent');
-    const expected = Observable.of({} as Page<TaskModel>);
+    const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listUrgent').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listUrgent).toHaveBeenCalledWith(0);
@@ -60,7 +60,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for unassigned list type', () => {
     const route = routeWithType('unassigned');
-    const expected = Observable.of({} as Page<TaskModel>);
+    const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listUnassigned').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listUnassigned).toHaveBeenCalledWith(0);
@@ -68,7 +68,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for archived list type', () => {
     const route = routeWithType('archived');
-    const expected = Observable.of({} as Page<TaskModel>);
+    const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listArchived').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listArchived).toHaveBeenCalledWith(0);
@@ -83,7 +83,7 @@ describe('TasksResolverService', () => {
         }
       }
     };
-    const expected = Observable.of({} as Page<TaskModel>);
+    const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listForPerson').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listForPerson).toHaveBeenCalledWith(42, 0);
@@ -92,7 +92,7 @@ describe('TasksResolverService', () => {
   it('should resolve tasks when page is present', () => {
     const route = routeWithType('archived');
     (route as any).queryParamMap = convertToParamMap({page: '2'});
-    const expected = Observable.of({} as Page<TaskModel>);
+    const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listArchived').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
     expect(taskService.listArchived).toHaveBeenCalledWith(2);

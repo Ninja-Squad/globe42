@@ -3,7 +3,7 @@ import { ErrorService } from '../error.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { ERRORS, FunctionalErrorModel } from '../models/error.model';
 import { interpolate } from '../utils';
-import 'rxjs/add/operator/filter';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'gl-error',
@@ -26,9 +26,9 @@ export class ErrorComponent implements OnInit {
     this.interceptor.technicalErrors.subscribe(
       err => this.error = { message: err.message, technical: true, status: err.status });
 
-    this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .subscribe(() => this.error = null);
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => this.error = null);
   }
 
   private toMessage(error: FunctionalErrorModel) {

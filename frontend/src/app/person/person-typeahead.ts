@@ -1,10 +1,8 @@
 import { PersonIdentityModel } from '../models/person.model';
 import { Observable } from 'rxjs/Observable';
 import { FullnamePipe } from '../fullname.pipe';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/map';
 import { sortBy } from '../utils';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 /**
  * Class used to help implementing a person typeahead
@@ -19,10 +17,11 @@ export class PersonTypeahead {
               private fullnamePipe: FullnamePipe) {
     this.persons = sortBy(persons, p => fullnamePipe.transform(p));
     this.searcher = (text$: Observable<string>) =>
-      text$
-        .debounceTime(200)
-        .distinctUntilChanged()
-        .map(term => term === '' ? [] : this.persons.filter(person => this.isPersonAccepted(person, term)).slice(0, 10));
+      text$.pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        map(term => term === '' ? [] : this.persons.filter(person => this.isPersonAccepted(person, term)).slice(0, 10))
+      );
 
     this.formatter = (result: PersonIdentityModel) => this.fullnamePipe.transform(result);
   }
