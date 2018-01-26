@@ -14,7 +14,7 @@ export class CurrentUserService {
     this.userEvents.subscribe(user => {
       jwtInterceptor.token = user ? user.token : null;
     });
-    this.retrieveUser();
+    this._retrieveUser();
   }
 
   authenticate(credentials: { login: string; password: string }) {
@@ -25,22 +25,32 @@ export class CurrentUserService {
 
   storeLoggedInUser(user: UserModel) {
     window.localStorage.setItem('rememberMe', JSON.stringify(user));
-    document.cookie = `globe42_token=${user.token};path=/`;
+    this.storeCookie(user.token);
     this.userEvents.next(user);
   }
 
-  retrieveUser() {
+  /**
+   * Visible for testing.
+   * This is called at startup, to retrieve the user from the local storage rememberMe item.
+   * If found, it emits an event from userEvents. The local storage is the single point of truth, but we also need
+   * a cookie for some operations (like loading a file, without using an AJAX request). So, if there is a user in the
+   * local storage, then it's also stored in a session cookie. Otherwise, the session cookie is deleted.
+   */
+  _retrieveUser() {
     const value = window.localStorage.getItem('rememberMe');
     if (value) {
       const user: UserModel = JSON.parse(value);
+      this.storeCookie(user.token);
       this.userEvents.next(user);
+    } else {
+      this.deleteCookie();
     }
   }
 
   logout() {
     this.userEvents.next(null);
     window.localStorage.removeItem('rememberMe');
-    document.cookie = `globe42_token=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    this.deleteCookie();
   }
 
   isLoggedIn(): boolean {
@@ -53,5 +63,13 @@ export class CurrentUserService {
 
   changePassword(newPassword: string): Observable<void> {
     return this.http.put<void>('/api/users/me/passwords', {newPassword});
+  }
+
+  private storeCookie(token: string) {
+    document.cookie = `globe42_token=${token};path=/`;
+  }
+
+  private deleteCookie() {
+    document.cookie = `globe42_token=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   }
 }

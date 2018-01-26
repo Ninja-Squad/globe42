@@ -67,7 +67,7 @@ describe('CurrentUserService', () => {
   it('should retrieve a user if one is stored', () => {
     spyOn(mockLocalStorage, 'getItem').and.returnValue(JSON.stringify(globeUser));
 
-    service.retrieveUser();
+    service._retrieveUser();
 
     expect(service.userEvents.getValue()).toEqual(globeUser);
     expect(jwtInterceptor.token).toBe(globeUser.token);
@@ -76,7 +76,7 @@ describe('CurrentUserService', () => {
   it('should retrieve no user if none stored', () => {
     spyOn(mockLocalStorage, 'getItem');
 
-    service.retrieveUser();
+    service._retrieveUser();
 
     expect(service.userEvents.getValue()).toBeNull();
     expect(jwtInterceptor.token).toBeNull();
