@@ -22,7 +22,6 @@ spring:
       max-request-size: 20MB
   jpa:
     open-in-view: false
-    show-sql: true
 management:
   endpoint:
     health:
