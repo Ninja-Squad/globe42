@@ -61,7 +61,7 @@ dependencies {
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
 
     runtime 'org.postgresql:postgresql:42.1.4'
-    runtime 'org.flywaydb:flyway-core:5.0.3'
+    runtime 'org.flywaydb:flyway-core:4.2.0' // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
 }
 
 // remove default tasks added by flyway plugin

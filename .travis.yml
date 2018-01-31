@@ -12,7 +12,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install language-pack-fr
   - sudo /etc/init.d/postgresql stop
-  - sudo /etc/init.d/postgresql start 9.6
+  - sudo /etc/init.d/postgresql start 9.2
 
 before_script:
   - psql -f backend/database/database.sql -U postgres
