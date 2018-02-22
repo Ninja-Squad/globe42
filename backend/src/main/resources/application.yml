@@ -25,7 +25,7 @@ spring:
 management:
   endpoint:
     health:
-      show-details: true
+      show-details: 'always'
   endpoints:
     web:
       expose: '*'
