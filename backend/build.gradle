@@ -64,14 +64,12 @@ dependencies {
         exclude module: 'junit'
     }
     testCompile 'com.ninja-squad:DbSetup:2.1.0'
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.2'
-    // To avoid compiler warnings about @API annotations in JUnit code.
-    testCompile('org.apiguardian:apiguardian-api:1.0.0')
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
 
     runtime 'org.postgresql:postgresql:42.1.4'
     runtime 'org.flywaydb:flyway-core:4.2.0' // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
 
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.2'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
 }
 
 test {
