@@ -7,7 +7,6 @@ import { Page } from '../models/page';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TaskEventType, TasksComponent } from '../tasks/tasks.component';
 import { FullnamePipe } from '../fullname.pipe';
-import { NowService } from '../now.service';
 import { DateTime } from 'luxon';
 import { By } from '@angular/platform-browser';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
@@ -31,6 +30,8 @@ describe('TasksPageComponent', () => {
   let activatedRoute: ActivatedRoute;
 
   beforeEach(async(() => {
+    jasmine.clock().mockDate(DateTime.fromISO('2017-08-01T12:30:00').toJSDate());
+
     const tasks: Array<TaskModel> = [];
     for (let i = 0; i < 3; i++) {
       tasks.push(
@@ -91,15 +92,14 @@ describe('TasksPageComponent', () => {
         DurationPipe
       ],
       providers: [
-        NowService,
         TaskService,
         TasksResolverService,
         { provide: ActivatedRoute, useFactory: () => activatedRoute }
       ]
     });
-
-    spyOn(TestBed.get(NowService), 'now').and.callFake(() => DateTime.fromISO('2017-08-01T12:30:00'));
   }));
+
+  afterEach(() => jasmine.clock().uninstall());
 
   it('should display tasks in a task list', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);

@@ -4,7 +4,6 @@ import { TaskService } from './task.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TaskModel } from './models/task.model';
 import { Observable } from 'rxjs/Observable';
-import { NowService } from './now.service';
 import { Page } from './models/page';
 import { SpentTimeModel } from './models/spent-time.model';
 import { HttpTester } from './http-tester.spec';
@@ -21,16 +20,19 @@ describe('TaskService', () => {
   let currentUserService: CurrentUserService;
 
   beforeEach(() => {
+    jasmine.clock().mockDate(DateTime.fromISO('2017-08-02T15:30:00').toJSDate());
+
     TestBed.configureTestingModule({
-      providers: [NowService, TaskService],
-      imports: [ CurrentUserModule.forRoot(), HttpClientTestingModule ]
+      providers: [TaskService],
+      imports: [CurrentUserModule.forRoot(), HttpClientTestingModule]
     });
 
     service = TestBed.get(TaskService);
     currentUserService = TestBed.get(CurrentUserService);
     httpTester = new HttpTester(TestBed.get(HttpTestingController));
-    spyOn(TestBed.get(NowService), 'now').and.callFake(() => DateTime.fromISO('2017-08-02T15:30:00'));
   });
+
+  afterEach(() => jasmine.clock().uninstall());
 
   function checkPage(methodToTest: () => Observable<Page<TaskModel>>, expectedUrl: string) {
     const expectedPage = {
@@ -48,7 +50,7 @@ describe('TaskService', () => {
     checkPage(() => service.listMine(2), '/api/tasks?page=2&mine=');
   });
 
-  it('should list my tasks', () => {
+  it('should list urgent tasks', () => {
     checkPage(() => service.listUrgent(2), '/api/tasks?page=2&before=2017-08-09');
   });
 

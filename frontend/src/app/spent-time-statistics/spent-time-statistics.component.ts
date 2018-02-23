@@ -5,12 +5,12 @@ import { ChartConfiguration } from 'chart.js';
 import { minutesToDuration, sortBy } from '../utils';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NowService } from '../now.service';
 import { UserModel } from '../models/user.model';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
 import { of } from 'rxjs/observable/of';
 import { catchError, concat, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
+import { DateTime } from 'luxon';
 
 export interface CategoryStatistic {
   category: TaskCategoryModel;
@@ -60,8 +60,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
   constructor(fb: FormBuilder,
               private taskService: TaskService,
               private router: Router,
-              private route: ActivatedRoute,
-              private nowService: NowService) {
+              private route: ActivatedRoute) {
     this.criteriaForm = fb.group({
       from: null as string,
       to: null as string,
@@ -75,9 +74,10 @@ export class SpentTimeStatisticsComponent implements OnInit {
     // If no param, default to the current month
     const paramMap = this.route.snapshot.queryParamMap;
     if (!paramMap.get('from') && !paramMap.get('to') && !paramMap.get('by')) {
+      const now = DateTime.local();
       this.criteriaForm.setValue( {
-        from: this.nowService.now().startOf('month').toISODate(),
-        to: this.nowService.now().endOf('month').toISODate(),
+        from: now.startOf('month').toISODate(),
+        to: now.endOf('month').toISODate(),
         by: ALL_USERS
       });
     } else {

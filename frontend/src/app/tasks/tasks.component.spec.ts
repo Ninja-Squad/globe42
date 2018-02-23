@@ -6,7 +6,6 @@ import { UserModel } from '../models/user.model';
 import { PersonIdentityModel } from '../models/person.model';
 import { FullnamePipe } from '../fullname.pipe';
 import { DateTime } from 'luxon';
-import { NowService } from '../now.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
@@ -38,6 +37,8 @@ describe('TasksComponent', () => {
   let tasks: Array<TaskModel>;
 
   beforeEach(async(() => {
+    jasmine.clock().mockDate(DateTime.fromISO('2017-08-01T12:30:00').toJSDate());
+
     tasks = [
       {
         id: 12,
@@ -80,20 +81,19 @@ describe('TasksComponent', () => {
         DurationPipe,
       ],
       providers: [
-        NowService,
         TaskService,
         TasksResolverService,
         ConfirmService
       ]
     });
-
-    spyOn(TestBed.get(NowService), 'now').and.callFake(() => DateTime.fromISO('2017-08-01T12:30:00'));
   }));
+
+  afterEach(() => jasmine.clock().uninstall());
 
   describe('logic', () => {
 
     function createComponent() {
-      const component = new TasksComponent(TestBed.get(NowService));
+      const component = new TasksComponent();
       component.taskModels = tasks;
       return component;
     }

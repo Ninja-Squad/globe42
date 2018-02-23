@@ -4,7 +4,6 @@ import { TasksResolverService } from './tasks-resolver.service';
 import { TaskService } from './task.service';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { NowService } from './now.service';
 import { TaskModel } from './models/task.model';
 import { Page } from './models/page';
 import { CurrentUserModule } from './current-user/current-user.module';
@@ -16,7 +15,7 @@ describe('TasksResolverService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [NowService, TaskService, TasksResolverService],
+      providers: [TaskService, TasksResolverService],
       imports: [CurrentUserModule.forRoot(), HttpClientModule]
     });
 

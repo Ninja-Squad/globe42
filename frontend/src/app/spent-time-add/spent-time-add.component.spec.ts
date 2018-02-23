@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
-import { NowService } from '../now.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
@@ -41,8 +40,7 @@ describe('SpentTimeAddComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SpentTimeAddComponent, TestComponent],
       providers: [
-        TaskService,
-        NowService
+        TaskService
       ],
       imports: [CurrentUserModule.forRoot(), HttpClientModule, FormsModule]
     });

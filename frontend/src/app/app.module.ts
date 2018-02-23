@@ -58,7 +58,6 @@ import { TasksComponent } from './tasks/tasks.component';
 import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
 import { TasksResolverService } from './tasks-resolver.service';
 import { TaskService } from './task.service';
-import { NowService } from './now.service';
 import { TasksPageComponent } from './tasks-page/tasks-page.component';
 import { TaskEditComponent } from './task-edit/task-edit.component';
 import { TaskResolverService } from './task-resolver.service';
@@ -218,7 +217,6 @@ registerLocaleData(localeFr);
     TasksResolverService,
     TaskService,
     TaskResolverService,
-    NowService,
     PersonNoteService,
     PersonFileService,
     ParticipationService,

@@ -9,10 +9,9 @@ import { SpentTimeModel } from '../models/spent-time.model';
 import { Subject } from 'rxjs/Subject';
 import { HttpClientModule } from '@angular/common/http';
 import { DurationPipe } from '../duration.pipe';
-import { NowService } from '../now.service';
 import { CurrentUserModule } from '../current-user/current-user.module';
-import Spy = jasmine.Spy;
 import { of } from 'rxjs/observable/of';
+import Spy = jasmine.Spy;
 
 @Component({
   template: `<gl-spent-times [taskModel]="taskModel" (spentTimeDeleted)="storeDeletedSpentTime($event)"></gl-spent-times>`
@@ -95,7 +94,6 @@ describe('SpentTimesComponent', () => {
         declarations: [SpentTimesComponent, TestComponent, DurationPipe],
         providers: [
           TaskService,
-          NowService,
           { provide: LOCALE_ID, useValue: 'fr-FR' }
         ],
         imports: [CurrentUserModule.forRoot(), HttpClientModule]

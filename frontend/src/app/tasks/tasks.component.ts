@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import { DateTime } from 'luxon';
-import { NowService } from '../now.service';
 import { SpentTimeModel } from '../models/spent-time.model';
 
 class Task {
@@ -9,11 +8,11 @@ class Task {
   spentTimesOpened = false;
   addSpentTimeOpened = false;
 
-  constructor(public model: TaskModel, private nowService: NowService) {}
+  constructor(public model: TaskModel) {}
 
   relativeDueDate(): string {
     const dueDateTime = DateTime.fromISO(this.model.dueDate);
-    const today = this.nowService.now().startOf('day');
+    const today = DateTime.local().startOf('day');
     if (today.equals(dueDateTime)) {
       return 'aujourd\'hui';
     }
@@ -30,7 +29,7 @@ class Task {
 
   dueDateClass() {
     const dueDateTime = DateTime.fromISO(this.model.dueDate);
-    const today = this.nowService.now().startOf('day');
+    const today = DateTime.local().startOf('day');
     const days = dueDateTime.diff(today, ['days']).days;
     if (days < 0) {
       return 'text-danger font-weight-bold';
@@ -69,11 +68,9 @@ export class TasksComponent {
   @Output()
   taskClicked = new EventEmitter<TaskEvent>();
 
-  constructor(private nowService: NowService) { }
-
   @Input()
   set taskModels(models: Array<TaskModel>) {
-    this.tasks = models.map(model => new Task(model, this.nowService));
+    this.tasks = models.map(model => new Task(model));
   }
 
   toggle(task: Task, event: Event) {

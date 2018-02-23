@@ -5,13 +5,12 @@ import { TaskService } from './task.service';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskModel } from './models/task.model';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
-import { NowService } from './now.service';
 import { CurrentUserModule } from './current-user/current-user.module';
 import { of } from 'rxjs/observable/of';
 
 describe('TaskResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [TaskResolverService, TaskService, NowService],
+    providers: [TaskResolverService, TaskService],
     imports: [CurrentUserModule.forRoot(), HttpClientModule]
   }));
 

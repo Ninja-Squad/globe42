@@ -2,7 +2,6 @@ import { SpentTimeStatisticsComponent } from './spent-time-statistics.component'
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
-import { NowService } from '../now.service';
 import { DateTime } from 'luxon';
 import { TaskService } from '../task.service';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -17,12 +16,6 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { empty } from 'rxjs/observable/empty';
 import { of } from 'rxjs/observable/of';
-
-class FakeNowService extends NowService {
-  now(): DateTime {
-    return DateTime.fromISO('2017-12-29T12:13:00Z');
-  }
-}
 
 function createRoute(queryParams: {[key: string]: string}): ActivatedRoute {
   return {
@@ -40,6 +33,8 @@ describe('SpentTimeStatisticsComponent', () => {
   let route: ActivatedRoute;
 
   beforeEach(() => {
+    jasmine.clock().mockDate(DateTime.fromISO('2017-12-29T12:13:00Z').toJSDate());
+
     TestBed.overrideTemplate(ChartComponent, '');
     TestBed.configureTestingModule({
       declarations: [SpentTimeStatisticsComponent, ChartComponent, DurationPipe],
@@ -50,7 +45,6 @@ describe('SpentTimeStatisticsComponent', () => {
       ]), ReactiveFormsModule, GlobeNgbModule.forRoot(), CurrentUserModule.forRoot(), HttpClientModule],
       providers: [
         { provide: ActivatedRoute, useFactory: () => route },
-        { provide: NowService, useClass: FakeNowService },
         TaskService
       ]
     });
@@ -58,6 +52,8 @@ describe('SpentTimeStatisticsComponent', () => {
     const taskService = TestBed.get(TaskService);
     spyOn(taskService, 'spentTimeStatistics').and.returnValue(empty());
   });
+
+  afterEach(() => jasmine.clock().uninstall());
 
   it('should create form with current month and all users selected', () => {
     route = createRoute({});

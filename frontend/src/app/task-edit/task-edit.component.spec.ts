@@ -9,7 +9,6 @@ import { PersonIdentityModel } from '../models/person.model';
 import { UserModel } from '../models/user.model';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskService } from '../task.service';
-import { NowService } from '../now.service';
 import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
@@ -59,7 +58,6 @@ describe('TaskEditComponent', () => {
       declarations: [TaskEditComponent],
       providers: [
         TaskService,
-        NowService,
         FullnamePipe,
         { provide: ActivatedRoute, useValue: activatedRoute }
       ]

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { SearchCityService } from '../search-city.service';
 import { HttpEventType } from '@angular/common/http';
-import { NowService } from '../now.service';
 import { interval } from 'rxjs/observable/interval';
 import { takeWhile } from 'rxjs/operators';
+import { DateTime } from 'luxon';
 
 const ESTIMATED_PROCESSING_TIME_IN_MILLIS = 20000;
 
@@ -21,7 +21,7 @@ export class CitiesUploadComponent {
    */
   progress: number;
 
-  constructor(private cityService: SearchCityService, private nowService: NowService) { }
+  constructor(private cityService: SearchCityService) { }
 
   upload(fileChangeEvent: Event) {
     const file = (fileChangeEvent.target as HTMLInputElement).files[0];
@@ -69,7 +69,7 @@ export class CitiesUploadComponent {
     return new FileReader();
   }
 
-  private now() {
-    return this.nowService.now().valueOf();
+  private now(): number {
+    return DateTime.local().valueOf();
   }
 }
