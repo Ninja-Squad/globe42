@@ -11,7 +11,7 @@ import org.globe42.domain.ActivityType;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
 import org.globe42.web.persons.PersonIdentityDTO;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 

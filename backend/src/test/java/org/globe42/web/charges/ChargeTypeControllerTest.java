@@ -1,6 +1,7 @@
 package org.globe42.web.charges;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,8 +18,8 @@ import org.globe42.domain.ChargeType;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -43,7 +44,7 @@ public class ChargeTypeControllerTest extends BaseTest {
 
     private ChargeType chargeType;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         chargeType = new ChargeType(42L);
         chargeType.setName("source 1");
@@ -76,11 +77,11 @@ public class ChargeTypeControllerTest extends BaseTest {
         assertThat(result.getId()).isEqualTo(chargeType.getId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenGettingWithUnknownId() {
         when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.empty());
 
-        controller.get(chargeType.getId());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(chargeType.getId()));
     }
 
     @Test
@@ -99,7 +100,7 @@ public class ChargeTypeControllerTest extends BaseTest {
         assertChargeTypeEqualsCommand(chargeTypeArgumentCaptor.getValue(), command);
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenCreatingWithUnknownChargeCategory() {
         ChargeTypeCommandDTO command = createCommand();
 
@@ -107,16 +108,16 @@ public class ChargeTypeControllerTest extends BaseTest {
             .thenReturn(Optional.of(new ChargeCategory(command.getCategoryId(), "category 2")));
         when(mockChargeTypeDao.existsByName(command.getName())).thenReturn(true);
 
-        controller.create(command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(command));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenCreatingWithExistingName() {
         ChargeTypeCommandDTO command = createCommand();
 
         when(mockChargeCategoryDao.findById(command.getCategoryId())).thenReturn(Optional.empty());
 
-        controller.create(command);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(command));
     }
 
     @Test
@@ -132,14 +133,15 @@ public class ChargeTypeControllerTest extends BaseTest {
         assertChargeTypeEqualsCommand(chargeType, command);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfNotFoundWhenUpdating() {
         when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.empty());
 
-        controller.update(chargeType.getId(), createCommand());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.update(chargeType.getId(), createCommand()));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
         ChargeTypeCommandDTO command = createCommand();
 
@@ -148,7 +150,8 @@ public class ChargeTypeControllerTest extends BaseTest {
             .thenReturn(Optional.of(new ChargeCategory(command.getCategoryId(), "category 2")));
         when(mockChargeTypeDao.findByName(command.getName())).thenReturn(Optional.of(new ChargeType(4567L)));
 
-        controller.update(chargeType.getId(), command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
+            () -> controller.update(chargeType.getId(), command));
     }
 
     @Test

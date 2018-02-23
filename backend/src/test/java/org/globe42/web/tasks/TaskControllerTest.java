@@ -1,6 +1,7 @@
 package org.globe42.web.tasks;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -26,8 +27,8 @@ import org.globe42.web.exception.NotFoundException;
 import org.globe42.web.security.CurrentUser;
 import org.globe42.web.users.UserControllerTest;
 import org.globe42.web.util.PageDTO;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
@@ -66,7 +67,7 @@ public class TaskControllerTest extends BaseTest {
     private TaskCategory variousCategory;
     private TaskCategory mealCategory;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         user = UserControllerTest.createUser(1L);
         Person person = new Person(2L);
@@ -176,20 +177,22 @@ public class TaskControllerTest extends BaseTest {
         assertThat(task2.getAssignee()).isEqualTo(user);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenAssigningUnexistingTask() {
         when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.empty());
         when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
 
-        controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId())));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenAssigningToUnexistingUser() {
         when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
         when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.empty());
 
-        controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
+            () -> controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId())));
     }
 
     @Test
@@ -201,11 +204,12 @@ public class TaskControllerTest extends BaseTest {
         assertThat(task2.getAssignee()).isEqualTo(null);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenUnassigningUnexistingTask() {
         when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.empty());
 
-        controller.unassign(task2.getId());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.unassign(task2.getId()));
     }
 
     @Test
@@ -218,11 +222,12 @@ public class TaskControllerTest extends BaseTest {
         assertThat(task1.getArchivalInstant()).isNotNull();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenChangingStatusOfUnexistingTask() {
         when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.empty());
 
-        controller.changeStatus(task1.getId(), new TaskStatusChangeCommandDTO(TaskStatus.DONE));
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.changeStatus(task1.getId(), new TaskStatusChangeCommandDTO(TaskStatus.DONE)));
     }
 
     @Test
@@ -234,10 +239,12 @@ public class TaskControllerTest extends BaseTest {
         assertThat(result.getId()).isEqualTo(task1.getId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenGettingUnexistingTask() {
         when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.empty());
-        controller.get(task1.getId());
+
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.get(task1.getId()));
     }
 
     @Test

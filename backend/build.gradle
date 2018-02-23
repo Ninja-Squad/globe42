@@ -33,6 +33,9 @@ repositories {
 tasks.withType(JavaCompile) {
     // enable parameter name preservation, used by Jackson
     options.compilerArgs.add('-parameters')
+
+    // disable annotation processing which generates a gradle warning
+    options.compilerArgs.add('-proc:none')
 }
 
 bootJar {
@@ -51,17 +54,26 @@ bootRun {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'io.jsonwebtoken:jjwt:0.7.0'
-    compile 'com.google.cloud:google-cloud-storage:1.5.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.jsonwebtoken:jjwt:0.7.0'
+    implementation 'com.google.cloud:google-cloud-storage:1.5.1'
 
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile 'com.ninja-squad:DbSetup:2.1.0'
+    runtimeOnly 'org.postgresql:postgresql:42.1.4'
+    runtimeOnly 'org.flywaydb:flyway-core:4.2.0' // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
 
-    runtime 'org.postgresql:postgresql:42.1.4'
-    runtime 'org.flywaydb:flyway-core:4.2.0' // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+    }
+    testImplementation 'com.ninja-squad:DbSetup:2.1.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 // remove default tasks added by flyway plugin

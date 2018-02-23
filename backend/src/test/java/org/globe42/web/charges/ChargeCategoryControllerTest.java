@@ -13,8 +13,8 @@ import java.util.Optional;
 import org.globe42.dao.ChargeCategoryDao;
 import org.globe42.domain.ChargeCategory;
 import org.globe42.test.BaseTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -37,7 +37,7 @@ public class ChargeCategoryControllerTest extends BaseTest {
 
     private ChargeCategory chargeCategory;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         chargeCategory = new ChargeCategory(1L, "rental");
     }

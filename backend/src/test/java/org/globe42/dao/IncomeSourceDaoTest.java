@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.operation.Insert;
 import com.ninja_squad.dbsetup.operation.Operation;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -18,7 +18,7 @@ public class IncomeSourceDaoTest extends BaseDaoTest {
     @Autowired
     private IncomeSourceDao dao;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         Operation incomeSourceType =
             Insert.into("income_source_type")

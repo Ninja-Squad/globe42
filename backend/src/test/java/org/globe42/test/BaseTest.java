@@ -1,6 +1,6 @@
 package org.globe42.test;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
 
 /**
@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
  * @author JB Nizet
  */
 public class BaseTest {
-    @Before
+    @BeforeEach
     public void initMockito() {
         MockitoAnnotations.initMocks(this);
     }

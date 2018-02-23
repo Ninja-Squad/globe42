@@ -1,6 +1,7 @@
 package org.globe42.web.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -9,7 +10,7 @@ import org.globe42.dao.UserDao;
 import org.globe42.domain.User;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.UnauthorizedException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -30,16 +31,17 @@ public class AuthenticationControllerTest extends BaseTest {
     @InjectMocks
     private AuthenticationController controller;
 
-    @Test(expected = UnauthorizedException.class)
+    @Test
     public void shouldThrowWhenUnknownUser() {
         CredentialsDTO credentials = createCredentials();
 
         when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.empty());
 
-        controller.authenticate(credentials);
+        assertThatExceptionOfType(UnauthorizedException.class).isThrownBy(
+            () -> controller.authenticate(credentials));
     }
 
-    @Test(expected = UnauthorizedException.class)
+    @Test
     public void shouldThrowWhenPasswordDoesntMatch() {
         CredentialsDTO credentials = createCredentials();
 
@@ -47,7 +49,8 @@ public class AuthenticationControllerTest extends BaseTest {
         when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
         when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(false);
 
-        controller.authenticate(credentials);
+        assertThatExceptionOfType(UnauthorizedException.class).isThrownBy(
+            () -> controller.authenticate(credentials));
     }
 
     @Test

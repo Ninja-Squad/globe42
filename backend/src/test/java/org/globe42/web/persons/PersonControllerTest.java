@@ -1,6 +1,7 @@
 package org.globe42.web.persons;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.globe42.test.Answers.modifiedFirstArgument;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyChar;
@@ -23,8 +24,8 @@ import org.globe42.domain.MaritalStatus;
 import org.globe42.domain.Person;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.NotFoundException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -53,7 +54,7 @@ public class PersonControllerTest extends BaseTest {
 
     private Person person;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         person = new Person(1L);
         person.setMediationCode("A2");
@@ -86,11 +87,11 @@ public class PersonControllerTest extends BaseTest {
         assertThat(result.getIdentity().getId()).isEqualTo(person.getId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfNotFoundWhenGetting() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
 
-        controller.get(person.getId());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(person.getId()));
     }
 
     @Test
@@ -279,11 +280,12 @@ public class PersonControllerTest extends BaseTest {
         verify(mockCoupleDao).delete(previousCoupleOfAgnes);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfNotFoundWhenUpdating() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
 
-        controller.update(person.getId(), createCommand());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.update(person.getId(), createCommand()));
     }
 
     @Test
@@ -295,11 +297,11 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.isDeleted()).isTrue();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfNotFoundWhenDeleting() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
 
-        controller.delete(person.getId());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.delete(person.getId()));
     }
 
     @Test
@@ -312,11 +314,11 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.isDeleted()).isFalse();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfNotFoundWhenResurrecting() {
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
 
-        controller.resurrect(person.getId());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.resurrect(person.getId()));
     }
 
     static PersonCommandDTO createCommand() {

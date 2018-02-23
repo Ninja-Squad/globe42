@@ -18,8 +18,8 @@ import org.globe42.domain.Person;
 import org.globe42.domain.Task;
 import org.globe42.domain.TaskStatus;
 import org.globe42.domain.User;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +33,7 @@ public class TaskDaoTest extends BaseDaoTest {
     @Autowired
     private TaskDao dao;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         Operation persons =
             Insert.into("person")

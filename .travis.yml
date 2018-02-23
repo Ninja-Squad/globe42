@@ -14,6 +14,9 @@ before_install:
   - sudo /etc/init.d/postgresql stop
   - sudo /etc/init.d/postgresql start 9.2
 
+# skip the install step where gradle assemble is normally run
+install: true
+
 before_script:
   - psql -f backend/database/database.sql -U postgres
 
@@ -40,7 +43,7 @@ cache:
     - $HOME/.cache/yarn
 
 script:
-  - ./gradlew check jacocoTestReport
+  - ./gradlew build jacocoTestReport --parallel
 
 after_success:
 # upload code coverage to codecov.io

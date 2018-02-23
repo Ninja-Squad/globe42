@@ -1,6 +1,7 @@
 package org.globe42.web.incomes;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,8 +18,8 @@ import org.globe42.domain.IncomeSourceType;
 import org.globe42.test.BaseTest;
 import org.globe42.web.exception.BadRequestException;
 import org.globe42.web.exception.NotFoundException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -43,7 +44,7 @@ public class IncomeSourceControllerTest extends BaseTest {
 
     private IncomeSource incomeSource;
 
-    @Before
+    @BeforeEach
     public void prepare() {
         incomeSource = new IncomeSource(42L);
         incomeSource.setName("source 1");
@@ -76,11 +77,11 @@ public class IncomeSourceControllerTest extends BaseTest {
         assertThat(result.getId()).isEqualTo(incomeSource.getId());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenGettingWithUnknownId() {
         when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.empty());
 
-        controller.get(incomeSource.getId());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(incomeSource.getId()));
     }
 
     @Test
@@ -99,7 +100,7 @@ public class IncomeSourceControllerTest extends BaseTest {
         assertIncomeSourceEqualsCommand(incomeSourceArgumentCaptor.getValue(), command);
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenCreatingWithUnknownIncomeSourceType() {
         IncomeSourceCommandDTO command = createCommand();
 
@@ -107,16 +108,16 @@ public class IncomeSourceControllerTest extends BaseTest {
             .thenReturn(Optional.of(new IncomeSourceType(command.getTypeId(), "type 2")));
         when(mockIncomeSourceDao.existsByName(command.getName())).thenReturn(true);
 
-        controller.create(command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(command));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowWhenCreatingWithExistingName() {
         IncomeSourceCommandDTO command = createCommand();
 
         when(mockIncomeSourceTypeDao.findById(command.getTypeId())).thenReturn(Optional.empty());
 
-        controller.create(command);
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(command));
     }
 
     @Test
@@ -132,14 +133,15 @@ public class IncomeSourceControllerTest extends BaseTest {
         assertIncomeSourceEqualsCommand(incomeSource, command);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowIfNotFoundWhenUpdating() {
         when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.empty());
 
-        controller.update(incomeSource.getId(), createCommand());
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
+            () -> controller.update(incomeSource.getId(), createCommand()));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
         IncomeSourceCommandDTO command = createCommand();
 
@@ -148,7 +150,8 @@ public class IncomeSourceControllerTest extends BaseTest {
             .thenReturn(Optional.of(new IncomeSourceType(command.getTypeId(), "type 2")));
         when(mockIncomeSourceDao.findByName(command.getName())).thenReturn(Optional.of(new IncomeSource(4567L)));
 
-        controller.update(incomeSource.getId(), command);
+        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
+            () -> controller.update(incomeSource.getId(), command));
     }
 
     @Test
