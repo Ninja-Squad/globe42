@@ -28,7 +28,8 @@ management:
       show-details: 'always'
   endpoints:
     web:
-      expose: '*'
+      exposure:
+        include: '*'
 
 ---
 spring:
