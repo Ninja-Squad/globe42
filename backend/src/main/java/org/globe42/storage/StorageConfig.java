@@ -1,7 +1,6 @@
 package org.globe42.storage;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +11,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,47 +20,33 @@ import org.springframework.context.annotation.Configuration;
  * @author JB Nizet
  */
 @Configuration
+@EnableConfigurationProperties(StorageProperties.class)
 public class StorageConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageConfig.class);
 
-    /**
-     * The JSON string containing the credentials, loaded from the property
-     * <code>globe42.googleCloudStorageCredentials</code>. If not
-     * null (typically in production, on clever cloud, where the whole JSON credentials are stored in an environment
-     * variable) then this is used as the source of the google credentials.
-     */
-    private final String credentials;
+    private final StorageProperties properties;
 
-    /**
-     * The path to the json file containing the credentials, loaded from the property
-     * <code>globe42.googleCloudStorageCredentialsPath</code>. Only used if {@link #credentials} is null.
-     * Typically used in dev mode, where specifying a file path in a command-line property is easier.
-     */
-    private final File credentialsPath;
-
-    public StorageConfig(@Value("${globe42.googleCloudStorageCredentials:#{null}}") String credentials,
-                         @Value("${globe42.googleCloudStorageCredentialsPath:#{null}}") File credentialsPath) {
-        this.credentials = credentials;
-        this.credentialsPath = credentialsPath;
+    public StorageConfig(StorageProperties properties) {
+        this.properties = properties;
     }
 
     @Bean
     public Storage storage() throws IOException {
-        if (this.credentials != null) {
-            LOGGER.info("Property globe42.googleCloudStorageCredentials is set." +
+        if (properties.getCredentials() != null) {
+            LOGGER.info("Property globe42.google-cloud-storage.credentials is set." +
                             " Using its value as Google Cloud Storage JSON credentials");
-            InputStream in = new ByteArrayInputStream(this.credentials.getBytes(StandardCharsets.UTF_8));
+            InputStream in = new ByteArrayInputStream(properties.getCredentials().getBytes(StandardCharsets.UTF_8));
             return StorageOptions
                 .newBuilder()
                 .setCredentials(GoogleCredentials.fromStream(in))
                 .build()
                 .getService();
         }
-        else if (this.credentialsPath != null) {
-            LOGGER.info("Property globe42.googleCloudStorageCredentialsPath is set." +
+        else if (properties.getCredentialsPath() != null) {
+            LOGGER.info("Property globe42.google-cloud-storage.credentials-path is set." +
                             " Using its value as a JSON file path to the Google Cloud Storage credentials");
-            try (InputStream in = new FileInputStream(this.credentialsPath)) {
+            try (InputStream in = new FileInputStream(properties.getCredentialsPath())) {
                 return StorageOptions
                     .newBuilder()
                     .setCredentials(GoogleCredentials.fromStream(in))
@@ -70,7 +55,7 @@ public class StorageConfig {
             }
         }
         else {
-            LOGGER.warn("Neither property globe42.googleCloudStorageCredentials nor globe42.googleCloudStorageCredentials is set." +
+            LOGGER.warn("Neither property globe42.google-cloud-storage.credentials nor globe42.google-cloud-storage.credentials-path is set." +
                             " Using default instance credentials.");
             return StorageOptions.getDefaultInstance().getService();
         }
