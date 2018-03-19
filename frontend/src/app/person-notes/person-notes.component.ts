@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PersonNoteService } from '../person-note.service';
 import { ConfirmService } from '../confirm.service';
 import { DateTime } from 'luxon';
@@ -21,8 +21,12 @@ export class PersonNotesComponent implements OnInit {
   @Input()
   person: PersonModel;
 
+  @Output()
+  noteEdited = new EventEmitter<boolean>();
+
   spinnerDisplayed = false;
-  editedNote: NoteModel;
+
+  private _editedNote: NoteModel;
 
   constructor(private personNoteService: PersonNoteService,
               private currentUserService: CurrentUserService,
@@ -37,6 +41,15 @@ export class PersonNotesComponent implements OnInit {
       this.notes = notes;
       this.spinnerDisplayed = false;
     });
+  }
+
+  get editedNote(): NoteModel {
+    return this._editedNote;
+  }
+
+  set editedNote(note: NoteModel) {
+    this._editedNote = note;
+    this.noteEdited.emit(!!note);
   }
 
   addNote() {

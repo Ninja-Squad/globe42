@@ -53,6 +53,7 @@ import { ParticipantsResolverService } from './participants-resolver.service';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time-statistics.component';
+import { PersonNoteEditionGuard } from './person-note-edition.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -85,7 +86,7 @@ export const routes: Routes = [
             },
             children: [
               {path: '', pathMatch: 'full', redirectTo: 'info'},
-              {path: 'info', component: PersonComponent},
+              {path: 'info', component: PersonComponent, canDeactivate: [PersonNoteEditionGuard]},
               {
                 path: 'resources',
                 component: PersonResourcesComponent,

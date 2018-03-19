@@ -107,6 +107,8 @@ describe('PersonNotesComponent', () => {
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
+    const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
+    fixture.componentInstance.noteEdited.subscribe(noteEditedObserver);
     fixture.detectChanges();
 
     // edit first note
@@ -117,6 +119,7 @@ describe('PersonNotesComponent', () => {
     expect(fixture.componentInstance.editedNote).toBe(notes[0]);
     expect(noteComponents[0].componentInstance.edited).toBe(true);
     expect(noteComponents[1].componentInstance.disabled).toBe(true);
+    expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
     // cancel first note edition
     noteComponents[0].nativeElement.querySelectorAll('button')[1].click();
@@ -124,7 +127,7 @@ describe('PersonNotesComponent', () => {
 
     expect(fixture.componentInstance.editedNote).toBeNull();
     expect(noteComponents[0].componentInstance.edited).toBe(false);
-
+    expect(noteEditedObserver).toHaveBeenCalledWith(false);
     expect(noteComponents[1].componentInstance.disabled).toBe(false);
   });
 
@@ -217,6 +220,8 @@ describe('PersonNotesComponent', () => {
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
+    const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
+    fixture.componentInstance.noteEdited.subscribe(noteEditedObserver);
     fixture.detectChanges();
 
     // click on Add Note button
@@ -226,6 +231,7 @@ describe('PersonNotesComponent', () => {
 
     let noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
     expect(noteComponents.length).toBe(3);
+    expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
     expect(fixture.componentInstance.editedNote).toBe(notes[2]);
     expect(noteComponents[0].componentInstance.disabled).toBe(true);
@@ -238,6 +244,7 @@ describe('PersonNotesComponent', () => {
     noteComponents[2].nativeElement.querySelectorAll('button')[1].click();
     fixture.detectChanges();
     expect(fixture.componentInstance.editedNote).toBeNull();
+    expect(noteEditedObserver).toHaveBeenCalledWith(false);
 
     noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
     expect(noteComponents.length).toBe(2);
@@ -263,6 +270,8 @@ describe('PersonNotesComponent', () => {
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;
+    const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
+    fixture.componentInstance.noteEdited.subscribe(noteEditedObserver);
     fixture.detectChanges();
 
     // click on Add Note button
@@ -272,6 +281,8 @@ describe('PersonNotesComponent', () => {
 
     fixture.whenStable().then(() => {
       fixture.detectChanges();
+
+      expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
       // enter text of new note
       const noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
@@ -289,8 +300,10 @@ describe('PersonNotesComponent', () => {
       expect(personNoteService.create).toHaveBeenCalledWith(person.id, 'new text');
       expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
+      fixture.detectChanges();
       expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(3);
       expect(fixture.componentInstance.editedNote).toBe(null);
+      expect(noteEditedObserver).toHaveBeenCalledWith(false);
     });
   }));
 });

@@ -101,6 +101,7 @@ import { CurrentUserModule } from './current-user/current-user.module';
 import { GlobeNgbModule } from './globe-ngb/globe-ngb.module';
 import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time-statistics.component';
 import { ChartComponent } from './chart/chart.component';
+import { PersonNoteEditionGuard } from './person-note-edition.guard';
 
 registerLocaleData(localeFr);
 
@@ -183,6 +184,7 @@ registerLocaleData(localeFr);
     SearchCityService,
     DisplayCityPipe,
     PersonResolverService,
+    PersonNoteEditionGuard,
     PersonsResolverService,
     IncomeTypesResolverService,
     IncomeSourceTypeService,

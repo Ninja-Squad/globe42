@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PersonModel } from '../models/person.model';
-import { NoteModel } from '../models/note.model';
 import { ConfirmService } from '../confirm.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { PersonService } from '../person.service';
@@ -18,7 +17,7 @@ export class PersonComponent implements OnInit {
   person: PersonModel;
   mapsUrl: string;
 
-  editedNote: NoteModel = null;
+  noteEdited = false;
 
   constructor(private route: ActivatedRoute,
               private confirmService: ConfirmService,
