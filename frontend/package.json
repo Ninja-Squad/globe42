@@ -40,7 +40,7 @@
     "@types/jasmine": "2.8.6",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "7.0.56",
-    "bundlesize": "0.13.2",
+    "bundlesize": "0.16.0",
     "codecov": "2.3.1",
     "codelyzer": "4.0.2",
     "jasmine-core": "2.8.0",
