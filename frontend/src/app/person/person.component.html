@@ -131,8 +131,8 @@
       <p id="fiscalStatus">
         {{ person.fiscalStatus | displayFiscalStatus }}
         <ng-container *ngIf="person.fiscalStatus !== 'UNKNOWN'">
-          <span *ngIf="person.fiscalStatusDate">
-            &mdash; établie le {{ person.fiscalStatusDate | date }}
+          <span *ngIf="person.fiscalNumber">
+            &mdash; n° fiscal {{ person.fiscalNumber }}
           </span>
           <span class="text-danger" *ngIf="!person.fiscalStatusUpToDate">
             <span class="fa fa-warning"></span>

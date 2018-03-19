@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,6 +13,7 @@ import org.globe42.domain.Gender;
 import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
+import org.globe42.domain.Person;
 
 /**
  * Command sent to create or update a person
@@ -52,7 +54,9 @@ public final class PersonCommandDTO {
 
     @NotNull
     private final FiscalStatus fiscalStatus;
-    private final LocalDate fiscalStatusDate;
+
+    @Pattern(regexp = Person.FISCAL_NUMBER_REGEXP)
+    private final String fiscalNumber;
     private final boolean fiscalStatusUpToDate;
     private final HealthCareCoverage healthCareCoverage;
     private final String healthInsurance;
@@ -86,7 +90,7 @@ public final class PersonCommandDTO {
                             @JsonProperty Integer housingSpace,
                             @JsonProperty String hostName,
                             @JsonProperty FiscalStatus fiscalStatus,
-                            @JsonProperty LocalDate fiscalStatusDate,
+                            @JsonProperty String fiscalNumber,
                             @JsonProperty boolean fiscalStatusUpToDate,
                             @JsonProperty HealthCareCoverage healthCareCoverage,
                             @JsonProperty String healthInsurance,
@@ -116,7 +120,7 @@ public final class PersonCommandDTO {
         this.housingSpace = housingSpace;
         this.hostName = hostName;
         this.fiscalStatus = fiscalStatus;
-        this.fiscalStatusDate = fiscalStatusDate;
+        this.fiscalNumber = fiscalNumber;
         this.fiscalStatusUpToDate = fiscalStatusUpToDate;
         this.healthCareCoverage = healthCareCoverage;
         this.healthInsurance = healthInsurance;
@@ -208,8 +212,8 @@ public final class PersonCommandDTO {
         return fiscalStatus;
     }
 
-    public LocalDate getFiscalStatusDate() {
-        return fiscalStatusDate;
+    public String getFiscalNumber() {
+        return fiscalNumber;
     }
 
     public boolean isFiscalStatusUpToDate() {

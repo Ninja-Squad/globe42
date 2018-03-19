@@ -34,7 +34,7 @@ public final class PersonDTO {
     private final Integer housingSpace;
     private final String hostName;
     private final FiscalStatus fiscalStatus;
-    private final LocalDate fiscalStatusDate;
+    private final String fiscalNumber;
     private final boolean fiscalStatusUpToDate;
     private final HealthCareCoverage healthCareCoverage;
     private final String healthInsurance;
@@ -66,7 +66,7 @@ public final class PersonDTO {
         this.housingSpace = person.getHousingSpace();
         this.hostName = person.getHostName();
         this.fiscalStatus = person.getFiscalStatus();
-        this.fiscalStatusDate = person.getFiscalStatusDate();
+        this.fiscalNumber = person.getFiscalNumber();
         this.fiscalStatusUpToDate = person.isFiscalStatusUpToDate();
         this.healthCareCoverage = person.getHealthCareCoverage();
         this.healthInsurance = person.getHealthInsurance();
@@ -149,8 +149,8 @@ public final class PersonDTO {
         return fiscalStatus;
     }
 
-    public LocalDate getFiscalStatusDate() {
-        return fiscalStatusDate;
+    public String getFiscalNumber() {
+        return fiscalNumber;
     }
 
     public boolean isFiscalStatusUpToDate() {

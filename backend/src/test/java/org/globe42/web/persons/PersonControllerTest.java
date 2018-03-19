@@ -359,7 +359,7 @@ public class PersonControllerTest extends BaseTest {
                                     70,
                                     "Bruno Mala",
                                     FiscalStatus.TAXABLE,
-                                    LocalDate.of(2017, 2, 1),
+                                    "0123456789012",
                                     true,
                                     HealthCareCoverage.GENERAL,
                                     "AXA",
@@ -396,7 +396,7 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getHousingSpace()).isEqualTo(command.getHousingSpace());
         assertThat(person.getHostName()).isEqualTo(command.getHostName());
         assertThat(person.getFiscalStatus()).isEqualTo(command.getFiscalStatus());
-        assertThat(person.getFiscalStatusDate()).isEqualTo(command.getFiscalStatusDate());
+        assertThat(person.getFiscalNumber()).isEqualTo(command.getFiscalNumber());
         assertThat(person.isFiscalStatusUpToDate()).isEqualTo(command.isFiscalStatusUpToDate());
         assertThat(person.getHealthCareCoverage()).isEqualTo(command.getHealthCareCoverage());
         assertThat(person.getHealthInsurance()).isEqualTo(command.getHealthInsurance());

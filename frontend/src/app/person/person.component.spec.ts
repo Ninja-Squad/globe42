@@ -54,7 +54,7 @@ describe('PersonComponent', () => {
     housingSpace: 80,
     hostName: 'Bruno Mala',
     fiscalStatus: 'TAXABLE',
-    fiscalStatusDate: '2017-02-01',
+    fiscalNumber: '0123456789012',
     fiscalStatusUpToDate: true,
     healthCareCoverage: 'AME',
     healthInsurance: 'AXA',
@@ -137,7 +137,7 @@ describe('PersonComponent', () => {
     expect(housing.textContent).toContain('80 m2');
     const fiscalStatus = nativeElement.querySelector('#fiscalStatus');
     expect(fiscalStatus.textContent).toContain('Imposable');
-    expect(fiscalStatus.textContent).toContain('établie le 1 févr. 2017');
+    expect(fiscalStatus.textContent).toContain('n° fiscal 0123456789012');
     expect(fiscalStatus.textContent).toContain('à jour');
     const healthCareCoverage = nativeElement.querySelector('#healthCareCoverage');
     expect(healthCareCoverage.textContent).toContain('Aide médicale de l\'Etat');

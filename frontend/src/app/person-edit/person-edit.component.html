@@ -223,11 +223,11 @@
       </div>
     </div>
     <div class="form-group row" *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'">
-      <label for="fiscalStatusDate" class="col-sm-3 col-form-label">Date de mise en place</label>
-      <gl-datepicker-container class="col-sm-9">
-        <input class="form-control" id="fiscalStatusDate" placeholder="01/01/2016"
-               formControlName="fiscalStatusDate" ngbDatepicker [minDate]="{year: 1990, month: 1}">
-      </gl-datepicker-container>
+      <label for="fiscalNumber" class="col-sm-3 col-form-label">N° fiscal</label>
+      <div class="col-sm-9">
+        <input class="form-control" id="fiscalNumber" placeholder="13 chiffres" formControlName="fiscalNumber">
+        <div class="invalid-feedback" *ngIf="personForm.get('fiscalNumber').hasError('pattern')">Le n° fiscal doit être composé de 13 chiffres</div>
+      </div>
     </div>
     <div class="row">
       <div class="col-sm-9 offset-sm-3">

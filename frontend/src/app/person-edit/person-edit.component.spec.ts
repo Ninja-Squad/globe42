@@ -118,7 +118,7 @@ describe('PersonEditComponent', () => {
       hostName: 'Bruno Mala',
       fiscalStatus: 'TAXABLE',
       fiscalStatusUpToDate: true,
-      fiscalStatusDate: '2017-02-01',
+      fiscalNumber: '0123456789012',
       healthCareCoverage: 'AME',
       healthInsurance: 'AXA',
       accompanying: 'Paul',
@@ -211,8 +211,8 @@ describe('PersonEditComponent', () => {
       expect(fiscalStatusNotTaxable.checked).toBe(false);
       const fiscalStatusTaxable = nativeElement.querySelector('#fiscalStatusTAXABLE');
       expect(fiscalStatusTaxable.checked).toBe(true);
-      const fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
-      expect(fiscalStatusDate.value).toBe('01/02/2017');
+      const fiscalNumber = nativeElement.querySelector('#fiscalNumber');
+      expect(fiscalNumber.value).toBe('0123456789012');
       const fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
       expect(fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
       const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
@@ -380,6 +380,27 @@ describe('PersonEditComponent', () => {
       expect(component.spouseIsInCouple).toBe(false);
       expect(nativeElement.textContent).not.toContain(`Jane Doe est déjà en couple avec quelqu'un d'autre`);
     });
+
+    it('should set the fiscal number to null if invalid when setting the fiscal status to UNKNONW', () => {
+      const fixture = TestBed.createComponent(PersonEditComponent);
+      fixture.detectChanges();
+      const nativeElement = fixture.nativeElement;
+      const component = fixture.componentInstance;
+
+      const fiscalNumber = nativeElement.querySelector('#fiscalNumber');
+      fiscalNumber.value = 'INVALID';
+      fiscalNumber.dispatchEvent(new Event('input'));
+
+      const fiscalStatusUnknown = nativeElement.querySelector('#fiscalStatusUNKNOWN');
+      fiscalStatusUnknown.click();
+
+      fixture.detectChanges();
+
+      expect(fiscalNumber.value).toBe('');
+      expect(component.personForm.get('fiscalNumber').value).toBeNull();
+
+      fixture.detectChanges();
+    });
   });
 
   describe('in create mode', () => {
@@ -495,8 +516,8 @@ describe('PersonEditComponent', () => {
       expect(hostName.value).toBe('');
       const fiscalStatusUnknown = nativeElement.querySelector('#fiscalStatusUNKNOWN');
       expect(fiscalStatusUnknown.checked).toBe(true);
-      let fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
-      expect(fiscalStatusDate).toBeFalsy();
+      let fiscalNumber = nativeElement.querySelector('#fiscalNumber');
+      expect(fiscalNumber).toBeFalsy();
       let fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
       expect(fiscalStatusUpToDate).toBeFalsy();
       const accompanying = nativeElement.querySelector('#accompanying');
@@ -588,10 +609,11 @@ describe('PersonEditComponent', () => {
       fixture.detectChanges();
       tick();
 
-      fiscalStatusDate = nativeElement.querySelector('#fiscalStatusDate');
-      expect(fiscalStatusDate).toBeTruthy();
-      fiscalStatusDate.value = '01/01/2015';
-      fiscalStatusDate.dispatchEvent(new Event('change'));
+      fiscalNumber = nativeElement.querySelector('#fiscalNumber');
+      expect(fiscalNumber).toBeTruthy();
+      fiscalNumber.value = '0123456789012';
+      fiscalNumber.dispatchEvent(new Event('input'));
+
       fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
       expect(fiscalStatusUpToDate).toBeTruthy();
       fiscalStatusUpToDate.checked = true;
@@ -643,7 +665,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.socialSecurityNumber).toBe('453287654309876');
       expect(createdPerson.cafNumber).toBe('78654');
       expect(createdPerson.fiscalStatus).toBe('TAXABLE');
-      expect(createdPerson.fiscalStatusDate).toBe('2015-01-01');
+      expect(createdPerson.fiscalNumber).toBe('0123456789012');
       expect(createdPerson.fiscalStatusUpToDate).toBe(true);
       expect((createdPerson as any).nationality).not.toBeDefined();
       expect(createdPerson.nationalityId).toBe('BEL');

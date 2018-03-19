@@ -25,7 +25,7 @@ export interface PersonCommand {
   housingSpace: number;
   hostName: string;
   fiscalStatus: FiscalStatus;
-  fiscalStatusDate: string;
+  fiscalNumber: string;
   fiscalStatusUpToDate: boolean;
   accompanying: string;
   socialSecurityNumber: string;

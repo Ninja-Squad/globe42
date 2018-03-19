@@ -39,7 +39,7 @@ export interface PersonModel extends PersonIdentityModel {
   housingSpace: number;
   hostName: string;
   fiscalStatus: FiscalStatus;
-  fiscalStatusDate: string;
+  fiscalNumber: string;
   fiscalStatusUpToDate: boolean;
   healthCareCoverage: HealthCareCoverage;
   healthInsurance: string;

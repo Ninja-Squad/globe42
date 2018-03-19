@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * A person helped by, or member of Globe 42.
@@ -32,6 +33,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 public class Person {
+
+    public static final String FISCAL_NUMBER_REGEXP = "\\d{13}";
 
     private static final String PERSON_GENERATOR = "PersonGenerator";
 
@@ -168,10 +171,12 @@ public class Person {
     private FiscalStatus fiscalStatus = FiscalStatus.UNKNOWN;
 
     /**
-     * The date when the fiscal statuswas established. Only requested to mediation-enabled persons, if the fiscal
-     * status is not {@link FiscalStatus#UNKNOWN}.
+     * The fiscal number. Only requested to mediation-enabled persons, if the fiscal status is not
+     * {@link FiscalStatus#UNKNOWN}. It's composed of 13 digits (see
+     * https://cfsmsp.impots.gouv.fr/secavis/faces/commun/aideSpi.jsf)
      */
-    private LocalDate fiscalStatusDate;
+    @Pattern(regexp = FISCAL_NUMBER_REGEXP)
+    private String fiscalNumber;
 
     /**
      * Is the fiscal status up-to-date. Only requested to mediation-enabled persons, if the fiscal
@@ -436,12 +441,12 @@ public class Person {
         this.fiscalStatus = fiscalStatus;
     }
 
-    public LocalDate getFiscalStatusDate() {
-        return fiscalStatusDate;
+    public String getFiscalNumber() {
+        return fiscalNumber;
     }
 
-    public void setFiscalStatusDate(LocalDate fiscalStatusDate) {
-        this.fiscalStatusDate = fiscalStatusDate;
+    public void setFiscalNumber(String fiscalNumber) {
+        this.fiscalNumber = fiscalNumber;
     }
 
     public boolean isFiscalStatusUpToDate() {

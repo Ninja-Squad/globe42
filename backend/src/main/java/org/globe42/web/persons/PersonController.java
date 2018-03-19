@@ -143,7 +143,7 @@ public class PersonController {
             person.setHousingSpace(command.getHousingSpace());
             person.setHostName(command.getHostName());
             person.setFiscalStatus(command.getFiscalStatus());
-            person.setFiscalStatusDate(command.getFiscalStatusDate());
+            person.setFiscalNumber(command.getFiscalNumber());
             person.setFiscalStatusUpToDate(command.isFiscalStatusUpToDate());
             person.setHealthCareCoverage(command.getHealthCareCoverage());
             person.setHealthInsurance(command.getHealthInsurance());

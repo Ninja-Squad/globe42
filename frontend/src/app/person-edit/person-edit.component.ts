@@ -93,7 +93,7 @@ export class PersonEditComponent {
       housingSpace: null,
       hostName: '',
       fiscalStatus: 'UNKNOWN',
-      fiscalStatusDate: null,
+      fiscalNumber: ['', Validators.pattern(/\d{13}/)],
       fiscalStatusUpToDate: false,
       nationality: null
     });
@@ -115,6 +115,16 @@ export class PersonEditComponent {
     ).subscribe(spouse =>
       this.spouseIsInCouple = !!(spouse.spouse && (!this.editedPerson || (spouse.spouse.id !== this.editedPerson.id)))
     );
+
+    // We try to keep the previously entered fiscal number even if the user chooses to set the
+    // fiscal status to UNKNOWN, but if it's invalid, that would prevent the form from being submitted
+    // so we set it to null in that (unlikely) case.
+    this.personForm.get('fiscalStatus').valueChanges.subscribe(value => {
+      const fiscalNumberCtrl = this.personForm.get('fiscalNumber');
+      if (value === 'UNKNOWN' && fiscalNumberCtrl.invalid) {
+        fiscalNumberCtrl.setValue(null);
+      }
+    });
   }
 
   showFrenchFamilySituation() {
