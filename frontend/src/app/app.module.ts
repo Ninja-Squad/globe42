@@ -102,6 +102,7 @@ import { GlobeNgbModule } from './globe-ngb/globe-ngb.module';
 import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time-statistics.component';
 import { ChartComponent } from './chart/chart.component';
 import { PersonNoteEditionGuard } from './person-note-edition.guard';
+import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 
 registerLocaleData(localeFr);
 
@@ -164,7 +165,8 @@ registerLocaleData(localeFr);
     SpentTimeAddComponent,
     PersonsLayoutComponent,
     SpentTimeStatisticsComponent,
-    ChartComponent
+    ChartComponent,
+    PersonTasksComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

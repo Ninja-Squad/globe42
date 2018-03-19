@@ -25,8 +25,10 @@ export class TasksResolverService implements Resolve<Array<TaskModel> | Page<Tas
         return this.taskService.listUnassigned(pageNumber);
       case 'archived':
         return this.taskService.listArchived(pageNumber);
-      case 'person':
-        return this.taskService.listForPerson(route.parent.data.person.id, pageNumber);
+      case 'person-todo':
+        return this.taskService.listTodoForPerson(route.parent.parent.data.person.id, pageNumber);
+      case 'person-archived':
+        return this.taskService.listArchivedForPerson(route.parent.parent.data.person.id, pageNumber);
       default:
         throw new Error(`Unknown listType: ${listType}`);
     }

@@ -102,6 +102,12 @@ public class TaskDaoTest extends BaseDaoTest {
     }
 
     @Test
+    public void shouldFindArchivedForPerson() {
+        TRACKER.skipNextLaunch();
+        assertThat(dao.findArchivedByConcernedPerson(new Person(1L), pageRequest()).getContent()).extracting(Task::getId).containsExactly(6L);
+    }
+
+    @Test
     public void shouldFindArchived() {
         TRACKER.skipNextLaunch();
         Page<Task> result = dao.findArchived(pageRequest());

@@ -54,6 +54,7 @@ import { PersonsLayoutComponent } from './persons-layout/persons-layout.componen
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time-statistics.component';
 import { PersonNoteEditionGuard } from './person-note-edition.guard';
+import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -98,12 +99,32 @@ export const routes: Routes = [
               {path: 'family', component: PersonFamilySituationComponent},
               {
                 path: 'tasks',
-                component: TasksPageComponent,
-                data: {taskListType: 'person'},
-                resolve: {
-                  tasks: TasksResolverService
-                },
-                runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+                component: PersonTasksComponent,
+                children: [
+                  {
+                    path: '',
+                    redirectTo: 'todo',
+                    pathMatch: 'full'
+                  },
+                  {
+                    path: 'todo',
+                    component: TasksPageComponent,
+                    data: {taskListType: 'person-todo'},
+                    resolve: {
+                      tasks: TasksResolverService
+                    },
+                    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+                  },
+                  {
+                    path: 'archived',
+                    component: TasksPageComponent,
+                    data: {taskListType: 'person-archived'},
+                    resolve: {
+                      tasks: TasksResolverService
+                    },
+                    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+                  }
+                ]
               },
               {path: 'files', component: PersonFilesComponent},
               {

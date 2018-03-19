@@ -98,13 +98,35 @@ public class TaskControllerMvcTest {
     }
 
     @Test
+    public void shouldListTodoForPerson() throws Exception {
+        Person person = new Person(1L);
+        when(mockPersonDao.getOne(1L)).thenReturn(person);
+        when(mockTaskDao.findTodoByConcernedPerson(eq(person), any()))
+            .thenReturn(singlePage(Collections.singletonList(task)));
+
+        mvc.perform(get("/api/tasks?person=1"))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
+    }
+
+    @Test
+    public void shouldListArchivedForPerson() throws Exception {
+        Person person = new Person(1L);
+        when(mockPersonDao.getOne(1L)).thenReturn(person);
+        when(mockTaskDao.findArchivedByConcernedPerson(eq(person), any()))
+            .thenReturn(singlePage(Collections.singletonList(task)));
+
+        mvc.perform(get("/api/tasks?person=1&archived"))
+           .andExpect(status().isOk())
+           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
+    }
+
+    @Test
     public void shouldListUnassigned() throws Exception {
         when(mockTaskDao.findTodoUnassigned(any()))
             .thenReturn(singlePage(Collections.singletonList(task)));
 
-        // the equal is not necessary in production, but is mandatory in tests due to a bug. See
-        // https://jira.spring.io/browse/SPR-15831
-        mvc.perform(get("/api/tasks?unassigned="))
+        mvc.perform(get("/api/tasks?unassigned"))
            .andExpect(status().isOk())
            .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
     }

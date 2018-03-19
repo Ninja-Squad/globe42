@@ -81,9 +81,16 @@ public class TaskController {
     }
 
     @GetMapping(params = "person")
-    public PageDTO<TaskDTO> listForPerson(@RequestParam("person") Long personId, @RequestParam Optional<Integer> page) {
+    public PageDTO<TaskDTO> listTodoForPerson(@RequestParam("person") Long personId, @RequestParam Optional<Integer> page) {
         Person person = personDao.getOne(personId);
         return PageDTO.fromPage(taskDao.findTodoByConcernedPerson(person, pageRequest(page)), TaskDTO::new);
+    }
+
+    @GetMapping(params = {"person", "archived"})
+    public PageDTO<TaskDTO> listArchivedForPerson(@RequestParam("person") Long personId,
+                                                  @RequestParam Optional<Integer> page) {
+        Person person = personDao.getOne(personId);
+        return PageDTO.fromPage(taskDao.findArchivedByConcernedPerson(person, pageRequest(page)), TaskDTO::new);
     }
 
     @GetMapping(params = "before")

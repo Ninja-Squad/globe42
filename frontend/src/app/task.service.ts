@@ -37,8 +37,14 @@ export class TaskService {
     return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber).set('mine', '')});
   }
 
-  listForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
+  listTodoForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get<Page<TaskModel>>(`/api/tasks`, {params: pageParams(pageNumber).set('person', personId.toString())});
+  }
+
+  listArchivedForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
+    return this.http.get<Page<TaskModel>>(
+      `/api/tasks`,
+      {params: pageParams(pageNumber).set('person', personId.toString()).set('archived', '')});
   }
 
   listUnassigned(pageNumber: number): Observable<Page<TaskModel>> {

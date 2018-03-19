@@ -58,8 +58,12 @@ describe('TaskService', () => {
     checkPage(() => service.listUnassigned(2), '/api/tasks?page=2&unassigned=');
   });
 
-  it('should list tasks concerning person', () => {
-    checkPage(() => service.listForPerson(42, 2), '/api/tasks?page=2&person=42');
+  it('should list todo tasks concerning person', () => {
+    checkPage(() => service.listTodoForPerson(42, 2), '/api/tasks?page=2&person=42');
+  });
+
+  it('should list archived tasks concerning person', () => {
+    checkPage(() => service.listArchivedForPerson(42, 2), '/api/tasks?page=2&person=42&archived=');
   });
 
   it('should list archived tasks', () => {

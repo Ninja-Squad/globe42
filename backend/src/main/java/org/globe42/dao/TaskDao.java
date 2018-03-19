@@ -32,6 +32,11 @@ public interface TaskDao extends JpaRepository<Task, Long> {
     Page<Task> findTodoByConcernedPerson(@Param("person") Person person, Pageable page);
 
     @Query("select task from Task task"
+        + " where task.status <> org.globe42.domain.TaskStatus.TODO and task.concernedPerson = :person"
+        + " order by task.archivalInstant desc")
+    Page<Task> findArchivedByConcernedPerson(@Param("person") Person person, Pageable page);
+
+    @Query("select task from Task task"
         + " where task.status = org.globe42.domain.TaskStatus.TODO and task.assignee is null"
         + " order by task.dueDate, task.id")
     Page<Task> findTodoUnassigned(Pageable page);

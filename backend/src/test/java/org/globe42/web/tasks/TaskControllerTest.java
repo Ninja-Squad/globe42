@@ -141,13 +141,25 @@ public class TaskControllerTest extends BaseTest {
     }
 
     @Test
-    public void shouldListForPerson() {
+    public void shouldListTodoForPerson() {
         Person person = new Person(42L);
         when(mockPersonDao.getOne(person.getId())).thenReturn(person);
         PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
         when(mockTaskDao.findTodoByConcernedPerson(person, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
 
-        PageDTO<TaskDTO> result = controller.listForPerson(person.getId(), Optional.empty());
+        PageDTO<TaskDTO> result = controller.listTodoForPerson(person.getId(), Optional.empty());
+
+        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+    }
+
+    @Test
+    public void shouldListArchivedForPerson() {
+        Person person = new Person(42L);
+        when(mockPersonDao.getOne(person.getId())).thenReturn(person);
+        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
+        when(mockTaskDao.findArchivedByConcernedPerson(person, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
+
+        PageDTO<TaskDTO> result = controller.listArchivedForPerson(person.getId(), Optional.empty());
 
         assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
     }

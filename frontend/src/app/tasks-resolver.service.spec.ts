@@ -73,19 +73,38 @@ describe('TasksResolverService', () => {
     expect(taskService.listArchived).toHaveBeenCalledWith(0);
   });
 
-  it('should resolve tasks for person list type', () => {
-    const route: any = routeWithType('person');
+  it('should resolve tasks for person-todo list type', () => {
+    const route: any = routeWithType('person-todo');
     route.parent = {
-      data: {
-        person: {
-          id: 42
+      parent: {
+        data: {
+          person: {
+            id: 42
+          }
         }
       }
     };
     const expected = of({} as Page<TaskModel>);
-    spyOn(taskService, 'listForPerson').and.returnValue(expected);
+    spyOn(taskService, 'listTodoForPerson').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
-    expect(taskService.listForPerson).toHaveBeenCalledWith(42, 0);
+    expect(taskService.listTodoForPerson).toHaveBeenCalledWith(42, 0);
+  });
+
+  it('should resolve tasks for person-archived list type', () => {
+    const route: any = routeWithType('person-archived');
+    route.parent = {
+      parent: {
+        data: {
+          person: {
+            id: 42
+          }
+        }
+      }
+    };
+    const expected = of({} as Page<TaskModel>);
+    spyOn(taskService, 'listArchivedForPerson').and.returnValue(expected);
+    expect(resolver.resolve(route)).toBe(expected);
+    expect(taskService.listArchivedForPerson).toHaveBeenCalledWith(42, 0);
   });
 
   it('should resolve tasks when page is present', () => {
