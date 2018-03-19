@@ -92,7 +92,7 @@ described in [the documentation about default credentials](https://developers.go
 
 To avoid setting a global environment variable, you can instead use this command-line option:
 
-    --globe42.googleCloudStorageCredentialsPath=secrets/google-cloud-storage-dev.json
+    --globe42.googleCloudStorage.credentialsPath=secrets/google-cloud-storage-dev.json
     
 This credentials file is located in [the Ninja Squad Drive](https://drive.google.com/drive/u/1/folders/0B0FLWwufPzrTN1NVTDZJMWZTVXc)
 
@@ -121,6 +121,6 @@ see the [logs console](https://console.clever-cloud.com/organisations/orga_dd753
 ### Google Cloud Storage credentials on CleverCloud
 
 Applications on CleverCloud don't have access to the file system. So, instead of defining an environment variable
-containing the path of the GCS credentials, we use an environment variable, `globe42.googleCloudStorageCredentials`,
+containing the path of the GCS credentials, we use an environment variable, `globe42.googleCloudStorage.credentials`,
 containing the *content* of the production credentials file. 
 
