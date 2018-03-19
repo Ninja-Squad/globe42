@@ -3,6 +3,16 @@
 
 <form (ngSubmit)="taskForm.valid && save()" #taskForm="ngForm">
   <div class="form-group row">
+    <label for="category" class="col-sm-3 col-form-label">Catégorie</label>
+    <div class="col-sm-9">
+      <select class="form-control" id="category" name="category" [(ngModel)]="task.category" required #categoryCtrl="ngModel">
+        <option></option>
+        <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
+      </select>
+      <div class="invalid-feedback" *ngIf="categoryCtrl.hasError('required')">La catégorie est obligatoire</div>
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="title" class="col-sm-3 col-form-label">Libellé</label>
     <div class="col-sm-9">
       <input class="form-control" id="title" name="title" [(ngModel)]="task.title" required #titleCtrl="ngModel"/>
@@ -15,16 +25,6 @@
       <textarea class="form-control" id="description" name="description" [(ngModel)]="task.description" required
                 style="height: 12rem;" #descriptionCtrl="ngModel"></textarea>
       <div class="invalid-feedback" *ngIf="descriptionCtrl.hasError('required')">La description est obligatoire</div>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="category" class="col-sm-3 col-form-label">Catégorie</label>
-    <div class="col-sm-9">
-      <select class="form-control" id="category" name="category" [(ngModel)]="task.category" required #categoryCtrl="ngModel">
-        <option></option>
-        <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
-      </select>
-      <div class="invalid-feedback" *ngIf="categoryCtrl.hasError('required')">La catégorie est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
