@@ -208,9 +208,9 @@
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-0.5.0.tgz#0bee06a95f6ab1ee82a490af24de60449eb93dc8"
 
-"@types/node@7.0.52":
-  version "7.0.52"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.52.tgz#8990d3350375542b0c21a83cd0331e6a8fc86716"
+"@types/node@7.0.56":
+  version "7.0.56"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.56.tgz#b6b659049191822be43c14610c1785d4b9cddecf"
 
 "@types/node@^6.0.46":
   version "6.0.96"
