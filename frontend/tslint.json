@@ -130,7 +130,13 @@
       "gl",
       "kebab-case"
     ],
+    "angular-whitespace": [true, "check-semicolon", "check-interpolation"],
     "no-output-on-prefix": true,
+    "banana-in-box": true,
+    "contextual-life-cycle": true,
+    "templates-no-negated-async": true,
+    "template-conditional-complexity": true,
+    "use-view-encapsulation": true,
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,
