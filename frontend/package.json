@@ -30,7 +30,7 @@
     "core-js": "2.5.3",
     "font-awesome": "4.7.0",
     "luxon": "0.5.8",
-    "rxjs": "5.5.6",
+    "rxjs": "5.5.7",
     "zone.js": "0.8.20"
   },
   "devDependencies": {
