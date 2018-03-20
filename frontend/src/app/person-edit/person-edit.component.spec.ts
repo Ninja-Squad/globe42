@@ -23,6 +23,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
+import { CountryModel } from '../models/country.model';
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -47,6 +48,21 @@ describe('PersonEditComponent', () => {
       lastName: 'Doe'
     }
   ] as Array<PersonIdentityModel>;
+
+  const countries: Array<CountryModel> = [
+    {
+      id: 'BEL',
+      name: 'Belgique'
+    },
+    {
+      id: 'FRA',
+      name: 'France'
+    },
+    {
+      id: 'TUR',
+      name: 'Turquie'
+    }
+  ];
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
@@ -108,6 +124,10 @@ describe('PersonEditComponent', () => {
       accompanying: 'Paul',
       socialSecurityNumber: '234765498056734',
       cafNumber: '56734',
+      nationality: {
+        id: 'FRA',
+        name: 'France'
+      },
       frenchFamilySituation: {
         parentsPresent: false,
         spousePresent: true,
@@ -119,7 +139,7 @@ describe('PersonEditComponent', () => {
     };
 
     const activatedRoute = {
-      snapshot: {data: {person, persons}}
+      snapshot: {data: {person, persons, countries}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
@@ -205,6 +225,8 @@ describe('PersonEditComponent', () => {
       expect(socialSecurityNumber.value).toBe(person.socialSecurityNumber);
       const cafNumber = nativeElement.querySelector('#cafNumber');
       expect(cafNumber.value).toBe(person.cafNumber);
+      const nationality = nativeElement.querySelector('#nationality');
+      expect(nationality.value).toBe(person.nationality.name);
       const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
       expect(frenchFamilySituation.textContent).not.toContain('Inconnue');
       expect(frenchFamilySituation.textContent).not.toContain('Renseigner');
@@ -362,7 +384,7 @@ describe('PersonEditComponent', () => {
 
   describe('in create mode', () => {
     const activatedRoute = {
-      snapshot: {data: {person: null as PersonModel, persons}}
+      snapshot: {data: {person: null as PersonModel, persons, countries}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
@@ -434,7 +456,9 @@ describe('PersonEditComponent', () => {
         'hostName',
         'fiscalStatusUNKNOWN',
         'socialSecurityNumber',
+        'accompanying',
         'cafNumber',
+        'nationality',
         'frenchFamilySituation',
         'abroadFamilySituation'
       ];
@@ -458,7 +482,7 @@ describe('PersonEditComponent', () => {
       expect(firstMediationAppointmentDate.value).toBe('');
       const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
       expect(maritalStatus.selectedIndex).toBe(0);
-      const spouse: HTMLSelectElement = nativeElement.querySelector('#spouse');
+      const spouse: HTMLInputElement = nativeElement.querySelector('#spouse');
       expect(spouse.value).toBe('');
       expect(maritalStatus.options[0].value).toBe('UNKNOWN');
       const entryDate = nativeElement.querySelector('#entryDate');
@@ -481,6 +505,8 @@ describe('PersonEditComponent', () => {
       expect(socialSecurityNumber.value).toBe('');
       const cafNumber = nativeElement.querySelector('#cafNumber');
       expect(cafNumber.value).toBe('');
+      const nationality = nativeElement.querySelector('#nationality');
+      expect(nationality.value).toBe('');
       const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
       expect(frenchFamilySituation.textContent).toContain('Inconnue');
 
@@ -522,7 +548,7 @@ describe('PersonEditComponent', () => {
       maritalStatus.selectedIndex = 2;
       maritalStatus.dispatchEvent(new Event('change'));
 
-      // trigger city typeahead
+      // trigger spouse typeahead
       spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
       spouse.value = 'Jane';
       spouse.dispatchEvent(new Event('input'));
@@ -571,6 +597,18 @@ describe('PersonEditComponent', () => {
       fiscalStatusUpToDate.checked = true;
       fiscalStatusUpToDate.dispatchEvent(new Event('change'));
 
+      // trigger nationality typeahead
+      nationality.value = 'Bel';
+      nationality.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      tick(500);
+      // select first result
+      const nationalityResult = nativeElement.querySelector('ngb-typeahead-window button');
+      expect(nationalityResult.textContent).toContain('Belgique');
+      nationalityResult.dispatchEvent(new Event('click'));
+      fixture.detectChanges();
+      tick();
+
       nativeElement.querySelector('#save').click();
       fixture.detectChanges();
       tick();
@@ -607,6 +645,8 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.fiscalStatus).toBe('TAXABLE');
       expect(createdPerson.fiscalStatusDate).toBe('2015-01-01');
       expect(createdPerson.fiscalStatusUpToDate).toBe(true);
+      expect((createdPerson as any).nationality).not.toBeDefined();
+      expect(createdPerson.nationalityId).toBe('BEL');
 
       expect(router.navigate).toHaveBeenCalledWith(['persons', 43]);
     }));

@@ -12,8 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.globe42.dao.CountryDao;
 import org.globe42.dao.CoupleDao;
 import org.globe42.dao.PersonDao;
+import org.globe42.domain.Country;
 import org.globe42.domain.Couple;
 import org.globe42.domain.FamilySituation;
 import org.globe42.domain.FiscalStatus;
@@ -43,6 +45,9 @@ public class PersonControllerTest extends BaseTest {
     @Mock
     private CoupleDao mockCoupleDao;
 
+    @Mock
+    private CountryDao mockCountryDao;
+
     @InjectMocks
     private PersonController controller;
 
@@ -58,6 +63,10 @@ public class PersonControllerTest extends BaseTest {
     public void prepare() {
         person = new Person(1L);
         person.setMediationCode("A2");
+
+        when(mockCountryDao.findById(isNotNull())).thenAnswer(
+            invocation -> Optional.of(new Country(invocation.getArgument(0),
+                                                  "Country " + invocation.getArgument(0))));
     }
 
     @Test
@@ -357,6 +366,7 @@ public class PersonControllerTest extends BaseTest {
                                     "Nadia DURAND",
                                     "277126912340454",
                                     "123765",
+                                    "FRA",
                                     new FamilySituationDTO(false, true, 2, 3),
                                     new FamilySituationDTO(true, false, 0, 1));
     }
@@ -393,6 +403,7 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getAccompanying()).isEqualTo(command.getAccompanying());
         assertThat(person.getSocialSecurityNumber()).isEqualTo(command.getSocialSecurityNumber());
         assertThat(person.getCafNumber()).isEqualTo(command.getCafNumber());
+        assertThat(person.getNationality().getId()).isEqualTo(command.getNationalityId());
         assertFamilySituationEqualsCommand(person.getFrenchFamilySituation(), command.getFrenchFamilySituation());
         assertFamilySituationEqualsCommand(person.getAbroadFamilySituation(), command.getAbroadFamilySituation());
     }

@@ -1,3 +1,5 @@
+import { CountryModel } from './country.model';
+
 export type MaritalStatus = 'UNKNOWN' | 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 'WIDOWER' | 'DIVORCED' | 'SPLIT';
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 export type FiscalStatus = 'UNKNOWN' | 'TAXABLE' | 'NOT_TAXABLE';
@@ -44,6 +46,7 @@ export interface PersonModel extends PersonIdentityModel {
   accompanying: string;
   socialSecurityNumber: string;
   cafNumber: string;
+  nationality: CountryModel;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
   deleted: boolean;

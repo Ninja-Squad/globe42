@@ -55,6 +55,7 @@ import { TaskCategoriesResolverService } from './task-categories-resolver.servic
 import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time-statistics.component';
 import { PersonNoteEditionGuard } from './person-note-edition.guard';
 import { PersonTasksComponent } from './person-tasks/person-tasks.component';
+import { CountriesResolverService } from './countries-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -76,7 +77,8 @@ export const routes: Routes = [
             path: 'create',
             component: PersonEditComponent,
             resolve: {
-              persons: PersonsResolverService
+              persons: PersonsResolverService,
+              countries: CountriesResolverService
             }
           },
           {
@@ -141,7 +143,8 @@ export const routes: Routes = [
             component: PersonEditComponent,
             resolve: {
               person: PersonResolverService,
-              persons: PersonsResolverService
+              persons: PersonsResolverService,
+              countries: CountriesResolverService
             }
           },
           {

@@ -61,6 +61,10 @@ describe('PersonComponent', () => {
     accompanying: 'Paul',
     socialSecurityNumber: '277126912340454',
     cafNumber: '123765',
+    nationality: {
+      id: 'FRA',
+      name: 'France'
+    },
     frenchFamilySituation: null,
     abroadFamilySituation: null,
     deleted: false
@@ -145,6 +149,8 @@ describe('PersonComponent', () => {
     expect(socialSecurityNumber.textContent).toContain('277126912340454');
     const cafNumber = nativeElement.querySelector('#cafNumber');
     expect(cafNumber.textContent).toContain('123765');
+    const nationality = nativeElement.querySelector('#nationality');
+    expect(nationality.textContent).toContain('France');
   });
 
   it('should display a person with mediation disabled', () => {
@@ -162,7 +168,11 @@ describe('PersonComponent', () => {
       'maritalStatus',
       'spouse',
       'healthCareCoverage',
-      'healthInsurance'
+      'healthInsurance',
+      'accompanying',
+      'socialSecurityNumber',
+      'cafNumber',
+      'nationality'
     ];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));

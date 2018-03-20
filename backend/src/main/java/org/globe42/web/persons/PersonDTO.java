@@ -9,6 +9,7 @@ import org.globe42.domain.Housing;
 import org.globe42.domain.MaritalStatus;
 import org.globe42.domain.HealthCareCoverage;
 import org.globe42.domain.Person;
+import org.globe42.web.countries.CountryDTO;
 
 /**
  * DTO for Person
@@ -41,6 +42,7 @@ public final class PersonDTO {
     private final String socialSecurityNumber;
     private final String cafNumber;
     private PersonIdentityDTO spouse;
+    private CountryDTO nationality;
 
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
@@ -73,6 +75,7 @@ public final class PersonDTO {
         this.cafNumber = person.getCafNumber();
         Person spouse = person.getSpouse();
         this.spouse = spouse == null ? null : new PersonIdentityDTO(spouse);
+        this.nationality = person.getNationality() == null ? null : new CountryDTO(person.getNationality());
         this.frenchFamilySituation = person.getFrenchFamilySituation() == null ? null : new FamilySituationDTO(person.getFrenchFamilySituation());
         this.abroadFamilySituation = person.getAbroadFamilySituation() == null ? null : new FamilySituationDTO(person.getAbroadFamilySituation());
         this.deleted = person.isDeleted();
@@ -176,6 +179,10 @@ public final class PersonDTO {
 
     public PersonIdentityDTO getSpouse() {
         return spouse;
+    }
+
+    public CountryDTO getNationality() {
+        return nationality;
     }
 
     public FamilySituationDTO getFrenchFamilySituation() {

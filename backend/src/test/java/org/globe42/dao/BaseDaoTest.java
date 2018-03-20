@@ -41,7 +41,8 @@ public abstract class BaseDaoTest {
                                                                "family_situation",
                                                                "income_source",
                                                                "income_source_type",
-                                                               "postal_city");
+                                                               "postal_city",
+                                                               "country");
 
     private final Operation RESET_ALL_MEDIATION_CODE_SEQUENCES =
         resetAllMediationCodeSequences();

@@ -229,9 +229,16 @@ public class Person {
     private String socialSecurityNumber;
 
     /**
-     * The CAF number of the person. CAF = "Caisse Allocations Familiales" in French. Only requested to mediation-enabled persons, and not mandatory
+     * The CAF number of the person. CAF = "Caisse Allocations Familiales" in French. Only requested to
+     * mediation-enabled persons, and not mandatory
      */
     private String cafNumber;
+
+    /**
+     * The nationality of the person. Only requested to mediation-enabled persons, and not mandatory
+     */
+    @ManyToOne
+    private Country nationality;
 
     /**
      * The notes added on the person
@@ -527,6 +534,14 @@ public class Person {
 
     public void setCafNumber(String cafNumber) {
         this.cafNumber = cafNumber;
+    }
+
+    public Country getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(Country nationality) {
+        this.nationality = nationality;
     }
 
     public Set<Note> getNotes() {

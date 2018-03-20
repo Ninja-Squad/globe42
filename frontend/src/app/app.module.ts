@@ -103,6 +103,8 @@ import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time
 import { ChartComponent } from './chart/chart.component';
 import { PersonNoteEditionGuard } from './person-note-edition.guard';
 import { PersonTasksComponent } from './person-tasks/person-tasks.component';
+import { CountryService } from './country.service';
+import { CountriesResolverService } from './countries-resolver.service';
 
 registerLocaleData(localeFr);
 
@@ -226,7 +228,9 @@ registerLocaleData(localeFr);
     ParticipationService,
     ParticipationsResolverService,
     ParticipantsResolverService,
-    TaskCategoriesResolverService
+    TaskCategoriesResolverService,
+    CountryService,
+    CountriesResolverService
   ],
   bootstrap: [AppComponent]
 })

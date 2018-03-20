@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import org.globe42.dao.CountryDao;
 import org.globe42.dao.CoupleDao;
 import org.globe42.dao.PersonDao;
 import org.globe42.domain.City;
@@ -35,10 +36,12 @@ public class PersonController {
 
     private final PersonDao personDao;
     private final CoupleDao coupleDao;
+    private final CountryDao countryDao;
 
-    public PersonController(PersonDao personDao, CoupleDao coupleDao) {
+    public PersonController(PersonDao personDao, CoupleDao coupleDao, CountryDao countryDao) {
         this.personDao = personDao;
         this.coupleDao = coupleDao;
+        this.countryDao = countryDao;
     }
 
     @GetMapping
@@ -149,6 +152,10 @@ public class PersonController {
             person.setCafNumber(command.getCafNumber());
             person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
             person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
+            person.setNationality(
+                countryDao.findById(command.getNationalityId())
+                          .orElseThrow(() -> new BadRequestException("No nationality with ID "
+                                                                         + command.getNationalityId())));
             handleCouple(person, command.getSpouseId());
         }
     }

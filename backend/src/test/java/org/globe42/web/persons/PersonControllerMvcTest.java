@@ -2,6 +2,7 @@ package org.globe42.web.persons;
 
 import static org.globe42.test.Answers.modifiedFirstArgument;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -12,8 +13,10 @@ import java.util.Collections;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.globe42.dao.CountryDao;
 import org.globe42.dao.CoupleDao;
 import org.globe42.dao.PersonDao;
+import org.globe42.domain.Country;
 import org.globe42.domain.Person;
 import org.globe42.test.GlobeMvcTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +39,9 @@ public class PersonControllerMvcTest {
     @MockBean
     private CoupleDao mockCoupleDao;
 
+    @MockBean
+    private CountryDao mockCountryDao;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -50,6 +56,8 @@ public class PersonControllerMvcTest {
         person.setAdherent(true);
         person.setEntryDate(LocalDate.of(2017, 5, 21));
         person.setMediationCode("A2");
+
+        when(mockCountryDao.findById(isNotNull())).thenReturn(Optional.of(new Country("FRA", "France")));
     }
 
     @Test

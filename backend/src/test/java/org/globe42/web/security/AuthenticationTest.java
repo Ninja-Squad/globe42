@@ -3,6 +3,7 @@ package org.globe42.web.security;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.globe42.dao.CountryDao;
 import org.globe42.dao.CoupleDao;
 import org.globe42.dao.PersonDao;
 import org.globe42.dao.UserDao;
@@ -27,6 +28,9 @@ public class AuthenticationTest {
 
     @MockBean
     private CoupleDao mockCoupleDao;
+
+    @MockBean
+    private CountryDao mockCountryDao;
 
     @MockBean
     private UserDao mockUserDao;

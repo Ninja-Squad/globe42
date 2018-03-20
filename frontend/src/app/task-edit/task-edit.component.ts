@@ -67,11 +67,11 @@ export class TaskEditComponent implements OnInit {
       this.task.category = this.findWithId(this.categories, this.editedTask.category.id);
       this.task.dueDate = this.editedTask.dueDate;
       this.task.concernedPerson =
-        this.editedTask.concernedPerson ? this.findWithId(this.personTypeahead.persons, this.editedTask.concernedPerson.id) : null;
+        this.editedTask.concernedPerson ? this.findWithId(this.personTypeahead.elements, this.editedTask.concernedPerson.id) : null;
       this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
     } else {
       if (concernedPersonId) {
-        this.task.concernedPerson = this.findWithId(this.personTypeahead.persons, +concernedPersonId);
+        this.task.concernedPerson = this.findWithId(this.personTypeahead.elements, +concernedPersonId);
       }
     }
   }

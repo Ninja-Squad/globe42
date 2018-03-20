@@ -14,9 +14,9 @@ import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-covera
 import { PersonTypeahead } from '../person/person-typeahead';
 import { FullnamePipe } from '../fullname.pipe';
 import { CityTypeahead } from './city-typeahead';
-import { sortBy } from '../utils';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
+import { CountryTypeahead } from '../person/country-typeahead';
 
 @Component({
   selector: 'gl-person-edit',
@@ -40,6 +40,8 @@ export class PersonEditComponent {
 
   spouseIsInCouple = false;
 
+  countryTypeahead: CountryTypeahead;
+
   private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
     if (!ctrl.value) {
       return null;
@@ -60,10 +62,10 @@ export class PersonEditComponent {
     if (this.editedPerson) {
       persons = persons.filter(p => p.id !== this.editedPerson.id);
     }
-    persons = sortBy(persons, p => fullnamePipe.transform(p));
 
     this.cityTypeahead = new CityTypeahead(this.searchCityService, this.displayCityPipe);
     this.spouseTypeahead = new PersonTypeahead(persons, this.fullnamePipe);
+    this.countryTypeahead = new CountryTypeahead(this.route.snapshot.data['countries']);
 
     this.personForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -92,7 +94,8 @@ export class PersonEditComponent {
       hostName: '',
       fiscalStatus: 'UNKNOWN',
       fiscalStatusDate: null,
-      fiscalStatusUpToDate: false
+      fiscalStatusUpToDate: false,
+      nationality: null
     });
 
     if (this.editedPerson) {
@@ -135,6 +138,9 @@ export class PersonEditComponent {
 
     formValue.spouseId = formValue.spouse ? formValue.spouse.id : null;
     delete formValue.spouse;
+
+    formValue.nationalityId = formValue.nationality ? formValue.nationality.id : null;
+    delete formValue.nationality;
 
     const command: PersonCommand = formValue;
 

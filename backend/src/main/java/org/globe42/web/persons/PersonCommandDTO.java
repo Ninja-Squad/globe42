@@ -59,6 +59,9 @@ public final class PersonCommandDTO {
     private final String accompanying;
     private final String socialSecurityNumber;
     private final String cafNumber;
+
+    private final String nationalityId;
+
     private final FamilySituationDTO frenchFamilySituation;
     private final FamilySituationDTO abroadFamilySituation;
 
@@ -90,6 +93,7 @@ public final class PersonCommandDTO {
                             @JsonProperty String accompanying,
                             @JsonProperty String socialSecurityNumber,
                             @JsonProperty String cafNumber,
+                            @JsonProperty String nationalityId,
                             @JsonProperty FamilySituationDTO frenchFamilySituation,
                             @JsonProperty FamilySituationDTO abroadFamilySituation) {
         this.firstName = firstName;
@@ -119,6 +123,7 @@ public final class PersonCommandDTO {
         this.accompanying = accompanying;
         this.socialSecurityNumber = socialSecurityNumber;
         this.cafNumber = cafNumber;
+        this.nationalityId = nationalityId;
         this.frenchFamilySituation = frenchFamilySituation;
         this.abroadFamilySituation = abroadFamilySituation;
     }
@@ -131,7 +136,9 @@ public final class PersonCommandDTO {
         return lastName;
     }
 
-    public String getBirthName() { return birthName; }
+    public String getBirthName() {
+        return birthName;
+    }
 
     public String getNickName() {
         return nickName;
@@ -173,7 +180,9 @@ public final class PersonCommandDTO {
         return mediationEnabled;
     }
 
-    public LocalDate getFirstMediationAppointmentDate() { return firstMediationAppointmentDate; }
+    public LocalDate getFirstMediationAppointmentDate() {
+        return firstMediationAppointmentDate;
+    }
 
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
@@ -191,7 +200,9 @@ public final class PersonCommandDTO {
         return housingSpace;
     }
 
-    public String getHostName() { return hostName; }
+    public String getHostName() {
+        return hostName;
+    }
 
     public FiscalStatus getFiscalStatus() {
         return fiscalStatus;
@@ -209,13 +220,25 @@ public final class PersonCommandDTO {
         return healthCareCoverage;
     }
 
-    public String getHealthInsurance() { return healthInsurance; }
+    public String getHealthInsurance() {
+        return healthInsurance;
+    }
 
-    public String getAccompanying() { return accompanying; }
+    public String getAccompanying() {
+        return accompanying;
+    }
 
-    public String getSocialSecurityNumber() { return socialSecurityNumber; }
+    public String getSocialSecurityNumber() {
+        return socialSecurityNumber;
+    }
 
-    public String getCafNumber() { return cafNumber; }
+    public String getCafNumber() {
+        return cafNumber;
+    }
+
+    public String getNationalityId() {
+        return nationalityId;
+    }
 
     public FamilySituationDTO getFrenchFamilySituation() {
         return frenchFamilySituation;

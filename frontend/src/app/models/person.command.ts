@@ -32,6 +32,7 @@ export interface PersonCommand {
   cafNumber: string;
   healthCareCoverage: HealthCareCoverage;
   healthInsurance: string;
+  nationalityId: string;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;
 }
