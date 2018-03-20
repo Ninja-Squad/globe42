@@ -1,6 +1,6 @@
 /* tslint:disable:no-use-before-declare */
 
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerConfig, NgbDatepickerI18n,
   NgbModule
@@ -10,6 +10,7 @@ import { FrenchDateParserFormatterService } from './french-date-parser-formatter
 import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
 import { NonEditableTypeaheadDirective } from './non-editable-typeahead.directive';
 
+@Injectable()
 export class GlobeNgbDatepickerConfig extends NgbDatepickerConfig {
   constructor() {
     super();
