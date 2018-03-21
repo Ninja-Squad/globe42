@@ -45,49 +45,66 @@
         </p>
       </div>
     </div>
-    <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">N° de Sécurité Sociale</label>
-      <div class="col-sm-6">
-        <p id="socialSecurityNumber" class="form-control-plaintext">{{ person.socialSecurityNumber }}</p>
-      </div>
-    </div>
-    <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">N° CAF</label>
-      <div class="col-sm-6">
-        <p id="cafNumber" class="form-control-plaintext">{{ person.cafNumber }}</p>
-      </div>
-    </div>
-    <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Couverture médicale</label>
-      <div class="col-sm-6">
-        <p id="healthCareCoverage" class="form-control-plaintext">{{ person.healthCareCoverage | displayHealthCareCoverage }}</p>
-      </div>
-    </div>
-    <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Mutuelle</label>
-      <div class="col-sm-6">
-        <p id="healthInsurance" class="form-control-plaintext">{{ person.healthInsurance }}</p>
-      </div>
-    </div>
 
-    <h2 class="mt-3">Informations</h2>
+    <div *ngIf="person.mediationEnabled">
+      <h2 class="mt-3">Santé</h2>
 
-    <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
-      <div class="col-sm-6">
-        <p id="entryDate" class="form-control-plaintext">{{ person.entryDate | date }}</p>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">N° de Sécurité Sociale</label>
+        <div class="col-sm-6">
+          <p id="socialSecurityNumber" class="form-control-plaintext">{{ person.socialSecurityNumber }}</p>
+        </div>
       </div>
-    </div>
-    <div class="form-group row" *ngIf="person.mediationEnabled">
-      <label class="col-sm-6 col-form-label">1<sup>er</sup> RDV médiation</label>
-      <div class="col-sm-6">
-        <p id="firstMediationAppointmentDate" class="form-control-plaintext">{{ person.firstMediationAppointmentDate | date }}</p>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">N° CAF</label>
+        <div class="col-sm-6">
+          <p id="cafNumber" class="form-control-plaintext">{{ person.cafNumber }}</p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Couverture médicale</label>
+        <div class="col-sm-6">
+          <p id="healthCareCoverage" class="form-control-plaintext">
+            {{ person.healthCareCoverage | displayHealthCareCoverage }}
+            <span *ngIf="person.healthCareCoverage !== 'UNKNOWN' && person.healthCareCoverageStartDate">
+              depuis le {{ person.healthCareCoverageStartDate | date }}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Mutuelle</label>
+        <div class="col-sm-6">
+          <p id="healthInsurance" class="form-control-plaintext">
+            {{ person.healthInsurance }}
+            <span *ngIf="person.healthInsurance && person.healthInsuranceStartDate">
+              depuis le {{ person.healthInsuranceStartDate | date }}
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="col-lg">
-    <h2 class="mt-3 mt-lg-0">Contact</h2>
+    <div *ngIf="person.mediationEnabled">
+      <h2 class="mt-3 mt-lg-0">Informations</h2>
+
+      <div class="form-group row" *ngIf="person.mediationEnabled">
+        <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
+        <div class="col-sm-6">
+          <p id="entryDate" class="form-control-plaintext">{{ person.entryDate | date }}</p>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="person.mediationEnabled">
+        <label class="col-sm-6 col-form-label">1<sup>er</sup> RDV médiation</label>
+        <div class="col-sm-6">
+          <p id="firstMediationAppointmentDate" class="form-control-plaintext">{{ person.firstMediationAppointmentDate | date }}</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="mt-3" [class.mt-lg-0]="!person.mediationEnabled">Contact</h2>
 
     <div class="d-flex mb-2" id="fullAddress">
       <div class="mr-3"><span class="fa fa-home"></span></div>

@@ -42,7 +42,9 @@ export interface PersonModel extends PersonIdentityModel {
   fiscalNumber: string;
   fiscalStatusUpToDate: boolean;
   healthCareCoverage: HealthCareCoverage;
+  healthCareCoverageStartDate: string;
   healthInsurance: string;
+  healthInsuranceStartDate: string;
   accompanying: string;
   socialSecurityNumber: string;
   cafNumber: string;

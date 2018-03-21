@@ -59,7 +59,9 @@ public final class PersonCommandDTO {
     private final String fiscalNumber;
     private final boolean fiscalStatusUpToDate;
     private final HealthCareCoverage healthCareCoverage;
+    private final LocalDate healthCareCoverageStartDate;
     private final String healthInsurance;
+    private final LocalDate healthInsuranceStartDate;
     private final String accompanying;
     private final String socialSecurityNumber;
     private final String cafNumber;
@@ -93,7 +95,9 @@ public final class PersonCommandDTO {
                             @JsonProperty String fiscalNumber,
                             @JsonProperty boolean fiscalStatusUpToDate,
                             @JsonProperty HealthCareCoverage healthCareCoverage,
+                            @JsonProperty LocalDate healthCareCoverageStartDate,
                             @JsonProperty String healthInsurance,
+                            @JsonProperty LocalDate healthInsuranceStartDate,
                             @JsonProperty String accompanying,
                             @JsonProperty String socialSecurityNumber,
                             @JsonProperty String cafNumber,
@@ -123,7 +127,9 @@ public final class PersonCommandDTO {
         this.fiscalNumber = fiscalNumber;
         this.fiscalStatusUpToDate = fiscalStatusUpToDate;
         this.healthCareCoverage = healthCareCoverage;
+        this.healthCareCoverageStartDate = healthCareCoverageStartDate;
         this.healthInsurance = healthInsurance;
+        this.healthInsuranceStartDate = healthInsuranceStartDate;
         this.accompanying = accompanying;
         this.socialSecurityNumber = socialSecurityNumber;
         this.cafNumber = cafNumber;
@@ -224,8 +230,16 @@ public final class PersonCommandDTO {
         return healthCareCoverage;
     }
 
+    public LocalDate getHealthCareCoverageStartDate() {
+        return healthCareCoverageStartDate;
+    }
+
     public String getHealthInsurance() {
         return healthInsurance;
+    }
+
+    public LocalDate getHealthInsuranceStartDate() {
+        return healthInsuranceStartDate;
     }
 
     public String getAccompanying() {

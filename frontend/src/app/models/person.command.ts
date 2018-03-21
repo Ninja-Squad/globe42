@@ -31,7 +31,9 @@ export interface PersonCommand {
   socialSecurityNumber: string;
   cafNumber: string;
   healthCareCoverage: HealthCareCoverage;
+  healthCareCoverageStartDate: string;
   healthInsurance: string;
+  healthInsuranceStartDate: string;
   nationalityId: string;
   frenchFamilySituation: FamilySituation;
   abroadFamilySituation: FamilySituation;

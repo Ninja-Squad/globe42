@@ -146,7 +146,9 @@ public class PersonController {
             person.setFiscalNumber(command.getFiscalNumber());
             person.setFiscalStatusUpToDate(command.isFiscalStatusUpToDate());
             person.setHealthCareCoverage(command.getHealthCareCoverage());
+            person.setHealthCareCoverageStartDate(command.getHealthCareCoverageStartDate());
             person.setHealthInsurance(command.getHealthInsurance());
+            person.setHealthInsuranceStartDate(command.getHealthInsuranceStartDate());
             person.setAccompanying(command.getAccompanying());
             person.setSocialSecurityNumber(command.getSocialSecurityNumber());
             person.setCafNumber(command.getCafNumber());

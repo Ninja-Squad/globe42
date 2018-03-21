@@ -57,7 +57,9 @@ describe('PersonComponent', () => {
     fiscalNumber: '0123456789012',
     fiscalStatusUpToDate: true,
     healthCareCoverage: 'AME',
+    healthCareCoverageStartDate: '2017-01-01',
     healthInsurance: 'AXA',
+    healthInsuranceStartDate: '2017-02-02',
     accompanying: 'Paul',
     socialSecurityNumber: '277126912340454',
     cafNumber: '123765',
@@ -141,8 +143,10 @@ describe('PersonComponent', () => {
     expect(fiscalStatus.textContent).toContain('à jour');
     const healthCareCoverage = nativeElement.querySelector('#healthCareCoverage');
     expect(healthCareCoverage.textContent).toContain('Aide médicale de l\'Etat');
+    expect(healthCareCoverage.textContent).toContain('depuis le 1 janv. 2017');
     const healthInsurance = nativeElement.querySelector('#healthInsurance');
     expect(healthInsurance.textContent).toContain('AXA');
+    expect(healthInsurance.textContent).toContain('depuis le 2 févr. 2017');
     const accompanying = nativeElement.querySelector('#accompanying');
     expect(accompanying.textContent).toContain('Paul');
     const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');

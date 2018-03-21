@@ -217,9 +217,21 @@ public class Person {
     private HealthCareCoverage healthCareCoverage = HealthCareCoverage.UNKNOWN;
 
     /**
+     * The date when the health care coverage has been established/started. Only requested to mediation-enabled persons,
+     * and when the health care coverage is not UNKNOWN
+     */
+    private LocalDate healthCareCoverageStartDate;
+
+    /**
      * The Health Insurance. Only requested to mediation-enabled persons, and not mandatory
      */
     private String healthInsurance;
+
+    /**
+     * The date when the health care coverage has been established/started. Only requested to mediation-enabled persons,
+     * and when the health insurance is known
+     */
+    private LocalDate healthInsuranceStartDate;
 
     /**
      * The name of the accompanying. Only requested to mediation-enabled persons, and not mandatory
@@ -509,12 +521,28 @@ public class Person {
         this.healthCareCoverage = healthCareCoverage;
     }
 
+    public LocalDate getHealthCareCoverageStartDate() {
+        return healthCareCoverageStartDate;
+    }
+
+    public void setHealthCareCoverageStartDate(LocalDate healthCareCoverageStartDate) {
+        this.healthCareCoverageStartDate = healthCareCoverageStartDate;
+    }
+
     public String getHealthInsurance() {
         return healthInsurance;
     }
 
     public void setHealthInsurance(String healthInsurance) {
         this.healthInsurance = healthInsurance;
+    }
+
+    public LocalDate getHealthInsuranceStartDate() {
+        return healthInsuranceStartDate;
+    }
+
+    public void setHealthInsuranceStartDate(LocalDate healthInsuranceStartDate) {
+        this.healthInsuranceStartDate = healthInsuranceStartDate;
     }
 
     public String getAccompanying() {

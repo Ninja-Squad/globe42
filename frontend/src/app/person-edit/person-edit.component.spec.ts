@@ -120,7 +120,9 @@ describe('PersonEditComponent', () => {
       fiscalStatusUpToDate: true,
       fiscalNumber: '0123456789012',
       healthCareCoverage: 'AME',
+      healthCareCoverageStartDate: '2017-01-01',
       healthInsurance: 'AXA',
+      healthInsuranceStartDate: '2017-02-02',
       accompanying: 'Paul',
       socialSecurityNumber: '234765498056734',
       cafNumber: '56734',
@@ -217,8 +219,12 @@ describe('PersonEditComponent', () => {
       expect(fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
       const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
       expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe(person.healthCareCoverage);
+      const healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
+      expect(healthCareCoverageStartDate.value).toBe('01/01/2017');
       const healthInsurance = nativeElement.querySelector('#healthInsurance');
       expect(healthInsurance.value).toBe(person.healthInsurance);
+      const healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
+      expect(healthInsuranceStartDate.value).toBe('02/02/2017');
       const accompanying = nativeElement.querySelector('#accompanying');
       expect(accompanying.value).toBe(person.accompanying);
       const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');
@@ -526,6 +532,14 @@ describe('PersonEditComponent', () => {
       expect(socialSecurityNumber.value).toBe('');
       const cafNumber = nativeElement.querySelector('#cafNumber');
       expect(cafNumber.value).toBe('');
+      const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
+      expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe('UNKNOWN');
+      let healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
+      expect(healthCareCoverageStartDate).toBeFalsy();
+      const healthInsurance = nativeElement.querySelector('#healthInsurance');
+      expect(healthInsurance.value).toBe('');
+      let healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
+      expect(healthInsuranceStartDate).toBeFalsy();
       const nationality = nativeElement.querySelector('#nationality');
       expect(nationality.value).toBe('');
       const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
@@ -619,6 +633,24 @@ describe('PersonEditComponent', () => {
       fiscalStatusUpToDate.checked = true;
       fiscalStatusUpToDate.dispatchEvent(new Event('change'));
 
+      healthCareCoverage.selectedIndex = 1;
+      healthCareCoverage.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+      tick();
+      healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
+      expect(healthCareCoverageStartDate).toBeTruthy();
+      healthCareCoverageStartDate.value = '01/01/2017';
+      healthCareCoverageStartDate.dispatchEvent(new Event('change'));
+
+      healthInsurance.value = 'AXA';
+      healthInsurance.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      tick();
+      healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
+      expect(healthInsuranceStartDate).toBeTruthy();
+      healthInsuranceStartDate.value = '02/02/2017';
+      healthInsuranceStartDate.dispatchEvent(new Event('change'));
+
       // trigger nationality typeahead
       nationality.value = 'Bel';
       nationality.dispatchEvent(new Event('input'));
@@ -634,7 +666,6 @@ describe('PersonEditComponent', () => {
       nativeElement.querySelector('#save').click();
       fixture.detectChanges();
       tick();
-      expect(entryDate.value).toBe('02/02/2015');
 
       expect(personService.create).toHaveBeenCalled();
 
@@ -667,6 +698,10 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.fiscalStatus).toBe('TAXABLE');
       expect(createdPerson.fiscalNumber).toBe('0123456789012');
       expect(createdPerson.fiscalStatusUpToDate).toBe(true);
+      expect(createdPerson.healthCareCoverage).toBe('GENERAL');
+      expect(createdPerson.healthCareCoverageStartDate).toBe('2017-01-01');
+      expect(createdPerson.healthInsurance).toBe('AXA');
+      expect(createdPerson.healthInsuranceStartDate).toBe('2017-02-02');
       expect((createdPerson as any).nationality).not.toBeDefined();
       expect(createdPerson.nationalityId).toBe('BEL');
 
