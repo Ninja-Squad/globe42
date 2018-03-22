@@ -9,6 +9,7 @@ import { DateStringAdapterService } from './date-string-adapter.service';
 import { FrenchDateParserFormatterService } from './french-date-parser-formatter.service';
 import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
 import { NonEditableTypeaheadDirective } from './non-editable-typeahead.directive';
+import { DatepickerContainerComponent } from './datepicker-container.component';
 
 @Injectable()
 export class GlobeNgbDatepickerConfig extends NgbDatepickerConfig {
@@ -25,9 +26,10 @@ export class GlobeNgbDatepickerConfig extends NgbDatepickerConfig {
   ],
   exports: [
     NgbModule,
-    NonEditableTypeaheadDirective
+    NonEditableTypeaheadDirective,
+    DatepickerContainerComponent
   ],
-  declarations: [NonEditableTypeaheadDirective]
+  declarations: [NonEditableTypeaheadDirective, DatepickerContainerComponent]
 })
 export class GlobeNgbModule {
   static forRoot(): ModuleWithProviders {

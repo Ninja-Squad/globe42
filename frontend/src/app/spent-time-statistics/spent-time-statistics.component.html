@@ -2,20 +2,16 @@
 
 <form [formGroup]="criteriaForm" class="form-inline mb-4">
   <label for="from" class="mr-2">Du</label>
-  <div class="input-group mr-2">
-    <div class="input-group-prepend" (click)="from.toggle()">
-      <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
-    </div>
-    <input class="form-control" style="width: 8em;" id="from" formControlName="from" ngbDatepicker #from="ngbDatepicker" [minDate]="{year: 2017, month: 1}">
-  </div>
+  <gl-datepicker-container class="mr-2">
+    <input class="form-control" style="width: 8em;" id="from" formControlName="from"
+           ngbDatepicker [minDate]="{year: 2017, month: 1}">
+  </gl-datepicker-container>
 
   <label for="to" class="mr-2">au</label>
-  <div class="input-group mr-2">
-    <div class="input-group-prepend" (click)="to.toggle()">
-      <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
-    </div>
-    <input class="form-control" style="width: 8em;" id="to" formControlName="to" ngbDatepicker #to="ngbDatepicker" [minDate]="{year: 2017, month: 1}">
-  </div>
+  <gl-datepicker-container class="mr-2">
+    <input class="form-control" style="width: 8em;" id="to" formControlName="to"
+           ngbDatepicker [minDate]="{year: 2017, month: 1}">
+  </gl-datepicker-container>
 
   <label for="by" class="mr-2">Par</label>
   <select id="by" formControlName="by" class="form-control">

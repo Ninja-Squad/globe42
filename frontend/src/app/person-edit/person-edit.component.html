@@ -57,13 +57,10 @@
   </div>
   <div class="form-group row">
     <label for="birthDate" class="col-sm-3 col-form-label">Date de naissance</label>
-    <div class="col-sm-9 input-group">
-      <div class="input-group-prepend" (click)="d.toggle()">
-        <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
-      </div>
+    <gl-datepicker-container class="col-sm-9">
       <input class="form-control" id="birthDate" placeholder="23/12/1970"
-             formControlName="birthDate" ngbDatepicker #d="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
-    </div>
+             formControlName="birthDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+    </gl-datepicker-container>
   </div>
 
   <h2>Contact</h2>
@@ -119,13 +116,10 @@
 
     <div class="form-group row">
       <label for="entryDate" class="col-sm-3 col-form-label">Date d'entrée en France</label>
-      <div class="col-sm-9 input-group">
-        <div class="input-group-prepend" (click)="ed.toggle()">
-          <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
-        </div>
+      <gl-datepicker-container class="col-sm-9">
         <input class="form-control" id="entryDate" placeholder="01/01/2010"
-               formControlName="entryDate" ngbDatepicker #ed="ngbDatepicker" [minDate]="{year: 1900, month: 1}">
-      </div>
+               formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+      </gl-datepicker-container>
     </div>
 
     <div class="form-group row">
@@ -137,13 +131,10 @@
 
     <div class="form-group row">
       <label for="firstMediationAppointmentDate" class="col-sm-3 col-form-label">1<sup>er</sup> RDV médiation</label>
-      <div class="col-sm-9 input-group">
-        <div class="input-group-prepend" (click)="fd.toggle()">
-          <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
-        </div>
+      <gl-datepicker-container class="col-sm-9">
         <input class="form-control" id="firstMediationAppointmentDate" placeholder="01/01/2017"
-               formControlName="firstMediationAppointmentDate" ngbDatepicker #fd="ngbDatepicker" [minDate]="{year: 2012, month: 1}">
-      </div>
+               formControlName="firstMediationAppointmentDate" ngbDatepicker [minDate]="{year: 2012, month: 1}">
+      </gl-datepicker-container>
     </div>
 
     <div class="form-group row">
@@ -233,13 +224,10 @@
     </div>
     <div class="form-group row" *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'">
       <label for="fiscalStatusDate" class="col-sm-3 col-form-label">Date de mise en place</label>
-      <div class="col-sm-9 input-group">
-        <div class="input-group-prepend" (click)="fsd.toggle()">
-          <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
-        </div>
+      <gl-datepicker-container class="col-sm-9">
         <input class="form-control" id="fiscalStatusDate" placeholder="01/01/2016"
-               formControlName="fiscalStatusDate" ngbDatepicker #fsd="ngbDatepicker" [minDate]="{year: 1990, month: 1}">
-      </div>
+               formControlName="fiscalStatusDate" ngbDatepicker [minDate]="{year: 1990, month: 1}">
+      </gl-datepicker-container>
     </div>
     <div class="row">
       <div class="col-sm-9 offset-sm-3">

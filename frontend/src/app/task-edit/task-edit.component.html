@@ -29,12 +29,10 @@
   </div>
   <div class="form-group row">
     <label for="dueDate" class="col-sm-3 col-form-label">Echéance</label>
-    <div class="col-sm-9 input-group">
-      <div class="input-group-prepend" (click)="d.toggle()">
-        <span class="input-group-text fa fa-calendar" aria-hidden="true"></span>
-      </div>
-      <input class="form-control" id="dueDate" name="dueDate" [(ngModel)]="task.dueDate" ngbDatepicker #d="ngbDatepicker" [minDate]="{year: 2017, month: 1}" />
-    </div>
+    <gl-datepicker-container class="col-sm-9">
+      <input class="form-control" id="dueDate" name="dueDate" [(ngModel)]="task.dueDate"
+             ngbDatepicker [minDate]="{year: 2017, month: 1}" />
+    </gl-datepicker-container>
   </div>
   <div class="form-group row">
     <label for="title" class="col-sm-3 col-form-label">Concerne</label>
