@@ -1,4 +1,4 @@
-<h1>Types de charge</h1>
+<h1>Natures des charges</h1>
 
 <div class="row mb-2 align-items-center charge-type-item" *ngFor="let chargeType of chargeTypes">
   <div class="col-sm"><a [routerLink]="['/charge-types', chargeType.id, 'edit']">{{ chargeType.name }}</a></div>
@@ -17,5 +17,5 @@
 
 <a class="btn btn-outline-primary" routerLink="/charge-types/create">
   <span class="fa fa-plus"></span>
-  Nouveau type de charge
+  Nouvelle nature des charges
 </a>

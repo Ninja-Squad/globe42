@@ -43,7 +43,7 @@ describe('IncomeTypeEditComponent', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification du type de revenu CAF');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de l\'organisme payeur CAF');
     });
 
     it('should edit and update an existing income type', async(() => {
@@ -86,7 +86,7 @@ describe('IncomeTypeEditComponent', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouveau type de revenu');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvel organisme payeur');
     });
 
     it('should create and save a new income type', fakeAsync(() => {

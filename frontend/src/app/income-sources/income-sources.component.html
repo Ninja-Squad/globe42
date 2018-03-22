@@ -1,4 +1,4 @@
-<h1>Sources de revenu</h1>
+<h1>Natures de prestation</h1>
 
 <div class="row mb-2 align-items-center income-source-item" *ngFor="let incomeSource of incomeSources">
   <div class="col-sm"><a [routerLink]="['/income-sources', incomeSource.id, 'edit']">{{ incomeSource.name }}</a></div>
@@ -17,5 +17,5 @@
 
 <a class="btn btn-outline-primary" routerLink="/income-sources/create">
   <span class="fa fa-plus"></span>
-  Nouvelle source de revenu
+  Nouvelle nature de prestation
 </a>

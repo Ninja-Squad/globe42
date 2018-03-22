@@ -43,7 +43,7 @@ describe('ChargeCategoryEditComponent', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la catégorie de charge rental');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la dépense rental');
     });
 
     it('should edit and update an existing charge category', async(() => {
@@ -86,7 +86,7 @@ describe('ChargeCategoryEditComponent', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle catégorie de charge');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle dépense');
     });
 
     it('should create and save a new charge category', fakeAsync(() => {

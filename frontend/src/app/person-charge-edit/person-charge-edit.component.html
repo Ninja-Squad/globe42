@@ -2,7 +2,7 @@
 
 <form (ngSubmit)="save()" #chargeForm="ngForm">
   <div class="form-group row">
-    <label for="type" class="col-sm-3 col-form-label">Type de charge</label>
+    <label for="type" class="col-sm-3 col-form-label">Nature de la charge</label>
     <div class="col-sm-9">
       <select class="form-control" id="type" name="type" [(ngModel)]="charge.type" required>
         <option value=""></option>

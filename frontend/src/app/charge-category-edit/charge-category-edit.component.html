@@ -1,6 +1,6 @@
 <h1>
-  <ng-container *ngIf="editedChargeCategory">Modification de la catégorie de charge {{ editedChargeCategory.name }}</ng-container>
-  <ng-container *ngIf="!editedChargeCategory">Nouvelle catégorie de charge</ng-container>
+  <ng-container *ngIf="editedChargeCategory">Modification de la dépense {{ editedChargeCategory.name }}</ng-container>
+  <ng-container *ngIf="!editedChargeCategory">Nouvelle dépense</ng-container>
 </h1>
 
 <form (ngSubmit)="save()" #categoryForm="ngForm">

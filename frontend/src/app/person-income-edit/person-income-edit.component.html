@@ -3,7 +3,7 @@
 
 <form (ngSubmit)="save()" #incomeForm="ngForm">
   <div class="form-group row">
-    <label for="source" class="col-sm-3 col-form-label">Source du revenu</label>
+    <label for="source" class="col-sm-3 col-form-label">Nature de la prestation</label>
     <div class="col-sm-9">
       <select class="form-control" id="source" name="source" [(ngModel)]="income.source" required>
         <option value=""></option>

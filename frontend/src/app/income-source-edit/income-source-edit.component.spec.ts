@@ -46,7 +46,7 @@ describe('IncomeSourceEditComponent', () => {
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle source de revenu');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle nature de prestation');
     });
 
     it('should expose sorted income source types', () => {
@@ -155,7 +155,7 @@ describe('IncomeSourceEditComponent', () => {
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la source de revenu foo');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la nature de prestation foo');
     });
 
     it('should expose the edited income source info', () => {

@@ -46,7 +46,7 @@ describe('ChargeTypeEditComponent', () => {
       const fixture = TestBed.createComponent(ChargeTypeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouveau type de charge');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle nature des charges');
     });
 
     it('should expose sorted charge categories', () => {
@@ -155,7 +155,7 @@ describe('ChargeTypeEditComponent', () => {
       const fixture = TestBed.createComponent(ChargeTypeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification du type de charge foo');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la nature des charges foo');
     });
 
     it('should expose the edited charge type info', () => {

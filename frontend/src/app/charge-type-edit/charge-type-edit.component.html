@@ -1,6 +1,6 @@
 <h1>
-  <ng-container *ngIf="editedChargeType">Modification du type de charge {{ editedChargeType.name }}</ng-container>
-  <ng-container *ngIf="!editedChargeType">Nouveau type de charge</ng-container>
+  <ng-container *ngIf="editedChargeType">Modification de la nature des charges {{ editedChargeType.name }}</ng-container>
+  <ng-container *ngIf="!editedChargeType">Nouvelle nature des charges</ng-container>
 </h1>
 
 <form (ngSubmit)="save()" #chargeTypeForm="ngForm">
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="category" class="col-sm-3 col-form-label">Type</label>
+    <label for="category" class="col-sm-3 col-form-label">Dépense</label>
     <div class="col-sm-9">
       <select class="form-control" id="category" name="category" [(ngModel)]="chargeType.categoryId" required>
         <option value=""></option>

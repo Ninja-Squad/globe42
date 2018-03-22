@@ -1,4 +1,4 @@
-<h1>Types de revenu</h1>
+<h1>Organismes payeurs</h1>
 
 <div class="row mb-2 align-items-center income-type-item" *ngFor="let incomeType of incomeTypes">
   <div class="col-sm"><a [routerLink]="['/income-types', incomeType.id, 'edit']">{{ incomeType.type }}</a></div>
@@ -12,5 +12,5 @@
 
 <a class="btn btn-outline-primary" routerLink="/income-types/create">
   <span class="fa fa-plus"></span>
-  Nouveau type de revenu
+  Nouvel organisme
 </a>
