@@ -30,7 +30,10 @@ management:
     web:
       exposure:
         include: '*'
-
+logging:
+   level:
+      # Hides HHH000424: Disabling contextual LOB creation as createClob() method threw error
+      org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: WARN
 ---
 spring:
   profiles: demo
