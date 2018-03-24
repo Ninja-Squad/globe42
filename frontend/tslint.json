@@ -117,18 +117,6 @@
       "check-type"
     ],
     "no-import-side-effect": [true, {"ignore-module": "(core-js/.*|zone\\.js/.*)$"}],
-    "directive-selector": [
-      true,
-      "attribute",
-      "gl",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "gl",
-      "kebab-case"
-    ],
     "angular-whitespace": [true, "check-semicolon", "check-interpolation"],
     "banana-in-box": true,
     "component-class-suffix": true,
