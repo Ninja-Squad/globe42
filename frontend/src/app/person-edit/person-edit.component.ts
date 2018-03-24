@@ -18,6 +18,8 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 import { CountryTypeahead } from '../person/country-typeahead';
 
+export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;
+
 @Component({
   selector: 'gl-person-edit',
   templateUrl: './person-edit.component.html',
@@ -93,7 +95,7 @@ export class PersonEditComponent {
       housingSpace: null,
       hostName: '',
       fiscalStatus: 'UNKNOWN',
-      fiscalNumber: ['', Validators.pattern(/\d{13}/)],
+      fiscalNumber: ['', Validators.pattern(FISCAL_NUMBER_PATTERN)],
       fiscalStatusUpToDate: false,
       nationality: null
     });

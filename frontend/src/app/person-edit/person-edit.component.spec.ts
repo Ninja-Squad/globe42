@@ -2,7 +2,7 @@ import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { PersonEditComponent } from './person-edit.component';
+import { FISCAL_NUMBER_PATTERN, PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
 import { CityModel, PersonIdentityModel, PersonModel } from '../models/person.model';
 import { DisplayCityPipe } from '../display-city.pipe';
@@ -672,5 +672,12 @@ describe('PersonEditComponent', () => {
 
       expect(router.navigate).toHaveBeenCalledWith(['persons', 43]);
     }));
+
+    it('should accept only 13 digits for the fiscal number', () => {
+      expect(FISCAL_NUMBER_PATTERN.test('1abcdefghijk2')).toBeFalsy();
+      expect(FISCAL_NUMBER_PATTERN.test('123456789012')).toBeFalsy();
+      expect(FISCAL_NUMBER_PATTERN.test('12345678901234')).toBeFalsy();
+      expect(FISCAL_NUMBER_PATTERN.test('1234567890123')).toBeTruthy();
+    });
   });
 });
