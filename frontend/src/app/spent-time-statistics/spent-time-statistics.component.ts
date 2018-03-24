@@ -7,9 +7,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
-import { of } from 'rxjs/observable/of';
-import { catchError, concat, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
+import { concat, EMPTY, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 
 export interface CategoryStatistic {
@@ -90,15 +89,13 @@ export class SpentTimeStatisticsComponent implements OnInit {
 
     // when criteria change, we update the URL
     // when from or to changes, we reload the statistics
-    of(this.criteriaForm.value).pipe(
-      concat(this.criteriaForm.valueChanges)
-    ).pipe(
+    concat(of(this.criteriaForm.value), this.criteriaForm.valueChanges).pipe(
       filter(() => this.criteriaForm.valid),
       tap(value => this.router.navigate(['tasks/statistics'], { queryParams: value, replaceUrl: true })),
       map(value => ({ from: value.from, to: value.to })),
       distinctUntilChanged((v1, v2) => v1.from === v2.from && v1.to === v2.to),
       switchMap(value => this.taskService.spentTimeStatistics(value)
-        .pipe(catchError(() => empty<SpentTimeStatisticsModel>())))
+        .pipe(catchError(() => EMPTY)))
     ).subscribe(stats => this.updateState(stats));
 
     // when by changes, no need to reload the statistics, but the chart must be updated

@@ -110,16 +110,14 @@
 </div>
 
 <div class="mt-4">
-  <a [routerLink]="['/persons', person.id , 'incomes', 'create']" class="btn btn-outline-primary">
+  <a [routerLink]="['/persons', person.id , 'incomes', 'create']" class="btn btn-outline-primary mr-2">
     <span class="fa fa-plus"></span>
     Ajouter un revenu
   </a>
-
-  <a [routerLink]="['/persons', person.id , 'charges', 'create']" class="btn btn-outline-primary">
+  <a [routerLink]="['/persons', person.id , 'charges', 'create']" class="btn btn-outline-primary mr-2">
     <span class="fa fa-plus"></span>
     Ajouter une charge
   </a>
-
   <a [routerLink]="['/persons', person.id , 'per-unit-revenue', 'edit']" class="btn btn-outline-primary">
     <span class="fa fa-edit"></span>
     Éditer les informations du RUC

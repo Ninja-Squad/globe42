@@ -8,14 +8,12 @@ import { PersonNoteService } from '../person-note.service';
 import { PersonModel } from '../models/person.model';
 import { NoteModel } from '../models/note.model';
 import { ConfirmService } from '../confirm.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject, of, throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 describe('PersonNotesComponent', () => {
 
@@ -25,11 +23,7 @@ describe('PersonNotesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), FormsModule, HttpClientModule, GlobeNgbModule.forRoot()],
-      declarations: [PersonNotesComponent, NoteComponent],
-      providers: [
-        PersonNoteService,
-        ConfirmService
-      ]
+      declarations: [PersonNotesComponent, NoteComponent]
     });
 
     notes = [
@@ -160,7 +154,7 @@ describe('PersonNotesComponent', () => {
     const confirmService = TestBed.get(ConfirmService);
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
     spyOn(personNoteService, 'delete').and.returnValue(of(null));
-    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nok'));
+    spyOn(confirmService, 'confirm').and.returnValue(throwError('nok'));
 
     const fixture = TestBed.createComponent(PersonNotesComponent);
     fixture.componentInstance.person = person;

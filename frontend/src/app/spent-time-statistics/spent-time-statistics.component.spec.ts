@@ -14,8 +14,7 @@ import { ChartColor } from 'chart.js';
 import { By } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
-import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
+import { EMPTY, of } from 'rxjs';
 
 function createRoute(queryParams: {[key: string]: string}): ActivatedRoute {
   return {
@@ -43,14 +42,11 @@ describe('SpentTimeStatisticsComponent', () => {
           path: 'tasks/statistics', component: SpentTimeStatisticsComponent
         }
       ]), ReactiveFormsModule, GlobeNgbModule.forRoot(), CurrentUserModule.forRoot(), HttpClientModule],
-      providers: [
-        { provide: ActivatedRoute, useFactory: () => route },
-        TaskService
-      ]
+      providers: [{ provide: ActivatedRoute, useFactory: () => route }]
     });
 
     const taskService = TestBed.get(TaskService);
-    spyOn(taskService, 'spentTimeStatistics').and.returnValue(empty());
+    spyOn(taskService, 'spentTimeStatistics').and.returnValue(EMPTY);
   });
 
   afterEach(() => jasmine.clock().uninstall());

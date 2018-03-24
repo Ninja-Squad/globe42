@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 import { FunctionalErrorModel, TechnicalErrorModel } from './models/error.model';
 import { tap } from 'rxjs/operators';
 
@@ -25,7 +24,7 @@ import { tap } from 'rxjs/operators';
  * This functional error handler will check that the error is indeed functional, and if it is, it will emit it
  * so that the error component can display it in the generic error location.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ErrorService implements HttpInterceptor {
 
   /**

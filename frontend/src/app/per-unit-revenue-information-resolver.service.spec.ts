@@ -4,8 +4,7 @@ import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-inf
 import { PerUnitRevenueInformationService } from './per-unit-revenue-information.service';
 import { PerUnitRevenueInformationModel } from './models/per-unit-revenue-information.model';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 
 describe('PerUnitRevenueInformationResolverService', () => {
 
@@ -20,7 +19,6 @@ describe('PerUnitRevenueInformationResolverService', () => {
     (mockPerUnitRevenueInformationService.get as jasmine.Spy).and.returnValue(info);
     TestBed.configureTestingModule({
       providers: [
-        PerUnitRevenueInformationResolverService,
         { provide: PerUnitRevenueInformationService, useValue: mockPerUnitRevenueInformationService }
       ]
     });

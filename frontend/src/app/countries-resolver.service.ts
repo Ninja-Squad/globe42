@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { CountryService } from './country.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { CountryModel } from './models/country.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CountriesResolverService implements Resolve<Array<CountryModel>> {
 
   constructor(private countryService: CountryService) { }

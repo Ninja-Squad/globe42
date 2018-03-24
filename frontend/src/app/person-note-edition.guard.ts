@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { PersonComponent } from './person/person.component';
 import { ConfirmService } from './confirm.service';
 import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PersonNoteEditionGuard implements CanDeactivate<PersonComponent> {
 
   constructor(private confirmService: ConfirmService) {}

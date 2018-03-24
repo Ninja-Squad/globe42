@@ -4,7 +4,7 @@ import { ConfirmService } from '../confirm.service';
 import { DateTime } from 'luxon';
 import { NoteModel } from '../models/note.model';
 import { NoteEditionEvent } from '../note/note.component';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { PersonModel } from '../models/person.model';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { switchMap } from 'rxjs/operators';

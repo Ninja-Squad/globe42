@@ -12,7 +12,6 @@ describe('PersonFileService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ PersonFileService ],
       imports: [ HttpClientTestingModule ]
     });
 

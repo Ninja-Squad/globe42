@@ -1,6 +1,6 @@
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { MenuComponent } from './menu.component';
 import { UserModel } from '../models/user.model';
 import { CurrentUserService } from '../current-user/current-user.service';

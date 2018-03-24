@@ -12,7 +12,6 @@ describe('WeddingEventService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ WeddingEventService ],
       imports: [ HttpClientTestingModule ]
     });
 

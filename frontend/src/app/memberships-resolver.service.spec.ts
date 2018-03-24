@@ -1,4 +1,4 @@
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { MembershipsResolverService } from './memberships-resolver.service';
@@ -9,7 +9,6 @@ import { PersonModel } from './models/person.model';
 describe('MembershipsResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MembershipsResolverService, MembershipService],
       imports: [HttpClientModule]
     });
   });

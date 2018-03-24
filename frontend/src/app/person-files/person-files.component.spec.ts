@@ -9,10 +9,9 @@ import { ConfirmService } from '../confirm.service';
 import { FileSizePipe } from '../file-size.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject, of } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
 
 describe('PersonFilesComponent', () => {
   const person = { id: 42 } as PersonModel;
@@ -33,8 +32,6 @@ describe('PersonFilesComponent', () => {
       imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
       declarations: [PersonFilesComponent, FileSizePipe],
       providers: [
-        PersonFileService,
-        ConfirmService,
         { provide: ActivatedRoute, useValue: activatedRoute },
       ]
     });

@@ -1,15 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 import { TaskService } from './task.service';
 import { TaskCategoryModel } from './models/task-category.model';
-import { of } from 'rxjs/observable/of';
 
 describe('TaskCategoriesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      TaskCategoriesResolverService,
       { provide: TaskService, useValue: jasmine.createSpyObj('TaskService', ['listCategories'])}
     ],
     imports: [HttpClientModule]

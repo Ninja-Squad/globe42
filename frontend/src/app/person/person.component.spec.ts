@@ -18,8 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { PersonService } from '../person.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { of, throwError } from 'rxjs';
 
 describe('PersonComponent', () => {
   const cityModel: CityModel = {
@@ -93,9 +92,7 @@ describe('PersonComponent', () => {
     ],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: LOCALE_ID, useValue: 'fr-FR'},
-      ConfirmService,
-      PersonService
+      { provide: LOCALE_ID, useValue: 'fr-FR'}
     ],
     schemas: [NO_ERRORS_SCHEMA]
   })));
@@ -209,7 +206,7 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nok'));
+    spyOn(confirmService, 'confirm').and.returnValue(throwError('nok'));
     spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
@@ -252,7 +249,7 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nok'));
+    spyOn(confirmService, 'confirm').and.returnValue(throwError('nok'));
     spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 

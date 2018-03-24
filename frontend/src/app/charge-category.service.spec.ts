@@ -13,9 +13,6 @@ describe('ChargeCategoryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        ChargeCategoryService
-      ],
       imports: [HttpClientTestingModule]
     });
 

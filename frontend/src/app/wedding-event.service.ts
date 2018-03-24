@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { WeddingEventModel } from './models/wedding-event.model';
 import { WeddingEventCommand } from './models/wedding-event.command';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class WeddingEventService {
 
   constructor(private http: HttpClient) { }

@@ -7,7 +7,7 @@ import { UserWithPasswordModel } from '../models/user-with-password.model';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('PasswordResetComponent', () => {
   const user: UserModel = {id: 42, login: 'jb', admin: false};
@@ -20,7 +20,6 @@ describe('PasswordResetComponent', () => {
     imports: [ HttpClientModule, GlobeNgbModule.forRoot() ],
     declarations: [ PasswordResetComponent ],
     providers: [
-      UserService,
       { provide: ActivatedRoute, useValue: activatedRoute },
       { provide: Router, useValue: fakeRouter }
     ]

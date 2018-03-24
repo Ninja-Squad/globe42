@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { HttpTestingController } from '@angular/common/http/testing';
 
 export class HttpTester {

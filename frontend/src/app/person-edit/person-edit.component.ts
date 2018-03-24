@@ -14,7 +14,7 @@ import { HEALTH_INSURANCE_TRANSLATIONS } from '../display-health-insurance.pipe'
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CityTypeahead } from './city-typeahead';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
+import { EMPTY } from 'rxjs';
 import { CountryTypeahead } from '../person/country-typeahead';
 
 export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;
@@ -112,7 +112,7 @@ export class PersonEditComponent {
 
     this.personForm.get('spouse').valueChanges.pipe(
       tap(() => this.spouseIsInCouple = false),
-      switchMap(spouse => spouse ? this.personService.get(spouse.id) : empty<PersonModel>())
+      switchMap(spouse => spouse ? this.personService.get(spouse.id) : EMPTY)
     ).subscribe(spouse =>
       this.spouseIsInCouple = !!(spouse.spouse && (!this.editedPerson || (spouse.spouse.id !== this.editedPerson.id)))
     );

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { PersonIdentityModel, PersonModel } from './models/person.model';
 import { HttpClient } from '@angular/common/http';
 import { PersonCommand } from './models/person.command';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PersonService {
 
   constructor(private http: HttpClient) { }

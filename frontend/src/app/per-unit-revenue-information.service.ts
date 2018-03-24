@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PerUnitRevenueInformationModel } from './models/per-unit-revenue-information.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 function buildUrl(personId: number) {
   return `/api/persons/${personId}/per-unit-revenue`;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PerUnitRevenueInformationService {
 
   constructor(private http: HttpClient) {

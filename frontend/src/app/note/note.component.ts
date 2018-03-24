@@ -37,7 +37,7 @@ export class NoteComponent implements AfterContentChecked {
   private shouldGiveFocus = false;
 
   @ViewChild('textArea')
-  private textArea: ElementRef;
+  private textArea: ElementRef<HTMLTextAreaElement>;
 
   private _edited = false;
 

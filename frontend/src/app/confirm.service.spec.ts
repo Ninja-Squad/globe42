@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmOptions, ConfirmService } from './confirm.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Component, NgModule } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
 import { GlobeNgbModule } from './globe-ngb/globe-ngb.module';
 
-describe('ConfirmService and its modal compoent', () => {
+describe('ConfirmService and its modal component', () => {
 
   @Component({
     template: ''
@@ -18,7 +18,6 @@ describe('ConfirmService and its modal compoent', () => {
   @NgModule({
     imports: [RouterTestingModule, GlobeNgbModule.forRoot()],
     declarations: [ConfirmModalContentComponent, TestComponent],
-    providers: [ConfirmService],
     entryComponents: [ConfirmModalContentComponent]
   })
   class TestModule {

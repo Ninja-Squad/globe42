@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { ChargeCategoryModel } from './models/charge-category.model';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { ChargeCategoryService } from './charge-category.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ChargeCategoryResolverService implements Resolve<ChargeCategoryModel> {
 
   constructor(private chargeCategoryService: ChargeCategoryService) { }

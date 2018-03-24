@@ -5,7 +5,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ParticipantModel } from '../models/participant.model';
 
 describe('ParticipantsComponent', () => {

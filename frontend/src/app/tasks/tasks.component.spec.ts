@@ -8,8 +8,6 @@ import { FullnamePipe } from '../fullname.pipe';
 import { DateTime } from 'luxon';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TaskService } from '../task.service';
-import { TasksResolverService } from '../tasks-resolver.service';
-import { ConfirmService } from '../confirm.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -19,7 +17,7 @@ import { DurationPipe } from '../duration.pipe';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -79,11 +77,6 @@ describe('TasksComponent', () => {
         SpentTimesComponent,
         SpentTimeAddComponent,
         DurationPipe,
-      ],
-      providers: [
-        TaskService,
-        TasksResolverService,
-        ConfirmService
       ]
     });
   }));

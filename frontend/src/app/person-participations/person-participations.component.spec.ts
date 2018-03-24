@@ -9,8 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FullnamePipe } from '../fullname.pipe';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs/observable/of';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { of, throwError } from 'rxjs';
 
 describe('PersonParticipationsComponent', () => {
 
@@ -75,7 +74,7 @@ describe('PersonParticipationsComponent', () => {
       const socialMediationItem: ParticipationItem = component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0];
       socialMediationItem.selected = true;
 
-      spyOn(participationService, 'create').and.returnValue(ErrorObservable.create('error'));
+      spyOn(participationService, 'create').and.returnValue(throwError('error'));
 
       component.selectionChanged(socialMediationItem);
 
@@ -100,7 +99,7 @@ describe('PersonParticipationsComponent', () => {
       const mealItem: ParticipationItem = component.items.filter(item => item.activityType === 'MEAL')[0];
       const participationId = mealItem.id;
       mealItem.selected = false;
-      spyOn(participationService, 'delete').and.returnValue(ErrorObservable.create('error'));
+      spyOn(participationService, 'delete').and.returnValue(throwError('error'));
 
       component.selectionChanged(mealItem);
 
@@ -116,10 +115,7 @@ describe('PersonParticipationsComponent', () => {
       TestBed.configureTestingModule({
         declarations: [PersonParticipationsComponent, FullnamePipe, DisplayActivityTypePipe],
         imports: [HttpClientModule, FormsModule, RouterTestingModule],
-        providers: [
-          ParticipationService,
-          { provide: ActivatedRoute, useValue: route }
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: route }]
       });
 
       fixture = TestBed.createComponent(PersonParticipationsComponent);

@@ -3,7 +3,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { ErrorComponent } from './error.component';
 import { ErrorService } from '../error.service';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('ErrorComponent', () => {
@@ -19,10 +19,7 @@ describe('ErrorComponent', () => {
     TestBed.configureTestingModule({
       imports: [GlobeNgbModule.forRoot()],
       declarations: [ErrorComponent],
-      providers: [
-        {provide: Router, useValue: fakeRouter},
-        ErrorService
-      ]
+      providers: [ {provide: Router, useValue: fakeRouter} ]
     });
 
 

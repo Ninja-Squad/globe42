@@ -5,12 +5,11 @@ import { UserModel } from './models/user.model';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './user.service';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('UserResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UserResolverService, UserService],
       imports: [HttpClientModule]
     });
   });

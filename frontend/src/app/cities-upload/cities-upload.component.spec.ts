@@ -1,15 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { CitiesUploadComponent } from './cities-upload.component';
 import { SearchCityService } from '../search-city.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-
-// TODO: those three lines of code can be removed after new version of angular is released.
-declare let Zone: any;
-const { fakeAsync, tick } = Zone['__zone_symbol__fakeAsyncTest'];
-const async = Zone['__zone_symbol__asyncTest'];
 
 function tickSeconds(seconds: number) {
   tick(seconds * 1000);
@@ -20,8 +15,7 @@ describe('CitiesUploadComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [GlobeNgbModule.forRoot(), HttpClientModule],
-        declarations: [CitiesUploadComponent],
-        providers: [SearchCityService]
+        declarations: [CitiesUploadComponent]
       });
     })
   );

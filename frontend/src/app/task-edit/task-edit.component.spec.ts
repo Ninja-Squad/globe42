@@ -13,7 +13,7 @@ import { TaskCategoryModel } from '../models/task-category.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('TaskEditComponent', () => {
 
@@ -55,10 +55,7 @@ describe('TaskEditComponent', () => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), FormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), HttpClientModule],
       declarations: [TaskEditComponent],
-      providers: [
-        TaskService,
-        { provide: ActivatedRoute, useValue: activatedRoute }
-      ]
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
 
     // different object on purpose

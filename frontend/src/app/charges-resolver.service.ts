@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ChargeService } from './charge.service';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ChargeModel } from './models/charge.model';
 import { PersonModel } from './models/person.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ChargesResolverService implements Resolve<Array<ChargeModel>> {
 
   constructor(private chargeService: ChargeService) { }

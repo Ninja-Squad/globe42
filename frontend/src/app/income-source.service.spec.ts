@@ -13,9 +13,6 @@ describe('IncomeSourceService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        IncomeSourceService
-      ],
       imports: [HttpClientTestingModule]
     });
 

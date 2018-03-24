@@ -6,10 +6,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MembershipService } from '../membership.service';
 import { MembershipModel } from '../models/membership.model';
+import { MembershipService } from '../membership.service';
 
 describe('PersonLayoutComponent', () => {
   const person = {
@@ -29,7 +29,6 @@ describe('PersonLayoutComponent', () => {
     imports: [RouterTestingModule, HttpClientTestingModule],
     declarations: [PersonLayoutComponent, FullnamePipe],
     providers: [
-      MembershipService,
       { provide: ActivatedRoute, useValue: activatedRoute }
     ]
   })));

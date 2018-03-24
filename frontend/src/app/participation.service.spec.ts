@@ -12,7 +12,6 @@ describe('ParticipationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ ParticipationService ],
       imports: [ HttpClientTestingModule ]
     });
 

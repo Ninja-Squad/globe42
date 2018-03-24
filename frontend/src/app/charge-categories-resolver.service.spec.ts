@@ -1,15 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ChargeCategoriesResolverService } from './charge-categories-resolver.service';
-import { HttpClientModule } from '@angular/common/http';
 import { ChargeCategoryService } from './charge-category.service';
-import { Observable } from 'rxjs/Observable';
 import { ChargeCategoryModel } from './models/charge-category.model';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ChargeCategoriesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [ChargeCategoriesResolverService, ChargeCategoryService],
     imports: [HttpClientModule]
   }));
 

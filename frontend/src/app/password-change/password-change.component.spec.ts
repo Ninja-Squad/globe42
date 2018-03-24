@@ -5,8 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
-import { of } from 'rxjs/observable/of';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { of, throwError } from 'rxjs';
 
 describe('PasswordChangeComponent', () => {
 
@@ -116,7 +115,7 @@ describe('PasswordChangeComponent', () => {
     fixture.detectChanges();
 
     const userService = TestBed.get(CurrentUserService);
-    spyOn(userService, 'checkPassword').and.returnValue(ErrorObservable.create(null));
+    spyOn(userService, 'checkPassword').and.returnValue(throwError(null));
     spyOn(userService, 'changePassword');
 
     const componentInstance = fixture.componentInstance;
@@ -140,7 +139,7 @@ describe('PasswordChangeComponent', () => {
 
     const userService = TestBed.get(CurrentUserService);
     spyOn(userService, 'checkPassword').and.returnValue(of(null));
-    spyOn(userService, 'changePassword').and.returnValue(ErrorObservable.create(null));
+    spyOn(userService, 'changePassword').and.returnValue(throwError(null));
 
     const componentInstance = fixture.componentInstance;
     componentInstance.model.oldPassword = 'old';

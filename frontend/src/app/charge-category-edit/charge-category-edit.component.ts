@@ -4,7 +4,7 @@ import { ChargeCategoryCommand } from '../models/charge-category.command';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
 import { ErrorService } from '../error.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'gl-charge-category-edit',

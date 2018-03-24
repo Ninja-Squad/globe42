@@ -1,8 +1,7 @@
 import { SearchCityService } from '../search-city.service';
 import { CityModel } from '../models/person.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { displayCity } from '../display-city.pipe';
-import { of } from 'rxjs/observable/of';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
 export class CityTypeahead {

@@ -1,14 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { IncomeTypesResolverService } from './income-types-resolver.service';
 import { IncomeSourceTypeModel } from './models/income-source-type.model';
 import { IncomeSourceTypeService } from './income-source-type.service';
-import { of } from 'rxjs/observable/of';
 
 describe('IncomeTypesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [IncomeTypesResolverService, IncomeSourceTypeService],
     imports: [HttpClientModule]
   }));
 

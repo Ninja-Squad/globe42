@@ -9,7 +9,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { NgModule } from '@angular/core';
 import { ChargeService } from '../charge.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('PersonChargeEditComponent', () => {
   const chargeTypes = [
@@ -21,8 +21,7 @@ describe('PersonChargeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule],
-    declarations: [PersonChargeEditComponent, FullnamePipe],
-    providers: [ChargeService]
+    declarations: [PersonChargeEditComponent, FullnamePipe]
   })
   class TestModule {}
 

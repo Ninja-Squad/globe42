@@ -6,13 +6,11 @@ import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
 import { ConfirmService } from '../confirm.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { of } from 'rxjs/observable/of';
 
 describe('UsersComponent', () => {
   const users: Array<UserModel> = [
@@ -30,11 +28,7 @@ describe('UsersComponent', () => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModalModule.forRoot()],
       declarations: [UsersComponent],
-      providers: [
-        {provide: ActivatedRoute, useValue: activatedRoute},
-        UserService,
-        ConfirmService
-      ]
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
 
     userService = TestBed.get(UserService);
@@ -73,7 +67,7 @@ describe('UsersComponent', () => {
     const confirmService = TestBed.get(ConfirmService);
 
     spyOn(userService, 'delete');
-    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create('nope'));
+    spyOn(confirmService, 'confirm').and.returnValue(throwError('nope'));
 
     const fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();

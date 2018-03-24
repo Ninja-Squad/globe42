@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 @Component({
   template: `<gl-spent-time-add [taskModel]="task"
@@ -39,9 +39,6 @@ describe('SpentTimeAddComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SpentTimeAddComponent, TestComponent],
-      providers: [
-        TaskService
-      ],
       imports: [CurrentUserModule.forRoot(), HttpClientModule, FormsModule]
     });
 

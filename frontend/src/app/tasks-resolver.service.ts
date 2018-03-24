@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { TaskModel } from './models/task.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { TaskService } from './task.service';
 import { Page } from './models/page';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TasksResolverService implements Resolve<Array<TaskModel> | Page<TaskModel>> {
 
   constructor(private taskService: TaskService) { }

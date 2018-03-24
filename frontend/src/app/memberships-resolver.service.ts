@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { MembershipService } from './membership.service';
 import { MembershipModel } from './models/membership.model';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { PersonModel } from './models/person.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MembershipsResolverService implements Resolve<Array<MembershipModel>> {
 
   constructor(private membershipService: MembershipService) { }

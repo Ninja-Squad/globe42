@@ -1,7 +1,7 @@
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { FISCAL_NUMBER_PATTERN, PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
 import { CityModel, PersonIdentityModel, PersonModel } from '../models/person.model';
@@ -13,7 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { DisplayGenderPipe } from '../display-gender.pipe';
-import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
@@ -23,7 +22,6 @@ import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
 import { CountryModel } from '../models/country.model';
 
 describe('PersonEditComponent', () => {
@@ -78,10 +76,6 @@ describe('PersonEditComponent', () => {
       DisplayHealthInsurancePipe,
       FamilySituationEditComponent,
       FullnamePipe
-    ],
-    providers: [
-      PersonService,
-      SearchCityService
     ]
   })
   class TestModule {

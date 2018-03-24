@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { NoteModel } from './models/note.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PersonNoteService {
 
   constructor(private http: HttpClient) { }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserModel } from './models/user.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { UserCommand } from './models/user.command';
 import { UserWithPasswordModel } from './models/user-with-password.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UserService {
 
   constructor(private http: HttpClient) {}

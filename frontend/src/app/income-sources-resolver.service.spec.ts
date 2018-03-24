@@ -4,11 +4,10 @@ import { IncomeSourcesResolverService } from './income-sources-resolver.service'
 import { HttpClientModule } from '@angular/common/http';
 import { IncomeSourceModel } from './models/income-source.model';
 import { IncomeSourceService } from './income-source.service';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('IncomeSourcesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [IncomeSourcesResolverService, IncomeSourceService],
     imports: [HttpClientModule]
   }));
 

@@ -4,11 +4,10 @@ import { PersonsResolverService } from './persons-resolver.service';
 import { PersonModel } from './models/person.model';
 import { PersonService } from './person.service';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('PersonsResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [PersonsResolverService, PersonService],
     imports: [HttpClientModule]
   }));
 

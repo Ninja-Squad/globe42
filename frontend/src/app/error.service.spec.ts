@@ -20,8 +20,7 @@ describe('ErrorService', () => {
           provide: HTTP_INTERCEPTORS,
           useExisting: ErrorService,
           multi: true
-        },
-        ErrorService,
+        }
       ]
     });
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SearchCityService } from '../search-city.service';
 import { HttpEventType } from '@angular/common/http';
-import { interval } from 'rxjs/observable/interval';
+import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 

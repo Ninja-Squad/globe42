@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FullnamePipe } from '../fullname.pipe';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -21,8 +21,7 @@ describe('PersonIncomeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe],
-    providers: [IncomeService]
+    declarations: [PersonIncomeEditComponent, FullnamePipe]
   })
   class TestModule {}
 

@@ -4,11 +4,10 @@ import { ChargesResolverService } from './charges-resolver.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ChargeService } from './charge.service';
 import { ChargeModel } from './models/charge.model';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('ChargesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [ChargesResolverService, ChargeService],
     imports: [HttpClientModule]
   }));
 

@@ -6,7 +6,7 @@ import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceService } from '../income-source.service';
 import { ErrorService } from '../error.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'gl-income-source-edit',

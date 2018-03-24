@@ -6,11 +6,10 @@ import { TaskModel } from '../models/task.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
 import { SpentTimeModel } from '../models/spent-time.model';
-import { Subject } from 'rxjs/Subject';
+import { Subject, of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { DurationPipe } from '../duration.pipe';
 import { CurrentUserModule } from '../current-user/current-user.module';
-import { of } from 'rxjs/observable/of';
 import Spy = jasmine.Spy;
 
 @Component({
@@ -92,10 +91,7 @@ describe('SpentTimesComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [SpentTimesComponent, TestComponent, DurationPipe],
-        providers: [
-          TaskService,
-          { provide: LOCALE_ID, useValue: 'fr-FR' }
-        ],
+        providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
         imports: [CurrentUserModule.forRoot(), HttpClientModule]
       });
 

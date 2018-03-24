@@ -13,7 +13,6 @@ describe('PersonService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ PersonService ],
       imports: [ HttpClientTestingModule ]
     });
 

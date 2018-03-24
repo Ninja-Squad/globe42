@@ -7,9 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
-import { ErrorService } from '../error.service';
 import { ChargeCategoryModel } from '../models/charge-category.model';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('ChargeCategoryEditComponent', () => {
   const fakeRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
@@ -19,8 +18,6 @@ describe('ChargeCategoryEditComponent', () => {
     declarations: [ChargeCategoryEditComponent],
     providers: [
       { provide: Router, useValue: fakeRouter },
-      ChargeCategoryService,
-      ErrorService
     ]
   })
   class TestModule {}

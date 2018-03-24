@@ -9,7 +9,7 @@ import { ChargeTypeService } from '../charge-type.service';
 import { ErrorService } from '../error.service';
 import { NgModule } from '@angular/core';
 import { ChargeTypeModel } from '../models/charge-type.model';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('ChargeTypeEditComponent', () => {
 

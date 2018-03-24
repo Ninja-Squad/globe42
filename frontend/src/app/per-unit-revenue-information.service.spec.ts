@@ -13,8 +13,7 @@ describe('PerUnitRevenueInformationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [PerUnitRevenueInformationService]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.get(PerUnitRevenueInformationService);

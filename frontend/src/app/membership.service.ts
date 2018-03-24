@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { MembershipModel } from './models/membership.model';
 import { MembershipCommand } from './models/membership.command';
-import { Subject } from 'rxjs/Subject';
 import { tap } from 'rxjs/operators';
 
 function url(personId: number): string {
   return `/api/persons/${personId}/memberships`;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MembershipService {
 
   currentMembership$ = new Subject<MembershipModel>();

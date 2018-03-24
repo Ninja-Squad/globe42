@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { TaskModel } from './models/task.model';
 import { Page } from './models/page';
 import { TaskCommand } from './models/task.command';
@@ -17,7 +17,7 @@ function pageParams(pageNumber: number): HttpParams {
   return new HttpParams().set('page', pageNumber.toString());
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TaskService {
 
   constructor(private http: HttpClient,

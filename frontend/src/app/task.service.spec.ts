@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { TaskService } from './task.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TaskModel } from './models/task.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Page } from './models/page';
 import { SpentTimeModel } from './models/spent-time.model';
 import { HttpTester } from './http-tester.spec';
@@ -23,7 +23,6 @@ describe('TaskService', () => {
     jasmine.clock().mockDate(DateTime.fromISO('2017-08-02T15:30:00').toJSDate());
 
     TestBed.configureTestingModule({
-      providers: [TaskService],
       imports: [CurrentUserModule.forRoot(), HttpClientTestingModule]
     });
 

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { CityModel } from './models/person.model';
-import { of } from 'rxjs/observable/of';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SearchCityService {
 
   constructor(private http: HttpClient) { }

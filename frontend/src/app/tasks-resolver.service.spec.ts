@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TaskModel } from './models/task.model';
 import { Page } from './models/page';
 import { CurrentUserModule } from './current-user/current-user.module';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('TasksResolverService', () => {
   let resolver: TasksResolverService;
@@ -15,7 +15,6 @@ describe('TasksResolverService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TaskService, TasksResolverService],
       imports: [CurrentUserModule.forRoot(), HttpClientModule]
     });
 

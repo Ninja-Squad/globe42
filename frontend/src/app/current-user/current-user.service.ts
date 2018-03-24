@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UserModel } from '../models/user.model';
-import { Observable } from 'rxjs/Observable';
 import { JwtInterceptorService } from './jwt-interceptor.service';
 import { tap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CurrentUserService {
   userEvents = new BehaviorSubject<UserModel | null>(null);
 

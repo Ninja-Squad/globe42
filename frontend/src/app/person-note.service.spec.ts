@@ -11,7 +11,6 @@ describe('PersonNoteService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ PersonNoteService ],
       imports: [ HttpClientTestingModule ]
     });
 

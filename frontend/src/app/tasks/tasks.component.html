@@ -4,6 +4,7 @@
       <div class="d-flex w-100 justify-content-between task-title">
         <div>
           <h2>{{ task.model.title }}</h2>
+          &ngsp;
           <small class="text-muted">#{{ task.model.category.name }}</small>
         </div>
         <small *ngIf="task.model.status === 'TODO' && task.model.dueDate" [class]="task.dueDateClass()">{{ task.relativeDueDate() }}</small>
@@ -16,14 +17,19 @@
       <div class="small text-muted">
         <div>
           Créée par {{ task.model.creator.login }}.
+          &ngsp;
           <span *ngIf="task.model.assignee">Assignée à {{ task.model.assignee.login }}.</span>
+          &ngsp;
           <span *ngIf="task.model.concernedPerson">Concerne <a [routerLink]="['/persons', task.model.concernedPerson.id]">{{ task.model.concernedPerson | fullname }}</a>.</span>
         </div>
         <div>
-          Temps passé:
+          Temps passé&nbsp;:
+          &ngsp;
           <span *ngIf="task.model.totalSpentTimeInMinutes === 0">{{ task.model.totalSpentTimeInMinutes | duration }}</span>
+          &ngsp;
           <a href="#" class="spent-times-link" (click)="toggleSpentTimes(task, $event)" *ngIf="task.model.totalSpentTimeInMinutes > 0">{{ task.model.totalSpentTimeInMinutes | duration }}</a>
           &ndash;
+          &ngsp;
           <a href="#" class="add-spent-time-link" (click)="toggleAddSpentTime(task, $event)">Ajouter</a>
           <gl-spent-times *ngIf="task.spentTimesOpened && task.model.totalSpentTimeInMinutes > 0" [taskModel]="task.model" (spentTimeDeleted)="onSpentTimeDeleted($event)"></gl-spent-times>
           <gl-spent-time-add class="d-block mt-2" *ngIf="task.addSpentTimeOpened" [taskModel]="task.model" (spentTimeAdded)="onSpentTimeAdded($event)" (cancelled)="toggleAddSpentTime(task)"></gl-spent-time-add>

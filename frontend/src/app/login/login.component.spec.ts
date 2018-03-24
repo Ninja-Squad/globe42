@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { LoginComponent } from './login.component';
 import { FormsModule } from '@angular/forms';

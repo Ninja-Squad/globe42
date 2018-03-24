@@ -5,7 +5,7 @@ import { TaskModel } from '../models/task.model';
 import { TaskEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { PersonModel } from '../models/person.model';
 import { switchMap } from 'rxjs/operators';
 

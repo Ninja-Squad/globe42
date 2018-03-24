@@ -3,9 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { PersonNoteEditionGuard } from './person-note-edition.guard';
 import { PersonComponent } from './person/person.component';
 import { ConfirmService } from './confirm.service';
-import { of } from 'rxjs/observable/of';
-import { Observable } from 'rxjs/Observable';
-import { _throw } from 'rxjs/observable/throw';
+import { Observable, of, throwError } from 'rxjs';
 
 describe('PersonNoteEditionGuard', () => {
   let guard: PersonNoteEditionGuard;
@@ -17,7 +15,6 @@ describe('PersonNoteEditionGuard', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        PersonNoteEditionGuard,
         { provide: ConfirmService, useValue: confirmService }
       ]
     });
@@ -47,7 +44,7 @@ describe('PersonNoteEditionGuard', () => {
 
   it('should prevent deactivation if note edited and not confirmed', () => {
     component.noteEdited = true;
-    (confirmService.confirm as jasmine.Spy).and.returnValue(_throw(undefined));
+    (confirmService.confirm as jasmine.Spy).and.returnValue(throwError(undefined));
 
     let result: boolean = null;
     (guard.canDeactivate(component) as Observable<boolean>).subscribe(r => result = r);

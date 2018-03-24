@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PersonModel } from '../models/person.model';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { MembershipService } from '../membership.service';
-import { merge } from 'rxjs/observable/merge';
-import { Subscription } from 'rxjs/Subscription';
+import { merge, Subscription } from 'rxjs';
 
 @Component({
   selector: 'gl-person-layout',

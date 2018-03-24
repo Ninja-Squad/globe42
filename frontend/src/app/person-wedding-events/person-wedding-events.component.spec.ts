@@ -10,8 +10,8 @@ import { DisplayWeddingEventTypePipe, WEDDING_EVENT_TYPE_TRANSLATIONS } from '..
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmService } from '../confirm.service';
 import Spy = jasmine.Spy;
-import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
+import { of } from 'rxjs';
+import { throwError } from 'rxjs';
 import { DateTime } from 'luxon';
 import { LOCALE_ID } from '@angular/core';
 
@@ -106,7 +106,7 @@ describe('PersonWeddingEventsComponent', () => {
       const confirmService = TestBed.get(ConfirmService);
       const weddingEventService = TestBed.get(WeddingEventService);
 
-      (confirmService.confirm as Spy).and.returnValue(_throw(null));
+      (confirmService.confirm as Spy).and.returnValue(throwError(null));
 
       component.deleteEvent(events[1]);
       expect(component.events).toEqual(events);

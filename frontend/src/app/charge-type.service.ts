@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ChargeTypeModel } from './models/charge-type.model';
 import { ChargeTypeCommand } from './models/charge-type.command';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ChargeTypeService {
 
   constructor(private http: HttpClient) { }

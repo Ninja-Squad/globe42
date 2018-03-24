@@ -5,12 +5,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ParticipationService } from './participation.service';
 import { PersonIdentityModel } from './models/person.model';
 import { convertToParamMap } from '@angular/router';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('ParticipantsResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ParticipantsResolverService, ParticipationService],
       imports: [HttpClientModule]
     });
   });

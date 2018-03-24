@@ -12,7 +12,6 @@ describe('MembershipService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MembershipService],
       imports: [
         HttpClientTestingModule
       ]

@@ -19,7 +19,7 @@ import { DurationPipe } from '../duration.pipe';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -91,11 +91,7 @@ describe('TasksPageComponent', () => {
         SpentTimeAddComponent,
         DurationPipe
       ],
-      providers: [
-        TaskService,
-        TasksResolverService,
-        { provide: ActivatedRoute, useFactory: () => activatedRoute }
-      ]
+      providers: [{ provide: ActivatedRoute, useFactory: () => activatedRoute }]
     });
   }));
 

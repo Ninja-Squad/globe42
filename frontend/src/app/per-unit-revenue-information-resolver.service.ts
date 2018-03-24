@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { PerUnitRevenueInformationService } from './per-unit-revenue-information.service';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { PerUnitRevenueInformationModel } from './models/per-unit-revenue-information.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class PerUnitRevenueInformationResolverService implements Resolve<PerUnitRevenueInformationModel | null> {
 
   constructor(private perUnitRevenueInformationService: PerUnitRevenueInformationService) { }

@@ -1,16 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ChargeTypeResolverService } from './charge-type-resolver.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { ChargeTypeModel } from './models/charge-type.model';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { ChargeTypeService } from './charge-type.service';
-import { of } from 'rxjs/observable/of';
 
 describe('ChargeTypeResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [ChargeTypeResolverService, ChargeTypeService],
     imports: [HttpClientModule]
   }));
 

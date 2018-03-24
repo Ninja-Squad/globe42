@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { WeddingEventsResolverService } from './wedding-events-resolver.service';
 import { PersonModel } from './models/person.model';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { WeddingEventService } from './wedding-event.service';
 import { WeddingEventModel } from './models/wedding-event.model';
@@ -10,7 +10,6 @@ import { WeddingEventModel } from './models/wedding-event.model';
 describe('WeddingEventsResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [WeddingEventsResolverService, WeddingEventService],
       imports: [HttpClientModule]
     });
   });

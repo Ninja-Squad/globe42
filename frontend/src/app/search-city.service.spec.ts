@@ -12,7 +12,6 @@ describe('SearchCityService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ SearchCityService ],
       imports: [ HttpClientTestingModule ]
     });
 

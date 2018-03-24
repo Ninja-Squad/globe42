@@ -8,8 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ErrorService } from '../error.service';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('IncomeSourceEditComponent', () => {
 
@@ -22,11 +21,7 @@ describe('IncomeSourceEditComponent', () => {
   @NgModule({
     imports: [CommonModule, HttpClientModule, FormsModule],
     declarations: [IncomeSourceEditComponent],
-    providers: [
-      { provide: Router, useValue: fakeRouter },
-      IncomeSourceService,
-      ErrorService
-    ]
+    providers: [{ provide: Router, useValue: fakeRouter }]
   })
   class TestModule {}
 

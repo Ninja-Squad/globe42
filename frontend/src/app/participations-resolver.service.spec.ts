@@ -5,12 +5,11 @@ import { ParticipationService } from './participation.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ParticipationModel } from './models/participation.model';
 import { PersonModel } from './models/person.model';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('ParticipationsResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ParticipationsResolverService, ParticipationService],
       imports: [HttpClientModule]
     });
   });

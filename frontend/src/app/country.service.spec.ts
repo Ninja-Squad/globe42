@@ -9,7 +9,6 @@ describe('CountryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ CountryService ],
       imports: [ HttpClientTestingModule ]
     });
 

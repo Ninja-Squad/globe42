@@ -12,7 +12,6 @@ describe('JwtInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        JwtInterceptorService,
         {
           provide: HTTP_INTERCEPTORS,
           useExisting: JwtInterceptorService,

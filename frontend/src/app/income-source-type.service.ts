@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IncomeSourceTypeModel } from './models/income-source-type.model';
 import { IncomeSourceTypeCommand } from './models/income-source-type.command';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class IncomeSourceTypeService {
 
   constructor(private http: HttpClient) { }

@@ -8,17 +8,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { ErrorService } from '../error.service';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('UserEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
-    declarations: [UserEditComponent],
-    providers: [UserService, ErrorService]
+    declarations: [UserEditComponent]
   })
   class TestModule {}
 

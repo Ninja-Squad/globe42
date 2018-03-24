@@ -4,11 +4,10 @@ import { ChargeTypesResolverService } from './charge-types-resolver.service';
 import { ChargeTypeService } from './charge-type.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ChargeTypeModel } from './models/charge-type.model';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('ChargeTypesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [ChargeTypesResolverService, ChargeTypeService],
     imports: [HttpClientModule]
   }));
 

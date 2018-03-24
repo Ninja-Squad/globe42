@@ -14,7 +14,9 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 })
 export class NonEditableTypeaheadDirective {
 
-  constructor(private ngControl: NgControl, private elementRef: ElementRef, private typeahead: NgbTypeahead) { }
+  constructor(private ngControl: NgControl,
+              private elementRef: ElementRef<HTMLInputElement>,
+              private typeahead: NgbTypeahead) { }
 
   @HostListener('blur')
   onBlur() {

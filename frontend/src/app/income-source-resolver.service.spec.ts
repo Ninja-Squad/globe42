@@ -2,15 +2,13 @@ import { TestBed } from '@angular/core/testing';
 
 import { IncomeSourceResolverService } from './income-source-resolver.service';
 import { HttpClientModule } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { IncomeSourceModel } from './models/income-source.model';
 import { IncomeSourceService } from './income-source.service';
-import { of } from 'rxjs/observable/of';
 
 describe('IncomeSourceResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [IncomeSourceResolverService, IncomeSourceService],
     imports: [HttpClientModule]
   }));
 

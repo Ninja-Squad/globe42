@@ -8,7 +8,7 @@ import { PersonModel } from '../models/person.model';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 
 describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let route: ActivatedRoute;

@@ -1,15 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
 import { CountriesResolverService } from './countries-resolver.service';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { CountryService } from './country.service';
-import { Observable } from 'rxjs/Observable';
 import { CountryModel } from './models/country.model';
 
 describe('CountriesResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [CountriesResolverService, CountryService],
     imports: [HttpClientModule]
   }));
 

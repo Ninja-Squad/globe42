@@ -6,7 +6,7 @@ import { ChargeTypeCommand } from '../models/charge-type.command';
 import { ChargeTypeService } from '../charge-type.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from '../error.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'gl-charge-type-edit',

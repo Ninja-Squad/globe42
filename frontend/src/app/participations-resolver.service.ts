@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { ParticipationService } from './participation.service';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { ParticipationModel } from './models/participation.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { PersonModel } from './models/person.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ParticipationsResolverService implements Resolve<Array<ParticipationModel>> {
 
   constructor(private participationService: ParticipationService) { }
