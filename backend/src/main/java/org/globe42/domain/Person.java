@@ -274,6 +274,12 @@ public class Person {
     private Set<Participation> participations = new HashSet<>();
 
     /**
+     * The wedding events of the person. Only requested to mediation-enabled persons.
+     */
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<WeddingEvent> weddingEvents = new HashSet<>();
+
+    /**
      * Flag indicating that the given person is logically deleted
      */
     private boolean deleted;
@@ -615,6 +621,19 @@ public class Person {
             return null;
         }
         return couple.getSpouseOf(this);
+    }
+
+    public Set<WeddingEvent> getWeddingEvents() {
+        return Collections.unmodifiableSet(weddingEvents);
+    }
+
+    public void addWeddingEvent(WeddingEvent weddingEvent) {
+        weddingEvent.setPerson(this);
+        weddingEvents.add(weddingEvent);
+    }
+
+    public void removeWeddingEvent(WeddingEvent weddingEvent) {
+        weddingEvents.remove(weddingEvent);
     }
 
     public boolean isDeleted() {

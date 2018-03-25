@@ -1,0 +1,44 @@
+<h2>Mariages et divorces</h2>
+
+<div class="row align-items-center mb-2 event-item" *ngFor="let event of events">
+  <div class="col-sm">{{ event.date | date}}</div>
+  <div class="col-sm">{{ event.type | displayWeddingEventType }}</div>
+  <div class="col-sm text-right">
+    <button type="button" class="btn btn-danger btn-sm" (click)="deleteEvent(event)">
+      <span class="fa fa-trash"></span>
+      Supprimer
+    </button>
+  </div>
+</div>
+
+<div class="mt-4">
+  <button *ngIf="!newEvent" id="newEventButton" class="btn btn-outline-primary" (click)="showEventCreation()">Ajouter un événement</button>
+
+  <form *ngIf="newEvent" [formGroup]="newEvent" (ngSubmit)="create()">
+    <div class="form-group">
+      <label for="date" class="mr-2">Date</label>
+      <gl-datepicker-container class="mr-2">
+        <input class="form-control" style="width: 8em;" id="date" formControlName="date"
+               ngbDatepicker [minDate]="{year: 1900, month: 1}" [maxDate]="maxMonth">
+        <div class="invalid-feedback">
+          <span *ngIf="newEvent.get('date').hasError('required')">La date est obligatoire</span>
+          <span *ngIf="newEvent.get('date').hasError('pastDate')">La date doit être dans le passé</span>
+        </div>
+      </gl-datepicker-container>
+    </div>
+
+    <div class="form-group">
+      <label for="type" class="mr-2">Type d'événement</label>
+      <select id="type" formControlName="type" class="form-control mr-2">
+        <option value=""></option>
+        <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{ eventType.translation }}</option>
+      </select>
+      <div class="invalid-feedback">
+        <span *ngIf="newEvent.get('type').hasError('required')">Le type d'événement est obligatoire</span>
+      </div>
+    </div>
+
+    <button id="createButton" class="btn btn-primary mr-2">Ajouter</button>
+    <button id="cancelCreationButton" type="button" class="btn btn-danger" (click)="newEvent = null">Annuler</button>
+  </form>
+</div>

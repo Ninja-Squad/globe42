@@ -56,6 +56,8 @@ import { SpentTimeStatisticsComponent } from './spent-time-statistics/spent-time
 import { PersonNoteEditionGuard } from './person-note-edition.guard';
 import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 import { CountriesResolverService } from './countries-resolver.service';
+import { PersonWeddingEventsComponent } from './person-wedding-events/person-wedding-events.component';
+import { WeddingEventsResolverService } from './wedding-events-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -99,6 +101,13 @@ export const routes: Routes = [
                 }
               },
               {path: 'family', component: PersonFamilySituationComponent},
+              {
+                path: 'wedding-events',
+                component: PersonWeddingEventsComponent,
+                resolve: {
+                  events: WeddingEventsResolverService
+                }
+              },
               {
                 path: 'tasks',
                 component: PersonTasksComponent,

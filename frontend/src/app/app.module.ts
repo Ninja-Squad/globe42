@@ -105,6 +105,10 @@ import { PersonNoteEditionGuard } from './person-note-edition.guard';
 import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 import { CountryService } from './country.service';
 import { CountriesResolverService } from './countries-resolver.service';
+import { PersonWeddingEventsComponent } from './person-wedding-events/person-wedding-events.component';
+import { WeddingEventsResolverService } from './wedding-events-resolver.service';
+import { DisplayWeddingEventTypePipe } from './display-wedding-event-type.pipe';
+import { WeddingEventService } from './wedding-event.service';
 
 registerLocaleData(localeFr);
 
@@ -168,7 +172,9 @@ registerLocaleData(localeFr);
     PersonsLayoutComponent,
     SpentTimeStatisticsComponent,
     ChartComponent,
-    PersonTasksComponent
+    PersonTasksComponent,
+    PersonWeddingEventsComponent,
+    DisplayWeddingEventTypePipe
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -230,7 +236,9 @@ registerLocaleData(localeFr);
     ParticipantsResolverService,
     TaskCategoriesResolverService,
     CountryService,
-    CountriesResolverService
+    CountriesResolverService,
+    WeddingEventService,
+    WeddingEventsResolverService
   ],
   bootstrap: [AppComponent]
 })
