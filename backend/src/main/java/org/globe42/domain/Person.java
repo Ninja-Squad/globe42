@@ -34,7 +34,7 @@ import javax.validation.constraints.Pattern;
 @Entity
 public class Person {
 
-    public static final String FISCAL_NUMBER_REGEXP = "\\d{13}";
+    public static final String FISCAL_NUMBER_REGEXP = "\\d{13}|^$";
 
     private static final String PERSON_GENERATOR = "PersonGenerator";
 

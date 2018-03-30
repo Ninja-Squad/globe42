@@ -21,4 +21,12 @@ public class PersonTest {
         assertThat(pattern.matcher("12345678901234").matches()).isFalse();
         assertThat(pattern.matcher("1234567890123").matches()).isTrue();
     }
+
+    @Test
+    public void shouldAcceptEmptyStringAsFiscalNumber() {
+        Pattern pattern = Pattern.compile(Person.FISCAL_NUMBER_REGEXP);
+
+        assertThat(pattern.matcher("").matches()).isTrue();
+        assertThat(pattern.matcher(" ").matches()).isFalse();
+    }
 }
