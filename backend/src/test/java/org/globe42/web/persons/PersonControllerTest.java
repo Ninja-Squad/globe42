@@ -180,6 +180,17 @@ public class PersonControllerTest extends BaseTest {
     }
 
     @Test
+    public void shouldUpdateWhenNoNationality() {
+        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
+        PersonCommandDTO command = createCommandWithNoNationality();
+        controller.update(person.getId(), command);
+
+        assertPersonEqualsCommand(person, command);
+        assertThat(person.getMediationCode()).isEqualTo("L37");
+    }
+
+    @Test
     public void shouldNotUpdateMediationCodeIfLetterStaysTheSame() {
         person.setMediationCode("L42");
         when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
@@ -334,11 +345,19 @@ public class PersonControllerTest extends BaseTest {
         return createCommand("Lacote");
     }
 
+    static PersonCommandDTO createCommandWithNoNationality() {
+        return createCommand("Lacote", true, null, null);
+    }
+
     static PersonCommandDTO createCommand(String lastName) {
         return createCommand(lastName, true, null);
     }
 
     static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled, Long spouseId) {
+        return createCommand(lastName, mediationEnabled, spouseId, "FRA");
+    }
+
+    static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled, Long spouseId, String nationalityId) {
         return new PersonCommandDTO("Cyril",
                                     lastName,
                                     "Lacote du chateau",
@@ -368,7 +387,7 @@ public class PersonControllerTest extends BaseTest {
                                     "Nadia DURAND",
                                     "277126912340454",
                                     "123765",
-                                    "FRA",
+                                    nationalityId,
                                     new FamilySituationDTO(false, true, 2, 3),
                                     new FamilySituationDTO(true, false, 0, 1));
     }
@@ -407,7 +426,12 @@ public class PersonControllerTest extends BaseTest {
         assertThat(person.getAccompanying()).isEqualTo(command.getAccompanying());
         assertThat(person.getSocialSecurityNumber()).isEqualTo(command.getSocialSecurityNumber());
         assertThat(person.getCafNumber()).isEqualTo(command.getCafNumber());
-        assertThat(person.getNationality().getId()).isEqualTo(command.getNationalityId());
+        if (command.getNationalityId() == null) {
+            assertThat(person.getNationality()).isNull();
+        }
+        else {
+            assertThat(person.getNationality().getId()).isEqualTo(command.getNationalityId());
+        }
         assertFamilySituationEqualsCommand(person.getFrenchFamilySituation(), command.getFrenchFamilySituation());
         assertFamilySituationEqualsCommand(person.getAbroadFamilySituation(), command.getAbroadFamilySituation());
     }

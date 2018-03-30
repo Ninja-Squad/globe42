@@ -154,10 +154,15 @@ public class PersonController {
             person.setCafNumber(command.getCafNumber());
             person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
             person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
-            person.setNationality(
-                countryDao.findById(command.getNationalityId())
-                          .orElseThrow(() -> new BadRequestException("No nationality with ID "
-                                                                         + command.getNationalityId())));
+            if (command.getNationalityId() == null) {
+                person.setNationality(null);
+            }
+            else {
+                person.setNationality(
+                    countryDao.findById(command.getNationalityId())
+                              .orElseThrow(() -> new BadRequestException("No nationality with ID "
+                                                                             + command.getNationalityId())));
+            }
             handleCouple(person, command.getSpouseId());
         }
     }
