@@ -4,25 +4,19 @@
   <div class="form-group row">
     <label class="col col-form-label">Parents présents</label>
     <div class="col">
-      <p class="form-control-static">{{ situation.parentsPresent ? 'Oui' : 'Non' }}</p>
+      <p class="form-control-plaintext">{{ situation.parentsPresent ? 'Oui' : 'Non' }}</p>
     </div>
   </div>
   <div class="form-group row">
     <label class="col col-form-label">Époux(se) présent(e)</label>
     <div class="col">
-      <p class="form-control-static">{{ situation.spousePresent ? 'Oui' : 'Non' }}</p>
+      <p class="form-control-plaintext">{{ situation.spousePresent ? 'Oui' : 'Non' }}</p>
     </div>
   </div>
   <div class="form-group row">
     <label class="col col-form-label">Nombre d'enfants</label>
     <div class="col">
-      <p class="form-control-static">{{ situation.childCount | number }}</p>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col col-form-label">Nombre de frères et soeurs</label>
-    <div class="col">
-      <p class="form-control-static">{{ situation.siblingCount | number }}</p>
+      <p class="form-control-plaintext">{{ situation.childCount | number }}</p>
     </div>
   </div>
 </div>

@@ -18,7 +18,6 @@ export interface FamilySituation {
   parentsPresent: boolean;
   spousePresent: boolean;
   childCount: number;
-  siblingCount: number;
 }
 
 export interface PersonModel extends PersonIdentityModel {

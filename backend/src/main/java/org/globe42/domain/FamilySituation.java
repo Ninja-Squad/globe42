@@ -22,7 +22,6 @@ public class FamilySituation {
     private boolean parentsPresent;
     private boolean spousePresent;
     private Integer childCount;
-    private Integer siblingCount;
 
     public FamilySituation() {
     }
@@ -33,12 +32,10 @@ public class FamilySituation {
 
     public FamilySituation(boolean parentsPresent,
                            boolean spousePresent,
-                           Integer childCount,
-                           Integer siblingCount) {
+                           Integer childCount) {
         this.parentsPresent = parentsPresent;
         this.spousePresent = spousePresent;
         this.childCount = childCount;
-        this.siblingCount = siblingCount;
     }
 
     public Long getId() {
@@ -71,13 +68,5 @@ public class FamilySituation {
 
     public void setChildCount(Integer childCount) {
         this.childCount = childCount;
-    }
-
-    public Integer getSiblingCount() {
-        return siblingCount;
-    }
-
-    public void setSiblingCount(Integer siblingCount) {
-        this.siblingCount = siblingCount;
     }
 }

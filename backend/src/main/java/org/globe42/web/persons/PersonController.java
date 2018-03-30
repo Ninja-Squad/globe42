@@ -173,8 +173,7 @@ public class PersonController {
         }
         return new FamilySituation(dtoOrNull.isParentsPresent(),
                                    dtoOrNull.isSpousePresent(),
-                                   dtoOrNull.getChildCount(),
-                                   dtoOrNull.getSiblingCount());
+                                   dtoOrNull.getChildCount());
     }
 
     private char mediationCodeLetter(Person person) {

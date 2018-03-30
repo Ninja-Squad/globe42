@@ -131,8 +131,7 @@ describe('PersonEditComponent', () => {
       frenchFamilySituation: {
         parentsPresent: false,
         spousePresent: true,
-        childCount: 1,
-        siblingCount: 3
+        childCount: 1
       },
       abroadFamilySituation: null,
       deleted: false

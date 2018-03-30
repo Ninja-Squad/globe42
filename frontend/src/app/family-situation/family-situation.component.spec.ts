@@ -8,8 +8,7 @@ describe('FamilySituationComponent', () => {
   const situation: FamilySituation = {
     parentsPresent: false,
     spousePresent: true,
-    childCount: 1,
-    siblingCount: 2
+    childCount: 1
   };
 
   @Component({
@@ -31,6 +30,5 @@ describe('FamilySituationComponent', () => {
     expect(text).toContain('Non');
     expect(text).toContain('Oui');
     expect(text).toContain('1');
-    expect(text).toContain('2');
   });
 });

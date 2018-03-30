@@ -16,8 +16,7 @@ describe('FamilySituationEditComponent', () => {
       this.situation = fb.group({
         parentsPresent: [true],
         spousePresent: [false],
-        childCount: [],
-        siblingCount: [1]
+        childCount: []
       });
     }
   }
@@ -27,7 +26,7 @@ describe('FamilySituationEditComponent', () => {
     declarations: [TestComponent, FamilySituationEditComponent]
   })));
 
-  it('should display two checkboxes and two number fields', () => {
+  it('should display two checkboxes and one number field', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.detectChanges();
 
@@ -37,9 +36,8 @@ describe('FamilySituationEditComponent', () => {
     expect(checkboxes[1].checked).toBe(false);
 
     const numbers = fixture.nativeElement.querySelectorAll('input[type="number"]');
-    expect(numbers.length).toBe(2);
+    expect(numbers.length).toBe(1);
     expect(numbers[0].value).toBe('');
-    expect(numbers[1].value).toBe('1');
   });
 
   it('should change the values in the form group', () => {
@@ -55,16 +53,13 @@ describe('FamilySituationEditComponent', () => {
     const numbers = fixture.nativeElement.querySelectorAll('input[type="number"]');
     numbers[0].value = '2';
     numbers[0].dispatchEvent(new Event('input'));
-    numbers[1].value = '0';
-    numbers[1].dispatchEvent(new Event('input'));
 
     fixture.detectChanges();
 
     expect(fixture.componentInstance.situation.value).toEqual({
       parentsPresent: false,
       spousePresent: true,
-      childCount: 2,
-      siblingCount: 0
+      childCount: 2
     });
   });
 });

@@ -12,24 +12,20 @@ public final class FamilySituationDTO {
     private final boolean parentsPresent;
     private final boolean spousePresent;
     private final Integer childCount;
-    private final Integer siblingCount;
 
     public FamilySituationDTO(FamilySituation familySituation) {
         this(familySituation.isParentsPresent(),
              familySituation.isSpousePresent(),
-             familySituation.getChildCount(),
-             familySituation.getSiblingCount());
+             familySituation.getChildCount());
     }
 
     @JsonCreator
     public FamilySituationDTO(@JsonProperty boolean parentsPresent,
                               @JsonProperty boolean spousePresent,
-                              @JsonProperty Integer childCount,
-                              @JsonProperty Integer siblingCount) {
+                              @JsonProperty Integer childCount) {
         this.parentsPresent = parentsPresent;
         this.spousePresent = spousePresent;
         this.childCount = childCount;
-        this.siblingCount = siblingCount;
     }
 
     public boolean isParentsPresent() {
@@ -42,9 +38,5 @@ public final class FamilySituationDTO {
 
     public Integer getChildCount() {
         return childCount;
-    }
-
-    public Integer getSiblingCount() {
-        return siblingCount;
     }
 }

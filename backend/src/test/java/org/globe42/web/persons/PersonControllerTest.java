@@ -388,8 +388,8 @@ public class PersonControllerTest extends BaseTest {
                                     "277126912340454",
                                     "123765",
                                     nationalityId,
-                                    new FamilySituationDTO(false, true, 2, 3),
-                                    new FamilySituationDTO(true, false, 0, 1));
+                                    new FamilySituationDTO(false, true, 2),
+                                    new FamilySituationDTO(true, false, 0));
     }
 
     private void assertPersonEqualsCommand(Person person, PersonCommandDTO command) {
@@ -444,7 +444,6 @@ public class PersonControllerTest extends BaseTest {
             assertThat(familySituation.isParentsPresent()).isEqualTo(dto.isParentsPresent());
             assertThat(familySituation.isSpousePresent()).isEqualTo(dto.isSpousePresent());
             assertThat(familySituation.getChildCount()).isEqualTo(dto.getChildCount());
-            assertThat(familySituation.getSiblingCount()).isEqualTo(dto.getSiblingCount());
         }
     }
 }
