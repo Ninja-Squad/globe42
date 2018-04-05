@@ -5,9 +5,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
         classpath 'org.flywaydb:flyway-gradle-plugin:5.0.3'
-        classpath 'org.postgresql:postgresql:9.4.1212'
+        classpath 'org.postgresql:postgresql:42.2.2'
     }
 }
 
@@ -60,7 +60,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.jsonwebtoken:jjwt:0.9.0'
-    implementation 'com.google.cloud:google-cloud-storage:1.19.0'
+    implementation 'com.google.cloud:google-cloud-storage:1.24.1'
 
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.flywaydb:flyway-core'
