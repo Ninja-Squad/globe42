@@ -192,7 +192,6 @@ registerLocaleData(localeFr);
     PersonService,
     UserService,
     SearchCityService,
-    DisplayCityPipe,
     PersonResolverService,
     PersonNoteEditionGuard,
     PersonsResolverService,
@@ -225,7 +224,6 @@ registerLocaleData(localeFr);
       useValue: 'fr-FR'
     },
     ConfirmService,
-    FullnamePipe,
     TasksResolverService,
     TaskService,
     TaskResolverService,

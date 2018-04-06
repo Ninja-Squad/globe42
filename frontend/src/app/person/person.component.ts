@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
-import { FullnamePipe } from '../fullname.pipe';
+import { displayFullname } from '../fullname.pipe';
 import { PersonService } from '../person.service';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -22,7 +22,6 @@ export class PersonComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private confirmService: ConfirmService,
               private personService: PersonService,
-              private fullnamePipe: FullnamePipe,
               private router: Router) { }
 
   ngOnInit() {
@@ -36,14 +35,14 @@ export class PersonComponent implements OnInit {
 
   delete() {
     this.confirmService.confirm(
-      { message: `Voulez-vous vraiment supprimer ${this.fullnamePipe.transform(this.person)}\u00a0?`}).pipe(
+      { message: `Voulez-vous vraiment supprimer ${displayFullname(this.person)}\u00a0?`}).pipe(
       switchMap(() => this.personService.delete(this.person.id))
     ).subscribe(() => this.router.navigate(['/persons']), () => {});
   }
 
   resurrect() {
     this.confirmService.confirm(
-      { message: `Voulez-vous vraiment annuler la suppression de ${this.fullnamePipe.transform(this.person)}\u00a0?`}).pipe(
+      { message: `Voulez-vous vraiment annuler la suppression de ${displayFullname(this.person)}\u00a0?`}).pipe(
       switchMap(() => this.personService.resurrect(this.person.id))
     ).subscribe(() => this.router.navigate(['/persons']), () => {});
   }

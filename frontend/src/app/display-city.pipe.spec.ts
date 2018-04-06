@@ -13,11 +13,5 @@ describe('DisplayCityPipe', () => {
     const resultEmpty = pipe.transform(undefined);
 
     expect(resultEmpty).toBe('');
-
-    const resultEmptyObject = pipe.transform({ city: undefined, code: undefined });
-
-    expect(resultEmptyObject).toBe('');
-
   });
-
 });

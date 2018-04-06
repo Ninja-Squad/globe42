@@ -1,7 +1,7 @@
 import { SearchCityService } from '../search-city.service';
 import { CityModel } from '../models/person.model';
 import { Observable } from 'rxjs/Observable';
-import { DisplayCityPipe } from '../display-city.pipe';
+import { displayCity } from '../display-city.pipe';
 import { of } from 'rxjs/observable/of';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
@@ -11,7 +11,7 @@ export class CityTypeahead {
   searcher: (text$: Observable<string>) => Observable<Array<CityModel>>;
   formatter: (result: CityModel) => string;
 
-  constructor(private searchCityService: SearchCityService, private displayCityPipe: DisplayCityPipe) {
+  constructor(private searchCityService: SearchCityService) {
     this.searcher = (text$: Observable<string>) =>
       text$.pipe(
         filter(query => query.length > 1),
@@ -28,6 +28,6 @@ export class CityTypeahead {
         )
       );
 
-    this.formatter = (result: CityModel) => this.displayCityPipe.transform(result);
+    this.formatter = displayCity;
   }
 }

@@ -27,7 +27,6 @@ describe('ParticipantsComponent', () => {
       declarations: [ ParticipantsComponent, FullnamePipe, DisplayActivityTypePipe ],
       imports: [ RouterTestingModule ],
       providers: [
-        FullnamePipe,
         { provide: ActivatedRoute, useValue: route }
       ]
     });

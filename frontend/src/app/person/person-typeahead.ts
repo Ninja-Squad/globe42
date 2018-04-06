@@ -1,5 +1,5 @@
 import { PersonIdentityModel } from '../models/person.model';
-import { FullnamePipe } from '../fullname.pipe';
+import { displayFullname } from '../fullname.pipe';
 import { sortBy } from '../utils';
 import { ArrayBasedTypeahead } from '../globe-ngb/array-based-typeahead';
 
@@ -8,9 +8,8 @@ import { ArrayBasedTypeahead } from '../globe-ngb/array-based-typeahead';
  */
 export class PersonTypeahead extends ArrayBasedTypeahead<PersonIdentityModel> {
 
-  constructor(persons: Array<PersonIdentityModel>,
-              private fullnamePipe: FullnamePipe) {
-    super(sortBy(persons, p => fullnamePipe.transform(p)));
+  constructor(persons: Array<PersonIdentityModel>) {
+    super(sortBy(persons, displayFullname));
   }
 
   protected isAccepted(person: PersonIdentityModel, term: string): boolean {
@@ -22,6 +21,6 @@ export class PersonTypeahead extends ArrayBasedTypeahead<PersonIdentityModel> {
   }
 
   protected format(element: PersonIdentityModel): string {
-    return this.fullnamePipe.transform(element);
+    return displayFullname(element);
   }
 }

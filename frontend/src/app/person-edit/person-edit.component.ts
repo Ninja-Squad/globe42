@@ -4,7 +4,6 @@ import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } fro
 import { PersonService } from '../person.service';
 import { Gender, MaritalStatus, PersonIdentityModel, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
-import { DisplayCityPipe } from '../display-city.pipe';
 import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { GENDER_TRANSLATIONS } from '../display-gender.pipe';
 import { PersonCommand } from '../models/person.command';
@@ -12,7 +11,6 @@ import { HOUSING_TRANSLATIONS } from '../display-housing.pipe';
 import { FISCAL_STATUS_TRANSLATIONS } from '../display-fiscal-status.pipe';
 import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
 import { PersonTypeahead } from '../person/person-typeahead';
-import { FullnamePipe } from '../fullname.pipe';
 import { CityTypeahead } from './city-typeahead';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
@@ -53,11 +51,9 @@ export class PersonEditComponent {
 
   constructor(private personService: PersonService,
               private searchCityService: SearchCityService,
-              private displayCityPipe: DisplayCityPipe,
               private route: ActivatedRoute,
               private router: Router,
-              private fb: FormBuilder,
-              private fullnamePipe: FullnamePipe) {
+              private fb: FormBuilder) {
     this.editedPerson = this.route.snapshot.data['person'];
 
     let persons: Array<PersonIdentityModel> = this.route.snapshot.data['persons'];
@@ -65,8 +61,8 @@ export class PersonEditComponent {
       persons = persons.filter(p => p.id !== this.editedPerson.id);
     }
 
-    this.cityTypeahead = new CityTypeahead(this.searchCityService, this.displayCityPipe);
-    this.spouseTypeahead = new PersonTypeahead(persons, this.fullnamePipe);
+    this.cityTypeahead = new CityTypeahead(this.searchCityService);
+    this.spouseTypeahead = new PersonTypeahead(persons);
     this.countryTypeahead = new CountryTypeahead(this.route.snapshot.data['countries']);
 
     this.personForm = this.fb.group({

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PersonIdentityModel } from '../models/person.model';
 import { ActivatedRoute } from '@angular/router';
 import { sortBy } from '../utils';
-import { FullnamePipe } from '../fullname.pipe';
+import { displayFullname } from '../fullname.pipe';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -17,11 +17,10 @@ export class PersonsComponent implements OnInit {
 
   private allPersons: Array<PersonIdentityModel> = [];
 
-  constructor(private route: ActivatedRoute, private fullnamePipe: FullnamePipe) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.allPersons = sortBy<PersonIdentityModel>(this.route.snapshot.data['persons'],
-      p => this.fullnamePipe.transform(p));
+    this.allPersons = sortBy<PersonIdentityModel>(this.route.snapshot.data['persons'], displayFullname);
     this.filterCtrl.valueChanges.subscribe(text => this.filter(text));
     this.filter('');
   }

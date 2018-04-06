@@ -20,19 +20,19 @@ describe('PersonsComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, ReactiveFormsModule],
       declarations: [PersonsComponent, FullnamePipe],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }, FullnamePipe]
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
   }));
 
   it('should expose persons sorted by full name', () => {
-    const component = new PersonsComponent(activatedRoute, TestBed.get(FullnamePipe));
+    const component = new PersonsComponent(activatedRoute);
     component.ngOnInit();
 
     expect(component.persons.map(p => p.mediationCode)).toEqual(['D2', 'D1']);
   });
 
   it('should filter by first name, ignoring case', () => {
-    const component = new PersonsComponent(activatedRoute, TestBed.get(FullnamePipe));
+    const component = new PersonsComponent(activatedRoute);
     component.ngOnInit();
 
     component.filterCtrl.setValue('ab');
@@ -41,7 +41,7 @@ describe('PersonsComponent', () => {
   });
 
   it('should filter by last name, ignoring case', () => {
-    const component = new PersonsComponent(activatedRoute, TestBed.get(FullnamePipe));
+    const component = new PersonsComponent(activatedRoute);
     component.ngOnInit();
 
     component.filterCtrl.setValue('ea');
@@ -50,7 +50,7 @@ describe('PersonsComponent', () => {
   });
 
   it('should filter by nick name, ignoring case', () => {
-    const component = new PersonsComponent(activatedRoute, TestBed.get(FullnamePipe));
+    const component = new PersonsComponent(activatedRoute);
     component.ngOnInit();
 
     component.filterCtrl.setValue('ad');
@@ -59,7 +59,7 @@ describe('PersonsComponent', () => {
   });
 
   it('should filter by mediation code, ignoring case', () => {
-    const component = new PersonsComponent(activatedRoute, TestBed.get(FullnamePipe));
+    const component = new PersonsComponent(activatedRoute);
     component.ngOnInit();
 
     component.filterCtrl.setValue('d2');
@@ -68,7 +68,7 @@ describe('PersonsComponent', () => {
   });
 
   it('should not blow up when filtering if no first name', () => {
-    const component = new PersonsComponent(activatedRoute, TestBed.get(FullnamePipe));
+    const component = new PersonsComponent(activatedRoute);
     component.ngOnInit();
     component.persons[0].firstName = null;
     component.persons[1].firstName = null;

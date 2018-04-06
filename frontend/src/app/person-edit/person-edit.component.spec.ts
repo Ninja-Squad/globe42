@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { FISCAL_NUMBER_PATTERN, PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
 import { CityModel, PersonIdentityModel, PersonModel } from '../models/person.model';
-import { DisplayCityPipe } from '../display-city.pipe';
+import { displayCity, DisplayCityPipe } from '../display-city.pipe';
 import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { PersonCommand } from '../models/person.command';
 import { CommonModule } from '@angular/common';
@@ -79,9 +79,7 @@ describe('PersonEditComponent', () => {
     ],
     providers: [
       PersonService,
-      DisplayCityPipe,
-      SearchCityService,
-      FullnamePipe
+      SearchCityService
     ]
   })
   class TestModule {
@@ -161,7 +159,6 @@ describe('PersonEditComponent', () => {
       spyOn(personService, 'update').and.returnValue(of(person));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
-      const displayCityPipe = TestBed.get(DisplayCityPipe);
 
       const fixture = TestBed.createComponent(PersonEditComponent);
       fixture.detectChanges();
@@ -184,7 +181,7 @@ describe('PersonEditComponent', () => {
       const address = nativeElement.querySelector('#address');
       expect(address.value).toBe(person.address);
       const city = nativeElement.querySelector('#city');
-      expect(city.value).toBe(displayCityPipe.transform(person.city));
+      expect(city.value).toBe(displayCity(person.city));
       const email = nativeElement.querySelector('#email');
       expect(email.value).toBe(person.email);
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
@@ -263,7 +260,6 @@ describe('PersonEditComponent', () => {
     });
 
     it('should clear the city input on blur if not valid anymore', () =>  {
-      const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
       fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
@@ -272,7 +268,7 @@ describe('PersonEditComponent', () => {
 
       const nativeElement = fixture.nativeElement;
       const city: HTMLInputElement = nativeElement.querySelector('#city');
-      expect(city.value).toBe(displayCityPipe.transform(person.city));
+      expect(city.value).toBe(displayCity(person.city));
 
       // erase something in the field, which should make its model null
       city.value = '42000 SAINT-ETIENN';
@@ -432,7 +428,6 @@ describe('PersonEditComponent', () => {
       spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
-      const displayCityPipe = TestBed.get(DisplayCityPipe);
       const fixture = TestBed.createComponent(PersonEditComponent);
       // fake typeahead results
       fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => of([cityModel]);
@@ -570,8 +565,7 @@ describe('PersonEditComponent', () => {
       tick();
       // select first result
       const cityResult = nativeElement.querySelector('ngb-typeahead-window button');
-      expect(cityResult.textContent)
-        .toContain(displayCityPipe.transform(cityModel));
+      expect(cityResult.textContent).toContain(displayCity(cityModel));
       cityResult.dispatchEvent(new Event('click'));
       fixture.detectChanges();
       tick();

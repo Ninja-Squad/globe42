@@ -3,7 +3,6 @@ import { TaskService } from '../task.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskCommand } from '../models/task.command';
 import { PersonIdentityModel } from '../models/person.model';
-import { FullnamePipe } from '../fullname.pipe';
 import { UserModel } from '../models/user.model';
 import { sortBy } from '../utils';
 import { TaskModel } from '../models/task.model';
@@ -47,12 +46,11 @@ export class TaskEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private router: Router,
-              private fullnamePipe: FullnamePipe,
               private currentUserService: CurrentUserService) { }
 
   ngOnInit() {
     this.editedTask = this.route.snapshot.data.task;
-    this.personTypeahead = new PersonTypeahead(this.route.snapshot.data.persons, this.fullnamePipe);
+    this.personTypeahead = new PersonTypeahead(this.route.snapshot.data.persons);
     this.users = this.sortUsers(this.route.snapshot.data.users);
     this.categories = this.route.snapshot.data.categories;
 

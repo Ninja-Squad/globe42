@@ -3,7 +3,6 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { TaskEditComponent } from './task-edit.component';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FullnamePipe } from '../fullname.pipe';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { PersonIdentityModel } from '../models/person.model';
 import { UserModel } from '../models/user.model';
@@ -58,7 +57,6 @@ describe('TaskEditComponent', () => {
       declarations: [TaskEditComponent],
       providers: [
         TaskService,
-        FullnamePipe,
         { provide: ActivatedRoute, useValue: activatedRoute }
       ]
     });

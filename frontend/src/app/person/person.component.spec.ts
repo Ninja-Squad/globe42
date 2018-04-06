@@ -94,14 +94,13 @@ describe('PersonComponent', () => {
       { provide: ActivatedRoute, useValue: activatedRoute },
       { provide: LOCALE_ID, useValue: 'fr-FR'},
       ConfirmService,
-      PersonService,
-      FullnamePipe
+      PersonService
     ],
     schemas: [NO_ERRORS_SCHEMA]
   })));
 
   it('should have a maps URL', () => {
-    const component = new PersonComponent(activatedRoute, null, null, null, null);
+    const component = new PersonComponent(activatedRoute, null, null, null);
     component.ngOnInit();
     expect(component.mapsUrl).toBe('https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE');
   });
