@@ -12,8 +12,8 @@ export class SpentTimeAddComponent {
 
   @Input() taskModel: TaskModel;
 
-  @Output() spentTimeAdded = new EventEmitter<SpentTimeEvent>();
-  @Output() cancelled = new EventEmitter<void>();
+  @Output() readonly spentTimeAdded = new EventEmitter<SpentTimeEvent>();
+  @Output() readonly cancelled = new EventEmitter<void>();
 
   model = {
     hours: 0,

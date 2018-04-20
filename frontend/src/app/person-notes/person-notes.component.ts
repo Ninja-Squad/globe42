@@ -22,7 +22,7 @@ export class PersonNotesComponent implements OnInit {
   person: PersonModel;
 
   @Output()
-  noteEdited = new EventEmitter<boolean>();
+  readonly noteEdited = new EventEmitter<boolean>();
 
   spinnerDisplayed = false;
 

@@ -1,7 +1,7 @@
 <h2>Mariages et divorces</h2>
 
 <div class="row align-items-center mb-2 event-item" *ngFor="let event of events">
-  <div class="col-sm">{{ event.date | date}}</div>
+  <div class="col-sm">{{ event.date | date }}</div>
   <div class="col-sm">{{ event.type | displayWeddingEventType }}</div>
   <div class="col-sm text-right">
     <button type="button" class="btn btn-danger btn-sm" (click)="deleteEvent(event)">

@@ -66,7 +66,7 @@ export class TasksComponent {
   tasks: Array<Task> = [];
 
   @Output()
-  taskClicked = new EventEmitter<TaskEvent>();
+  readonly taskClicked = new EventEmitter<TaskEvent>();
 
   @Input()
   set taskModels(models: Array<TaskModel>) {
