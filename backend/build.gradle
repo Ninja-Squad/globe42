@@ -1,17 +1,21 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'https://repo.spring.io/libs-milestone' }
     }
 
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.40'
+        classpath 'org.jetbrains.kotlin:kotlin-noarg:1.2.40'
         classpath 'org.flywaydb:flyway-gradle-plugin:5.0.3'
         classpath 'org.postgresql:postgresql:42.2.2'
     }
 }
 
 plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.40"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.2.40"
+    id "org.jetbrains.kotlin.plugin.jpa" version "1.2.40"
     id "org.flywaydb.flyway" version "5.0.3"
     id "com.gorylenko.gradle-git-properties" version "1.4.17"
 }
@@ -27,7 +31,20 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.spring.io/libs-milestone" }
+}
+
+sourceCompatibility = 1.8
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
 }
 
 tasks.withType(JavaCompile) {
@@ -61,6 +78,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.jsonwebtoken:jjwt:0.9.0'
     implementation 'com.google.cloud:google-cloud-storage:1.24.1'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.flywaydb:flyway-core'
@@ -70,6 +90,7 @@ dependencies {
     }
     testImplementation 'com.ninja-squad:DbSetup:2.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
