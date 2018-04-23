@@ -20,10 +20,12 @@ import javax.transaction.Transactional
 @RestController
 @Transactional
 @RequestMapping("/api/users")
-class UserController(private val currentUser: CurrentUser,
-                     private val userDao: UserDao,
-                     private val passwordGenerator: PasswordGenerator,
-                     private val passwordDigester: PasswordDigester) {
+class UserController(
+    private val currentUser: CurrentUser,
+    private val userDao: UserDao,
+    private val passwordGenerator: PasswordGenerator,
+    private val passwordDigester: PasswordDigester
+) {
 
     @GetMapping("/me")
     fun getCurrentUser(): CurrentUserDTO {
@@ -76,8 +78,8 @@ class UserController(private val currentUser: CurrentUser,
         val user = userDao.findNotDeletedById(userId).orElseThrow { NotFoundException("No user with ID " + userId) }
 
         userDao.findNotDeletedByLogin(command.login)
-                .filter { other -> other.id != userId }
-                .ifPresent { _ -> throw BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS) }
+            .filter { other -> other.id != userId }
+            .ifPresent { _ -> throw BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS) }
 
         copyCommandToUser(command, user)
     }

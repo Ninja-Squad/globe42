@@ -245,9 +245,11 @@ class Person {
      * The notes added on the person
      */
     @OneToMany(cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
-    @JoinTable(name = "person_note",
-               joinColumns = [JoinColumn(name = "person_id")],
-               inverseJoinColumns = [JoinColumn(name = "note_id")])
+    @JoinTable(
+        name = "person_note",
+        joinColumns = [JoinColumn(name = "person_id")],
+        inverseJoinColumns = [JoinColumn(name = "note_id")]
+    )
     private val notes: MutableSet<Note> = HashSet()
 
     /**

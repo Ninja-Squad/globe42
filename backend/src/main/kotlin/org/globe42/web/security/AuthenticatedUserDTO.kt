@@ -7,10 +7,11 @@ import org.globe42.domain.User
  * @author JB Nizet
  */
 data class AuthenticatedUserDTO(
-        val id: Long,
-        val login: String,
-        val admin: Boolean,
-        val token: String) {
+    val id: Long,
+    val login: String,
+    val admin: Boolean,
+    val token: String
+) {
 
     constructor(user: User, token: String) : this(user.id!!, user.login!!, user.admin, token)
 }

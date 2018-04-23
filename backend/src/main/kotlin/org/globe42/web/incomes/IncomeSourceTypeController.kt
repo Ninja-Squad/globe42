@@ -25,8 +25,8 @@ class IncomeSourceTypeController(private val incomeSourceTypeDao: IncomeSourceTy
     @GetMapping("/{typeId}")
     fun get(@PathVariable("typeId") typeId: Long): IncomeSourceTypeDTO {
         return incomeSourceTypeDao.findById(typeId)
-                .map(::IncomeSourceTypeDTO)
-                .orElseThrow { NotFoundException("No income source type with ID $typeId") }
+            .map(::IncomeSourceTypeDTO)
+            .orElseThrow { NotFoundException("No income source type with ID $typeId") }
     }
 
     @PostMapping
@@ -47,8 +47,8 @@ class IncomeSourceTypeController(private val incomeSourceTypeDao: IncomeSourceTy
         val type = incomeSourceTypeDao.findById(typeId).orElseThrow(::NotFoundException)
 
         incomeSourceTypeDao.findByType(command.type)
-                .filter { other -> other.id != typeId }
-                .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
+            .filter { other -> other.id != typeId }
+            .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
 
         copyCommandToType(command, type)
     }

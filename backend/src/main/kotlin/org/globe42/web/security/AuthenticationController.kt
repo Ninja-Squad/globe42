@@ -15,9 +15,11 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping("/api/authentication")
 @Transactional
-class AuthenticationController(private val userDao: UserDao,
-                               private val passwordDigester: PasswordDigester,
-                               private val jwtHelper: JwtHelper) {
+class AuthenticationController(
+    private val userDao: UserDao,
+    private val passwordDigester: PasswordDigester,
+    private val jwtHelper: JwtHelper
+) {
 
     @PostMapping
     fun authenticate(@RequestBody credentials: CredentialsDTO): AuthenticatedUserDTO {

@@ -14,7 +14,7 @@ class MaxAgeCacheConfig : WebMvcConfigurer {
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("*.bundle.js", "*.bundle.css", "fontawesome-webfont.*")
-                .addResourceLocations("classpath:/static/", "classpath:/public/")
-                .setCachePeriod(Integer.MAX_VALUE)
+            .addResourceLocations("classpath:/static/", "classpath:/public/")
+            .setCachePeriod(Integer.MAX_VALUE)
     }
 }

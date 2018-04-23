@@ -9,8 +9,9 @@ import org.hibernate.validator.constraints.Length
  * @author JB Nizet
  */
 data class CityDTO(
-        @field:Length(min = 5, max = 5) val code: String,
-        val city: String) {
-    constructor(city: City): this(city.code, city.city)
-    constructor(city: PostalCity): this(city.postalCode!!, city.city!!)
+    @field:Length(min = 5, max = 5) val code: String,
+    val city: String
+) {
+    constructor(city: City) : this(city.code, city.city)
+    constructor(city: PostalCity) : this(city.postalCode!!, city.city!!)
 }

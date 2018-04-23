@@ -27,12 +27,13 @@ data class FileDTO(
     /**
      * The content type of the file
      */
-    val contentType: String) {
+    val contentType: String
+) {
 
-    constructor(blob: BlobInfo, prefix: String): this(
-            blob.name.substring(prefix.length),
-            blob.size,
-            if (blob.createTime == null) Instant.now() else Instant.ofEpochMilli(blob.createTime),
-            blob.contentType
+    constructor(blob: BlobInfo, prefix: String) : this(
+        blob.name.substring(prefix.length),
+        blob.size,
+        if (blob.createTime == null) Instant.now() else Instant.ofEpochMilli(blob.createTime),
+        blob.contentType
     )
 }

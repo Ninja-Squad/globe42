@@ -14,9 +14,11 @@ import javax.servlet.http.HttpServletRequest
 @WebFilter(value = ["/*"])
 class IndexFilter : Filter {
     @Throws(IOException::class, ServletException::class)
-    override fun doFilter(req: ServletRequest,
-                          response: ServletResponse,
-                          chain: FilterChain) {
+    override fun doFilter(
+        req: ServletRequest,
+        response: ServletResponse,
+        chain: FilterChain
+    ) {
         val request = req as HttpServletRequest
         if (mustForward(request)) {
             request.getRequestDispatcher("/index.html").forward(request, response)

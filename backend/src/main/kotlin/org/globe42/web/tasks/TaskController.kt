@@ -29,11 +29,13 @@ const val PAGE_SIZE = 20
 @RestController
 @RequestMapping(value = ["/api/tasks"])
 @Transactional
-class TaskController(private val taskDao: TaskDao,
-                     private val userDao: UserDao,
-                     private val personDao: PersonDao,
-                     private val taskCategoryDao: TaskCategoryDao,
-                     private val currentUser: CurrentUser) {
+class TaskController(
+    private val taskDao: TaskDao,
+    private val userDao: UserDao,
+    private val personDao: PersonDao,
+    private val taskCategoryDao: TaskCategoryDao,
+    private val currentUser: CurrentUser
+) {
 
     @GetMapping
     fun listTodo(@RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
@@ -58,15 +60,19 @@ class TaskController(private val taskDao: TaskDao,
     }
 
     @GetMapping(params = ["person", "archived"])
-    fun listArchivedForPerson(@RequestParam("person") personId: Long?,
-                              @RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
+    fun listArchivedForPerson(
+        @RequestParam("person") personId: Long?,
+        @RequestParam page: Optional<Int>
+    ): PageDTO<TaskDTO> {
         val person = personDao.getOne(personId!!)
         return taskDao.findArchivedByConcernedPerson(person, pageRequest(page)).toDTO(::TaskDTO)
     }
 
     @GetMapping(params = ["before"])
-    fun listTodoBefore(@RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
-                       @RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
+    fun listTodoBefore(
+        @RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
+        @RequestParam page: Optional<Int>
+    ): PageDTO<TaskDTO> {
         return taskDao.findTodoBefore(date, pageRequest(page)).toDTO(::TaskDTO)
     }
 
@@ -150,10 +156,10 @@ class TaskController(private val taskDao: TaskDao,
     fun deleteSpentTime(@PathVariable("taskId") taskId: Long, @PathVariable("spentTimeId") spentTimeId: Long) {
         val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
         task.getSpentTimes()
-                .stream()
-                .filter { st -> st.id == spentTimeId }
-                .findAny()
-                .ifPresent { task.removeSpentTime(it) }
+            .stream()
+            .filter { st -> st.id == spentTimeId }
+            .findAny()
+            .ifPresent { task.removeSpentTime(it) }
     }
 
     private fun copyCommandToTask(command: TaskCommandDTO, task: Task) {

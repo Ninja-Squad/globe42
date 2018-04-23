@@ -9,5 +9,5 @@ import org.globe42.domain.User
  * @author JB Nizet
  */
 data class UserWithPasswordDTO(@field:JsonUnwrapped val user: UserDTO, val generatedPassword: String) {
-    constructor(user: User, generatedPassword: String): this(UserDTO(user), generatedPassword)
+    constructor(user: User, generatedPassword: String) : this(UserDTO(user), generatedPassword)
 }

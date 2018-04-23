@@ -26,8 +26,8 @@ class JwtHelper(@param:Value("\${globe42.secretKey}") private val secretKey: Str
      */
     fun buildToken(userId: Long?): String {
         return Jwts.builder()
-                .setSubject(userId!!.toString())
-                .signWith(SIGNATURE_ALGORITHM, secretKey).compact()
+            .setSubject(userId!!.toString())
+            .signWith(SIGNATURE_ALGORITHM, secretKey).compact()
     }
 
     /**

@@ -17,10 +17,12 @@ private const val POSTAL_CITY_GENERATOR = "PostalCityGenerator"
 class PostalCity {
 
     @Id
-    @SequenceGenerator(name = POSTAL_CITY_GENERATOR,
-                       sequenceName = "POSTAL_CITY_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = POSTAL_CITY_GENERATOR,
+        sequenceName = "POSTAL_CITY_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = POSTAL_CITY_GENERATOR)
     var id: Long? = null
 

@@ -27,8 +27,8 @@ class ChargeCategoryController(private val chargeCategoryDao: ChargeCategoryDao)
     @GetMapping("/{categoryId}")
     operator fun get(@PathVariable("categoryId") categoryId: Long): ChargeCategoryDTO {
         return chargeCategoryDao.findById(categoryId)
-                .map(::ChargeCategoryDTO)
-                .orElseThrow { NotFoundException("No charge category with ID $categoryId") }
+            .map(::ChargeCategoryDTO)
+            .orElseThrow { NotFoundException("No charge category with ID $categoryId") }
     }
 
     @PostMapping
@@ -49,8 +49,8 @@ class ChargeCategoryController(private val chargeCategoryDao: ChargeCategoryDao)
         val type = chargeCategoryDao.findById(categoryId).orElseThrow { NotFoundException() }
 
         chargeCategoryDao.findByName(command.name)
-                .filter { other -> other.id != categoryId }
-                .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
+            .filter { other -> other.id != categoryId }
+            .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
 
         copyCommandToType(command, type)
     }

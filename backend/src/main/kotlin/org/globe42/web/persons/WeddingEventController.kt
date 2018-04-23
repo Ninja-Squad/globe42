@@ -23,16 +23,18 @@ class WeddingEventController(private val personDao: PersonDao) {
     fun list(@PathVariable("personId") personId: Long): List<WeddingEventDTO> {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         return person.getWeddingEvents()
-                .stream()
-                .sorted(Comparator.comparing(WeddingEvent::date))
-                .map(::WeddingEventDTO)
-                .collect(Collectors.toList())
+            .stream()
+            .sorted(Comparator.comparing(WeddingEvent::date))
+            .map(::WeddingEventDTO)
+            .collect(Collectors.toList())
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@PathVariable("personId") personId: Long,
-               @Validated @RequestBody command: WeddingEventCommandDTO): WeddingEventDTO {
+    fun create(
+        @PathVariable("personId") personId: Long,
+        @Validated @RequestBody command: WeddingEventCommandDTO
+    ): WeddingEventDTO {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
 
         val event = WeddingEvent()
@@ -47,13 +49,15 @@ class WeddingEventController(private val personDao: PersonDao) {
 
     @DeleteMapping("/{eventId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable("personId") personId: Long,
-               @PathVariable("eventId") eventId: Long) {
+    fun delete(
+        @PathVariable("personId") personId: Long,
+        @PathVariable("eventId") eventId: Long
+    ) {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         person.getWeddingEvents()
-                .stream()
-                .filter { p -> p.id == eventId }
-                .findAny()
-                .ifPresent { person.removeWeddingEvent(it) }
+            .stream()
+            .filter { p -> p.id == eventId }
+            .findAny()
+            .ifPresent { person.removeWeddingEvent(it) }
     }
 }

@@ -18,15 +18,19 @@ import java.util.stream.Collectors
 class PostalCityUploadParser {
 
     fun parse(content: ByteArray): List<PostalCity> {
-        val reader = BufferedReader(InputStreamReader(ByteArrayInputStream(content),
-                                                      StandardCharsets.UTF_8))
+        val reader = BufferedReader(
+            InputStreamReader(
+                ByteArrayInputStream(content),
+                StandardCharsets.UTF_8
+            )
+        )
         return reader.lines()
-                .skip(1L)
-                .filter { line -> !line.isEmpty() }
-                .map(this::parseLine)
-                .distinct()
-                .map(Line::postalCity)
-                .collect(Collectors.toList())
+            .skip(1L)
+            .filter { line -> !line.isEmpty() }
+            .map(this::parseLine)
+            .distinct()
+            .map(Line::postalCity)
+            .collect(Collectors.toList())
     }
 
     private fun parseLine(line: String): Line {

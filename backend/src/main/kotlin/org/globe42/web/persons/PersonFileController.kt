@@ -31,8 +31,10 @@ class PersonFileController(private val personDao: PersonDao, private val storage
     }
 
     @GetMapping("/{fileName}")
-    fun get(@PathVariable("personId") personId: Long,
-            @PathVariable("fileName") fileName: String): ResponseEntity<StreamingResponseBody> {
+    fun get(
+        @PathVariable("personId") personId: Long,
+        @PathVariable("fileName") fileName: String
+    ): ResponseEntity<StreamingResponseBody> {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         val directory = person.id!!.toString()
         val readableFile = storageService.get(directory, fileName)
@@ -42,22 +44,26 @@ class PersonFileController(private val personDao: PersonDao, private val storage
             }
         }
         return ResponseEntity.status(HttpStatus.OK)
-                .contentLength(readableFile.file.size!!)
-                .contentType(MediaType.valueOf(readableFile.file.contentType))
-                .body(responseBody)
+            .contentLength(readableFile.file.size!!)
+            .contentType(MediaType.valueOf(readableFile.file.contentType))
+            .body(responseBody)
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Throws(IOException::class)
-    fun create(@PathVariable("personId") personId: Long,
-               @RequestParam("file") multipartFile: MultipartFile): FileDTO {
+    fun create(
+        @PathVariable("personId") personId: Long,
+        @RequestParam("file") multipartFile: MultipartFile
+    ): FileDTO {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         val directory = person.id.toString()
-        return storageService.create(directory,
-                                     multipartFile.originalFilename!!,
-                                     multipartFile.contentType,
-                                     multipartFile.inputStream)
+        return storageService.create(
+            directory,
+            multipartFile.originalFilename!!,
+            multipartFile.contentType,
+            multipartFile.inputStream
+        )
     }
 
     @DeleteMapping("/{fileName}")

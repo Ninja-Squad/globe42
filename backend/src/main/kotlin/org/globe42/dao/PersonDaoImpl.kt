@@ -12,7 +12,7 @@ class PersonDaoImpl : PersonDaoCustom {
     private lateinit var em: EntityManager
 
     override fun nextMediationCode(letter: Char): Int {
-        val query = "select nextval('mediation_code_" + letter + "_seq')"
+        val query = "select nextval('mediation_code_${letter}_seq')"
         return (em.createNativeQuery(query).singleResult as Number).toInt()
     }
 }

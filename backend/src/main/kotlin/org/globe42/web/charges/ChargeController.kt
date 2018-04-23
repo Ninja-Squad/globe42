@@ -19,9 +19,11 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping(value = ["/api/persons/{personId}/charges"])
 @Transactional
-class ChargeController(private val personDao: PersonDao,
-                       private val chargeDao: ChargeDao,
-                       private val chargeTypeDao: ChargeTypeDao) {
+class ChargeController(
+    private val personDao: PersonDao,
+    private val chargeDao: ChargeDao,
+    private val chargeTypeDao: ChargeTypeDao
+) {
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long?): List<ChargeDTO> {
@@ -35,7 +37,7 @@ class ChargeController(private val personDao: PersonDao,
         val person = loadPerson(personId)
 
         val type = chargeTypeDao.findById(command.typeId)
-                .orElseThrow { BadRequestException("No charge type with ID ${command.typeId}") }
+            .orElseThrow { BadRequestException("No charge type with ID ${command.typeId}") }
 
         type.maxMonthlyAmount?.let {
             if (command.monthlyAmount > it) {

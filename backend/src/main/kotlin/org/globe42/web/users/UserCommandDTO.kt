@@ -8,13 +8,14 @@ import javax.validation.constraints.NotEmpty
  */
 data class UserCommandDTO(
 
-        /**
-         * The new login of the user.
-         */
-        @field:NotEmpty
-        val login: String,
+    /**
+     * The new login of the user.
+     */
+    @field:NotEmpty
+    val login: String,
 
-        /**
-         * The new admin flag of the user.
-         */
-        val admin: Boolean)
+    /**
+     * The new admin flag of the user.
+     */
+    val admin: Boolean
+)

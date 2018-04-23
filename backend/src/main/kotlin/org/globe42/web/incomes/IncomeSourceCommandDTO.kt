@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull
  * @author JB Nizet
  */
 data class IncomeSourceCommandDTO(
-        @field:NotEmpty val name: String,
-        @field:NotNull val typeId: Long,
-        val maxMonthlyAmount: BigDecimal?)
+    @field:NotEmpty val name: String,
+    @field:NotNull val typeId: Long,
+    val maxMonthlyAmount: BigDecimal?
+)

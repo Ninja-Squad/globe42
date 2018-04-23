@@ -14,10 +14,12 @@ private const val PARTICIPATION_GENERATOR = "ParticipationGenerator"
 class Participation {
 
     @Id
-    @SequenceGenerator(name = PARTICIPATION_GENERATOR,
-                       sequenceName = "PARTICIPATION_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = PARTICIPATION_GENERATOR,
+        sequenceName = "PARTICIPATION_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = PARTICIPATION_GENERATOR)
     var id: Long? = null
 

@@ -20,21 +20,23 @@ class SpentTimeDaoImpl : SpentTimeDaoCustom {
     private lateinit var em: EntityManager
 
     override fun findSpentTimeStatistics(criteria: SpentTimeStatisticsCriteriaDTO): List<SpentTimeStatistic> {
-        val jpql = ("select category.id, creator.id, sum(spentTime.minutes) from SpentTime spentTime"
-                + " join spentTime.task task "
-                + " join task.category category "
-                + " join spentTime.creator creator "
-                + spentTimeStatisticsWhereClause(criteria)
-                + " group by category.id, creator.id")
+        val jpql = """select category.id, creator.id, sum(spentTime.minutes)
+             from SpentTime spentTime
+             join spentTime.task task
+             join task.category category
+             join spentTime.creator creator ${spentTimeStatisticsWhereClause(criteria)}
+             group by category.id, creator.id"""
 
         val query = em.createQuery(jpql, Array<Any>::class.java)
         bindParameters(query, criteria)
         val list = query.resultList
 
         return list.map { row ->
-            SpentTimeStatistic(em.find(TaskCategory::class.java, row[0] as Long),
-                               em.find(User::class.java, row[1] as Long),
-                               (row[2] as Number).toInt())
+            SpentTimeStatistic(
+                em.find(TaskCategory::class.java, row[0] as Long),
+                em.find(User::class.java, row[1] as Long),
+                (row[2] as Number).toInt()
+            )
         }
     }
 

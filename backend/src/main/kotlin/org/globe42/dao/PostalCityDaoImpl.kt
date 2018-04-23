@@ -35,16 +35,16 @@ class PostalCityDaoImpl : PostalCityDaoCustom {
         val jpql = "select pc from PostalCity pc where pc.postalCode like :value order by pc.postalCode, pc.city"
         val query = em.createQuery(jpql, PostalCity::class.java)
         return query.setParameter("value", "$search%")
-                .setMaxResults(limit)
-                .resultList
+            .setMaxResults(limit)
+            .resultList
     }
 
     override fun findByCity(search: String, limit: Int): List<PostalCity> {
         val jpql = "select pc from PostalCity pc where upper(pc.city) like :value order by pc.city, pc.postalCode"
         val query = em.createQuery(jpql, PostalCity::class.java)
         return query.setParameter("value", sanitizeQuery(search) + "%")
-                .setMaxResults(limit)
-                .resultList
+            .setMaxResults(limit)
+            .resultList
     }
 
     private fun sanitizeQuery(search: String): String {

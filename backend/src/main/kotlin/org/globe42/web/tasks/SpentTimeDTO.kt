@@ -9,13 +9,16 @@ import java.time.Instant
  * @author JB Nizet
  */
 data class SpentTimeDTO(
-        val id: Long,
-        val minutes: Int,
-        val creator: UserDTO,
-        val creationInstant: Instant) {
+    val id: Long,
+    val minutes: Int,
+    val creator: UserDTO,
+    val creationInstant: Instant
+) {
 
-    constructor(spentTime: SpentTime): this(spentTime.id!!,
-                                            spentTime.minutes,
-                                            UserDTO(spentTime.creator!!),
-                                            spentTime.creationInstant)
+    constructor(spentTime: SpentTime) : this(
+        spentTime.id!!,
+        spentTime.minutes,
+        UserDTO(spentTime.creator!!),
+        spentTime.creationInstant
+    )
 }

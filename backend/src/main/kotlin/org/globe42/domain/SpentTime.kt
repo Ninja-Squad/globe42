@@ -15,10 +15,12 @@ private const val SPENT_TIME_GENERATOR = "SpentTimeGenerator"
 class SpentTime {
 
     @Id
-    @SequenceGenerator(name = SPENT_TIME_GENERATOR,
-                       sequenceName = "SPENT_TIME_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = SPENT_TIME_GENERATOR,
+        sequenceName = "SPENT_TIME_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = SPENT_TIME_GENERATOR)
     var id: Long? = null
 

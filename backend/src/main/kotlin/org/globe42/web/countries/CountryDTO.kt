@@ -7,5 +7,5 @@ import org.globe42.domain.Country
  * @author JB Nizet
  */
 data class CountryDTO(val id: String, val name: String) {
-    constructor(country: Country): this(country.id, country.name)
+    constructor(country: Country) : this(country.id, country.name)
 }

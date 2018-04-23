@@ -8,11 +8,14 @@ import org.globe42.web.users.UserDTO
  * @author JB Nizet
  */
 data class SpentTimeStatisticDTO(
-        val category: TaskCategoryDTO,
-        val user: UserDTO,
-        val minutes: Int) {
+    val category: TaskCategoryDTO,
+    val user: UserDTO,
+    val minutes: Int
+) {
 
-    constructor(statistic: SpentTimeStatistic): this(TaskCategoryDTO(statistic.category),
-                                                     UserDTO(statistic.user),
-                                                     statistic.minutes)
+    constructor(statistic: SpentTimeStatistic) : this(
+        TaskCategoryDTO(statistic.category),
+        UserDTO(statistic.user),
+        statistic.minutes
+    )
 }
