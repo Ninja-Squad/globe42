@@ -21,9 +21,11 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping(value = ["/api/persons"])
 @Transactional
-class PersonController(private val personDao: PersonDao,
-                       private val coupleDao: CoupleDao,
-                       private val countryDao: CountryDao) {
+class PersonController(
+    private val personDao: PersonDao,
+    private val coupleDao: CoupleDao,
+    private val countryDao: CountryDao
+) {
 
     @GetMapping
     fun list() = personDao.findNotDeleted().map(::PersonIdentityDTO)
@@ -33,9 +35,7 @@ class PersonController(private val personDao: PersonDao,
 
     @GetMapping("/{personId}")
     fun get(@PathVariable("personId") id: Long): PersonDTO {
-        return personDao.findById(id).map(::PersonDTO).orElseThrow {
-            NotFoundException("No person with ID $id")
-        }
+        return personDao.findById(id).map(::PersonDTO).orElseThrow { NotFoundException("No person with ID $id") }
     }
 
     @PostMapping
@@ -71,7 +71,8 @@ class PersonController(private val personDao: PersonDao,
         // code.
         if (newMediationCodeLetter != oldMediationCodeLetter) {
             if (command.mediationEnabled) {
-                person.mediationCode = newMediationCodeLetter + personDao.nextMediationCode(newMediationCodeLetter).toString()
+                person.mediationCode = newMediationCodeLetter +
+                        personDao.nextMediationCode(newMediationCodeLetter).toString()
             } else {
                 person.mediationCode = null
             }
@@ -155,7 +156,8 @@ class PersonController(private val personDao: PersonDao,
         }
 
         if (spouseId != null && (currentSpouse == null || currentSpouse.id != spouseId)) {
-            val newSpouse = personDao.findById(spouseId).orElseThrow { BadRequestException("No person with ID $spouseId") }
+            val newSpouse =
+                personDao.findById(spouseId).orElseThrow { BadRequestException("No person with ID $spouseId") }
 
             val newSpouseCurrentCouple = newSpouse.couple
             if (newSpouseCurrentCouple != null) {

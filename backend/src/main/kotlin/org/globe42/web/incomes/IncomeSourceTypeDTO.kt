@@ -9,10 +9,12 @@ import org.globe42.domain.IncomeSourceType
  * @author JB Nizet
  */
 data class IncomeSourceTypeDTO(
-        val id: Long,
-        val type: String) {
+    val id: Long,
+    val type: String
+) {
 
-    constructor(incomeSourceType: IncomeSourceType): this(
-            incomeSourceType.id!!,
-            incomeSourceType.type!!)
+    constructor(incomeSourceType: IncomeSourceType) : this(
+        incomeSourceType.id!!,
+        incomeSourceType.type!!
+    )
 }

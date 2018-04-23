@@ -28,13 +28,15 @@ class StorageService(private val storage: Storage) {
      */
     fun list(directory: String): List<FileDTO> {
         val prefix = directory.endingWithSlash()
-        val page = storage.list(PERSON_FILES_BUCKET,
-                                Storage.BlobListOption.pageSize(10000),
-                                Storage.BlobListOption.currentDirectory(),
-                                Storage.BlobListOption.prefix(prefix))
+        val page = storage.list(
+            PERSON_FILES_BUCKET,
+            Storage.BlobListOption.pageSize(10000),
+            Storage.BlobListOption.currentDirectory(),
+            Storage.BlobListOption.prefix(prefix)
+        )
         return page.values
-                .map { blob -> FileDTO(blob, prefix) }
-                .toList()
+            .map { blob -> FileDTO(blob, prefix) }
+            .toList()
     }
 
     /**
@@ -49,15 +51,17 @@ class StorageService(private val storage: Storage) {
         return ReadableFile(blob, prefix)
     }
 
-    fun create(directory: String,
-               name: String,
-               contentType: String?,
-               data: InputStream): FileDTO {
+    fun create(
+        directory: String,
+        name: String,
+        contentType: String?,
+        data: InputStream
+    ): FileDTO {
         val prefix = directory.endingWithSlash()
         val blobId = BlobId.of(PERSON_FILES_BUCKET, prefix + name)
         val blobInfo = BlobInfo.newBuilder(blobId)
-                .setContentType(contentType ?: MediaType.APPLICATION_OCTET_STREAM.toString())
-                .build()
+            .setContentType(contentType ?: MediaType.APPLICATION_OCTET_STREAM.toString())
+            .build()
         try {
             Channels.newOutputStream(storage.writer(blobInfo)).use { out -> ByteStreams.copy(data, out) }
         } catch (e: IOException) {

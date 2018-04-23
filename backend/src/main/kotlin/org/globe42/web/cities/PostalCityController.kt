@@ -22,8 +22,8 @@ class PostalCityController(private val postalCityDao: PostalCityDao, private val
     @GetMapping(params = ["query"])
     fun search(@RequestParam("query") query: String): List<CityDTO> {
         val cities: List<PostalCity> =
-                if (query.isNumeric()) postalCityDao.findByPostalCode(query, LIMIT)
-                else postalCityDao.findByCity(query, LIMIT)
+            if (query.isNumeric()) postalCityDao.findByPostalCode(query, LIMIT)
+            else postalCityDao.findByCity(query, LIMIT)
 
         return cities.map(::CityDTO)
     }

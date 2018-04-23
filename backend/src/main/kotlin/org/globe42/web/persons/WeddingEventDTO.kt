@@ -9,12 +9,14 @@ import java.time.LocalDate
  * @author JB Nizet
  */
 data class WeddingEventDTO(
-        val id: Long,
-        val date: LocalDate,
-        val type: WeddingEventType) {
+    val id: Long,
+    val date: LocalDate,
+    val type: WeddingEventType
+) {
 
     constructor(event: WeddingEvent) : this(
-            event.id!!,
-            event.date!!,
-            event.type!!)
+        event.id!!,
+        event.date!!,
+        event.type!!
+    )
 }

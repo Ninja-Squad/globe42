@@ -15,10 +15,12 @@ private const val WEDDING_EVENT_GENERATOR = "WeddingEventGenerator"
 class WeddingEvent {
 
     @Id
-    @SequenceGenerator(name = WEDDING_EVENT_GENERATOR,
-                       sequenceName = "WEDDING_EVENT_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = WEDDING_EVENT_GENERATOR,
+        sequenceName = "WEDDING_EVENT_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = WEDDING_EVENT_GENERATOR)
     var id: Long? = null
 

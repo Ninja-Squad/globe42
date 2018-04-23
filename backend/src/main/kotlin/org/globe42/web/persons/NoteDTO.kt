@@ -9,14 +9,16 @@ import java.time.Instant
  * @author JB Nizet
  */
 data class NoteDTO(
-        val id: Long,
-        val text: String,
-        val creator: UserDTO,
-        val creationInstant: Instant) {
+    val id: Long,
+    val text: String,
+    val creator: UserDTO,
+    val creationInstant: Instant
+) {
 
     constructor(note: Note) : this(
-            note.id!!,
-            note.text!!,
-            UserDTO(note.creator!!),
-            note.creationInstant!!)
+        note.id!!,
+        note.text!!,
+        UserDTO(note.creator!!),
+        note.creationInstant!!
+    )
 }

@@ -16,10 +16,12 @@ private const val TASK_CATEGORY_GENERATOR = "TaskCategoryGenerator"
 class TaskCategory {
 
     @Id
-    @SequenceGenerator(name = TASK_CATEGORY_GENERATOR,
-                       sequenceName = "TASK_CATEGORY_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = TASK_CATEGORY_GENERATOR,
+        sequenceName = "TASK_CATEGORY_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = TASK_CATEGORY_GENERATOR)
     var id: Long? = null
 

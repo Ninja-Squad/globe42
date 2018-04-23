@@ -15,10 +15,12 @@ const val FAMILY_SITUATION_GENERATOR = "FamilySituationGenerator"
 class FamilySituation {
 
     @Id
-    @SequenceGenerator(name = FAMILY_SITUATION_GENERATOR,
-                       sequenceName = "FAMILY_SITUATION_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = FAMILY_SITUATION_GENERATOR,
+        sequenceName = "FAMILY_SITUATION_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = FAMILY_SITUATION_GENERATOR)
     var id: Long? = null
 
@@ -32,9 +34,11 @@ class FamilySituation {
         this.id = id
     }
 
-    constructor(parentsPresent: Boolean,
-                spousePresent: Boolean,
-                childCount: Int?) {
+    constructor(
+        parentsPresent: Boolean,
+        spousePresent: Boolean,
+        childCount: Int?
+    ) {
         this.parentsPresent = parentsPresent
         this.spousePresent = spousePresent
         this.childCount = childCount

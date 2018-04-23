@@ -20,18 +20,20 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping(value = ["/api/persons/{personId}/notes"])
 @Transactional
-class PersonNoteController(private val personDao: PersonDao,
-                           private val currentUser: CurrentUser,
-                           private val userDao: UserDao) {
+class PersonNoteController(
+    private val personDao: PersonDao,
+    private val currentUser: CurrentUser,
+    private val userDao: UserDao
+) {
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<NoteDTO> {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         return person.getNotes()
-                .stream()
-                .sorted(Comparator.comparing(Note::creationInstant))
-                .map(::NoteDTO)
-                .collect(Collectors.toList())
+            .stream()
+            .sorted(Comparator.comparing(Note::creationInstant))
+            .map(::NoteDTO)
+            .collect(Collectors.toList())
     }
 
     @PostMapping
@@ -52,27 +54,31 @@ class PersonNoteController(private val personDao: PersonDao,
 
     @PutMapping("/{noteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable("personId") personId: Long,
-               @PathVariable("noteId") noteId: Long,
-               @Validated @RequestBody command: NoteCommandDTO) {
+    fun update(
+        @PathVariable("personId") personId: Long,
+        @PathVariable("noteId") noteId: Long,
+        @Validated @RequestBody command: NoteCommandDTO
+    ) {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         val note = person.getNotes()
-                .stream()
-                .filter { n -> n.id == noteId }
-                .findAny()
-                .orElseThrow(::NotFoundException)
+            .stream()
+            .filter { n -> n.id == noteId }
+            .findAny()
+            .orElseThrow(::NotFoundException)
         note.text = command.text
     }
 
     @DeleteMapping("/{noteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable("personId") personId: Long,
-               @PathVariable("noteId") noteId: Long) {
+    fun delete(
+        @PathVariable("personId") personId: Long,
+        @PathVariable("noteId") noteId: Long
+    ) {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         person.getNotes()
-                .stream()
-                .filter { n -> n.id == noteId }
-                .findAny()
-                .ifPresent { person.removeNote(it) }
+            .stream()
+            .filter { n -> n.id == noteId }
+            .findAny()
+            .ifPresent { person.removeNote(it) }
     }
 }

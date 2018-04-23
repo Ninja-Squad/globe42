@@ -14,10 +14,12 @@ private const val INCOME_GENERATOR = "IncomeGenerator"
 class Income {
 
     @Id
-    @SequenceGenerator(name = INCOME_GENERATOR,
-                       sequenceName = "INCOME_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = INCOME_GENERATOR,
+        sequenceName = "INCOME_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = INCOME_GENERATOR)
     var id: Long? = null
 

@@ -10,8 +10,6 @@ import javax.persistence.Embeddable
  */
 @Embeddable
 class City(
-        @field:Length(min = 5, max = 5)
-        @field:Column(name = "postal_code")
-        var code: String,
-
-        var city: String)
+    @field:Length(min = 5, max = 5) @field:Column(name = "postal_code") var code: String,
+    var city: String
+)

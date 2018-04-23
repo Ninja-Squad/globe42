@@ -17,10 +17,12 @@ private const val INCOME_SOURCE_TYPE_GENERATOR = "IncomeSourceTypeGenerator"
 class IncomeSourceType {
 
     @Id
-    @SequenceGenerator(name = INCOME_SOURCE_TYPE_GENERATOR,
-                       sequenceName = "INCOME_SOURCE_TYPE_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = INCOME_SOURCE_TYPE_GENERATOR,
+        sequenceName = "INCOME_SOURCE_TYPE_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = INCOME_SOURCE_TYPE_GENERATOR)
     var id: Long? = null
 

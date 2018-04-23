@@ -18,9 +18,11 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping(value = ["/api/persons/{personId}/incomes"])
 @Transactional
-class IncomeController(private val personDao: PersonDao,
-                       private val incomeDao: IncomeDao,
-                       private val incomeSourceDao: IncomeSourceDao) {
+class IncomeController(
+    private val personDao: PersonDao,
+    private val incomeDao: IncomeDao,
+    private val incomeSourceDao: IncomeSourceDao
+) {
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<IncomeDTO> {

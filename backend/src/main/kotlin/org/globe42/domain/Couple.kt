@@ -51,10 +51,10 @@ class Couple {
             throw IllegalStateException("The person ${person.id} is not involved in this couple ${this.id}")
         }
         return persons.stream()
-                .filter { p -> p != person }
-                .findAny()
-                .orElseThrow {
-                    IllegalStateException("there is no person other than ${person.id} in this couple ${this.id}")
-                }
+            .filter { p -> p != person }
+            .findAny()
+            .orElseThrow {
+                IllegalStateException("there is no person other than ${person.id} in this couple ${this.id}")
+            }
     }
 }

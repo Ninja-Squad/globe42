@@ -7,9 +7,10 @@ import javax.validation.constraints.NotEmpty
  * @author JB Nizet
  */
 data class CredentialsDTO(
-        @field:NotEmpty val login: String,
+    @field:NotEmpty val login: String,
 
-        /**
-         * The password, in clear text.
-         */
-        @field:NotEmpty val password: String)
+    /**
+     * The password, in clear text.
+     */
+    @field:NotEmpty val password: String
+)

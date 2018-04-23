@@ -19,8 +19,10 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping(value = ["/api/income-sources"])
 @Transactional
-class IncomeSourceController(private val incomeSourceDao: IncomeSourceDao,
-                             private val incomeSourceTypeDao: IncomeSourceTypeDao) {
+class IncomeSourceController(
+    private val incomeSourceDao: IncomeSourceDao,
+    private val incomeSourceTypeDao: IncomeSourceTypeDao
+) {
 
     @GetMapping
     fun list(): List<IncomeSourceDTO> = incomeSourceDao.findAll().map(::IncomeSourceDTO)
@@ -28,8 +30,8 @@ class IncomeSourceController(private val incomeSourceDao: IncomeSourceDao,
     @GetMapping("/{sourceId}")
     fun get(@PathVariable("sourceId") sourceId: Long): IncomeSourceDTO {
         return incomeSourceDao.findById(sourceId)
-                .map(::IncomeSourceDTO)
-                .orElseThrow { NotFoundException("No income source with ID $sourceId") }
+            .map(::IncomeSourceDTO)
+            .orElseThrow { NotFoundException("No income source with ID $sourceId") }
     }
 
     @PostMapping
@@ -50,8 +52,8 @@ class IncomeSourceController(private val incomeSourceDao: IncomeSourceDao,
         val source = incomeSourceDao.findById(sourceId).orElseThrow(::NotFoundException)
 
         incomeSourceDao.findByName(command.name)
-                .filter { other -> other.id != sourceId }
-                .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_NAME_ALREADY_EXISTS) }
+            .filter { other -> other.id != sourceId }
+            .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_NAME_ALREADY_EXISTS) }
 
         copyCommandToSource(command, source)
     }

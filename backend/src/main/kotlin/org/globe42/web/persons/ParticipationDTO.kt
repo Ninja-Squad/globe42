@@ -8,8 +8,9 @@ import org.globe42.domain.Participation
  * @author JB Nizet
  */
 data class ParticipationDTO(
-        val id: Long,
-        val activityType: ActivityType) {
+    val id: Long,
+    val activityType: ActivityType
+) {
 
     constructor(participation: Participation) : this(participation.id!!, participation.activityType!!)
 }

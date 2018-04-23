@@ -19,10 +19,12 @@ private const val CHARGE_CATEGORY_GENERATOR = "ChargeCategoryGenerator"
 class ChargeCategory {
 
     @Id
-    @SequenceGenerator(name = CHARGE_CATEGORY_GENERATOR,
-                       sequenceName = "CHARGE_CATEGORY_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = CHARGE_CATEGORY_GENERATOR,
+        sequenceName = "CHARGE_CATEGORY_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = CHARGE_CATEGORY_GENERATOR)
     var id: Long? = null
 

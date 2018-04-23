@@ -23,10 +23,10 @@ class StorageConfig(private val properties: StorageProperties) {
     @Throws(IOException::class)
     fun storage(): Storage {
         fun InputStream.toStorage() = StorageOptions
-                .newBuilder()
-                .setCredentials(GoogleCredentials.fromStream(this))
-                .build()
-                .service
+            .newBuilder()
+            .setCredentials(GoogleCredentials.fromStream(this))
+            .build()
+            .service
 
         properties.credentials?.let {
             LOGGER.info("Property globe42.google-cloud-storage.credentials is set." + " Using its value as Google Cloud Storage JSON credentials")

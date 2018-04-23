@@ -8,9 +8,10 @@ import java.math.BigDecimal
  * @author JB Nizet
  */
 data class IncomeDTO(
-        val id: Long,
-        val source: IncomeSourceDTO,
-        val monthlyAmount: BigDecimal) {
+    val id: Long,
+    val source: IncomeSourceDTO,
+    val monthlyAmount: BigDecimal
+) {
 
-    constructor(income: Income): this(income.id!!, IncomeSourceDTO(income.source!!), income.monthlyAmount!!)
+    constructor(income: Income) : this(income.id!!, IncomeSourceDTO(income.source!!), income.monthlyAmount!!)
 }

@@ -10,14 +10,16 @@ import java.math.BigDecimal
  * @author JB Nizet
  */
 data class IncomeSourceDTO(
-        val id: Long,
-        val name: String,
-        val type: IncomeSourceTypeDTO,
-        val maxMonthlyAmount: BigDecimal?) {
+    val id: Long,
+    val name: String,
+    val type: IncomeSourceTypeDTO,
+    val maxMonthlyAmount: BigDecimal?
+) {
 
-    constructor(incomeSource: IncomeSource): this(
-            incomeSource.id!!,
-            incomeSource.name!!,
-            IncomeSourceTypeDTO(incomeSource.type!!),
-            incomeSource.maxMonthlyAmount)
+    constructor(incomeSource: IncomeSource) : this(
+        incomeSource.id!!,
+        incomeSource.name!!,
+        IncomeSourceTypeDTO(incomeSource.type!!),
+        incomeSource.maxMonthlyAmount
+    )
 }

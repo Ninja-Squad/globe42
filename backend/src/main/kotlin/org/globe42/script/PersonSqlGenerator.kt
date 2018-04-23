@@ -62,9 +62,10 @@ class PersonSqlGenerator(private val lines: Stream<String>) {
     private fun toSqlInsert(row: Row): String {
         val builder = StringBuilder()
         builder.append(
-                "insert into person (id, first_name, last_name, gender, birth_date, phone_number, adherent, mediation_code, " +
-                        "marital_status, housing, fiscal_status, fiscal_status_up_to_date, mediation_enabled, " +
-                        "health_care_coverage) VALUES (nextval('person_seq'), '")
+            """insert into person (id, first_name, last_name, gender, birth_date, phone_number, adherent,
+                mediation_code, marital_status, housing, fiscal_status, fiscal_status_up_to_date, mediation_enabled,
+                health_care_coverage) VALUES (nextval('person_seq'), '""".trimMargin()
+        )
         builder.append(row.firstName)
         builder.append("', '")
         builder.append(row.lastName)
@@ -115,20 +116,24 @@ class PersonSqlGenerator(private val lines: Stream<String>) {
         var birthDate: LocalDate? = null
         if (array.size > 4 && !Strings.isNullOrEmpty(array[4])) {
             val dateTimeFormatter = DateTimeFormatterBuilder().appendPattern("dd/MM/")
-                    .appendValueReduced(ChronoField.YEAR,
-                                        2,
-                                        2,
-                                        1900)
-                    .toFormatter()
+                .appendValueReduced(
+                    ChronoField.YEAR,
+                    2,
+                    2,
+                    1900
+                )
+                .toFormatter()
 
             birthDate = LocalDate.parse(array[4].trim { it <= ' ' }, dateTimeFormatter)
         }
 
-        return Row(toName(array[0]),
-                   toName(array[1]),
-                   mediationCode,
-                   phone,
-                   birthDate)
+        return Row(
+            toName(array[0]),
+            toName(array[1]),
+            mediationCode,
+            phone,
+            birthDate
+        )
     }
 
     private fun toName(s: String): String {
@@ -143,11 +148,13 @@ class PersonSqlGenerator(private val lines: Stream<String>) {
         return result
     }
 
-    private class Row(val lastName: String,
-                      val firstName: String,
-                      val mediationCode: String?,
-                      val phone: String?,
-                      val birthDate: LocalDate?) {
+    private class Row(
+        val lastName: String,
+        val firstName: String,
+        val mediationCode: String?,
+        val phone: String?,
+        val birthDate: LocalDate?
+    ) {
 
         val mediationLetter: Char?
             get() = mediationCode?.get(0)
@@ -169,8 +176,11 @@ class PersonSqlGenerator(private val lines: Stream<String>) {
         @Throws(IOException::class)
         @JvmStatic
         fun main(args: Array<String>) {
-            BufferedReader(InputStreamReader(PersonSqlGenerator::class.java.getResourceAsStream(
-                    "/persons.txt"))).use { reader ->
+            BufferedReader(
+                InputStreamReader(
+                    PersonSqlGenerator::class.java.getResourceAsStream("/persons.txt")
+                )
+            ).use { reader ->
                 PersonSqlGenerator(reader.lines()).generate()
             }
         }

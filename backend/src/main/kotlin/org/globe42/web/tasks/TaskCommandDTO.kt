@@ -9,9 +9,10 @@ import javax.validation.constraints.NotNull
  * @author JB Nizet
  */
 data class TaskCommandDTO(
-        @field:NotEmpty val title: String,
-        @field:NotEmpty val description: String,
-        @field:NotNull val categoryId: Long,
-        val dueDate: LocalDate?,
-        val concernedPersonId: Long?,
-        val assigneeId: Long?)
+    @field:NotEmpty val title: String,
+    @field:NotEmpty val description: String,
+    @field:NotNull val categoryId: Long,
+    val dueDate: LocalDate?,
+    val concernedPersonId: Long?,
+    val assigneeId: Long?
+)

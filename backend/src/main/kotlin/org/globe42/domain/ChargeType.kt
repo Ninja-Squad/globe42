@@ -16,10 +16,12 @@ private const val CHARGE_TYPE_GENERATOR = "ChargeTypeGenerator"
 class ChargeType {
 
     @Id
-    @SequenceGenerator(name = CHARGE_TYPE_GENERATOR,
-                       sequenceName = "CHARGE_TYPE_SEQ",
-                       initialValue = 1000,
-                       allocationSize = 1)
+    @SequenceGenerator(
+        name = CHARGE_TYPE_GENERATOR,
+        sequenceName = "CHARGE_TYPE_SEQ",
+        initialValue = 1000,
+        allocationSize = 1
+    )
     @GeneratedValue(generator = CHARGE_TYPE_GENERATOR)
     var id: Long? = null
 

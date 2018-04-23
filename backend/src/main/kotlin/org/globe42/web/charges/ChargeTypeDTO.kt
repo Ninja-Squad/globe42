@@ -10,13 +10,16 @@ import java.math.BigDecimal
  * @author JB Nizet
  */
 data class ChargeTypeDTO(
-        val id: Long,
-        val name: String,
-        val category: ChargeCategoryDTO,
-        val maxMonthlyAmount: BigDecimal?) {
+    val id: Long,
+    val name: String,
+    val category: ChargeCategoryDTO,
+    val maxMonthlyAmount: BigDecimal?
+) {
 
-    constructor(chargeType: ChargeType) : this(chargeType.id!!,
-                                               chargeType.name!!,
-                                               ChargeCategoryDTO(chargeType.category!!),
-                                               chargeType.maxMonthlyAmount)
+    constructor(chargeType: ChargeType) : this(
+        chargeType.id!!,
+        chargeType.name!!,
+        ChargeCategoryDTO(chargeType.category!!),
+        chargeType.maxMonthlyAmount
+    )
 }

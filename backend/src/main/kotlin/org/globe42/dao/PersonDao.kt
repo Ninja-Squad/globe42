@@ -11,10 +11,12 @@ import org.springframework.data.repository.query.Param
  * @author JB Nizet
  */
 interface PersonDao : JpaRepository<Person, Long>, PersonDaoCustom {
-    @Query("select person from Participation participation"
-                   + " join participation.person person"
-                   + " where participation.activityType = :activityType"
-                   + " and person.deleted = false")
+    @Query(
+        """select person from Participation participation
+            join participation.person person
+            where participation.activityType = :activityType
+            and person.deleted = false"""
+    )
     fun findParticipants(@Param("activityType") activityType: ActivityType): List<Person>
 
     @Query("select person from Person person where person.deleted = false")

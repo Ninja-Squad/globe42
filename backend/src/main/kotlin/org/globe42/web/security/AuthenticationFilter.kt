@@ -37,9 +37,7 @@ class AuthenticationFilter : Filter {
     }
 
     @Throws(IOException::class, ServletException::class)
-    override fun doFilter(req: ServletRequest,
-                          resp: ServletResponse,
-                          chain: FilterChain) {
+    override fun doFilter(req: ServletRequest, resp: ServletResponse, chain: FilterChain) {
         val request = req as HttpServletRequest
         val response = resp as HttpServletResponse
 
@@ -47,7 +45,8 @@ class AuthenticationFilter : Filter {
         currentUser.userId = userId
 
         if ((isProtectedApiRequest(request) || isProtectedActuatorRequest(request))
-                && (userId == null || !userDao.existsNotDeletedById(userId))) {
+            && (userId == null || !userDao.existsNotDeletedById(userId))
+        ) {
             response.sendError(HttpStatus.UNAUTHORIZED.value())
         } else if (isProtectedActuatorRequest(request) && (userId == null || !userDao.existsNotDeletedAdminById(userId))) {
             response.sendError(HttpStatus.FORBIDDEN.value())
@@ -87,10 +86,10 @@ class AuthenticationFilter : Filter {
             if (!header.startsWith(BEARER_PREFIX)) null else header.substring(BEARER_PREFIX.length).trim()
         } else if (request.cookies != null) {
             Arrays.stream(request.cookies)
-                    .filter { cookie -> cookie.name == "globe42_token" }
-                    .map { it.getValue() }
-                    .findAny()
-                    .orElse(null)
+                .filter { cookie -> cookie.name == "globe42_token" }
+                .map { it.getValue() }
+                .findAny()
+                .orElse(null)
         } else {
             null
         }

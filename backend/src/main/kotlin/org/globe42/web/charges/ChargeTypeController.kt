@@ -19,8 +19,10 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping(value = ["/api/charge-types"])
 @Transactional
-class ChargeTypeController(private val chargeTypeDao: ChargeTypeDao,
-                           private val chargeCategoryDao: ChargeCategoryDao) {
+class ChargeTypeController(
+    private val chargeTypeDao: ChargeTypeDao,
+    private val chargeCategoryDao: ChargeCategoryDao
+) {
 
     @GetMapping
     fun list(): List<ChargeTypeDTO> {
@@ -30,8 +32,8 @@ class ChargeTypeController(private val chargeTypeDao: ChargeTypeDao,
     @GetMapping("/{typeId}")
     operator fun get(@PathVariable("typeId") typeId: Long): ChargeTypeDTO {
         return chargeTypeDao.findById(typeId)
-                .map(::ChargeTypeDTO)
-                .orElseThrow { NotFoundException("No charge type with ID $typeId") }
+            .map(::ChargeTypeDTO)
+            .orElseThrow { NotFoundException("No charge type with ID $typeId") }
     }
 
     @PostMapping
@@ -52,8 +54,8 @@ class ChargeTypeController(private val chargeTypeDao: ChargeTypeDao,
         val source = chargeTypeDao.findById(typeId).orElseThrow { NotFoundException() }
 
         chargeTypeDao.findByName(command.name)
-                .filter { other -> other.id != typeId }
-                .ifPresent { _ -> throw BadRequestException(ErrorCode.CHARGE_TYPE_NAME_ALREADY_EXISTS) }
+            .filter { other -> other.id != typeId }
+            .ifPresent { _ -> throw BadRequestException(ErrorCode.CHARGE_TYPE_NAME_ALREADY_EXISTS) }
 
         copyCommandToSource(command, source)
     }

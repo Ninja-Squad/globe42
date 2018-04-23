@@ -11,13 +11,14 @@ import javax.persistence.Id
 @Entity
 class Country(
 
-        /**
-         * The ISO code of the country
-         */
-        @Id
-        var id: String,
+    /**
+     * The ISO code of the country
+     */
+    @Id
+    var id: String,
 
-        /**
-         * The French name of the country
-         */
-        var name: String)
+    /**
+     * The French name of the country
+     */
+    var name: String
+)

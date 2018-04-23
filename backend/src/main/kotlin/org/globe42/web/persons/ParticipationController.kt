@@ -25,8 +25,10 @@ class ParticipationController(private val personDao: PersonDao) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@PathVariable("personId") personId: Long,
-               @Validated @RequestBody command: ParticipationCommandDTO): ParticipationDTO {
+    fun create(
+        @PathVariable("personId") personId: Long,
+        @Validated @RequestBody command: ParticipationCommandDTO
+    ): ParticipationDTO {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
 
         val participation = Participation()
@@ -40,13 +42,15 @@ class ParticipationController(private val personDao: PersonDao) {
 
     @DeleteMapping("/{participationId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable("personId") personId: Long,
-               @PathVariable("participationId") participationId: Long) {
+    fun delete(
+        @PathVariable("personId") personId: Long,
+        @PathVariable("participationId") participationId: Long
+    ) {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         person.getParticipations()
-                .stream()
-                .filter { p -> p.id == participationId }
-                .findAny()
-                .ifPresent { person.removeParticipation(it) }
+            .stream()
+            .filter { p -> p.id == participationId }
+            .findAny()
+            .ifPresent { person.removeParticipation(it) }
     }
 }
