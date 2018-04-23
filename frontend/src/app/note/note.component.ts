@@ -20,16 +20,16 @@ export class NoteComponent implements AfterContentChecked {
   disabled = false;
 
   @Output()
-  editionCancelled = new EventEmitter<NoteEditionEvent>();
+  readonly editionCancelled = new EventEmitter<NoteEditionEvent>();
 
   @Output()
-  editionDone = new EventEmitter<NoteEditionEvent>();
+  readonly editionDone = new EventEmitter<NoteEditionEvent>();
 
   @Output()
-  editionRequested = new EventEmitter<NoteModel>();
+  readonly editionRequested = new EventEmitter<NoteModel>();
 
   @Output()
-  deletionRequested = new EventEmitter<NoteModel>();
+  readonly deletionRequested = new EventEmitter<NoteModel>();
 
   editedText: string;
   rowCount: number;

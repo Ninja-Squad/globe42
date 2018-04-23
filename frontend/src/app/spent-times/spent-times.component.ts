@@ -15,7 +15,7 @@ export class SpentTimesComponent implements OnInit {
   taskModel: TaskModel;
 
   @Output()
-  spentTimeDeleted = new EventEmitter<SpentTimeEvent>();
+  readonly spentTimeDeleted = new EventEmitter<SpentTimeEvent>();
 
   spentTimes: Array<SpentTimeModel>;
 
