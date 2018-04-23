@@ -42,7 +42,8 @@ class ParticipationControllerTest : BaseTest() {
         val result = controller.list(person.id!!)
 
         assertThat(result).extracting<Long>(ParticipationDTO::id).containsExactly(mealParticipation.id)
-        assertThat(result).extracting<ActivityType>(ParticipationDTO::activityType).containsExactly(mealParticipation.activityType)
+        assertThat(result).extracting<ActivityType>(ParticipationDTO::activityType)
+            .containsExactly(mealParticipation.activityType)
     }
 
     @Test
@@ -56,7 +57,7 @@ class ParticipationControllerTest : BaseTest() {
 
         assertThat(result.activityType).isEqualTo(command.activityType)
         assertThat(person.getParticipations()).extracting<ActivityType>(Participation::activityType)
-                .containsOnly(ActivityType.MEAL, ActivityType.SOCIAL_MEDIATION)
+            .containsOnly(ActivityType.MEAL, ActivityType.SOCIAL_MEDIATION)
     }
 
     @Test

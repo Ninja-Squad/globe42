@@ -76,20 +76,20 @@ class TaskControllerMvcTest {
         whenever(mockTaskDao.findTodo(any<Pageable>())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.content.[0].id").value(task.id!!.toInt()))
-                .andExpect(jsonPath("$.content.[0].dueDate").value(task.dueDate.toString()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.content.[0].id").value(task.id!!.toInt()))
+            .andExpect(jsonPath("$.content.[0].dueDate").value(task.dueDate.toString()))
     }
 
     @Test
     @Throws(Exception::class)
     fun `should list todo before`() {
         whenever(mockTaskDao.findTodoBefore(eq(LocalDate.of(2017, 8, 1)), any()))
-                .thenReturn(singlePage(listOf(task)))
+            .thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?before=2017-08-01"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
@@ -100,8 +100,8 @@ class TaskControllerMvcTest {
         whenever(mockTaskDao.findTodoByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?person=1"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
@@ -112,8 +112,8 @@ class TaskControllerMvcTest {
         whenever(mockTaskDao.findArchivedByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?person=1&archived"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
@@ -122,8 +122,8 @@ class TaskControllerMvcTest {
         whenever(mockTaskDao.findTodoUnassigned(any())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?unassigned"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
@@ -133,10 +133,12 @@ class TaskControllerMvcTest {
         val otherUser = User(5433L)
         whenever(mockUserDao.findNotDeletedById(otherUser.id!!)).thenReturn(Optional.of(otherUser))
 
-        mvc.perform(post("/api/tasks/{taskId}/assignments", task.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(TaskAssignmentCommandDTO(otherUser.id!!))))
-                .andExpect(status().isCreated)
+        mvc.perform(
+            post("/api/tasks/{taskId}/assignments", task.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(TaskAssignmentCommandDTO(otherUser.id!!)))
+        )
+            .andExpect(status().isCreated)
 
         assertThat(task.assignee).isEqualTo(otherUser)
     }
@@ -146,10 +148,12 @@ class TaskControllerMvcTest {
     fun `should change status`() {
         whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
 
-        mvc.perform(post("/api/tasks/{taskId}/status-changes", task.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(TaskStatusChangeCommandDTO(TaskStatus.DONE))))
-                .andExpect(status().isCreated)
+        mvc.perform(
+            post("/api/tasks/{taskId}/status-changes", task.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(TaskStatusChangeCommandDTO(TaskStatus.DONE)))
+        )
+            .andExpect(status().isCreated)
 
         assertThat(task.status).isEqualTo(TaskStatus.DONE)
     }
@@ -163,11 +167,13 @@ class TaskControllerMvcTest {
         whenever(mockUserDao.getOne(mockCurrentUser.userId!!)).thenReturn(user)
         whenever(mockTaskDao.save(any<Task>())).thenReturnModifiedFirstArgument<Task> { task -> task.id = 42L }
 
-        mvc.perform(post("/api/tasks")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.id").value(42))
+        mvc.perform(
+            post("/api/tasks")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.id").value(42))
     }
 
     @Test
@@ -176,10 +182,12 @@ class TaskControllerMvcTest {
         val command = createCommand(null, null)
         whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
 
-        mvc.perform(put("/api/tasks/{id}", task.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isNoContent)
+        mvc.perform(
+            put("/api/tasks/{id}", task.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isNoContent)
     }
 
     private fun singlePage(tasks: List<Task>): Page<Task> {

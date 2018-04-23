@@ -86,7 +86,7 @@ class ChargeTypeControllerTest : BaseTest() {
         val command = createCommand()
 
         whenever(mockChargeCategoryDao.findById(command.categoryId))
-                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
         whenever(mockChargeTypeDao.save(any<ChargeType>())).thenReturn(chargeType)
 
         val result = controller.create(command)
@@ -102,7 +102,7 @@ class ChargeTypeControllerTest : BaseTest() {
         val command = createCommand()
 
         whenever(mockChargeCategoryDao.findById(command.categoryId))
-                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
         whenever(mockChargeTypeDao.existsByName(command.name)).thenReturn(true)
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
@@ -123,7 +123,7 @@ class ChargeTypeControllerTest : BaseTest() {
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
         whenever(mockChargeCategoryDao.findById(command.categoryId))
-                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
 
         controller.update(chargeType.id!!, command)
 
@@ -135,8 +135,10 @@ class ChargeTypeControllerTest : BaseTest() {
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
-            controller.update(chargeType.id!!,
-                                createCommand())
+            controller.update(
+                chargeType.id!!,
+                createCommand()
+            )
         }
     }
 
@@ -146,11 +148,11 @@ class ChargeTypeControllerTest : BaseTest() {
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
         whenever(mockChargeCategoryDao.findById(command.categoryId))
-                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
         whenever(mockChargeTypeDao.findByName(command.name)).thenReturn(Optional.of(ChargeType(4567L)))
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
-            controller.update(chargeType.id!!,  command)
+            controller.update(chargeType.id!!, command)
         }
     }
 
@@ -160,7 +162,7 @@ class ChargeTypeControllerTest : BaseTest() {
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
         whenever(mockChargeCategoryDao.findById(command.categoryId))
-                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
         whenever(mockChargeTypeDao.findByName(command.name)).thenReturn(Optional.of(chargeType))
 
         controller.update(chargeType.id!!, command)

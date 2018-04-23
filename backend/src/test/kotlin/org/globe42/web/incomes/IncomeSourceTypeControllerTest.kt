@@ -64,7 +64,7 @@ class IncomeSourceTypeControllerTest : BaseTest() {
 
         whenever(mockIncomeSourceTypeDao.existsByType(command.type)).thenReturn(false)
         whenever(mockIncomeSourceTypeDao.save(any<IncomeSourceType>()))
-                .thenReturnModifiedFirstArgument<IncomeSourceType> { it.id = 42L }
+            .thenReturnModifiedFirstArgument<IncomeSourceType> { it.id = 42L }
 
         val result = controller.create(command)
 

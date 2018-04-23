@@ -58,7 +58,7 @@ class PersonController(
         val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
 
         val oldMediationCodeLetter = person.mediationCode.let {
-            if (it == null) 0.toChar() else it[0]
+            if (it != null) it[0] else 0.toChar()
         }
 
         copyCommandToPerson(command, person)
@@ -94,46 +94,48 @@ class PersonController(
     }
 
     private fun copyCommandToPerson(command: PersonCommandDTO, person: Person) {
-        person.firstName = command.firstName
-        person.lastName = command.lastName
-        person.birthName = command.birthName
-        person.nickName = command.nickName
-        person.birthDate = command.birthDate
-        person.address = command.address
-        person.city = command.city?.let { City(it.code, it.city) }
-        person.email = command.email
-        person.adherent = command.adherent
-        person.gender = command.gender
-        person.phoneNumber = command.phoneNumber
-        person.mediationEnabled = command.mediationEnabled
+        with(person) {
+            firstName = command.firstName
+            lastName = command.lastName
+            birthName = command.birthName
+            nickName = command.nickName
+            birthDate = command.birthDate
+            address = command.address
+            city = command.city?.let { City(it.code, it.city) }
+            email = command.email
+            adherent = command.adherent
+            gender = command.gender
+            phoneNumber = command.phoneNumber
+            mediationEnabled = command.mediationEnabled
 
-        // if mediation is disabled, we leave all the mediation-related elements as is
-        // in case mediation is re-enabled later, to not lose valuable information.
-        if (command.mediationEnabled) {
-            person.entryDate = command.entryDate
-            person.firstMediationAppointmentDate = command.firstMediationAppointmentDate
-            person.maritalStatus = command.maritalStatus
-            person.housing = command.housing
-            person.housingSpace = command.housingSpace
-            person.hostName = command.hostName
-            person.fiscalStatus = command.fiscalStatus
-            person.fiscalNumber = command.fiscalNumber
-            person.fiscalStatusUpToDate = command.fiscalStatusUpToDate
-            person.healthCareCoverage = command.healthCareCoverage
-            person.healthCareCoverageStartDate = command.healthCareCoverageStartDate
-            person.healthInsurance = command.healthInsurance
-            person.healthInsuranceStartDate = command.healthInsuranceStartDate
-            person.accompanying = command.accompanying
-            person.socialSecurityNumber = command.socialSecurityNumber
-            person.cafNumber = command.cafNumber
-            person.frenchFamilySituation = command.frenchFamilySituation.toFamilySituation()
-            person.abroadFamilySituation = command.abroadFamilySituation.toFamilySituation()
-            person.nationality = command.nationalityId?.let {
-                countryDao.findById(it).orElseThrow {
-                    BadRequestException("No nationality with ID ${command.nationalityId}")
+            // if mediation is disabled, we leave all the mediation-related elements as is
+            // in case mediation is re-enabled later, to not lose valuable information.
+            if (command.mediationEnabled) {
+                entryDate = command.entryDate
+                firstMediationAppointmentDate = command.firstMediationAppointmentDate
+                maritalStatus = command.maritalStatus
+                housing = command.housing
+                housingSpace = command.housingSpace
+                hostName = command.hostName
+                fiscalStatus = command.fiscalStatus
+                fiscalNumber = command.fiscalNumber
+                fiscalStatusUpToDate = command.fiscalStatusUpToDate
+                healthCareCoverage = command.healthCareCoverage
+                healthCareCoverageStartDate = command.healthCareCoverageStartDate
+                healthInsurance = command.healthInsurance
+                healthInsuranceStartDate = command.healthInsuranceStartDate
+                accompanying = command.accompanying
+                socialSecurityNumber = command.socialSecurityNumber
+                cafNumber = command.cafNumber
+                frenchFamilySituation = command.frenchFamilySituation.toFamilySituation()
+                abroadFamilySituation = command.abroadFamilySituation.toFamilySituation()
+                nationality = command.nationalityId?.let {
+                    countryDao.findById(it).orElseThrow {
+                        BadRequestException("No nationality with ID ${command.nationalityId}")
+                    }
                 }
+                handleCouple(this, command.spouseId)
             }
-            handleCouple(person, command.spouseId)
         }
     }
 

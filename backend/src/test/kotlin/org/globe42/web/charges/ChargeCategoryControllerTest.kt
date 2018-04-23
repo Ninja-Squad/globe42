@@ -64,7 +64,7 @@ class ChargeCategoryControllerTest : BaseTest() {
 
         whenever(mockChargeCategoryDao.existsByName(command.name)).thenReturn(false)
         whenever(mockChargeCategoryDao.save(any<ChargeCategory>()))
-                .thenReturnModifiedFirstArgument<ChargeCategory> { it.id = 42 }
+            .thenReturnModifiedFirstArgument<ChargeCategory> { it.id = 42 }
 
         val result = controller.create(command)
 

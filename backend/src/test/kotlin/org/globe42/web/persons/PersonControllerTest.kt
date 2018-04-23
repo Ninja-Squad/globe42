@@ -55,8 +55,12 @@ class PersonControllerTest : BaseTest() {
         person.mediationCode = "A2"
 
         whenever(mockCountryDao.findById(any())).thenAnswer { invocation ->
-            Optional.of(Country(invocation.getArgument(0),
-                                "Country " + invocation.getArgument<Any>(0)))
+            Optional.of(
+                Country(
+                    invocation.getArgument(0),
+                    "Country " + invocation.getArgument<Any>(0)
+                )
+            )
         }
     }
 
@@ -296,8 +300,10 @@ class PersonControllerTest : BaseTest() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
-            controller.update(person.id!!,
-                                createCommand())
+            controller.update(
+                person.id!!,
+                createCommand()
+            )
         }
     }
 
@@ -393,42 +399,46 @@ class PersonControllerTest : BaseTest() {
         }
 
         @JvmOverloads
-        internal fun createCommand(lastName: String = "Lacote",
-                                   mediationEnabled: Boolean = true,
-                                   spouseId: Long? = null,
-                                   nationalityId: String? = "FRA"): PersonCommandDTO {
-            return PersonCommandDTO(firstName = "Cyril",
-                                    lastName = lastName,
-                                    birthName = "Lacote du chateau",
-                                    nickName = "CEO, Bitch",
-                                    birthDate = LocalDate.of(1977, 9, 12),
-                                    address = "somewhere",
-                                    city = CityDTO("42000", "Saint-Etienne"),
-                                    email = "cyril@ninja-squad.com",
-                                    adherent = true,
-                                    entryDate = LocalDate.of(2017, 4, 13),
-                                    gender = Gender.MALE,
-                                    phoneNumber = "01234567",
-                                    mediationEnabled = mediationEnabled,
-                                    firstMediationAppointmentDate = LocalDate.of(2017, 12, 1),
-                                    maritalStatus = MaritalStatus.CONCUBINAGE,
-                                    spouseId = spouseId,
-                                    housing = Housing.F3,
-                                    housingSpace = 70,
-                                    hostName = "Bruno Mala",
-                                    fiscalStatus = FiscalStatus.TAXABLE,
-                                    fiscalNumber = "0123456789012",
-                                    fiscalStatusUpToDate = true,
-                                    healthCareCoverage = HealthCareCoverage.GENERAL,
-                                    healthCareCoverageStartDate = LocalDate.of(2016, 1, 1),
-                                    healthInsurance = "AXA",
-                                    healthInsuranceStartDate = LocalDate.of(2017, 1, 1),
-                                    accompanying = "Nadia DURAND",
-                                    socialSecurityNumber = "277126912340454",
-                                    cafNumber = "123765",
-                                    nationalityId = nationalityId,
-                                    frenchFamilySituation = FamilySituationDTO(false, true, 2),
-                                    abroadFamilySituation = FamilySituationDTO(true, false, 0))
+        internal fun createCommand(
+            lastName: String = "Lacote",
+            mediationEnabled: Boolean = true,
+            spouseId: Long? = null,
+            nationalityId: String? = "FRA"
+        ): PersonCommandDTO {
+            return PersonCommandDTO(
+                firstName = "Cyril",
+                lastName = lastName,
+                birthName = "Lacote du chateau",
+                nickName = "CEO, Bitch",
+                birthDate = LocalDate.of(1977, 9, 12),
+                address = "somewhere",
+                city = CityDTO("42000", "Saint-Etienne"),
+                email = "cyril@ninja-squad.com",
+                adherent = true,
+                entryDate = LocalDate.of(2017, 4, 13),
+                gender = Gender.MALE,
+                phoneNumber = "01234567",
+                mediationEnabled = mediationEnabled,
+                firstMediationAppointmentDate = LocalDate.of(2017, 12, 1),
+                maritalStatus = MaritalStatus.CONCUBINAGE,
+                spouseId = spouseId,
+                housing = Housing.F3,
+                housingSpace = 70,
+                hostName = "Bruno Mala",
+                fiscalStatus = FiscalStatus.TAXABLE,
+                fiscalNumber = "0123456789012",
+                fiscalStatusUpToDate = true,
+                healthCareCoverage = HealthCareCoverage.GENERAL,
+                healthCareCoverageStartDate = LocalDate.of(2016, 1, 1),
+                healthInsurance = "AXA",
+                healthInsuranceStartDate = LocalDate.of(2017, 1, 1),
+                accompanying = "Nadia DURAND",
+                socialSecurityNumber = "277126912340454",
+                cafNumber = "123765",
+                nationalityId = nationalityId,
+                frenchFamilySituation = FamilySituationDTO(false, true, 2),
+                abroadFamilySituation = FamilySituationDTO(true, false, 0)
+            )
         }
     }
 }

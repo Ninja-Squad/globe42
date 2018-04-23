@@ -58,10 +58,10 @@ class IncomeControllerMvcTest {
         person.addIncome(income)
 
         mvc.perform(get("/api/persons/{personId}/incomes", person.id))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(income.id!!.toInt()))
-                .andExpect(jsonPath("$[0].monthlyAmount").value(income.monthlyAmount!!.toDouble()))
-                .andExpect(jsonPath("$[0].source.id").value(income.source!!.id!!.toInt()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(income.id!!.toInt()))
+            .andExpect(jsonPath("$[0].monthlyAmount").value(income.monthlyAmount!!.toDouble()))
+            .andExpect(jsonPath("$[0].source.id").value(income.source!!.id!!.toInt()))
     }
 
     @Test
@@ -73,7 +73,7 @@ class IncomeControllerMvcTest {
         whenever(mockIncomeDao.findById(income.id!!)).thenReturn(Optional.of(income))
 
         mvc.perform(delete("/api/persons/{personId}/incomes/{incomeId}", person.id, income.id))
-                .andExpect(status().isNoContent)
+            .andExpect(status().isNoContent)
     }
 
     @Test
@@ -83,13 +83,15 @@ class IncomeControllerMvcTest {
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
         whenever(mockIncomeDao.save(any<Income>()))
-                .thenReturnModifiedFirstArgument<Income> { income -> income.id = 345L }
+            .thenReturnModifiedFirstArgument<Income> { income -> income.id = 345L }
 
         val command = IncomeCommandDTO(incomeSource.id!!, BigDecimal.TEN)
-        mvc.perform(post("/api/persons/{personId}/incomes", person.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.id").value(345))
+        mvc.perform(
+            post("/api/persons/{personId}/incomes", person.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.id").value(345))
     }
 }

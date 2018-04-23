@@ -64,10 +64,12 @@ class SpentTimeDaoTest : BaseDaoTest() {
         val result = dao.findSpentTimeStatistics(criteria)
         assertThat(result).hasSize(4)
         assertThat(result.map(SpentTimeStatistic::toStatResult))
-                .containsOnly(StatResult(6L, 1L, 30),
-                              StatResult(6L, 2L, 70),
-                              StatResult(7L, 1L, 110),
-                              StatResult(7L, 2L, 150))
+            .containsOnly(
+                StatResult(6L, 1L, 30),
+                StatResult(6L, 2L, 70),
+                StatResult(7L, 1L, 110),
+                StatResult(7L, 2L, 150)
+            )
     }
 
     @Test
@@ -76,10 +78,12 @@ class SpentTimeDaoTest : BaseDaoTest() {
         val result = dao.findSpentTimeStatistics(criteria)
         assertThat(result).hasSize(4)
         assertThat(result.map(SpentTimeStatistic::toStatResult))
-                .containsOnly(StatResult(6L, 1L, 20),
-                              StatResult(6L, 2L, 70),
-                              StatResult(7L, 1L, 60),
-                              StatResult(7L, 2L, 150))
+            .containsOnly(
+                StatResult(6L, 1L, 20),
+                StatResult(6L, 2L, 70),
+                StatResult(7L, 1L, 60),
+                StatResult(7L, 2L, 150)
+            )
     }
 
     @Test
@@ -88,23 +92,29 @@ class SpentTimeDaoTest : BaseDaoTest() {
         val result = dao.findSpentTimeStatistics(criteria)
         assertThat(result).hasSize(4)
         assertThat(result.map(SpentTimeStatistic::toStatResult))
-                .containsOnly(StatResult(6L, 1L, 30),
-                              StatResult(6L, 2L, 30),
-                              StatResult(7L, 1L, 110),
-                              StatResult(7L, 2L, 70))
+            .containsOnly(
+                StatResult(6L, 1L, 30),
+                StatResult(6L, 2L, 30),
+                StatResult(7L, 1L, 110),
+                StatResult(7L, 2L, 70)
+            )
     }
 
     @Test
     fun `should find spent time statistics with start and end date`() {
-        val criteria = SpentTimeStatisticsCriteriaDTO(LocalDate.of(2017, 12, 3),
-                                                      LocalDate.of(2017, 12, 4))
+        val criteria = SpentTimeStatisticsCriteriaDTO(
+            LocalDate.of(2017, 12, 3),
+            LocalDate.of(2017, 12, 4)
+        )
         val result = dao.findSpentTimeStatistics(criteria)
         assertThat(result).hasSize(4)
         assertThat(result.map(SpentTimeStatistic::toStatResult))
-                .containsOnly(StatResult(6L, 1L, 20),
-                              StatResult(6L, 2L, 30),
-                              StatResult(7L, 1L, 60),
-                              StatResult(7L, 2L, 70))
+            .containsOnly(
+                StatResult(6L, 1L, 20),
+                StatResult(6L, 2L, 30),
+                StatResult(7L, 1L, 60),
+                StatResult(7L, 2L, 70)
+            )
     }
 }
 

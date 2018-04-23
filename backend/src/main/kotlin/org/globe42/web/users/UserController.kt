@@ -102,7 +102,9 @@ class UserController(
     }
 
     private fun copyCommandToUser(command: UserCommandDTO, user: User) {
-        user.login = command.login
-        user.admin = command.admin
+        with(user) {
+            login = command.login
+            admin = command.admin
+        }
     }
 }

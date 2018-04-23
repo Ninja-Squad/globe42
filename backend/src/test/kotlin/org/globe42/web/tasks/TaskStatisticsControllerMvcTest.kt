@@ -30,21 +30,25 @@ class TaskStatisticsControllerMvcTest {
 
     @Test
     fun `should get spent time statistics`() {
-        val criteria = SpentTimeStatisticsCriteriaDTO(LocalDate.of(2017, 12, 1),
-                                                      LocalDate.of(2017, 12, 31))
+        val criteria = SpentTimeStatisticsCriteriaDTO(
+            LocalDate.of(2017, 12, 1),
+            LocalDate.of(2017, 12, 31)
+        )
 
         val meal = TaskCategory(6L, "Meal")
         val user = User(1L, "jb")
 
         whenever(mockSpentTimeDao.findSpentTimeStatistics(criteria))
-                .thenReturn(listOf(SpentTimeStatistic(meal, user, 100)))
+            .thenReturn(listOf(SpentTimeStatistic(meal, user, 100)))
 
-        mvc.perform(get("/api/task-statistics/spent-times")
-                              .param("from", criteria.from.toString())
-                              .param("to", criteria.to.toString()))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.statistics[0].user.login").value(user.login!!))
-                .andExpect(jsonPath("$.statistics[0].category.name").value(meal.name!!))
-                .andExpect(jsonPath("$.statistics[0].minutes").value(100))
+        mvc.perform(
+            get("/api/task-statistics/spent-times")
+                .param("from", criteria.from.toString())
+                .param("to", criteria.to.toString())
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.statistics[0].user.login").value(user.login!!))
+            .andExpect(jsonPath("$.statistics[0].category.name").value(meal.name!!))
+            .andExpect(jsonPath("$.statistics[0].minutes").value(100))
     }
 }

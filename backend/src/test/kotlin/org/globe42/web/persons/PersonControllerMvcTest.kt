@@ -62,8 +62,8 @@ class PersonControllerMvcTest {
         whenever(mockPersonDao.findNotDeleted()).thenReturn(listOf<Person>(person))
 
         mvc.perform(get("/api/persons"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(1))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(1))
     }
 
     @Test
@@ -71,8 +71,8 @@ class PersonControllerMvcTest {
         whenever(mockPersonDao.findDeleted()).thenReturn(listOf<Person>(person))
 
         mvc.perform(get("/api/persons").param("deleted", ""))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(1))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(1))
     }
 
     @Test
@@ -80,10 +80,10 @@ class PersonControllerMvcTest {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         mvc.perform(get("/api/persons/{personId}", person.id))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
-                .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
+            .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
     }
 
     @Test
@@ -91,28 +91,32 @@ class PersonControllerMvcTest {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         mvc.perform(get("/api/persons/{personId}", person.id))
-                .andExpect(status().isNotFound)
+            .andExpect(status().isNotFound)
     }
 
     @Test
     fun `should create`() {
         whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 1L }
 
-        mvc.perform(post("/api/persons")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.id").value(1))
+        mvc.perform(
+            post("/api/persons")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand()))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.id").value(1))
     }
 
     @Test
     fun `should update`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
-        mvc.perform(put("/api/persons/{personId}", person.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
-                .andExpect(status().isNoContent)
+        mvc.perform(
+            put("/api/persons/{personId}", person.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand()))
+        )
+            .andExpect(status().isNoContent)
     }
 
     @Test
@@ -120,7 +124,7 @@ class PersonControllerMvcTest {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         mvc.perform(delete("/api/persons/{personId}", person.id))
-                .andExpect(status().isNoContent)
+            .andExpect(status().isNoContent)
     }
 
     @Test
@@ -128,6 +132,6 @@ class PersonControllerMvcTest {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         mvc.perform(delete("/api/persons/{personId}/deletion", person.id))
-                .andExpect(status().isNoContent)
+            .andExpect(status().isNoContent)
     }
 }

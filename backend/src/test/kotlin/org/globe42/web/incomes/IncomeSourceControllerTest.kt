@@ -85,7 +85,7 @@ class IncomeSourceControllerTest : BaseTest() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceTypeDao.findById(command.typeId))
-                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+            .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
         whenever(mockIncomeSourceDao.save(any<IncomeSource>())).thenReturn(incomeSource)
 
         val result = controller.create(command)
@@ -101,7 +101,7 @@ class IncomeSourceControllerTest : BaseTest() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceTypeDao.findById(command.typeId))
-                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+            .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
         whenever(mockIncomeSourceDao.existsByName(command.name)).thenReturn(true)
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
@@ -122,7 +122,7 @@ class IncomeSourceControllerTest : BaseTest() {
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
         whenever(mockIncomeSourceTypeDao.findById(command.typeId))
-                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+            .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
 
         controller.update(incomeSource.id!!, command)
 
@@ -144,7 +144,7 @@ class IncomeSourceControllerTest : BaseTest() {
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
         whenever(mockIncomeSourceTypeDao.findById(command.typeId))
-                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+            .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
         whenever(mockIncomeSourceDao.findByName(command.name)).thenReturn(Optional.of(IncomeSource(4567L)))
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
@@ -158,7 +158,7 @@ class IncomeSourceControllerTest : BaseTest() {
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
         whenever(mockIncomeSourceTypeDao.findById(command.typeId))
-                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+            .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
         whenever(mockIncomeSourceDao.findByName(command.name)).thenReturn(Optional.of(incomeSource))
 
         controller.update(incomeSource.id!!, command)

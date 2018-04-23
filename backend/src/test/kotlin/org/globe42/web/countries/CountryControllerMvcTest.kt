@@ -29,14 +29,15 @@ class CountryControllerMvcTest {
     @BeforeEach
     fun prepare() {
         whenever(mockCountryDao.findAllSortedByName()).thenReturn(
-                listOf(Country("BEL", "Belgique"), Country("FRA", "France")))
+            listOf(Country("BEL", "Belgique"), Country("FRA", "France"))
+        )
     }
 
     @Test
     fun `should list`() {
         mvc.perform(get("/api/countries"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value("BEL"))
-                .andExpect(jsonPath("$[1].name").value("France"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value("BEL"))
+            .andExpect(jsonPath("$[1].name").value("France"))
     }
 }

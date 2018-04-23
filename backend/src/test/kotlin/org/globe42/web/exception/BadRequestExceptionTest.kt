@@ -38,8 +38,12 @@ class BadRequestExceptionTest {
 
     @Test
     fun `should create with functional error`() {
-        val e = BadRequestException(FunctionalError(ErrorCode.USER_LOGIN_ALREADY_EXISTS,
-                                                    Collections.singletonMap("foo", "bar")))
+        val e = BadRequestException(
+            FunctionalError(
+                ErrorCode.USER_LOGIN_ALREADY_EXISTS,
+                Collections.singletonMap("foo", "bar")
+            )
+        )
 
         assertThat(e.message).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString())
         assertThat(e.error!!.code).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS)

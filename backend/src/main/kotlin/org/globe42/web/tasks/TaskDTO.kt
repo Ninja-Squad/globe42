@@ -31,8 +31,8 @@ data class TaskDTO(
         task.status,
         task.dueDate,
         UserDTO(task.creator!!),
-        if (task.assignee == null) null else UserDTO(task.assignee!!),
-        if (task.concernedPerson == null) null else PersonIdentityDTO(task.concernedPerson!!),
+        task.assignee?.let { UserDTO(it) },
+        task.concernedPerson?.let { PersonIdentityDTO(it) },
         task.totalSpentTimeInMinutes
     )
 }

@@ -61,9 +61,11 @@ class ChargeTypeController(
     }
 
     private fun copyCommandToSource(command: ChargeTypeCommandDTO, source: ChargeType) {
-        source.name = command.name
-        source.category = loadChargeCategory(command.categoryId)
-        source.maxMonthlyAmount = command.maxMonthlyAmount
+        with(source) {
+            name = command.name
+            category = loadChargeCategory(command.categoryId)
+            maxMonthlyAmount = command.maxMonthlyAmount
+        }
     }
 
     private fun loadChargeCategory(categoryId: Long): ChargeCategory {

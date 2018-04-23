@@ -78,16 +78,22 @@ class PersonFileControllerTest : BaseTest() {
     @Test
     @Throws(IOException::class)
     fun `should create`() {
-        val multipartFile = MockMultipartFile("file",
-                                              "new.txt",
-                                              "text/plain",
-                                              "new".toByteArray(StandardCharsets.UTF_8))
+        val multipartFile = MockMultipartFile(
+            "file",
+            "new.txt",
+            "text/plain",
+            "new".toByteArray(StandardCharsets.UTF_8)
+        )
         val file = FileDTO("new.txt", 3L, Instant.now(), "text/plain")
 
-        whenever(mockStorageService.create(eq(directory),
-                                           eq(multipartFile.originalFilename),
-                                           eq(multipartFile.contentType),
-                                           any())).thenReturn(file)
+        whenever(
+            mockStorageService.create(
+                eq(directory),
+                eq(multipartFile.originalFilename),
+                eq(multipartFile.contentType),
+                any()
+            )
+        ).thenReturn(file)
 
         val result = controller.create(person.id!!, multipartFile)
 

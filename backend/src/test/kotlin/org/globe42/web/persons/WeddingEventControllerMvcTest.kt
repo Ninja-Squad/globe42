@@ -52,33 +52,37 @@ class WeddingEventControllerMvcTest {
     @Throws(Exception::class)
     fun `should list`() {
         mvc.perform(get("/api/persons/{personId}/wedding-events", person.id))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(34))
-                .andExpect(jsonPath("$[0].date").value("2000-02-28"))
-                .andExpect(jsonPath("$[0].type").value(WeddingEventType.WEDDING.name))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(34))
+            .andExpect(jsonPath("$[0].date").value("2000-02-28"))
+            .andExpect(jsonPath("$[0].type").value(WeddingEventType.WEDDING.name))
     }
 
     @Test
     @Throws(Exception::class)
     fun `should create`() {
         val date = LocalDate.of(2002, 3, 28)
-        val command = WeddingEventCommandDTO(date,
-                                             WeddingEventType.DIVORCE)
+        val command = WeddingEventCommandDTO(
+            date,
+            WeddingEventType.DIVORCE
+        )
         whenever(mockPersonDao.flush()).then {
             person.getWeddingEvents().find { it.date == date }?.let { it.id = 876 }
             Unit
         }
-        mvc.perform(post("/api/persons/{personId}/wedding-events", person.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.type").value(WeddingEventType.DIVORCE.name))
+        mvc.perform(
+            post("/api/persons/{personId}/wedding-events", person.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.type").value(WeddingEventType.DIVORCE.name))
     }
 
     @Test
     @Throws(Exception::class)
     fun `should delete`() {
         mvc.perform(delete("/api/persons/{personId}/wedding-events/{eventId}", person.id, firstWedding.id))
-                .andExpect(status().isNoContent)
+            .andExpect(status().isNoContent)
     }
 }

@@ -122,7 +122,7 @@ class UserControllerTest : BaseTest() {
         whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
         whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
         whenever(mockUserDao.save(any<User>()))
-                .thenReturnModifiedFirstArgument<User> { it.id = 42L }
+            .thenReturnModifiedFirstArgument<User> { it.id = 42L }
 
         val (user, generatedPassword) = controller.create(command)
         assertThat(generatedPassword).isEqualTo("password")

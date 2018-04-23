@@ -49,8 +49,8 @@ class ParticipationControllerMvcTest {
     @Test
     fun `should list`() {
         mvc.perform(get("/api/persons/{personId}/participations", person.id))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(34))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(34))
     }
 
     @Test
@@ -60,18 +60,24 @@ class ParticipationControllerMvcTest {
             person.getParticipations().find { it.activityType == ActivityType.SOCIAL_MEDIATION }?.let { it.id = 345L }
             Unit
         }
-        mvc.perform(post("/api/persons/{personId}/participations", person.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.activityType").value(ActivityType.SOCIAL_MEDIATION.name))
+        mvc.perform(
+            post("/api/persons/{personId}/participations", person.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.activityType").value(ActivityType.SOCIAL_MEDIATION.name))
     }
 
     @Test
     fun `should delete`() {
-        mvc.perform(delete("/api/persons/{personId}/participations/{participationId}",
-                             person.id,
-                             mealParticipation.id))
-                .andExpect(status().isNoContent)
+        mvc.perform(
+            delete(
+                "/api/persons/{personId}/participations/{participationId}",
+                person.id,
+                mealParticipation.id
+            )
+        )
+            .andExpect(status().isNoContent)
     }
 }

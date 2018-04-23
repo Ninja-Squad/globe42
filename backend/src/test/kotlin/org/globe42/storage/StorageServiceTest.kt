@@ -46,13 +46,17 @@ class StorageServiceTest : BaseTest() {
     @Suppress("UNCHECKED_CAST")
     @Test
     fun `should list`() {
-        val mockPage= mock<Page<Blob>>()
+        val mockPage = mock<Page<Blob>>()
         whenever(mockPage.getValues()).thenReturn(listOf(blob))
 
-        whenever(mockStorage.list(PERSON_FILES_BUCKET,
-                                  Storage.BlobListOption.pageSize(10000),
-                                  Storage.BlobListOption.currentDirectory(),
-                                  Storage.BlobListOption.prefix("foo/"))).thenReturn(mockPage)
+        whenever(
+            mockStorage.list(
+                PERSON_FILES_BUCKET,
+                Storage.BlobListOption.pageSize(10000),
+                Storage.BlobListOption.currentDirectory(),
+                Storage.BlobListOption.prefix("foo/")
+            )
+        ).thenReturn(mockPage)
 
         val result = service.list("foo")
 
@@ -87,8 +91,8 @@ class StorageServiceTest : BaseTest() {
     @Test
     fun `should create`() {
         val blobInfo = BlobInfo.newBuilder(PERSON_FILES_BUCKET, "foo/new.txt")
-                .setContentType("text/plain")
-                .build()
+            .setContentType("text/plain")
+            .build()
 
         val written = ByteArray(7)
         val mockWriteChannel = mock<WriteChannel>()
@@ -99,10 +103,12 @@ class StorageServiceTest : BaseTest() {
         }
         whenever(mockStorage.writer(blobInfo)).thenReturn(mockWriteChannel)
 
-        val result = service.create("foo",
-                                             "new.txt",
-                                             "text/plain",
-                                             "goodbye".toByteArray(StandardCharsets.UTF_8).inputStream())
+        val result = service.create(
+            "foo",
+            "new.txt",
+            "text/plain",
+            "goodbye".toByteArray(StandardCharsets.UTF_8).inputStream()
+        )
 
         assertThat(result.name).isEqualTo("new.txt")
         assertThat(result.creationInstant).isNotNull()

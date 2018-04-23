@@ -46,6 +46,6 @@ class AuthenticationTest {
     @Test
     fun `should get unauthorized error`() {
         mvc.perform(get("/api/persons"))
-                .andExpect(status().isUnauthorized)
+            .andExpect(status().isUnauthorized)
     }
 }
