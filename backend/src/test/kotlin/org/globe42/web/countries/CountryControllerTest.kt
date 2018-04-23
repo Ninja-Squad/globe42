@@ -24,12 +24,14 @@ class CountryControllerTest : BaseTest() {
     @Test
     fun `should list`() {
         whenever(mockCountryDao.findAllSortedByName()).thenReturn(
-                listOf(Country("BEL", "Belgique"), Country("FRA", "France")))
+            listOf(Country("BEL", "Belgique"), Country("FRA", "France"))
+        )
 
         val result = controller.list()
 
         assertThat(result).containsExactly(
-                CountryDTO("BEL", "Belgique"),
-                CountryDTO("FRA", "France"))
+            CountryDTO("BEL", "Belgique"),
+            CountryDTO("FRA", "France")
+        )
     }
 }

@@ -99,7 +99,7 @@ class TaskControllerTest : BaseTest() {
     fun `should list unassigned`() {
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findTodoUnassigned(pageRequest))
-                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
+            .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
         val result = controller.listUnassigned(Optional.empty())
 
@@ -113,7 +113,7 @@ class TaskControllerTest : BaseTest() {
 
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findTodoByAssignee(user, pageRequest))
-                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
+            .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
         val result = controller.listMine(Optional.empty())
 
@@ -125,7 +125,7 @@ class TaskControllerTest : BaseTest() {
         val maxDate = LocalDate.of(2017, 8, 4)
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findTodoBefore(maxDate, pageRequest))
-                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
+            .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
         val result = controller.listTodoBefore(maxDate, Optional.empty())
 
@@ -138,7 +138,7 @@ class TaskControllerTest : BaseTest() {
         whenever(mockPersonDao.getOne(person.id!!)).thenReturn(person)
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findTodoByConcernedPerson(person, pageRequest))
-                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
+            .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
         val result = controller.listTodoForPerson(person.id, Optional.empty())
 
@@ -151,7 +151,7 @@ class TaskControllerTest : BaseTest() {
         whenever(mockPersonDao.getOne(person.id!!)).thenReturn(person)
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findArchivedByConcernedPerson(person, pageRequest))
-                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
+            .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
         val result = controller.listArchivedForPerson(person.id, Optional.empty())
 
@@ -162,7 +162,7 @@ class TaskControllerTest : BaseTest() {
     fun `should list archived`() {
         val pageRequest = PageRequest.of(2, PAGE_SIZE)
         whenever(mockTaskDao.findArchived(pageRequest))
-                .thenReturn(PageImpl(listOf(task1, task2), pageRequest, 42))
+            .thenReturn(PageImpl(listOf(task1, task2), pageRequest, 42))
 
         val result = controller.listArchived(Optional.of(2))
 
@@ -378,12 +378,14 @@ internal fun createTask(id: Long?, user: User, person: Person, category: TaskCat
 }
 
 internal fun createCommand(concernedPersonId: Long?, assigneeId: Long?): TaskCommandDTO {
-    return TaskCommandDTO("new title",
-                          "new description",
-                          VARIOUS_CATEGORY_ID,
-                          LocalDate.now().plusDays(1),
-                          concernedPersonId,
-                          assigneeId)
+    return TaskCommandDTO(
+        "new title",
+        "new description",
+        VARIOUS_CATEGORY_ID,
+        LocalDate.now().plusDays(1),
+        concernedPersonId,
+        assigneeId
+    )
 }
 
 internal fun createSpentTime(id: Long, minutes: Int, creator: User?): SpentTime {

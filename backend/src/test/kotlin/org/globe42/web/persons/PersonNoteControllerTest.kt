@@ -141,7 +141,7 @@ class PersonNoteControllerTest : BaseTest() {
         val command = NoteCommandDTO("test3")
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
-            controller.update(person.id!!,87654L, command)
+            controller.update(person.id!!, 87654L, command)
         }
     }
 

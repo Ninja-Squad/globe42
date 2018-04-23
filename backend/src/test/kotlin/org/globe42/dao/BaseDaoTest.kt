@@ -30,19 +30,20 @@ abstract class BaseDaoTest {
     protected fun setup(configure: DbSetupBuilder.() -> Unit) {
         dbSetup(to = dataSource) {
             deleteAllFrom(
-                    "person_note",
-                    "note",
-                    "spent_time",
-                    "task",
-                    "guser",
-                    "income",
-                    "participation",
-                    "person",
-                    "family_situation",
-                    "income_source",
-                    "income_source_type",
-                    "postal_city",
-                    "country")
+                "person_note",
+                "note",
+                "spent_time",
+                "task",
+                "guser",
+                "income",
+                "participation",
+                "person",
+                "family_situation",
+                "income_source",
+                "income_source_type",
+                "postal_city",
+                "country"
+            )
 
             sequenceOf(('a'..'z').map { letter ->
                 sql("ALTER SEQUENCE mediation_code_${letter}_seq RESTART WITH 1")

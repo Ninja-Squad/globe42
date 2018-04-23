@@ -33,7 +33,7 @@ data class FileDTO(
     constructor(blob: BlobInfo, prefix: String) : this(
         blob.name.substring(prefix.length),
         blob.size,
-        if (blob.createTime == null) Instant.now() else Instant.ofEpochMilli(blob.createTime),
+        blob.createTime?.let { Instant.ofEpochMilli(it) } ?: Instant.now(),
         blob.contentType
     )
 }

@@ -37,9 +37,9 @@ class PostalCityControllerMvcTest {
         whenever(mockPostalCityDao.findByCity("ST E", LIMIT)).thenReturn(listOf(postalCity))
 
         mvc.perform(get("/api/cities").param("query", "ST E"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].code").value("42000"))
-                .andExpect(jsonPath("$[0].city").value("ST ETIENNE"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].code").value("42000"))
+            .andExpect(jsonPath("$[0].city").value("ST ETIENNE"))
     }
 
     @Test
@@ -50,7 +50,7 @@ class PostalCityControllerMvcTest {
         whenever(mockUploadParser.parse(body)).thenReturn(parsedCities)
 
         mvc.perform(post("/api/cities/uploads").content(body))
-                .andExpect(status().isCreated)
+            .andExpect(status().isCreated)
 
         verify(mockPostalCityDao).saveAllEfficiently(parsedCities)
     }

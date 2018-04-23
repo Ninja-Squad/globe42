@@ -30,7 +30,7 @@ class TaskStatisticsControllerTest : BaseTest() {
         val meal = TaskCategory(6L, "Meal")
         val user = User(1L, "jb")
         whenever(mockSpentTimeDao.findSpentTimeStatistics(criteria))
-                .thenReturn(listOf(SpentTimeStatistic(meal, user, 100)))
+            .thenReturn(listOf(SpentTimeStatistic(meal, user, 100)))
 
         val result = controller.spentTimeStatistics(criteria)
 

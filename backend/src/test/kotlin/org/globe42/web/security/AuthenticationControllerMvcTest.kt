@@ -45,12 +45,14 @@ class AuthenticationControllerMvcTest {
         val token = "token"
         whenever(mockJwtHelper.buildToken(user.id)).thenReturn(token)
 
-        mvc.perform(post("/api/authentication")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(credentials)))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.login").value(user.login!!))
-                .andExpect(jsonPath("$.admin").value(user.admin))
-                .andExpect(jsonPath("$.token").value(token))
+        mvc.perform(
+            post("/api/authentication")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(credentials))
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.login").value(user.login!!))
+            .andExpect(jsonPath("$.admin").value(user.admin))
+            .andExpect(jsonPath("$.token").value(token))
     }
 }

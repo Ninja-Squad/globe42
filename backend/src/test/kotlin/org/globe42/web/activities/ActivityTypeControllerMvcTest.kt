@@ -34,8 +34,8 @@ class ActivityTypeControllerMvcTest {
         whenever(mockPersonDao.findParticipants(ActivityType.MEAL)).thenReturn(listOf(person))
 
         mvc.perform(get("/api/activity-types/{activityType}/participants", ActivityType.MEAL))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(42))
-                .andExpect(jsonPath("$[0].email").value(person.email!!))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(42))
+            .andExpect(jsonPath("$[0].email").value(person.email!!))
     }
 }

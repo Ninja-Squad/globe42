@@ -51,14 +51,17 @@ class WeddingEventControllerTest : BaseTest() {
         val result = controller.list(person.id!!)
 
         assertThat(result).extracting<Long>(WeddingEventDTO::id).containsExactly(
-                firstWedding.id,
-                firstDivorce.id)
+            firstWedding.id,
+            firstDivorce.id
+        )
         assertThat(result).extracting<LocalDate>(WeddingEventDTO::date).containsExactly(
-                firstWedding.date,
-                firstDivorce.date)
+            firstWedding.date,
+            firstDivorce.date
+        )
         assertThat(result).extracting<WeddingEventType>(WeddingEventDTO::type).containsExactly(
-                firstWedding.type,
-                firstDivorce.type)
+            firstWedding.type,
+            firstDivorce.type
+        )
     }
 
     @Test

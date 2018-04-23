@@ -51,10 +51,10 @@ class UserControllerMvcTest {
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
         mvc.perform(get("/api/users/me"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.id").value(user.id!!))
-                .andExpect(jsonPath("$.login").value(user.login!!))
-                .andExpect(jsonPath("$.password").doesNotExist())
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(user.id!!))
+            .andExpect(jsonPath("$.login").value(user.login!!))
+            .andExpect(jsonPath("$.password").doesNotExist())
     }
 
     @Test
@@ -66,10 +66,12 @@ class UserControllerMvcTest {
 
         val command = ChangePasswordCommandDTO("newPassword")
 
-        mvc.perform(put("/api/users/me/passwords")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isNoContent)
+        mvc.perform(
+            put("/api/users/me/passwords")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isNoContent)
     }
 
     @Test
@@ -78,10 +80,10 @@ class UserControllerMvcTest {
         whenever(mockUserDao.findNotDeleted()).thenReturn(listOf(user))
 
         mvc.perform(get("/api/users"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(user.id!!))
-                .andExpect(jsonPath("$[0].login").value(user.login!!))
-                .andExpect(jsonPath("$[0].password").doesNotExist())
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(user.id!!))
+            .andExpect(jsonPath("$[0].login").value(user.login!!))
+            .andExpect(jsonPath("$[0].password").doesNotExist())
     }
 
     @Test
@@ -91,14 +93,16 @@ class UserControllerMvcTest {
         whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
         whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
         whenever(mockUserDao.save(any<User>()))
-                .thenReturnModifiedFirstArgument<User> { it.id = 42L }
+            .thenReturnModifiedFirstArgument<User> { it.id = 42L }
 
-        mvc.perform(post("/api/users")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.login").value(command.login))
-                .andExpect(jsonPath("$.generatedPassword").value("password"))
+        mvc.perform(
+            post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.login").value(command.login))
+            .andExpect(jsonPath("$.generatedPassword").value("password"))
     }
 
     @Test
@@ -109,10 +113,12 @@ class UserControllerMvcTest {
 
         val command = UserCommandDTO("test", true)
 
-        mvc.perform(put("/api/users/{userId}", user.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isNoContent)
+        mvc.perform(
+            put("/api/users/{userId}", user.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isNoContent)
     }
 
     @Test
@@ -122,7 +128,7 @@ class UserControllerMvcTest {
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
         mvc.perform(delete("/api/users/{userId}", user.id))
-                .andExpect(status().isNoContent)
+            .andExpect(status().isNoContent)
     }
 
     @Test
@@ -135,8 +141,8 @@ class UserControllerMvcTest {
         whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
 
         mvc.perform(post("/api/users/{userId}/password-resets", user.id))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.login").value(user.login!!))
-                .andExpect(jsonPath("$.generatedPassword").value("password"))
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.login").value(user.login!!))
+            .andExpect(jsonPath("$.generatedPassword").value("password"))
     }
 }

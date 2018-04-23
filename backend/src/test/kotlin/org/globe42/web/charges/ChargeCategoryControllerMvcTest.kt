@@ -31,8 +31,8 @@ class ChargeCategoryControllerMvcTest {
         whenever(mockChargeCategoryDao.findAll()).thenReturn(listOf(ChargeCategory(1L, "category1")))
 
         mvc.perform(get("/api/charge-categories"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("category1"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(1))
+            .andExpect(jsonPath("$[0].name").value("category1"))
     }
 }

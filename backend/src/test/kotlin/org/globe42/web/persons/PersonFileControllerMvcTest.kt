@@ -56,20 +56,28 @@ class PersonFileControllerMvcTest {
     @Throws(Exception::class)
     fun `should create`() {
         val file = FileDTO("new.txt", 3L, Instant.now(), "text/plain")
-        val multipartFile = MockMultipartFile("file",
-                                              "new.txt",
-                                              "text/plain",
-                                              "new".toByteArray(StandardCharsets.UTF_8))
+        val multipartFile = MockMultipartFile(
+            "file",
+            "new.txt",
+            "text/plain",
+            "new".toByteArray(StandardCharsets.UTF_8)
+        )
 
-        whenever(mockStorageService.create(eq(directory),
-                                           eq(multipartFile.originalFilename),
-                                           eq(multipartFile.contentType),
-                                           any())).thenReturn(file)
+        whenever(
+            mockStorageService.create(
+                eq(directory),
+                eq(multipartFile.originalFilename),
+                eq(multipartFile.contentType),
+                any()
+            )
+        ).thenReturn(file)
 
-        mvc.perform(multipart("/api/persons/{personId}/files", person.id)
-                              .file(multipartFile))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.name").value("new.txt"))
+        mvc.perform(
+            multipart("/api/persons/{personId}/files", person.id)
+                .file(multipartFile)
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.name").value("new.txt"))
     }
 
     @Test
@@ -82,10 +90,10 @@ class PersonFileControllerMvcTest {
         whenever(mockStorageService.get(directory, file.name)).thenReturn(readableFile)
 
         mvc.perform(get("/api/persons/{personId}/files/{name}", person.id, file.name))
-                .andDo { it.getAsyncResult() }
-                .andExpect(status().isOk)
-                .andExpect(content().contentType(MediaType.TEXT_PLAIN))
-                .andExpect(content().bytes("hello".toByteArray(StandardCharsets.UTF_8)))
-                .andExpect(header().longValue(HttpHeaders.CONTENT_LENGTH, 5L))
+            .andDo { it.getAsyncResult() }
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.TEXT_PLAIN))
+            .andExpect(content().bytes("hello".toByteArray(StandardCharsets.UTF_8)))
+            .andExpect(header().longValue(HttpHeaders.CONTENT_LENGTH, 5L))
     }
 }

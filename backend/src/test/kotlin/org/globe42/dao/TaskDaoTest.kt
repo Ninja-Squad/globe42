@@ -45,13 +45,29 @@ class TaskDaoTest : BaseDaoTest() {
                 withGeneratedValue("title", ValueGenerators.stringSequence("title_"))
                 withDefaultValue("total_spent_time_in_minutes", 0)
                 withDefaultValue("category_id", 6L)
-                columns("id", "status", "due_date", "creator_id", "assignee_id", "concerned_person_id", "archival_instant")
+                columns(
+                    "id",
+                    "status",
+                    "due_date",
+                    "creator_id",
+                    "assignee_id",
+                    "concerned_person_id",
+                    "archival_instant"
+                )
                 values(1L, TaskStatus.DONE, null, 1L, 1L, null, Instant.parse("2017-08-04T00:00:00Z"))
                 values(2L, TaskStatus.TODO, null, 1L, 2L, null, null)
                 values(3L, TaskStatus.TODO, null, 2L, 1L, null, null)
                 values(4L, TaskStatus.TODO, LocalDate.of(2017, 8, 1), 3L, null, null, null)
                 values(5L, TaskStatus.TODO, LocalDate.of(2017, 8, 7), 3L, null, 1L, null)
-                values(6L, TaskStatus.CANCELLED, LocalDate.of(2017, 8, 1), 3L, null, 1L, Instant.parse("2017-08-04T12:00:00Z"))
+                values(
+                    6L,
+                    TaskStatus.CANCELLED,
+                    LocalDate.of(2017, 8, 1),
+                    3L,
+                    null,
+                    1L,
+                    Instant.parse("2017-08-04T12:00:00Z")
+                )
             }
         }
     }
@@ -60,16 +76,16 @@ class TaskDaoTest : BaseDaoTest() {
     fun `should find todo`() {
         skipNextLaunch()
         assertThat(dao.findTodo(pageRequest()).content)
-                .extracting<Long>(Task::id)
-                .containsExactly(4L, 5L, 2L, 3L)
+            .extracting<Long>(Task::id)
+            .containsExactly(4L, 5L, 2L, 3L)
     }
 
     @Test
     fun `should find todo by assignee`() {
         skipNextLaunch()
         assertThat(dao.findTodoByAssignee(User(1L), pageRequest()).content)
-                .extracting<Long>(Task::id)
-                .containsExactly(3L)
+            .extracting<Long>(Task::id)
+            .containsExactly(3L)
     }
 
     @Test
@@ -82,24 +98,24 @@ class TaskDaoTest : BaseDaoTest() {
     fun `should find todo before`() {
         skipNextLaunch()
         assertThat(dao.findTodoBefore(LocalDate.of(2017, 8, 1), pageRequest()).content)
-                .extracting<Long>(Task::id)
-                .containsExactly(4L)
+            .extracting<Long>(Task::id)
+            .containsExactly(4L)
     }
 
     @Test
     fun `should find todo for person`() {
         skipNextLaunch()
         assertThat(dao.findTodoByConcernedPerson(Person(1L), pageRequest()).content)
-                .extracting<Long>(Task::id)
-                .containsExactly(5L)
+            .extracting<Long>(Task::id)
+            .containsExactly(5L)
     }
 
     @Test
     fun `should find archived for person`() {
         skipNextLaunch()
         assertThat(dao.findArchivedByConcernedPerson(Person(1L), pageRequest()).content)
-                .extracting<Long>(Task::id)
-                .containsExactly(6L)
+            .extracting<Long>(Task::id)
+            .containsExactly(6L)
     }
 
     @Test

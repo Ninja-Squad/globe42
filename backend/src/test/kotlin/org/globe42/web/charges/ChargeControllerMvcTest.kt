@@ -57,10 +57,10 @@ class ChargeControllerMvcTest {
         person.addCharge(charge)
 
         mvc.perform(get("/api/persons/{personId}/charges", person.id))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(charge.id!!))
-                .andExpect(jsonPath("$[0].monthlyAmount").value(charge.monthlyAmount!!.toDouble()))
-                .andExpect(jsonPath("$[0].type.id").value(charge.type!!.id!!.toInt()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(charge.id!!))
+            .andExpect(jsonPath("$[0].monthlyAmount").value(charge.monthlyAmount!!.toDouble()))
+            .andExpect(jsonPath("$[0].type.id").value(charge.type!!.id!!.toInt()))
     }
 
     @Test
@@ -71,7 +71,7 @@ class ChargeControllerMvcTest {
         whenever(mockChargeDao.findById(charge.id!!)).thenReturn(Optional.of(charge))
 
         mvc.perform(delete("/api/persons/{personId}/charges/{chargeId}", person.id, charge.id))
-                .andExpect(status().isNoContent)
+            .andExpect(status().isNoContent)
     }
 
     @Test
@@ -81,13 +81,15 @@ class ChargeControllerMvcTest {
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
         whenever(mockChargeDao.save(any<Charge>()))
-                .thenReturnModifiedFirstArgument<Charge> { charge -> charge.id = 345L }
+            .thenReturnModifiedFirstArgument<Charge> { charge -> charge.id = 345L }
 
         val command = ChargeCommandDTO(chargeTypeId, BigDecimal.TEN)
-        mvc.perform(post("/api/persons/{personId}/charges", person.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.id").value(345))
+        mvc.perform(
+            post("/api/persons/{personId}/charges", person.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.id").value(345))
     }
 }

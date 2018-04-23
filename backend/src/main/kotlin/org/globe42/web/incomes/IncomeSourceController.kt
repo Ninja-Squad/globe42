@@ -59,9 +59,11 @@ class IncomeSourceController(
     }
 
     private fun copyCommandToSource(command: IncomeSourceCommandDTO, source: IncomeSource) {
-        source.name = command.name
-        source.type = loadIncomeSourceType(command.typeId)
-        source.maxMonthlyAmount = command.maxMonthlyAmount
+        with(source) {
+            name = command.name
+            type = loadIncomeSourceType(command.typeId)
+            maxMonthlyAmount = command.maxMonthlyAmount
+        }
     }
 
     private fun loadIncomeSourceType(typeId: Long): IncomeSourceType {

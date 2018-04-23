@@ -29,7 +29,7 @@ class CountryDaoTest : BaseDaoTest() {
     @Test
     fun `should list sorted by name`() {
         assertThat(countryDao.findAllSortedByName())
-                .extracting<String>(Country::name)
-                .containsExactly("Belgique", "France")
+            .extracting<String>(Country::name)
+            .containsExactly("Belgique", "France")
     }
 }

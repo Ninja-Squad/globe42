@@ -55,12 +55,12 @@ class IncomeSourceControllerMvcTest {
         whenever(mockIncomeSourceDao.findAll()).thenReturn(listOf<IncomeSource>(incomeSource))
 
         mvc.perform(get("/api/income-sources"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$[0].id").value(42))
-                .andExpect(jsonPath("$[0].name").value(incomeSource.name!!))
-                .andExpect(jsonPath("$[0].type.id").value(incomeSource.type!!.id!!))
-                .andExpect(jsonPath("$[0].type.type").value(incomeSource.type!!.type!!))
-                .andExpect(jsonPath("$[0].maxMonthlyAmount").value(incomeSource.maxMonthlyAmount!!.toDouble()))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$[0].id").value(42))
+            .andExpect(jsonPath("$[0].name").value(incomeSource.name!!))
+            .andExpect(jsonPath("$[0].type.id").value(incomeSource.type!!.id!!))
+            .andExpect(jsonPath("$[0].type.type").value(incomeSource.type!!.type!!))
+            .andExpect(jsonPath("$[0].maxMonthlyAmount").value(incomeSource.maxMonthlyAmount!!.toDouble()))
     }
 
     @Test
@@ -69,8 +69,8 @@ class IncomeSourceControllerMvcTest {
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
 
         mvc.perform(get("/api/income-sources/{sourceId}", incomeSource.id))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.id").value(42))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(42))
     }
 
     @Test
@@ -80,11 +80,13 @@ class IncomeSourceControllerMvcTest {
         whenever(mockIncomeSourceDao.save(any<IncomeSource>())).thenReturn(incomeSource)
         whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type!!))
 
-        mvc.perform(post("/api/income-sources")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isCreated)
-                .andExpect(jsonPath("$.id").value(42))
+        mvc.perform(
+            post("/api/income-sources")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isCreated)
+            .andExpect(jsonPath("$.id").value(42))
     }
 
     @Test
@@ -95,9 +97,11 @@ class IncomeSourceControllerMvcTest {
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
         whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type!!))
 
-        mvc.perform(put("/api/income-sources/{sourceId}", incomeSource.id)
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsBytes(command)))
-                .andExpect(status().isNoContent)
+        mvc.perform(
+            put("/api/income-sources/{sourceId}", incomeSource.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(command))
+        )
+            .andExpect(status().isNoContent)
     }
 }

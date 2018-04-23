@@ -30,7 +30,8 @@ class AdminOnlyAspectTest : BaseTest() {
         whenever(mockCurrentUser.userId).thenReturn(userId)
         whenever(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false)
 
-        Assertions.assertThatExceptionOfType(ForbiddenException::class.java).isThrownBy { aspect.checkUserIsAdmin(null) }
+        Assertions.assertThatExceptionOfType(ForbiddenException::class.java)
+            .isThrownBy { aspect.checkUserIsAdmin(null) }
     }
 
     @Test

@@ -4,7 +4,9 @@ import org.globe42.dao.PersonDao
 import org.globe42.dao.TaskCategoryDao
 import org.globe42.dao.TaskDao
 import org.globe42.dao.UserDao
-import org.globe42.domain.*
+import org.globe42.domain.SpentTime
+import org.globe42.domain.Task
+import org.globe42.domain.TaskStatus
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
@@ -163,28 +165,26 @@ class TaskController(
     }
 
     private fun copyCommandToTask(command: TaskCommandDTO, task: Task) {
-        task.description = command.description
-        task.title = command.title
-        task.category = taskCategoryDao.findById(command.categoryId).orElseThrow {
-            BadRequestException("No category with ID ${command.categoryId}")
-        }
+        with(task) {
+            description = command.description
+            title = command.title
+            category = taskCategoryDao.findById(command.categoryId).orElseThrow {
+                BadRequestException("No category with ID ${command.categoryId}")
+            }
 
-        task.dueDate = command.dueDate
-        var concernedPerson: Person? = null
-        if (command.concernedPersonId != null) {
-            concernedPerson = personDao.findById(command.concernedPersonId).orElseThrow {
-                BadRequestException("no person with id ${command.concernedPersonId}")
+            dueDate = command.dueDate
+            concernedPerson = command.concernedPersonId?.let {
+                personDao.findById(it).orElseThrow {
+                    BadRequestException("no person with id $it")
+                }
+            }
+
+            assignee = command.assigneeId?.let {
+                userDao.findNotDeletedById(it).orElseThrow {
+                    BadRequestException("no user with id $it")
+                }
             }
         }
-        task.concernedPerson = concernedPerson
-
-        var assignee: User? = null
-        if (command.assigneeId != null) {
-            assignee = userDao.findNotDeletedById(command.assigneeId).orElseThrow {
-                BadRequestException("no user with id ${command.assigneeId}")
-            }
-        }
-        task.assignee = assignee
     }
 
     private fun pageRequest(@RequestParam page: Optional<Int>): PageRequest {

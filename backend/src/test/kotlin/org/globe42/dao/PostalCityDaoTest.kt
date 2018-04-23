@@ -5,7 +5,6 @@ import org.globe42.domain.PostalCity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
 
 /**
  * Tests for [PostalCityDao]
@@ -53,9 +52,9 @@ class PostalCityDaoTest : BaseDaoTest() {
 
     @Test
     fun `should save efficiently`() {
-        val list = Arrays.asList(
-                PostalCity("69000", "LYON"),
-                PostalCity("42170", "ST JUST ST RAMBERT")
+        val list = listOf(
+            PostalCity("69000", "LYON"),
+            PostalCity("42170", "ST JUST ST RAMBERT")
         )
         dao.saveAllEfficiently(list)
 
