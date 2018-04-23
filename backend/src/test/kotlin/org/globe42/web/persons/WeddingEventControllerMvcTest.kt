@@ -50,7 +50,7 @@ class WeddingEventControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldList() {
+    fun `should list`() {
         mvc.perform(get("/api/persons/{personId}/wedding-events", person.id))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$[0].id").value(34))
@@ -60,7 +60,7 @@ class WeddingEventControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldCreate() {
+    fun `should create`() {
         val date = LocalDate.of(2002, 3, 28)
         val command = WeddingEventCommandDTO(date,
                                              WeddingEventType.DIVORCE)
@@ -77,7 +77,7 @@ class WeddingEventControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldDelete() {
+    fun `should delete`() {
         mvc.perform(delete("/api/persons/{personId}/wedding-events/{eventId}", person.id, firstWedding.id))
                 .andExpect(status().isNoContent)
     }

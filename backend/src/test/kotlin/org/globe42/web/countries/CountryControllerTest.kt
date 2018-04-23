@@ -22,7 +22,7 @@ class CountryControllerTest : BaseTest() {
     private lateinit var controller: CountryController
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockCountryDao.findAllSortedByName()).thenReturn(
                 listOf(Country("BEL", "Belgique"), Country("FRA", "France")))
 

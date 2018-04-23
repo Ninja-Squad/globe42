@@ -30,7 +30,7 @@ class AuthenticationControllerTest : BaseTest() {
     private lateinit var controller: AuthenticationController
 
     @Test
-    fun shouldThrowWhenUnknownUser() {
+    fun `should throw when unknown user`() {
         val credentials = createCredentials()
 
         whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.empty())
@@ -39,7 +39,7 @@ class AuthenticationControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenPasswordDoesntMatch() {
+    fun `should throw when password doesnt match`() {
         val credentials = createCredentials()
 
         val user = createUser()
@@ -50,7 +50,7 @@ class AuthenticationControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldAuthenticate() {
+    fun `should authenticate`() {
         val credentials = createCredentials()
 
         val user = createUser()

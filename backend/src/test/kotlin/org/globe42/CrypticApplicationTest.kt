@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class CrypticApplicationTest {
 
     @Test
-    fun contextLoads() {
+    fun `context loads`() {
     }
 
 }

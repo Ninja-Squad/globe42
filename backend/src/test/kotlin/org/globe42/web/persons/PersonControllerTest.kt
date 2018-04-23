@@ -61,7 +61,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockPersonDao.findNotDeleted()).thenReturn(listOf<Person>(person))
 
         val result = controller.list()
@@ -70,7 +70,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListDeleted() {
+    fun `should list deleted`() {
         whenever(mockPersonDao.findDeleted()).thenReturn(listOf<Person>(person))
 
         val result = controller.listDeleted()
@@ -79,7 +79,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         val (identity) = controller.get(person.id!!)
@@ -88,14 +88,14 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfNotFoundWhenGetting() {
+    fun `should throw if not found when getting`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(person.id!!) }
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createCommand()
 
         whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
@@ -110,7 +110,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreateWithLowercaseLastName() {
+    fun `should create with lowercase last name`() {
         val command = createCommand("lacote")
 
         whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
@@ -120,7 +120,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreateWithLastNameStartingWithBizarreLetter() {
+    fun `should create with last name starting with bizarre letter`() {
         val command = createCommand("\$foo")
 
         whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
@@ -130,7 +130,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldNotGenerateMediationCodeIfMediationDisabled() {
+    fun `should not generate mediation code if mediation disabled`() {
         val command = createCommand("lacote", false, null)
 
         whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
@@ -139,7 +139,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreateWithSpouse() {
+    fun `should create with spouse`() {
         val spouseId = 200L
         val command = createCommand("Lacote", true, spouseId)
 
@@ -160,7 +160,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
         whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
         val command = createCommand()
@@ -171,7 +171,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdateWhenNoNationality() {
+    fun `should update when no nationality`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
         whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
         val command = createCommandWithNoNationality()
@@ -182,7 +182,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldNotUpdateMediationCodeIfLetterStaysTheSame() {
+    fun `should not update mediation code if letter stays the same`() {
         person.mediationCode = "L42"
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
@@ -196,7 +196,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreateMediationCodeIfMediationEnabledAndNotBefore() {
+    fun `should create mediation code if mediation enabled and not before`() {
         person.mediationCode = null
         person.mediationEnabled = false
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
@@ -211,7 +211,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdateWithSpouseWhenNoSpouseBefore() {
+    fun `should update with spouse when no spouse before`() {
         val spouseId = 200L
         val command = createCommand("Lacote", true, spouseId)
 
@@ -228,7 +228,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdateWithSpouseWhenOtherSpouseBefore() {
+    fun `should update with spouse when other spouse before`() {
         val spouseId = 200L
         val command = createCommand("Lacote", true, spouseId)
 
@@ -251,7 +251,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdateWithoutSpouseWhenOtherSpouseBefore() {
+    fun `should update without spouse when other spouse before`() {
         val command = createCommand("Lacote", true, null)
 
         val previousSpouse = Person(100L)
@@ -269,7 +269,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDeleteCoupleOfNewSpouse() {
+    fun `should delete couple of new spouse`() {
         val spouseId = 200L
         val command = createCommand("Lacote", true, spouseId)
 
@@ -292,7 +292,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfNotFoundWhenUpdating() {
+    fun `should throw if not found when updating`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -302,7 +302,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         controller.delete(person.id!!)
@@ -311,14 +311,14 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfNotFoundWhenDeleting() {
+    fun `should throw if not found when deleting`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(person.id!!) }
     }
 
     @Test
-    fun shouldResurrect() {
+    fun `should resurrect`() {
         person.deleted = true
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
@@ -328,7 +328,7 @@ class PersonControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfNotFoundWhenResurrecting() {
+    fun `should throw if not found when resurrecting`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.resurrect(person.id!!) }

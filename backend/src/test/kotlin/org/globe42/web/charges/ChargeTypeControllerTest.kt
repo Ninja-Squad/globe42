@@ -49,7 +49,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockChargeTypeDao.findAll()).thenReturn(listOf<ChargeType>(chargeType))
 
         val result = controller.list()
@@ -65,7 +65,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         val chargeTypeId = chargeType.id!!
         whenever(mockChargeTypeDao.findById(chargeTypeId)).thenReturn(Optional.of(chargeType))
 
@@ -75,14 +75,14 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenGettingWithUnknownId() {
+    fun `should throw when getting with unknown id`() {
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(chargeType.id!!) }
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createCommand()
 
         whenever(mockChargeCategoryDao.findById(command.categoryId))
@@ -98,7 +98,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingWithUnknownChargeCategory() {
+    fun `should throw when creating with unknown charge category`() {
         val command = createCommand()
 
         whenever(mockChargeCategoryDao.findById(command.categoryId))
@@ -109,7 +109,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingWithExistingName() {
+    fun `should throw when creating with existing name`() {
         val command = createCommand()
 
         whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.empty())
@@ -118,7 +118,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createCommand()
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
@@ -131,7 +131,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfNotFoundWhenUpdating() {
+    fun `should throw if not found when updating`() {
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -141,7 +141,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
+    fun `should throw when updating with already used nick name`() {
         val command = createCommand()
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
@@ -155,7 +155,7 @@ class ChargeTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdateIfSameSurnameIsKept() {
+    fun `should update if same surname is kept`() {
         val command = createCommand()
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))

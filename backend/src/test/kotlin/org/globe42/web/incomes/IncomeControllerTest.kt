@@ -42,7 +42,7 @@ class IncomeControllerTest : BaseTest() {
     private lateinit var controller: IncomeController
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val personId = 42L
         val person = Person(personId)
         val income = createIncome(12L)
@@ -58,7 +58,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfPersonNotFound() {
+    fun `should throw if person not found`() {
         val personId = 42L
         whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
 
@@ -66,7 +66,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         val personId = 42L
         val incomeId = 12L
         val income = Income(incomeId)
@@ -79,7 +79,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldAcceptDeletionIfNotFoundToBeIdempotent() {
+    fun `should accept deletion if not found to be idempotent`() {
         val incomeId = 12L
         whenever(mockIncomeDao.findById(incomeId)).thenReturn(Optional.empty())
 
@@ -89,7 +89,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectDeletionIfNotInCorrectPerson() {
+    fun `should reject deletion if not in correct person`() {
         val incomeId = 12L
         val personId = 42L
         val income = Income(incomeId)
@@ -101,7 +101,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val personId = 42L
         val sourceId = 12L
 
@@ -122,7 +122,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingForUnknownPerson() {
+    fun `should throw when creating for unknown person`() {
         val personId = 42L
         val sourceId = 12L
 
@@ -136,7 +136,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingWithTooLargeAmount() {
+    fun `should throw when creating with too large amount`() {
         val personId = 42L
         val sourceId = 12L
 
@@ -151,7 +151,7 @@ class IncomeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingForUnknownSource() {
+    fun `should throw when creating for unknown source`() {
         val personId = 42L
         val sourceId = 12L
 

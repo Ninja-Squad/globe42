@@ -39,7 +39,7 @@ class ChargeCategoryControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockChargeCategoryDao.findById(chargeCategory.id!!)).thenReturn(Optional.of(chargeCategory))
 
         val result = controller.get(chargeCategory.id!!)
@@ -48,7 +48,7 @@ class ChargeCategoryControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockChargeCategoryDao.findAll()).thenReturn(listOf<ChargeCategory>(chargeCategory))
 
         val result = controller.list()
@@ -59,7 +59,7 @@ class ChargeCategoryControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createCommand()
 
         whenever(mockChargeCategoryDao.existsByName(command.name)).thenReturn(false)
@@ -75,7 +75,7 @@ class ChargeCategoryControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createCommand()
 
         whenever(mockChargeCategoryDao.findById(chargeCategory.id!!)).thenReturn(Optional.of(chargeCategory))

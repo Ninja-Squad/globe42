@@ -30,14 +30,14 @@ class IncomeSourceDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindIfExistsByName() {
+    fun `should find if exists by name`() {
         skipNextLaunch()
         assertThat(dao.existsByName("hello")).isFalse()
         assertThat(dao.existsByName("agirc")).isTrue()
     }
 
     @Test
-    fun shouldFindByName() {
+    fun `should find by name`() {
         skipNextLaunch()
         assertThat(dao.findByName("hello")).isEmpty()
         assertThat(dao.findByName("agirc")).isNotEmpty()

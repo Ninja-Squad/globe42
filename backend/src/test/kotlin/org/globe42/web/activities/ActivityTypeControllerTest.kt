@@ -24,7 +24,7 @@ class ActivityTypeControllerTest : BaseTest() {
     private lateinit var controller: ActivityTypeController
 
     @Test
-    fun shouldListParticipants() {
+    fun `should list participants`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
         whenever(mockPersonDao.findParticipants(ActivityType.MEAL)).thenReturn(Arrays.asList(person))
 

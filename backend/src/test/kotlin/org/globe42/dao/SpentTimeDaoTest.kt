@@ -59,7 +59,7 @@ class SpentTimeDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindSpentTimeStatisticsWithoutCriteria() {
+    fun `should find spent time statistics without criteria`() {
         val criteria = SpentTimeStatisticsCriteriaDTO(null, null)
         val result = dao.findSpentTimeStatistics(criteria)
         assertThat(result).hasSize(4)
@@ -71,7 +71,7 @@ class SpentTimeDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindSpentTimeStatisticsWithStartDate() {
+    fun `should find spent time statistics with start date`() {
         val criteria = SpentTimeStatisticsCriteriaDTO(LocalDate.of(2017, 12, 3), null)
         val result = dao.findSpentTimeStatistics(criteria)
         assertThat(result).hasSize(4)
@@ -83,7 +83,7 @@ class SpentTimeDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindSpentTimeStatisticsWithEndDate() {
+    fun `should find spent time statistics with end date`() {
         val criteria = SpentTimeStatisticsCriteriaDTO(null, LocalDate.of(2017, 12, 4))
         val result = dao.findSpentTimeStatistics(criteria)
         assertThat(result).hasSize(4)
@@ -95,7 +95,7 @@ class SpentTimeDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindSpentTimeStatisticsWithStartAndEndDate() {
+    fun `should find spent time statistics with start and end date`() {
         val criteria = SpentTimeStatisticsCriteriaDTO(LocalDate.of(2017, 12, 3),
                                                       LocalDate.of(2017, 12, 4))
         val result = dao.findSpentTimeStatistics(criteria)

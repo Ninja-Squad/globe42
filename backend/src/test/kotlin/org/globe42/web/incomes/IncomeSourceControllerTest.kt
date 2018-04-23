@@ -49,7 +49,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockIncomeSourceDao.findAll()).thenReturn(listOf(incomeSource))
 
         val result = controller.list()
@@ -65,7 +65,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
 
         val result = controller.get(incomeSource.id!!)
@@ -74,14 +74,14 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenGettingWithUnknownId() {
+    fun `should throw when getting with unknown id`() {
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(incomeSource.id!!) }
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceTypeDao.findById(command.typeId))
@@ -97,7 +97,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingWithUnknownIncomeSourceType() {
+    fun `should throw when creating with unknown income source type`() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceTypeDao.findById(command.typeId))
@@ -108,7 +108,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingWithExistingName() {
+    fun `should throw when creating with existing name`() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.empty())
@@ -117,7 +117,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
@@ -130,7 +130,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfNotFoundWhenUpdating() {
+    fun `should throw if not found when updating`() {
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -139,7 +139,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
+    fun `should throw when updating with already used nick name`() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
@@ -153,7 +153,7 @@ class IncomeSourceControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdateIfSameSurnameIsKept() {
+    fun `should update if same surname is kept`() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))

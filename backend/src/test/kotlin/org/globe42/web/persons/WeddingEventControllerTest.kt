@@ -47,7 +47,7 @@ class WeddingEventControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val result = controller.list(person.id!!)
 
         assertThat(result).extracting<Long>(WeddingEventDTO::id).containsExactly(
@@ -62,7 +62,7 @@ class WeddingEventControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val date = LocalDate.of(2018, 3, 1)
         val command = WeddingEventCommandDTO(date, WeddingEventType.WEDDING)
         whenever(mockPersonDao.flush()).then {
@@ -78,7 +78,7 @@ class WeddingEventControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         controller.delete(person.id!!, firstDivorce.id!!)
 
         assertThat(person.getWeddingEvents()).hasSize(1)

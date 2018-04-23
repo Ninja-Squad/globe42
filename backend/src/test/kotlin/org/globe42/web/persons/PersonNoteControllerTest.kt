@@ -65,7 +65,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         val result = controller.list(person.id!!)
@@ -81,14 +81,14 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenListingForUnknownPerson() {
+    fun `should throw when listing for unknown person`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(person.id!!) }
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
         whenever(mockPersonDao.flush()).thenAnswer {
             val addedNote = person.getNotes().find({ it.text == "test3" })
@@ -106,7 +106,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingForUnknownPerson() {
+    fun `should throw when creating for unknown person`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
         val command = NoteCommandDTO("test3")
 
@@ -116,7 +116,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         val command = NoteCommandDTO("test3")
@@ -126,7 +126,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenUpdatingForUnknownPerson() {
+    fun `should throw when updating for unknown person`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
         val command = NoteCommandDTO("test3")
 
@@ -136,7 +136,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenUpdatingUnknownNote() {
+    fun `should throw when updating unknown note`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
         val command = NoteCommandDTO("test3")
 
@@ -146,7 +146,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         controller.delete(person.id!!, note1.id!!)
@@ -155,7 +155,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenDeletingForUnknownPerson() {
+    fun `should throw when deleting for unknown person`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -164,7 +164,7 @@ class PersonNoteControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldNoteThrowWhenDeletingUnknownNote() {
+    fun `should note throw when deleting unknown note`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
         controller.delete(person.id!!, 876543L)
         assertThat(person.getNotes()).containsOnly(note1, note2)

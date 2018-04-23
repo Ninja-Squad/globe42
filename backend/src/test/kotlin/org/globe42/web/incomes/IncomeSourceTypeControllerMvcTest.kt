@@ -27,7 +27,7 @@ class IncomeSourceTypeControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockIncomeSourceTypeDao.findAll()).thenReturn(listOf(IncomeSourceType(1L, "type1")))
 
         mvc.perform(get("/api/income-source-types"))

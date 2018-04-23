@@ -23,7 +23,7 @@ class PersonCommandDTOTest {
 
     @Test
     @Throws(IOException::class)
-    fun shouldDeserialize() {
+    fun `should deserialize`() {
         val json = """{
             "firstName": "Agnes",
             "lastName": "Crepet",

@@ -40,12 +40,12 @@ class AdminOnlyIntegrationTest {
     }
 
     @Test
-    fun shouldThrowWhenCallingAdminOnlyAnnotatedMethod() {
+    fun `should throw when calling admin only annotated method`() {
         assertThatExceptionOfType(ForbiddenException::class.java).isThrownBy { adminOnlyTester.foo() }
     }
 
     @Test
-    fun shouldNotThrowWhenCallingNotAnnotatedMethod() {
+    fun `should not throw when calling not annotated method`() {
         adminOnlyTester.bar()
     }
 

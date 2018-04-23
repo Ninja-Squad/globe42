@@ -44,7 +44,7 @@ class AuthenticationTest {
     private lateinit var mvc: MockMvc
 
     @Test
-    fun shouldGetUnauthorizedError() {
+    fun `should get unauthorized error`() {
         mvc.perform(get("/api/persons"))
                 .andExpect(status().isUnauthorized)
     }

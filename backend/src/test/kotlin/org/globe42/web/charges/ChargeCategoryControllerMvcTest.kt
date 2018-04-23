@@ -27,7 +27,7 @@ class ChargeCategoryControllerMvcTest {
     private lateinit var mvc: MockMvc
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockChargeCategoryDao.findAll()).thenReturn(listOf(ChargeCategory(1L, "category1")))
 
         mvc.perform(get("/api/charge-categories"))

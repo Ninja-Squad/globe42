@@ -50,7 +50,7 @@ class ChargeTypeControllerMvcTest {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockChargeTypeDao.findAll()).thenReturn(listOf<ChargeType>(chargeType))
 
         mvc.perform(get("/api/charge-types"))
@@ -63,7 +63,7 @@ class ChargeTypeControllerMvcTest {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
 
         mvc.perform(get("/api/charge-types/{typeId}", chargeType.id))
@@ -72,7 +72,7 @@ class ChargeTypeControllerMvcTest {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createCommand()
         whenever(mockChargeTypeDao.save(any<ChargeType>())).thenReturn(chargeType)
         whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.of(chargeType.category!!))
@@ -85,7 +85,7 @@ class ChargeTypeControllerMvcTest {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createCommand()
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))

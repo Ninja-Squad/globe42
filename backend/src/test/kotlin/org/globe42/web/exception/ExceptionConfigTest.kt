@@ -14,7 +14,7 @@ import org.springframework.web.context.request.ServletWebRequest
  */
 class ExceptionConfigTest {
     @Test
-    fun shouldIncludeFunctionalError() {
+    fun `should include functional error`() {
         var result = ExceptionConfig().errorAttributes()
         val request = MockHttpServletRequest()
         val webRequest = ServletWebRequest(request)
@@ -29,7 +29,7 @@ class ExceptionConfigTest {
     }
 
     @Test
-    fun shouldNotIncludeFunctionalErrorIfNotPresent() {
+    fun `should not include functional error if not present`() {
         var result = ExceptionConfig().errorAttributes()
         val request = MockHttpServletRequest()
         val webRequest = ServletWebRequest(request)
@@ -44,7 +44,7 @@ class ExceptionConfigTest {
     }
 
     @Test
-    fun shouldNotIncludeFunctionalErrorIfNotBadRequestException() {
+    fun `should not include functional error if not bad request exception`() {
         var result = ExceptionConfig().errorAttributes()
         val request = MockHttpServletRequest()
         val webRequest = ServletWebRequest(request)

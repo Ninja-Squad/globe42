@@ -27,7 +27,7 @@ class CountryDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldListSortedByName() {
+    fun `should list sorted by name`() {
         assertThat(countryDao.findAllSortedByName())
                 .extracting<String>(Country::name)
                 .containsExactly("Belgique", "France")

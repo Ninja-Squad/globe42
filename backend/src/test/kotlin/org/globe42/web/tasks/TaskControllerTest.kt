@@ -76,7 +76,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListTodo() {
+    fun `should list todo`() {
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findTodo(pageRequest)).thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
@@ -96,7 +96,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListUnassigned() {
+    fun `should list unassigned`() {
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findTodoUnassigned(pageRequest))
                 .thenReturn(singlePage(listOf(task1, task2), pageRequest))
@@ -107,7 +107,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListMine() {
+    fun `should list mine`() {
         whenever(mockCurrentUser.userId).thenReturn(user.id)
         whenever(mockUserDao.getOne(user.id!!)).thenReturn(user)
 
@@ -121,7 +121,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListBefore() {
+    fun `should list before`() {
         val maxDate = LocalDate.of(2017, 8, 4)
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         whenever(mockTaskDao.findTodoBefore(maxDate, pageRequest))
@@ -133,7 +133,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListTodoForPerson() {
+    fun `should list todo for person`() {
         val person = Person(42L)
         whenever(mockPersonDao.getOne(person.id!!)).thenReturn(person)
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
@@ -146,7 +146,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListArchivedForPerson() {
+    fun `should list archived for person`() {
         val person = Person(42L)
         whenever(mockPersonDao.getOne(person.id!!)).thenReturn(person)
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
@@ -159,7 +159,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListArchived() {
+    fun `should list archived`() {
         val pageRequest = PageRequest.of(2, PAGE_SIZE)
         whenever(mockTaskDao.findArchived(pageRequest))
                 .thenReturn(PageImpl(listOf(task1, task2), pageRequest, 42))
@@ -174,7 +174,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldAssign() {
+    fun `should assign`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
         whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
 
@@ -184,7 +184,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenAssigningUnexistingTask() {
+    fun `should throw when assigning unexisting task`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.empty())
         whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
 
@@ -194,7 +194,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenAssigningToUnexistingUser() {
+    fun `should throw when assigning to unexisting user`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
         whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.empty())
 
@@ -204,7 +204,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUnassign() {
+    fun `should unassign`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
 
         controller.unassign(task2.id!!)
@@ -213,14 +213,14 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenUnassigningUnexistingTask() {
+    fun `should throw when unassigning unexisting task`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.unassign(task2.id!!) }
     }
 
     @Test
-    fun shouldChangeStatus() {
+    fun `should change status`() {
         whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
 
         controller.changeStatus(task1.id!!, TaskStatusChangeCommandDTO(TaskStatus.DONE))
@@ -230,7 +230,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenChangingStatusOfUnexistingTask() {
+    fun `should throw when changing status of unexisting task`() {
         whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -239,7 +239,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
 
         val (id) = controller.get(task1.id!!)
@@ -248,14 +248,14 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenGettingUnexistingTask() {
+    fun `should throw when getting unexisting task`() {
         whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(task1.id!!) }
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createCommand(12L, 13L)
 
         val person = Person(command.concernedPersonId!!, "John", "Doe", Gender.MALE)
@@ -280,7 +280,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreateWhenNullReferencesPassedInCommand() {
+    fun `should create when null references passed in command`() {
         val command = createCommand(null, null)
 
         whenever(mockCurrentUser.userId).thenReturn(user.id)
@@ -293,7 +293,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createCommand(12L, 13L)
 
         val person = Person(command.concernedPersonId!!, "Jack", "Black", Gender.MALE)
@@ -315,7 +315,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldListSpentTimes() {
+    fun `should list spent times`() {
         task1.addSpentTime(createSpentTime(1L, 10, user))
         task1.addSpentTime(createSpentTime(2L, 15, user))
 
@@ -330,7 +330,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldAddSpentTime() {
+    fun `should add spent time`() {
         whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
         whenever(mockCurrentUser.userId).thenReturn(user.id)
         whenever(mockUserDao.getOne(user.id!!)).thenReturn(user)
@@ -345,7 +345,7 @@ class TaskControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDeleteSpentTime() {
+    fun `should delete spent time`() {
         val spentTime = createSpentTime(1L, 10, user)
         task1.addSpentTime(spentTime)
         whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
@@ -392,4 +392,3 @@ internal fun createSpentTime(id: Long, minutes: Int, creator: User?): SpentTime 
     spentTime.creator = creator
     return spentTime
 }
-

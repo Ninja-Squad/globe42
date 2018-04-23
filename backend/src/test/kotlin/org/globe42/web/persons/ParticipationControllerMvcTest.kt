@@ -47,14 +47,14 @@ class ParticipationControllerMvcTest {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         mvc.perform(get("/api/persons/{personId}/participations", person.id))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$[0].id").value(34))
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = ParticipationCommandDTO(ActivityType.SOCIAL_MEDIATION)
         whenever(mockPersonDao.flush()).then {
             person.getParticipations().find { it.activityType == ActivityType.SOCIAL_MEDIATION }?.let { it.id = 345L }
@@ -68,7 +68,7 @@ class ParticipationControllerMvcTest {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         mvc.perform(delete("/api/persons/{personId}/participations/{participationId}",
                              person.id,
                              mealParticipation.id))
