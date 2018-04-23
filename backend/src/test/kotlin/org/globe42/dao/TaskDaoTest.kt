@@ -57,7 +57,7 @@ class TaskDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindTodo() {
+    fun `should find todo`() {
         skipNextLaunch()
         assertThat(dao.findTodo(pageRequest()).content)
                 .extracting<Long>(Task::id)
@@ -65,7 +65,7 @@ class TaskDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindTodoByAssignee() {
+    fun `should find todo by assignee`() {
         skipNextLaunch()
         assertThat(dao.findTodoByAssignee(User(1L), pageRequest()).content)
                 .extracting<Long>(Task::id)
@@ -73,13 +73,13 @@ class TaskDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindTodoUnassigned() {
+    fun `should find todo unassigned`() {
         skipNextLaunch()
         assertThat(dao.findTodoUnassigned(pageRequest()).content).extracting<Long>(Task::id).containsExactly(4L, 5L)
     }
 
     @Test
-    fun shouldFindTodoBefore() {
+    fun `should find todo before`() {
         skipNextLaunch()
         assertThat(dao.findTodoBefore(LocalDate.of(2017, 8, 1), pageRequest()).content)
                 .extracting<Long>(Task::id)
@@ -87,7 +87,7 @@ class TaskDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindTodoForPerson() {
+    fun `should find todo for person`() {
         skipNextLaunch()
         assertThat(dao.findTodoByConcernedPerson(Person(1L), pageRequest()).content)
                 .extracting<Long>(Task::id)
@@ -95,7 +95,7 @@ class TaskDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindArchivedForPerson() {
+    fun `should find archived for person`() {
         skipNextLaunch()
         assertThat(dao.findArchivedByConcernedPerson(Person(1L), pageRequest()).content)
                 .extracting<Long>(Task::id)
@@ -103,7 +103,7 @@ class TaskDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindArchived() {
+    fun `should find archived`() {
         skipNextLaunch()
         val result = dao.findArchived(pageRequest())
         assertThat(result.totalElements).isEqualTo(2)

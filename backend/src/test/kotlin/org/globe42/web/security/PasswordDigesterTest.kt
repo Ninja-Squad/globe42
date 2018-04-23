@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
  */
 class PasswordDigesterTest {
     @Test
-    fun hashedPasswordShouldMatch() {
+    fun `hashed password should match`() {
         val password = "password"
         val digester = PasswordDigester()
         val hash = digester.hash(password)
@@ -18,20 +18,20 @@ class PasswordDigesterTest {
     }
 
     @Test
-    fun passwordShouldNotMatchWithNullHashedPassword() {
+    fun `password should not match with null hashed password`() {
         val digester = PasswordDigester()
         assertThat(digester.match("foobar", null)).isFalse()
     }
 
     @Test
-    fun badPasswordShouldNotMatch() {
+    fun `bad password should not match`() {
         val password = "password"
         val digester = PasswordDigester()
         assertThat(digester.match("badPassword", digester.hash(password)))
     }
 
     @Test
-    fun hashesShouldBeDifferentWithSamePassword() {
+    fun `hashes should be different with same password`() {
         val password = "password"
         val digester = PasswordDigester()
         val hash1 = digester.hash(password)

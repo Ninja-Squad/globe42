@@ -11,7 +11,7 @@ import java.util.regex.Pattern
 class PersonTest {
 
     @Test
-    fun shouldValidateFiscalNumber() {
+    fun `should validate fiscal number`() {
         val pattern = Pattern.compile(FISCAL_NUMBER_REGEXP)
 
         assertThat(pattern.matcher("1abcdefghijk3").matches()).isFalse()
@@ -21,7 +21,7 @@ class PersonTest {
     }
 
     @Test
-    fun shouldAcceptEmptyStringAsFiscalNumber() {
+    fun `should accept empty string as fiscal number`() {
         val pattern = Pattern.compile(FISCAL_NUMBER_REGEXP)
 
         assertThat(pattern.matcher("").matches()).isTrue()

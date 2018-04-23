@@ -17,7 +17,7 @@ class JwtHelperTest {
     }
 
     @Test
-    fun shouldBuildAndParseToken() {
+    fun `should build and parse token`() {
         // given a user
         val userId = 42L
 

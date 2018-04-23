@@ -28,7 +28,7 @@ class ActivityTypeControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldListParticipants() {
+    fun `should list participants`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
         person.email = "john@doe.com"
         whenever(mockPersonDao.findParticipants(ActivityType.MEAL)).thenReturn(listOf(person))

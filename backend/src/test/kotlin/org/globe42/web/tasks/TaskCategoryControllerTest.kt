@@ -22,7 +22,7 @@ class TaskCategoryControllerTest : BaseTest() {
     private lateinit var controller: TaskCategoryController
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockTaskCategoryDao.findAll()).thenReturn(listOf(TaskCategory(6L, "Various")))
         val result = controller.list()
         assertThat(result).containsExactly(TaskCategoryDTO(6L, "Various"))

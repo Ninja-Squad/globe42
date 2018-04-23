@@ -58,7 +58,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockPersonDao.findNotDeleted()).thenReturn(listOf<Person>(person))
 
         mvc.perform(get("/api/persons"))
@@ -67,7 +67,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun shouldListDeleted() {
+    fun `should list deleted`() {
         whenever(mockPersonDao.findDeleted()).thenReturn(listOf<Person>(person))
 
         mvc.perform(get("/api/persons").param("deleted", ""))
@@ -76,7 +76,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         mvc.perform(get("/api/persons/{personId}", person.id))
@@ -87,7 +87,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun should404IfPersonNotFound() {
+    fun `should 404 if person not found`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
         mvc.perform(get("/api/persons/{personId}", person.id))
@@ -95,7 +95,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 1L }
 
         mvc.perform(post("/api/persons")
@@ -106,7 +106,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         mvc.perform(put("/api/persons/{personId}", person.id)
@@ -116,7 +116,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         mvc.perform(delete("/api/persons/{personId}", person.id))
@@ -124,7 +124,7 @@ class PersonControllerMvcTest {
     }
 
     @Test
-    fun shouldResurrect() {
+    fun `should resurrect`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         mvc.perform(delete("/api/persons/{personId}/deletion", person.id))

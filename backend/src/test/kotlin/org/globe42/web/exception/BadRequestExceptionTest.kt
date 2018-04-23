@@ -11,7 +11,7 @@ import java.util.*
  */
 class BadRequestExceptionTest {
     @Test
-    fun shouldCreateWithMessage() {
+    fun `should create with message`() {
         val e = BadRequestException("foo")
 
         assertThat(e.error).isNull()
@@ -19,7 +19,7 @@ class BadRequestExceptionTest {
     }
 
     @Test
-    fun shouldCreateWithErrorCode() {
+    fun `should create with error code`() {
         val e = BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS)
 
         assertThat(e.message).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString())
@@ -28,7 +28,7 @@ class BadRequestExceptionTest {
     }
 
     @Test
-    fun shouldCreateWithErrorCodeAndParameter() {
+    fun `should create with error code and parameter`() {
         val e = BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS, "foo", "bar")
 
         assertThat(e.message).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString())
@@ -37,7 +37,7 @@ class BadRequestExceptionTest {
     }
 
     @Test
-    fun shouldCreateWithFunctionalError() {
+    fun `should create with functional error`() {
         val e = BadRequestException(FunctionalError(ErrorCode.USER_LOGIN_ALREADY_EXISTS,
                                                     Collections.singletonMap("foo", "bar")))
 

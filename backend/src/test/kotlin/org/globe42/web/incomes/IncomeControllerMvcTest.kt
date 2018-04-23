@@ -53,7 +53,7 @@ class IncomeControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldList() {
+    fun `should list`() {
         val income = createIncome(12L)
         person.addIncome(income)
 
@@ -66,7 +66,7 @@ class IncomeControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldDelete() {
+    fun `should delete`() {
         val income = createIncome(12L)
         person.addIncome(income)
 
@@ -78,7 +78,7 @@ class IncomeControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldCreate() {
+    fun `should create`() {
         val incomeSource = createIncomeSource(12L)
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))

@@ -72,7 +72,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldListTodos() {
+    fun `should list todos`() {
         whenever(mockTaskDao.findTodo(any<Pageable>())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks"))
@@ -83,7 +83,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldListTodoBefore() {
+    fun `should list todo before`() {
         whenever(mockTaskDao.findTodoBefore(eq(LocalDate.of(2017, 8, 1)), any()))
                 .thenReturn(singlePage(listOf(task)))
 
@@ -94,7 +94,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldListTodoForPerson() {
+    fun `should list todo for person`() {
         val person = Person(1L)
         whenever(mockPersonDao.getOne(1L)).thenReturn(person)
         whenever(mockTaskDao.findTodoByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
@@ -106,7 +106,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldListArchivedForPerson() {
+    fun `should list archived for person`() {
         val person = Person(1L)
         whenever(mockPersonDao.getOne(1L)).thenReturn(person)
         whenever(mockTaskDao.findArchivedByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
@@ -118,7 +118,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldListUnassigned() {
+    fun `should list unassigned`() {
         whenever(mockTaskDao.findTodoUnassigned(any())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?unassigned"))
@@ -128,7 +128,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldAssign() {
+    fun `should assign`() {
         whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
         val otherUser = User(5433L)
         whenever(mockUserDao.findNotDeletedById(otherUser.id!!)).thenReturn(Optional.of(otherUser))
@@ -143,7 +143,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldChangeStatus() {
+    fun `should change status`() {
         whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
 
         mvc.perform(post("/api/tasks/{taskId}/status-changes", task.id)
@@ -156,7 +156,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createCommand(null, null)
 
         whenever(mockCurrentUser.userId).thenReturn(user.id)
@@ -172,7 +172,7 @@ class TaskControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createCommand(null, null)
         whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
 

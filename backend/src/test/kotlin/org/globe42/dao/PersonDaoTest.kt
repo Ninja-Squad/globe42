@@ -37,7 +37,7 @@ class PersonDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldInsert() {
+    fun `should insert`() {
         val person = Person()
         person.gender = Gender.MALE
         person.firstName = "JB"
@@ -51,20 +51,20 @@ class PersonDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindById() {
+    fun `should find by id`() {
         skipNextLaunch()
         assertThat(personDao.findById(1L)).hasValueSatisfying { p -> assertThat(p.id).isEqualTo(1L) }
     }
 
     @Test
-    fun shouldFindParticipants() {
+    fun `should find participants`() {
         skipNextLaunch()
         assertThat(personDao.findParticipants(ActivityType.MEAL)).extracting<Long>(Person::id).containsOnly(1L)
         assertThat(personDao.findParticipants(ActivityType.SOCIAL_MEDIATION)).isEmpty()
     }
 
     @Test
-    fun shouldGetNextMediatonCode() {
+    fun `should get next mediaton code`() {
         var result = personDao.nextMediationCode('R')
         assertThat(result).isEqualTo(1)
         result = personDao.nextMediationCode('r')
@@ -74,12 +74,12 @@ class PersonDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindNotDeleted() {
+    fun `should find not deleted`() {
         assertThat(personDao.findNotDeleted()).extracting<Long>(Person::id).containsOnly(1L)
     }
 
     @Test
-    fun shouldFindDeleted() {
+    fun `should find deleted`() {
         assertThat(personDao.findDeleted()).extracting<Long>(Person::id).containsOnly(2L)
     }
 }

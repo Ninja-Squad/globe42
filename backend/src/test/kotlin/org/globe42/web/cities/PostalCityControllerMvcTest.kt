@@ -32,7 +32,7 @@ class PostalCityControllerMvcTest {
     private lateinit var mvc: MockMvc
 
     @Test
-    fun shouldSearch() {
+    fun `should search`() {
         val postalCity = PostalCity("42000", "ST ETIENNE")
         whenever(mockPostalCityDao.findByCity("ST E", LIMIT)).thenReturn(listOf(postalCity))
 
@@ -44,7 +44,7 @@ class PostalCityControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldUpload() {
+    fun `should upload`() {
         val body = "fake".toByteArray()
         val parsedCities = Arrays.asList(PostalCity("42000", "ST ETIENNE"))
         whenever(mockUploadParser.parse(body)).thenReturn(parsedCities)

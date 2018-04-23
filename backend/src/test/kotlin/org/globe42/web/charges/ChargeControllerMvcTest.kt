@@ -52,7 +52,7 @@ class ChargeControllerMvcTest {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val charge = createCharge(12L)
         person.addCharge(charge)
 
@@ -64,7 +64,7 @@ class ChargeControllerMvcTest {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         val charge = createCharge(12L)
         person.addCharge(charge)
 
@@ -75,7 +75,7 @@ class ChargeControllerMvcTest {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val chargeTypeId = 12L
         val chargeType = createChargeType(chargeTypeId)
 

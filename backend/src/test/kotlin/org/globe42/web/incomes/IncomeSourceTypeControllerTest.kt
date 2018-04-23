@@ -39,7 +39,7 @@ class IncomeSourceTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockIncomeSourceTypeDao.findById(incomeSourceType.id!!)).thenReturn(Optional.of(incomeSourceType))
 
         val result = controller.get(incomeSourceType.id!!)
@@ -48,7 +48,7 @@ class IncomeSourceTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockIncomeSourceTypeDao.findAll()).thenReturn(listOf(incomeSourceType))
 
         val result = controller.list()
@@ -59,7 +59,7 @@ class IncomeSourceTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createIncomeSourceTypeCommand()
 
         whenever(mockIncomeSourceTypeDao.existsByType(command.type)).thenReturn(false)
@@ -75,7 +75,7 @@ class IncomeSourceTypeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createIncomeSourceTypeCommand()
 
         whenever(mockIncomeSourceTypeDao.findById(incomeSourceType.id!!)).thenReturn(Optional.of(incomeSourceType))

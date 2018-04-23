@@ -51,7 +51,7 @@ class IncomeSourceControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldList() {
+    fun `should list`() {
         whenever(mockIncomeSourceDao.findAll()).thenReturn(listOf<IncomeSource>(incomeSource))
 
         mvc.perform(get("/api/income-sources"))
@@ -65,7 +65,7 @@ class IncomeSourceControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
 
         mvc.perform(get("/api/income-sources/{sourceId}", incomeSource.id))
@@ -75,7 +75,7 @@ class IncomeSourceControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldCreate() {
+    fun `should create`() {
         val command = createIncomeSourceCommand()
         whenever(mockIncomeSourceDao.save(any<IncomeSource>())).thenReturn(incomeSource)
         whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type!!))
@@ -89,7 +89,7 @@ class IncomeSourceControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))

@@ -45,7 +45,7 @@ class StorageServiceTest : BaseTest() {
 
     @Suppress("UNCHECKED_CAST")
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val mockPage= mock<Page<Blob>>()
         whenever(mockPage.getValues()).thenReturn(listOf(blob))
 
@@ -65,7 +65,7 @@ class StorageServiceTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         whenever(mockStorage.get(PERSON_FILES_BUCKET, blob.name)).thenReturn(blob)
 
         val mockChannel = mock<ReadChannel>()
@@ -85,7 +85,7 @@ class StorageServiceTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val blobInfo = BlobInfo.newBuilder(PERSON_FILES_BUCKET, "foo/new.txt")
                 .setContentType("text/plain")
                 .build()
@@ -111,7 +111,7 @@ class StorageServiceTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         service.delete("foo", "hello.txt")
 
         verify(mockStorage).delete(PERSON_FILES_BUCKET, "foo/hello.txt")

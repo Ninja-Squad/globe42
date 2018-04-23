@@ -60,7 +60,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGetCurrentUser() {
+    fun `should get current user`() {
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
@@ -70,14 +70,14 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenGettingCurrentUserIfNotFound() {
+    fun `should throw when getting current user if not found`() {
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty())
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.getCurrentUser() }
     }
 
     @Test
-    fun shouldChangePasswordOfCurrentUser() {
+    fun `should change password of current user`() {
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
@@ -90,7 +90,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeleted()).thenReturn(listOf(user))
 
@@ -101,7 +101,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldGet() {
+    fun `should get`() {
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
@@ -110,13 +110,13 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenGettingIfNotFound() {
+    fun `should throw when getting if not found`() {
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty())
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(userId) }
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = UserCommandDTO("test", true)
 
         whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
@@ -134,7 +134,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingWithExistingLogin() {
+    fun `should throw when creating with existing login`() {
         val command = UserCommandDTO("test", false)
 
         whenever(mockUserDao.existsByLogin(command.login)).thenReturn(true)
@@ -143,7 +143,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val command = UserCommandDTO("test", true)
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
@@ -154,7 +154,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenUpdatingWithExistingLogin() {
+    fun `should throw when updating with existing login`() {
         val command = UserCommandDTO("test", false)
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
@@ -165,7 +165,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldNotThrowWhenUpdatingWithSameLogin() {
+    fun `should not throw when updating with same login`() {
         val user = createUser(userId)
         val command = UserCommandDTO(user.login!!, false)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
@@ -176,7 +176,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
@@ -186,7 +186,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldNotDoAnythingWhenDeletingUnexistingUser() {
+    fun `should not do anything when deleting unexisting user`() {
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty())
 
         controller.delete(userId)
@@ -195,7 +195,7 @@ class UserControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldResetPassword() {
+    fun `should reset password`() {
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 

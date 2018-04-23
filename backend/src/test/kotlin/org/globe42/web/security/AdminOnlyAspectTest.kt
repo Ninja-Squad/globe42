@@ -25,7 +25,7 @@ class AdminOnlyAspectTest : BaseTest() {
     private lateinit var aspect: AdminOnlyAspect
 
     @Test
-    fun shouldThrowIfNoCurrentUserOrCurrentUserNotAdmin() {
+    fun `should throw if no current user or current user not admin`() {
         val userId = 42L
         whenever(mockCurrentUser.userId).thenReturn(userId)
         whenever(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false)
@@ -34,7 +34,7 @@ class AdminOnlyAspectTest : BaseTest() {
     }
 
     @Test
-    fun shouldNotThrowIfCurrentUserIsAdmin() {
+    fun `should not throw if current user is admin`() {
         val userId = 42L
         whenever(mockCurrentUser.userId).thenReturn(userId)
         val user = User(userId)

@@ -26,7 +26,7 @@ class PostalCityControllerTest : BaseTest() {
     private lateinit var controller: PostalCityController
 
     @Test
-    fun shouldSearchByPostalCodeWhenQueryIsNumeric() {
+    fun `should search by postal code when query is numeric`() {
         val postalCity = PostalCity("42000", "ST ETIENNE")
         whenever(mockPostalCityDao.findByPostalCode("420", LIMIT)).thenReturn(listOf(postalCity))
 
@@ -38,7 +38,7 @@ class PostalCityControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldSearchByCityWhenQueryIsNotNumeric() {
+    fun `should search by city when query is not numeric`() {
         val postalCity = PostalCity("42000", "ST ETIENNE")
         whenever(mockPostalCityDao.findByCity("ST ET", LIMIT)).thenReturn(listOf(postalCity))
 
@@ -50,7 +50,7 @@ class PostalCityControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldUpload() {
+    fun `should upload`() {
         val body = "fake".toByteArray()
         val parsedCities = Arrays.asList(PostalCity("42000", "ST ETIENNE"))
         whenever(mockUploadParser.parse(body)).thenReturn(parsedCities)

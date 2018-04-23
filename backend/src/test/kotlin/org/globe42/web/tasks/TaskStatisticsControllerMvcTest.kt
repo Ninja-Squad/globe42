@@ -29,7 +29,7 @@ class TaskStatisticsControllerMvcTest {
     private lateinit var mvc: MockMvc
 
     @Test
-    fun shouldGetSpentTimeStatistics() {
+    fun `should get spent time statistics`() {
         val criteria = SpentTimeStatisticsCriteriaDTO(LocalDate.of(2017, 12, 1),
                                                       LocalDate.of(2017, 12, 31))
 

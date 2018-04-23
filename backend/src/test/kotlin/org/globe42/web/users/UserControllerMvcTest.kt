@@ -44,7 +44,7 @@ class UserControllerMvcTest {
     private lateinit var mvc: MockMvc
 
     @Test
-    fun shouldGetCurrentUser() {
+    fun `should get current user`() {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockCurrentUser.userId).thenReturn(userId)
@@ -58,7 +58,7 @@ class UserControllerMvcTest {
     }
 
     @Test
-    fun shouldChangePasswordOfCurrentUser() {
+    fun `should change password of current user`() {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockCurrentUser.userId).thenReturn(userId)
@@ -73,7 +73,7 @@ class UserControllerMvcTest {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val user = createUser(42L)
         whenever(mockUserDao.findNotDeleted()).thenReturn(listOf(user))
 
@@ -85,7 +85,7 @@ class UserControllerMvcTest {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = UserCommandDTO("test", true)
 
         whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
@@ -102,7 +102,7 @@ class UserControllerMvcTest {
     }
 
     @Test
-    fun shouldUpdate() {
+    fun `should update`() {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
@@ -116,7 +116,7 @@ class UserControllerMvcTest {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
@@ -126,7 +126,7 @@ class UserControllerMvcTest {
     }
 
     @Test
-    fun shouldResetPassword() {
+    fun `should reset password`() {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))

@@ -28,13 +28,13 @@ class UserDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindNotDeleted() {
+    fun `should find not deleted`() {
         skipNextLaunch()
         assertThat(userDao.findNotDeleted()).extracting<Long>(User::id).containsOnly(1L, 3L)
     }
 
     @Test
-    fun shouldFindNotDeletedByLogin() {
+    fun `should find not deleted by login`() {
         skipNextLaunch()
         assertThat(userDao.findNotDeletedByLogin("jb")).isNotEmpty
         assertThat(userDao.findNotDeletedByLogin("old")).isEmpty
@@ -42,7 +42,7 @@ class UserDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldExistByLogin() {
+    fun `should exist by login`() {
         skipNextLaunch()
         assertThat(userDao.existsByLogin("jb")).isTrue()
         assertThat(userDao.existsByLogin("ced")).isFalse()
@@ -50,7 +50,7 @@ class UserDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindNotDeletedById() {
+    fun `should find not deleted by id`() {
         skipNextLaunch()
         assertThat(userDao.findNotDeletedById(1L)).isNotEmpty
         assertThat(userDao.findNotDeletedById(2L)).isEmpty
@@ -58,7 +58,7 @@ class UserDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldExistsNotDeletedById() {
+    fun `should exists not deleted by id`() {
         skipNextLaunch()
         assertThat(userDao.existsNotDeletedById(1L)).isTrue()
         assertThat(userDao.existsNotDeletedById(2L)).isFalse()
@@ -67,7 +67,7 @@ class UserDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldExistsNotDeletedAdminById() {
+    fun `should exists not deleted admin by id`() {
         skipNextLaunch()
         assertThat(userDao.existsNotDeletedAdminById(1L)).isTrue()
         assertThat(userDao.existsNotDeletedAdminById(2L)).isFalse()

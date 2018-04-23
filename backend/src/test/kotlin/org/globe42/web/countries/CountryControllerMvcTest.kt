@@ -33,7 +33,7 @@ class CountryControllerMvcTest {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         mvc.perform(get("/api/countries"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$[0].id").value("BEL"))

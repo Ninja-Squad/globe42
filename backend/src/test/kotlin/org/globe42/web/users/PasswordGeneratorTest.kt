@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
  */
 class PasswordGeneratorTest {
     @Test
-    fun shouldGenerate() {
+    fun `should generate`() {
         val passwordGenerator = PasswordGenerator()
 
         val p1 = passwordGenerator.generatePassword()

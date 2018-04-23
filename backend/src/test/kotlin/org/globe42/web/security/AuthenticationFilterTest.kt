@@ -42,7 +42,7 @@ class AuthenticationFilterTest : BaseTest() {
     private lateinit var mockFilterChain: FilterChain
 
     @Test
-    fun shouldRejectIfNoHeaderAndNoCookieForApiRequest() {
+    fun `should reject if no header and no cookie for api request`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/persons"
 
@@ -50,7 +50,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldAcceptIfNoHeaderAndNoCookieForApiAuthenticationRequest() {
+    fun `should accept if no header and no cookie for api authentication request`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/authentication"
 
@@ -58,7 +58,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectIfNoHeaderAndNoCookieForActuatorRequest() {
+    fun `should reject if no header and no cookie for actuator request`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/actuator"
 
@@ -66,7 +66,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldAcceptIfNoHeaderAndNoCookieForActuatorHealthRequest() {
+    fun `should accept if no header and no cookie for actuator health request`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/actuator/health"
 
@@ -74,7 +74,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectIfHeaderWithNoBearerPrefix() {
+    fun `should reject if header with no bearer prefix`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "hello world")
@@ -83,7 +83,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectIfHeaderWithBadToken() {
+    fun `should reject if header with bad token`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
@@ -94,7 +94,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectIfHeaderWithTokenWithBadUserId() {
+    fun `should reject if header with token with bad user id`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
@@ -107,7 +107,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectIfUserDoesNotExist() {
+    fun `should reject if user does not exist`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
@@ -121,7 +121,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldSetCurrentUserIfValidTokenInHeader() {
+    fun `should set current user if valid token in header`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
@@ -136,7 +136,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldSetCurrentUserIfValidTokenInCookie() {
+    fun `should set current user if valid token in cookie`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/api/persons"
         request.setCookies(Cookie("globe42_token", "hello"))
@@ -151,7 +151,7 @@ class AuthenticationFilterTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectIfNotAdminForProtectedActuatorRequest() {
+    fun `should reject if not admin for protected actuator request`() {
         val request = MockHttpServletRequest()
         request.requestURI = "/actuator/foo"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")

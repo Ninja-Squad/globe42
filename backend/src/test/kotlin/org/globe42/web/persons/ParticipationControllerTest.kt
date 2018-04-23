@@ -38,7 +38,7 @@ class ParticipationControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val result = controller.list(person.id!!)
 
         assertThat(result).extracting<Long>(ParticipationDTO::id).containsExactly(mealParticipation.id)
@@ -46,7 +46,7 @@ class ParticipationControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val command = ParticipationCommandDTO(ActivityType.SOCIAL_MEDIATION)
         whenever(mockPersonDao.flush()).then {
             person.getParticipations().find { it.activityType == ActivityType.SOCIAL_MEDIATION }?.let { it.id = 345L }
@@ -60,7 +60,7 @@ class ParticipationControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         controller.delete(person.id!!, mealParticipation.id!!)
         assertThat(person.getParticipations()).isEmpty()
     }

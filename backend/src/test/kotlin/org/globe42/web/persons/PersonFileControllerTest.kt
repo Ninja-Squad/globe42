@@ -47,7 +47,7 @@ class PersonFileControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
         whenever(mockStorageService.list(directory)).thenReturn(listOf(file))
 
@@ -58,7 +58,7 @@ class PersonFileControllerTest : BaseTest() {
 
     @Test
     @Throws(IOException::class)
-    fun shouldGet() {
+    fun `should get`() {
         val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
         val readableFile = mock<ReadableFile>()
         whenever(readableFile.file).thenReturn(file)
@@ -77,7 +77,7 @@ class PersonFileControllerTest : BaseTest() {
 
     @Test
     @Throws(IOException::class)
-    fun shouldCreate() {
+    fun `should create`() {
         val multipartFile = MockMultipartFile("file",
                                               "new.txt",
                                               "text/plain",
@@ -96,7 +96,7 @@ class PersonFileControllerTest : BaseTest() {
 
     @Test
     @Throws(IOException::class)
-    fun shouldDelete() {
+    fun `should delete`() {
         controller.delete(person.id!!, "hello.txt")
         verify(mockStorageService).delete(directory, "hello.txt")
     }

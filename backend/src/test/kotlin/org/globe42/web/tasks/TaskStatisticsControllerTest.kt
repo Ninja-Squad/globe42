@@ -24,7 +24,7 @@ class TaskStatisticsControllerTest : BaseTest() {
     private lateinit var controller: TaskStatisticsController
 
     @Test
-    fun shouldGetStatistics() {
+    fun `should get statistics`() {
         val criteria = SpentTimeStatisticsCriteriaDTO(null, null)
 
         val meal = TaskCategory(6L, "Meal")

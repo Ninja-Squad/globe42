@@ -29,7 +29,7 @@ class PostalCityDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindByPostalCode() {
+    fun `should find by postal code`() {
         skipNextLaunch()
         var result = dao.findByPostalCode("42", 10)
         assertThat(result).extracting<Long>(PostalCity::id).containsExactly(2L, 3L)
@@ -39,7 +39,7 @@ class PostalCityDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldFindByCity() {
+    fun `should find by city`() {
         skipNextLaunch()
         var result = dao.findByCity("Saint   étienne", 10)
         assertThat(result).extracting<Long>(PostalCity::id).containsExactly(2L, 3L, 4L)
@@ -52,7 +52,7 @@ class PostalCityDaoTest : BaseDaoTest() {
     }
 
     @Test
-    fun shouldSaveEfficiently() {
+    fun `should save efficiently`() {
         val list = Arrays.asList(
                 PostalCity("69000", "LYON"),
                 PostalCity("42170", "ST JUST ST RAMBERT")

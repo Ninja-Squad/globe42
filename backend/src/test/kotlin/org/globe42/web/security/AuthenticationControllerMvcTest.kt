@@ -36,7 +36,7 @@ class AuthenticationControllerMvcTest {
     private lateinit var mvc: MockMvc
 
     @Test
-    fun shouldAuthenticate() {
+    fun `should authenticate`() {
         val credentials = createCredentials()
 
         val user = createUser()

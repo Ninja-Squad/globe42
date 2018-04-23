@@ -42,7 +42,7 @@ class ChargeControllerTest : BaseTest() {
     private lateinit var controller: ChargeController
 
     @Test
-    fun shouldList() {
+    fun `should list`() {
         val personId = 42L
         val person = Person(personId)
         val charge = createCharge(12L)
@@ -58,7 +58,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowIfPersonNotFound() {
+    fun `should throw if person not found`() {
         val personId = 42L
         whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
 
@@ -66,7 +66,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldDelete() {
+    fun `should delete`() {
         val personId = 42L
         val chargeId = 12L
         val charge = Charge(chargeId)
@@ -79,7 +79,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldAcceptDeletionIfNotFoundToBeIdempotent() {
+    fun `should accept deletion if not found to be idempotent`() {
         val chargeId = 12L
         whenever(mockChargeDao.findById(chargeId)).thenReturn(Optional.empty())
 
@@ -89,7 +89,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldRejectDeletionIfNotInCorrectPerson() {
+    fun `should reject deletion if not in correct person`() {
         val chargeId = 12L
         val personId = 42L
         val charge = Charge(chargeId)
@@ -101,7 +101,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldCreate() {
+    fun `should create`() {
         val personId = 42L
         val typeId = 12L
 
@@ -122,7 +122,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingForUnknownPerson() {
+    fun `should throw when creating for unknown person`() {
         val personId = 42L
         val typeId = 12L
 
@@ -135,7 +135,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingWithTooLargeAmount() {
+    fun `should throw when creating with too large amount`() {
         val personId = 42L
         val typeId = 12L
 
@@ -150,7 +150,7 @@ class ChargeControllerTest : BaseTest() {
     }
 
     @Test
-    fun shouldThrowWhenCreatingForUnknownType() {
+    fun `should throw when creating for unknown type`() {
         val personId = 42L
         val typeId = 12L
 

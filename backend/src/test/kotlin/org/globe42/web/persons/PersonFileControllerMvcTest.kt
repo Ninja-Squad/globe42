@@ -54,7 +54,7 @@ class PersonFileControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldCreate() {
+    fun `should create`() {
         val file = FileDTO("new.txt", 3L, Instant.now(), "text/plain")
         val multipartFile = MockMultipartFile("file",
                                               "new.txt",
@@ -74,7 +74,7 @@ class PersonFileControllerMvcTest {
 
     @Test
     @Throws(Exception::class)
-    fun shouldGet() {
+    fun `should get`() {
         val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
         val readableFile = mock<ReadableFile>()
         whenever(readableFile.file).thenReturn(file)
