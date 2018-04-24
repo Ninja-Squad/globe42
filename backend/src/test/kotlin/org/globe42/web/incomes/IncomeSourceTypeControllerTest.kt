@@ -1,101 +1,96 @@
-package org.globe42.web.incomes;
+package org.globe42.web.incomes
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.globe42.test.Answers.modifiedFirstArgument;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.IncomeSourceTypeDao;
-import org.globe42.domain.IncomeSourceType;
-import org.globe42.test.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.globe42.dao.IncomeSourceTypeDao
+import org.globe42.domain.IncomeSourceType
+import org.globe42.test.BaseTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.util.*
 
 /**
- * Unit tests for {@link IncomeSourceTypeController}
+ * Unit tests for [IncomeSourceTypeController]
  * @author JB Nizet
  */
-public class IncomeSourceTypeControllerTest extends BaseTest {
+class IncomeSourceTypeControllerTest : BaseTest() {
 
     @Mock
-    private IncomeSourceTypeDao mockIncomeSourceTypeDao;
+    private lateinit var mockIncomeSourceTypeDao: IncomeSourceTypeDao
 
     @InjectMocks
-    private IncomeSourceTypeController controller;
+    private lateinit var controller: IncomeSourceTypeController
 
     @Captor
-    private ArgumentCaptor<IncomeSourceType> incomeSourceTypeArgumentCaptor;
+    private lateinit var incomeSourceTypeArgumentCaptor: ArgumentCaptor<IncomeSourceType>
 
-    private IncomeSourceType incomeSourceType;
+    private lateinit var incomeSourceType: IncomeSourceType
 
     @BeforeEach
-    public void prepare() {
-        incomeSourceType = new IncomeSourceType(1L, "CAF");
+    fun prepare() {
+        incomeSourceType = IncomeSourceType(1L, "CAF")
     }
 
     @Test
-    public void shouldGet() {
-        when(mockIncomeSourceTypeDao.findById(incomeSourceType.getId())).thenReturn(Optional.of(incomeSourceType));
+    fun shouldGet() {
+        whenever(mockIncomeSourceTypeDao.findById(incomeSourceType.id!!)).thenReturn(Optional.of(incomeSourceType))
 
-        IncomeSourceTypeDTO result = controller.get(incomeSourceType.getId());
+        val result = controller.get(incomeSourceType.id!!)
 
-        assertThat(result.getId()).isEqualTo(incomeSourceType.getId());
+        assertThat(result.id).isEqualTo(incomeSourceType.id!!)
     }
 
     @Test
-    public void shouldList() {
-        when(mockIncomeSourceTypeDao.findAll()).thenReturn(
-            Collections.singletonList(incomeSourceType));
+    fun shouldList() {
+        whenever(mockIncomeSourceTypeDao.findAll()).thenReturn(listOf(incomeSourceType))
 
-        List<IncomeSourceTypeDTO> result = controller.list();
+        val result = controller.list()
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(1L);
-        assertThat(result.get(0).getType()).isEqualTo("CAF");
+        assertThat(result).hasSize(1)
+        assertThat(result[0].id).isEqualTo(1L)
+        assertThat(result[0].type).isEqualTo("CAF")
     }
 
     @Test
-    public void shouldCreate() {
-        IncomeSourceTypeCommandDTO command = createCommand();
+    fun shouldCreate() {
+        val command = createIncomeSourceTypeCommand()
 
-        when(mockIncomeSourceTypeDao.existsByType(command.getType())).thenReturn(false);
-        when(mockIncomeSourceTypeDao.save(any(IncomeSourceType.class)))
-            .thenAnswer(modifiedFirstArgument((IncomeSourceType st) -> st.setId(42L)));
+        whenever(mockIncomeSourceTypeDao.existsByType(command.type)).thenReturn(false)
+        whenever(mockIncomeSourceTypeDao.save(any<IncomeSourceType>()))
+                .thenReturnModifiedFirstArgument<IncomeSourceType> { it.id = 42L }
 
-        IncomeSourceTypeDTO result = controller.create(command);
+        val result = controller.create(command)
 
-        verify(mockIncomeSourceTypeDao).save(incomeSourceTypeArgumentCaptor.capture());
+        verify(mockIncomeSourceTypeDao).save(incomeSourceTypeArgumentCaptor.capture())
 
-        assertThat(result.getId()).isEqualTo(42L);
-        assertIncomeSourceTypeEqualsCommand(incomeSourceTypeArgumentCaptor.getValue(), command);
+        assertThat(result.id).isEqualTo(42L)
+        assertIncomeSourceTypeEqualsCommand(incomeSourceTypeArgumentCaptor.value, command)
     }
 
     @Test
-    public void shouldUpdate() {
-        IncomeSourceTypeCommandDTO command = createCommand();
+    fun shouldUpdate() {
+        val command = createIncomeSourceTypeCommand()
 
-        when(mockIncomeSourceTypeDao.findById(incomeSourceType.getId())).thenReturn(Optional.of(incomeSourceType));
-        when(mockIncomeSourceTypeDao.findByType(command.getType())).thenReturn(Optional.empty());
+        whenever(mockIncomeSourceTypeDao.findById(incomeSourceType.id!!)).thenReturn(Optional.of(incomeSourceType))
+        whenever(mockIncomeSourceTypeDao.findByType(command.type)).thenReturn(Optional.empty())
 
-        controller.update(incomeSourceType.getId(), command);
+        controller.update(incomeSourceType.id!!, command)
 
-        assertIncomeSourceTypeEqualsCommand(incomeSourceType, command);
+        assertIncomeSourceTypeEqualsCommand(incomeSourceType, command)
     }
 
-    static IncomeSourceTypeCommandDTO createCommand() {
-        return new IncomeSourceTypeCommandDTO("Securité Sociale");
+    private fun assertIncomeSourceTypeEqualsCommand(source: IncomeSourceType, command: IncomeSourceTypeCommandDTO) {
+        assertThat(source.type).isEqualTo(command.type)
     }
+}
 
-    private void assertIncomeSourceTypeEqualsCommand(IncomeSourceType source, IncomeSourceTypeCommandDTO command) {
-        assertThat(source.getType()).isEqualTo(command.getType());
-    }
+internal fun createIncomeSourceTypeCommand(): IncomeSourceTypeCommandDTO {
+    return IncomeSourceTypeCommandDTO("Securité Sociale")
 }

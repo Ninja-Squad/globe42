@@ -1,50 +1,48 @@
-package org.globe42.web.exception;
+package org.globe42.web.exception
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.entry;
-
-import java.util.Collections;
-
-import org.junit.jupiter.api.Test;
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.entry
+import org.junit.jupiter.api.Test
+import java.util.*
 
 /**
- * Unit tests for {@link BadRequestException}
+ * Unit tests for [BadRequestException]
  * @author JB Nizet
  */
-public class BadRequestExceptionTest {
+class BadRequestExceptionTest {
     @Test
-    public void shouldCreateWithMessage() {
-        BadRequestException e = new BadRequestException("foo");
+    fun shouldCreateWithMessage() {
+        val e = BadRequestException("foo")
 
-        assertThat(e.getError()).isNull();
-        assertThat(e.getMessage()).isEqualTo("foo");
+        assertThat(e.error).isNull()
+        assertThat(e.message).isEqualTo("foo")
     }
 
     @Test
-    public void shouldCreateWithErrorCode() {
-        BadRequestException e = new BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
+    fun shouldCreateWithErrorCode() {
+        val e = BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS)
 
-        assertThat(e.getMessage()).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString());
-        assertThat(e.getError().getCode()).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
-        assertThat(e.getError().getParameters()).isEmpty();
+        assertThat(e.message).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString())
+        assertThat(e.error!!.code).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS)
+        assertThat(e.error!!.parameters).isEmpty()
     }
 
     @Test
-    public void shouldCreateWithErrorCodeAndParameter() {
-        BadRequestException e = new BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS, "foo", "bar");
+    fun shouldCreateWithErrorCodeAndParameter() {
+        val e = BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS, "foo", "bar")
 
-        assertThat(e.getMessage()).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString());
-        assertThat(e.getError().getCode()).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
-        assertThat(e.getError().getParameters()).containsOnly(entry("foo", "bar"));
+        assertThat(e.message).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString())
+        assertThat(e.error!!.code).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS)
+        assertThat(e.error!!.parameters).containsOnly(entry("foo", "bar"))
     }
 
     @Test
-    public void shouldCreateWithFunctionalError() {
-        BadRequestException e = new BadRequestException(new FunctionalError(ErrorCode.USER_LOGIN_ALREADY_EXISTS,
-                                                                            Collections.singletonMap("foo", "bar")));
+    fun shouldCreateWithFunctionalError() {
+        val e = BadRequestException(FunctionalError(ErrorCode.USER_LOGIN_ALREADY_EXISTS,
+                                                    Collections.singletonMap("foo", "bar")))
 
-        assertThat(e.getMessage()).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString());
-        assertThat(e.getError().getCode()).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
-        assertThat(e.getError().getParameters()).containsOnly(entry("foo", "bar"));
+        assertThat(e.message).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS.toString())
+        assertThat(e.error!!.code).isEqualTo(ErrorCode.USER_LOGIN_ALREADY_EXISTS)
+        assertThat(e.error!!.parameters).containsOnly(entry("foo", "bar"))
     }
 }

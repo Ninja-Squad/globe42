@@ -1,81 +1,75 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import java.text.Normalizer
+import java.util.ArrayList
+import java.util.stream.Collectors
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
+import javax.persistence.TypedQuery
 
-import org.globe42.domain.PostalCity;
+import org.globe42.domain.PostalCity
 
 /**
- * Implementation of custom methods of {@link PostalCityDao}
+ * Implementation of custom methods of [PostalCityDao]
  * @author JB Nizet
  */
-public class PostalCityDaoImpl implements PostalCityDaoCustom {
+class PostalCityDaoImpl : PostalCityDaoCustom {
 
     @PersistenceContext
-    private EntityManager em;
+    private lateinit var em: EntityManager
 
-    @Override
-    public void saveAllEfficiently(Collection<PostalCity> cities) {
-        int counter = 0;
-        for (PostalCity city : cities) {
-            em.persist(city);
-            counter++;
+    override fun saveAllEfficiently(cities: Collection<PostalCity>) {
+        var counter = 0
+        for (city in cities) {
+            em.persist(city)
+            counter++
             if (counter == 50) {
-                counter = 0;
-                em.flush();
-                em.clear();
+                counter = 0
+                em.flush()
+                em.clear()
             }
         }
     }
 
-    @Override
-    public List<PostalCity> findByPostalCode(String search, int limit) {
-        String jpql = "select pc from PostalCity pc where pc.postalCode like :value order by pc.postalCode, pc.city";
-        TypedQuery<PostalCity> query = em.createQuery(jpql, PostalCity.class);
-        return query.setParameter("value", search + "%")
-                    .setMaxResults(limit)
-                    .getResultList();
+    override fun findByPostalCode(search: String, limit: Int): List<PostalCity> {
+        val jpql = "select pc from PostalCity pc where pc.postalCode like :value order by pc.postalCode, pc.city"
+        val query = em.createQuery(jpql, PostalCity::class.java)
+        return query.setParameter("value", "$search%")
+                .setMaxResults(limit)
+                .resultList
     }
 
-    @Override
-    public List<PostalCity> findByCity(String search, int limit) {
-        String jpql = "select pc from PostalCity pc where upper(pc.city) like :value order by pc.city, pc.postalCode";
-        TypedQuery<PostalCity> query = em.createQuery(jpql, PostalCity.class);
-        return query.setParameter("value", sanitizeQuery(search)+ "%")
-                    .setMaxResults(limit)
-                    .getResultList();
+    override fun findByCity(search: String, limit: Int): List<PostalCity> {
+        val jpql = "select pc from PostalCity pc where upper(pc.city) like :value order by pc.city, pc.postalCode"
+        val query = em.createQuery(jpql, PostalCity::class.java)
+        return query.setParameter("value", sanitizeQuery(search) + "%")
+                .setMaxResults(limit)
+                .resultList
     }
 
-    private String sanitizeQuery(String search) {
+    private fun sanitizeQuery(search: String): String {
         // Use uppercase
-        String result = search.toUpperCase();
+        var result = search.toUpperCase()
         // replace dashed and commas with spaces, since thre is none in the data
-        result = result.replace('\'', ' ').replace('-', ' ');
+        result = result.replace('\'', ' ').replace('-', ' ')
         // remove accents
-        result = Normalizer.normalize(result, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+        result = Normalizer.normalize(result, Normalizer.Form.NFD).replace("[^\\p{ASCII}]".toRegex(), "")
 
         // strip in parts to make sure there is a single space between parts
-        String[] split = result.split(" ");
-        List<String> parts = new ArrayList<>();
-        for (String part : split) {
-            String trimmedPart = part.trim();
+        val split = result.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val parts = ArrayList<String>()
+        for (part in split) {
+            val trimmedPart = part.trim { it <= ' ' }
             if (!trimmedPart.isEmpty()) {
                 // replace SAINT by ST, since that's what the daaset uses
-                if (trimmedPart.equals("SAINT")) {
-                    parts.add("ST");
-                }
-                else {
-                    parts.add(trimmedPart);
+                if (trimmedPart == "SAINT") {
+                    parts.add("ST")
+                } else {
+                    parts.add(trimmedPart)
                 }
             }
         }
-        result = parts.stream().collect(Collectors.joining(" "));
-        return result;
+        result = parts.joinToString(" ")
+        return result
     }
 }

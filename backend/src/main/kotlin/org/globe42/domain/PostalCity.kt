@@ -1,55 +1,46 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.SequenceGenerator
+import javax.validation.constraints.NotEmpty
+
+private const val POSTAL_CITY_GENERATOR = "PostalCityGenerator"
 
 /**
  * A city, imported from the official postal code reference at
- * <a href="https://www.data.gouv.fr/fr/datasets/base-officielle-des-codes-postaux/">Data Gouv</a>.
+ * [Data Gouv](https://www.data.gouv.fr/fr/datasets/base-officielle-des-codes-postaux/).
  * @author JB Nizet
  */
 @Entity
-public class PostalCity {
-    private static final String POSTAL_CITY_GENERATOR = "PostalCityGenerator";
+class PostalCity {
 
     @Id
-    @SequenceGenerator(name = POSTAL_CITY_GENERATOR, sequenceName = "POSTAL_CITY_SEQ", initialValue = 1000, allocationSize = 1)
+    @SequenceGenerator(name = POSTAL_CITY_GENERATOR,
+                       sequenceName = "POSTAL_CITY_SEQ",
+                       initialValue = 1000,
+                       allocationSize = 1)
     @GeneratedValue(generator = POSTAL_CITY_GENERATOR)
-    private Long id;
+    var id: Long? = null
 
     @NotEmpty
-    private String postalCode;
+    var postalCode: String? = null
 
     /**
      * The city, which is supposed to be in uppercase
      */
     @NotEmpty
-    private String city;
+    var city: String? = null
 
-    public PostalCity() {
+    constructor()
+
+    constructor(id: Long) {
+        this.id = id
     }
 
-    public PostalCity(Long id) {
-        this.id = id;
-    }
-
-    public PostalCity(String postalCode, String city) {
-        this.postalCode = postalCode;
-        this.city = city;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public String getCity() {
-        return city;
+    constructor(postalCode: String, city: String) {
+        this.postalCode = postalCode
+        this.city = city
     }
 }

@@ -1,187 +1,188 @@
-package org.globe42.web.tasks;
+package org.globe42.web.tasks
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.globe42.dao.PersonDao;
-import org.globe42.dao.TaskCategoryDao;
-import org.globe42.dao.TaskDao;
-import org.globe42.dao.UserDao;
-import org.globe42.domain.Person;
-import org.globe42.domain.Task;
-import org.globe42.domain.TaskCategory;
-import org.globe42.domain.TaskStatus;
-import org.globe42.domain.User;
-import org.globe42.test.Answers;
-import org.globe42.test.GlobeMvcTest;
-import org.globe42.web.security.CurrentUser;
-import org.globe42.web.users.UserControllerTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.globe42.dao.PersonDao
+import org.globe42.dao.TaskCategoryDao
+import org.globe42.dao.TaskDao
+import org.globe42.dao.UserDao
+import org.globe42.domain.*
+import org.globe42.test.GlobeMvcTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.security.CurrentUser
+import org.globe42.web.users.createUser
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.time.LocalDate
+import java.util.*
 
 /**
- * MVC tests for {@link TaskController}
+ * MVC tests for [TaskController]
  * @author JB Nizet
  */
-@GlobeMvcTest(TaskController.class)
-public class TaskControllerMvcTest {
+@GlobeMvcTest(TaskController::class)
+class TaskControllerMvcTest {
 
     @MockBean
-    private TaskDao mockTaskDao;
+    private lateinit var mockTaskDao: TaskDao
 
     @MockBean
-    private UserDao mockUserDao;
+    private lateinit var mockUserDao: UserDao
 
     @MockBean
-    private TaskCategoryDao mockTaskCategoryDao;
+    private lateinit var mockTaskCategoryDao: TaskCategoryDao
 
     @MockBean
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @MockBean
-    private CurrentUser mockCurrentUser;
+    private lateinit var mockCurrentUser: CurrentUser
 
     @Autowired
-    private MockMvc mvc;
+    private lateinit var mvc: MockMvc
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
-    private Task task;
-    private User user;
+    private lateinit var task: Task
+    private lateinit var user: User
 
     @BeforeEach
-    public void prepare() {
-        TaskCategory variousCategory = new TaskCategory(TaskControllerTest.VARIOUS_CATEGORY_ID, "Various");
-        when(mockTaskCategoryDao.findById(variousCategory.getId())).thenReturn(Optional.of(variousCategory));
+    fun prepare() {
+        val variousCategory = TaskCategory(VARIOUS_CATEGORY_ID, "Various")
+        whenever(mockTaskCategoryDao.findById(variousCategory.id!!)).thenReturn(Optional.of(variousCategory))
 
-        user = UserControllerTest.createUser(2L);
-        task = TaskControllerTest.createTask(23L, user, new Person(45L), variousCategory);
+        user = createUser(2L)
+        task = createTask(23L, user, Person(45L, "John", "Doe", Gender.MALE), variousCategory)
     }
 
     @Test
-    public void shouldListTodos() throws Exception {
-        when(mockTaskDao.findTodo(any())).thenReturn(singlePage(Collections.singletonList(task)));
+    @Throws(Exception::class)
+    fun shouldListTodos() {
+        whenever(mockTaskDao.findTodo(any<Pageable>())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.content.[0].id").value(task.getId().intValue()))
-           .andExpect(jsonPath("$.content.[0].dueDate").value(task.getDueDate().toString()));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.content.[0].id").value(task.id!!.toInt()))
+                .andExpect(jsonPath("$.content.[0].dueDate").value(task.dueDate.toString()))
     }
 
     @Test
-    public void shouldListTodoBefore() throws Exception {
-        when(mockTaskDao.findTodoBefore(eq(LocalDate.of(2017, 8, 1)), any()))
-            .thenReturn(singlePage(Collections.singletonList(task)));
+    @Throws(Exception::class)
+    fun shouldListTodoBefore() {
+        whenever(mockTaskDao.findTodoBefore(eq(LocalDate.of(2017, 8, 1)), any()))
+                .thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?before=2017-08-01"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
-    public void shouldListTodoForPerson() throws Exception {
-        Person person = new Person(1L);
-        when(mockPersonDao.getOne(1L)).thenReturn(person);
-        when(mockTaskDao.findTodoByConcernedPerson(eq(person), any()))
-            .thenReturn(singlePage(Collections.singletonList(task)));
+    @Throws(Exception::class)
+    fun shouldListTodoForPerson() {
+        val person = Person(1L)
+        whenever(mockPersonDao.getOne(1L)).thenReturn(person)
+        whenever(mockTaskDao.findTodoByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?person=1"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
-    public void shouldListArchivedForPerson() throws Exception {
-        Person person = new Person(1L);
-        when(mockPersonDao.getOne(1L)).thenReturn(person);
-        when(mockTaskDao.findArchivedByConcernedPerson(eq(person), any()))
-            .thenReturn(singlePage(Collections.singletonList(task)));
+    @Throws(Exception::class)
+    fun shouldListArchivedForPerson() {
+        val person = Person(1L)
+        whenever(mockPersonDao.getOne(1L)).thenReturn(person)
+        whenever(mockTaskDao.findArchivedByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?person=1&archived"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
-    public void shouldListUnassigned() throws Exception {
-        when(mockTaskDao.findTodoUnassigned(any()))
-            .thenReturn(singlePage(Collections.singletonList(task)));
+    @Throws(Exception::class)
+    fun shouldListUnassigned() {
+        whenever(mockTaskDao.findTodoUnassigned(any())).thenReturn(singlePage(listOf(task)))
 
         mvc.perform(get("/api/tasks?unassigned"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.content[0].id").value(task.getId().intValue()));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.content[0].id").value(task.id!!.toInt()))
     }
 
     @Test
-    public void shouldAssign() throws Exception {
-        when(mockTaskDao.findById(task.getId())).thenReturn(Optional.of(task));
-        User otherUser = new User(5433L);
-        when(mockUserDao.findNotDeletedById(otherUser.getId())).thenReturn(Optional.of(otherUser));
+    @Throws(Exception::class)
+    fun shouldAssign() {
+        whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
+        val otherUser = User(5433L)
+        whenever(mockUserDao.findNotDeletedById(otherUser.id!!)).thenReturn(Optional.of(otherUser))
 
-        mvc.perform(post("/api/tasks/{taskId}/assignments", task.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new TaskAssignmentCommandDTO(otherUser.getId()))))
-           .andExpect(status().isCreated());
+        mvc.perform(post("/api/tasks/{taskId}/assignments", task.id)
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(TaskAssignmentCommandDTO(otherUser.id!!))))
+                .andExpect(status().isCreated)
 
-        assertThat(task.getAssignee()).isEqualTo(otherUser);
+        assertThat(task.assignee).isEqualTo(otherUser)
     }
 
     @Test
-    public void shouldChangeStatus() throws Exception {
-        when(mockTaskDao.findById(task.getId())).thenReturn(Optional.of(task));
+    @Throws(Exception::class)
+    fun shouldChangeStatus() {
+        whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
 
-        mvc.perform(post("/api/tasks/{taskId}/status-changes", task.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(new TaskStatusChangeCommandDTO(TaskStatus.DONE))))
-           .andExpect(status().isCreated());
+        mvc.perform(post("/api/tasks/{taskId}/status-changes", task.id)
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(TaskStatusChangeCommandDTO(TaskStatus.DONE))))
+                .andExpect(status().isCreated)
 
-        assertThat(task.getStatus()).isEqualTo(TaskStatus.DONE);
+        assertThat(task.status).isEqualTo(TaskStatus.DONE)
     }
 
     @Test
-    public void shouldCreate() throws Exception {
-        TaskCommandDTO command = TaskControllerTest.createCommand(null, null);
+    @Throws(Exception::class)
+    fun shouldCreate() {
+        val command = createCommand(null, null)
 
-        when(mockTaskDao.save(any(Task.class))).thenAnswer(Answers.<Task>modifiedFirstArgument(task -> task.setId(42L)));
+        whenever(mockCurrentUser.userId).thenReturn(user.id)
+        whenever(mockUserDao.getOne(mockCurrentUser.userId!!)).thenReturn(user)
+        whenever(mockTaskDao.save(any<Task>())).thenReturnModifiedFirstArgument<Task> { task -> task.id = 42L }
 
         mvc.perform(post("/api/tasks")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(command)))
-           .andExpect(status().isCreated())
-           .andExpect(jsonPath("$.id").value(42));
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(command)))
+                .andExpect(status().isCreated)
+                .andExpect(jsonPath("$.id").value(42))
     }
 
     @Test
-    public void shouldUpdate() throws Exception {
-        TaskCommandDTO command = TaskControllerTest.createCommand(null, null);
-        when(mockTaskDao.findById(task.getId())).thenReturn(Optional.of(task));
+    @Throws(Exception::class)
+    fun shouldUpdate() {
+        val command = createCommand(null, null)
+        whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
 
-        mvc.perform(put("/api/tasks/{id}", task.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(command)))
-           .andExpect(status().isNoContent());
+        mvc.perform(put("/api/tasks/{id}", task.id)
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(command)))
+                .andExpect(status().isNoContent)
     }
 
-    private Page<Task> singlePage(List<Task> tasks) {
-        return new PageImpl<>(tasks, PageRequest.of(0, TaskController.PAGE_SIZE), tasks.size());
+    private fun singlePage(tasks: List<Task>): Page<Task> {
+        return PageImpl(tasks, PageRequest.of(0, PAGE_SIZE), tasks.size.toLong())
     }
 }

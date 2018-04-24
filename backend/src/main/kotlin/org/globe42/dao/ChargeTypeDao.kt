@@ -1,15 +1,15 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import java.util.Optional;
+import java.util.Optional
 
-import org.globe42.domain.ChargeType;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.globe42.domain.ChargeType
+import org.springframework.data.jpa.repository.JpaRepository
 
 /**
- * DAO for the {@link ChargeType} entity
+ * DAO for the [ChargeType] entity
  * @author JB Nizet
  */
-public interface ChargeTypeDao extends JpaRepository<ChargeType, Long> {
-    boolean existsByName(String name);
-    Optional<ChargeType> findByName(String name);
+interface ChargeTypeDao : JpaRepository<ChargeType, Long> {
+    fun existsByName(name: String): Boolean
+    fun findByName(name: String): Optional<ChargeType>
 }

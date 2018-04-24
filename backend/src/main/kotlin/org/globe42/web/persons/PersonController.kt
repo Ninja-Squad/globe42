@@ -1,210 +1,171 @@
-package org.globe42.web.persons;
+package org.globe42.web.persons
 
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
-
-import org.globe42.dao.CountryDao;
-import org.globe42.dao.CoupleDao;
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.City;
-import org.globe42.domain.Couple;
-import org.globe42.domain.FamilySituation;
-import org.globe42.domain.Person;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.NotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.globe42.dao.CountryDao
+import org.globe42.dao.CoupleDao
+import org.globe42.dao.PersonDao
+import org.globe42.domain.City
+import org.globe42.domain.Couple
+import org.globe42.domain.FamilySituation
+import org.globe42.domain.Person
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.NotFoundException
+import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
 
 /**
  * REST controller for persons
  * @author JB Nizet
  */
 @RestController
-@RequestMapping(value = "/api/persons")
+@RequestMapping(value = ["/api/persons"])
 @Transactional
-public class PersonController {
-
-    private final PersonDao personDao;
-    private final CoupleDao coupleDao;
-    private final CountryDao countryDao;
-
-    public PersonController(PersonDao personDao, CoupleDao coupleDao, CountryDao countryDao) {
-        this.personDao = personDao;
-        this.coupleDao = coupleDao;
-        this.countryDao = countryDao;
-    }
+class PersonController(private val personDao: PersonDao,
+                       private val coupleDao: CoupleDao,
+                       private val countryDao: CountryDao) {
 
     @GetMapping
-    public List<PersonIdentityDTO> list() {
-        return personDao.findNotDeleted().stream().map(PersonIdentityDTO::new).collect(Collectors.toList());
-    }
+    fun list() = personDao.findNotDeleted().map(::PersonIdentityDTO)
 
-    @GetMapping(params = "deleted")
-    public List<PersonIdentityDTO> listDeleted() {
-        return personDao.findDeleted().stream().map(PersonIdentityDTO::new).collect(Collectors.toList());
-    }
+    @GetMapping(params = ["deleted"])
+    fun listDeleted() = personDao.findDeleted().map(::PersonIdentityDTO)
 
     @GetMapping("/{personId}")
-    public PersonDTO get(@PathVariable("personId") Long id) {
-        return personDao.findById(id).map(PersonDTO::new).orElseThrow(() -> new NotFoundException("No person with ID " + id));
+    fun get(@PathVariable("personId") id: Long): PersonDTO {
+        return personDao.findById(id).map(::PersonDTO).orElseThrow {
+            NotFoundException("No person with ID $id")
+        }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PersonDTO create(@Validated @RequestBody PersonCommandDTO command) {
-        Person person = new Person();
-        copyCommandToPerson(command, person);
+    fun create(@Validated @RequestBody command: PersonCommandDTO): PersonDTO {
+        val person = Person()
+        copyCommandToPerson(command, person)
 
-        if (person.isMediationEnabled()) {
-            char mediationCodeLetter = mediationCodeLetter(person);
-            person.setMediationCode(mediationCodeLetter + String.valueOf(personDao.nextMediationCode(mediationCodeLetter)));
+        if (person.mediationEnabled) {
+            val mediationCodeLetter = mediationCodeLetter(person)
+            person.mediationCode = mediationCodeLetter + personDao.nextMediationCode(mediationCodeLetter).toString()
         }
 
-        return new PersonDTO(personDao.save(person));
+        return PersonDTO(personDao.save(person))
     }
 
     @PutMapping("/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable("personId") Long id, @Validated @RequestBody PersonCommandDTO command) {
-        Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
+    fun update(@PathVariable("personId") id: Long, @Validated @RequestBody command: PersonCommandDTO) {
+        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
 
-        char oldMediationCodeLetter = person.getMediationCode() == null ? 0 : person.getMediationCode().charAt(0);
+        val oldMediationCodeLetter = person.mediationCode.let {
+            if (it == null) 0.toChar() else it[0]
+        }
 
-        copyCommandToPerson(command, person);
+        copyCommandToPerson(command, person)
 
-        char newMediationCodeLetter = mediationCodeLetter(person);
+        val newMediationCodeLetter = mediationCodeLetter(person)
         // if the mediation code letter changes, we change the code, unless the mediation is disabled,
         // in which case we set it to null.
         // if mediation is disabled and the letter doesn't change, we leave the code there, but
         // we don't transfer it to the client. So if mediation is reenabled, the person will keep the old
         // code.
         if (newMediationCodeLetter != oldMediationCodeLetter) {
-            if (command.isMediationEnabled()) {
-                person.setMediationCode(newMediationCodeLetter + String.valueOf(personDao.nextMediationCode(
-                    newMediationCodeLetter)));
-            }
-            else {
-                person.setMediationCode(null);
+            if (command.mediationEnabled) {
+                person.mediationCode = newMediationCodeLetter + personDao.nextMediationCode(newMediationCodeLetter).toString()
+            } else {
+                person.mediationCode = null
             }
         }
     }
 
     @DeleteMapping("/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("personId") Long id) {
-        Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
-        person.setDeleted(true);
+    fun delete(@PathVariable("personId") id: Long) {
+        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+        person.deleted = true
     }
 
     @DeleteMapping("/{personId}/deletion")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void resurrect(@PathVariable("personId") Long id) {
-        Person person = personDao.findById(id).orElseThrow(() -> new NotFoundException("No person with ID " + id));
-        person.setDeleted(false);
+    fun resurrect(@PathVariable("personId") id: Long) {
+        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+        person.deleted = false
     }
 
-    private void copyCommandToPerson(PersonCommandDTO command, Person person) {
-        person.setFirstName(command.getFirstName());
-        person.setLastName(command.getLastName());
-        person.setBirthName(command.getBirthName());
-        person.setNickName(command.getNickName());
-        person.setBirthDate(command.getBirthDate());
-        person.setAddress(command.getAddress());
-        if (command.getCity() == null) {
-            person.setCity(null);
-        }
-        else {
-            person.setCity(new City(command.getCity().getCode(), command.getCity().getCity()));
-        }
-
-        person.setEmail(command.getEmail());
-        person.setAdherent(command.isAdherent());
-        person.setGender(command.getGender());
-        person.setPhoneNumber(command.getPhoneNumber());
-        person.setMediationEnabled(command.isMediationEnabled());
+    private fun copyCommandToPerson(command: PersonCommandDTO, person: Person) {
+        person.firstName = command.firstName
+        person.lastName = command.lastName
+        person.birthName = command.birthName
+        person.nickName = command.nickName
+        person.birthDate = command.birthDate
+        person.address = command.address
+        person.city = command.city?.let { City(it.code, it.city) }
+        person.email = command.email
+        person.adherent = command.adherent
+        person.gender = command.gender
+        person.phoneNumber = command.phoneNumber
+        person.mediationEnabled = command.mediationEnabled
 
         // if mediation is disabled, we leave all the mediation-related elements as is
         // in case mediation is re-enabled later, to not lose valuable information.
-        if (command.isMediationEnabled()) {
-            person.setEntryDate(command.getEntryDate());
-            person.setFirstMediationAppointmentDate(command.getFirstMediationAppointmentDate());
-            person.setMaritalStatus(command.getMaritalStatus());
-            person.setHousing(command.getHousing());
-            person.setHousingSpace(command.getHousingSpace());
-            person.setHostName(command.getHostName());
-            person.setFiscalStatus(command.getFiscalStatus());
-            person.setFiscalNumber(command.getFiscalNumber());
-            person.setFiscalStatusUpToDate(command.isFiscalStatusUpToDate());
-            person.setHealthCareCoverage(command.getHealthCareCoverage());
-            person.setHealthCareCoverageStartDate(command.getHealthCareCoverageStartDate());
-            person.setHealthInsurance(command.getHealthInsurance());
-            person.setHealthInsuranceStartDate(command.getHealthInsuranceStartDate());
-            person.setAccompanying(command.getAccompanying());
-            person.setSocialSecurityNumber(command.getSocialSecurityNumber());
-            person.setCafNumber(command.getCafNumber());
-            person.setFrenchFamilySituation(toFamilySituation(command.getFrenchFamilySituation()));
-            person.setAbroadFamilySituation(toFamilySituation(command.getAbroadFamilySituation()));
-            if (command.getNationalityId() == null) {
-                person.setNationality(null);
+        if (command.mediationEnabled) {
+            person.entryDate = command.entryDate
+            person.firstMediationAppointmentDate = command.firstMediationAppointmentDate
+            person.maritalStatus = command.maritalStatus
+            person.housing = command.housing
+            person.housingSpace = command.housingSpace
+            person.hostName = command.hostName
+            person.fiscalStatus = command.fiscalStatus
+            person.fiscalNumber = command.fiscalNumber
+            person.fiscalStatusUpToDate = command.fiscalStatusUpToDate
+            person.healthCareCoverage = command.healthCareCoverage
+            person.healthCareCoverageStartDate = command.healthCareCoverageStartDate
+            person.healthInsurance = command.healthInsurance
+            person.healthInsuranceStartDate = command.healthInsuranceStartDate
+            person.accompanying = command.accompanying
+            person.socialSecurityNumber = command.socialSecurityNumber
+            person.cafNumber = command.cafNumber
+            person.frenchFamilySituation = command.frenchFamilySituation.toFamilySituation()
+            person.abroadFamilySituation = command.abroadFamilySituation.toFamilySituation()
+            person.nationality = command.nationalityId?.let {
+                countryDao.findById(it).orElseThrow {
+                    BadRequestException("No nationality with ID ${command.nationalityId}")
+                }
             }
-            else {
-                person.setNationality(
-                    countryDao.findById(command.getNationalityId())
-                              .orElseThrow(() -> new BadRequestException("No nationality with ID "
-                                                                             + command.getNationalityId())));
-            }
-            handleCouple(person, command.getSpouseId());
+            handleCouple(person, command.spouseId)
         }
     }
 
-    private FamilySituation toFamilySituation(FamilySituationDTO dtoOrNull) {
-        if (dtoOrNull == null) {
-            return null;
-        }
-        return new FamilySituation(dtoOrNull.isParentsPresent(),
-                                   dtoOrNull.isSpousePresent(),
-                                   dtoOrNull.getChildCount());
+    private fun FamilySituationDTO?.toFamilySituation(): FamilySituation? {
+        return this?.let { FamilySituation(parentsPresent, spousePresent, childCount) }
     }
 
-    private char mediationCodeLetter(Person person) {
-        char letter = Character.toUpperCase(person.getLastName().charAt(0));
-        if (letter < 'A' || letter > 'Z') {
-            letter = 'Z';
-        }
-        return letter;
+    private fun mediationCodeLetter(person: Person): Char {
+        val letter = Character.toUpperCase(person.lastName!![0])
+        return if (letter < 'A' || letter > 'Z') 'Z' else letter
     }
 
-    private void handleCouple(Person person, Long spouseId) {
-        Person currentSpouse = person.getSpouse();
-        if (currentSpouse != null && !currentSpouse.getId().equals(spouseId)) {
-            Couple couple = person.getCouple();
-            currentSpouse.setCouple(null);
-            person.setCouple(null);
-            coupleDao.delete(couple);
+    private fun handleCouple(person: Person, spouseId: Long?) {
+        val currentSpouse = person.spouse
+        if (currentSpouse != null && currentSpouse.id != spouseId) {
+            val couple = person.couple
+            currentSpouse.couple = null
+            person.couple = null
+            coupleDao.delete(couple!!)
         }
 
-        if (spouseId != null && (currentSpouse == null || !currentSpouse.getId().equals(spouseId))) {
-            Person newSpouse = personDao.findById(spouseId).orElseThrow(() -> new BadRequestException("No person with ID " + spouseId));
+        if (spouseId != null && (currentSpouse == null || currentSpouse.id != spouseId)) {
+            val newSpouse = personDao.findById(spouseId).orElseThrow { BadRequestException("No person with ID $spouseId") }
 
-            Couple newSpouseCurrentCouple = newSpouse.getCouple();
+            val newSpouseCurrentCouple = newSpouse.couple
             if (newSpouseCurrentCouple != null) {
-                newSpouse.getSpouse().setCouple(null);
-                newSpouse.setCouple(null);
-                coupleDao.delete(newSpouseCurrentCouple);
+                newSpouse.spouse!!.couple = null
+                newSpouse.couple = null
+                coupleDao.delete(newSpouseCurrentCouple)
             }
 
-            Couple newCouple = new Couple(person, newSpouse);
-            coupleDao.save(newCouple);
+            val newCouple = Couple(person, newSpouse)
+            coupleDao.save(newCouple)
         }
     }
 }

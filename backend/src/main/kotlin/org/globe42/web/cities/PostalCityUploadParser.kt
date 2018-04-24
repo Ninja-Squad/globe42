@@ -1,15 +1,13 @@
-package org.globe42.web.cities;
+package org.globe42.web.cities
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.globe42.domain.PostalCity;
-import org.springframework.stereotype.Component;
+import org.globe42.domain.PostalCity
+import org.springframework.stereotype.Component
+import java.io.BufferedReader
+import java.io.ByteArrayInputStream
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
+import java.util.*
+import java.util.stream.Collectors
 
 /**
  * Parser for the CSV file containing postal codes and cities, available at
@@ -17,55 +15,43 @@ import org.springframework.stereotype.Component;
  * @author JB Nizet
  */
 @Component
-public class PostalCityUploadParser {
+class PostalCityUploadParser {
 
-    public List<PostalCity> parse(byte[] content) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(content),
-                                                                         StandardCharsets.UTF_8));
+    fun parse(content: ByteArray): List<PostalCity> {
+        val reader = BufferedReader(InputStreamReader(ByteArrayInputStream(content),
+                                                      StandardCharsets.UTF_8))
         return reader.lines()
-                     .skip(1L)
-                     .filter(line -> !line.isEmpty())
-                     .map(this::parseLine)
-                     .distinct()
-                     .map(Line::getPostalCity)
-                     .collect(Collectors.toList());
+                .skip(1L)
+                .filter { line -> !line.isEmpty() }
+                .map(this::parseLine)
+                .distinct()
+                .map(Line::postalCity)
+                .collect(Collectors.toList())
     }
 
-    private Line parseLine(String line) {
-        String[] split = line.split(";");
-        return new Line(new PostalCity(split[2], split[1]));
+    private fun parseLine(line: String): Line {
+        val split = line.split(";").dropLastWhile(String::isEmpty).toTypedArray()
+        return Line(PostalCity(split[2], split[1]))
     }
 
     /**
      * Wrapper class allowing to remove duplicates, i.e. lines that have the same postal code and city
      */
-    private static final class Line {
-        private final PostalCity postalCity;
+    private class Line(val postalCity: PostalCity) {
 
-        public Line(PostalCity postalCity) {
-            this.postalCity = postalCity;
-        }
-
-        public PostalCity getPostalCity() {
-            return postalCity;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
             }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
+            if (other == null || javaClass != other.javaClass) {
+                return false
             }
-            Line line = (Line) o;
-            return Objects.equals(this.postalCity.getPostalCode(), line.postalCity.getPostalCode())
-                   && Objects.equals(this.postalCity.getCity(), line.postalCity.getCity());
+            val line = other as Line?
+            return this.postalCity.postalCode == line!!.postalCity.postalCode && this.postalCity.city == line.postalCity.city
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(postalCity.getPostalCode(), postalCity.getCity());
+        override fun hashCode(): Int {
+            return Objects.hash(postalCity.postalCode, postalCity.city)
         }
     }
 }

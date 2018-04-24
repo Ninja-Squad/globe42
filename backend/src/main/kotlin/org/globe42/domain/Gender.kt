@@ -1,11 +1,11 @@
-package org.globe42.domain;
+package org.globe42.domain
 
 /**
  * A gender
  * @author JB Nizet
  */
-public enum Gender {
+enum class Gender {
     MALE,
     FEMALE,
-    OTHER;
+    OTHER
 }

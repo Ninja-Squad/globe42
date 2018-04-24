@@ -1,37 +1,36 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.domain.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.globe42.domain.User
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
+import java.util.*
 
 /**
- * DAO for the {@link org.globe42.domain.User} entity
+ * DAO for the [org.globe42.domain.User] entity
  * @author JB Nizet
  */
-public interface UserDao extends JpaRepository<User, Long>, UserDaoCustom {
+interface UserDao : JpaRepository<User, Long>, UserDaoCustom {
 
     @Query("select u from User u where u.deleted = false")
-    List<User> findNotDeleted();
+    fun findNotDeleted(): List<User>
 
     /**
      * Finds a not deleted user by login
      */
     @Query("select u from User u where u.login = :login and u.deleted = false")
-    Optional<User> findNotDeletedByLogin(@Param("login") String login);
+    fun findNotDeletedByLogin(@Param("login") login: String): Optional<User>
 
     /**
      * Tests if a user, deleted or not, has the given login
      */
-    boolean existsByLogin(String login);
+    fun existsByLogin(login: String): Boolean
 
     /**
      * Finds a not deleted user by ID
      */
-    default Optional<User> findNotDeletedById(Long id) {
-        return this.findById(id).filter(user -> !user.isDeleted());
+    @JvmDefault
+    fun findNotDeletedById(id: Long): Optional<User> {
+        return this.findById(id).filter { user -> !user.deleted }
     }
 }

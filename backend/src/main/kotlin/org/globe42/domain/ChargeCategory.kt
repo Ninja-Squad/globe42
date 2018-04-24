@@ -1,10 +1,12 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.SequenceGenerator
+import javax.validation.constraints.NotEmpty
+
+private const val CHARGE_CATEGORY_GENERATOR = "ChargeCategoryGenerator"
 
 /**
  * A category of charges like, for example, "house rental charge". Charge types (like "mortgage", or "electricity")
@@ -14,46 +16,30 @@ import javax.validation.constraints.NotEmpty;
  * @author JB Nizet
  */
 @Entity
-public class ChargeCategory {
-
-    private static final String CHARGE_CATEGORY_GENERATOR = "ChargeCategoryGenerator";
+class ChargeCategory {
 
     @Id
-    @SequenceGenerator(name = CHARGE_CATEGORY_GENERATOR, sequenceName = "CHARGE_CATEGORY_SEQ", initialValue = 1000, allocationSize = 1)
+    @SequenceGenerator(name = CHARGE_CATEGORY_GENERATOR,
+                       sequenceName = "CHARGE_CATEGORY_SEQ",
+                       initialValue = 1000,
+                       allocationSize = 1)
     @GeneratedValue(generator = CHARGE_CATEGORY_GENERATOR)
-    private Long id;
+    var id: Long? = null
 
     /**
      * The name of the category, as displayed in the application
      */
     @NotEmpty
-    private String name;
+    var name: String? = null
 
-    public ChargeCategory() {
+    constructor()
+
+    constructor(id: Long) {
+        this.id = id
     }
 
-    public ChargeCategory(Long id) {
-        this.id = id;
-    }
-
-    public ChargeCategory(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    constructor(id: Long, name: String) {
+        this.id = id
+        this.name = name
     }
 }

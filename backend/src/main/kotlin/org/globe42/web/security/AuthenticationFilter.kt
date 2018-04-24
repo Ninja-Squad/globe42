@@ -1,119 +1,98 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import java.io.IOException;
-import java.util.Arrays;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.globe42.dao.UserDao
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import java.io.IOException
+import java.util.*
+import javax.servlet.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
-import io.jsonwebtoken.Claims;
-import org.globe42.dao.UserDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+private const val BEARER_PREFIX = "Bearer "
 
 /**
- * Servlet filter used to check that the user is authenticated, on all API URLs except <code>/api/authentication</code>.
+ * Servlet filter used to check that the user is authenticated, on all API URLs except `/api/authentication`.
  * It also checks that the user is authenticated and is an admin for all actuator endpoints, except
- * <code>/actuator/health</code> which is allowed to anyone.
+ * `/actuator/health` which is allowed to anyone.
  *
- * This servlet is registered by {@link AuthenticationConfig}.
+ * This servlet is registered by [AuthenticationConfig].
  *
  * @author JB Nizet
  */
-public class AuthenticationFilter implements Filter {
-
-    private static final String BEARER_PREFIX = "Bearer ";
+class AuthenticationFilter : Filter {
 
     @Autowired
-    private JwtHelper jwtHelper;
+    private lateinit var jwtHelper: JwtHelper
 
     @Autowired
-    private CurrentUser currentUser;
+    private lateinit var currentUser: CurrentUser
 
     @Autowired
-    private UserDao userDao;
+    private lateinit var userDao: UserDao
 
-    @Override
-    public void init(FilterConfig filterConfig) {
+    override fun init(filterConfig: FilterConfig) {
         // nothing to do
     }
 
-    @Override
-    public void doFilter(ServletRequest req,
-                         ServletResponse resp,
-                         FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) resp;
+    @Throws(IOException::class, ServletException::class)
+    override fun doFilter(req: ServletRequest,
+                          resp: ServletResponse,
+                          chain: FilterChain) {
+        val request = req as HttpServletRequest
+        val response = resp as HttpServletResponse
 
-        Long userId = extractUserIdFromToken(request);
-        currentUser.setUserId(userId);
+        val userId = extractUserIdFromToken(request)
+        currentUser.userId = userId
 
         if ((isProtectedApiRequest(request) || isProtectedActuatorRequest(request))
-            && (userId == null || !userDao.existsNotDeletedById(userId))) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value());
-        }
-        else if (isProtectedActuatorRequest(request) && !userDao.existsNotDeletedAdminById(userId)) {
-            response.sendError(HttpStatus.FORBIDDEN.value());
-        }
-        else {
-            chain.doFilter(req, response);
+                && (userId == null || !userDao.existsNotDeletedById(userId))) {
+            response.sendError(HttpStatus.UNAUTHORIZED.value())
+        } else if (isProtectedActuatorRequest(request) && (userId == null || !userDao.existsNotDeletedAdminById(userId))) {
+            response.sendError(HttpStatus.FORBIDDEN.value())
+        } else {
+            chain.doFilter(req, response)
         }
     }
 
-    private boolean isProtectedActuatorRequest(HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        return requestURI.startsWith("/actuator") && !requestURI.equals("/actuator/health");
+    private fun isProtectedActuatorRequest(request: HttpServletRequest): Boolean {
+        val requestURI = request.requestURI
+        return requestURI.startsWith("/actuator") && requestURI != "/actuator/health"
     }
 
-    private boolean isProtectedApiRequest(HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        return requestURI.startsWith("/api") && !requestURI.equals("/api/authentication");
+    private fun isProtectedApiRequest(request: HttpServletRequest): Boolean {
+        val requestURI = request.requestURI
+        return requestURI.startsWith("/api") && requestURI != "/api/authentication"
     }
 
-    @Override
-    public void destroy() {
+    override fun destroy() {
         // nothing to do
     }
 
-    private Long extractUserIdFromToken(HttpServletRequest request) {
-        String token = extractToken(request);
-        if (token == null) {
-            return null;
-        }
+    private fun extractUserIdFromToken(request: HttpServletRequest): Long? {
+        val token = extractToken(request) ?: return null
 
         try {
-            Claims claims = jwtHelper.extractClaims(token);
-            return Long.parseLong(claims.getSubject());
-        }
-        catch (Exception e) {
-            return null;
+            val claims = jwtHelper.extractClaims(token)
+            return claims.subject.toLong()
+        } catch (e: Exception) {
+            return null
         }
     }
 
-    private String extractToken(HttpServletRequest request) {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header != null) {
-            if (!header.startsWith(BEARER_PREFIX)) {
-                return null;
-            }
-            return header.substring(BEARER_PREFIX.length()).trim();
-        }
-        else if (request.getCookies() != null) {
-            return Arrays.stream(request.getCookies())
-                         .filter(cookie -> cookie.getName().equals("globe42_token"))
-                         .map(Cookie::getValue)
-                         .findAny()
-                         .orElse(null);
-        }
-        else {
-            return null;
+    private fun extractToken(request: HttpServletRequest): String? {
+        val header = request.getHeader(HttpHeaders.AUTHORIZATION)
+        return if (header != null) {
+            if (!header.startsWith(BEARER_PREFIX)) null else header.substring(BEARER_PREFIX.length).trim()
+        } else if (request.cookies != null) {
+            Arrays.stream(request.cookies)
+                    .filter { cookie -> cookie.name == "globe42_token" }
+                    .map { it.getValue() }
+                    .findAny()
+                    .orElse(null)
+        } else {
+            null
         }
     }
 }

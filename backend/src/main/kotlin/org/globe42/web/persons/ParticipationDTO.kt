@@ -1,26 +1,15 @@
-package org.globe42.web.persons;
+package org.globe42.web.persons
 
-import org.globe42.domain.ActivityType;
-import org.globe42.domain.Participation;
+import org.globe42.domain.ActivityType
+import org.globe42.domain.Participation
 
 /**
  * The participation of a person to an activity type
  * @author JB Nizet
  */
-public final class ParticipationDTO {
-    private final Long id;
-    private final ActivityType activityType;
+data class ParticipationDTO(
+        val id: Long,
+        val activityType: ActivityType) {
 
-    public ParticipationDTO(Participation participation) {
-        this.id = participation.getId();
-        this.activityType = participation.getActivityType();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public ActivityType getActivityType() {
-        return activityType;
-    }
+    constructor(participation: Participation) : this(participation.id!!, participation.activityType!!)
 }

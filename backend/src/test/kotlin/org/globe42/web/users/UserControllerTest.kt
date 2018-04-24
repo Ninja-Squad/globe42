@@ -1,220 +1,209 @@
-package org.globe42.web.users;
+package org.globe42.web.users
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.UserDao
+import org.globe42.domain.User
+import org.globe42.test.BaseTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.NotFoundException
+import org.globe42.web.security.CurrentUser
+import org.globe42.web.security.PasswordDigester
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.util.*
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.NoteDao;
-import org.globe42.dao.SpentTimeDao;
-import org.globe42.dao.TaskDao;
-import org.globe42.dao.UserDao;
-import org.globe42.domain.User;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.NotFoundException;
-import org.globe42.web.security.CurrentUser;
-import org.globe42.web.security.PasswordDigester;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+fun createUser(id: Long): User {
+    val user = User(id)
+    user.login = "JB"
+    user.password = "hashedPassword"
+    return user
+}
 
 /**
- * Unit tests for {@link UserController}
+ * Unit tests for [UserController]
  * @author JB Nizet
  */
-public class UserControllerTest extends BaseTest {
+class UserControllerTest : BaseTest() {
     @Mock
-    private CurrentUser mockCurrentUser;
+    private lateinit var mockCurrentUser: CurrentUser
 
     @Mock
-    private UserDao mockUserDao;
+    private lateinit var mockUserDao: UserDao
 
     @Mock
-    private TaskDao mockTaskDao;
+    private lateinit var mockPasswordGenerator: PasswordGenerator
 
     @Mock
-    private NoteDao mockNoteDao;
-
-    @Mock
-    private SpentTimeDao mockSpentTimeDao;
-
-    @Mock
-    private PasswordGenerator mockPasswordGenerator;
-
-    @Mock
-    private PasswordDigester mockPasswordDigester;
+    private lateinit var mockPasswordDigester: PasswordDigester
 
     @InjectMocks
-    private UserController controller;
+    private lateinit var controller: UserController
 
     @Captor
-    private ArgumentCaptor<User> userCaptor;
+    private lateinit var userCaptor: ArgumentCaptor<User>
 
-    private Long userId = 42L;
+    private val userId = 42L
 
     @BeforeEach
-    public void prepare() {
-        when(mockCurrentUser.getUserId()).thenReturn(userId);
+    fun prepare() {
+        whenever(mockCurrentUser.userId).thenReturn(userId)
     }
 
     @Test
-    public void shouldGetCurrentUser() {
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldGetCurrentUser() {
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        CurrentUserDTO result = controller.getCurrentUser();
-        assertThat(result.getId()).isEqualTo(user.getId());
-        assertThat(result.getLogin()).isEqualTo(user.getLogin());
+        val (id, login) = controller.getCurrentUser()
+        assertThat(id).isEqualTo(user.id)
+        assertThat(login).isEqualTo(user.login)
     }
 
     @Test
-    public void shouldThrowWhenGettingCurrentUserIfNotFound() {
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
+    fun shouldThrowWhenGettingCurrentUserIfNotFound() {
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.getCurrentUser());
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.getCurrentUser() }
     }
 
     @Test
-    public void shouldChangePasswordOfCurrentUser() {
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldChangePasswordOfCurrentUser() {
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        ChangePasswordCommandDTO command = new ChangePasswordCommandDTO("newPassword");
-        when(mockPasswordDigester.hash(command.getNewPassword())).thenReturn("hashed");
+        val command = ChangePasswordCommandDTO("newPassword")
+        whenever(mockPasswordDigester.hash(command.newPassword)).thenReturn("hashed")
 
-        controller.changePassword(command);
+        controller.changePassword(command)
 
-        assertThat(user.getPassword()).isEqualTo("hashed");
+        assertThat(user.password).isEqualTo("hashed")
     }
 
     @Test
-    public void shouldList() {
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeleted()).thenReturn(Collections.singletonList(user));
+    fun shouldList() {
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeleted()).thenReturn(listOf(user))
 
-        List<UserDTO> result = controller.list();
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(user.getId());
-        assertThat(result.get(0).getLogin()).isEqualTo(user.getLogin());
+        val result = controller.list()
+        assertThat(result).hasSize(1)
+        assertThat(result[0].id).isEqualTo(user.id)
+        assertThat(result[0].login).isEqualTo(user.login)
     }
 
     @Test
-    public void shouldGet() {
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldGet() {
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        UserDTO result = controller.get(userId);
-        assertThat(result.getId()).isEqualTo(user.getId());
+        val (id) = controller.get(userId)
+        assertThat(id).isEqualTo(user.id)
     }
 
     @Test
-    public void shouldThrowWhenGettingIfNotFound() {
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(userId));
+    fun shouldThrowWhenGettingIfNotFound() {
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty())
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(userId) }
     }
 
     @Test
-    public void shouldCreate() {
-        UserCommandDTO command = new UserCommandDTO("test", true);
+    fun shouldCreate() {
+        val command = UserCommandDTO("test", true)
 
-        when(mockPasswordGenerator.generatePassword()).thenReturn("password");
-        when(mockPasswordDigester.hash("password")).thenReturn("hashed");
+        whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
+        whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
+        whenever(mockUserDao.save(any<User>()))
+                .thenReturnModifiedFirstArgument<User> { it.id = 42L }
 
-        UserWithPasswordDTO result = controller.create(command);
-        assertThat(result.getGeneratedPassword()).isEqualTo("password");
-        assertThat(result.getUser().getLogin()).isEqualTo(command.getLogin());
-        assertThat(result.getUser().isAdmin()).isEqualTo(command.isAdmin());
+        val (user, generatedPassword) = controller.create(command)
+        assertThat(generatedPassword).isEqualTo("password")
+        assertThat(user.login).isEqualTo(command.login)
+        assertThat(user.admin).isEqualTo(command.admin)
 
-        verify(mockUserDao).save(userCaptor.capture());
-        assertThat(userCaptor.getValue().getPassword()).isEqualTo("hashed");
+        verify(mockUserDao).save(userCaptor.capture())
+        assertThat(userCaptor.value.password).isEqualTo("hashed")
     }
 
     @Test
-    public void shouldThrowWhenCreatingWithExistingLogin() {
-        UserCommandDTO command = new UserCommandDTO("test", false);
+    fun shouldThrowWhenCreatingWithExistingLogin() {
+        val command = UserCommandDTO("test", false)
 
-        when(mockUserDao.existsByLogin(command.getLogin())).thenReturn(true);
+        whenever(mockUserDao.existsByLogin(command.login)).thenReturn(true)
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(command));
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
     }
 
     @Test
-    public void shouldUpdate() {
-        UserCommandDTO command = new UserCommandDTO("test", true);
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldUpdate() {
+        val command = UserCommandDTO("test", true)
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        controller.update(userId, command);
-        assertThat(user.getLogin()).isEqualTo(command.getLogin());
-        assertThat(user.isAdmin()).isEqualTo(command.isAdmin());
+        controller.update(userId, command)
+        assertThat(user.login).isEqualTo(command.login)
+        assertThat(user.admin).isEqualTo(command.admin)
     }
 
     @Test
-    public void shouldThrowWhenUpdatingWithExistingLogin() {
-        UserCommandDTO command = new UserCommandDTO("test", false);
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldThrowWhenUpdatingWithExistingLogin() {
+        val command = UserCommandDTO("test", false)
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        when(mockUserDao.findNotDeletedByLogin(command.getLogin())).thenReturn(Optional.of(createUser(4567L)));
+        whenever(mockUserDao.findNotDeletedByLogin(command.login)).thenReturn(Optional.of(createUser(4567L)))
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.update(userId, command));
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.update(userId, command) }
     }
 
     @Test
-    public void shouldNotThrowWhenUpdatingWithSameLogin() {
-        User user = createUser(userId);
-        UserCommandDTO command = new UserCommandDTO(user.getLogin(), false);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldNotThrowWhenUpdatingWithSameLogin() {
+        val user = createUser(userId)
+        val command = UserCommandDTO(user.login!!, false)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        when(mockUserDao.findNotDeletedByLogin(command.getLogin())).thenReturn(Optional.of(user));
+        whenever(mockUserDao.findNotDeletedByLogin(command.login)).thenReturn(Optional.of(user))
 
-        controller.update(userId, command);
+        controller.update(userId, command)
     }
 
     @Test
-    public void shouldDelete() {
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldDelete() {
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        controller.delete(userId);
+        controller.delete(userId)
 
-        assertThat(user.isDeleted()).isTrue();
+        assertThat(user.deleted).isTrue()
     }
 
     @Test
-    public void shouldNotDoAnythingWhenDeletingUnexistingUser() {
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty());
+    fun shouldNotDoAnythingWhenDeletingUnexistingUser() {
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.empty())
 
-        controller.delete(userId);
+        controller.delete(userId)
 
-        verify(mockUserDao, never()).delete(any(User.class));
+        verify(mockUserDao, never()).delete(any())
     }
 
     @Test
-    public void shouldResetPassword() {
-        User user = createUser(userId);
-        when(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user));
+    fun shouldResetPassword() {
+        val user = createUser(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
-        when(mockPasswordGenerator.generatePassword()).thenReturn("password");
-        when(mockPasswordDigester.hash("password")).thenReturn("hashed");
-        UserWithPasswordDTO result = controller.resetPassword(userId);
+        whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
+        whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
+        val (_, generatedPassword) = controller.resetPassword(userId)
 
-        assertThat(user.getPassword()).isEqualTo("hashed");
-        assertThat(result.getGeneratedPassword()).isEqualTo("password");
-    }
-
-    public static User createUser(Long id) {
-        User user = new User(id);
-        user.setLogin("JB");
-        user.setPassword("hashedPassword");
-        return user;
+        assertThat(user.password).isEqualTo("hashed")
+        assertThat(generatedPassword).isEqualTo("password")
     }
 }

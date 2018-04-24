@@ -1,70 +1,62 @@
-package org.globe42.web.cities;
+package org.globe42.web.cities
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.globe42.dao.PostalCityDao;
-import org.globe42.domain.PostalCity;
-import org.globe42.test.BaseTest;
-import org.globe42.web.persons.CityDTO;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Java6Assertions.assertThat
+import org.globe42.dao.PostalCityDao
+import org.globe42.domain.PostalCity
+import org.globe42.test.BaseTest
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.util.*
 
 /**
- * Unit tests for {@link PostalCityController}
+ * Unit tests for [PostalCityController]
  * @author JB Nizet
  */
-public class PostalCityControllerTest extends BaseTest {
+class PostalCityControllerTest : BaseTest() {
     @Mock
-    private PostalCityDao mockPostalCityDao;
+    private lateinit var mockPostalCityDao: PostalCityDao
 
     @Mock
-    private PostalCityUploadParser mockUploadParser;
+    private lateinit var mockUploadParser: PostalCityUploadParser
 
     @InjectMocks
-    private PostalCityController controller;
+    private lateinit var controller: PostalCityController
 
     @Test
-    public void shouldSearchByPostalCodeWhenQueryIsNumeric() {
-        PostalCity postalCity = new PostalCity("42000", "ST ETIENNE");
-        when(mockPostalCityDao.findByPostalCode("420", PostalCityController.LIMIT)).thenReturn(
-            Arrays.asList(postalCity)
-        );
+    fun shouldSearchByPostalCodeWhenQueryIsNumeric() {
+        val postalCity = PostalCity("42000", "ST ETIENNE")
+        whenever(mockPostalCityDao.findByPostalCode("420", LIMIT)).thenReturn(listOf(postalCity))
 
-        List<CityDTO> result = controller.search("420");
+        val result = controller.search("420")
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getCode()).isEqualTo(postalCity.getPostalCode());
-        assertThat(result.get(0).getCity()).isEqualTo(postalCity.getCity());
+        assertThat(result).hasSize(1)
+        assertThat(result[0].code).isEqualTo(postalCity.postalCode)
+        assertThat(result[0].city).isEqualTo(postalCity.city)
     }
 
     @Test
-    public void shouldSearchByCityWhenQueryIsNotNumeric() {
-        PostalCity postalCity = new PostalCity("42000", "ST ETIENNE");
-        when(mockPostalCityDao.findByCity("ST ET", PostalCityController.LIMIT)).thenReturn(
-            Arrays.asList(postalCity)
-        );
+    fun shouldSearchByCityWhenQueryIsNotNumeric() {
+        val postalCity = PostalCity("42000", "ST ETIENNE")
+        whenever(mockPostalCityDao.findByCity("ST ET", LIMIT)).thenReturn(listOf(postalCity))
 
-        List<CityDTO> result = controller.search("ST ET");
+        val result = controller.search("ST ET")
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getCode()).isEqualTo(postalCity.getPostalCode());
-        assertThat(result.get(0).getCity()).isEqualTo(postalCity.getCity());
+        assertThat(result).hasSize(1)
+        assertThat(result[0].code).isEqualTo(postalCity.postalCode)
+        assertThat(result[0].city).isEqualTo(postalCity.city)
     }
 
     @Test
-    public void shouldUpload() {
-        byte[] body = "fake".getBytes();
-        List<PostalCity> parsedCities = Arrays.asList(new PostalCity("42000", "ST ETIENNE"));
-        when(mockUploadParser.parse(body)).thenReturn(parsedCities);
+    fun shouldUpload() {
+        val body = "fake".toByteArray()
+        val parsedCities = Arrays.asList(PostalCity("42000", "ST ETIENNE"))
+        whenever(mockUploadParser.parse(body)).thenReturn(parsedCities)
 
-        controller.upload(body);
+        controller.upload(body)
 
-        verify(mockPostalCityDao).saveAllEfficiently(parsedCities);
+        verify(mockPostalCityDao).saveAllEfficiently(parsedCities)
     }
 }

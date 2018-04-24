@@ -1,8 +1,8 @@
-package org.globe42.web;
+package org.globe42.web
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 /**
  * Configuration used to set an infinite max-age on static assets that can be cached forever (because
@@ -10,12 +10,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author JB Nizet
  */
 @Configuration
-public class MaxAgeCacheConfig implements WebMvcConfigurer {
+class MaxAgeCacheConfig : WebMvcConfigurer {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("*.bundle.js", "*.bundle.css", "fontawesome-webfont.*")
                 .addResourceLocations("classpath:/static/", "classpath:/public/")
-                .setCachePeriod(Integer.MAX_VALUE);
+                .setCachePeriod(Integer.MAX_VALUE)
     }
 }

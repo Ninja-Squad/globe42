@@ -1,102 +1,99 @@
-package org.globe42.web.charges;
+package org.globe42.web.charges
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.globe42.dao.ChargeCategoryDao;
-import org.globe42.dao.ChargeTypeDao;
-import org.globe42.domain.ChargeCategory;
-import org.globe42.domain.ChargeType;
-import org.globe42.test.GlobeMvcTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
+import org.globe42.dao.ChargeCategoryDao
+import org.globe42.dao.ChargeTypeDao
+import org.globe42.domain.ChargeCategory
+import org.globe42.domain.ChargeType
+import org.globe42.test.GlobeMvcTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.math.BigDecimal
+import java.util.*
 
 /**
- * MVC tests for {@link ChargeTypeController}
+ * MVC tests for [ChargeTypeController]
  * @author JB Nizet
  */
-@GlobeMvcTest(ChargeTypeController.class)
-public class ChargeTypeControllerMvcTest {
+@GlobeMvcTest(ChargeTypeController::class)
+class ChargeTypeControllerMvcTest {
 
     @MockBean
-    private ChargeTypeDao mockChargeTypeDao;
+    private lateinit var mockChargeTypeDao: ChargeTypeDao
 
     @MockBean
-    private ChargeCategoryDao mockChargeCategoryDao;
+    private lateinit var mockChargeCategoryDao: ChargeCategoryDao
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
-    private MockMvc mvc;
+    private lateinit var mvc: MockMvc
 
-    private ChargeType chargeType;
+    private lateinit var chargeType: ChargeType
 
     @BeforeEach
-    public void prepare() {
-        chargeType = new ChargeType(42L);
-        chargeType.setName("source 1");
-        chargeType.setCategory(new ChargeCategory(1L, "category 1"));
-        chargeType.setMaxMonthlyAmount(new BigDecimal("1234.56"));
+    fun prepare() {
+        chargeType = ChargeType(42L)
+        chargeType.name = "source 1"
+        chargeType.category = ChargeCategory(1L, "category 1")
+        chargeType.maxMonthlyAmount = BigDecimal("1234.56")
     }
 
     @Test
-    public void shouldList() throws Exception {
-        when(mockChargeTypeDao.findAll()).thenReturn(Collections.singletonList(chargeType));
+    fun shouldList() {
+        whenever(mockChargeTypeDao.findAll()).thenReturn(listOf<ChargeType>(chargeType))
 
         mvc.perform(get("/api/charge-types"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(42))
-           .andExpect(jsonPath("$[0].name").value(chargeType.getName()))
-           .andExpect(jsonPath("$[0].category.id").value(chargeType.getCategory().getId()))
-           .andExpect(jsonPath("$[0].category.name").value(chargeType.getCategory().getName()))
-           .andExpect(jsonPath("$[0].maxMonthlyAmount").value(chargeType.getMaxMonthlyAmount().doubleValue()));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$[0].id").value(42))
+                .andExpect(jsonPath("$[0].name").value(chargeType.name!!))
+                .andExpect(jsonPath("$[0].category.id").value(chargeType.category!!.id!!))
+                .andExpect(jsonPath("$[0].category.name").value(chargeType.category!!.name!!))
+                .andExpect(jsonPath("$[0].maxMonthlyAmount").value(chargeType.maxMonthlyAmount!!.toDouble()))
     }
 
     @Test
-    public void shouldGet() throws Exception {
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.of(chargeType));
+    fun shouldGet() {
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
 
-        mvc.perform(get("/api/charge-types/{typeId}", chargeType.getId()))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.id").value(42));
+        mvc.perform(get("/api/charge-types/{typeId}", chargeType.id))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id").value(42))
     }
 
     @Test
-    public void shouldCreate() throws Exception {
-        ChargeTypeCommandDTO command = ChargeTypeControllerTest.createCommand();
-        when(mockChargeTypeDao.save(any(ChargeType.class))).thenReturn(chargeType);
-        when(mockChargeCategoryDao.findById(command.getCategoryId())).thenReturn(Optional.of(chargeType.getCategory()));
+    fun shouldCreate() {
+        val command = createCommand()
+        whenever(mockChargeTypeDao.save(any<ChargeType>())).thenReturn(chargeType)
+        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.of(chargeType.category!!))
 
         mvc.perform(post("/api/charge-types")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(command)))
-           .andExpect(status().isCreated())
-           .andExpect(jsonPath("$.id").value(42));
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(command)))
+                .andExpect(status().isCreated)
+                .andExpect(jsonPath("$.id").value(42))
     }
 
     @Test
-    public void shouldUpdate() throws Exception {
-        ChargeTypeCommandDTO command = ChargeTypeControllerTest.createCommand();
+    fun shouldUpdate() {
+        val command = createCommand()
 
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.of(chargeType));
-        when(mockChargeCategoryDao.findById(command.getCategoryId())).thenReturn(Optional.of(chargeType.getCategory()));
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
+        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.of(chargeType.category!!))
 
-        mvc.perform(put("/api/charge-types/{sourceId}", chargeType.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(command)))
-           .andExpect(status().isNoContent());
+        mvc.perform(put("/api/charge-types/{sourceId}", chargeType.id)
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(command)))
+                .andExpect(status().isNoContent)
     }
 }

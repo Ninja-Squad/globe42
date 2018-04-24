@@ -1,6 +1,4 @@
-package org.globe42.web.tasks;
-
-import java.util.List;
+package org.globe42.web.tasks
 
 /**
  * The statistics about spent times on tasks. Contains one element containing the number of minutes spent
@@ -8,14 +6,4 @@ import java.util.List;
  * displaying time spent by each user on each category
  * @author JB Nizet
  */
-public class SpentTimeStatisticsDTO {
-    private final List<SpentTimeStatisticDTO> statistics;
-
-    public SpentTimeStatisticsDTO(List<SpentTimeStatisticDTO> statistics) {
-        this.statistics = statistics;
-    }
-
-    public List<SpentTimeStatisticDTO> getStatistics() {
-        return statistics;
-    }
-}
+data class SpentTimeStatisticsDTO(val statistics: List<SpentTimeStatisticDTO>)

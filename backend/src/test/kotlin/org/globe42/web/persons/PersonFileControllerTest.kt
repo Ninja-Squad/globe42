@@ -1,110 +1,103 @@
-package org.globe42.web.persons;
+package org.globe42.web.persons
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.Person;
-import org.globe42.storage.FileDTO;
-import org.globe42.storage.ReadableFile;
-import org.globe42.storage.StorageService;
-import org.globe42.test.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import com.nhaarman.mockito_kotlin.*
+import org.assertj.core.api.Assertions.assertThat
+import org.globe42.dao.PersonDao
+import org.globe42.domain.Person
+import org.globe42.storage.FileDTO
+import org.globe42.storage.ReadableFile
+import org.globe42.storage.StorageService
+import org.globe42.test.BaseTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.mock.web.MockMultipartFile
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.nio.charset.StandardCharsets
+import java.time.Instant
+import java.util.*
 
 /**
- * Unit tests for {@link PersonFileController}
+ * Unit tests for [PersonFileController]
  * @author JB Nizet
  */
-public class PersonFileControllerTest extends BaseTest {
+class PersonFileControllerTest : BaseTest() {
     @Mock
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @Mock
-    private StorageService mockStorageService;
+    private lateinit var mockStorageService: StorageService
 
     @InjectMocks
-    private PersonFileController controller;
+    private lateinit var controller: PersonFileController
 
-    private Person person;
-    private String directory;
+    private lateinit var person: Person
+    private lateinit var directory: String
 
     @BeforeEach
-    public void prepare() {
-        person = new Person(1000L);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        directory = Long.toString(person.getId());
+    fun prepare() {
+        person = Person(1000L)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        directory = java.lang.Long.toString(person.id!!)
     }
 
     @Test
-    public void shouldList() {
-        FileDTO file = new FileDTO("hello.txt", 5L, Instant.now(), "text/plain");
-        when(mockStorageService.list(directory)).thenReturn(Collections.singletonList(file));
+    fun shouldList() {
+        val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
+        whenever(mockStorageService.list(directory)).thenReturn(listOf(file))
 
-        List<FileDTO> result = controller.list(person.getId());
+        val result = controller.list(person.id!!)
 
-        assertThat(result).containsExactly(file);
+        assertThat(result).containsExactly(file)
     }
 
     @Test
-    public void shouldGet() throws IOException {
-        FileDTO file = new FileDTO("hello.txt", 5L, Instant.now(), "text/plain");
-        ReadableFile readableFile = mock(ReadableFile.class);
-        when(readableFile.getFile()).thenReturn(file);
-        when(readableFile.getInputStream()).thenReturn(new ByteArrayInputStream("hello".getBytes(StandardCharsets.UTF_8)));
-        when(mockStorageService.get(directory, file.getName())).thenReturn(readableFile);
+    @Throws(IOException::class)
+    fun shouldGet() {
+        val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
+        val readableFile = mock<ReadableFile>()
+        whenever(readableFile.file).thenReturn(file)
+        whenever(readableFile.inputStream).thenReturn(ByteArrayInputStream("hello".toByteArray(StandardCharsets.UTF_8)))
+        whenever(mockStorageService.get(directory, file.name)).thenReturn(readableFile)
 
-        ResponseEntity<StreamingResponseBody> result = controller.get(person.getId(), file.getName());
+        val result = controller.get(person.id!!, file.name)
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.TEXT_PLAIN);
-        assertThat(result.getHeaders().getContentLength()).isEqualTo(file.getSize());
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        result.getBody().writeTo(out);
-        assertThat(out.toByteArray()).isEqualTo("hello".getBytes(StandardCharsets.UTF_8));
+        assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(result.headers.contentType).isEqualTo(MediaType.TEXT_PLAIN)
+        assertThat(result.headers.contentLength).isEqualTo(file.size)
+        val out = ByteArrayOutputStream()
+        result.body!!.writeTo(out)
+        assertThat(out.toByteArray()).isEqualTo("hello".toByteArray(StandardCharsets.UTF_8))
     }
 
     @Test
-    public void shouldCreate() throws IOException {
-        MultipartFile multipartFile =
-            new MockMultipartFile("file", "new.txt", "text/plain", "new".getBytes(StandardCharsets.UTF_8));
-        FileDTO file = new FileDTO("new.txt", 3L, Instant.now(), "text/plain");
+    @Throws(IOException::class)
+    fun shouldCreate() {
+        val multipartFile = MockMultipartFile("file",
+                                              "new.txt",
+                                              "text/plain",
+                                              "new".toByteArray(StandardCharsets.UTF_8))
+        val file = FileDTO("new.txt", 3L, Instant.now(), "text/plain")
 
-        when(mockStorageService.create(eq(directory),
-                                       eq(multipartFile.getOriginalFilename()),
-                                       eq(multipartFile.getContentType()),
-                                       any(InputStream.class))).thenReturn(file);
+        whenever(mockStorageService.create(eq(directory),
+                                           eq(multipartFile.originalFilename),
+                                           eq(multipartFile.contentType),
+                                           any())).thenReturn(file)
 
-        FileDTO result = controller.create(person.getId(), multipartFile);
+        val result = controller.create(person.id!!, multipartFile)
 
-        assertThat(result).isEqualTo(file);
+        assertThat(result).isEqualTo(file)
     }
 
     @Test
-    public void shouldDelete() throws IOException {
-        controller.delete(person.getId(), "hello.txt");
-        verify(mockStorageService).delete(directory, "hello.txt");
+    @Throws(IOException::class)
+    fun shouldDelete() {
+        controller.delete(person.id!!, "hello.txt")
+        verify(mockStorageService).delete(directory, "hello.txt")
     }
 }

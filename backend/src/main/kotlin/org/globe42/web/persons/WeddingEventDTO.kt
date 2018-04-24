@@ -1,34 +1,20 @@
-package org.globe42.web.persons;
+package org.globe42.web.persons
 
-import java.time.LocalDate;
-
-import org.globe42.domain.WeddingEvent;
-import org.globe42.domain.WeddingEventType;
+import org.globe42.domain.WeddingEvent
+import org.globe42.domain.WeddingEventType
+import java.time.LocalDate
 
 /**
- * DTO for {@link org.globe42.domain.WeddingEvent}
+ * DTO for [org.globe42.domain.WeddingEvent]
  * @author JB Nizet
  */
-public final class WeddingEventDTO {
-    private final Long id;
-    private final LocalDate date;
-    private final WeddingEventType type;
+data class WeddingEventDTO(
+        val id: Long,
+        val date: LocalDate,
+        val type: WeddingEventType) {
 
-    public WeddingEventDTO(WeddingEvent event) {
-        this.id = event.getId();
-        this.date = event.getDate();
-        this.type = event.getType();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public WeddingEventType getType() {
-        return type;
-    }
+    constructor(event: WeddingEvent) : this(
+            event.id!!,
+            event.date!!,
+            event.type!!)
 }

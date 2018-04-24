@@ -1,84 +1,80 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-
-import org.globe42.dao.UserDao;
-import org.globe42.domain.User;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.UnauthorizedException;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.UserDao
+import org.globe42.domain.User
+import org.globe42.test.BaseTest
+import org.globe42.web.exception.UnauthorizedException
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.util.*
 
 /**
  * Unit tests for AuthenticationController
  * @author JB Nizet
  */
-public class AuthenticationControllerTest extends BaseTest {
+class AuthenticationControllerTest : BaseTest() {
     @Mock
-    private UserDao mockUserDao;
+    private lateinit var mockUserDao: UserDao
 
     @Mock
-    private PasswordDigester mockPasswordDigester;
+    private lateinit var mockPasswordDigester: PasswordDigester
 
     @Mock
-    private JwtHelper mockJwtHelper;
+    private lateinit var mockJwtHelper: JwtHelper
 
     @InjectMocks
-    private AuthenticationController controller;
+    private lateinit var controller: AuthenticationController
 
     @Test
-    public void shouldThrowWhenUnknownUser() {
-        CredentialsDTO credentials = createCredentials();
+    fun shouldThrowWhenUnknownUser() {
+        val credentials = createCredentials()
 
-        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.empty());
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(UnauthorizedException.class).isThrownBy(
-            () -> controller.authenticate(credentials));
-    }
-
-    @Test
-    public void shouldThrowWhenPasswordDoesntMatch() {
-        CredentialsDTO credentials = createCredentials();
-
-        User user = createUser();
-        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
-        when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(false);
-
-        assertThatExceptionOfType(UnauthorizedException.class).isThrownBy(
-            () -> controller.authenticate(credentials));
+        assertThatExceptionOfType(UnauthorizedException::class.java).isThrownBy { controller.authenticate(credentials) }
     }
 
     @Test
-    public void shouldAuthenticate() {
-        CredentialsDTO credentials = createCredentials();
+    fun shouldThrowWhenPasswordDoesntMatch() {
+        val credentials = createCredentials()
 
-        User user = createUser();
-        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
-        when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(true);
-        String token = "token";
-        when(mockJwtHelper.buildToken(user.getId())).thenReturn(token);
-        AuthenticatedUserDTO result = controller.authenticate(credentials);
+        val user = createUser()
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.of(user))
+        whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(false)
 
-        assertThat(result.getId()).isEqualTo(user.getId());
-        assertThat(result.getLogin()).isEqualTo(user.getLogin());
-        assertThat(result.isAdmin()).isEqualTo(user.isAdmin());
-        assertThat(result.getToken()).isEqualTo(token);
+        assertThatExceptionOfType(UnauthorizedException::class.java).isThrownBy { controller.authenticate(credentials) }
     }
 
-    public static CredentialsDTO createCredentials() {
-        return new CredentialsDTO("JB", "passw0rd");
-    }
+    @Test
+    fun shouldAuthenticate() {
+        val credentials = createCredentials()
 
-    public static User createUser() {
-        User user = new User(1L);
-        user.setLogin("JB");
-        user.setPassword("hashedPassword");
-        user.setAdmin(true);
-        return user;
+        val user = createUser()
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.of(user))
+        whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(true)
+        val token = "token"
+        whenever(mockJwtHelper.buildToken(user.id)).thenReturn(token)
+        val result = controller.authenticate(credentials)
+
+        assertThat(result.id).isEqualTo(user.id)
+        assertThat(result.login).isEqualTo(user.login)
+        assertThat(result.admin).isEqualTo(user.admin)
+        assertThat(result.token).isEqualTo(token)
     }
+}
+
+internal fun createCredentials(): CredentialsDTO {
+    return CredentialsDTO("JB", "passw0rd")
+}
+
+internal fun createUser(): User {
+    val user = User(1L)
+    user.login = "JB"
+    user.password = "hashedPassword"
+    user.admin = true
+    return user
 }

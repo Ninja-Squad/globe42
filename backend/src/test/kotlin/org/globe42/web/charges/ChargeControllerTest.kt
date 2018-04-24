@@ -1,178 +1,177 @@
-package org.globe42.web.charges;
+package org.globe42.web.charges
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.ChargeDao;
-import org.globe42.dao.ChargeTypeDao;
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.Charge;
-import org.globe42.domain.ChargeCategory;
-import org.globe42.domain.ChargeType;
-import org.globe42.domain.Person;
-import org.globe42.test.Answers;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.NotFoundException;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.ChargeDao
+import org.globe42.dao.ChargeTypeDao
+import org.globe42.dao.PersonDao
+import org.globe42.domain.Charge
+import org.globe42.domain.ChargeCategory
+import org.globe42.domain.ChargeType
+import org.globe42.domain.Person
+import org.globe42.test.BaseTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.NotFoundException
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.math.BigDecimal
+import java.util.*
 
 /**
- * Unit tests for {@link ChargeController}
+ * Unit tests for [ChargeController]
  * @author JB Nizet
  */
-public class ChargeControllerTest extends BaseTest {
+class ChargeControllerTest : BaseTest() {
 
     @Mock
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @Mock
-    private ChargeDao mockChargeDao;
+    private lateinit var mockChargeDao: ChargeDao
 
     @Mock
-    private ChargeTypeDao mockChargeTypeDao;
+    private lateinit var mockChargeTypeDao: ChargeTypeDao
 
     @InjectMocks
-    private ChargeController controller;
+    private lateinit var controller: ChargeController
 
     @Test
-    public void shouldList() {
-        Long personId = 42L;
-        Person person = new Person(personId);
-        Charge charge = createCharge(12L);
-        person.addCharge(charge);
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
+    fun shouldList() {
+        val personId = 42L
+        val person = Person(personId)
+        val charge = createCharge(12L)
+        person.addCharge(charge)
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
 
-        List<ChargeDTO> result = controller.list(personId);
+        val result = controller.list(personId)
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(charge.getId());
-        assertThat(result.get(0).getType().getId()).isEqualTo(charge.getType().getId());
-        assertThat(result.get(0).getMonthlyAmount()).isEqualTo(charge.getMonthlyAmount());
-    }
-
-    @Test
-    public void shouldThrowIfPersonNotFound() {
-        Long personId = 42L;
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.list(personId));
+        assertThat(result).hasSize(1)
+        assertThat(result[0].id).isEqualTo(charge.id)
+        assertThat(result[0].type.id).isEqualTo(charge.type!!.id)
+        assertThat(result[0].monthlyAmount).isEqualTo(charge.monthlyAmount)
     }
 
     @Test
-    public void shouldDelete() {
-        Long personId = 42L;
-        Long chargeId = 12L;
-        Charge charge = new Charge(chargeId);
-        charge.setPerson(new Person(personId));
-        when(mockChargeDao.findById(chargeId)).thenReturn(Optional.of(charge));
+    fun shouldThrowIfPersonNotFound() {
+        val personId = 42L
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
 
-        controller.delete(personId, chargeId);
-
-        verify(mockChargeDao).delete(charge);
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(personId) }
     }
 
     @Test
-    public void shouldAcceptDeletionIfNotFoundToBeIdempotent() {
-        Long chargeId = 12L;
-        when(mockChargeDao.findById(chargeId)).thenReturn(Optional.empty());
+    fun shouldDelete() {
+        val personId = 42L
+        val chargeId = 12L
+        val charge = Charge(chargeId)
+        charge.person = Person(personId)
+        whenever(mockChargeDao.findById(chargeId)).thenReturn(Optional.of(charge))
 
-        controller.delete(42L, chargeId);
+        controller.delete(personId, chargeId)
 
-        verify(mockChargeDao, never()).delete(any());
+        verify(mockChargeDao).delete(charge)
     }
 
     @Test
-    public void shouldRejectDeletionIfNotInCorrectPerson() {
-        Long chargeId = 12L;
-        Long personId = 42L;
-        Charge charge = new Charge(chargeId);
-        charge.setPerson(new Person(personId));
+    fun shouldAcceptDeletionIfNotFoundToBeIdempotent() {
+        val chargeId = 12L
+        whenever(mockChargeDao.findById(chargeId)).thenReturn(Optional.empty())
 
-        when(mockChargeDao.findById(chargeId)).thenReturn(Optional.of(charge));
+        controller.delete(42L, chargeId)
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.delete(456L, chargeId));
+        verify(mockChargeDao, never()).delete(any())
     }
 
     @Test
-    public void shouldCreate() {
-        Long personId = 42L;
-        Long typeId = 12L;
+    fun shouldRejectDeletionIfNotInCorrectPerson() {
+        val chargeId = 12L
+        val personId = 42L
+        val charge = Charge(chargeId)
+        charge.person = Person(personId)
 
-        Person person = new Person(personId);
-        ChargeType type = createChargeType(typeId);
+        whenever(mockChargeDao.findById(chargeId)).thenReturn(Optional.of(charge))
 
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
-        when(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.of(type));
-        when(mockChargeDao.save(any(Charge.class))).thenAnswer(
-            Answers.<Charge>modifiedFirstArgument(charge -> charge.setId(34L)));
-
-        ChargeCommandDTO command = new ChargeCommandDTO(typeId, BigDecimal.TEN);
-
-        ChargeDTO result = controller.create(personId, command);
-
-        assertThat(result.getId()).isEqualTo(34L);
-        assertThat(result.getMonthlyAmount()).isEqualByComparingTo(command.getMonthlyAmount());
-        assertThat(result.getType().getId()).isEqualTo(command.getTypeId());
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(456L, chargeId) }
     }
 
     @Test
-    public void shouldThrowWhenCreatingForUnknownPerson() {
-        Long personId = 42L;
-        Long typeId = 12L;
+    fun shouldCreate() {
+        val personId = 42L
+        val typeId = 12L
 
-        Person person = new Person(personId);
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
-        when(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.empty());
+        val person = Person(personId)
+        val type = createChargeType(typeId)
 
-        ChargeCommandDTO command = new ChargeCommandDTO(typeId, BigDecimal.TEN);
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        whenever(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.of(type))
+        whenever(mockChargeDao.save(any<Charge>())).thenReturnModifiedFirstArgument<Charge> { it.id = 34L }
+
+        val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
+
+        val result = controller.create(personId, command)
+
+        assertThat(result.id).isEqualTo(34L)
+        assertThat(result.monthlyAmount).isEqualByComparingTo(command.monthlyAmount)
+        assertThat(result.type.id).isEqualTo(command.typeId)
     }
 
     @Test
-    public void shouldThrowWhenCreatingWithTooLargeAmount() {
-        Long personId = 42L;
-        Long typeId = 12L;
+    fun shouldThrowWhenCreatingForUnknownPerson() {
+        val personId = 42L
+        val typeId = 12L
 
-        Person person = new Person(personId);
-        ChargeType type = createChargeType(typeId);
-        type.setMaxMonthlyAmount(new BigDecimal("9"));
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
-        when(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.of(type));
+        val person = Person(personId)
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        whenever(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.empty())
 
-        ChargeCommandDTO command = new ChargeCommandDTO(typeId, BigDecimal.TEN);
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
+        val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
     }
 
     @Test
-    public void shouldThrowWhenCreatingForUnknownType() {
-        Long personId = 42L;
-        Long typeId = 12L;
+    fun shouldThrowWhenCreatingWithTooLargeAmount() {
+        val personId = 42L
+        val typeId = 12L
 
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
+        val person = Person(personId)
+        val type = createChargeType(typeId)
+        type.maxMonthlyAmount = BigDecimal("9")
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        whenever(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.of(type))
 
-        ChargeCommandDTO command = new ChargeCommandDTO(typeId, BigDecimal.TEN);
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(personId, command));
+        val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
     }
 
-    static Charge createCharge(Long id) {
-        Charge charge = new Charge(id);
-        ChargeType chargeType = createChargeType(id * 10);
-        charge.setType(chargeType);
-        charge.setMonthlyAmount(new BigDecimal("123.45"));
-        return charge;
-    }
+    @Test
+    fun shouldThrowWhenCreatingForUnknownType() {
+        val personId = 42L
+        val typeId = 12L
 
-    static ChargeType createChargeType(Long id) {
-        ChargeType chargeType = new ChargeType(id);
-        chargeType.setCategory(new ChargeCategory(id * 10, "rental"));
-        return chargeType;
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
+
+        val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.create(personId, command) }
     }
+}
+
+internal fun createCharge(id: Long): Charge {
+    val charge = Charge(id)
+    val chargeType = createChargeType(id * 10)
+    charge.type = chargeType
+    charge.monthlyAmount = BigDecimal("123.45")
+    return charge
+}
+
+internal fun createChargeType(id: Long): ChargeType {
+    val chargeType = ChargeType(id)
+    chargeType.category = ChargeCategory(id * 10, "rental")
+    chargeType.name = "type $id"
+    return chargeType
 }

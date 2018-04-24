@@ -1,38 +1,35 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.ninja_squad.dbsetup.operation.Insert;
-import com.ninja_squad.dbsetup.operation.Operation;
-import org.globe42.domain.Country;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.assertj.core.api.Assertions.assertThat
+import org.globe42.domain.Country
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 
 /**
- * Unit tests for {@link CountryDao}
+ * Unit tests for [CountryDao]
  * @author JB Nizet
  */
-public class CountryDaoTest extends BaseDaoTest {
+class CountryDaoTest : BaseDaoTest() {
 
     @Autowired
-    private CountryDao countryDao;
+    private lateinit var countryDao: CountryDao
 
     @BeforeEach
-    public void prepare() {
-        Operation countries =
-            Insert.into("country")
-                  .columns("id", "name")
-                  .values("FRA", "France")
-                  .values("BEL", "Belgique")
-                  .build();
-        dbSetup(countries);
+    fun prepare() {
+        setup {
+            insertInto("country") {
+                columns("id", "name")
+                values("FRA", "France")
+                values("BEL", "Belgique")
+            }
+        }
     }
 
     @Test
-    public void shouldListSortedByName() {
+    fun shouldListSortedByName() {
         assertThat(countryDao.findAllSortedByName())
-            .extracting(Country::getName)
-            .containsExactly("Belgique", "France");
+                .extracting<String>(Country::name)
+                .containsExactly("Belgique", "France")
     }
 }

@@ -1,180 +1,180 @@
-package org.globe42.web.charges;
+package org.globe42.web.charges
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.ChargeCategoryDao;
-import org.globe42.dao.ChargeTypeDao;
-import org.globe42.domain.ChargeCategory;
-import org.globe42.domain.ChargeType;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.ChargeCategoryDao
+import org.globe42.dao.ChargeTypeDao
+import org.globe42.domain.ChargeCategory
+import org.globe42.domain.ChargeType
+import org.globe42.test.BaseTest
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.NotFoundException
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.math.BigDecimal
+import java.util.*
 
 /**
- * Unit tests for {@link ChargeTypeController}
+ * Unit tests for [ChargeTypeController]
  * @author JB Nizet
  */
-public class ChargeTypeControllerTest extends BaseTest {
+class ChargeTypeControllerTest : BaseTest() {
     @Mock
-    private ChargeTypeDao mockChargeTypeDao;
+    private lateinit var mockChargeTypeDao: ChargeTypeDao
 
     @Mock
-    private ChargeCategoryDao mockChargeCategoryDao;
+    private lateinit var mockChargeCategoryDao: ChargeCategoryDao
 
     @InjectMocks
-    private ChargeTypeController controller;
+    private lateinit var controller: ChargeTypeController
 
     @Captor
-    private ArgumentCaptor<ChargeType> chargeTypeArgumentCaptor;
+    private lateinit var chargeTypeArgumentCaptor: ArgumentCaptor<ChargeType>
 
-    private ChargeType chargeType;
+    private lateinit var chargeType: ChargeType
 
     @BeforeEach
-    public void prepare() {
-        chargeType = new ChargeType(42L);
-        chargeType.setName("source 1");
-        chargeType.setCategory(new ChargeCategory(1L, "category 1"));
-        chargeType.setMaxMonthlyAmount(new BigDecimal("1234.56"));
+    fun prepare() {
+        chargeType = ChargeType(42L)
+        chargeType.name = "source 1"
+        chargeType.category = ChargeCategory(1L, "category 1")
+        chargeType.maxMonthlyAmount = BigDecimal("1234.56")
     }
 
     @Test
-    public void shouldList() {
-        when(mockChargeTypeDao.findAll()).thenReturn(Collections.singletonList(chargeType));
+    fun shouldList() {
+        whenever(mockChargeTypeDao.findAll()).thenReturn(listOf<ChargeType>(chargeType))
 
-        List<ChargeTypeDTO> result = controller.list();
+        val result = controller.list()
 
-        assertThat(result).hasSize(1);
-        ChargeTypeDTO dto = result.get(0);
-        assertThat(dto.getId()).isEqualTo(chargeType.getId());
-        assertThat(dto.getName()).isEqualTo(chargeType.getName());
-        assertThat(dto.getCategory().getId()).isEqualTo(chargeType.getCategory().getId());
-        assertThat(dto.getCategory().getName()).isEqualTo(chargeType.getCategory().getName());
-        assertThat(dto.getMaxMonthlyAmount()).isEqualTo(chargeType.getMaxMonthlyAmount());
-        assertThat(dto.getId()).isEqualTo(chargeType.getId());
+        assertThat(result).hasSize(1)
+        val (id, name, category, maxMonthlyAmount) = result[0]
+        assertThat(id).isEqualTo(chargeType.id)
+        assertThat(name).isEqualTo(chargeType.name)
+        assertThat(category.id).isEqualTo(chargeType.category!!.id)
+        assertThat(category.name).isEqualTo(chargeType.category!!.name)
+        assertThat(maxMonthlyAmount).isEqualTo(chargeType.maxMonthlyAmount)
+        assertThat(id).isEqualTo(chargeType.id)
     }
 
     @Test
-    public void shouldGet() {
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.of(chargeType));
+    fun shouldGet() {
+        val chargeTypeId = chargeType.id!!
+        whenever(mockChargeTypeDao.findById(chargeTypeId)).thenReturn(Optional.of(chargeType))
 
-        ChargeTypeDTO result = controller.get(chargeType.getId());
+        val result = controller.get(chargeTypeId)
 
-        assertThat(result.getId()).isEqualTo(chargeType.getId());
+        assertThat(result.id).isEqualTo(chargeTypeId)
     }
 
     @Test
-    public void shouldThrowWhenGettingWithUnknownId() {
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.empty());
+    fun shouldThrowWhenGettingWithUnknownId() {
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(chargeType.getId()));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(chargeType.id!!) }
     }
 
     @Test
-    public void shouldCreate() {
-        ChargeTypeCommandDTO command = createCommand();
+    fun shouldCreate() {
+        val command = createCommand()
 
-        when(mockChargeCategoryDao.findById(command.getCategoryId()))
-            .thenReturn(Optional.of(new ChargeCategory(command.getCategoryId(), "category 2")));
-        when(mockChargeTypeDao.save(any(ChargeType.class))).thenReturn(chargeType);
+        whenever(mockChargeCategoryDao.findById(command.categoryId))
+                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+        whenever(mockChargeTypeDao.save(any<ChargeType>())).thenReturn(chargeType)
 
-        ChargeTypeDTO result = controller.create(command);
+        val result = controller.create(command)
 
-        verify(mockChargeTypeDao).save(chargeTypeArgumentCaptor.capture());
+        verify(mockChargeTypeDao).save(chargeTypeArgumentCaptor.capture())
 
-        assertThat(result).isNotNull();
-        assertChargeTypeEqualsCommand(chargeTypeArgumentCaptor.getValue(), command);
+        assertThat(result).isNotNull()
+        assertChargeTypeEqualsCommand(chargeTypeArgumentCaptor.value, command)
     }
 
     @Test
-    public void shouldThrowWhenCreatingWithUnknownChargeCategory() {
-        ChargeTypeCommandDTO command = createCommand();
+    fun shouldThrowWhenCreatingWithUnknownChargeCategory() {
+        val command = createCommand()
 
-        when(mockChargeCategoryDao.findById(command.getCategoryId()))
-            .thenReturn(Optional.of(new ChargeCategory(command.getCategoryId(), "category 2")));
-        when(mockChargeTypeDao.existsByName(command.getName())).thenReturn(true);
+        whenever(mockChargeCategoryDao.findById(command.categoryId))
+                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+        whenever(mockChargeTypeDao.existsByName(command.name)).thenReturn(true)
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(command));
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
     }
 
     @Test
-    public void shouldThrowWhenCreatingWithExistingName() {
-        ChargeTypeCommandDTO command = createCommand();
+    fun shouldThrowWhenCreatingWithExistingName() {
+        val command = createCommand()
 
-        when(mockChargeCategoryDao.findById(command.getCategoryId())).thenReturn(Optional.empty());
+        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(command));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.create(command) }
     }
 
     @Test
-    public void shouldUpdate() {
-        ChargeTypeCommandDTO command = createCommand();
+    fun shouldUpdate() {
+        val command = createCommand()
 
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.of(chargeType));
-        when(mockChargeCategoryDao.findById(command.getCategoryId()))
-            .thenReturn(Optional.of(new ChargeCategory(command.getCategoryId(), "category 2")));
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
+        whenever(mockChargeCategoryDao.findById(command.categoryId))
+                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
 
-        controller.update(chargeType.getId(), command);
+        controller.update(chargeType.id!!, command)
 
-        assertChargeTypeEqualsCommand(chargeType, command);
+        assertChargeTypeEqualsCommand(chargeType, command)
     }
 
     @Test
-    public void shouldThrowIfNotFoundWhenUpdating() {
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.empty());
+    fun shouldThrowIfNotFoundWhenUpdating() {
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> controller.update(chargeType.getId(), createCommand()));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
+            controller.update(chargeType.id!!,
+                                createCommand())
+        }
     }
 
     @Test
-    public void shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
-        ChargeTypeCommandDTO command = createCommand();
+    fun shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
+        val command = createCommand()
 
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.of(chargeType));
-        when(mockChargeCategoryDao.findById(command.getCategoryId()))
-            .thenReturn(Optional.of(new ChargeCategory(command.getCategoryId(), "category 2")));
-        when(mockChargeTypeDao.findByName(command.getName())).thenReturn(Optional.of(new ChargeType(4567L)));
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
+        whenever(mockChargeCategoryDao.findById(command.categoryId))
+                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+        whenever(mockChargeTypeDao.findByName(command.name)).thenReturn(Optional.of(ChargeType(4567L)))
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
-            () -> controller.update(chargeType.getId(), command));
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
+            controller.update(chargeType.id!!,  command)
+        }
     }
 
     @Test
-    public void shouldUpdateIfSameSurnameIsKept() {
-        ChargeTypeCommandDTO command = createCommand();
+    fun shouldUpdateIfSameSurnameIsKept() {
+        val command = createCommand()
 
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.of(chargeType));
-        when(mockChargeCategoryDao.findById(command.getCategoryId()))
-            .thenReturn(Optional.of(new ChargeCategory(command.getCategoryId(), "category 2")));
-        when(mockChargeTypeDao.findByName(command.getName())).thenReturn(Optional.of(chargeType));
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
+        whenever(mockChargeCategoryDao.findById(command.categoryId))
+                .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+        whenever(mockChargeTypeDao.findByName(command.name)).thenReturn(Optional.of(chargeType))
 
-        controller.update(chargeType.getId(), command);
+        controller.update(chargeType.id!!, command)
 
-        assertChargeTypeEqualsCommand(chargeType, command);
+        assertChargeTypeEqualsCommand(chargeType, command)
     }
 
-    static ChargeTypeCommandDTO createCommand() {
-        return new ChargeTypeCommandDTO("source 2", 2L, new BigDecimal("12.34"));
+    private fun assertChargeTypeEqualsCommand(source: ChargeType, command: ChargeTypeCommandDTO) {
+        assertThat(source.name).isEqualTo(command.name)
+        assertThat(source.category!!.id!!).isEqualTo(command.categoryId)
+        assertThat(source.maxMonthlyAmount).isEqualTo(command.maxMonthlyAmount)
     }
+}
 
-    private void assertChargeTypeEqualsCommand(ChargeType source, ChargeTypeCommandDTO command) {
-        assertThat(source.getName()).isEqualTo(command.getName());
-        assertThat(source.getCategory().getId()).isEqualTo(command.getCategoryId());
-        assertThat(source.getMaxMonthlyAmount()).isEqualTo(command.getMaxMonthlyAmount());
-    }
+internal fun createCommand(): ChargeTypeCommandDTO {
+    return ChargeTypeCommandDTO("source 2", 2L, BigDecimal("12.34"))
 }

@@ -1,37 +1,34 @@
-package org.globe42.web.activities;
+package org.globe42.web.activities
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.ActivityType;
-import org.globe42.domain.Person;
-import org.globe42.test.BaseTest;
-import org.globe42.web.persons.PersonIdentityDTO;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.globe42.dao.PersonDao
+import org.globe42.domain.ActivityType
+import org.globe42.domain.Gender
+import org.globe42.domain.Person
+import org.globe42.test.BaseTest
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.util.*
 
 /**
- * Unit tests for {@link ActivityTypeController}
+ * Unit tests for [ActivityTypeController]
  * @author JB Nizet
  */
-public class ActivityTypeControllerTest extends BaseTest {
+class ActivityTypeControllerTest : BaseTest() {
     @Mock
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @InjectMocks
-    private ActivityTypeController controller;
+    private lateinit var controller: ActivityTypeController
 
     @Test
-    public void shouldListParticipants() {
-        Person person = new Person(42L);
-        when(mockPersonDao.findParticipants(ActivityType.MEAL)).thenReturn(Arrays.asList(person));
+    fun shouldListParticipants() {
+        val person = Person(42L, "John", "Doe", Gender.MALE)
+        whenever(mockPersonDao.findParticipants(ActivityType.MEAL)).thenReturn(Arrays.asList(person))
 
-        List<ParticipantDTO> result = controller.list(ActivityType.MEAL);
-        assertThat(result).extracting(p -> p.getIdentity().getId()).containsExactly(42L);
+        val result = controller.list(ActivityType.MEAL)
+        assertThat(result).extracting<Long> { (identity) -> identity.id }.containsExactly(42L)
     }
 }

@@ -1,34 +1,28 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
 
 /**
- * Implementation of {@link UserDaoCustom}
+ * Implementation of [UserDaoCustom]
  * @author JB Nizet
  */
-public class UserDaoImpl implements UserDaoCustom {
+class UserDaoImpl : UserDaoCustom {
 
     @PersistenceContext
-    private EntityManager em;
+    private lateinit var em: EntityManager
 
-    @Override
-    public boolean existsNotDeletedById(Long userId) {
-        return existsByQueryAndId("select 1 from User u where u.id = :id and u.deleted = false",
-                                  userId);
-    }
+    override fun existsNotDeletedById(userId: Long) =
+            existsByQueryAndId("select 1 from User u where u.id = :id and u.deleted = false", userId)
 
-    @Override
-    public boolean existsNotDeletedAdminById(Long userId) {
-        return existsByQueryAndId("select 1 from User u where u.id = :id and u.deleted = false and u.admin = true",
-                                  userId);
-    }
+    override fun existsNotDeletedAdminById(userId: Long) =
+            existsByQueryAndId("select 1 from User u where u.id = :id and u.deleted = false and u.admin = true",
+                               userId)
 
-    private boolean existsByQueryAndId(String jpql, Long userId) {
-        List<Number> result = em.createQuery(jpql, Number.class)
-                                .setParameter("id", userId)
-                                .getResultList();
-        return !result.isEmpty();
+    private fun existsByQueryAndId(jpql: String, userId: Long?): Boolean {
+        val result = em.createQuery(jpql, Number::class.java)
+                .setParameter("id", userId)
+                .resultList
+        return !result.isEmpty()
     }
 }

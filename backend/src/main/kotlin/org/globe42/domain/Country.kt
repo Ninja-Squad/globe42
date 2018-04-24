@@ -1,7 +1,7 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.Entity
+import javax.persistence.Id
 
 /**
  * A country (used to serve as a nationality, in fact), identified by an ISO 3166-1 alpha-3 country code`
@@ -9,32 +9,15 @@ import javax.persistence.Id;
  * @author JB Nizet
  */
 @Entity
-public class Country {
+class Country(
 
-    /**
-     * The ISO code of the country
-     */
-    @Id
-    private String id;
+        /**
+         * The ISO code of the country
+         */
+        @Id
+        var id: String,
 
-    /**
-     * The French name of the country
-     */
-    private String name;
-
-    public Country() {
-    }
-
-    public Country(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-}
+        /**
+         * The French name of the country
+         */
+        var name: String)

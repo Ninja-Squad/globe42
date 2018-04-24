@@ -34,15 +34,15 @@ repositories {
 }
 
 sourceCompatibility = 1.8
-compileKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
+[compileKotlin, compileTestKotlin].each { it ->
+    it.kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict", "-Xenable-jvm-default"]
         jvmTarget = "1.8"
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
+        freeCompilerArgs = ["-Xjsr305=strict", "-Xenable-jvm-default"]
         jvmTarget = "1.8"
     }
 }
@@ -89,6 +89,7 @@ dependencies {
         exclude module: 'junit'
     }
     testImplementation 'com.ninja-squad:DbSetup:2.1.0'
+    testImplementation 'com.ninja-squad:DbSetup-kotlin:2.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
 

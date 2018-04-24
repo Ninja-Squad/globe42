@@ -1,193 +1,190 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.io.IOException;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.impl.DefaultClaims;
-import org.globe42.dao.UserDao;
-import org.globe42.test.BaseTest;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import io.jsonwebtoken.JwtException
+import io.jsonwebtoken.impl.DefaultClaims
+import org.assertj.core.api.Assertions.assertThat
+import org.globe42.dao.UserDao
+import org.globe42.test.BaseTest
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.Spy
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.mock.web.MockHttpServletRequest
+import org.springframework.mock.web.MockHttpServletResponse
+import javax.servlet.FilterChain
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
 
 /**
- * Unit tests for {@link AuthenticationFilter}
+ * Unit tests for [AuthenticationFilter]
  * @author JB Nizet
  */
-public class AuthenticationFilterTest extends BaseTest {
+class AuthenticationFilterTest : BaseTest() {
 
     @Spy
-    private CurrentUser currentUser = new CurrentUser();
+    private val currentUser = CurrentUser()
 
     @Mock
-    private JwtHelper mockJwtHelper;
+    private lateinit var mockJwtHelper: JwtHelper
 
     @Mock
-    private UserDao mockUserDao;
+    private lateinit var mockUserDao: UserDao
 
     @InjectMocks
-    private AuthenticationFilter filter;
+    private lateinit var filter: AuthenticationFilter
 
     @Mock
-    private FilterChain mockFilterChain;
+    private lateinit var mockFilterChain: FilterChain
 
     @Test
-    public void shouldRejectIfNoHeaderAndNoCookieForApiRequest() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/persons");
+    fun shouldRejectIfNoHeaderAndNoCookieForApiRequest() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/persons"
 
-        shouldRejectWithUnauthorized(request);
-    }
-
-    @Test
-    public void shouldAcceptIfNoHeaderAndNoCookieForApiAuthenticationRequest() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/authentication");
-
-        shouldAccept(request);
+        shouldRejectWithUnauthorized(request)
     }
 
     @Test
-    public void shouldRejectIfNoHeaderAndNoCookieForActuatorRequest() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/actuator");
+    fun shouldAcceptIfNoHeaderAndNoCookieForApiAuthenticationRequest() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/authentication"
 
-        shouldRejectWithUnauthorized(request);
+        shouldAccept(request)
     }
 
     @Test
-    public void shouldAcceptIfNoHeaderAndNoCookieForActuatorHealthRequest() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/actuator/health");
+    fun shouldRejectIfNoHeaderAndNoCookieForActuatorRequest() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/actuator"
 
-        shouldAccept(request);
+        shouldRejectWithUnauthorized(request)
     }
 
     @Test
-    public void shouldRejectIfHeaderWithNoBearerPrefix() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/persons");
-        request.addHeader(HttpHeaders.AUTHORIZATION, "hello world");
+    fun shouldAcceptIfNoHeaderAndNoCookieForActuatorHealthRequest() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/actuator/health"
 
-        shouldRejectWithUnauthorized(request);
+        shouldAccept(request)
     }
 
     @Test
-    public void shouldRejectIfHeaderWithBadToken() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/persons");
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello");
+    fun shouldRejectIfHeaderWithNoBearerPrefix() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/persons"
+        request.addHeader(HttpHeaders.AUTHORIZATION, "hello world")
 
-        when(mockJwtHelper.extractClaims("hello")).thenThrow(new JwtException("invalid"));
-
-        shouldRejectWithUnauthorized(request);
+        shouldRejectWithUnauthorized(request)
     }
 
     @Test
-    public void shouldRejectIfHeaderWithTokenWithBadUserId() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/persons");
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello");
+    fun shouldRejectIfHeaderWithBadToken() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/persons"
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        Claims claims = new DefaultClaims();
-        claims.setSubject("abcd");
-        when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
+        whenever(mockJwtHelper.extractClaims("hello")).thenThrow(JwtException("invalid"))
 
-        shouldRejectWithUnauthorized(request);
+        shouldRejectWithUnauthorized(request)
     }
 
     @Test
-    public void shouldRejectIfUserDoesNotExist() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/persons");
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello");
+    fun shouldRejectIfHeaderWithTokenWithBadUserId() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/persons"
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        Claims claims = new DefaultClaims();
-        claims.setSubject("1234");
-        when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
-        when(mockUserDao.existsNotDeletedById(1234L)).thenReturn(false);
+        val claims = DefaultClaims()
+        claims.subject = "abcd"
+        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
 
-        shouldRejectWithUnauthorized(request);
+        shouldRejectWithUnauthorized(request)
     }
 
     @Test
-    public void shouldSetCurrentUserIfValidTokenInHeader() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/persons");
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello");
+    fun shouldRejectIfUserDoesNotExist() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/persons"
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        Claims claims = new DefaultClaims();
-        claims.setSubject("1234");
-        when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
-        when(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true);
+        val claims = DefaultClaims()
+        claims.subject = "1234"
+        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
+        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(false)
 
-        shouldAccept(request);
-        assertThat(currentUser.getUserId()).isEqualTo(1234L);
+        shouldRejectWithUnauthorized(request)
     }
 
     @Test
-    public void shouldSetCurrentUserIfValidTokenInCookie() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/persons");
-        request.setCookies(new Cookie("globe42_token", "hello"));
+    fun shouldSetCurrentUserIfValidTokenInHeader() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/persons"
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        Claims claims = new DefaultClaims();
-        claims.setSubject("1234");
-        when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
-        when(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true);
+        val claims = DefaultClaims()
+        claims.subject = "1234"
+        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
+        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true)
 
-        shouldAccept(request);
-        assertThat(currentUser.getUserId()).isEqualTo(1234L);
+        shouldAccept(request)
+        assertThat(currentUser.userId).isEqualTo(1234L)
     }
 
     @Test
-    public void shouldRejectIfNotAdminForProtectedActuatorRequest() throws IOException, ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/actuator/foo");
-        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello");
+    fun shouldSetCurrentUserIfValidTokenInCookie() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/api/persons"
+        request.setCookies(Cookie("globe42_token", "hello"))
 
-        Claims claims = new DefaultClaims();
-        claims.setSubject("1234");
-        when(mockJwtHelper.extractClaims("hello")).thenReturn(claims);
-        when(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true);
-        when(mockUserDao.existsNotDeletedAdminById(1234L)).thenReturn(false);
+        val claims = DefaultClaims()
+        claims.subject = "1234"
+        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
+        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true)
 
-        shouldRejectWithForbidden(request);
+        shouldAccept(request)
+        assertThat(currentUser.userId).isEqualTo(1234L)
     }
 
-    private void shouldRejectWithUnauthorized(HttpServletRequest request) throws IOException, ServletException {
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        filter.doFilter(request, response, mockFilterChain);
+    @Test
+    fun shouldRejectIfNotAdminForProtectedActuatorRequest() {
+        val request = MockHttpServletRequest()
+        request.requestURI = "/actuator/foo"
+        request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        verify(mockFilterChain, never()).doFilter(request, response);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        val claims = DefaultClaims()
+        claims.subject = "1234"
+        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
+        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true)
+        whenever(mockUserDao.existsNotDeletedAdminById(1234L)).thenReturn(false)
+
+        shouldRejectWithForbidden(request)
     }
 
-    private void shouldRejectWithForbidden(HttpServletRequest request) throws IOException, ServletException {
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        filter.doFilter(request, response, mockFilterChain);
+    private fun shouldRejectWithUnauthorized(request: HttpServletRequest) {
+        val response = MockHttpServletResponse()
+        filter.doFilter(request, response, mockFilterChain)
 
-        verify(mockFilterChain, never()).doFilter(request, response);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
+        verify(mockFilterChain, never()).doFilter(request, response)
+        assertThat(response.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
     }
 
-    private void shouldAccept(HttpServletRequest request) throws IOException, ServletException {
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        filter.doFilter(request, response, mockFilterChain);
+    private fun shouldRejectWithForbidden(request: HttpServletRequest) {
+        val response = MockHttpServletResponse()
+        filter.doFilter(request, response, mockFilterChain)
 
-        verify(mockFilterChain).doFilter(request, response);
+        verify(mockFilterChain, never()).doFilter(request, response)
+        assertThat(response.status).isEqualTo(HttpStatus.FORBIDDEN.value())
+    }
+
+    private fun shouldAccept(request: HttpServletRequest) {
+        val response = MockHttpServletResponse()
+        filter.doFilter(request, response, mockFilterChain)
+
+        verify(mockFilterChain).doFilter(request, response)
     }
 }

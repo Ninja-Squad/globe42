@@ -1,67 +1,60 @@
-package org.globe42.web;
+package org.globe42.web
 
-import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component
+import java.io.IOException
+import javax.servlet.*
+import javax.servlet.annotation.WebFilter
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Filter that forwards all GET requests to non-static and non-api resources to index.html
  * @author JB Nizet
  */
 @Component
-@WebFilter(value = "/*")
-public class IndexFilter implements Filter {
-    @Override
-    public void doFilter(ServletRequest req,
-                         ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
+@WebFilter(value = ["/*"])
+class IndexFilter : Filter {
+    @Throws(IOException::class, ServletException::class)
+    override fun doFilter(req: ServletRequest,
+                          response: ServletResponse,
+                          chain: FilterChain) {
+        val request = req as HttpServletRequest
         if (mustForward(request)) {
-            request.getRequestDispatcher("/index.html").forward(request, response);
-            return;
+            request.getRequestDispatcher("/index.html").forward(request, response)
+            return
         }
 
-        chain.doFilter(request, response);
+        chain.doFilter(request, response)
     }
 
-    private boolean mustForward(HttpServletRequest request) {
-        if (!request.getMethod().equals("GET")) {
-            return false;
+    private fun mustForward(request: HttpServletRequest): Boolean {
+        if (request.method != "GET") {
+            return false
         }
 
-        String uri = request.getRequestURI();
+        val uri = request.requestURI
 
         return !(uri.startsWith("/api")
-            || uri.endsWith(".js")
-            || uri.endsWith(".css")
-            || uri.startsWith("/index.html")
-            || uri.endsWith(".ico")
-            || uri.endsWith(".png")
-            || uri.endsWith(".jpg")
-            || uri.endsWith(".gif")
-            || uri.endsWith(".eot")
-            || uri.endsWith(".svg")
-            || uri.endsWith(".woff2")
-            || uri.endsWith(".ttf")
-            || uri.endsWith(".woff")
-            || uri.startsWith("/actuator"));
+                || uri.endsWith(".js")
+                || uri.endsWith(".css")
+                || uri.startsWith("/index.html")
+                || uri.endsWith(".ico")
+                || uri.endsWith(".png")
+                || uri.endsWith(".jpg")
+                || uri.endsWith(".gif")
+                || uri.endsWith(".eot")
+                || uri.endsWith(".svg")
+                || uri.endsWith(".woff2")
+                || uri.endsWith(".ttf")
+                || uri.endsWith(".woff")
+                || uri.startsWith("/actuator"))
     }
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    @Throws(ServletException::class)
+    override fun init(filterConfig: FilterConfig) {
         // nothing to do
     }
 
-    @Override
-    public void destroy() {
+    override fun destroy() {
         // nothing to do
     }
 }

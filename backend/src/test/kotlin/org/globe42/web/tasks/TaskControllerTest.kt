@@ -1,393 +1,395 @@
-package org.globe42.web.tasks;
+package org.globe42.web.tasks
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.PersonDao;
-import org.globe42.dao.TaskCategoryDao;
-import org.globe42.dao.TaskDao;
-import org.globe42.dao.UserDao;
-import org.globe42.domain.Person;
-import org.globe42.domain.SpentTime;
-import org.globe42.domain.Task;
-import org.globe42.domain.TaskCategory;
-import org.globe42.domain.TaskStatus;
-import org.globe42.domain.User;
-import org.globe42.test.Answers;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.NotFoundException;
-import org.globe42.web.security.CurrentUser;
-import org.globe42.web.users.UserControllerTest;
-import org.globe42.web.util.PageDTO;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.PersonDao
+import org.globe42.dao.TaskCategoryDao
+import org.globe42.dao.TaskDao
+import org.globe42.dao.UserDao
+import org.globe42.domain.*
+import org.globe42.test.BaseTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.NotFoundException
+import org.globe42.web.security.CurrentUser
+import org.globe42.web.users.createUser
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import java.time.LocalDate
+import java.util.*
 
 /**
- * Unit tests for {@link TaskController}
+ * Unit tests for [TaskController]
  * @author JB Nizet
  */
-public class TaskControllerTest extends BaseTest {
-
-    public static final Long VARIOUS_CATEGORY_ID = 6L;
+class TaskControllerTest : BaseTest() {
 
     @Mock
-    private TaskDao mockTaskDao;
+    private lateinit var mockTaskDao: TaskDao
 
     @Mock
-    private UserDao mockUserDao;
+    private lateinit var mockUserDao: UserDao
 
     @Mock
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @Mock
-    private TaskCategoryDao mockTaskCategoryDao;
+    private lateinit var mockTaskCategoryDao: TaskCategoryDao
 
     @Mock
-    private CurrentUser mockCurrentUser;
+    private lateinit var mockCurrentUser: CurrentUser
 
     @InjectMocks
-    private TaskController controller;
+    private lateinit var controller: TaskController
 
-    private Task task1;
-    private Task task2;
-    private User user;
-    private TaskCategory variousCategory;
-    private TaskCategory mealCategory;
+    private lateinit var task1: Task
+    private lateinit var task2: Task
+    private lateinit var user: User
+    private lateinit var variousCategory: TaskCategory
+    private lateinit var mealCategory: TaskCategory
 
     @BeforeEach
-    public void prepare() {
-        user = UserControllerTest.createUser(1L);
-        Person person = new Person(2L);
+    fun prepare() {
+        user = createUser(1L)
+        val person = Person(2L, "Jane", "Dean", Gender.FEMALE)
 
-        variousCategory = new TaskCategory(VARIOUS_CATEGORY_ID, "Various");
-        when(mockTaskCategoryDao.findById(variousCategory.getId())).thenReturn(Optional.of(variousCategory));
-        mealCategory = new TaskCategory(10L, "Meal");
-        when(mockTaskCategoryDao.findById(mealCategory.getId())).thenReturn(Optional.of(mealCategory));
+        variousCategory = TaskCategory(VARIOUS_CATEGORY_ID, "Various")
+        whenever(mockTaskCategoryDao.findById(variousCategory.id!!)).thenReturn(Optional.of(variousCategory))
+        mealCategory = TaskCategory(10L, "Meal")
+        whenever(mockTaskCategoryDao.findById(mealCategory.id!!)).thenReturn(Optional.of(mealCategory))
 
-        task1 = createTask(23L, user, person, mealCategory);
+        task1 = createTask(23L, user, person, mealCategory)
 
-        task2 = new Task(24L);
-        task2.setStatus(TaskStatus.TODO);
-        task2.setDescription("description2");
-        task2.setTitle("title2");
-        task2.setCategory(variousCategory);
+        task2 = Task(24L)
+        task2.status = TaskStatus.TODO
+        task2.description = "description2"
+        task2.title = "title2"
+        task2.category = variousCategory
+        task2.creator = user
     }
 
     @Test
-    public void shouldListTodo() {
-        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
-        when(mockTaskDao.findTodo(pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
+    fun shouldListTodo() {
+        val pageRequest = PageRequest.of(0, PAGE_SIZE)
+        whenever(mockTaskDao.findTodo(pageRequest)).thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
-        PageDTO<TaskDTO> result = controller.listTodo(Optional.empty());
+        val result = controller.listTodo(Optional.empty())
 
-        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
-        TaskDTO dto1 = result.getContent().get(0);
-        assertThat(dto1.getStatus()).isEqualTo(task1.getStatus());
-        assertThat(dto1.getDescription()).isEqualTo(task1.getDescription());
-        assertThat(dto1.getTitle()).isEqualTo(task1.getTitle());
-        assertThat(dto1.getCategory().getId()).isEqualTo(task1.getCategory().getId());
-        assertThat(dto1.getCategory().getName()).isEqualTo(task1.getCategory().getName());
-        assertThat(dto1.getDueDate()).isEqualTo(task1.getDueDate());
-        assertThat(dto1.getCreator().getId()).isEqualTo(task1.getCreator().getId());
-        assertThat(dto1.getAssignee().getId()).isEqualTo(task1.getAssignee().getId());
-        assertThat(dto1.getConcernedPerson().getId()).isEqualTo(task1.getConcernedPerson().getId());
+        assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
+        val dto = result.content[0]
+        assertThat(dto.status).isEqualTo(task1.status)
+        assertThat(dto.description).isEqualTo(task1.description)
+        assertThat(dto.title).isEqualTo(task1.title)
+        assertThat(dto.category.id).isEqualTo(task1.category!!.id)
+        assertThat(dto.category.name).isEqualTo(task1.category!!.name)
+        assertThat(dto.dueDate).isEqualTo(task1.dueDate)
+        assertThat(dto.creator.id).isEqualTo(task1.creator!!.id)
+        assertThat(dto.assignee!!.id).isEqualTo(task1.assignee!!.id)
+        assertThat(dto.concernedPerson!!.id).isEqualTo(task1.concernedPerson!!.id)
     }
 
     @Test
-    public void shouldListUnassigned() {
-        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
-        when(mockTaskDao.findTodoUnassigned(pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
+    fun shouldListUnassigned() {
+        val pageRequest = PageRequest.of(0, PAGE_SIZE)
+        whenever(mockTaskDao.findTodoUnassigned(pageRequest))
+                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
-        PageDTO<TaskDTO> result = controller.listUnassigned(Optional.empty());
+        val result = controller.listUnassigned(Optional.empty())
 
-        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
 
     @Test
-    public void shouldListMine() {
-        when(mockCurrentUser.getUserId()).thenReturn(user.getId());
-        when(mockUserDao.getOne(user.getId())).thenReturn(user);
+    fun shouldListMine() {
+        whenever(mockCurrentUser.userId).thenReturn(user.id)
+        whenever(mockUserDao.getOne(user.id!!)).thenReturn(user)
 
-        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
-        when(mockTaskDao.findTodoByAssignee(user, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
+        val pageRequest = PageRequest.of(0, PAGE_SIZE)
+        whenever(mockTaskDao.findTodoByAssignee(user, pageRequest))
+                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
-        PageDTO<TaskDTO> result = controller.listMine(Optional.empty());
+        val result = controller.listMine(Optional.empty())
 
-        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
 
     @Test
-    public void shouldListBefore() {
-        LocalDate maxDate = LocalDate.of(2017, 8, 4);
-        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
-        when(mockTaskDao.findTodoBefore(maxDate, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
+    fun shouldListBefore() {
+        val maxDate = LocalDate.of(2017, 8, 4)
+        val pageRequest = PageRequest.of(0, PAGE_SIZE)
+        whenever(mockTaskDao.findTodoBefore(maxDate, pageRequest))
+                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
-        PageDTO<TaskDTO> result = controller.listTodoBefore(maxDate, Optional.empty());
+        val result = controller.listTodoBefore(maxDate, Optional.empty())
 
-        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
 
     @Test
-    public void shouldListTodoForPerson() {
-        Person person = new Person(42L);
-        when(mockPersonDao.getOne(person.getId())).thenReturn(person);
-        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
-        when(mockTaskDao.findTodoByConcernedPerson(person, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
+    fun shouldListTodoForPerson() {
+        val person = Person(42L)
+        whenever(mockPersonDao.getOne(person.id!!)).thenReturn(person)
+        val pageRequest = PageRequest.of(0, PAGE_SIZE)
+        whenever(mockTaskDao.findTodoByConcernedPerson(person, pageRequest))
+                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
-        PageDTO<TaskDTO> result = controller.listTodoForPerson(person.getId(), Optional.empty());
+        val result = controller.listTodoForPerson(person.id, Optional.empty())
 
-        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
 
     @Test
-    public void shouldListArchivedForPerson() {
-        Person person = new Person(42L);
-        when(mockPersonDao.getOne(person.getId())).thenReturn(person);
-        PageRequest pageRequest = PageRequest.of(0, TaskController.PAGE_SIZE);
-        when(mockTaskDao.findArchivedByConcernedPerson(person, pageRequest)).thenReturn(singlePage(Arrays.asList(task1, task2), pageRequest));
+    fun shouldListArchivedForPerson() {
+        val person = Person(42L)
+        whenever(mockPersonDao.getOne(person.id!!)).thenReturn(person)
+        val pageRequest = PageRequest.of(0, PAGE_SIZE)
+        whenever(mockTaskDao.findArchivedByConcernedPerson(person, pageRequest))
+                .thenReturn(singlePage(listOf(task1, task2), pageRequest))
 
-        PageDTO<TaskDTO> result = controller.listArchivedForPerson(person.getId(), Optional.empty());
+        val result = controller.listArchivedForPerson(person.id, Optional.empty())
 
-        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
+        assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
 
     @Test
-    public void shouldListArchived() {
-        PageRequest pageRequest = PageRequest.of(2, TaskController.PAGE_SIZE);
-        when(mockTaskDao.findArchived(pageRequest)).thenReturn(
-            new PageImpl<>(Arrays.asList(task1, task2), pageRequest, 42));
+    fun shouldListArchived() {
+        val pageRequest = PageRequest.of(2, PAGE_SIZE)
+        whenever(mockTaskDao.findArchived(pageRequest))
+                .thenReturn(PageImpl(listOf(task1, task2), pageRequest, 42))
 
-        PageDTO<TaskDTO> result = controller.listArchived(Optional.of(2));
+        val result = controller.listArchived(Optional.of(2))
 
-        assertThat(result.getContent()).extracting(TaskDTO::getId).containsExactly(task1.getId(), task2.getId());
-        assertThat(result.getNumber()).isEqualTo(2);
-        assertThat(result.getSize()).isEqualTo(TaskController.PAGE_SIZE);
-        assertThat(result.getTotalElements()).isEqualTo(42);
-        assertThat(result.getTotalPages()).isEqualTo(3);
+        assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
+        assertThat(result.number).isEqualTo(2)
+        assertThat(result.size).isEqualTo(PAGE_SIZE)
+        assertThat(result.totalElements).isEqualTo(42)
+        assertThat(result.totalPages).isEqualTo(3)
     }
 
     @Test
-    public void shouldAssign() {
-        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
-        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
+    fun shouldAssign() {
+        whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
 
-        controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId()));
+        controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
 
-        assertThat(task2.getAssignee()).isEqualTo(user);
+        assertThat(task2.assignee).isEqualTo(user)
     }
 
     @Test
-    public void shouldThrowWhenAssigningUnexistingTask() {
-        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.empty());
-        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
+    fun shouldThrowWhenAssigningUnexistingTask() {
+        whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.empty())
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId())));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
+            controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
+        }
     }
 
     @Test
-    public void shouldThrowWhenAssigningToUnexistingUser() {
-        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
-        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.empty());
+    fun shouldThrowWhenAssigningToUnexistingUser() {
+        whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
-            () -> controller.assign(task2.getId(), new TaskAssignmentCommandDTO(user.getId())));
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
+            controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
+        }
     }
 
     @Test
-    public void shouldUnassign() {
-        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.of(task2));
+    fun shouldUnassign() {
+        whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
 
-        controller.unassign(task2.getId());
+        controller.unassign(task2.id!!)
 
-        assertThat(task2.getAssignee()).isEqualTo(null);
+        assertThat(task2.assignee).isEqualTo(null)
     }
 
     @Test
-    public void shouldThrowWhenUnassigningUnexistingTask() {
-        when(mockTaskDao.findById(task2.getId())).thenReturn(Optional.empty());
+    fun shouldThrowWhenUnassigningUnexistingTask() {
+        whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> controller.unassign(task2.getId()));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.unassign(task2.id!!) }
     }
 
     @Test
-    public void shouldChangeStatus() {
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+    fun shouldChangeStatus() {
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
 
-        controller.changeStatus(task1.getId(), new TaskStatusChangeCommandDTO(TaskStatus.DONE));
+        controller.changeStatus(task1.id!!, TaskStatusChangeCommandDTO(TaskStatus.DONE))
 
-        assertThat(task1.getStatus()).isEqualTo(TaskStatus.DONE);
-        assertThat(task1.getArchivalInstant()).isNotNull();
+        assertThat(task1.status).isEqualTo(TaskStatus.DONE)
+        assertThat(task1.archivalInstant).isNotNull()
     }
 
     @Test
-    public void shouldThrowWhenChangingStatusOfUnexistingTask() {
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.empty());
+    fun shouldThrowWhenChangingStatusOfUnexistingTask() {
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> controller.changeStatus(task1.getId(), new TaskStatusChangeCommandDTO(TaskStatus.DONE)));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
+            controller.changeStatus(task1.id!!, TaskStatusChangeCommandDTO(TaskStatus.DONE))
+        }
     }
 
     @Test
-    public void shouldGet() {
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+    fun shouldGet() {
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
 
-        TaskDTO result = controller.get(task1.getId());
+        val (id) = controller.get(task1.id!!)
 
-        assertThat(result.getId()).isEqualTo(task1.getId());
+        assertThat(id).isEqualTo(task1.id!!)
     }
 
     @Test
-    public void shouldThrowWhenGettingUnexistingTask() {
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.empty());
+    fun shouldThrowWhenGettingUnexistingTask() {
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> controller.get(task1.getId()));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(task1.id!!) }
     }
 
     @Test
-    public void shouldCreate() {
-        TaskCommandDTO command = createCommand(12L, 13L);
+    fun shouldCreate() {
+        val command = createCommand(12L, 13L)
 
-        Person person = new Person(command.getConcernedPersonId());
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        val person = Person(command.concernedPersonId!!, "John", "Doe", Gender.MALE)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
-        User user = new User(command.getAssigneeId());
-        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
+        val user = User(command.assigneeId!!, "JB")
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
 
-        when(mockTaskDao.save(any(Task.class))).thenAnswer(Answers.<Task>modifiedFirstArgument(task -> task.setId(42L)));
+        whenever(mockCurrentUser.userId).thenReturn(user.id)
+        whenever(mockUserDao.getOne(mockCurrentUser.userId!!)).thenReturn(user)
 
-        TaskDTO result = controller.create(command);
-        assertThat(result.getId()).isEqualTo(42L);
-        assertThat(result.getTitle()).isEqualTo(command.getTitle());
-        assertThat(result.getCategory().getId()).isEqualTo(variousCategory.getId());
-        assertThat(result.getDescription()).isEqualTo(command.getDescription());
-        assertThat(result.getDueDate()).isEqualTo(command.getDueDate());
-        assertThat(result.getConcernedPerson().getId()).isEqualTo(person.getId());
-        assertThat(result.getAssignee().getId()).isEqualTo(user.getId());
+        whenever(mockTaskDao.save(any<Task>())).thenReturnModifiedFirstArgument<Task> { task -> task.id = 42L }
+
+        val task = controller.create(command)
+        assertThat(task.id).isEqualTo(42L)
+        assertThat(task.title).isEqualTo(command.title)
+        assertThat(task.category.id).isEqualTo(variousCategory.id)
+        assertThat(task.description).isEqualTo(command.description)
+        assertThat(task.dueDate).isEqualTo(command.dueDate)
+        assertThat(task.concernedPerson!!.id).isEqualTo(person.id!!)
+        assertThat(task.assignee!!.id).isEqualTo(user.id!!)
     }
 
     @Test
-    public void shouldCreateWhenNullReferencesPassedInCommand() {
-        TaskCommandDTO command = createCommand(null, null);
+    fun shouldCreateWhenNullReferencesPassedInCommand() {
+        val command = createCommand(null, null)
 
-        when(mockTaskDao.save(any(Task.class))).thenAnswer(Answers.<Task>modifiedFirstArgument(task -> task.setId(42L)));
+        whenever(mockCurrentUser.userId).thenReturn(user.id)
+        whenever(mockUserDao.getOne(mockCurrentUser.userId!!)).thenReturn(user)
+        whenever(mockTaskDao.save(any<Task>())).thenReturnModifiedFirstArgument<Task> { task -> task.id = 42L }
 
-        TaskDTO result = controller.create(command);
-        assertThat(result.getConcernedPerson()).isNull();
-        assertThat(result.getAssignee()).isNull();
+        val task = controller.create(command)
+        assertThat(task.concernedPerson).isNull()
+        assertThat(task.assignee).isNull()
     }
 
     @Test
-    public void shouldUpdate() {
-        TaskCommandDTO command = createCommand(12L, 13L);
+    fun shouldUpdate() {
+        val command = createCommand(12L, 13L)
 
-        Person person = new Person(command.getConcernedPersonId());
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        val person = Person(command.concernedPersonId!!, "Jack", "Black", Gender.MALE)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
-        User user = new User(command.getAssigneeId());
-        when(mockUserDao.findNotDeletedById(user.getId())).thenReturn(Optional.of(user));
+        val user = User(command.assigneeId!!)
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
 
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
 
-        controller.update(task1.getId(), command);
+        controller.update(task1.id!!, command)
 
-        assertThat(task1.getTitle()).isEqualTo(command.getTitle());
-        assertThat(task1.getDescription()).isEqualTo(command.getDescription());
-        assertThat(task1.getCategory().getId()).isEqualTo(command.getCategoryId());
-        assertThat(task1.getDueDate()).isEqualTo(command.getDueDate());
-        assertThat(task1.getConcernedPerson().getId()).isEqualTo(person.getId());
-        assertThat(task1.getAssignee().getId()).isEqualTo(user.getId());
+        assertThat(task1.title).isEqualTo(command.title)
+        assertThat(task1.description).isEqualTo(command.description)
+        assertThat(task1.category!!.id).isEqualTo(command.categoryId)
+        assertThat(task1.dueDate).isEqualTo(command.dueDate)
+        assertThat(task1.concernedPerson!!.id).isEqualTo(person.id!!)
+        assertThat(task1.assignee!!.id).isEqualTo(user.id!!)
     }
 
     @Test
-    public void shouldListSpentTimes() {
-        task1.addSpentTime(createSpentTime(1L, 10, user));
-        task1.addSpentTime(createSpentTime(2L, 15, null));
+    fun shouldListSpentTimes() {
+        task1.addSpentTime(createSpentTime(1L, 10, user))
+        task1.addSpentTime(createSpentTime(2L, 15, user))
 
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
 
-        List<SpentTimeDTO> result = controller.listSpentTimes(task1.getId());
-        assertThat(result).hasSize(2);
-        SpentTimeDTO spentTime1 = result.stream().filter(sp -> sp.getId().equals(1L)).findAny().get();
-        assertThat(spentTime1.getCreator().getId()).isEqualTo(user.getId());
-        assertThat(spentTime1.getMinutes()).isEqualTo(10);
-        assertThat(spentTime1.getCreationInstant()).isNotNull();
-
-        SpentTimeDTO spentTime2 = result.stream().filter(sp -> sp.getId().equals(2L)).findAny().get();
-        assertThat(spentTime2.getCreator()).isNull();
+        val result = controller.listSpentTimes(task1.id)
+        assertThat(result).hasSize(2)
+        val spentTime1 = result.find { it.id == 1L }!!
+        assertThat(spentTime1.id).isEqualTo(user.id)
+        assertThat(spentTime1.minutes).isEqualTo(10)
+        assertThat(spentTime1.creationInstant).isNotNull()
     }
 
     @Test
-    public void shouldAddSpentTime() {
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
-        when(mockCurrentUser.getUserId()).thenReturn(user.getId());
-        when(mockUserDao.getOne(user.getId())).thenReturn(user);
+    fun shouldAddSpentTime() {
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
+        whenever(mockCurrentUser.userId).thenReturn(user.id)
+        whenever(mockUserDao.getOne(user.id!!)).thenReturn(user)
+        whenever(mockTaskDao.flush()).thenAnswer { _ -> task1.getSpentTimes().forEach { it.id = it.id ?: 76L } }
 
-        SpentTimeCommandDTO command = new SpentTimeCommandDTO(10);
-        SpentTimeDTO result = controller.addSpentTime(task1.getId(), command);
+        val command = SpentTimeCommandDTO(10)
+        val addedSpentTime = controller.addSpentTime(task1.id!!, command)
 
-        assertThat(task1.getSpentTimes()).hasSize(1);
-        assertThat(result.getMinutes()).isEqualTo(10);
-        assertThat(result.getCreator().getId()).isEqualTo(user.getId());
+        assertThat(task1.getSpentTimes()).hasSize(1)
+        assertThat(addedSpentTime.minutes).isEqualTo(10)
+        assertThat(addedSpentTime.creator.id).isEqualTo(user.id!!)
     }
 
     @Test
-    public void shouldDeleteSpentTime() {
-        SpentTime spentTime = createSpentTime(1L, 10, user);
-        task1.addSpentTime(spentTime);
-        when(mockTaskDao.findById(task1.getId())).thenReturn(Optional.of(task1));
-        controller.deleteSpentTime(task1.getId(), spentTime.getId());
-        assertThat(task1.getSpentTimes().isEmpty());
+    fun shouldDeleteSpentTime() {
+        val spentTime = createSpentTime(1L, 10, user)
+        task1.addSpentTime(spentTime)
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
+        controller.deleteSpentTime(task1.id!!, spentTime.id!!)
+        assertThat(task1.getSpentTimes().isEmpty())
 
-        controller.deleteSpentTime(task1.getId(), spentTime.getId());
+        controller.deleteSpentTime(task1.id!!, spentTime.id!!)
     }
 
-    static Task createTask(Long id, User user, Person person, TaskCategory category) {
-        Task task = new Task(id);
-        task.setStatus(TaskStatus.TODO);
-        task.setDescription("description");
-        task.setTitle("title");
-        task.setCategory(category);
-        task.setDueDate(LocalDate.of(2017, 8, 1));
-        task.setAssignee(user);
-        task.setCreator(user);
-        task.setConcernedPerson(person);
-
-        return task;
-    }
-
-    static TaskCommandDTO createCommand(Long concernedPersonId, Long assigneeId) {
-        return new TaskCommandDTO("new title",
-                                  "new description",
-                                  VARIOUS_CATEGORY_ID,
-                                  LocalDate.now().plusDays(1),
-                                  concernedPersonId,
-                                  assigneeId);
-    }
-
-    static SpentTime createSpentTime(Long id, int minutes, User creator) {
-        SpentTime spentTime = new SpentTime(id);
-        spentTime.setMinutes(minutes);
-        spentTime.setCreator(creator);
-        return spentTime;
-    }
-
-    private Page<Task> singlePage(List<Task> tasks, PageRequest pageRequest) {
-        return new PageImpl<>(tasks, pageRequest, tasks.size());
+    private fun singlePage(tasks: List<Task>, pageRequest: PageRequest): Page<Task> {
+        return PageImpl(tasks, pageRequest, tasks.size.toLong())
     }
 }
+
+internal const val VARIOUS_CATEGORY_ID = 6L
+
+internal fun createTask(id: Long?, user: User, person: Person, category: TaskCategory): Task {
+    val task = Task()
+    task.id = id
+    task.status = TaskStatus.TODO
+    task.description = "description"
+    task.title = "title"
+    task.category = category
+    task.dueDate = LocalDate.of(2017, 8, 1)
+    task.assignee = user
+    task.creator = user
+    task.concernedPerson = person
+
+    return task
+}
+
+internal fun createCommand(concernedPersonId: Long?, assigneeId: Long?): TaskCommandDTO {
+    return TaskCommandDTO("new title",
+                          "new description",
+                          VARIOUS_CATEGORY_ID,
+                          LocalDate.now().plusDays(1),
+                          concernedPersonId,
+                          assigneeId)
+}
+
+internal fun createSpentTime(id: Long, minutes: Int, creator: User?): SpentTime {
+    val spentTime = SpentTime(id)
+    spentTime.minutes = minutes
+    spentTime.creator = creator
+    return spentTime
+}
+

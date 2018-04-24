@@ -1,10 +1,12 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.SequenceGenerator
+import javax.validation.constraints.NotEmpty
+
+private const val INCOME_SOURCE_TYPE_GENERATOR = "IncomeSourceTypeGenerator"
 
 /**
  * A type of income source. This is kind of like an enum, except we don't want to change, build and deploy the
@@ -12,46 +14,30 @@ import javax.validation.constraints.NotEmpty;
  * @author JB Nizet
  */
 @Entity
-public class IncomeSourceType {
-
-    private static final String INCOME_SOURCE_TYPE_GENERATOR = "IncomeSourceTypeGenerator";
+class IncomeSourceType {
 
     @Id
-    @SequenceGenerator(name = INCOME_SOURCE_TYPE_GENERATOR, sequenceName = "INCOME_SOURCE_TYPE_SEQ", initialValue = 1000, allocationSize = 1)
+    @SequenceGenerator(name = INCOME_SOURCE_TYPE_GENERATOR,
+                       sequenceName = "INCOME_SOURCE_TYPE_SEQ",
+                       initialValue = 1000,
+                       allocationSize = 1)
     @GeneratedValue(generator = INCOME_SOURCE_TYPE_GENERATOR)
-    private Long id;
+    var id: Long? = null
 
     /**
      * The type, as displayed in the application
      */
     @NotEmpty
-    private String type;
+    var type: String? = null
 
-    public IncomeSourceType() {
+    constructor()
+
+    constructor(id: Long) {
+        this.id = id
     }
 
-    public IncomeSourceType(Long id) {
-        this.id = id;
-    }
-
-    public IncomeSourceType(Long id, String type) {
-        this.id = id;
-        this.type = type;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    constructor(id: Long, type: String) {
+        this.id = id
+        this.type = type
     }
 }

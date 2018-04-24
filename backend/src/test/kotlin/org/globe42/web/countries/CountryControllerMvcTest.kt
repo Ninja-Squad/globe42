@@ -1,47 +1,42 @@
-package org.globe42.web.countries;
+package org.globe42.web.countries
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Arrays;
-
-import org.globe42.dao.CountryDao;
-import org.globe42.domain.Country;
-import org.globe42.test.GlobeMvcTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import com.nhaarman.mockito_kotlin.whenever
+import org.globe42.dao.CountryDao
+import org.globe42.domain.Country
+import org.globe42.test.GlobeMvcTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
- * MVC test for {@link CountryController}
+ * MVC test for [CountryController]
  * @author JB Nizet
  */
-@GlobeMvcTest(CountryController.class)
-public class CountryControllerMvcTest {
+@GlobeMvcTest(CountryController::class)
+class CountryControllerMvcTest {
 
     @MockBean
-    private CountryDao mockCountryDao;
+    private lateinit var mockCountryDao: CountryDao
 
     @Autowired
-    private MockMvc mvc;
+    private lateinit var mvc: MockMvc
 
     @BeforeEach
-    public void prepare() {
-        when(mockCountryDao.findAllSortedByName()).thenReturn(Arrays.asList(
-            new Country("BEL", "Belgique"),
-            new Country("FRA", "France")
-        ));
+    fun prepare() {
+        whenever(mockCountryDao.findAllSortedByName()).thenReturn(
+                listOf(Country("BEL", "Belgique"), Country("FRA", "France")))
     }
 
     @Test
-    public void shouldList() throws Exception {
+    fun shouldList() {
         mvc.perform(get("/api/countries"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value("BEL"))
-           .andExpect(jsonPath("$[1].name").value("France"));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$[0].id").value("BEL"))
+                .andExpect(jsonPath("$[1].name").value("France"))
     }
 }

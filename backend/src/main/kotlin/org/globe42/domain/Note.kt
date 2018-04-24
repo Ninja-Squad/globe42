@@ -1,78 +1,39 @@
-package org.globe42.domain;
+package org.globe42.domain
+
+import java.time.Instant
+import javax.persistence.*
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
+
+private const val NOTE_GENERATOR = "NoteGenerator"
 
 /**
  * A note, allowing to add free information on a person (or other future entities)
  * @author JB Nizet
  */
-
-import java.time.Instant;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 @Entity
-public class Note {
-
-    private static final String NOTE_GENERATOR = "NoteGenerator";
+class Note {
 
     @Id
     @SequenceGenerator(name = NOTE_GENERATOR, sequenceName = "NOTE_SEQ", initialValue = 1000, allocationSize = 1)
     @GeneratedValue(generator = NOTE_GENERATOR)
-    private Long id;
+    var id: Long? = null
 
     @NotEmpty
-    private String text;
+    var text: String? = null
 
     /**
      * The user who created the task.
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private User creator;
+    var creator: User? = null
 
-    private Instant creationInstant;
+    var creationInstant: Instant? = null
 
-    public Note() {
-    }
+    constructor()
 
-    public Note(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-    public Instant getCreationInstant() {
-        return creationInstant;
-    }
-
-    public void setCreationInstant(Instant creationInstant) {
-        this.creationInstant = creationInstant;
+    constructor(id: Long) {
+        this.id = id
     }
 }

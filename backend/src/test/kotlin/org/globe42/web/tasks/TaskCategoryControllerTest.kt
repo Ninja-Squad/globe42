@@ -1,35 +1,30 @@
-package org.globe42.web.tasks;
+package org.globe42.web.tasks
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.globe42.dao.TaskCategoryDao;
-import org.globe42.domain.TaskCategory;
-import org.globe42.test.BaseTest;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Java6Assertions.assertThat
+import org.globe42.dao.TaskCategoryDao
+import org.globe42.domain.TaskCategory
+import org.globe42.test.BaseTest
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
 
 /**
- * Unit tests for {@link TaskCategoryController}
+ * Unit tests for [TaskCategoryController]
  * @author JB Nizet
  */
-public class TaskCategoryControllerTest extends BaseTest {
+class TaskCategoryControllerTest : BaseTest() {
 
     @Mock
-    private TaskCategoryDao mockTaskCategoryDao;
+    private lateinit var mockTaskCategoryDao: TaskCategoryDao
 
     @InjectMocks
-    private TaskCategoryController controller;
+    private lateinit var controller: TaskCategoryController
 
     @Test
-    public void shouldList() {
-        when(mockTaskCategoryDao.findAll()).thenReturn(Arrays.asList(new TaskCategory(6L, "Various")));
-        List<TaskCategoryDTO> result = controller.list();
-        assertThat(result).extracting(TaskCategoryDTO::getId).containsExactly(6L);
-        assertThat(result).extracting(TaskCategoryDTO::getName).containsExactly("Various");
+    fun shouldList() {
+        whenever(mockTaskCategoryDao.findAll()).thenReturn(listOf(TaskCategory(6L, "Various")))
+        val result = controller.list()
+        assertThat(result).containsExactly(TaskCategoryDTO(6L, "Various"))
     }
 }

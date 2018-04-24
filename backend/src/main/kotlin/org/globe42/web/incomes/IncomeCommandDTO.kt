@@ -1,41 +1,20 @@
-package org.globe42.web.incomes;
+package org.globe42.web.incomes
 
-import java.math.BigDecimal;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.math.BigDecimal
+import javax.validation.constraints.NotNull
 
 /**
  * A command used to create an income for a person
  * @author JB Nizet
  */
-public final class IncomeCommandDTO {
+data class IncomeCommandDTO (
 
-    /**
-     * The ID of the source of the income
-     */
-    @NotNull
-    private final Long sourceId;
+        /**
+         * The ID of the source of the income
+         */
+        @field:NotNull val sourceId: Long,
 
-    /**
-     * The monthly amount of the income
-     */
-    @NotNull
-    private final BigDecimal monthlyAmount;
-
-    @JsonCreator
-    public IncomeCommandDTO(@JsonProperty Long sourceId,
-                            @JsonProperty BigDecimal monthlyAmount) {
-        this.sourceId = sourceId;
-        this.monthlyAmount = monthlyAmount;
-    }
-
-    public Long getSourceId() {
-        return sourceId;
-    }
-
-    public BigDecimal getMonthlyAmount() {
-        return monthlyAmount;
-    }
-}
+        /**
+         * The monthly amount of the income
+         */
+        @field:NotNull val monthlyAmount: BigDecimal)
