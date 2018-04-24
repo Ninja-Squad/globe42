@@ -1,61 +1,57 @@
-package org.globe42.web.cities;
+package org.globe42.web.cities
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.globe42.dao.PostalCityDao;
-import org.globe42.domain.PostalCity;
-import org.globe42.test.GlobeMvcTest;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.globe42.dao.PostalCityDao
+import org.globe42.domain.PostalCity
+import org.globe42.test.GlobeMvcTest
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.util.*
 
 /**
- * MVC tests for {@link PostalCityController}
+ * MVC tests for [PostalCityController]
  * @author JB Nizet
  */
-@GlobeMvcTest(PostalCityController.class)
-public class PostalCityControllerMvcTest {
+@GlobeMvcTest(PostalCityController::class)
+class PostalCityControllerMvcTest {
 
     @MockBean
-    private PostalCityDao mockPostalCityDao;
+    private lateinit var mockPostalCityDao: PostalCityDao
 
     @MockBean
-    private PostalCityUploadParser mockUploadParser;
+    private lateinit var mockUploadParser: PostalCityUploadParser
 
     @Autowired
-    private MockMvc mvc;
+    private lateinit var mvc: MockMvc
 
     @Test
-    public void shouldSearch() throws Exception {
-        PostalCity postalCity = new PostalCity("42000", "ST ETIENNE");
-        when(mockPostalCityDao.findByCity("ST E", PostalCityController.LIMIT)).thenReturn(
-            Arrays.asList(postalCity)
-        );
+    fun shouldSearch() {
+        val postalCity = PostalCity("42000", "ST ETIENNE")
+        whenever(mockPostalCityDao.findByCity("ST E", LIMIT)).thenReturn(listOf(postalCity))
 
         mvc.perform(get("/api/cities").param("query", "ST E"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].code").value("42000"))
-           .andExpect(jsonPath("$[0].city").value("ST ETIENNE"));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$[0].code").value("42000"))
+                .andExpect(jsonPath("$[0].city").value("ST ETIENNE"))
     }
 
     @Test
-    public void shouldUpload() throws Exception {
-        byte[] body = "fake".getBytes();
-        List<PostalCity> parsedCities = Arrays.asList(new PostalCity("42000", "ST ETIENNE"));
-        when(mockUploadParser.parse(body)).thenReturn(parsedCities);
+    @Throws(Exception::class)
+    fun shouldUpload() {
+        val body = "fake".toByteArray()
+        val parsedCities = Arrays.asList(PostalCity("42000", "ST ETIENNE"))
+        whenever(mockUploadParser.parse(body)).thenReturn(parsedCities)
 
         mvc.perform(post("/api/cities/uploads").content(body))
-           .andExpect(status().isCreated());
+                .andExpect(status().isCreated)
 
-        verify(mockPostalCityDao).saveAllEfficiently(parsedCities);
+        verify(mockPostalCityDao).saveAllEfficiently(parsedCities)
     }
 }

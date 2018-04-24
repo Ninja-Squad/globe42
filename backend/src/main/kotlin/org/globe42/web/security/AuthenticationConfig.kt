@@ -1,28 +1,26 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import java.util.Arrays;
-
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import java.util.*
 
 /**
  * Configuration of the WebMvc application
  * @author JB Nizet
  */
 @Configuration
-public class AuthenticationConfig {
+class AuthenticationConfig {
 
     @Bean
-    public FilterRegistrationBean<AuthenticationFilter> authenticationFilterRegistration() {
-        FilterRegistrationBean<AuthenticationFilter> filterRegistrationBean =
-            new FilterRegistrationBean<>(authenticationFilter());
-        filterRegistrationBean.setUrlPatterns(Arrays.asList("/api/*", "/actuator", "/actuator/*"));
-        return filterRegistrationBean;
+    fun authenticationFilterRegistration(): FilterRegistrationBean<AuthenticationFilter> {
+        val filterRegistrationBean = FilterRegistrationBean(authenticationFilter())
+        filterRegistrationBean.urlPatterns = Arrays.asList("/api/*", "/actuator", "/actuator/*")
+        return filterRegistrationBean
     }
 
     @Bean
-    public AuthenticationFilter authenticationFilter() {
-        return new AuthenticationFilter();
+    fun authenticationFilter(): AuthenticationFilter {
+        return AuthenticationFilter()
     }
 }

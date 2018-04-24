@@ -1,182 +1,179 @@
-package org.globe42.web.incomes;
+package org.globe42.web.incomes
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.IncomeDao;
-import org.globe42.dao.IncomeSourceDao;
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.Income;
-import org.globe42.domain.IncomeSource;
-import org.globe42.domain.IncomeSourceType;
-import org.globe42.domain.Person;
-import org.globe42.test.Answers;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.NotFoundException;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.IncomeDao
+import org.globe42.dao.IncomeSourceDao
+import org.globe42.dao.PersonDao
+import org.globe42.domain.Income
+import org.globe42.domain.IncomeSource
+import org.globe42.domain.IncomeSourceType
+import org.globe42.domain.Person
+import org.globe42.test.BaseTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.NotFoundException
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.math.BigDecimal
+import java.util.*
 
 /**
- * Unit tests for {@link IncomeController}
+ * Unit tests for [IncomeController]
  * @author JB Nizet
  */
-public class IncomeControllerTest extends BaseTest {
+class IncomeControllerTest : BaseTest() {
 
     @Mock
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @Mock
-    private IncomeDao mockIncomeDao;
+    private lateinit var mockIncomeDao: IncomeDao
 
     @Mock
-    private IncomeSourceDao mockIncomeSourceDao;
+    private lateinit var mockIncomeSourceDao: IncomeSourceDao
 
     @InjectMocks
-    private IncomeController controller;
+    private lateinit var controller: IncomeController
 
     @Test
-    public void shouldList() {
-        Long personId = 42L;
-        Person person = new Person(personId);
-        Income income = createIncome(12L);
-        person.addIncome(income);
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
+    fun shouldList() {
+        val personId = 42L
+        val person = Person(personId)
+        val income = createIncome(12L)
+        person.addIncome(income)
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
 
-        List<IncomeDTO> result = controller.list(personId);
+        val result = controller.list(personId)
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(income.getId());
-        assertThat(result.get(0).getSource().getId()).isEqualTo(income.getSource().getId());
-        assertThat(result.get(0).getMonthlyAmount()).isEqualTo(income.getMonthlyAmount());
-    }
-
-    @Test
-    public void shouldThrowIfPersonNotFound() {
-        Long personId = 42L;
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.list(personId));
+        assertThat(result).hasSize(1)
+        assertThat(result[0].id).isEqualTo(income.id)
+        assertThat(result[0].source.id).isEqualTo(income.source!!.id)
+        assertThat(result[0].monthlyAmount).isEqualTo(income.monthlyAmount)
     }
 
     @Test
-    public void shouldDelete() {
-        Long personId = 42L;
-        Long incomeId = 12L;
-        Income income = new Income(incomeId);
-        income.setPerson(new Person(personId));
-        when(mockIncomeDao.findById(incomeId)).thenReturn(Optional.of(income));
+    fun shouldThrowIfPersonNotFound() {
+        val personId = 42L
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
 
-        controller.delete(personId, incomeId);
-
-        verify(mockIncomeDao).delete(income);
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(personId) }
     }
 
     @Test
-    public void shouldAcceptDeletionIfNotFoundToBeIdempotent() {
-        Long incomeId = 12L;
-        when(mockIncomeDao.findById(incomeId)).thenReturn(Optional.empty());
+    fun shouldDelete() {
+        val personId = 42L
+        val incomeId = 12L
+        val income = Income(incomeId)
+        income.person = Person(personId)
+        whenever(mockIncomeDao.findById(incomeId)).thenReturn(Optional.of(income))
 
-        controller.delete(42L, incomeId);
+        controller.delete(personId, incomeId)
 
-        verify(mockIncomeDao, never()).delete(any());
+        verify(mockIncomeDao).delete(income)
     }
 
     @Test
-    public void shouldRejectDeletionIfNotInCorrectPerson() {
-        Long incomeId = 12L;
-        Long personId = 42L;
-        Income income = new Income(incomeId);
-        income.setPerson(new Person(personId));
+    fun shouldAcceptDeletionIfNotFoundToBeIdempotent() {
+        val incomeId = 12L
+        whenever(mockIncomeDao.findById(incomeId)).thenReturn(Optional.empty())
 
-        when(mockIncomeDao.findById(incomeId)).thenReturn(Optional.of(income));
+        controller.delete(42L, incomeId)
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.delete(456L, incomeId));
+        verify(mockIncomeDao, never()).delete(any())
     }
 
     @Test
-    public void shouldCreate() {
-        Long personId = 42L;
-        Long sourceId = 12L;
+    fun shouldRejectDeletionIfNotInCorrectPerson() {
+        val incomeId = 12L
+        val personId = 42L
+        val income = Income(incomeId)
+        income.person = Person(personId)
 
-        Person person = new Person(personId);
-        IncomeSource source = createIncomeSource(sourceId);
+        whenever(mockIncomeDao.findById(incomeId)).thenReturn(Optional.of(income))
 
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
-        when(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.of(source));
-        when(mockIncomeDao.save(any(Income.class))).thenAnswer(
-            Answers.<Income>modifiedFirstArgument(income -> income.setId(34L)));
-
-        IncomeCommandDTO command = new IncomeCommandDTO(sourceId, BigDecimal.TEN);
-
-        IncomeDTO result = controller.create(personId, command);
-
-        assertThat(result.getId()).isEqualTo(34L);
-        assertThat(result.getMonthlyAmount()).isEqualByComparingTo(command.getMonthlyAmount());
-        assertThat(result.getSource().getId()).isEqualTo(command.getSourceId());
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(456L, incomeId) }
     }
 
     @Test
-    public void shouldThrowWhenCreatingForUnknownPerson() {
-        Long personId = 42L;
-        Long sourceId = 12L;
+    fun shouldCreate() {
+        val personId = 42L
+        val sourceId = 12L
 
-        Person person = new Person(personId);
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
-        when(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.empty());
+        val person = Person(personId)
+        val source = createIncomeSource(sourceId)
 
-        IncomeCommandDTO command = new IncomeCommandDTO(sourceId, BigDecimal.TEN);
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        whenever(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.of(source))
+        whenever(mockIncomeDao.save(any<Income>())).thenReturnModifiedFirstArgument<Income> { it.id = 34L }
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
+        val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
+
+        val (id, source1, monthlyAmount) = controller.create(personId, command)
+
+        assertThat(id).isEqualTo(34L)
+        assertThat(monthlyAmount).isEqualByComparingTo(command.monthlyAmount)
+        assertThat(source1.id).isEqualTo(command.sourceId)
     }
 
     @Test
-    public void shouldThrowWhenCreatingWithTooLargeAmount() {
-        Long personId = 42L;
-        Long sourceId = 12L;
+    fun shouldThrowWhenCreatingForUnknownPerson() {
+        val personId = 42L
+        val sourceId = 12L
 
-        Person person = new Person(personId);
-        IncomeSource source = createIncomeSource(sourceId);
-        source.setMaxMonthlyAmount(new BigDecimal("9"));
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.of(person));
-        when(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.of(source));
+        val person = Person(personId)
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        whenever(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.empty())
 
-        IncomeCommandDTO command = new IncomeCommandDTO(sourceId, BigDecimal.TEN);
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(personId, command));
+        val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
+
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
     }
 
     @Test
-    public void shouldThrowWhenCreatingForUnknownSource() {
-        Long personId = 42L;
-        Long sourceId = 12L;
+    fun shouldThrowWhenCreatingWithTooLargeAmount() {
+        val personId = 42L
+        val sourceId = 12L
 
-        when(mockPersonDao.findById(personId)).thenReturn(Optional.empty());
+        val person = Person(personId)
+        val source = createIncomeSource(sourceId)
+        source.maxMonthlyAmount = BigDecimal("9")
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        whenever(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.of(source))
 
-        IncomeCommandDTO command = new IncomeCommandDTO(sourceId, BigDecimal.TEN);
-
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(personId, command));
+        val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
     }
 
-    static Income createIncome(Long id) {
-        Income income = new Income(id);
-        IncomeSource incomeSource = createIncomeSource(id * 10);
-        income.setSource(incomeSource);
-        income.setMonthlyAmount(new BigDecimal("123.45"));
-        return income;
-    }
+    @Test
+    fun shouldThrowWhenCreatingForUnknownSource() {
+        val personId = 42L
+        val sourceId = 12L
 
-    static IncomeSource createIncomeSource(Long id) {
-        IncomeSource incomeSource = new IncomeSource(id);
-        incomeSource.setType(new IncomeSourceType(id * 10, "CAF"));
-        return incomeSource;
+        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
+
+        val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
+
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.create(personId, command) }
     }
+}
+
+internal fun createIncome(id: Long): Income {
+    val income = Income(id)
+    val incomeSource = createIncomeSource(id * 10)
+    income.source = incomeSource
+    income.monthlyAmount = BigDecimal("123.45")
+    return income
+}
+
+internal fun createIncomeSource(id: Long): IncomeSource {
+    val incomeSource = IncomeSource(id)
+    incomeSource.type = IncomeSourceType(id * 10, "CAF")
+    incomeSource.name = "CAF ${id}"
+    return incomeSource
 }

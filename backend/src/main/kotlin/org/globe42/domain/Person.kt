@@ -1,28 +1,16 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import java.time.LocalDate
+import java.util.*
+import javax.persistence.*
+import javax.validation.Valid
+import javax.validation.constraints.Email
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Pattern
+
+const val FISCAL_NUMBER_REGEXP = "\\d{13}|^$"
+private const val PERSON_GENERATOR = "PersonGenerator"
 
 /**
  * A person helped by, or member of Globe 42.
@@ -32,100 +20,96 @@ import javax.validation.constraints.Pattern;
  * @author JB Nizet
  */
 @Entity
-public class Person {
-
-    public static final String FISCAL_NUMBER_REGEXP = "\\d{13}|^$";
-
-    private static final String PERSON_GENERATOR = "PersonGenerator";
+class Person {
 
     @Id
     @SequenceGenerator(name = PERSON_GENERATOR, sequenceName = "PERSON_SEQ", initialValue = 1000, allocationSize = 1)
     @GeneratedValue(generator = PERSON_GENERATOR)
-    private Long id;
+    var id: Long? = null
 
     /**
      * The first name, requested to all persons, and mandatory
      */
     @NotEmpty
-    private String firstName;
+    var firstName: String? = null
 
     /**
      * The last name, requested to all persons, and mandatory
      */
     @NotEmpty
-    private String lastName;
+    var lastName: String? = null
 
     /**
      * The birth name, requested to all persons, but not mandatory.
      * The birth name could be the maiden name of a married woman, for instance
      */
-    private String birthName;
+    var birthName: String? = null
 
     /**
      * The nick name, requested to all persons, but not mandatory
      */
-    private String nickName;
+    var nickName: String? = null
 
     /**
      * The gender of the person, requested to all persons, and mandatory
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    var gender: Gender? = null
 
     /**
      * The birth date, requested to all persons, but not mandatory
      */
-    private LocalDate birthDate;
+    var birthDate: LocalDate? = null
 
     /**
      * Is the person an official member of the association. Requested to all persons, and mandatory.
      */
-    private boolean adherent;
+    var adherent: Boolean = false
 
     /**
      * The first address line (street and number, typically) of the person. Requested to all persons, but not mandatory
      */
-    private String address;
+    var address: String? = null
 
     /**
      * The postal code and city of the person. Requested to all persons, but not mandatory
      */
     @Embedded
     @Valid
-    private City city;
+    var city: City? = null
 
     /**
      * The email of the person. Requested to all persons, but not mandatory
      */
     @Email
-    private String email;
+    var email: String? = null
 
     /**
      * The phone number of the person. Requested to all persons, but not mandatory
      */
-    private String phoneNumber;
+    var phoneNumber: String? = null
 
     /**
      * Is mediation enabled for the person or not. Requested to all persons, and mandatory.
      */
-    private boolean mediationEnabled;
+    var mediationEnabled: Boolean = false
 
     /**
      * The mediation code, generated automatically for mediation-enabled persons only, from the first letter of the
      * last name, and from a sequence.
      */
-    private String mediationCode;
+    var mediationCode: String? = null
 
     /**
      * The date of first mediation appointment. Only requested to mediation-enabled persons, but not mandatory
      */
-    private LocalDate firstMediationAppointmentDate;
+    var firstMediationAppointmentDate: LocalDate? = null
 
     /**
      * The date of entry in France. Only requested to mediation-enabled persons, but not mandatory
      */
-    private LocalDate entryDate;
+    var entryDate: LocalDate? = null
 
     /**
      * The marital status. Only requested to mediation-enabled persons, and unknown by default (so, technically
@@ -133,7 +117,7 @@ public class Person {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private MaritalStatus maritalStatus = MaritalStatus.UNKNOWN;
+    var maritalStatus = MaritalStatus.UNKNOWN
 
     /**
      * The couple (marriage, PACS, etc.) in which the person is engaged with another person. Only requested to
@@ -142,7 +126,7 @@ public class Person {
      * for later).
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    private Couple couple;
+    var couple: Couple? = null
 
     /**
      * The housing kind. Only requested to mediation-enabled persons, and unknown by default (so, technically
@@ -150,17 +134,17 @@ public class Person {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Housing housing = Housing.UNKNOWN;
+    var housing = Housing.UNKNOWN
 
     /**
      * The housing space, in square meters. Only requested to mediation-enabled persons, and not mandatory
      */
-    private Integer housingSpace;
+    var housingSpace: Int? = null
 
     /**
      * The name of the host, requested to all persons, but not mandatory.
      */
-    private String hostName;
+    var hostName: String? = null
 
     /**
      * The fiscal status. Only requested to mediation-enabled persons, and unknown by default (so, technically
@@ -168,45 +152,45 @@ public class Person {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private FiscalStatus fiscalStatus = FiscalStatus.UNKNOWN;
+    var fiscalStatus = FiscalStatus.UNKNOWN
 
     /**
      * The fiscal number. Only requested to mediation-enabled persons, if the fiscal status is not
-     * {@link FiscalStatus#UNKNOWN}. It's composed of 13 digits (see
+     * [FiscalStatus.UNKNOWN]. It's composed of 13 digits (see
      * https://cfsmsp.impots.gouv.fr/secavis/faces/commun/aideSpi.jsf)
      */
     @Pattern(regexp = FISCAL_NUMBER_REGEXP)
-    private String fiscalNumber;
+    var fiscalNumber: String? = null
 
     /**
      * Is the fiscal status up-to-date. Only requested to mediation-enabled persons, if the fiscal
-     * status is not {@link FiscalStatus#UNKNOWN}.
+     * status is not [FiscalStatus.UNKNOWN].
      */
-    private boolean fiscalStatusUpToDate;
+    var fiscalStatusUpToDate: Boolean = false
 
     /**
      * The family situation of the person in France. Only requested to mediation-enabled persons, and not mandatory
      */
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private FamilySituation frenchFamilySituation;
+    @OneToOne(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    var frenchFamilySituation: FamilySituation? = null
 
     /**
      * The family situation of the person abroad. Only requested to mediation-enabled persons, and not mandatory
      */
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private FamilySituation abroadFamilySituation;
+    @OneToOne(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    var abroadFamilySituation: FamilySituation? = null
 
     /**
      * The incomes of the person. Only requested to mediation-enabled persons
      */
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Income> incomes = new HashSet<>();
+    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    private val incomes: MutableSet<Income> = HashSet()
 
     /**
      * The charges of the person. Only requested to mediation-enabled persons
      */
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Charge> charges = new HashSet<>();
+    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    private val charges: MutableSet<Charge> = HashSet()
 
     /**
      * The Health Care Coverage. Only requested to mediation-enabled persons, and unknown by default (so, technically
@@ -214,433 +198,154 @@ public class Person {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private HealthCareCoverage healthCareCoverage = HealthCareCoverage.UNKNOWN;
+    var healthCareCoverage = HealthCareCoverage.UNKNOWN
 
     /**
      * The date when the health care coverage has been established/started. Only requested to mediation-enabled persons,
      * and when the health care coverage is not UNKNOWN
      */
-    private LocalDate healthCareCoverageStartDate;
+    var healthCareCoverageStartDate: LocalDate? = null
 
     /**
      * The Health Insurance. Only requested to mediation-enabled persons, and not mandatory
      */
-    private String healthInsurance;
+    var healthInsurance: String? = null
 
     /**
      * The date when the health care coverage has been established/started. Only requested to mediation-enabled persons,
      * and when the health insurance is known
      */
-    private LocalDate healthInsuranceStartDate;
+    var healthInsuranceStartDate: LocalDate? = null
 
     /**
      * The name of the accompanying. Only requested to mediation-enabled persons, and not mandatory
      */
-    private String accompanying;
+    var accompanying: String? = null
 
     /**
      * The social security number of the person. Only requested to mediation-enabled persons, and not mandatory.
      * In positions 6 and 7 of this number we have the 'place of birth" and we can have letters for people born abroad.
      * So we must have 'String' for the Type of this attribute.
      */
-    private String socialSecurityNumber;
+    var socialSecurityNumber: String? = null
 
     /**
      * The CAF number of the person. CAF = "Caisse Allocations Familiales" in French. Only requested to
      * mediation-enabled persons, and not mandatory
      */
-    private String cafNumber;
+    var cafNumber: String? = null
 
     /**
      * The nationality of the person. Only requested to mediation-enabled persons, and not mandatory
      */
     @ManyToOne
-    private Country nationality;
+    var nationality: Country? = null
 
     /**
      * The notes added on the person
      */
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
     @JoinTable(name = "person_note",
-        joinColumns = @JoinColumn(name = "person_id"),
-        inverseJoinColumns = @JoinColumn(name = "note_id")
-    )
-    private Set<Note> notes = new HashSet<>();
+               joinColumns = [JoinColumn(name = "person_id")],
+               inverseJoinColumns = [JoinColumn(name = "note_id")])
+    private val notes: MutableSet<Note> = HashSet()
 
     /**
      * The participations to activity types of the person
      */
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Participation> participations = new HashSet<>();
+    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    private val participations: MutableSet<Participation> = HashSet()
 
     /**
      * The wedding events of the person. Only requested to mediation-enabled persons.
      */
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<WeddingEvent> weddingEvents = new HashSet<>();
+    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    private val weddingEvents: MutableSet<WeddingEvent> = HashSet()
 
     /**
      * Flag indicating that the given person is logically deleted
      */
-    private boolean deleted;
+    var deleted: Boolean = false
 
-    public Person() {
-    }
-
-    public Person(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getBirthName() {
-        return birthName;
-    }
-
-    public void setBirthName(String birthName) {
-        this.birthName = birthName;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public boolean isAdherent() {
-        return adherent;
-    }
-
-    public void setAdherent(boolean adherent) {
-        this.adherent = adherent;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public boolean isMediationEnabled() {
-        return mediationEnabled;
-    }
-
-    public void setMediationEnabled(boolean mediationEnabled) {
-        this.mediationEnabled = mediationEnabled;
-    }
-
-    public String getMediationCode() {
-        return mediationCode;
-    }
-
-    public void setMediationCode(String mediationCode) {
-        this.mediationCode = mediationCode;
-    }
-
-    public LocalDate getFirstMediationAppointmentDate() {
-        return firstMediationAppointmentDate;
-    }
-
-    public void setFirstMediationAppointmentDate(LocalDate firstMediationAppointmentDate) {
-        this.firstMediationAppointmentDate = firstMediationAppointmentDate;
-    }
-
-    public LocalDate getEntryDate() {
-        return entryDate;
-    }
-
-    public void setEntryDate(LocalDate entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    public MaritalStatus getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(MaritalStatus maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public Housing getHousing() {
-        return housing;
-    }
-
-    public void setHousing(Housing housing) {
-        this.housing = housing;
-    }
-
-    public Integer getHousingSpace() {
-        return housingSpace;
-    }
-
-    public void setHousingSpace(Integer housingSpace) {
-        this.housingSpace = housingSpace;
-    }
-
-    public String getHostName() {
-        return hostName;
-    }
-
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
-    }
-
-    public FiscalStatus getFiscalStatus() {
-        return fiscalStatus;
-    }
-
-    public void setFiscalStatus(FiscalStatus fiscalStatus) {
-        this.fiscalStatus = fiscalStatus;
-    }
-
-    public String getFiscalNumber() {
-        return fiscalNumber;
-    }
-
-    public void setFiscalNumber(String fiscalNumber) {
-        this.fiscalNumber = fiscalNumber;
-    }
-
-    public boolean isFiscalStatusUpToDate() {
-        return fiscalStatusUpToDate;
-    }
-
-    public void setFiscalStatusUpToDate(boolean fiscalStatusUpToDate) {
-        this.fiscalStatusUpToDate = fiscalStatusUpToDate;
-    }
-
-    public FamilySituation getFrenchFamilySituation() {
-        return frenchFamilySituation;
-    }
-
-    public void setFrenchFamilySituation(FamilySituation frenchFamilySituation) {
-        this.frenchFamilySituation = frenchFamilySituation;
-    }
-
-    public FamilySituation getAbroadFamilySituation() {
-        return abroadFamilySituation;
-    }
-
-    public void setAbroadFamilySituation(FamilySituation abroadFamilySituation) {
-        this.abroadFamilySituation = abroadFamilySituation;
-    }
-
-    public void addIncome(Income income) {
-        income.setPerson(this);
-        this.incomes.add(income);
-    }
+    val spouse: Person?
+        get() = couple?.getSpouseOf(this)
 
-    public void removeIncome(Income income) {
-        income.setPerson(null);
-        this.incomes.remove(income);
-    }
-
-    public Set<Income> getIncomes() {
-        return Collections.unmodifiableSet(incomes);
-    }
-
-    public void addCharge(Charge charge) {
-        charge.setPerson(this);
-        this.charges.add(charge);
-    }
-
-    public void removeCharge(Charge charge) {
-        charge.setPerson(null);
-        this.charges.remove(charge);
-    }
-
-    public Set<Charge> getCharges() {
-        return Collections.unmodifiableSet(charges);
-    }
-
-    public HealthCareCoverage getHealthCareCoverage() {
-        return healthCareCoverage;
-    }
-
-    public void setHealthCareCoverage(HealthCareCoverage healthCareCoverage) {
-        this.healthCareCoverage = healthCareCoverage;
-    }
-
-    public LocalDate getHealthCareCoverageStartDate() {
-        return healthCareCoverageStartDate;
-    }
-
-    public void setHealthCareCoverageStartDate(LocalDate healthCareCoverageStartDate) {
-        this.healthCareCoverageStartDate = healthCareCoverageStartDate;
-    }
-
-    public String getHealthInsurance() {
-        return healthInsurance;
-    }
-
-    public void setHealthInsurance(String healthInsurance) {
-        this.healthInsurance = healthInsurance;
-    }
-
-    public LocalDate getHealthInsuranceStartDate() {
-        return healthInsuranceStartDate;
-    }
-
-    public void setHealthInsuranceStartDate(LocalDate healthInsuranceStartDate) {
-        this.healthInsuranceStartDate = healthInsuranceStartDate;
-    }
-
-    public String getAccompanying() {
-        return accompanying;
-    }
-
-    public void setAccompanying(String accompanying) {
-        this.accompanying = accompanying;
-    }
-
-    public String getSocialSecurityNumber() {
-        return socialSecurityNumber;
-    }
-
-    public void setSocialSecurityNumber(String socialSecurityNumber) {
-        this.socialSecurityNumber = socialSecurityNumber;
-    }
-
-    public String getCafNumber() {
-        return cafNumber;
-    }
+    constructor()
 
-    public void setCafNumber(String cafNumber) {
-        this.cafNumber = cafNumber;
+    constructor(id: Long) {
+        this.id = id
     }
 
-    public Country getNationality() {
-        return nationality;
+    constructor(id: Long, firstName: String, lastName: String, gender: Gender) {
+        this.id = id
+        this.firstName = firstName
+        this.lastName = lastName
+        this.gender = gender
     }
 
-    public void setNationality(Country nationality) {
-        this.nationality = nationality;
+    fun addIncome(income: Income) {
+        income.person = this
+        this.incomes.add(income)
     }
 
-    public Set<Note> getNotes() {
-        return Collections.unmodifiableSet(notes);
+    fun removeIncome(income: Income) {
+        income.person = null
+        this.incomes.remove(income)
     }
 
-    public void addNote(Note note) {
-        this.notes.add(note);
+    fun getIncomes(): Set<Income> {
+        return Collections.unmodifiableSet(incomes)
     }
 
-    public void removeNote(Note note) {
-        this.notes.remove(note);
+    fun addCharge(charge: Charge) {
+        charge.person = this
+        this.charges.add(charge)
     }
 
-    public Set<Participation> getParticipations() {
-        return Collections.unmodifiableSet(participations);
+    fun removeCharge(charge: Charge) {
+        charge.person = null
+        this.charges.remove(charge)
     }
 
-    public void addParticipation(Participation participation) {
-        participation.setPerson(this);
-        participations.add(participation);
+    fun getCharges(): Set<Charge> {
+        return Collections.unmodifiableSet(charges)
     }
 
-    public void removeParticipation(Participation participation) {
-        participations.remove(participation);
+    fun getNotes(): Set<Note> {
+        return Collections.unmodifiableSet(notes)
     }
 
-    public Couple getCouple() {
-        return couple;
+    fun addNote(note: Note) {
+        this.notes.add(note)
     }
 
-    public void setCouple(Couple couple) {
-        this.couple = couple;
+    fun removeNote(note: Note) {
+        this.notes.remove(note)
     }
 
-    public Person getSpouse() {
-        if (this.couple == null) {
-            return null;
-        }
-        return couple.getSpouseOf(this);
+    fun getParticipations(): Set<Participation> {
+        return Collections.unmodifiableSet(participations)
     }
 
-    public Set<WeddingEvent> getWeddingEvents() {
-        return Collections.unmodifiableSet(weddingEvents);
+    fun addParticipation(participation: Participation) {
+        participation.person = this
+        participations.add(participation)
     }
 
-    public void addWeddingEvent(WeddingEvent weddingEvent) {
-        weddingEvent.setPerson(this);
-        weddingEvents.add(weddingEvent);
+    fun removeParticipation(participation: Participation) {
+        participations.remove(participation)
     }
 
-    public void removeWeddingEvent(WeddingEvent weddingEvent) {
-        weddingEvents.remove(weddingEvent);
+    fun getWeddingEvents(): Set<WeddingEvent> {
+        return Collections.unmodifiableSet(weddingEvents)
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    fun addWeddingEvent(weddingEvent: WeddingEvent) {
+        weddingEvent.person = this
+        weddingEvents.add(weddingEvent)
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    fun removeWeddingEvent(weddingEvent: WeddingEvent) {
+        weddingEvents.remove(weddingEvent)
     }
 }

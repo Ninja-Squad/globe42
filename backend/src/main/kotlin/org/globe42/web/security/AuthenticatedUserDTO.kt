@@ -1,37 +1,16 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import org.globe42.domain.User;
+import org.globe42.domain.User
 
 /**
  * A user, with its JWT token
  * @author JB Nizet
  */
-public final class AuthenticatedUserDTO {
-    private Long id;
-    private final String login;
-    private final boolean admin;
-    private final String token;
+data class AuthenticatedUserDTO(
+        val id: Long,
+        val login: String,
+        val admin: Boolean,
+        val token: String) {
 
-    public AuthenticatedUserDTO(User user, String token) {
-        this.id = user.getId();
-        this.login = user.getLogin();
-        this.admin = user.isAdmin();
-        this.token = token;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public String getToken() {
-        return token;
-    }
+    constructor(user: User, token: String) : this(user.id!!, user.login!!, user.admin, token)
 }

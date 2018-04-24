@@ -1,11 +1,10 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import org.globe42.domain.Charge;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.globe42.domain.Charge
+import org.springframework.data.jpa.repository.JpaRepository
 
 /**
- * DAO for the {@link Charge} entity
+ * DAO for the [Charge] entity
  * @author JB Nizet
  */
-public interface ChargeDao extends JpaRepository<Charge, Long> {
-}
+interface ChargeDao : JpaRepository<Charge, Long>

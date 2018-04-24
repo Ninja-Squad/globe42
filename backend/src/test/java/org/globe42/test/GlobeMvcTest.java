@@ -16,6 +16,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 /**
  * Meta-annotation used to simplify the creation of MVC tests. Indeed, the AuthenticationConfig must be excluded
  * otherwise all requests fail with a 401, since requests don't have the required authorization header during tests
+ *
+ * Note that this annotation is not written in Kotlin due to a bug: https://youtrack.jetbrains.com/issue/KT-11475
+ *
  * @author JB Nizet
  */
 @Retention(RetentionPolicy.RUNTIME)

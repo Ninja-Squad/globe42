@@ -1,12 +1,15 @@
-package org.globe42;
+package org.globe42
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-public class CrypticApplication {
+class CrypticApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CrypticApplication.class, args);
-	}
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            SpringApplication.run(CrypticApplication::class.java, *args)
+        }
+    }
 }

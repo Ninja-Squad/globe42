@@ -1,95 +1,93 @@
-package org.globe42.web.charges;
+package org.globe42.web.charges
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.math.BigDecimal;
-import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.globe42.dao.ChargeDao;
-import org.globe42.dao.ChargeTypeDao;
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.Charge;
-import org.globe42.domain.ChargeType;
-import org.globe42.domain.Person;
-import org.globe42.test.Answers;
-import org.globe42.test.GlobeMvcTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
+import org.globe42.dao.ChargeDao
+import org.globe42.dao.ChargeTypeDao
+import org.globe42.dao.PersonDao
+import org.globe42.domain.Charge
+import org.globe42.domain.Person
+import org.globe42.test.GlobeMvcTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.math.BigDecimal
+import java.util.*
 
 /**
- * MVC tests for {@link ChargeController}
+ * MVC tests for [ChargeController]
  * @author JB Nizet
  */
-@GlobeMvcTest(ChargeController.class)
-public class ChargeControllerMvcTest {
+@GlobeMvcTest(ChargeController::class)
+class ChargeControllerMvcTest {
     @MockBean
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @MockBean
-    private ChargeDao mockChargeDao;
+    private lateinit var mockChargeDao: ChargeDao
 
     @MockBean
-    private ChargeTypeDao mockChargeTypeDao;
+    private lateinit var mockChargeTypeDao: ChargeTypeDao
 
     @Autowired
-    private MockMvc mvc;
+    private lateinit var mvc: MockMvc
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
-    private Person person;
+    private lateinit var person: Person
 
     @BeforeEach
-    public void prepare() {
-        person = new Person(42L);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+    fun prepare() {
+        person = Person(42L)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
     }
 
     @Test
-    public void shouldList() throws Exception {
-        Charge charge = ChargeControllerTest.createCharge(12L);
-        person.addCharge(charge);
+    fun shouldList() {
+        val charge = createCharge(12L)
+        person.addCharge(charge)
 
-        mvc.perform(get("/api/persons/{personId}/charges", person.getId()))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(charge.getId()))
-           .andExpect(jsonPath("$[0].monthlyAmount").value(charge.getMonthlyAmount().doubleValue()))
-           .andExpect(jsonPath("$[0].type.id").value(charge.getType().getId().intValue()));
+        mvc.perform(get("/api/persons/{personId}/charges", person.id))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$[0].id").value(charge.id!!))
+                .andExpect(jsonPath("$[0].monthlyAmount").value(charge.monthlyAmount!!.toDouble()))
+                .andExpect(jsonPath("$[0].type.id").value(charge.type!!.id!!.toInt()))
     }
 
     @Test
-    public void shouldDelete() throws Exception {
-        Charge charge = ChargeControllerTest.createCharge(12L);
-        person.addCharge(charge);
+    fun shouldDelete() {
+        val charge = createCharge(12L)
+        person.addCharge(charge)
 
-        when(mockChargeDao.findById(charge.getId())).thenReturn(Optional.of(charge));
+        whenever(mockChargeDao.findById(charge.id!!)).thenReturn(Optional.of(charge))
 
-        mvc.perform(delete("/api/persons/{personId}/charges/{chargeId}", person.getId(), charge.getId()))
-           .andExpect(status().isNoContent());
+        mvc.perform(delete("/api/persons/{personId}/charges/{chargeId}", person.id, charge.id))
+                .andExpect(status().isNoContent)
     }
 
     @Test
-    public void shouldCreate() throws Exception {
-        ChargeType chargeType = ChargeControllerTest.createChargeType(12L);
+    fun shouldCreate() {
+        val chargeTypeId = 12L
+        val chargeType = createChargeType(chargeTypeId)
 
-        when(mockChargeTypeDao.findById(chargeType.getId())).thenReturn(Optional.of(chargeType));
-        when(mockChargeDao.save(any(Charge.class)))
-            .thenAnswer(Answers.<Charge>modifiedFirstArgument(charge -> charge.setId(345L)));
+        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
+        whenever(mockChargeDao.save(any<Charge>()))
+                .thenReturnModifiedFirstArgument<Charge> { charge -> charge.id = 345L }
 
-        ChargeCommandDTO command = new ChargeCommandDTO(chargeType.getId(), BigDecimal.TEN);
-        mvc.perform(post("/api/persons/{personId}/charges", person.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(command)))
-           .andExpect(status().isCreated())
-           .andExpect(jsonPath("$.id").value(345));
+        val command = ChargeCommandDTO(chargeTypeId, BigDecimal.TEN)
+        mvc.perform(post("/api/persons/{personId}/charges", person.id)
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(command)))
+                .andExpect(status().isCreated)
+                .andExpect(jsonPath("$.id").value(345))
     }
 }

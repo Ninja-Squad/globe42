@@ -1,64 +1,60 @@
-package org.globe42.web.exception;
+package org.globe42.web.exception
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
-
-import java.util.Map;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.spy
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.springframework.mock.web.MockHttpServletRequest
+import org.springframework.web.context.request.ServletWebRequest
 
 /**
- * Unit tests for {@link ExceptionConfig}
+ * Unit tests for [ExceptionConfig]
  * @author JB Nizet
  */
-public class ExceptionConfigTest {
+class ExceptionConfigTest {
     @Test
-    public void shouldIncludeFunctionalError() {
-        ErrorAttributes result = new ExceptionConfig().errorAttributes();
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        WebRequest webRequest = new ServletWebRequest(request);
+    fun shouldIncludeFunctionalError() {
+        var result = ExceptionConfig().errorAttributes()
+        val request = MockHttpServletRequest()
+        val webRequest = ServletWebRequest(request)
 
-        result = spy(result);
-        BadRequestException exception = new BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS);
-        doReturn(exception).when(result).getError(webRequest);
+        result = spy(result)
+        val exception = BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS)
+        doReturn(exception).whenever(result).getError(webRequest)
 
-        Map<String, Object> errorAttributes = result.getErrorAttributes(webRequest, false);
+        val errorAttributes = result.getErrorAttributes(webRequest, false)
 
-        assertThat(errorAttributes.get("functionalError")).isEqualTo(exception.getError());
+        assertThat(errorAttributes["functionalError"]).isEqualTo(exception.error)
     }
 
     @Test
-    public void shouldNotIncludeFunctionalErrorIfNotPresent() {
-        ErrorAttributes result = new ExceptionConfig().errorAttributes();
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        WebRequest webRequest = new ServletWebRequest(request);
+    fun shouldNotIncludeFunctionalErrorIfNotPresent() {
+        var result = ExceptionConfig().errorAttributes()
+        val request = MockHttpServletRequest()
+        val webRequest = ServletWebRequest(request)
 
-        result = spy(result);
-        BadRequestException exception = new BadRequestException("foo");
-        doReturn(exception).when(result).getError(webRequest);
+        result = spy(result)
+        val exception = BadRequestException("foo")
+        doReturn(exception).whenever(result).getError(webRequest)
 
-        Map<String, Object> errorAttributes = result.getErrorAttributes(webRequest, false);
+        val errorAttributes = result.getErrorAttributes(webRequest, false)
 
-        assertThat(errorAttributes.containsKey("functionalError")).isFalse();
+        assertThat(errorAttributes.containsKey("functionalError")).isFalse()
     }
 
     @Test
-    public void shouldNotIncludeFunctionalErrorIfNotBadRequestException() {
-        ErrorAttributes result = new ExceptionConfig().errorAttributes();
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        WebRequest webRequest = new ServletWebRequest(request);
+    fun shouldNotIncludeFunctionalErrorIfNotBadRequestException() {
+        var result = ExceptionConfig().errorAttributes()
+        val request = MockHttpServletRequest()
+        val webRequest = ServletWebRequest(request)
 
-        result = spy(result);
-        IllegalStateException exception = new IllegalStateException("foo");
-        doReturn(exception).when(result).getError(webRequest);
+        result = spy(result)
+        val exception = IllegalStateException("foo")
+        doReturn(exception).whenever(result).getError(webRequest)
 
-        Map<String, Object> errorAttributes = result.getErrorAttributes(webRequest, false);
+        val errorAttributes = result.getErrorAttributes(webRequest, false)
 
-        assertThat(errorAttributes.containsKey("functionalError")).isFalse();
+        assertThat(errorAttributes.containsKey("functionalError")).isFalse()
     }
 }

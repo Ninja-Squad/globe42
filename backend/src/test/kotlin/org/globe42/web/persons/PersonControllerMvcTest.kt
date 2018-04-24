@@ -1,136 +1,133 @@
-package org.globe42.web.persons;
+package org.globe42.web.persons
 
-import static org.globe42.test.Answers.modifiedFirstArgument;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.globe42.dao.CountryDao;
-import org.globe42.dao.CoupleDao;
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.Country;
-import org.globe42.domain.Person;
-import org.globe42.test.GlobeMvcTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
+import org.globe42.dao.CountryDao
+import org.globe42.dao.CoupleDao
+import org.globe42.dao.PersonDao
+import org.globe42.domain.Country
+import org.globe42.domain.Gender
+import org.globe42.domain.Person
+import org.globe42.test.GlobeMvcTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.time.LocalDate
+import java.util.*
 
 /**
- * MVC test for {@link PersonController}
+ * MVC test for [PersonController]
  * @author JB Nizet
  */
-@GlobeMvcTest(PersonController.class)
-public class PersonControllerMvcTest {
+@GlobeMvcTest(PersonController::class)
+class PersonControllerMvcTest {
 
     @MockBean
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @MockBean
-    private CoupleDao mockCoupleDao;
+    private lateinit var mockCoupleDao: CoupleDao
 
     @MockBean
-    private CountryDao mockCountryDao;
+    private lateinit var mockCountryDao: CountryDao
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
-    private MockMvc mvc;
+    private lateinit var mvc: MockMvc
 
-    private Person person;
+    private lateinit var person: Person
 
     @BeforeEach
-    public void prepare() {
-        person = new Person(1L);
-        person.setAdherent(true);
-        person.setEntryDate(LocalDate.of(2017, 5, 21));
-        person.setMediationCode("A2");
+    fun prepare() {
+        person = Person(1L, "John", "Doe", Gender.MALE)
+        person.adherent = true
+        person.entryDate = LocalDate.of(2017, 5, 21)
+        person.mediationCode = "A2"
 
-        when(mockCountryDao.findById(isNotNull())).thenReturn(Optional.of(new Country("FRA", "France")));
+        whenever(mockCountryDao.findById(any())).thenReturn(Optional.of(Country("FRA", "France")))
     }
 
     @Test
-    public void shouldList() throws Exception {
-        when(mockPersonDao.findNotDeleted()).thenReturn(Collections.singletonList(person));
+    fun shouldList() {
+        whenever(mockPersonDao.findNotDeleted()).thenReturn(listOf<Person>(person))
 
         mvc.perform(get("/api/persons"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$[0].id").value(1))
     }
 
     @Test
-    public void shouldListDeleted() throws Exception {
-        when(mockPersonDao.findDeleted()).thenReturn(Collections.singletonList(person));
+    fun shouldListDeleted() {
+        whenever(mockPersonDao.findDeleted()).thenReturn(listOf<Person>(person))
 
         mvc.perform(get("/api/persons").param("deleted", ""))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$[0].id").value(1))
     }
 
     @Test
-    public void shouldGet() throws Exception {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+    fun shouldGet() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
-        mvc.perform(get("/api/persons/{personId}", person.getId()))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.id").value(1))
-           .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
-           .andExpect(jsonPath("$.entryDate").value("2017-05-21"));
+        mvc.perform(get("/api/persons/{personId}", person.id))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
+                .andExpect(jsonPath("$.entryDate").value("2017-05-21"))
     }
 
     @Test
-    public void should404IfPersonNotFound() throws Exception {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
+    fun should404IfPersonNotFound() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
 
-        mvc.perform(get("/api/persons/{personId}", person.getId()))
-           .andExpect(status().isNotFound());
+        mvc.perform(get("/api/persons/{personId}", person.id))
+                .andExpect(status().isNotFound)
     }
 
     @Test
-    public void shouldCreate() throws Exception {
-        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(1L)));
+    fun shouldCreate() {
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 1L }
 
         mvc.perform(post("/api/persons")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
-           .andExpect(status().isCreated())
-           .andExpect(jsonPath("$.id").value(1));
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
+                .andExpect(status().isCreated)
+                .andExpect(jsonPath("$.id").value(1))
     }
 
     @Test
-    public void shouldUpdate() throws Exception {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+    fun shouldUpdate() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
-        mvc.perform(put("/api/persons/{personId}", person.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
-           .andExpect(status().isNoContent());
+        mvc.perform(put("/api/persons/{personId}", person.id)
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())))
+                .andExpect(status().isNoContent)
     }
 
     @Test
-    public void shouldDelete() throws Exception {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+    fun shouldDelete() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
-        mvc.perform(delete("/api/persons/{personId}", person.getId()))
-           .andExpect(status().isNoContent());
+        mvc.perform(delete("/api/persons/{personId}", person.id))
+                .andExpect(status().isNoContent)
     }
 
     @Test
-    public void shouldResurrect() throws Exception {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+    fun shouldResurrect() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
-        mvc.perform(delete("/api/persons/{personId}/deletion", person.getId()))
-           .andExpect(status().isNoContent());
+        mvc.perform(delete("/api/persons/{personId}/deletion", person.id))
+                .andExpect(status().isNoContent)
     }
 }

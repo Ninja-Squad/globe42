@@ -1,36 +1,34 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import io.jsonwebtoken.Claims;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 /**
  * Unit tests for JwtHelper
  * @author JB Nizet
  */
-public class JwtHelperTest {
-    private JwtHelper jwtHelper;
+class JwtHelperTest {
+    private lateinit var jwtHelper: JwtHelper
 
     @BeforeEach
-    public void prepare() {
-        jwtHelper = new JwtHelper("someSecretKey");
+    fun prepare() {
+        jwtHelper = JwtHelper("someSecretKey")
     }
 
     @Test
-    public void shouldBuildAndParseToken() {
+    fun shouldBuildAndParseToken() {
         // given a user
-        Long userId = 42L;
+        val userId = 42L
 
         // when building a token
-        String token = jwtHelper.buildToken(userId);
+        val token = jwtHelper.buildToken(userId)
 
         // then we should have a token
-        assertThat(token.length()).isGreaterThan(20);
+        assertThat(token.length).isGreaterThan(20)
 
-        Claims claims = jwtHelper.extractClaims(token);
-        Long extractedUserId = Long.parseLong(claims.getSubject());
-        assertThat(extractedUserId).isEqualTo(userId);
+        val claims = jwtHelper.extractClaims(token)
+        val extractedUserId = java.lang.Long.parseLong(claims.subject)
+        assertThat(extractedUserId).isEqualTo(userId)
     }
 }

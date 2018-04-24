@@ -1,449 +1,434 @@
-package org.globe42.web.persons;
+package org.globe42.web.persons
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.globe42.test.Answers.modifiedFirstArgument;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyChar;
-import static org.mockito.Mockito.*;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.CountryDao;
-import org.globe42.dao.CoupleDao;
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.Country;
-import org.globe42.domain.Couple;
-import org.globe42.domain.FamilySituation;
-import org.globe42.domain.FiscalStatus;
-import org.globe42.domain.Gender;
-import org.globe42.domain.HealthCareCoverage;
-import org.globe42.domain.Housing;
-import org.globe42.domain.MaritalStatus;
-import org.globe42.domain.Person;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.CountryDao
+import org.globe42.dao.CoupleDao
+import org.globe42.dao.PersonDao
+import org.globe42.domain.*
+import org.globe42.test.BaseTest
+import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.exception.NotFoundException
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.ArgumentCaptor
+import org.mockito.ArgumentMatchers.anyChar
+import org.mockito.Captor
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.time.LocalDate
+import java.util.*
 
 /**
  * Unit tests for PersonController
  * @author JB Nizet
  */
-public class PersonControllerTest extends BaseTest {
+class PersonControllerTest : BaseTest() {
 
     @Mock
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @Mock
-    private CoupleDao mockCoupleDao;
+    private lateinit var mockCoupleDao: CoupleDao
 
     @Mock
-    private CountryDao mockCountryDao;
+    private lateinit var mockCountryDao: CountryDao
 
     @InjectMocks
-    private PersonController controller;
+    private lateinit var controller: PersonController
 
     @Captor
-    private ArgumentCaptor<Person> personArgumentCaptor;
+    private lateinit var personArgumentCaptor: ArgumentCaptor<Person>
 
     @Captor
-    private ArgumentCaptor<Couple> coupleArgumentCaptor;
+    private lateinit var coupleArgumentCaptor: ArgumentCaptor<Couple>
 
-    private Person person;
+    private lateinit var person: Person
 
     @BeforeEach
-    public void prepare() {
-        person = new Person(1L);
-        person.setMediationCode("A2");
-
-        when(mockCountryDao.findById(isNotNull())).thenAnswer(
-            invocation -> Optional.of(new Country(invocation.getArgument(0),
-                                                  "Country " + invocation.getArgument(0))));
-    }
-
-    @Test
-    public void shouldList() {
-        when(mockPersonDao.findNotDeleted()).thenReturn(Collections.singletonList(person));
-
-        List<PersonIdentityDTO> result = controller.list();
-
-        assertThat(result).extracting(PersonIdentityDTO::getId).containsExactly(1L);
-    }
-
-    @Test
-    public void shouldListDeleted() {
-        when(mockPersonDao.findDeleted()).thenReturn(Collections.singletonList(person));
-
-        List<PersonIdentityDTO> result = controller.listDeleted();
-
-        assertThat(result).extracting(PersonIdentityDTO::getId).containsExactly(1L);
-    }
-
-    @Test
-    public void shouldGet() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-
-        PersonDTO result = controller.get(person.getId());
-
-        assertThat(result.getIdentity().getId()).isEqualTo(person.getId());
-    }
-
-    @Test
-    public void shouldThrowIfNotFoundWhenGetting() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(person.getId()));
-    }
-
-    @Test
-    public void shouldCreate() {
-        PersonCommandDTO command = createCommand();
-
-        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        PersonDTO result = controller.create(command);
-
-        verify(mockPersonDao).save(personArgumentCaptor.capture());
-        Person savedPerson = personArgumentCaptor.getValue();
-        assertPersonEqualsCommand(savedPerson, command);
-        assertThat(result.getIdentity().getMediationCode()).isEqualTo("L37");
-    }
-
-    @Test
-    public void shouldCreateWithLowercaseLastName() {
-        PersonCommandDTO command = createCommand("lacote");
-
-        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        assertThat(controller.create(command).getIdentity().getMediationCode()).isEqualTo("L37");
-    }
-
-    @Test
-    public void shouldCreateWithLastNameStartingWithBizarreLetter() {
-        PersonCommandDTO command = createCommand("$foo");
-
-        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
-        when(mockPersonDao.nextMediationCode('Z')).thenReturn(76);
-
-        assertThat(controller.create(command).getIdentity().getMediationCode()).isEqualTo("Z76");
-    }
-
-    @Test
-    public void shouldNotGenerateMediationCodeIfMediationDisabled() {
-        PersonCommandDTO command = createCommand("lacote", false, null);
-
-        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
-
-        assertThat(controller.create(command).getIdentity().getMediationCode()).isNull();
-    }
-
-    @Test
-    public void shouldCreateWithSpouse() {
-        long spouseId = 200L;
-        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
-
-        Person agnes = new Person(spouseId);
-        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
-        when(mockPersonDao.save(any(Person.class))).thenAnswer(modifiedFirstArgument((Person p) -> p.setId(42L)));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        PersonDTO result = controller.create(command);
-
-        verify(mockPersonDao).save(personArgumentCaptor.capture());
-        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
-
-        Person savedPerson = personArgumentCaptor.getValue();
-        assertPersonEqualsCommand(savedPerson, command);
-        assertThat(savedPerson.getSpouse()).isEqualTo(agnes);
-        assertThat(agnes.getSpouse()).isEqualTo(savedPerson);
-    }
-
-    @Test
-    public void shouldUpdate() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-        PersonCommandDTO command = createCommand();
-        controller.update(person.getId(), command);
-
-        assertPersonEqualsCommand(person, command);
-        assertThat(person.getMediationCode()).isEqualTo("L37");
-    }
-
-    @Test
-    public void shouldUpdateWhenNoNationality() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-        PersonCommandDTO command = createCommandWithNoNationality();
-        controller.update(person.getId(), command);
-
-        assertPersonEqualsCommand(person, command);
-        assertThat(person.getMediationCode()).isEqualTo("L37");
-    }
-
-    @Test
-    public void shouldNotUpdateMediationCodeIfLetterStaysTheSame() {
-        person.setMediationCode("L42");
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-
-        PersonCommandDTO command = createCommand();
-
-        controller.update(person.getId(), command);
-
-        assertPersonEqualsCommand(person, command);
-        assertThat(person.getMediationCode()).isEqualTo("L42");
-        verify(mockPersonDao, never()).nextMediationCode(anyChar());
-    }
-
-    @Test
-    public void shouldCreateMediationCodeIfMediationEnabledAndNotBefore() {
-        person.setMediationCode(null);
-        person.setMediationEnabled(false);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        PersonCommandDTO command = createCommand();
-
-        controller.update(person.getId(), command);
-
-        assertPersonEqualsCommand(person, command);
-        assertThat(person.getMediationCode()).isEqualTo("L37");
-    }
-
-    @Test
-    public void shouldUpdateWithSpouseWhenNoSpouseBefore() {
-        long spouseId = 200L;
-        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
-
-        Person agnes = new Person(spouseId);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        controller.update(person.getId(), command);
-
-        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
-        assertThat(person.getSpouse()).isEqualTo(agnes);
-        assertThat(agnes.getSpouse()).isEqualTo(person);
-    }
-
-    @Test
-    public void shouldUpdateWithSpouseWhenOtherSpouseBefore() {
-        long spouseId = 200L;
-        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
-
-        Person previousSpouse = new Person(100L);
-        Couple previousCouple = new Couple(person, previousSpouse);
-        person.setCouple(previousCouple);
-
-        Person agnes = new Person(spouseId);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        controller.update(person.getId(), command);
-
-        verify(mockCoupleDao).delete(previousCouple);
-        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
-        assertThat(person.getSpouse()).isEqualTo(agnes);
-        assertThat(agnes.getSpouse()).isEqualTo(person);
-        assertThat(previousSpouse.getSpouse()).isNull();
-    }
-
-    @Test
-    public void shouldUpdateWithoutSpouseWhenOtherSpouseBefore() {
-        PersonCommandDTO command = createCommand("Lacote", true, null);
-
-        Person previousSpouse = new Person(100L);
-        Couple previousCouple = new Couple(person, previousSpouse);
-        person.setCouple(previousCouple);
-
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        controller.update(person.getId(), command);
-
-        verify(mockCoupleDao).delete(previousCouple);
-        assertThat(person.getSpouse()).isNull();
-        assertThat(previousSpouse.getSpouse()).isNull();
-    }
-
-    @Test
-    public void shouldDeleteCoupleOfNewSpouse() {
-        long spouseId = 200L;
-        PersonCommandDTO command = createCommand("Lacote", true, spouseId);
-
-        Person agnes = new Person(spouseId);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-        when(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes));
-        when(mockPersonDao.nextMediationCode('L')).thenReturn(37);
-
-        Person previousSpouseOfAgnes = new Person(100L);
-        Couple previousCoupleOfAgnes = new Couple(person, previousSpouseOfAgnes);
-
-        controller.update(person.getId(), command);
-
-        verify(mockCoupleDao).save(coupleArgumentCaptor.capture());
-        assertThat(person.getSpouse()).isEqualTo(agnes);
-        assertThat(agnes.getSpouse()).isEqualTo(person);
-
-        assertThat(previousSpouseOfAgnes.getSpouse()).isNull();
-        verify(mockCoupleDao).delete(previousCoupleOfAgnes);
-    }
-
-    @Test
-    public void shouldThrowIfNotFoundWhenUpdating() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> controller.update(person.getId(), createCommand()));
-    }
-
-    @Test
-    public void shouldDelete() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-
-        controller.delete(person.getId());
-
-        assertThat(person.isDeleted()).isTrue();
-    }
-
-    @Test
-    public void shouldThrowIfNotFoundWhenDeleting() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.delete(person.getId()));
-    }
-
-    @Test
-    public void shouldResurrect() {
-        person.setDeleted(true);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
-
-        controller.resurrect(person.getId());
-
-        assertThat(person.isDeleted()).isFalse();
-    }
-
-    @Test
-    public void shouldThrowIfNotFoundWhenResurrecting() {
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.resurrect(person.getId()));
-    }
-
-    static PersonCommandDTO createCommand() {
-        return createCommand("Lacote");
-    }
-
-    static PersonCommandDTO createCommandWithNoNationality() {
-        return createCommand("Lacote", true, null, null);
-    }
-
-    static PersonCommandDTO createCommand(String lastName) {
-        return createCommand(lastName, true, null);
-    }
-
-    static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled, Long spouseId) {
-        return createCommand(lastName, mediationEnabled, spouseId, "FRA");
-    }
-
-    static PersonCommandDTO createCommand(String lastName, boolean mediationEnabled, Long spouseId, String nationalityId) {
-        return new PersonCommandDTO("Cyril",
-                                    lastName,
-                                    "Lacote du chateau",
-                                    "CEO, Bitch",
-                                    LocalDate.of(1977, 9, 12),
-                                    "somewhere",
-                                    new CityDTO("42000", "Saint-Etienne"),
-                                    "cyril@ninja-squad.com",
-                                    true,
-                                    LocalDate.of(2017, 4, 13),
-                                    Gender.MALE,
-                                    "01234567",
-                                    mediationEnabled,
-                                    LocalDate.of(2017, 12, 01),
-                                    MaritalStatus.CONCUBINAGE,
-                                    spouseId,
-                                    Housing.F3,
-                                    70,
-                                    "Bruno Mala",
-                                    FiscalStatus.TAXABLE,
-                                    "0123456789012",
-                                    true,
-                                    HealthCareCoverage.GENERAL,
-                                    LocalDate.of(2016, 1, 1),
-                                    "AXA",
-                                    LocalDate.of(2017, 1, 1),
-                                    "Nadia DURAND",
-                                    "277126912340454",
-                                    "123765",
-                                    nationalityId,
-                                    new FamilySituationDTO(false, true, 2),
-                                    new FamilySituationDTO(true, false, 0));
-    }
-
-    private void assertPersonEqualsCommand(Person person, PersonCommandDTO command) {
-        assertThat(person.getFirstName()).isEqualTo(command.getFirstName());
-        assertThat(person.getLastName()).isEqualTo(command.getLastName());
-        assertThat(person.getBirthName()).isEqualTo(command.getBirthName());
-        assertThat(person.getNickName()).isEqualTo(command.getNickName());
-        assertThat(person.getBirthDate()).isEqualTo(command.getBirthDate());
-        assertThat(person.getAddress()).isEqualTo(command.getAddress());
-        assertThat(person.getCity().getCode()).isEqualTo(command.getCity().getCode());
-        assertThat(person.getCity().getCity()).isEqualTo(command.getCity().getCity());
-        assertThat(person.getEmail()).isEqualTo(command.getEmail());
-        assertThat(person.isAdherent()).isEqualTo(command.isAdherent());
-        assertThat(person.getEntryDate()).isEqualTo(command.getEntryDate());
-        assertThat(person.getGender()).isEqualTo(command.getGender());
-        assertThat(person.getPhoneNumber()).isEqualTo(command.getPhoneNumber());
-        assertThat(person.getMaritalStatus()).isEqualTo(command.getMaritalStatus());
-        if (command.getSpouseId() == null) {
-            assertThat(person.getSpouse()).isNull();
+    fun prepare() {
+        person = Person(1L, "John", "Doe", Gender.MALE)
+        person.mediationCode = "A2"
+
+        whenever(mockCountryDao.findById(any())).thenAnswer { invocation ->
+            Optional.of(Country(invocation.getArgument(0),
+                                "Country " + invocation.getArgument<Any>(0)))
         }
-        else {
-            assertThat(person.getSpouse().getId()).isEqualTo(command.getSpouseId());
-        }
-        assertThat(person.getHousing()).isEqualTo(command.getHousing());
-        assertThat(person.getHousingSpace()).isEqualTo(command.getHousingSpace());
-        assertThat(person.getHostName()).isEqualTo(command.getHostName());
-        assertThat(person.getFiscalStatus()).isEqualTo(command.getFiscalStatus());
-        assertThat(person.getFiscalNumber()).isEqualTo(command.getFiscalNumber());
-        assertThat(person.isFiscalStatusUpToDate()).isEqualTo(command.isFiscalStatusUpToDate());
-        assertThat(person.getHealthCareCoverage()).isEqualTo(command.getHealthCareCoverage());
-        assertThat(person.getHealthCareCoverageStartDate()).isEqualTo(command.getHealthCareCoverageStartDate());
-        assertThat(person.getHealthInsurance()).isEqualTo(command.getHealthInsurance());
-        assertThat(person.getHealthInsuranceStartDate()).isEqualTo(command.getHealthInsuranceStartDate());
-        assertThat(person.getAccompanying()).isEqualTo(command.getAccompanying());
-        assertThat(person.getSocialSecurityNumber()).isEqualTo(command.getSocialSecurityNumber());
-        assertThat(person.getCafNumber()).isEqualTo(command.getCafNumber());
-        if (command.getNationalityId() == null) {
-            assertThat(person.getNationality()).isNull();
-        }
-        else {
-            assertThat(person.getNationality().getId()).isEqualTo(command.getNationalityId());
-        }
-        assertFamilySituationEqualsCommand(person.getFrenchFamilySituation(), command.getFrenchFamilySituation());
-        assertFamilySituationEqualsCommand(person.getAbroadFamilySituation(), command.getAbroadFamilySituation());
     }
 
-    private void assertFamilySituationEqualsCommand(FamilySituation familySituation, FamilySituationDTO dto) {
+    @Test
+    fun shouldList() {
+        whenever(mockPersonDao.findNotDeleted()).thenReturn(listOf<Person>(person))
+
+        val result = controller.list()
+
+        assertThat(result).extracting<Long>(PersonIdentityDTO::id).containsExactly(1L)
+    }
+
+    @Test
+    fun shouldListDeleted() {
+        whenever(mockPersonDao.findDeleted()).thenReturn(listOf<Person>(person))
+
+        val result = controller.listDeleted()
+
+        assertThat(result).extracting<Long>(PersonIdentityDTO::id).containsExactly(1L)
+    }
+
+    @Test
+    fun shouldGet() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+
+        val (identity) = controller.get(person.id!!)
+
+        assertThat(identity.id).isEqualTo(person.id!!)
+    }
+
+    @Test
+    fun shouldThrowIfNotFoundWhenGetting() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(person.id!!) }
+    }
+
+    @Test
+    fun shouldCreate() {
+        val command = createCommand()
+
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        val result = controller.create(command)
+
+        verify(mockPersonDao).save(personArgumentCaptor.capture())
+        val savedPerson = personArgumentCaptor.value
+        assertPersonEqualsCommand(savedPerson, command)
+        assertThat(result.identity.mediationCode).isEqualTo("L37")
+    }
+
+    @Test
+    fun shouldCreateWithLowercaseLastName() {
+        val command = createCommand("lacote")
+
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        assertThat(controller.create(command).identity.mediationCode).isEqualTo("L37")
+    }
+
+    @Test
+    fun shouldCreateWithLastNameStartingWithBizarreLetter() {
+        val command = createCommand("\$foo")
+
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
+        whenever(mockPersonDao.nextMediationCode('Z')).thenReturn(76)
+
+        assertThat(controller.create(command).identity.mediationCode).isEqualTo("Z76")
+    }
+
+    @Test
+    fun shouldNotGenerateMediationCodeIfMediationDisabled() {
+        val command = createCommand("lacote", false, null)
+
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
+
+        assertThat(controller.create(command).identity.mediationCode).isNull()
+    }
+
+    @Test
+    fun shouldCreateWithSpouse() {
+        val spouseId = 200L
+        val command = createCommand("Lacote", true, spouseId)
+
+        val agnes = Person(spouseId, "Agnes", "Crepet", Gender.FEMALE)
+        whenever(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes))
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.create(command)
+
+        verify(mockPersonDao).save(personArgumentCaptor.capture())
+        verify<CoupleDao>(mockCoupleDao).save(coupleArgumentCaptor.capture())
+
+        val savedPerson = personArgumentCaptor.value
+        assertPersonEqualsCommand(savedPerson, command)
+        assertThat(savedPerson.spouse).isEqualTo(agnes)
+        assertThat(agnes.spouse).isEqualTo(savedPerson)
+    }
+
+    @Test
+    fun shouldUpdate() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+        val command = createCommand()
+        controller.update(person.id!!, command)
+
+        assertPersonEqualsCommand(person, command)
+        assertThat(person.mediationCode).isEqualTo("L37")
+    }
+
+    @Test
+    fun shouldUpdateWhenNoNationality() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+        val command = createCommandWithNoNationality()
+        controller.update(person.id!!, command)
+
+        assertPersonEqualsCommand(person, command)
+        assertThat(person.mediationCode).isEqualTo("L37")
+    }
+
+    @Test
+    fun shouldNotUpdateMediationCodeIfLetterStaysTheSame() {
+        person.mediationCode = "L42"
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+
+        val command = createCommand()
+
+        controller.update(person.id!!, command)
+
+        assertPersonEqualsCommand(person, command)
+        assertThat(person.mediationCode).isEqualTo("L42")
+        verify(mockPersonDao, never()).nextMediationCode(anyChar())
+    }
+
+    @Test
+    fun shouldCreateMediationCodeIfMediationEnabledAndNotBefore() {
+        person.mediationCode = null
+        person.mediationEnabled = false
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        val command = createCommand()
+
+        controller.update(person.id!!, command)
+
+        assertPersonEqualsCommand(person, command)
+        assertThat(person.mediationCode!!).isEqualTo("L37")
+    }
+
+    @Test
+    fun shouldUpdateWithSpouseWhenNoSpouseBefore() {
+        val spouseId = 200L
+        val command = createCommand("Lacote", true, spouseId)
+
+        val agnes = Person(spouseId)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.update(person.id!!, command)
+
+        verify<CoupleDao>(mockCoupleDao).save(coupleArgumentCaptor.capture())
+        assertThat(person.spouse).isEqualTo(agnes)
+        assertThat(agnes.spouse).isEqualTo(person)
+    }
+
+    @Test
+    fun shouldUpdateWithSpouseWhenOtherSpouseBefore() {
+        val spouseId = 200L
+        val command = createCommand("Lacote", true, spouseId)
+
+        val previousSpouse = Person(100L)
+        val previousCouple = Couple(person, previousSpouse)
+        person.couple = previousCouple
+
+        val agnes = Person(spouseId)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.update(person.id!!, command)
+
+        verify<CoupleDao>(mockCoupleDao).delete(previousCouple)
+        verify<CoupleDao>(mockCoupleDao).save(coupleArgumentCaptor.capture())
+        assertThat(person.spouse).isEqualTo(agnes)
+        assertThat(agnes.spouse).isEqualTo(person)
+        assertThat(previousSpouse.spouse).isNull()
+    }
+
+    @Test
+    fun shouldUpdateWithoutSpouseWhenOtherSpouseBefore() {
+        val command = createCommand("Lacote", true, null)
+
+        val previousSpouse = Person(100L)
+        val previousCouple = Couple(person, previousSpouse)
+        person.couple = previousCouple
+
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.update(person.id!!, command)
+
+        verify<CoupleDao>(mockCoupleDao).delete(previousCouple)
+        assertThat(person.spouse).isNull()
+        assertThat(previousSpouse.spouse).isNull()
+    }
+
+    @Test
+    fun shouldDeleteCoupleOfNewSpouse() {
+        val spouseId = 200L
+        val command = createCommand("Lacote", true, spouseId)
+
+        val agnes = Person(spouseId)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        val previousSpouseOfAgnes = Person(100L)
+        val previousCoupleOfAgnes = Couple(person, previousSpouseOfAgnes)
+
+        controller.update(person.id!!, command)
+
+        verify<CoupleDao>(mockCoupleDao).save(coupleArgumentCaptor.capture())
+        assertThat(person.spouse).isEqualTo(agnes)
+        assertThat(agnes.spouse).isEqualTo(person)
+
+        assertThat(previousSpouseOfAgnes.spouse).isNull()
+        verify<CoupleDao>(mockCoupleDao).delete(previousCoupleOfAgnes)
+    }
+
+    @Test
+    fun shouldThrowIfNotFoundWhenUpdating() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
+            controller.update(person.id!!,
+                                createCommand())
+        }
+    }
+
+    @Test
+    fun shouldDelete() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+
+        controller.delete(person.id!!)
+
+        assertThat(person.deleted).isTrue()
+    }
+
+    @Test
+    fun shouldThrowIfNotFoundWhenDeleting() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(person.id!!) }
+    }
+
+    @Test
+    fun shouldResurrect() {
+        person.deleted = true
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+
+        controller.resurrect(person.id!!)
+
+        assertThat(person.deleted).isFalse()
+    }
+
+    @Test
+    fun shouldThrowIfNotFoundWhenResurrecting() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.resurrect(person.id!!) }
+    }
+
+    private fun assertPersonEqualsCommand(person: Person, command: PersonCommandDTO) {
+        assertThat(person.firstName).isEqualTo(command.firstName)
+        assertThat(person.lastName).isEqualTo(command.lastName)
+        assertThat(person.birthName).isEqualTo(command.birthName)
+        assertThat(person.nickName).isEqualTo(command.nickName)
+        assertThat(person.birthDate).isEqualTo(command.birthDate)
+        assertThat(person.address).isEqualTo(command.address)
+        assertThat(person.city!!.code).isEqualTo(command.city!!.code)
+        assertThat(person.city!!.city).isEqualTo(command.city!!.city)
+        assertThat(person.email).isEqualTo(command.email)
+        assertThat(person.adherent).isEqualTo(command.adherent)
+        assertThat(person.entryDate).isEqualTo(command.entryDate)
+        assertThat(person.gender).isEqualTo(command.gender)
+        assertThat(person.phoneNumber).isEqualTo(command.phoneNumber)
+        assertThat(person.maritalStatus).isEqualTo(command.maritalStatus)
+        if (command.spouseId == null) {
+            assertThat(person.spouse).isNull()
+        } else {
+            assertThat(person.spouse!!.id).isEqualTo(command.spouseId!!)
+        }
+        assertThat(person.housing).isEqualTo(command.housing)
+        assertThat(person.housingSpace).isEqualTo(command.housingSpace)
+        assertThat(person.hostName).isEqualTo(command.hostName)
+        assertThat(person.fiscalStatus).isEqualTo(command.fiscalStatus)
+        assertThat(person.fiscalNumber).isEqualTo(command.fiscalNumber)
+        assertThat(person.fiscalStatusUpToDate).isEqualTo(command.fiscalStatusUpToDate)
+        assertThat(person.healthCareCoverage).isEqualTo(command.healthCareCoverage)
+        assertThat(person.healthCareCoverageStartDate).isEqualTo(command.healthCareCoverageStartDate)
+        assertThat(person.healthInsurance).isEqualTo(command.healthInsurance)
+        assertThat(person.healthInsuranceStartDate).isEqualTo(command.healthInsuranceStartDate)
+        assertThat(person.accompanying).isEqualTo(command.accompanying)
+        assertThat(person.socialSecurityNumber).isEqualTo(command.socialSecurityNumber)
+        assertThat(person.cafNumber).isEqualTo(command.cafNumber)
+        if (command.nationalityId == null) {
+            assertThat(person.nationality).isNull()
+        } else {
+            assertThat(person.nationality!!.id).isEqualTo(command.nationalityId)
+        }
+        assertFamilySituationEqualsCommand(person.frenchFamilySituation, command.frenchFamilySituation)
+        assertFamilySituationEqualsCommand(person.abroadFamilySituation, command.abroadFamilySituation)
+    }
+
+    private fun assertFamilySituationEqualsCommand(familySituation: FamilySituation?, dto: FamilySituationDTO?) {
         if (dto == null) {
-            assertThat(familySituation).isNull();
+            assertThat(familySituation).isNull()
+        } else {
+            assertThat(familySituation!!.parentsPresent).isEqualTo(dto.parentsPresent)
+            assertThat(familySituation.spousePresent).isEqualTo(dto.spousePresent)
+            assertThat(familySituation.childCount).isEqualTo(dto.childCount)
         }
-        else {
-            assertThat(familySituation.isParentsPresent()).isEqualTo(dto.isParentsPresent());
-            assertThat(familySituation.isSpousePresent()).isEqualTo(dto.isSpousePresent());
-            assertThat(familySituation.getChildCount()).isEqualTo(dto.getChildCount());
+    }
+
+    companion object {
+
+        internal fun createCommandWithNoNationality(): PersonCommandDTO {
+            return createCommand("Lacote", true, null, null)
+        }
+
+        @JvmOverloads
+        internal fun createCommand(lastName: String = "Lacote",
+                                   mediationEnabled: Boolean = true,
+                                   spouseId: Long? = null,
+                                   nationalityId: String? = "FRA"): PersonCommandDTO {
+            return PersonCommandDTO(firstName = "Cyril",
+                                    lastName = lastName,
+                                    birthName = "Lacote du chateau",
+                                    nickName = "CEO, Bitch",
+                                    birthDate = LocalDate.of(1977, 9, 12),
+                                    address = "somewhere",
+                                    city = CityDTO("42000", "Saint-Etienne"),
+                                    email = "cyril@ninja-squad.com",
+                                    adherent = true,
+                                    entryDate = LocalDate.of(2017, 4, 13),
+                                    gender = Gender.MALE,
+                                    phoneNumber = "01234567",
+                                    mediationEnabled = mediationEnabled,
+                                    firstMediationAppointmentDate = LocalDate.of(2017, 12, 1),
+                                    maritalStatus = MaritalStatus.CONCUBINAGE,
+                                    spouseId = spouseId,
+                                    housing = Housing.F3,
+                                    housingSpace = 70,
+                                    hostName = "Bruno Mala",
+                                    fiscalStatus = FiscalStatus.TAXABLE,
+                                    fiscalNumber = "0123456789012",
+                                    fiscalStatusUpToDate = true,
+                                    healthCareCoverage = HealthCareCoverage.GENERAL,
+                                    healthCareCoverageStartDate = LocalDate.of(2016, 1, 1),
+                                    healthInsurance = "AXA",
+                                    healthInsuranceStartDate = LocalDate.of(2017, 1, 1),
+                                    accompanying = "Nadia DURAND",
+                                    socialSecurityNumber = "277126912340454",
+                                    cafNumber = "123765",
+                                    nationalityId = nationalityId,
+                                    frenchFamilySituation = FamilySituationDTO(false, true, 2),
+                                    abroadFamilySituation = FamilySituationDTO(true, false, 0))
         }
     }
 }

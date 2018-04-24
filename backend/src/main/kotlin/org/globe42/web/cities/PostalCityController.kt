@@ -1,52 +1,31 @@
-package org.globe42.web.cities;
+package org.globe42.web.cities
 
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
+import org.globe42.dao.PostalCityDao
+import org.globe42.domain.PostalCity
+import org.globe42.web.persons.CityDTO
+import org.globe42.web.security.AdminOnly
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
 
-import org.globe42.dao.PostalCityDao;
-import org.globe42.domain.PostalCity;
-import org.globe42.web.persons.CityDTO;
-import org.globe42.web.security.AdminOnly;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+const val LIMIT = 10
 
 /**
  * Controller used to search for postal cities, and to import them.
  * @author JB Nizet
  */
 @RestController
-@RequestMapping(value = "/api/cities")
+@RequestMapping(value = ["/api/cities"])
 @Transactional
-public class PostalCityController {
+class PostalCityController(private val postalCityDao: PostalCityDao, private val uploadParser: PostalCityUploadParser) {
 
-    public static final int LIMIT = 10;
+    @GetMapping(params = ["query"])
+    fun search(@RequestParam("query") query: String): List<CityDTO> {
+        val cities: List<PostalCity> =
+                if (query.isNumeric()) postalCityDao.findByPostalCode(query, LIMIT)
+                else postalCityDao.findByCity(query, LIMIT)
 
-    private final PostalCityDao postalCityDao;
-    private final PostalCityUploadParser uploadParser;
-
-    public PostalCityController(PostalCityDao postalCityDao, PostalCityUploadParser uploadParser) {
-        this.postalCityDao = postalCityDao;
-        this.uploadParser = uploadParser;
-    }
-
-    @GetMapping(params = "query")
-    public List<CityDTO> search(@RequestParam("query") String query) {
-        List<PostalCity> cities;
-        if (isNumeric(query)) {
-            cities = postalCityDao.findByPostalCode(query, LIMIT);
-        }
-        else {
-            cities = postalCityDao.findByCity(query, LIMIT);
-        }
-
-        return cities.stream().map(CityDTO::new).collect(Collectors.toList());
+        return cities.map(::CityDTO)
     }
 
     /**
@@ -54,21 +33,18 @@ public class PostalCityController {
      * contained in the file.
      *
      * You can use the following command line to upload a file and invoke this method:
-     * <pre
-     *   curl -X POST -H "Authorization: Bearer $your-admin-token" $url/api/cities/uploads -T ~/Downloads/laposte_hexasmal.csv
-     * </pre>
+     * <pre curl -X POST -H></pre> "Authorization: Bearer $your-admin-token" $url/api/cities/uploads -T ~/Downloads/laposte_hexasmal.csv
+     *
      */
     @PostMapping("/uploads")
     @AdminOnly
     @ResponseStatus(HttpStatus.CREATED)
-    public void upload(@RequestBody byte[] data) {
-        List<PostalCity> cities = uploadParser.parse(data);
+    fun upload(@RequestBody data: ByteArray) {
+        val cities = uploadParser.parse(data)
 
-        postalCityDao.deleteAll();
-        postalCityDao.saveAllEfficiently(cities);
+        postalCityDao.deleteAll()
+        postalCityDao.saveAllEfficiently(cities)
     }
 
-    private boolean isNumeric(String query) {
-        return query.chars().allMatch(c -> c >= '0' && c <= '9');
-    }
+    private fun String.isNumeric(): Boolean = chars().allMatch { c -> c >= '0'.toInt() && c <= '9'.toInt() }
 }

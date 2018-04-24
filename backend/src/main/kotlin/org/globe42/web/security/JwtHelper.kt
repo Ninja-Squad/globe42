@@ -1,30 +1,22 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import java.security.NoSuchAlgorithmException
+import java.util.*
+import javax.crypto.KeyGenerator
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256
 
 /**
  * Helper class to build a JWT token or extract the claim from a token.
  * @author JB Nizet
  */
 @Component
-public class JwtHelper {
-
-    public static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
-
-    private final String secretKey;
-
-    public JwtHelper(@Value("${globe42.secretKey}") String secretKey) {
-        this.secretKey = secretKey;
-    }
+class JwtHelper(@param:Value("\${globe42.secretKey}") private val secretKey: String) {
 
     /**
      * Builds a token fot the user
@@ -32,10 +24,10 @@ public class JwtHelper {
      * @param userId - the user ID
      * @return a JWT token as a String
      */
-    public String buildToken(Long userId) {
+    fun buildToken(userId: Long?): String {
         return Jwts.builder()
-                   .setSubject(userId.toString())
-                   .signWith(SIGNATURE_ALGORITHM, secretKey).compact();
+                .setSubject(userId!!.toString())
+                .signWith(SIGNATURE_ALGORITHM, secretKey).compact()
     }
 
     /**
@@ -44,16 +36,20 @@ public class JwtHelper {
      * @param token - token to analyze
      * @return the Claims contained in the token
      */
-    public Claims extractClaims(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    fun extractClaims(token: String): Claims {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).body
     }
 
-    /**
-     * Allows generating a real secret key
-     */
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance(SIGNATURE_ALGORITHM.getJcaName());
-        SecretKey secretKey = keyGenerator.generateKey();
-        System.out.println(Base64.getEncoder().encodeToString(secretKey.getEncoded()));
+    companion object {
+        /**
+         * Allows generating a real secret key
+         */
+        @Throws(NoSuchAlgorithmException::class)
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val keyGenerator = KeyGenerator.getInstance(SIGNATURE_ALGORITHM.jcaName)
+            val secretKey = keyGenerator.generateKey()
+            println(Base64.getEncoder().encodeToString(secretKey.encoded))
+        }
     }
 }

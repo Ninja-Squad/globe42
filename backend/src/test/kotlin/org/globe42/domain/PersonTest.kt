@@ -1,32 +1,30 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.regex.Pattern;
-
-import org.junit.jupiter.api.Test;
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import java.util.regex.Pattern
 
 /**
  * Unit tests for Person
  * @author JB Nizet
  */
-public class PersonTest {
+class PersonTest {
 
     @Test
-    public void shouldValidateFiscalNumber() {
-        Pattern pattern = Pattern.compile(Person.FISCAL_NUMBER_REGEXP);
+    fun shouldValidateFiscalNumber() {
+        val pattern = Pattern.compile(FISCAL_NUMBER_REGEXP)
 
-        assertThat(pattern.matcher("1abcdefghijk3").matches()).isFalse();
-        assertThat(pattern.matcher("123456789012").matches()).isFalse();
-        assertThat(pattern.matcher("12345678901234").matches()).isFalse();
-        assertThat(pattern.matcher("1234567890123").matches()).isTrue();
+        assertThat(pattern.matcher("1abcdefghijk3").matches()).isFalse()
+        assertThat(pattern.matcher("123456789012").matches()).isFalse()
+        assertThat(pattern.matcher("12345678901234").matches()).isFalse()
+        assertThat(pattern.matcher("1234567890123").matches()).isTrue()
     }
 
     @Test
-    public void shouldAcceptEmptyStringAsFiscalNumber() {
-        Pattern pattern = Pattern.compile(Person.FISCAL_NUMBER_REGEXP);
+    fun shouldAcceptEmptyStringAsFiscalNumber() {
+        val pattern = Pattern.compile(FISCAL_NUMBER_REGEXP)
 
-        assertThat(pattern.matcher("").matches()).isTrue();
-        assertThat(pattern.matcher(" ").matches()).isFalse();
+        assertThat(pattern.matcher("").matches()).isTrue()
+        assertThat(pattern.matcher(" ").matches()).isFalse()
     }
 }

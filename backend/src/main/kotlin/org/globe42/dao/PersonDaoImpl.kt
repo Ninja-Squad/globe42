@@ -1,19 +1,18 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
 
 /**
- * Implementation of {@link PersonDaoCustom}
+ * Implementation of [PersonDaoCustom]
  * @author JB Nizet
  */
-public class PersonDaoImpl implements PersonDaoCustom {
+class PersonDaoImpl : PersonDaoCustom {
     @PersistenceContext
-    private EntityManager em;
+    private lateinit var em: EntityManager
 
-    @Override
-    public int nextMediationCode(char letter) {
-        String query = "select nextval('mediation_code_" + letter + "_seq')";
-        return ((Number) em.createNativeQuery(query).getSingleResult()).intValue();
+    override fun nextMediationCode(letter: Char): Int {
+        val query = "select nextval('mediation_code_" + letter + "_seq')"
+        return (em.createNativeQuery(query).singleResult as Number).toInt()
     }
 }

@@ -1,77 +1,61 @@
-package org.globe42.web.charges;
+package org.globe42.web.charges
 
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
-
-import org.globe42.dao.ChargeCategoryDao;
-import org.globe42.domain.ChargeCategory;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.ErrorCode;
-import org.globe42.web.exception.NotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.globe42.dao.ChargeCategoryDao
+import org.globe42.domain.ChargeCategory
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.ErrorCode
+import org.globe42.web.exception.NotFoundException
+import org.springframework.http.HttpStatus
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
 
 /**
  * REST controller used to deal with the CRUD of charge categories.
  * @author JB Nizet
  */
 @RestController
-@RequestMapping(value = "/api/charge-categories")
+@RequestMapping(value = ["/api/charge-categories"])
 @Transactional
-public class ChargeCategoryController {
-
-    private final ChargeCategoryDao chargeCategoryDao;
-
-    public ChargeCategoryController(ChargeCategoryDao chargeCategoryDao) {
-        this.chargeCategoryDao = chargeCategoryDao;
-    }
+class ChargeCategoryController(private val chargeCategoryDao: ChargeCategoryDao) {
 
     @GetMapping
-    public List<ChargeCategoryDTO> list() {
-        return chargeCategoryDao.findAll().stream().map(ChargeCategoryDTO::new).collect(Collectors.toList());
+    fun list(): List<ChargeCategoryDTO> {
+        return chargeCategoryDao.findAll().map(::ChargeCategoryDTO)
     }
 
     @GetMapping("/{categoryId}")
-    public ChargeCategoryDTO get(@PathVariable("categoryId") Long categoryId) {
+    operator fun get(@PathVariable("categoryId") categoryId: Long): ChargeCategoryDTO {
         return chargeCategoryDao.findById(categoryId)
-                .map(ChargeCategoryDTO::new)
-                .orElseThrow(() -> new NotFoundException("No charge category with ID " + categoryId));
+                .map(::ChargeCategoryDTO)
+                .orElseThrow { NotFoundException("No charge category with ID $categoryId") }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ChargeCategoryDTO create(@Validated @RequestBody ChargeCategoryCommandDTO command) {
-        if (chargeCategoryDao.existsByName(command.getName())) {
-            throw new BadRequestException(ErrorCode.CHARGE_CATEGORY_NAME_ALREADY_EXISTS);
+    fun create(@Validated @RequestBody command: ChargeCategoryCommandDTO): ChargeCategoryDTO {
+        if (chargeCategoryDao.existsByName(command.name)) {
+            throw BadRequestException(ErrorCode.CHARGE_CATEGORY_NAME_ALREADY_EXISTS)
         }
 
-        ChargeCategory type = new ChargeCategory();
-        copyCommandToType(command, type);
-        return new ChargeCategoryDTO(chargeCategoryDao.save(type));
+        val type = ChargeCategory()
+        copyCommandToType(command, type)
+        return ChargeCategoryDTO(chargeCategoryDao.save(type))
     }
 
     @PutMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable("categoryId") Long categoryId, @Validated @RequestBody ChargeCategoryCommandDTO command) {
-        ChargeCategory type = chargeCategoryDao.findById(categoryId).orElseThrow(NotFoundException::new);
+    fun update(@PathVariable("categoryId") categoryId: Long, @Validated @RequestBody command: ChargeCategoryCommandDTO) {
+        val type = chargeCategoryDao.findById(categoryId).orElseThrow { NotFoundException() }
 
-        chargeCategoryDao.findByName(command.getName()).filter(other -> !other.getId().equals(categoryId)).ifPresent(other -> {
-            throw new BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS);
-        });
+        chargeCategoryDao.findByName(command.name)
+                .filter { other -> other.id != categoryId }
+                .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
 
-        copyCommandToType(command, type);
+        copyCommandToType(command, type)
     }
 
-    private void copyCommandToType(ChargeCategoryCommandDTO command, ChargeCategory type) {
-        type.setName(command.getName());
+    private fun copyCommandToType(command: ChargeCategoryCommandDTO, type: ChargeCategory) {
+        type.name = command.name
     }
 }

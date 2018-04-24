@@ -1,10 +1,10 @@
-package org.globe42.web.exception;
+package org.globe42.web.exception
 
 /**
- * TODO include class javadoc here
+ * The various functional error codes
  * @author JB Nizet
  */
-public enum ErrorCode {
+enum class ErrorCode {
     USER_LOGIN_ALREADY_EXISTS,
     INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS,
     INCOME_SOURCE_NAME_ALREADY_EXISTS,

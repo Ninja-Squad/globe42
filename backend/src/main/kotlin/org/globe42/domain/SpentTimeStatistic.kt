@@ -1,29 +1,7 @@
-package org.globe42.domain;
+package org.globe42.domain
 
 /**
- * TODO include class javadoc here
+ * A statistic about spent time for a category and a user
  * @author JB Nizet
  */
-public final class SpentTimeStatistic {
-    private final TaskCategory category;
-    private final User user;
-    private final int minutes;
-
-    public SpentTimeStatistic(TaskCategory category, User user, int minutes) {
-        this.category = category;
-        this.user = user;
-        this.minutes = minutes;
-    }
-
-    public TaskCategory getCategory() {
-        return category;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public int getMinutes() {
-        return minutes;
-    }
-}
+data class SpentTimeStatistic(val category: TaskCategory, val user: User, val minutes: Int)

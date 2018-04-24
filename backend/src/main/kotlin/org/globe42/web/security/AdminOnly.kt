@@ -1,14 +1,8 @@
-package org.globe42.web.security;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+package org.globe42.web.security
 
 /**
- * Annotation allowing to install the aspect {@link AdminOnly} on a method.
+ * Annotation allowing to install the aspect [AdminOnly] on a method.
  * @author JB Nizet
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface AdminOnly {
-}
+@MustBeDocumented
+annotation class AdminOnly

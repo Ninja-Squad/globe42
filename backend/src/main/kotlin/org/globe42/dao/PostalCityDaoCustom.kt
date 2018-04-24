@@ -1,28 +1,25 @@
-package org.globe42.dao;
+package org.globe42.dao
 
-import java.util.Collection;
-import java.util.List;
-
-import org.globe42.domain.PostalCity;
+import org.globe42.domain.PostalCity
 
 /**
- * Custom methods of {@link PostalCityDao}
+ * Custom methods of [PostalCityDao]
  * @author JB Nizet
  */
-public interface PostalCityDaoCustom {
+interface PostalCityDaoCustom {
 
     /**
      * Inserts all the given cities in an efficient way
      */
-    void saveAllEfficiently(Collection<PostalCity> cities);
+    fun saveAllEfficiently(cities: Collection<PostalCity>)
 
     /**
      * Finds the N first cities whose postal code starts with the given value
      */
-    List<PostalCity> findByPostalCode(String search, int limit);
+    fun findByPostalCode(search: String, limit: Int): List<PostalCity>
 
     /**
      * Finds the N first cities whose name start with the given value, after sanitization
      */
-    List<PostalCity> findByCity(String search, int limit);
+    fun findByCity(search: String, limit: Int): List<PostalCity>
 }

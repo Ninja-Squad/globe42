@@ -1,180 +1,176 @@
-package org.globe42.web.incomes;
+package org.globe42.web.incomes
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.IncomeSourceDao;
-import org.globe42.dao.IncomeSourceTypeDao;
-import org.globe42.domain.IncomeSource;
-import org.globe42.domain.IncomeSourceType;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.BadRequestException;
-import org.globe42.web.exception.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.globe42.dao.IncomeSourceDao
+import org.globe42.dao.IncomeSourceTypeDao
+import org.globe42.domain.IncomeSource
+import org.globe42.domain.IncomeSourceType
+import org.globe42.test.BaseTest
+import org.globe42.web.exception.BadRequestException
+import org.globe42.web.exception.NotFoundException
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.math.BigDecimal
+import java.util.*
 
 /**
- * Unit tests for {@link IncomeSourceController}
+ * Unit tests for [IncomeSourceController]
  * @author JB Nizet
  */
-public class IncomeSourceControllerTest extends BaseTest {
+class IncomeSourceControllerTest : BaseTest() {
     @Mock
-    private IncomeSourceDao mockIncomeSourceDao;
+    private lateinit var mockIncomeSourceDao: IncomeSourceDao
 
     @Mock
-    private IncomeSourceTypeDao mockIncomeSourceTypeDao;
+    private lateinit var mockIncomeSourceTypeDao: IncomeSourceTypeDao
 
     @InjectMocks
-    private IncomeSourceController controller;
+    private lateinit var controller: IncomeSourceController
 
     @Captor
-    private ArgumentCaptor<IncomeSource> incomeSourceArgumentCaptor;
+    private lateinit var incomeSourceArgumentCaptor: ArgumentCaptor<IncomeSource>
 
-    private IncomeSource incomeSource;
+    private lateinit var incomeSource: IncomeSource
 
     @BeforeEach
-    public void prepare() {
-        incomeSource = new IncomeSource(42L);
-        incomeSource.setName("source 1");
-        incomeSource.setType(new IncomeSourceType(1L, "type 1"));
-        incomeSource.setMaxMonthlyAmount(new BigDecimal("1234.56"));
+    fun prepare() {
+        incomeSource = IncomeSource(42L)
+        incomeSource.name = "source 1"
+        incomeSource.type = IncomeSourceType(1L, "type 1")
+        incomeSource.maxMonthlyAmount = BigDecimal("1234.56")
     }
 
     @Test
-    public void shouldList() {
-        when(mockIncomeSourceDao.findAll()).thenReturn(Collections.singletonList(incomeSource));
+    fun shouldList() {
+        whenever(mockIncomeSourceDao.findAll()).thenReturn(listOf(incomeSource))
 
-        List<IncomeSourceDTO> result = controller.list();
+        val result = controller.list()
 
-        assertThat(result).hasSize(1);
-        IncomeSourceDTO dto = result.get(0);
-        assertThat(dto.getId()).isEqualTo(incomeSource.getId());
-        assertThat(dto.getName()).isEqualTo(incomeSource.getName());
-        assertThat(dto.getType().getId()).isEqualTo(incomeSource.getType().getId());
-        assertThat(dto.getType().getType()).isEqualTo(incomeSource.getType().getType());
-        assertThat(dto.getMaxMonthlyAmount()).isEqualTo(incomeSource.getMaxMonthlyAmount());
-        assertThat(dto.getId()).isEqualTo(incomeSource.getId());
+        assertThat(result).hasSize(1)
+        val (id, name, type, maxMonthlyAmount) = result[0]
+        assertThat(id).isEqualTo(incomeSource.id)
+        assertThat(name).isEqualTo(incomeSource.name)
+        assertThat(type.id).isEqualTo(incomeSource.type!!.id)
+        assertThat(type.type).isEqualTo(incomeSource.type!!.type)
+        assertThat(maxMonthlyAmount).isEqualTo(incomeSource.maxMonthlyAmount)
+        assertThat(id).isEqualTo(incomeSource.id)
     }
 
     @Test
-    public void shouldGet() {
-        when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.of(incomeSource));
+    fun shouldGet() {
+        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
 
-        IncomeSourceDTO result = controller.get(incomeSource.getId());
+        val result = controller.get(incomeSource.id!!)
 
-        assertThat(result.getId()).isEqualTo(incomeSource.getId());
+        assertThat(result.id).isEqualTo(incomeSource.id!!)
     }
 
     @Test
-    public void shouldThrowWhenGettingWithUnknownId() {
-        when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.empty());
+    fun shouldThrowWhenGettingWithUnknownId() {
+        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.get(incomeSource.getId()));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(incomeSource.id!!) }
     }
 
     @Test
-    public void shouldCreate() {
-        IncomeSourceCommandDTO command = createCommand();
+    fun shouldCreate() {
+        val command = createIncomeSourceCommand()
 
-        when(mockIncomeSourceTypeDao.findById(command.getTypeId()))
-            .thenReturn(Optional.of(new IncomeSourceType(command.getTypeId(), "type 2")));
-        when(mockIncomeSourceDao.save(any(IncomeSource.class))).thenReturn(incomeSource);
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId))
+                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+        whenever(mockIncomeSourceDao.save(any<IncomeSource>())).thenReturn(incomeSource)
 
-        IncomeSourceDTO result = controller.create(command);
+        val result = controller.create(command)
 
-        verify(mockIncomeSourceDao).save(incomeSourceArgumentCaptor.capture());
+        verify(mockIncomeSourceDao).save(incomeSourceArgumentCaptor.capture())
 
-        assertThat(result).isNotNull();
-        assertIncomeSourceEqualsCommand(incomeSourceArgumentCaptor.getValue(), command);
+        assertThat(result).isNotNull()
+        assertIncomeSourceEqualsCommand(incomeSourceArgumentCaptor.value, command)
     }
 
     @Test
-    public void shouldThrowWhenCreatingWithUnknownIncomeSourceType() {
-        IncomeSourceCommandDTO command = createCommand();
+    fun shouldThrowWhenCreatingWithUnknownIncomeSourceType() {
+        val command = createIncomeSourceCommand()
 
-        when(mockIncomeSourceTypeDao.findById(command.getTypeId()))
-            .thenReturn(Optional.of(new IncomeSourceType(command.getTypeId(), "type 2")));
-        when(mockIncomeSourceDao.existsByName(command.getName())).thenReturn(true);
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId))
+                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+        whenever(mockIncomeSourceDao.existsByName(command.name)).thenReturn(true)
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(() -> controller.create(command));
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
     }
 
     @Test
-    public void shouldThrowWhenCreatingWithExistingName() {
-        IncomeSourceCommandDTO command = createCommand();
+    fun shouldThrowWhenCreatingWithExistingName() {
+        val command = createIncomeSourceCommand()
 
-        when(mockIncomeSourceTypeDao.findById(command.getTypeId())).thenReturn(Optional.empty());
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> controller.create(command));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.create(command) }
     }
 
     @Test
-    public void shouldUpdate() {
-        IncomeSourceCommandDTO command = createCommand();
+    fun shouldUpdate() {
+        val command = createIncomeSourceCommand()
 
-        when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.of(incomeSource));
-        when(mockIncomeSourceTypeDao.findById(command.getTypeId()))
-            .thenReturn(Optional.of(new IncomeSourceType(command.getTypeId(), "type 2")));
+        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId))
+                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
 
-        controller.update(incomeSource.getId(), command);
+        controller.update(incomeSource.id!!, command)
 
-        assertIncomeSourceEqualsCommand(incomeSource, command);
+        assertIncomeSourceEqualsCommand(incomeSource, command)
     }
 
     @Test
-    public void shouldThrowIfNotFoundWhenUpdating() {
-        when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.empty());
+    fun shouldThrowIfNotFoundWhenUpdating() {
+        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.empty())
 
-        assertThatExceptionOfType(NotFoundException.class).isThrownBy(
-            () -> controller.update(incomeSource.getId(), createCommand()));
+        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
+            controller.update(incomeSource.id!!, createIncomeSourceCommand())
+        }
     }
 
     @Test
-    public void shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
-        IncomeSourceCommandDTO command = createCommand();
+    fun shouldThrowWhenUpdatingWithAlreadyUsedNickName() {
+        val command = createIncomeSourceCommand()
 
-        when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.of(incomeSource));
-        when(mockIncomeSourceTypeDao.findById(command.getTypeId()))
-            .thenReturn(Optional.of(new IncomeSourceType(command.getTypeId(), "type 2")));
-        when(mockIncomeSourceDao.findByName(command.getName())).thenReturn(Optional.of(new IncomeSource(4567L)));
+        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId))
+                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+        whenever(mockIncomeSourceDao.findByName(command.name)).thenReturn(Optional.of(IncomeSource(4567L)))
 
-        assertThatExceptionOfType(BadRequestException.class).isThrownBy(
-            () -> controller.update(incomeSource.getId(), command));
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
+            controller.update(incomeSource.id!!, command)
+        }
     }
 
     @Test
-    public void shouldUpdateIfSameSurnameIsKept() {
-        IncomeSourceCommandDTO command = createCommand();
+    fun shouldUpdateIfSameSurnameIsKept() {
+        val command = createIncomeSourceCommand()
 
-        when(mockIncomeSourceDao.findById(incomeSource.getId())).thenReturn(Optional.of(incomeSource));
-        when(mockIncomeSourceTypeDao.findById(command.getTypeId()))
-            .thenReturn(Optional.of(new IncomeSourceType(command.getTypeId(), "type 2")));
-        when(mockIncomeSourceDao.findByName(command.getName())).thenReturn(Optional.of(incomeSource));
+        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId))
+                .thenReturn(Optional.of(IncomeSourceType(command.typeId, "type 2")))
+        whenever(mockIncomeSourceDao.findByName(command.name)).thenReturn(Optional.of(incomeSource))
 
-        controller.update(incomeSource.getId(), command);
+        controller.update(incomeSource.id!!, command)
 
-        assertIncomeSourceEqualsCommand(incomeSource, command);
+        assertIncomeSourceEqualsCommand(incomeSource, command)
     }
 
-    static IncomeSourceCommandDTO createCommand() {
-        return new IncomeSourceCommandDTO("source 2", 2L, new BigDecimal("12.34"));
-    }
-
-    private void assertIncomeSourceEqualsCommand(IncomeSource source, IncomeSourceCommandDTO command) {
-        assertThat(source.getName()).isEqualTo(command.getName());
-        assertThat(source.getType().getId()).isEqualTo(command.getTypeId());
-        assertThat(source.getMaxMonthlyAmount()).isEqualTo(command.getMaxMonthlyAmount());
+    private fun assertIncomeSourceEqualsCommand(source: IncomeSource, command: IncomeSourceCommandDTO) {
+        assertThat(source.name).isEqualTo(command.name)
+        assertThat(source.type!!.id).isEqualTo(command.typeId)
+        assertThat(source.maxMonthlyAmount).isEqualTo(command.maxMonthlyAmount)
     }
 }
+
+internal fun createIncomeSourceCommand() = IncomeSourceCommandDTO("source 2", 2L, BigDecimal("12.34"))

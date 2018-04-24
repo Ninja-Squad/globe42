@@ -1,61 +1,56 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import static org.globe42.web.security.AuthenticationControllerTest.createCredentials;
-import static org.globe42.web.security.AuthenticationControllerTest.createUser;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Optional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.globe42.dao.UserDao;
-import org.globe42.domain.User;
-import org.globe42.test.GlobeMvcTest;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.nhaarman.mockito_kotlin.whenever
+import org.globe42.dao.UserDao
+import org.globe42.test.GlobeMvcTest
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.util.*
 
 /**
  * Unit tests for AuthenticationController
  * @author JB Nizet
  */
-@GlobeMvcTest(AuthenticationController.class)
-public class AuthenticationControllerMvcTest {
+@GlobeMvcTest(AuthenticationController::class)
+class AuthenticationControllerMvcTest {
     @MockBean
-    private UserDao mockUserDao;
+    private lateinit var mockUserDao: UserDao
 
     @MockBean
-    private PasswordDigester mockPasswordDigester;
+    private lateinit var mockPasswordDigester: PasswordDigester
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private lateinit var objectMapper: ObjectMapper
 
     @MockBean
-    private JwtHelper mockJwtHelper;
+    private lateinit var mockJwtHelper: JwtHelper
 
     @Autowired
-    private MockMvc mvc;
+    private lateinit var mvc: MockMvc
 
     @Test
-    public void shouldAuthenticate() throws Exception {
-        CredentialsDTO credentials = createCredentials();
+    fun shouldAuthenticate() {
+        val credentials = createCredentials()
 
-        User user = createUser();
-        when(mockUserDao.findNotDeletedByLogin(credentials.getLogin())).thenReturn(Optional.of(user));
-        when(mockPasswordDigester.match(credentials.getPassword(), user.getPassword())).thenReturn(true);
-        String token = "token";
-        when(mockJwtHelper.buildToken(user.getId())).thenReturn(token);
+        val user = createUser()
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.of(user))
+        whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(true)
+        val token = "token"
+        whenever(mockJwtHelper.buildToken(user.id)).thenReturn(token)
 
         mvc.perform(post("/api/authentication")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(credentials)))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$.login").value(user.getLogin()))
-           .andExpect(jsonPath("$.admin").value(user.isAdmin()))
-           .andExpect(jsonPath("$.token").value(token));
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsBytes(credentials)))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.login").value(user.login!!))
+                .andExpect(jsonPath("$.admin").value(user.admin))
+                .andExpect(jsonPath("$.token").value(token))
     }
 }

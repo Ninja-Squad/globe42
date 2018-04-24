@@ -1,10 +1,10 @@
-package org.globe42.domain;
+package org.globe42.domain
 
 /**
  * The status of a task
  * @author JB Nizet
  */
-public enum TaskStatus {
+enum class TaskStatus {
     /**
      * The task is still in the todo list
      */
@@ -18,5 +18,5 @@ public enum TaskStatus {
     /**
      * The task has been mark as done. It's in the archive list, but can still be resurrected if the user messed up
      */
-    DONE;
+    DONE
 }

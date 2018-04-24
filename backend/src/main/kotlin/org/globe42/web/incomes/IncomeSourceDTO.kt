@@ -1,40 +1,23 @@
-package org.globe42.web.incomes;
+package org.globe42.web.incomes
 
-import java.math.BigDecimal;
-
-import org.globe42.domain.IncomeSource;
+import org.globe42.domain.IncomeSource
+import java.math.BigDecimal
 
 /**
  * DTO of an income source
  * @see org.globe42.domain.IncomeSource
+ *
  * @author JB Nizet
  */
-public final class IncomeSourceDTO {
-    private final Long id;
-    private final String name;
-    private final IncomeSourceTypeDTO type;
-    private final BigDecimal maxMonthlyAmount;
+data class IncomeSourceDTO(
+        val id: Long,
+        val name: String,
+        val type: IncomeSourceTypeDTO,
+        val maxMonthlyAmount: BigDecimal?) {
 
-    public IncomeSourceDTO(IncomeSource incomeSource) {
-        this.id = incomeSource.getId();
-        this.name = incomeSource.getName();
-        this.type = new IncomeSourceTypeDTO(incomeSource.getType());
-        this.maxMonthlyAmount = incomeSource.getMaxMonthlyAmount();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public IncomeSourceTypeDTO getType() {
-        return type;
-    }
-
-    public BigDecimal getMaxMonthlyAmount() {
-        return maxMonthlyAmount;
-    }
+    constructor(incomeSource: IncomeSource): this(
+            incomeSource.id!!,
+            incomeSource.name!!,
+            IncomeSourceTypeDTO(incomeSource.type!!),
+            incomeSource.maxMonthlyAmount)
 }

@@ -1,12 +1,9 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+import java.util.*
+import javax.persistence.*
+
+private const val COUPLE_GENERATOR = "CoupleGenerator"
 
 /**
  * A couple (typically, marriage or PACS) between two persons.
@@ -23,44 +20,41 @@ import javax.persistence.SequenceGenerator;
  * @author JB Nizet
  */
 @Entity
-public class Couple {
-    private static final String COUPLE_GENERATOR = "CoupleGenerator";
+class Couple {
 
     @Id
     @SequenceGenerator(name = COUPLE_GENERATOR, sequenceName = "PERSON_SEQ", initialValue = 1000, allocationSize = 1)
     @GeneratedValue(generator = COUPLE_GENERATOR)
-    private Long id;
+    private var id: Long? = null
 
     /**
      * The 2 persons in the couple
      */
     @OneToMany(mappedBy = "couple")
-    private Set<Person> persons = new HashSet<>();
+    private val persons: MutableSet<Person> = HashSet()
 
-    public Couple() {
+    constructor()
+
+    constructor(id: Long) {
+        this.id = id
     }
 
-    public Couple(Long id) {
-        this.id = id;
+    constructor(first: Person, second: Person) {
+        this.persons.add(first)
+        this.persons.add(second)
+        first.couple = this
+        second.couple = this
     }
 
-    public Couple(Person first, Person second) {
-        this.persons.add(first);
-        this.persons.add(second);
-        first.setCouple(this);
-        second.setCouple(this);
-    }
-
-    public Person getSpouseOf(Person person) {
+    fun getSpouseOf(person: Person): Person {
         if (!this.persons.contains(person)) {
-            throw new IllegalStateException("The person " + person.getId() + " is not involved in this couple " + this.id);
+            throw IllegalStateException("The person ${person.id} is not involved in this couple ${this.id}")
         }
         return persons.stream()
-                      .filter(p -> !p.equals(person))
-                      .findAny()
-                      .orElseThrow(() -> new IllegalStateException("there is no person other than "
-                                                                       + person.getId()
-                                                                       + " in this couple "
-                                                                       + this.id));
+                .filter { p -> p != person }
+                .findAny()
+                .orElseThrow {
+                    IllegalStateException("there is no person other than ${person.id} in this couple ${this.id}")
+                }
     }
 }

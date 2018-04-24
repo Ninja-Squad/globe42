@@ -1,46 +1,40 @@
-package org.globe42.web.exception;
+package org.globe42.web.exception
 
-import java.util.Map;
-
-import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.boot.web.servlet.error.DefaultErrorAttributes
+import org.springframework.boot.web.servlet.error.ErrorAttributes
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.context.request.WebRequest
 
 /**
- * Spring Configuration class that adds a custom {@link ErrorAttributes} bean to the context, in order to
- * add a <code>functionalError</code> attribute to the JSON body of error responses when the exception
- * is a {@link BadRequestException}
+ * Spring Configuration class that adds a custom [ErrorAttributes] bean to the context, in order to
+ * add a `functionalError` attribute to the JSON body of error responses when the exception
+ * is a [BadRequestException]
  * @author JB Nizet
  */
 @Configuration
-public class ExceptionConfig {
+class ExceptionConfig {
     @Bean
-    public ErrorAttributes errorAttributes() {
-        return new CustomErrorAttributes();
+    fun errorAttributes(): ErrorAttributes {
+        return CustomErrorAttributes()
     }
 
-    public static class CustomErrorAttributes extends DefaultErrorAttributes {
-        public CustomErrorAttributes() {
-        }
+    open class CustomErrorAttributes : DefaultErrorAttributes {
+        constructor()
 
-        public CustomErrorAttributes(boolean includeException) {
-            super(includeException);
-        }
+        constructor(includeException: Boolean) : super(includeException)
 
-        @Override
-        public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
-            Map<String, Object> result = super.getErrorAttributes(webRequest, includeStackTrace);
+        override fun getErrorAttributes(webRequest: WebRequest, includeStackTrace: Boolean): Map<String, Any> {
+            val result = super.getErrorAttributes(webRequest, includeStackTrace)
 
-            Throwable error = getError(webRequest);
-            if (error instanceof BadRequestException) {
-                BadRequestException exception = (BadRequestException) error;
-                if (exception.getError() != null) {
-                    result.put("functionalError", exception.getError());
+            val error = getError(webRequest)
+            if (error is BadRequestException) {
+                val exception = error
+                if (exception.error != null) {
+                    result["functionalError"] = exception.error
                 }
             }
-            return result;
+            return result
         }
     }
 }

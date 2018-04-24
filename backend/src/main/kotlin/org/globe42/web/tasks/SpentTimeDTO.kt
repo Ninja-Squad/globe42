@@ -1,40 +1,21 @@
-package org.globe42.web.tasks;
+package org.globe42.web.tasks
 
-import java.time.Instant;
-
-import org.globe42.domain.SpentTime;
-import org.globe42.web.users.UserDTO;
+import org.globe42.domain.SpentTime
+import org.globe42.web.users.UserDTO
+import java.time.Instant
 
 /**
- * DTO for a {@link SpentTime}
+ * DTO for a [SpentTime]
  * @author JB Nizet
  */
-public final class SpentTimeDTO {
-    private final Long id;
-    private final int minutes;
-    private final UserDTO creator;
-    private final Instant creationInstant;
+data class SpentTimeDTO(
+        val id: Long,
+        val minutes: Int,
+        val creator: UserDTO,
+        val creationInstant: Instant) {
 
-    public SpentTimeDTO(SpentTime spentTime) {
-        this.id = spentTime.getId();
-        this.minutes = spentTime.getMinutes();
-        this.creator = spentTime.getCreator() == null ? null : new UserDTO(spentTime.getCreator());
-        this.creationInstant = spentTime.getCreationInstant();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public int getMinutes() {
-        return minutes;
-    }
-
-    public UserDTO getCreator() {
-        return creator;
-    }
-
-    public Instant getCreationInstant() {
-        return creationInstant;
-    }
+    constructor(spentTime: SpentTime): this(spentTime.id!!,
+                                            spentTime.minutes,
+                                            UserDTO(spentTime.creator!!),
+                                            spentTime.creationInstant)
 }

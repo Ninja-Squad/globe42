@@ -1,33 +1,25 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.globe42.dao.UserDao;
-import org.globe42.web.exception.ForbiddenException;
-import org.springframework.stereotype.Component;
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Before
+import org.globe42.dao.UserDao
+import org.globe42.web.exception.ForbiddenException
+import org.springframework.stereotype.Component
 
 /**
  * Aspect allowing to check that the current user is an admin before invoking a controller method.
- * This aspect is installed by annotating a method with {@link AdminOnly}
+ * This aspect is installed by annotating a method with [AdminOnly]
  *
  * @author JB Nizet
  */
 @Aspect
 @Component
-public class AdminOnlyAspect {
-
-    private final CurrentUser currentUser;
-    private final UserDao userDao;
-
-    public AdminOnlyAspect(CurrentUser currentUser, UserDao userDao) {
-        this.currentUser = currentUser;
-        this.userDao = userDao;
-    }
+class AdminOnlyAspect(private val currentUser: CurrentUser, private val userDao: UserDao) {
 
     @Before("@annotation(adminOnly)")
-    public void checkUserIsAdmin(AdminOnly adminOnly) {
-        if (!userDao.existsNotDeletedAdminById(currentUser.getUserId())) {
-            throw new ForbiddenException();
+    fun checkUserIsAdmin(adminOnly: AdminOnly?) {
+        if (!userDao.existsNotDeletedAdminById(currentUser.userId!!)) {
+            throw ForbiddenException()
         }
     }
 }

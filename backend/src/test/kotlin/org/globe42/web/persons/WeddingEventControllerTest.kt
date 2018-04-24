@@ -1,77 +1,86 @@
-package org.globe42.web.persons;
+package org.globe42.web.persons
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import org.globe42.dao.PersonDao;
-import org.globe42.domain.Person;
-import org.globe42.domain.WeddingEvent;
-import org.globe42.domain.WeddingEventType;
-import org.globe42.test.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions.assertThat
+import org.globe42.dao.PersonDao
+import org.globe42.domain.Gender
+import org.globe42.domain.Person
+import org.globe42.domain.WeddingEvent
+import org.globe42.domain.WeddingEventType
+import org.globe42.test.BaseTest
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import java.time.LocalDate
+import java.util.*
 
 /**
- * Unit tests for {@link WeddingEventController}
+ * Unit tests for [WeddingEventController]
  * @author JB Nizet
  */
-public class WeddingEventControllerTest extends BaseTest {
+class WeddingEventControllerTest : BaseTest() {
     @Mock
-    private PersonDao mockPersonDao;
+    private lateinit var mockPersonDao: PersonDao
 
     @InjectMocks
-    private WeddingEventController controller;
+    private lateinit var controller: WeddingEventController
 
-    private Person person;
-    private WeddingEvent firstWedding;
-    private WeddingEvent firstDivorce;
+    private lateinit var person: Person
+    private lateinit var firstWedding: WeddingEvent
+    private lateinit var firstDivorce: WeddingEvent
 
     @BeforeEach
-    public void prepare() {
-        person = new Person(42L);
-        firstWedding = new WeddingEvent(34L);
-        firstWedding.setDate(LocalDate.of(2000, 2, 28));
-        firstWedding.setType(WeddingEventType.WEDDING);
+    fun prepare() {
+        person = Person(42L, "John", "Doe", Gender.MALE)
+        firstWedding = WeddingEvent(34L)
+        firstWedding.date = LocalDate.of(2000, 2, 28)
+        firstWedding.type = WeddingEventType.WEDDING
 
-        firstDivorce = new WeddingEvent(35L);
-        firstDivorce.setDate(LocalDate.of(2002, 3, 28));
-        firstDivorce.setType(WeddingEventType.DIVORCE);
+        firstDivorce = WeddingEvent(35L)
+        firstDivorce.date = LocalDate.of(2002, 3, 28)
+        firstDivorce.type = WeddingEventType.DIVORCE
 
-        person.addWeddingEvent(firstWedding);
-        person.addWeddingEvent(firstDivorce);
-        when(mockPersonDao.findById(person.getId())).thenReturn(Optional.of(person));
+        person.addWeddingEvent(firstWedding)
+        person.addWeddingEvent(firstDivorce)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
     }
 
     @Test
-    public void shouldList() {
-        List<WeddingEventDTO> result = controller.list(person.getId());
+    fun shouldList() {
+        val result = controller.list(person.id!!)
 
-        assertThat(result).extracting(WeddingEventDTO::getId).containsExactly(firstWedding.getId(), firstDivorce.getId());
-        assertThat(result).extracting(WeddingEventDTO::getDate).containsExactly(firstWedding.getDate(), firstDivorce.getDate());
-        assertThat(result).extracting(WeddingEventDTO::getType).containsExactly(firstWedding.getType(), firstDivorce.getType());
+        assertThat(result).extracting<Long>(WeddingEventDTO::id).containsExactly(
+                firstWedding.id,
+                firstDivorce.id)
+        assertThat(result).extracting<LocalDate>(WeddingEventDTO::date).containsExactly(
+                firstWedding.date,
+                firstDivorce.date)
+        assertThat(result).extracting<WeddingEventType>(WeddingEventDTO::type).containsExactly(
+                firstWedding.type,
+                firstDivorce.type)
     }
 
     @Test
-    public void shouldCreate() {
-        WeddingEventCommandDTO command = new WeddingEventCommandDTO(LocalDate.of(2018, 3, 1),
-                                                                    WeddingEventType.WEDDING);
-        WeddingEventDTO result = controller.create(person.getId(), command);
+    fun shouldCreate() {
+        val date = LocalDate.of(2018, 3, 1)
+        val command = WeddingEventCommandDTO(date, WeddingEventType.WEDDING)
+        whenever(mockPersonDao.flush()).then {
+            person.getWeddingEvents().find { it.date == date }?.let { it.id = 876 }
+            Unit
+        }
 
-        assertThat(result.getDate()).isEqualTo(command.getDate());
-        assertThat(result.getType()).isEqualTo(command.getType());
-        assertThat(person.getWeddingEvents()).hasSize(3);
+        val result = controller.create(person.id!!, command)
+
+        assertThat(result.date).isEqualTo(command.date)
+        assertThat(result.type).isEqualTo(command.type)
+        assertThat(person.getWeddingEvents()).hasSize(3)
     }
 
     @Test
-    public void shouldDelete() {
-        controller.delete(person.getId(), firstDivorce.getId());
+    fun shouldDelete() {
+        controller.delete(person.id!!, firstDivorce.id!!)
 
-        assertThat(person.getWeddingEvents()).hasSize(1);
+        assertThat(person.getWeddingEvents()).hasSize(1)
     }
 }

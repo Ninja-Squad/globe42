@@ -1,49 +1,47 @@
-package org.globe42.web.security;
+package org.globe42.web.security
 
-import static org.mockito.Mockito.when;
-
-import org.assertj.core.api.Assertions;
-import org.globe42.dao.UserDao;
-import org.globe42.domain.User;
-import org.globe42.test.BaseTest;
-import org.globe42.web.exception.ForbiddenException;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import com.nhaarman.mockito_kotlin.whenever
+import org.assertj.core.api.Assertions
+import org.globe42.dao.UserDao
+import org.globe42.domain.User
+import org.globe42.test.BaseTest
+import org.globe42.web.exception.ForbiddenException
+import org.junit.jupiter.api.Test
+import org.mockito.InjectMocks
+import org.mockito.Mock
 
 /**
- * Unit tests for {@link AdminOnlyAspect}
+ * Unit tests for [AdminOnlyAspect]
  * @author JB Nizet
  */
-public class AdminOnlyAspectTest extends BaseTest {
+class AdminOnlyAspectTest : BaseTest() {
     @Mock
-    private CurrentUser mockCurrentUser;
+    private lateinit var mockCurrentUser: CurrentUser
 
     @Mock
-    private UserDao mockUserDao;
+    private lateinit var mockUserDao: UserDao
 
     @InjectMocks
-    private AdminOnlyAspect aspect;
+    private lateinit var aspect: AdminOnlyAspect
 
     @Test
-    public void shouldThrowIfNoCurrentUserOrCurrentUserNotAdmin() {
-        long userId = 42L;
-        when(mockCurrentUser.getUserId()).thenReturn(userId);
-        when(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false);
+    fun shouldThrowIfNoCurrentUserOrCurrentUserNotAdmin() {
+        val userId = 42L
+        whenever(mockCurrentUser.userId).thenReturn(userId)
+        whenever(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false)
 
-        Assertions.assertThatExceptionOfType(ForbiddenException.class).isThrownBy(
-            () -> aspect.checkUserIsAdmin(null));
+        Assertions.assertThatExceptionOfType(ForbiddenException::class.java).isThrownBy { aspect.checkUserIsAdmin(null) }
     }
 
     @Test
-    public void shouldNotThrowIfCurrentUserIsAdmin() {
-        long userId = 42L;
-        when(mockCurrentUser.getUserId()).thenReturn(userId);
-        User user = new User(userId);
-        user.setAdmin(true);
+    fun shouldNotThrowIfCurrentUserIsAdmin() {
+        val userId = 42L
+        whenever(mockCurrentUser.userId).thenReturn(userId)
+        val user = User(userId)
+        user.admin = true
 
-        when(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(true);
+        whenever(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(true)
 
-        aspect.checkUserIsAdmin(null);
+        aspect.checkUserIsAdmin(null)
     }
 }

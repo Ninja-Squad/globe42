@@ -1,8 +1,8 @@
-package org.globe42.web;
+package org.globe42.web
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 /**
  * Config class used to disable suffix matching, which prevents URLs to `/api/persons/1000/files/foo.png` to
@@ -10,9 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author JB Nizet
  */
 @Configuration
-public class SuffixMatchingConfig implements WebMvcConfigurer {
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.setUseSuffixPatternMatch(false);
+class SuffixMatchingConfig : WebMvcConfigurer {
+    override fun configurePathMatch(configurer: PathMatchConfigurer) {
+        configurer.setUseSuffixPatternMatch(false)
     }
 }

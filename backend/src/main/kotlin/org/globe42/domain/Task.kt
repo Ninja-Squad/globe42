@@ -1,208 +1,114 @@
-package org.globe42.domain;
+package org.globe42.domain
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import java.time.Instant
+import java.time.LocalDate
+import java.util.*
+import javax.persistence.*
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
+
+private const val TASK_GENERATOR = "TaskGenerator"
 
 /**
  * A task, which appears in the to-do list. When it's done, the task is simply being deleted.
  * @author JB Nizet
  */
 @Entity
-public class Task {
-    private static final String TASK_GENERATOR = "TaskGenerator";
+class Task {
 
     @Id
     @SequenceGenerator(name = TASK_GENERATOR, sequenceName = "TASK_SEQ", initialValue = 1000, allocationSize = 1)
     @GeneratedValue(generator = TASK_GENERATOR)
-    private Long id;
+    var id: Long? = null
 
     /**
      * The description of the task, which is free text describing what to do.
      */
     @NotEmpty
-    private String description;
+    var description: String? = null
 
     /**
      * A one-line title shortly describing the task, which appears in the to-do list.
      */
     @NotEmpty
-    private String title;
+    var title: String? = null
 
     @NotNull
     @ManyToOne
-    private TaskCategory category;
+    var category: TaskCategory? = null
 
     /**
-     * The status of the task. {@link TaskStatus#TODO} by default
+     * The status of the task. [TaskStatus.TODO] by default
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private TaskStatus status = TaskStatus.TODO;
+    var status = TaskStatus.TODO
 
     /**
      * The date before which the task should have been done. If null, it means there is no specific due date
      */
-    private LocalDate dueDate;
+    var dueDate: LocalDate? = null
 
     /**
      * The user who created the task.
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    private User creator;
+    var creator: User? = null
 
     /**
      * The user that is assigned to the task.
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    private User assignee;
+    var assignee: User? = null
 
     /**
      * The person concerned by this task, i.e. for whom the task was created.
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    private Person concernedPerson;
+    var concernedPerson: Person? = null
 
     /**
      * The instant when the task was archived (marked as done or cancelled). Mainly used to be able to display latest
      * archived tasks first in the list, to resurrect them easily.
      */
-    private Instant archivalInstant;
+    var archivalInstant: Instant? = null
 
     /**
      * The total spent time, in minutes, on this task. This value is recomputed every time a spent time is added or
      * delete for the task
      */
-    private int totalSpentTimeInMinutes;
+    var totalSpentTimeInMinutes: Int = 0
+        private set
 
     /**
      * The list of time pieces spent on the task
      */
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SpentTime> spentTimes = new HashSet<>();
+    @OneToMany(mappedBy = "task", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    private val spentTimes: MutableSet<SpentTime> = HashSet<SpentTime>()
 
-    public Task() {
+    constructor()
+
+    constructor(id: Long) {
+        this.id = id
     }
 
-    public Task(Long id) {
-        this.id = id;
+    fun getSpentTimes(): Set<SpentTime> {
+        return Collections.unmodifiableSet(spentTimes)
     }
 
-    public Long getId() {
-        return id;
+    fun addSpentTime(spentTime: SpentTime) {
+        spentTime.task = this
+        this.spentTimes.add(spentTime)
+        recomputeTotalSpentTime()
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    fun removeSpentTime(spentTime: SpentTime) {
+        this.spentTimes.remove(spentTime)
+        recomputeTotalSpentTime()
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public TaskCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(TaskCategory category) {
-        this.category = category;
-    }
-
-    public TaskStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(TaskStatus status) {
-        this.status = status;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-    public User getAssignee() {
-        return assignee;
-    }
-
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
-
-    public Person getConcernedPerson() {
-        return concernedPerson;
-    }
-
-    public void setConcernedPerson(Person concernedPerson) {
-        this.concernedPerson = concernedPerson;
-    }
-
-    public Instant getArchivalInstant() {
-        return archivalInstant;
-    }
-
-    public void setArchivalInstant(Instant archivalInstant) {
-        this.archivalInstant = archivalInstant;
-    }
-
-    public int getTotalSpentTimeInMinutes() {
-        return totalSpentTimeInMinutes;
-    }
-
-    public Set<SpentTime> getSpentTimes() {
-        return Collections.unmodifiableSet(spentTimes);
-    }
-
-    public void addSpentTime(SpentTime spentTime) {
-        spentTime.setTask(this);
-        this.spentTimes.add(spentTime);
-        recomputeTotalSpentTime();
-    }
-
-    public void removeSpentTime(SpentTime spentTime) {
-        this.spentTimes.remove(spentTime);
-        recomputeTotalSpentTime();
-    }
-
-    private void recomputeTotalSpentTime() {
-        this.totalSpentTimeInMinutes = this.spentTimes.stream().mapToInt(SpentTime::getMinutes).sum();
+    private fun recomputeTotalSpentTime() {
+        this.totalSpentTimeInMinutes = this.spentTimes.stream().mapToInt(SpentTime::minutes).sum()
     }
 }

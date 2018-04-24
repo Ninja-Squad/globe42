@@ -1,10 +1,10 @@
-package org.globe42.domain;
+package org.globe42.domain
 
 /**
  * A housing type
  * @author JB Nizet
  */
-public enum Housing {
+enum class Housing {
     UNKNOWN,
     F0,
     F1,
