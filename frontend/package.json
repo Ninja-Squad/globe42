@@ -24,7 +24,7 @@
     "@angular/router": "5.2.10",
     "@ng-bootstrap/ng-bootstrap": "1.1.2",
     "@types/chart.js": "2.7.14",
-    "@types/luxon": "0.5.1",
+    "@types/luxon": "0.5.2",
     "bootstrap": "4.1.0",
     "chart.js": "2.7.2",
     "core-js": "2.5.5",
