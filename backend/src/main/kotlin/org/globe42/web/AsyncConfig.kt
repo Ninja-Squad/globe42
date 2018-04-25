@@ -12,11 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 class AsyncConfig : WebMvcConfigurer {
     override fun configureAsyncSupport(configurer: AsyncSupportConfigurer) {
-        val taskExecutor = ThreadPoolTaskExecutor()
-        taskExecutor.corePoolSize = 1
-        taskExecutor.maxPoolSize = 30
-        taskExecutor.setThreadNamePrefix("GlobeWebAsync")
-        taskExecutor.initialize()
-        configurer.setTaskExecutor(taskExecutor)
+        configurer.setTaskExecutor(ThreadPoolTaskExecutor().apply {
+            corePoolSize = 1
+            maxPoolSize = 30
+            setThreadNamePrefix("GlobeWebAsync")
+            initialize()
+        })
     }
 }
