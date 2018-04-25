@@ -56,20 +56,11 @@ class PostalCityDaoImpl : PostalCityDaoCustom {
         result = Normalizer.normalize(result, Normalizer.Form.NFD).replace("[^\\p{ASCII}]".toRegex(), "")
 
         // strip in parts to make sure there is a single space between parts
-        val split = result.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val parts = ArrayList<String>()
-        for (part in split) {
-            val trimmedPart = part.trim { it <= ' ' }
-            if (!trimmedPart.isEmpty()) {
-                // replace SAINT by ST, since that's what the daaset uses
-                if (trimmedPart == "SAINT") {
-                    parts.add("ST")
-                } else {
-                    parts.add(trimmedPart)
-                }
-            }
-        }
-        result = parts.joinToString(" ")
+        result = result.split(' ')
+            .stream()
+            .filter { !it.isBlank() }
+            .map { if (it == "SAINT") "ST" else it }
+            .collect(Collectors.joining(" "))
         return result
     }
 }

@@ -30,7 +30,7 @@ class StorageService(private val storage: Storage) {
         val prefix = directory.endingWithSlash()
         val page = storage.list(
             PERSON_FILES_BUCKET,
-            Storage.BlobListOption.pageSize(10000),
+            Storage.BlobListOption.pageSize(10_000),
             Storage.BlobListOption.currentDirectory(),
             Storage.BlobListOption.prefix(prefix)
         )
