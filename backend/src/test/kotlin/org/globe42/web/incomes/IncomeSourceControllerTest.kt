@@ -58,8 +58,8 @@ class IncomeSourceControllerTest : BaseTest() {
         val (id, name, type, maxMonthlyAmount) = result[0]
         assertThat(id).isEqualTo(incomeSource.id)
         assertThat(name).isEqualTo(incomeSource.name)
-        assertThat(type.id).isEqualTo(incomeSource.type!!.id)
-        assertThat(type.type).isEqualTo(incomeSource.type!!.type)
+        assertThat(type.id).isEqualTo(incomeSource.type.id)
+        assertThat(type.type).isEqualTo(incomeSource.type.type)
         assertThat(maxMonthlyAmount).isEqualTo(incomeSource.maxMonthlyAmount)
         assertThat(id).isEqualTo(incomeSource.id)
     }
@@ -168,7 +168,7 @@ class IncomeSourceControllerTest : BaseTest() {
 
     private fun assertIncomeSourceEqualsCommand(source: IncomeSource, command: IncomeSourceCommandDTO) {
         assertThat(source.name).isEqualTo(command.name)
-        assertThat(source.type!!.id).isEqualTo(command.typeId)
+        assertThat(source.type.id).isEqualTo(command.typeId)
         assertThat(source.maxMonthlyAmount).isEqualTo(command.maxMonthlyAmount)
     }
 }

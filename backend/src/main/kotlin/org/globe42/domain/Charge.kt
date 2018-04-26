@@ -23,20 +23,20 @@ class Charge {
      */
     @ManyToOne
     @NotNull
-    var person: Person? = null
+    lateinit var person: Person
 
     /**
      * The type of the charge
      */
     @ManyToOne
     @NotNull
-    var type: ChargeType? = null
+    lateinit var type: ChargeType
 
     /**
      * The monthly amount of the charge
      */
     @NotNull
-    var monthlyAmount: BigDecimal? = null
+    lateinit var monthlyAmount: BigDecimal
 
     constructor()
 

@@ -58,8 +58,8 @@ class ChargeTypeControllerTest : BaseTest() {
         val (id, name, category, maxMonthlyAmount) = result[0]
         assertThat(id).isEqualTo(chargeType.id)
         assertThat(name).isEqualTo(chargeType.name)
-        assertThat(category.id).isEqualTo(chargeType.category!!.id)
-        assertThat(category.name).isEqualTo(chargeType.category!!.name)
+        assertThat(category.id).isEqualTo(chargeType.category.id)
+        assertThat(category.name).isEqualTo(chargeType.category.name)
         assertThat(maxMonthlyAmount).isEqualTo(chargeType.maxMonthlyAmount)
         assertThat(id).isEqualTo(chargeType.id)
     }
@@ -172,7 +172,7 @@ class ChargeTypeControllerTest : BaseTest() {
 
     private fun assertChargeTypeEqualsCommand(source: ChargeType, command: ChargeTypeCommandDTO) {
         assertThat(source.name).isEqualTo(command.name)
-        assertThat(source.category!!.id!!).isEqualTo(command.categoryId)
+        assertThat(source.category.id!!).isEqualTo(command.categoryId)
         assertThat(source.maxMonthlyAmount).isEqualTo(command.maxMonthlyAmount)
     }
 }

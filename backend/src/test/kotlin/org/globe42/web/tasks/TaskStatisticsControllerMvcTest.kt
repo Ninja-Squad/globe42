@@ -47,8 +47,8 @@ class TaskStatisticsControllerMvcTest {
                 .param("to", criteria.to.toString())
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.statistics[0].user.login").value(user.login!!))
-            .andExpect(jsonPath("$.statistics[0].category.name").value(meal.name!!))
+            .andExpect(jsonPath("$.statistics[0].user.login").value(user.login))
+            .andExpect(jsonPath("$.statistics[0].category.name").value(meal.name))
             .andExpect(jsonPath("$.statistics[0].minutes").value(100))
     }
 }

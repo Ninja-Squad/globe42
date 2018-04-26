@@ -18,8 +18,8 @@ data class ChargeTypeDTO(
 
     constructor(chargeType: ChargeType) : this(
         chargeType.id!!,
-        chargeType.name!!,
-        ChargeCategoryDTO(chargeType.category!!),
+        chargeType.name,
+        ChargeCategoryDTO(chargeType.category),
         chargeType.maxMonthlyAmount
     )
 }

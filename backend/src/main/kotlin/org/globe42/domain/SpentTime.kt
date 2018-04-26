@@ -37,14 +37,14 @@ class SpentTime {
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    var task: Task? = null
+    lateinit var task: Task
 
     /**
      * The user which recorded this time spent on the task (another person might have spent the actual time).
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    var creator: User? = null
+    lateinit var creator: User
 
     /**
      * The time when this spent time was created (might be later than the actual instant when the time was actually

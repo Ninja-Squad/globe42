@@ -59,8 +59,8 @@ class ChargeControllerMvcTest {
         mvc.perform(get("/api/persons/{personId}/charges", person.id))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].id").value(charge.id!!))
-            .andExpect(jsonPath("$[0].monthlyAmount").value(charge.monthlyAmount!!.toDouble()))
-            .andExpect(jsonPath("$[0].type.id").value(charge.type!!.id!!.toInt()))
+            .andExpect(jsonPath("$[0].monthlyAmount").value(charge.monthlyAmount.toDouble()))
+            .andExpect(jsonPath("$[0].type.id").value(charge.type.id!!.toInt()))
     }
 
     @Test

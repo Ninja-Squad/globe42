@@ -16,8 +16,8 @@ data class PersonIdentityDTO(
 
     constructor(person: Person) : this(
         person.id!!,
-        person.firstName!!,
-        person.lastName!!,
+        person.firstName,
+        person.lastName,
         person.nickName,
         // we hide the mediation code if mediation is disabled
         if (person.mediationEnabled) person.mediationCode else null

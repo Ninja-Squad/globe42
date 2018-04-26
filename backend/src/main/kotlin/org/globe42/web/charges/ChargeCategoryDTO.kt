@@ -10,5 +10,5 @@ import org.globe42.domain.IncomeSourceType
  * @author JB Nizet
  */
 data class ChargeCategoryDTO(val id: Long, val name: String) {
-    constructor(category: ChargeCategory) : this(category.id!!, category.name!!)
+    constructor(category: ChargeCategory) : this(category.id!!, category.name)
 }

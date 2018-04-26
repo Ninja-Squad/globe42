@@ -53,7 +53,7 @@ class ChargeControllerTest : BaseTest() {
 
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(charge.id)
-        assertThat(result[0].type.id).isEqualTo(charge.type!!.id)
+        assertThat(result[0].type.id).isEqualTo(charge.type.id)
         assertThat(result[0].monthlyAmount).isEqualTo(charge.monthlyAmount)
     }
 

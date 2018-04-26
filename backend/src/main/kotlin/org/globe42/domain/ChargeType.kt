@@ -29,14 +29,14 @@ class ChargeType {
      * The name of the charge type (mortgage, electricity, gas, etc.)
      */
     @NotEmpty
-    var name: String? = null
+    lateinit var name: String
 
     /**
      * The type of the income source
      */
     @ManyToOne
     @NotNull
-    var category: ChargeCategory? = null
+    lateinit var category: ChargeCategory
 
     /**
      * The maximum monthly amount (in euros) that the charge can reach. Null if no known maximum.

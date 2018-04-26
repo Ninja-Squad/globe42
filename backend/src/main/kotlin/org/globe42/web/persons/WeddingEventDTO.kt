@@ -16,7 +16,7 @@ data class WeddingEventDTO(
 
     constructor(event: WeddingEvent) : this(
         event.id!!,
-        event.date!!,
-        event.type!!
+        event.date,
+        event.type
     )
 }

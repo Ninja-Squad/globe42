@@ -18,8 +18,8 @@ data class IncomeSourceDTO(
 
     constructor(incomeSource: IncomeSource) : this(
         incomeSource.id!!,
-        incomeSource.name!!,
-        IncomeSourceTypeDTO(incomeSource.type!!),
+        incomeSource.name,
+        IncomeSourceTypeDTO(incomeSource.type),
         incomeSource.maxMonthlyAmount
     )
 }

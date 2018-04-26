@@ -18,7 +18,7 @@ data class SpentTimeDTO(
     constructor(spentTime: SpentTime) : this(
         spentTime.id!!,
         spentTime.minutes,
-        UserDTO(spentTime.creator!!),
+        UserDTO(spentTime.creator),
         spentTime.creationInstant
     )
 }

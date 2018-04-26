@@ -25,17 +25,17 @@ class Task {
      * The description of the task, which is free text describing what to do.
      */
     @NotEmpty
-    var description: String? = null
+    lateinit var description: String
 
     /**
      * A one-line title shortly describing the task, which appears in the to-do list.
      */
     @NotEmpty
-    var title: String? = null
+    lateinit var title: String
 
     @NotNull
     @ManyToOne
-    var category: TaskCategory? = null
+    lateinit var category: TaskCategory
 
     /**
      * The status of the task. [TaskStatus.TODO] by default
@@ -54,7 +54,7 @@ class Task {
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    var creator: User? = null
+    lateinit var creator: User
 
     /**
      * The user that is assigned to the task.

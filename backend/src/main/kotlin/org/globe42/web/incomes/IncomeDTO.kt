@@ -13,5 +13,5 @@ data class IncomeDTO(
     val monthlyAmount: BigDecimal
 ) {
 
-    constructor(income: Income) : this(income.id!!, IncomeSourceDTO(income.source!!), income.monthlyAmount!!)
+    constructor(income: Income) : this(income.id!!, IncomeSourceDTO(income.source), income.monthlyAmount)
 }

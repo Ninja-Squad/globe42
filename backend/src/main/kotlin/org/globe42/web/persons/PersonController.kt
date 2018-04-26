@@ -144,7 +144,7 @@ class PersonController(
     }
 
     private fun mediationCodeLetter(person: Person): Char {
-        val letter = Character.toUpperCase(person.lastName!![0])
+        val letter = Character.toUpperCase(person.lastName[0])
         return if (letter < 'A' || letter > 'Z') 'Z' else letter
     }
 

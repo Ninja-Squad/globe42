@@ -13,5 +13,5 @@ data class AuthenticatedUserDTO(
     val token: String
 ) {
 
-    constructor(user: User, token: String) : this(user.id!!, user.login!!, user.admin, token)
+    constructor(user: User, token: String) : this(user.id!!, user.login, user.admin, token)
 }

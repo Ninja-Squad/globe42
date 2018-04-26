@@ -8,7 +8,6 @@ import org.globe42.web.security.CurrentUser
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import java.time.Instant
 import java.util.*
 import java.util.stream.Collectors
 import javax.transaction.Transactional
@@ -42,7 +41,6 @@ class PersonNoteController(
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
 
         val note = Note()
-        note.creationInstant = Instant.now()
         note.creator = userDao.getOne(currentUser.userId!!)
         note.text = command.text
         person.addNote(note)

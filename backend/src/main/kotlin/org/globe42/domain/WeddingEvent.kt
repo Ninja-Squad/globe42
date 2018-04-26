@@ -27,14 +27,14 @@ class WeddingEvent {
     @Column(name = "event_date")
     @NotNull
     @Past
-    var date: LocalDate? = null
+    lateinit var date: LocalDate
 
     @NotNull
-    var type: WeddingEventType? = null
+    lateinit var type: WeddingEventType
 
     @ManyToOne
     @NotNull
-    var person: Person? = null
+    lateinit var person: Person
 
     constructor()
 
