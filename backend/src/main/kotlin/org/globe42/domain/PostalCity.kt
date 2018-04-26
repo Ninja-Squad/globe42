@@ -27,13 +27,13 @@ class PostalCity {
     var id: Long? = null
 
     @NotEmpty
-    var postalCode: String? = null
+    lateinit var postalCode: String
 
     /**
      * The city, which is supposed to be in uppercase
      */
     @NotEmpty
-    var city: String? = null
+    lateinit var city: String
 
     constructor()
 

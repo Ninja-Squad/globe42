@@ -9,5 +9,5 @@ import java.math.BigDecimal
  */
 data class ChargeDTO(val id: Long, val type: ChargeTypeDTO, val monthlyAmount: BigDecimal?) {
 
-    constructor(charge: Charge) : this(charge.id!!, ChargeTypeDTO(charge.type!!), charge.monthlyAmount)
+    constructor(charge: Charge) : this(charge.id!!, ChargeTypeDTO(charge.type), charge.monthlyAmount)
 }

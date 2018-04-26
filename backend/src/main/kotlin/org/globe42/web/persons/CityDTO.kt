@@ -13,5 +13,5 @@ data class CityDTO(
     val city: String
 ) {
     constructor(city: City) : this(city.code, city.city)
-    constructor(city: PostalCity) : this(city.postalCode!!, city.city!!)
+    constructor(city: PostalCity) : this(city.postalCode, city.city)
 }

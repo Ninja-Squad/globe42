@@ -52,7 +52,7 @@ data class PersonDTO(
         email = person.email,
         adherent = person.adherent,
         entryDate = person.entryDate,
-        gender = person.gender!!,
+        gender = person.gender,
         phoneNumber = person.phoneNumber,
         mediationEnabled = person.mediationEnabled,
         firstMediationAppointmentDate = person.firstMediationAppointmentDate,

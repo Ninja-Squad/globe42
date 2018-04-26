@@ -20,16 +20,17 @@ class Note {
     var id: Long? = null
 
     @NotEmpty
-    var text: String? = null
+    lateinit var text: String
 
     /**
-     * The user who created the task.
+     * The user who created the note.
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    var creator: User? = null
+    lateinit var creator: User
 
-    var creationInstant: Instant? = null
+    @NotNull
+    var creationInstant = Instant.now()
 
     constructor()
 

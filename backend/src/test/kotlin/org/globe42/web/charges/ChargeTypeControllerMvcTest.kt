@@ -56,9 +56,9 @@ class ChargeTypeControllerMvcTest {
         mvc.perform(get("/api/charge-types"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].id").value(42))
-            .andExpect(jsonPath("$[0].name").value(chargeType.name!!))
-            .andExpect(jsonPath("$[0].category.id").value(chargeType.category!!.id!!))
-            .andExpect(jsonPath("$[0].category.name").value(chargeType.category!!.name!!))
+            .andExpect(jsonPath("$[0].name").value(chargeType.name))
+            .andExpect(jsonPath("$[0].category.id").value(chargeType.category.id!!))
+            .andExpect(jsonPath("$[0].category.name").value(chargeType.category.name))
             .andExpect(jsonPath("$[0].maxMonthlyAmount").value(chargeType.maxMonthlyAmount!!.toDouble()))
     }
 
@@ -75,7 +75,7 @@ class ChargeTypeControllerMvcTest {
     fun `should create`() {
         val command = createCommand()
         whenever(mockChargeTypeDao.save(any<ChargeType>())).thenReturn(chargeType)
-        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.of(chargeType.category!!))
+        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.of(chargeType.category))
 
         mvc.perform(
             post("/api/charge-types")
@@ -91,7 +91,7 @@ class ChargeTypeControllerMvcTest {
         val command = createCommand()
 
         whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
-        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.of(chargeType.category!!))
+        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.of(chargeType.category))
 
         mvc.perform(
             put("/api/charge-types/{sourceId}", chargeType.id)

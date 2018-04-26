@@ -57,7 +57,7 @@ class IncomeController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable("personId") personId: Long, @PathVariable("incomeId") incomeId: Long) {
         incomeDao.findById(incomeId).ifPresent { income ->
-            if (income.person!!.id != personId) {
+            if (income.person.id != personId) {
                 throw NotFoundException("Income with ID $incomeId does not belong to person $personId")
             }
             incomeDao.delete(income)

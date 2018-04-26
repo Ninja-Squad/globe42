@@ -60,8 +60,8 @@ class IncomeControllerMvcTest {
         mvc.perform(get("/api/persons/{personId}/incomes", person.id))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].id").value(income.id!!.toInt()))
-            .andExpect(jsonPath("$[0].monthlyAmount").value(income.monthlyAmount!!.toDouble()))
-            .andExpect(jsonPath("$[0].source.id").value(income.source!!.id!!.toInt()))
+            .andExpect(jsonPath("$[0].monthlyAmount").value(income.monthlyAmount.toDouble()))
+            .andExpect(jsonPath("$[0].source.id").value(income.source.id!!.toInt()))
     }
 
     @Test

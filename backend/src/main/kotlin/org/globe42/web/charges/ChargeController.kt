@@ -57,7 +57,7 @@ class ChargeController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable("personId") personId: Long, @PathVariable("chargeId") chargeId: Long) {
         chargeDao.findById(chargeId).ifPresent { charge ->
-            if (charge.person!!.id != personId) {
+            if (charge.person.id != personId) {
                 throw NotFoundException("Charge with ID $chargeId does not belong to person $personId")
             }
             chargeDao.delete(charge)

@@ -17,8 +17,8 @@ data class NoteDTO(
 
     constructor(note: Note) : this(
         note.id!!,
-        note.text!!,
-        UserDTO(note.creator!!),
-        note.creationInstant!!
+        note.text,
+        UserDTO(note.creator),
+        note.creationInstant
     )
 }

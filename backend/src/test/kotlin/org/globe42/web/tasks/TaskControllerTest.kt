@@ -87,10 +87,10 @@ class TaskControllerTest : BaseTest() {
         assertThat(dto.status).isEqualTo(task1.status)
         assertThat(dto.description).isEqualTo(task1.description)
         assertThat(dto.title).isEqualTo(task1.title)
-        assertThat(dto.category.id).isEqualTo(task1.category!!.id)
-        assertThat(dto.category.name).isEqualTo(task1.category!!.name)
+        assertThat(dto.category.id).isEqualTo(task1.category.id)
+        assertThat(dto.category.name).isEqualTo(task1.category.name)
         assertThat(dto.dueDate).isEqualTo(task1.dueDate)
-        assertThat(dto.creator.id).isEqualTo(task1.creator!!.id)
+        assertThat(dto.creator.id).isEqualTo(task1.creator.id)
         assertThat(dto.assignee!!.id).isEqualTo(task1.assignee!!.id)
         assertThat(dto.concernedPerson!!.id).isEqualTo(task1.concernedPerson!!.id)
     }
@@ -308,7 +308,7 @@ class TaskControllerTest : BaseTest() {
 
         assertThat(task1.title).isEqualTo(command.title)
         assertThat(task1.description).isEqualTo(command.description)
-        assertThat(task1.category!!.id).isEqualTo(command.categoryId)
+        assertThat(task1.category.id).isEqualTo(command.categoryId)
         assertThat(task1.dueDate).isEqualTo(command.dueDate)
         assertThat(task1.concernedPerson!!.id).isEqualTo(person.id!!)
         assertThat(task1.assignee!!.id).isEqualTo(user.id!!)
@@ -388,7 +388,7 @@ internal fun createCommand(concernedPersonId: Long?, assigneeId: Long?): TaskCom
     )
 }
 
-internal fun createSpentTime(id: Long, minutes: Int, creator: User?): SpentTime {
+internal fun createSpentTime(id: Long, minutes: Int, creator: User): SpentTime {
     val spentTime = SpentTime(id)
     spentTime.minutes = minutes
     spentTime.creator = creator

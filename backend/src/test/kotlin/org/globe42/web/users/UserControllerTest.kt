@@ -167,7 +167,7 @@ class UserControllerTest : BaseTest() {
     @Test
     fun `should not throw when updating with same login`() {
         val user = createUser(userId)
-        val command = UserCommandDTO(user.login!!, false)
+        val command = UserCommandDTO(user.login, false)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
 
         whenever(mockUserDao.findNotDeletedByLogin(command.login)).thenReturn(Optional.of(user))

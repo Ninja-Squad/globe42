@@ -13,7 +13,7 @@ import org.springframework.web.context.WebApplicationContext
 @Component
 class CurrentUser {
     /**
-     * Sets the current user ID. Intentionally only visible to classes in the same package
+     * Gets/Sets the current user ID. Setter intentionally only visible to classes in the same package.
      */
     var userId: Long? = null
         internal set

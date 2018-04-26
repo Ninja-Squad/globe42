@@ -25,12 +25,12 @@ data class TaskDTO(
 
     constructor(task: Task) : this(
         task.id!!,
-        task.description!!,
-        task.title!!,
-        TaskCategoryDTO(task.category!!),
+        task.description,
+        task.title,
+        TaskCategoryDTO(task.category),
         task.status,
         task.dueDate,
-        UserDTO(task.creator!!),
+        UserDTO(task.creator),
         task.assignee?.let { UserDTO(it) },
         task.concernedPerson?.let { PersonIdentityDTO(it) },
         task.totalSpentTimeInMinutes

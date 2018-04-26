@@ -28,14 +28,14 @@ class IncomeSource {
      * The name of the source of income (APL, Agirc/Arrco, etc.)
      */
     @NotEmpty
-    var name: String? = null
+    lateinit var name: String
 
     /**
      * The type of the income source
      */
     @ManyToOne
     @NotNull
-    var type: IncomeSourceType? = null
+    lateinit var type: IncomeSourceType
 
     /**
      * The maximum monthly amount (in euros) that the income source can give as income. Null if no known maximum.

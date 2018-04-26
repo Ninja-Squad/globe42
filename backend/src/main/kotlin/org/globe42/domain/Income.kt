@@ -28,20 +28,20 @@ class Income {
      */
     @ManyToOne
     @NotNull
-    var person: Person? = null
+    lateinit var person: Person
 
     /**
      * The source of the income
      */
     @ManyToOne
     @NotNull
-    var source: IncomeSource? = null
+    lateinit var source: IncomeSource
 
     /**
      * The monthly amount of the income
      */
     @NotNull
-    var monthlyAmount: BigDecimal? = null
+    lateinit var monthlyAmount: BigDecimal
 
     constructor()
 

@@ -53,7 +53,7 @@ class UserControllerMvcTest {
         mvc.perform(get("/api/users/me"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value(user.id!!))
-            .andExpect(jsonPath("$.login").value(user.login!!))
+            .andExpect(jsonPath("$.login").value(user.login))
             .andExpect(jsonPath("$.password").doesNotExist())
     }
 
@@ -63,6 +63,7 @@ class UserControllerMvcTest {
         val user = createUser(userId)
         whenever(mockCurrentUser.userId).thenReturn(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockPasswordDigester.hash("newPassword")).thenReturn("hashedNewPassword")
 
         val command = ChangePasswordCommandDTO("newPassword")
 
@@ -82,7 +83,7 @@ class UserControllerMvcTest {
         mvc.perform(get("/api/users"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].id").value(user.id!!))
-            .andExpect(jsonPath("$[0].login").value(user.login!!))
+            .andExpect(jsonPath("$[0].login").value(user.login))
             .andExpect(jsonPath("$[0].password").doesNotExist())
     }
 
@@ -142,7 +143,7 @@ class UserControllerMvcTest {
 
         mvc.perform(post("/api/users/{userId}/password-resets", user.id))
             .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.login").value(user.login!!))
+            .andExpect(jsonPath("$.login").value(user.login))
             .andExpect(jsonPath("$.generatedPassword").value("password"))
     }
 }

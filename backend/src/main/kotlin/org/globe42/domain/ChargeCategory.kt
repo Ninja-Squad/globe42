@@ -32,7 +32,7 @@ class ChargeCategory {
      * The name of the category, as displayed in the application
      */
     @NotEmpty
-    var name: String? = null
+    lateinit var name: String
 
     constructor()
 

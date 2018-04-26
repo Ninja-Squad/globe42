@@ -9,16 +9,24 @@ import javax.persistence.Id
  * @author JB Nizet
  */
 @Entity
-class Country(
-
+class Country {
     /**
      * The ISO code of the country
      */
     @Id
-    var id: String,
+    lateinit var id: String
+        private set
 
     /**
      * The French name of the country
      */
-    var name: String
-)
+    lateinit var name: String
+        private set
+
+    constructor()
+
+    constructor(id: String, name: String) {
+        this.id = id
+        this.name = name
+    }
+}

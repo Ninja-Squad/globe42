@@ -75,7 +75,7 @@ class PersonNoteControllerTest : BaseTest() {
         assertThat(id).isEqualTo(note2.id) // sorted chronologically
         assertThat(creationInstant).isEqualTo(note2.creationInstant)
         assertThat(text).isEqualTo(note2.text) // sorted chronologically
-        assertThat(creator.id).isEqualTo(note2.creator!!.id) // sorted chronologically
+        assertThat(creator.id).isEqualTo(note2.creator.id) // sorted chronologically
 
         assertThat(result[1].creator.id).isEqualTo(creator.id)
     }

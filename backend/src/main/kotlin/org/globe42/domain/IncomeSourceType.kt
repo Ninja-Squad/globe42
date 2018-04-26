@@ -30,7 +30,7 @@ class IncomeSourceType {
      * The type, as displayed in the application
      */
     @NotEmpty
-    var type: String? = null
+    lateinit var type: String
 
     constructor()
 

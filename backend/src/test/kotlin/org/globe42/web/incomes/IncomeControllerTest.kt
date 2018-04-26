@@ -53,7 +53,7 @@ class IncomeControllerTest : BaseTest() {
 
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(income.id)
-        assertThat(result[0].source.id).isEqualTo(income.source!!.id)
+        assertThat(result[0].source.id).isEqualTo(income.source.id)
         assertThat(result[0].monthlyAmount).isEqualTo(income.monthlyAmount)
     }
 

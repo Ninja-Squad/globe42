@@ -57,9 +57,9 @@ class IncomeSourceControllerMvcTest {
         mvc.perform(get("/api/income-sources"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].id").value(42))
-            .andExpect(jsonPath("$[0].name").value(incomeSource.name!!))
-            .andExpect(jsonPath("$[0].type.id").value(incomeSource.type!!.id!!))
-            .andExpect(jsonPath("$[0].type.type").value(incomeSource.type!!.type!!))
+            .andExpect(jsonPath("$[0].name").value(incomeSource.name))
+            .andExpect(jsonPath("$[0].type.id").value(incomeSource.type.id!!))
+            .andExpect(jsonPath("$[0].type.type").value(incomeSource.type.type))
             .andExpect(jsonPath("$[0].maxMonthlyAmount").value(incomeSource.maxMonthlyAmount!!.toDouble()))
     }
 
@@ -78,7 +78,7 @@ class IncomeSourceControllerMvcTest {
     fun `should create`() {
         val command = createIncomeSourceCommand()
         whenever(mockIncomeSourceDao.save(any<IncomeSource>())).thenReturn(incomeSource)
-        whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type!!))
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type))
 
         mvc.perform(
             post("/api/income-sources")
@@ -95,7 +95,7 @@ class IncomeSourceControllerMvcTest {
         val command = createIncomeSourceCommand()
 
         whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
-        whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type!!))
+        whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type))
 
         mvc.perform(
             put("/api/income-sources/{sourceId}", incomeSource.id)

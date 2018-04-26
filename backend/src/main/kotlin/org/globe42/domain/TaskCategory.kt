@@ -26,7 +26,7 @@ class TaskCategory {
     var id: Long? = null
 
     @NotEmpty
-    var name: String? = null
+    lateinit var name: String
 
     constructor(id: Long, name: String) {
         this.id = id

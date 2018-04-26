@@ -31,13 +31,13 @@ class Person {
      * The first name, requested to all persons, and mandatory
      */
     @NotEmpty
-    var firstName: String? = null
+    lateinit var firstName: String
 
     /**
      * The last name, requested to all persons, and mandatory
      */
     @NotEmpty
-    var lastName: String? = null
+    lateinit var lastName: String
 
     /**
      * The birth name, requested to all persons, but not mandatory.
@@ -55,7 +55,7 @@ class Person {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    var gender: Gender? = null
+    lateinit var gender: Gender
 
     /**
      * The birth date, requested to all persons, but not mandatory
@@ -291,7 +291,6 @@ class Person {
     }
 
     fun removeIncome(income: Income) {
-        income.person = null
         this.incomes.remove(income)
     }
 
@@ -305,7 +304,6 @@ class Person {
     }
 
     fun removeCharge(charge: Charge) {
-        charge.person = null
         this.charges.remove(charge)
     }
 

@@ -15,6 +15,6 @@ data class IncomeSourceTypeDTO(
 
     constructor(incomeSourceType: IncomeSourceType) : this(
         incomeSourceType.id!!,
-        incomeSourceType.type!!
+        incomeSourceType.type
     )
 }

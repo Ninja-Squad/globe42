@@ -19,13 +19,13 @@ class User {
     var id: Long? = null
 
     @NotEmpty
-    var login: String? = null
+    lateinit var login: String
 
     /**
      * The salted and hashed password, base64-encoded
      */
     @NotEmpty
-    var password: String? = null
+    lateinit var password: String
 
     /**
      * Indicates that the user is an administrator. An administrator can manage other users, and access information
