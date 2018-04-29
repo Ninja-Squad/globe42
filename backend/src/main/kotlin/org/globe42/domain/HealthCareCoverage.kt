@@ -7,9 +7,9 @@ package org.globe42.domain
 enum class HealthCareCoverage {
     UNKNOWN,
     GENERAL,
-    MSA,
-    RSI,
+    PUMA,
+    AGR,
     AME,
-    CMU,
-    SPECIAL
+    SSI,
+    OTHER
 }

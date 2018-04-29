@@ -430,7 +430,7 @@ class PersonControllerTest : BaseTest() {
                 fiscalStatusUpToDate = true,
                 healthCareCoverage = HealthCareCoverage.GENERAL,
                 healthCareCoverageStartDate = LocalDate.of(2016, 1, 1),
-                healthInsurance = "AXA",
+                healthInsurance = HealthInsurance.MUTUELLE,
                 healthInsuranceStartDate = LocalDate.of(2017, 1, 1),
                 accompanying = "Nadia DURAND",
                 socialSecurityNumber = "277126912340454",

@@ -31,7 +31,7 @@ data class PersonDTO(
     val fiscalStatusUpToDate: Boolean,
     val healthCareCoverage: HealthCareCoverage,
     val healthCareCoverageStartDate: LocalDate?,
-    val healthInsurance: String?,
+    val healthInsurance: HealthInsurance,
     val healthInsuranceStartDate: LocalDate?,
     val accompanying: String?,
     val socialSecurityNumber: String?,

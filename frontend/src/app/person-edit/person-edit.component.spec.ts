@@ -17,6 +17,7 @@ import { SearchCityService } from '../search-city.service';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
+import { DisplayHealthInsurancePipe } from '../display-health-insurance.pipe';
 import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
 import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
@@ -74,6 +75,7 @@ describe('PersonEditComponent', () => {
       DisplayHousingPipe,
       DisplayFiscalStatusPipe,
       DisplayHealthCareCoveragePipe,
+      DisplayHealthInsurancePipe,
       FamilySituationEditComponent,
       FullnamePipe
     ],
@@ -119,7 +121,7 @@ describe('PersonEditComponent', () => {
       fiscalNumber: '0123456789012',
       healthCareCoverage: 'AME',
       healthCareCoverageStartDate: '2017-01-01',
-      healthInsurance: 'AXA',
+      healthInsurance: 'MUTUELLE',
       healthInsuranceStartDate: '2017-02-02',
       accompanying: 'Paul',
       socialSecurityNumber: '234765498056734',
@@ -217,8 +219,8 @@ describe('PersonEditComponent', () => {
       expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe(person.healthCareCoverage);
       const healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
       expect(healthCareCoverageStartDate.value).toBe('01/01/2017');
-      const healthInsurance = nativeElement.querySelector('#healthInsurance');
-      expect(healthInsurance.value).toBe(person.healthInsurance);
+      const healthInsurance: HTMLSelectElement = nativeElement.querySelector('#healthInsurance');
+      expect(healthInsurance.options[healthInsurance.selectedIndex].value).toBe(person.healthInsurance);
       const healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
       expect(healthInsuranceStartDate.value).toBe('02/02/2017');
       const accompanying = nativeElement.querySelector('#accompanying');
@@ -530,8 +532,8 @@ describe('PersonEditComponent', () => {
       expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe('UNKNOWN');
       let healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
       expect(healthCareCoverageStartDate).toBeFalsy();
-      const healthInsurance = nativeElement.querySelector('#healthInsurance');
-      expect(healthInsurance.value).toBe('');
+      const healthInsurance: HTMLSelectElement = nativeElement.querySelector('#healthInsurance');
+      expect(healthInsurance.options[healthInsurance.selectedIndex].value).toBe('UNKNOWN');
       let healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
       expect(healthInsuranceStartDate).toBeFalsy();
       const nationality = nativeElement.querySelector('#nationality');
@@ -635,8 +637,8 @@ describe('PersonEditComponent', () => {
       healthCareCoverageStartDate.value = '01/01/2017';
       healthCareCoverageStartDate.dispatchEvent(new Event('change'));
 
-      healthInsurance.value = 'AXA';
-      healthInsurance.dispatchEvent(new Event('input'));
+      healthInsurance.selectedIndex = 1;
+      healthInsurance.dispatchEvent(new Event('change'));
       fixture.detectChanges();
       tick();
       healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
@@ -693,7 +695,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.fiscalStatusUpToDate).toBe(true);
       expect(createdPerson.healthCareCoverage).toBe('GENERAL');
       expect(createdPerson.healthCareCoverageStartDate).toBe('2017-01-01');
-      expect(createdPerson.healthInsurance).toBe('AXA');
+      expect(createdPerson.healthInsurance).toBe('CMUC');
       expect(createdPerson.healthInsuranceStartDate).toBe('2017-02-02');
       expect((createdPerson as any).nationality).not.toBeDefined();
       expect(createdPerson.nationalityId).toBe('BEL');

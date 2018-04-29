@@ -9,6 +9,7 @@ import { DisplayMaritalStatusPipe } from '../display-marital-status.pipe';
 import { DisplayCityPipe } from '../display-city.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
+import { DisplayHealthInsurancePipe } from '../display-health-insurance.pipe';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -58,7 +59,7 @@ describe('PersonComponent', () => {
     fiscalStatusUpToDate: true,
     healthCareCoverage: 'AME',
     healthCareCoverageStartDate: '2017-01-01',
-    healthInsurance: 'AXA',
+    healthInsurance: 'CMUC',
     healthInsuranceStartDate: '2017-02-02',
     accompanying: 'Paul',
     socialSecurityNumber: '277126912340454',
@@ -88,6 +89,7 @@ describe('PersonComponent', () => {
       DisplayFiscalStatusPipe,
       DisplayHousingPipe,
       DisplayHealthCareCoveragePipe,
+      DisplayHealthInsurancePipe,
       FullnamePipe
     ],
     providers: [
@@ -144,7 +146,7 @@ describe('PersonComponent', () => {
     expect(healthCareCoverage.textContent).toContain('Aide médicale de l\'Etat');
     expect(healthCareCoverage.textContent).toContain('depuis le 1 janv. 2017');
     const healthInsurance = nativeElement.querySelector('#healthInsurance');
-    expect(healthInsurance.textContent).toContain('AXA');
+    expect(healthInsurance.textContent).toContain('CMU-C');
     expect(healthInsurance.textContent).toContain('depuis le 2 févr. 2017');
     const accompanying = nativeElement.querySelector('#accompanying');
     expect(accompanying.textContent).toContain('Paul');

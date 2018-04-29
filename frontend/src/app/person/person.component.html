@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-sm-6 col-form-label">Couverture médicale</label>
+        <label class="col-sm-6 col-form-label">Couverture médicale de base</label>
         <div class="col-sm-6">
           <p id="healthCareCoverage" class="form-control-plaintext">
             {{ person.healthCareCoverage | displayHealthCareCoverage }}
@@ -73,11 +73,11 @@
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-sm-6 col-form-label">Mutuelle</label>
+        <label class="col-sm-6 col-form-label">Couverture médicale complémentaire</label>
         <div class="col-sm-6">
           <p id="healthInsurance" class="form-control-plaintext">
-            {{ person.healthInsurance }}
-            <span *ngIf="person.healthInsurance && person.healthInsuranceStartDate">
+            {{ person.healthInsurance | displayHealthInsurance }}
+            <span *ngIf="person.healthInsurance !== 'UNKNOWN' && person.healthInsuranceStartDate">
               depuis le {{ person.healthInsuranceStartDate | date }}
             </span>
           </p>

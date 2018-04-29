@@ -207,9 +207,12 @@ class Person {
     var healthCareCoverageStartDate: LocalDate? = null
 
     /**
-     * The Health Insurance. Only requested to mediation-enabled persons, and not mandatory
+     * The Health Insurance.  Only requested to mediation-enabled persons, and unknown by default (so, technically
+     * mandatory, but can be left as unknown)
      */
-    var healthInsurance: String? = null
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    var healthInsurance = HealthInsurance.UNKNOWN
 
     /**
      * The date when the health care coverage has been established/started. Only requested to mediation-enabled persons,

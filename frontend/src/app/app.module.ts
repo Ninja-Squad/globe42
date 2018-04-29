@@ -52,6 +52,7 @@ import { PersonFamilySituationComponent } from './person-family-situation/person
 import { FamilySituationComponent } from './family-situation/family-situation.component';
 import { DisplayHousingPipe } from './display-housing.pipe';
 import { DisplayHealthCareCoveragePipe } from './display-health-care-coverage.pipe';
+import { DisplayHealthInsurancePipe } from './display-health-insurance.pipe';
 import { FamilySituationEditComponent } from './family-situation-edit/family-situation-edit.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 import { TasksComponent } from './tasks/tasks.component';
@@ -141,6 +142,7 @@ registerLocaleData(localeFr);
     FullnamePipe,
     DisplayFiscalStatusPipe,
     DisplayHealthCareCoveragePipe,
+    DisplayHealthInsurancePipe,
     PersonFamilySituationComponent,
     FamilySituationComponent,
     DisplayHousingPipe,

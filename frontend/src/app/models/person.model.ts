@@ -4,7 +4,8 @@ export type MaritalStatus = 'UNKNOWN' | 'MARRIED' |  'SINGLE' | 'CONCUBINAGE' | 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 export type FiscalStatus = 'UNKNOWN' | 'TAXABLE' | 'NOT_TAXABLE';
 export type Housing = 'UNKNOWN' | 'F0' | 'F1' | 'F2' | 'F3' | 'F4' | 'F5' | 'F6';
-export type HealthCareCoverage = 'UNKNOWN' | 'GENERAL' | 'MSA' | 'RSI' | 'AME' | 'CMU' | 'SPECIAL';
+export type HealthCareCoverage = 'UNKNOWN' | 'GENERAL' | 'PUMA' | 'AGR' | 'AME' | 'SSI' | 'OTHER';
+export type HealthInsurance = 'UNKNOWN' | 'CMUC' | 'AME' | 'ACS' | 'MUTUELLE';
 
 export interface PersonIdentityModel {
   id: number;
@@ -42,7 +43,7 @@ export interface PersonModel extends PersonIdentityModel {
   fiscalStatusUpToDate: boolean;
   healthCareCoverage: HealthCareCoverage;
   healthCareCoverageStartDate: string;
-  healthInsurance: string;
+  healthInsurance: HealthInsurance;
   healthInsuranceStartDate: string;
   accompanying: string;
   socialSecurityNumber: string;

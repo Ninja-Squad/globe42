@@ -10,6 +10,7 @@ import { PersonCommand } from '../models/person.command';
 import { HOUSING_TRANSLATIONS } from '../display-housing.pipe';
 import { FISCAL_STATUS_TRANSLATIONS } from '../display-fiscal-status.pipe';
 import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
+import { HEALTH_INSURANCE_TRANSLATIONS } from '../display-health-insurance.pipe';
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CityTypeahead } from './city-typeahead';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -34,6 +35,7 @@ export class PersonEditComponent {
   housings = HOUSING_TRANSLATIONS.map(t => t.key);
   fiscalStatuses = FISCAL_STATUS_TRANSLATIONS.map(t => t.key);
   healthCareCoverages = HEALTH_CARE_COVERAGE_TRANSLATIONS.map(t => t.key);
+  healthInsurances = HEALTH_INSURANCE_TRANSLATIONS.map(t => t.key);
 
   cityTypeahead: CityTypeahead;
   spouseTypeahead: PersonTypeahead;
@@ -83,7 +85,7 @@ export class PersonEditComponent {
       spouse: null,
       healthCareCoverage: 'UNKNOWN',
       healthCareCoverageStartDate: null,
-      healthInsurance: '',
+      healthInsurance: 'UNKNOWN',
       healthInsuranceStartDate: null,
       accompanying: '',
       socialSecurityNumber: '',

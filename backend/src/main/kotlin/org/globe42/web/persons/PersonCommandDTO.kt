@@ -36,7 +36,7 @@ class PersonCommandDTO(
     val fiscalStatusUpToDate: Boolean,
     @field:NotNull val healthCareCoverage: HealthCareCoverage = HealthCareCoverage.UNKNOWN,
     val healthCareCoverageStartDate: LocalDate?,
-    val healthInsurance: String?,
+    @field:NotNull val healthInsurance: HealthInsurance = HealthInsurance.UNKNOWN,
     val healthInsuranceStartDate: LocalDate?,
     val accompanying: String?,
     val socialSecurityNumber: String?,
