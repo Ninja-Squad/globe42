@@ -56,20 +56,72 @@
   <div class="col-sm"></div>
 </div>
 
-<hr/>
+<div *ngIf="charges.length || incomes.length">
+  <hr/>
 
-<div *ngIf="charges.length || incomes.length" class="row align-items-center mb-5" id="total">
-  <div class="col-sm"><strong>Reste à vivre</strong></div>
-  <div class="col-sm text-right"><strong>{{ totalMonthlyAmount() | currency:'EUR' }} / mois</strong></div>
-  <div class="col-sm"></div>
+  <div class="row align-items-center mb-5" id="total">
+    <div class="col-sm"><strong>Reste à vivre</strong></div>
+    <div class="col-sm text-right"><strong>{{ totalMonthlyAmount() | currency:'EUR' }} / mois</strong></div>
+    <div class="col-sm"></div>
+  </div>
 </div>
 
-<a [routerLink]="['/persons', person.id , 'incomes', 'create']" class="btn btn-outline-primary">
-  <span class="fa fa-plus"></span>
-  Ajouter un revenu
-</a>
+<h2 class="mt-5">Revenu par unité de consommation</h2>
 
-<a [routerLink]="['/persons', person.id , 'charges', 'create']" class="btn btn-outline-primary">
-  <span class="fa fa-plus"></span>
-  Ajouter une charge
-</a>
+<div *ngIf="!perUnitRevenueInformation" class="text-center" id="no-per-unit-revenue">
+  <span style="font-size: 60px;" class="fa fa-info-circle text-info"></span>
+  <br/>
+  <span class="lead">Information non renseignée&nbsp;!</span>
+</div>
+<div *ngIf="perUnitRevenueInformation">
+
+  <div class="row unit-item">
+    <div class="col-sm">Premier adulte du foyer</div>
+    <div class="col-sm text-right">{{ 1 | number:'.0-1' }} unité</div>
+    <div class="col-sm text-right"></div>
+  </div>
+  <div class="row unit-item">
+    <div class="col-sm">{{ perUnitRevenueInformation.adultLikeCount - 1 }} autre(s) adulte(s) ou équivalent</div>
+    <div class="col-sm text-right">{{ unitsForOtherAdultLike() | number:'.0-1' }} unité(s)</div>
+    <div class="col-sm"></div>
+  </div>
+  <div class="row unit-item">
+    <div class="col-sm">{{ perUnitRevenueInformation.childCount }} enfant(s) de moins de 14 ans</div>
+    <div class="col-sm text-right">{{ unitsForChildren() | number:'.0-1' }} unité(s)</div>
+    <div class="col-sm"></div>
+  </div>
+  <div class="row unit-item">
+    <div class="col-sm" *ngIf="perUnitRevenueInformation.monoParental">Foyer mono-parental</div>
+    <div class="col-sm" *ngIf="!perUnitRevenueInformation.monoParental">Foyer pluri-parental</div>
+    <div class="col-sm text-right">{{ unitsForMonoParental() | number:'.0-1' }} unité</div>
+    <div class="col-sm"></div>
+  </div>
+
+  <div class="row mt-2" id="per-unit-revenue">
+    <div class="col-sm"><strong>Revenu par unité de consommation</strong></div>
+    <div class="col-sm text-right"><strong>{{ perUnitRevenue() | currency:'EUR' }} / mois</strong></div>
+    <div class="col-sm text-right">
+      <button class="btn btn-danger btn-sm" id="delete-per-unit-revenue-information-button" (click)="deletePerUnitRevenueInformation()">
+        <span class="fa fa-trash"></span>
+        Supprimer les informations du RUC
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <a [routerLink]="['/persons', person.id , 'incomes', 'create']" class="btn btn-outline-primary">
+    <span class="fa fa-plus"></span>
+    Ajouter un revenu
+  </a>
+
+  <a [routerLink]="['/persons', person.id , 'charges', 'create']" class="btn btn-outline-primary">
+    <span class="fa fa-plus"></span>
+    Ajouter une charge
+  </a>
+
+  <a [routerLink]="['/persons', person.id , 'per-unit-revenue', 'edit']" class="btn btn-outline-primary">
+    <span class="fa fa-edit"></span>
+    Éditer les informations du RUC
+  </a>
+</div>

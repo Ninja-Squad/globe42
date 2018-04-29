@@ -58,6 +58,8 @@ import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 import { CountriesResolverService } from './countries-resolver.service';
 import { PersonWeddingEventsComponent } from './person-wedding-events/person-wedding-events.component';
 import { WeddingEventsResolverService } from './wedding-events-resolver.service';
+import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-information-resolver.service';
+import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -98,6 +100,7 @@ export const routes: Routes = [
                 resolve: {
                   incomes: IncomesResolverService,
                   charges: ChargesResolverService,
+                  perUnitRevenueInformation: PerUnitRevenueInformationResolverService
                 }
               },
               {path: 'family', component: PersonFamilySituationComponent},
@@ -170,6 +173,14 @@ export const routes: Routes = [
             resolve: {
               person: PersonResolverService,
               chargeTypes: ChargeTypesResolverService
+            }
+          },
+          {
+            path: ':id/per-unit-revenue/edit',
+            component: PersonPerUnitRevenueInformationEditComponent,
+            resolve: {
+              person: PersonResolverService,
+              perUnitRevenueInformation: PerUnitRevenueInformationResolverService
             }
           }
         ]

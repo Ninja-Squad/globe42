@@ -193,6 +193,12 @@ class Person {
     private val charges: MutableSet<Charge> = HashSet()
 
     /**
+     * The per unit revenue information, containing a description of the members of the household needed to compute
+     * the per unit revenue
+     */
+    var perUnitRevenueInformation: PerUnitRevenueInformation? = null
+
+    /**
      * The Health Care Coverage. Only requested to mediation-enabled persons, and unknown by default (so, technically
      * mandatory, but can be left as unknown)
      */

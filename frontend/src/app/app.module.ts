@@ -110,6 +110,9 @@ import { PersonWeddingEventsComponent } from './person-wedding-events/person-wed
 import { WeddingEventsResolverService } from './wedding-events-resolver.service';
 import { DisplayWeddingEventTypePipe } from './display-wedding-event-type.pipe';
 import { WeddingEventService } from './wedding-event.service';
+import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-information-resolver.service';
+import { PerUnitRevenueInformationService } from './per-unit-revenue-information.service';
+import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
 
 registerLocaleData(localeFr);
 
@@ -176,7 +179,8 @@ registerLocaleData(localeFr);
     ChartComponent,
     PersonTasksComponent,
     PersonWeddingEventsComponent,
-    DisplayWeddingEventTypePipe
+    DisplayWeddingEventTypePipe,
+    PersonPerUnitRevenueInformationEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -238,7 +242,9 @@ registerLocaleData(localeFr);
     CountryService,
     CountriesResolverService,
     WeddingEventService,
-    WeddingEventsResolverService
+    WeddingEventsResolverService,
+    PerUnitRevenueInformationService,
+    PerUnitRevenueInformationResolverService
   ],
   bootstrap: [AppComponent]
 })

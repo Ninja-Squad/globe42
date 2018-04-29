@@ -1,0 +1,52 @@
+<h1>Editer les informations nécessaires au calcul de revenu par unité de consommation pour {{ person | fullname }}</h1>
+
+<form (ngSubmit)="infoGroup.valid && save()" [formGroup]="infoGroup">
+  <div class="form-group row">
+    <label for="adultLikeCount" class="col-sm-3 col-form-label">Nombre d'adultes ou équivalent</label>
+    <div class="col-sm-9">
+      <input type="number" class="form-control" id="adultLikeCount" formControlName="adultLikeCount" min="1"/>
+      <small class="form-text text-muted">
+        Nombre total d'adultes et d'enfants de 14 ans ou plus, y compris {{ person.firstName }}
+      </small>
+      <div class="invalid-feedback">
+        <div *ngIf="infoGroup.get('adultLikeCount').hasError('required')">
+          Le nombre d'adultes ou équivalent est obligatoire
+        </div>
+        <div *ngIf="infoGroup.get('adultLikeCount').hasError('min')">
+          Le nombre d'adultes ou équivalent doit être au moins égal à 1
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="childCount" class="col-sm-3 col-form-label">Nombre d'enfants</label>
+    <div class="col-sm-9">
+      <input type="number" class="form-control" id="childCount" formControlName="childCount" min="0"/>
+      <small class="form-text text-muted">
+        Nombre d'enfants de moins de 14 ans
+      </small>
+      <div class="invalid-feedback">
+        <div *ngIf="infoGroup.get('childCount').hasError('required')">
+          Le nombre d'enfants est obligatoire
+        </div>
+        <div *ngIf="infoGroup.get('childCount').hasError('min')">
+          Le nombre d'enfants doit être au moins égal à 0
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-9 offset-sm-3 form-group">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="monoParental" formControlName="monoParental" />
+        <label class="form-check-label" for="monoParental">Ménage mono-parental</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-9 offset-sm-3">
+      <button class="btn btn-primary" id="save">Enregistrer</button>
+      <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'resources']">Annuler</a>
+    </div>
+  </div>
+</form>

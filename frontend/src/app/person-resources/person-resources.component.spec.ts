@@ -13,6 +13,8 @@ import { ChargeService } from '../charge.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { of } from 'rxjs/observable/of';
+import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
+import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
 
 describe('PersonResourcesComponent', () => {
   const incomes = [
@@ -41,9 +43,14 @@ describe('PersonResourcesComponent', () => {
     }
   ] as Array<ChargeModel>;
 
+  const perUnitRevenueInformation: PerUnitRevenueInformationModel = {
+    adultLikeCount: 4,
+    childCount: 2,
+    monoParental: true
+  };
 
   const activatedRoute = {
-    snapshot: { data: { incomes, charges } },
+    snapshot: { data: { incomes, charges, perUnitRevenueInformation } },
     parent: {
       snapshot: {
         data: {
@@ -64,6 +71,7 @@ describe('PersonResourcesComponent', () => {
       { provide: LOCALE_ID, useValue: 'fr-FR' },
       IncomeService,
       ChargeService,
+      PerUnitRevenueInformationService,
       ConfirmService
     ]
   })));
@@ -178,8 +186,8 @@ describe('PersonResourcesComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const incomeElements = nativeElement.querySelectorAll('div.charge-item');
-    expect(incomeElements.length).toBe(0);
+    const chargeElements = nativeElement.querySelectorAll('div.charge-item');
+    expect(chargeElements.length).toBe(0);
 
     const noIncome = nativeElement.querySelector('#no-charge');
     expect(noIncome.textContent).toContain('Aucune charge\u00A0!');
@@ -193,9 +201,9 @@ describe('PersonResourcesComponent', () => {
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
-    const totalIncome = nativeElement.querySelector('#total-charge');
-    expect(totalIncome.textContent).toContain('Total');
-    expect(totalIncome.textContent).toContain('450,00 € / mois');
+    const totalCharge = nativeElement.querySelector('#total-charge');
+    expect(totalCharge.textContent).toContain('Total');
+    expect(totalCharge.textContent).toContain('450,00 € / mois');
   });
 
   it('should ask for confirmation before deletion of charge', () => {
@@ -203,7 +211,7 @@ describe('PersonResourcesComponent', () => {
     fixture.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
-    const chargeService = TestBed.get(IncomeService);
+    const chargeService = TestBed.get(ChargeService);
     spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create(null));
     spyOn(chargeService, 'delete');
 
@@ -268,5 +276,76 @@ describe('PersonResourcesComponent', () => {
     fixture.detectChanges();
     totalIncome = nativeElement.querySelector('#total');
     expect(totalIncome).toBeNull();
+  });
+
+  it('should list units', () => {
+    const fixture = TestBed.createComponent(PersonResourcesComponent);
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement;
+    const unitElements = nativeElement.querySelectorAll('div.unit-item');
+    expect(unitElements.length).toBe(4);
+    expect(unitElements[0].textContent).toContain('1 unité');
+    expect(unitElements[1].textContent).toContain('1,5 unité(s)');
+    expect(unitElements[2].textContent).toContain('0,6 unité(s)');
+    expect(unitElements[3].textContent).toContain('0,2 unité');
+
+    expect(nativeElement.querySelector('#no-per-unit-revenue')).toBeFalsy();
+    expect(nativeElement.querySelector('#per-unit-revenue').textContent).toContain('330,00 € / mois');
+  });
+
+  it('should display no information message when no information', () => {
+    const fixture = TestBed.createComponent(PersonResourcesComponent);
+    fixture.componentInstance.perUnitRevenueInformation = null;
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement;
+    const unitElements = nativeElement.querySelectorAll('div.unit-item');
+    expect(unitElements.length).toBe(0);
+
+    const noInfo = nativeElement.querySelector('#no-per-unit-revenue');
+    expect(noInfo.textContent).toContain('Information non renseignée\u00A0!');
+
+    const perUnitRevenue = nativeElement.querySelector('#per-unit-revenue');
+    expect(perUnitRevenue).toBeNull();
+  });
+
+  it('should ask for confirmation before deletion of info', () => {
+    const fixture = TestBed.createComponent(PersonResourcesComponent);
+    fixture.detectChanges();
+
+    const confirmService = TestBed.get(ConfirmService);
+    const infoService = TestBed.get(PerUnitRevenueInformationService);
+    spyOn(confirmService, 'confirm').and.returnValue(ErrorObservable.create(null));
+    spyOn(infoService, 'delete');
+
+    const nativeElement = fixture.nativeElement;
+    const deleteButton: HTMLButtonElement = nativeElement.querySelector('#delete-per-unit-revenue-information-button');
+    deleteButton.click();
+
+    fixture.detectChanges();
+
+    expect(confirmService.confirm).toHaveBeenCalled();
+    expect(infoService.delete).not.toHaveBeenCalled();
+  });
+
+  it('should delete info once confirmed', () => {
+    const fixture = TestBed.createComponent(PersonResourcesComponent);
+    fixture.detectChanges();
+
+    const confirmService = TestBed.get(ConfirmService);
+    const infoService = TestBed.get(PerUnitRevenueInformationService);
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
+    spyOn(infoService, 'delete').and.returnValue(of(undefined));
+
+    const nativeElement = fixture.nativeElement;
+    const deleteButton: HTMLButtonElement = nativeElement.querySelector('#delete-per-unit-revenue-information-button');
+    deleteButton.click();
+
+    fixture.detectChanges();
+
+    expect(confirmService.confirm).toHaveBeenCalled();
+    expect(infoService.delete).toHaveBeenCalledWith(42);
+    expect(fixture.componentInstance.perUnitRevenueInformation).toBeNull();
   });
 });
