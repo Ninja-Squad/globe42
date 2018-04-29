@@ -20,7 +20,6 @@ class PersonCommandDTO(
     val address: String?,
     @field:Valid val city: CityDTO?,
     val email: String?,
-    val adherent: Boolean,
     val entryDate: LocalDate?,
     @field:NotNull val gender: Gender,
     val phoneNumber: String?,

@@ -103,7 +103,6 @@ class PersonController(
             address = command.address
             city = command.city?.let { City(it.code, it.city) }
             email = command.email
-            adherent = command.adherent
             gender = command.gender
             phoneNumber = command.phoneNumber
             mediationEnabled = command.mediationEnabled

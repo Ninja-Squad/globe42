@@ -78,7 +78,6 @@ export class PersonEditComponent {
       city: null,
       email: ['', PersonEditComponent.emailOrEmpty],
       phoneNumber: '',
-      adherent: [false, Validators.required],
       mediationEnabled: false,
       firstMediationAppointmentDate: null,
       maritalStatus: 'UNKNOWN',

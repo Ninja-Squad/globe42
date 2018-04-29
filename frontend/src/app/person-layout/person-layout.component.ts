@@ -1,20 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PersonModel } from '../models/person.model';
-import { map } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { MembershipService } from '../membership.service';
+import { merge } from 'rxjs/observable/merge';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'gl-person-layout',
   templateUrl: './person-layout.component.html',
   styleUrls: ['./person-layout.component.scss']
 })
-export class PersonLayoutComponent {
+export class PersonLayoutComponent implements OnDestroy {
 
   person: PersonModel;
+  membershipStatus: 'OK' | 'KO' | 'loading' = 'loading';
+  private membershipSubscription: Subscription;
 
-  constructor(route: ActivatedRoute) {
+  constructor(route: ActivatedRoute,
+              membershipService: MembershipService) {
     route.data.pipe(
       map(data => data.person as PersonModel)
     ).subscribe(person => this.person = person);
+
+    this.membershipSubscription = merge(
+      route.data.pipe(
+        tap(() => this.membershipStatus = 'loading'),
+        switchMap(data => membershipService.getCurrent(data.person.id))
+      ),
+      membershipService.currentMembership$
+    ).subscribe(membership => this.membershipStatus = membership ? 'OK' : 'KO');
+  }
+
+  ngOnDestroy(): void {
+    this.membershipSubscription.unsubscribe();
   }
 }

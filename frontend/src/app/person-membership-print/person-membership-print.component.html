@@ -1,0 +1,86 @@
+<div class="print-button text-right">
+  <button class="btn btn-primary btn-lg" (click)="print()">
+    <span class="fa fa-print"></span> Imprimer
+  </button>
+</div>
+<div class="print">
+  <div class="row">
+    <div class="col">
+      <img src="/assets/logo.png" class="logo" alt="Logo de Globe 42"/>
+    </div>
+    <div class="col">
+      <div>N° de pièce comptable</div>
+      <div class="rectangle"></div>
+    </div>
+  </div>
+  <h1 class="text-center">Fiche d'adhésion</h1>
+
+  <p class="text-center">
+    <strong>Je déclare avoir pris connaissance des statuts de l’association GLOBE 42</strong>
+  </p>
+
+  <div class="row mb-3">
+    <div class="col-2 text-right">Nom&nbsp;:</div>
+    <div class="col-4"><div class="field">{{ person.lastName | uppercase }}&nbsp;</div></div>
+    <div class="col-2 text-right">Prénom&nbsp;:</div>
+    <div class="col-4"><div class="field">{{ person.firstName | uppercase }}&nbsp;</div></div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-2 text-right">Né·e le&nbsp;:</div>
+    <div class="col-4"><div class="field">{{ person.birthDate | date:'dd/MM/yyyy' }}&nbsp;</div></div>
+    <div class="col-2 text-right">à&nbsp;:</div>
+    <div class="col-4"><div class="field">&nbsp;</div></div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-2 text-right">Adresse&nbsp;:</div>
+    <div class="col-10"><div class="field">{{ person.address }}&nbsp;</div></div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-2 text-right"></div>
+    <div class="col-10"><div class="field">{{ person.city?.code }} {{ person.city?.city }}&nbsp;</div></div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-2 text-right">Email&nbsp;:</div>
+    <div class="col-10"><div class="field">{{ person.email }}&nbsp;</div></div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-2 text-right">Téléphone&nbsp;:</div>
+    <div class="col-10"><div class="field">{{ person.phoneNumber }}&nbsp;</div></div>
+  </div>
+
+  <p class="mt-5">
+    <strong>
+      Je souhaite adhérer à l’association GLOBE 42.
+    </strong>
+    <br/>
+    Cotisation annuelle&nbsp;: 5 euros <em>(renouvellement à la date de l’Assemblée Générale annuelle)</em>
+  </p>
+
+  <p>
+    Ci-joint mon règlement&nbsp;:
+  </p>
+  <div class="row mb-3">
+    <div class="offset-1 col-11"><span class="fa fa-square-o"></span> En espèces</div>
+  </div>
+  <div class="row mb-3">
+    <div class="offset-1 col-11"><span class="fa fa-square-o"></span> Par chèque à l’ordre de&nbsp;: <strong>Espace Social et de Santé Participatif GLOBE 42</strong></div>
+  </div>
+
+  <div class="mb-3 mt-5">Comment avez-vous connu GLOBE 42&nbsp;?</div>
+  <div class="mb-3 field">&nbsp;</div>
+  <div class="mb-3 field">&nbsp;</div>
+
+  <div class="row mt-5 mb-5">
+    <div class="col-2 text-right">Date&nbsp;:</div>
+    <div class="col-4"><div class="field">&nbsp;</div></div>
+    <div class="col-2 text-right">Signature&nbsp;:</div>
+  </div>
+
+  <p class="small" style="margin-top: 100pt;">
+    Les informations recueillies, nécessaires pour votre adhésion, font l’objet d’un traitement informatique conforme
+    aux articles 39 et suivants de la <u>Loi du 6 janvier 1978 modifiée</u>.
+    En application de ces articles, vous bénéficiez d’un droit d’accès et de rectification des informations vous
+    concernant. Si vous souhaitez exercer ce droit et obtenir communication de ces informations, merci de vous adresser
+    à la / au secrétaire.
+  </p>
+</div>

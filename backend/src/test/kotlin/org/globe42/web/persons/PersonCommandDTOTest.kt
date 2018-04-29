@@ -29,7 +29,6 @@ class PersonCommandDTOTest {
             "lastName": "Crepet",
             "nickName": "Agnes",
             "gender": "FEMALE",
-            "adherent": true,
             "city": {
               "code": "42000",
               "city": "SAINT-ETIENNE"
@@ -39,7 +38,6 @@ class PersonCommandDTOTest {
         val command = objectMapper.readValue(json, PersonCommandDTO::class.java)
         assertThat(command.nickName).isEqualTo("Agnes")
         assertThat(command.gender).isEqualTo(Gender.FEMALE)
-        assertThat(command.adherent).isTrue()
         assertThat(command.city!!.code).isEqualTo("42000")
         assertThat(command.city!!.city).isEqualTo("SAINT-ETIENNE")
     }

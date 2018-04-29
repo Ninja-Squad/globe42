@@ -24,6 +24,12 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="participations" routerLinkActive="active">Activités</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="memberships" routerLinkActive="active">
+          Adhésion
+          <span id="membership-warning-icon" *ngIf="membershipStatus === 'KO'" class="text-warning fa fa-exclamation-triangle" ngbTooltip="Pas d'adhésion pour l'année en cours"></span>
+        </a>
+      </li>
     </ul>
   </div>
 

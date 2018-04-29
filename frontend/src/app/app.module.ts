@@ -113,6 +113,11 @@ import { WeddingEventService } from './wedding-event.service';
 import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-information-resolver.service';
 import { PerUnitRevenueInformationService } from './per-unit-revenue-information.service';
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
+import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
+import { MembershipService } from './membership.service';
+import { MembershipsResolverService } from './memberships-resolver.service';
+import { DisplayPaymentModePipe } from './display-payment-mode.pipe';
+import { PersonMembershipPrintComponent } from './person-membership-print/person-membership-print.component';
 
 registerLocaleData(localeFr);
 
@@ -180,7 +185,10 @@ registerLocaleData(localeFr);
     PersonTasksComponent,
     PersonWeddingEventsComponent,
     DisplayWeddingEventTypePipe,
-    PersonPerUnitRevenueInformationEditComponent
+    PersonPerUnitRevenueInformationEditComponent,
+    PersonMembershipsComponent,
+    DisplayPaymentModePipe,
+    PersonMembershipPrintComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -244,7 +252,9 @@ registerLocaleData(localeFr);
     WeddingEventService,
     WeddingEventsResolverService,
     PerUnitRevenueInformationService,
-    PerUnitRevenueInformationResolverService
+    PerUnitRevenueInformationResolverService,
+    MembershipService,
+    MembershipsResolverService
   ],
   bootstrap: [AppComponent]
 })

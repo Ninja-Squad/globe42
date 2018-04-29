@@ -1,0 +1,100 @@
+<h2>Adhésion de l'année en cours ({{ currentYear }})</h2>
+
+<div *ngIf="!currentMembership" id="no-current-membership">
+  <ngb-alert [dismissible]="false" type="warning">
+    Pas d'adhésion pour l'année en cours.
+  </ngb-alert>
+  <div class="text-right">
+    <a class="btn btn-outline-primary" target="membershipprint" href="/persons/{{ person.id }}/membership-print">
+      Imprimer une fiche d'adhésion
+      <sup class="fa fa-external-link small"></sup>
+    </a>
+  </div>
+
+  <h3>Enregistrer l'adhésion</h3>
+
+  <form [formGroup]="membershipForm" (ngSubmit)="membershipForm.valid && createCurrentMembership()">
+    <div class="row form-group">
+      <label for="paymentMode" class="col-form-label col-sm-3">Paiement par</label>
+      <div class="col-sm-9">
+        <select class="form-control" id="paymentMode" formControlName="paymentMode">
+          <option [value]="null"></option>
+          <option value="CHECK">{{ 'CHECK' | displayPaymentMode }}</option>
+          <option value="CASH">{{ 'CASH' | displayPaymentMode }}</option>
+        </select>
+        <div class="invalid-feedback">
+          <div *ngIf="membershipForm.get('paymentMode').hasError('required')">Le mode de paiement est obligatoire</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <label for="paymentDate" class="col-form-label col-sm-3">le</label>
+      <div class="col-sm-9">
+        <gl-datepicker-container>
+          <input class="form-control" id="paymentDate" formControlName="paymentDate" ngbDatepicker
+                 [minDate]="{year: currentYear, month: 1}">
+          <div class="invalid-feedback">
+            <div *ngIf="membershipForm.get('paymentDate').hasError('required')">La date de paiement est obligatoire</div>
+            <div *ngIf="membershipForm.get('paymentDate').hasError('pastDate')">La date de paiement doit être dans le passé</div>
+            <div *ngIf="membershipForm.get('paymentDate').hasError('min')">La date de paiement doit être dans l'année en cours</div>
+          </div>
+        </gl-datepicker-container>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <label for="cardNumber" class="col-form-label col-sm-3">Carte n°</label>
+      <div class="col-sm-9">
+        <input class="form-control" id="cardNumber" formControlName="cardNumber">
+        <div class="invalid-feedback">
+          <div *ngIf="membershipForm.get('cardNumber').hasError('required')">Le n° de carte est obligatoire</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="offset-sm-3 col">
+        <button type="submit" class="btn btn-primary" id="save">Enregistrer</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div *ngIf="currentMembership" id="current-membership">
+  <ngb-alert [dismissible]="false" type="info">
+    Payée ({{ currentMembership.paymentMode | displayPaymentMode }}) le {{ currentMembership.paymentDate | date }}.
+    <br/>
+    <ng-container *ngIf="currentMembership.cardNumber">Carte n° {{ currentMembership.cardNumber }}.</ng-container>
+    <ng-container *ngIf="!currentMembership.cardNumber">N° de carte inconnu.</ng-container>
+  </ngb-alert>
+  <div class="text-right">
+    <button type="button" class="btn btn-danger" id="delete-button" (click)="deleteCurrentMembership()">
+      <span class="fa fa-trash"></span>
+      Supprimer l'adhésion en cours
+    </button>
+  </div>
+</div>
+
+<div *ngIf="oldMemberships.length" id="old-memberships">
+  <h2>Adhésions des années antérieures</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Année</th>
+        <th>Mode de paiement</th>
+        <th>Date de paiement</th>
+        <th>N° de carte</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let membership of oldMemberships">
+        <td>{{ membership.year }}</td>
+        <td>{{ membership.paymentMode | displayPaymentMode }}</td>
+        <td>{{ membership.paymentDate | date }}</td>
+        <td>{{ membership.cardNumber }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

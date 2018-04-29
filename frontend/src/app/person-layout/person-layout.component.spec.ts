@@ -7,6 +7,9 @@ import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
 import { of } from 'rxjs/observable/of';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MembershipService } from '../membership.service';
+import { MembershipModel } from '../models/membership.model';
 
 describe('PersonLayoutComponent', () => {
   const person = {
@@ -23,9 +26,12 @@ describe('PersonLayoutComponent', () => {
   };
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, HttpClientTestingModule],
     declarations: [PersonLayoutComponent, FullnamePipe],
-    providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+    providers: [
+      MembershipService,
+      { provide: ActivatedRoute, useValue: activatedRoute }
+    ]
   })));
 
   it('should display the person full name as title', () => {
@@ -37,25 +43,60 @@ describe('PersonLayoutComponent', () => {
     expect(name.textContent).toContain('John Doe (john)');
   });
 
-  it('should have 7 nav links and a router outlet', () => {
+  it('should have 8 nav links and a router outlet', () => {
     const fixture = TestBed.createComponent(PersonLayoutComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
     const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(7);
+    expect(links.length).toBe(8);
 
     const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
     expect(outlet).toBeTruthy();
   });
 
-  it('should only have 4 nav links if mediation is not enabled', () => {
+  it('should only have 5 nav links if mediation is not enabled', () => {
     person.mediationEnabled = false;
     const fixture = TestBed.createComponent(PersonLayoutComponent);
     fixture.detectChanges();
 
     const nativeElement = fixture.nativeElement;
     const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(4);
+    expect(links.length).toBe(5);
+  });
+
+  it('should have a loading membership status initially', () => {
+    const fixture = TestBed.createComponent(PersonLayoutComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.membershipStatus).toBe('loading');
+    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeFalsy();
+  });
+
+  it('should change the working status when the current membership is loaded or when it is created or deleted', () => {
+    const membershipService: MembershipService = TestBed.get(MembershipService);
+    spyOn(membershipService, 'getCurrent').and.returnValue(of({} as MembershipModel));
+
+    const fixture = TestBed.createComponent(PersonLayoutComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.membershipStatus).toBe('OK');
+    expect(membershipService.getCurrent).toHaveBeenCalledWith(person.id);
+    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeFalsy();
+
+    membershipService.currentMembership$.next(null);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.membershipStatus).toBe('KO');
+    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeTruthy();
+
+    membershipService.currentMembership$.next({} as MembershipModel);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.membershipStatus).toBe('OK');
+    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeFalsy();
+
+    fixture.componentInstance.ngOnDestroy();
+    membershipService.currentMembership$.next(null);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.membershipStatus).toBe('OK'); // should have been unsubscribed
   });
 });

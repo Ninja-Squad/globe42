@@ -63,11 +63,6 @@ class Person {
     var birthDate: LocalDate? = null
 
     /**
-     * Is the person an official member of the association. Requested to all persons, and mandatory.
-     */
-    var adherent: Boolean = false
-
-    /**
      * The first address line (street and number, typically) of the person. Requested to all persons, but not mandatory
      */
     var address: String? = null

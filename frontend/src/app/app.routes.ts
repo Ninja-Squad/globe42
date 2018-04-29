@@ -60,6 +60,9 @@ import { PersonWeddingEventsComponent } from './person-wedding-events/person-wed
 import { WeddingEventsResolverService } from './wedding-events-resolver.service';
 import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-information-resolver.service';
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
+import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
+import { MembershipsResolverService } from './memberships-resolver.service';
+import { PersonMembershipPrintComponent } from './person-membership-print/person-membership-print.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -147,6 +150,13 @@ export const routes: Routes = [
                 resolve: {
                   participations: ParticipationsResolverService
                 }
+              },
+              {
+                path: 'memberships',
+                component: PersonMembershipsComponent,
+                resolve: {
+                  memberships: MembershipsResolverService
+                }
               }
             ]
           },
@@ -181,6 +191,13 @@ export const routes: Routes = [
             resolve: {
               person: PersonResolverService,
               perUnitRevenueInformation: PerUnitRevenueInformationResolverService
+            }
+          },
+          {
+            path: ':id/membership-print',
+            component: PersonMembershipPrintComponent,
+            resolve: {
+              person: PersonResolverService
             }
           }
         ]

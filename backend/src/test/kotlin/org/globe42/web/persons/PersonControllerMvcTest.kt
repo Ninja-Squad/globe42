@@ -50,7 +50,6 @@ class PersonControllerMvcTest {
     @BeforeEach
     fun prepare() {
         person = Person(1L, "John", "Doe", Gender.MALE)
-        person.adherent = true
         person.entryDate = LocalDate.of(2017, 5, 21)
         person.mediationCode = "A2"
 

@@ -99,7 +99,6 @@ describe('PersonEditComponent', () => {
       birthDate: '1980-01-01',
       city: cityModel,
       email: 'john@mail.com',
-      adherent: true,
       entryDate: '2016-12-01',
       gender: 'MALE',
       phoneNumber: '06 12 34 56 78',
@@ -193,10 +192,6 @@ describe('PersonEditComponent', () => {
       expect(maritalStatus.options[maritalStatus.selectedIndex].value).toBe(person.maritalStatus);
       const spouse: HTMLInputElement = nativeElement.querySelector('#spouse');
       expect(spouse.value).toBe('Jane Doe');
-      const adherentYes = nativeElement.querySelector('#adherenttrue');
-      expect(adherentYes.checked).toBe(true);
-      const adherentNo = nativeElement.querySelector('#adherentfalse');
-      expect(adherentNo.checked).toBe(false);
       const entryDate = nativeElement.querySelector('#entryDate');
       expect(entryDate.value).toBe('01/12/2016');
       const housing: HTMLSelectElement = nativeElement.querySelector('#housing');
@@ -460,10 +455,6 @@ describe('PersonEditComponent', () => {
       expect(email.value).toBe('');
       const phoneNumber = nativeElement.querySelector('#phoneNumber');
       expect(phoneNumber.value).toBe('');
-      const adherentYes = nativeElement.querySelector('#adherenttrue');
-      expect(adherentYes.checked).toBe(false);
-      const adherentNo = nativeElement.querySelector('#adherentfalse');
-      expect(adherentNo.checked).toBe(true);
 
       const mediationEnabledYes = nativeElement.querySelector('#mediationEnabledtrue');
       expect(mediationEnabledYes.checked).toBe(false);
@@ -591,8 +582,6 @@ describe('PersonEditComponent', () => {
       fixture.detectChanges();
       tick();
 
-      adherentYes.checked = true;
-      adherentYes.dispatchEvent(new Event('change'));
       entryDate.value = '02/02/2015';
       entryDate.dispatchEvent(new Event('change'));
       firstMediationAppointmentDate.value = '02/02/2017';
@@ -682,7 +671,6 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
       expect(createdPerson.spouseId).toBe(1);
       expect((createdPerson as any).spouse).not.toBeDefined();
-      expect(createdPerson.adherent).toBe(true);
       expect(createdPerson.entryDate).toBe('2015-02-02');
       expect(createdPerson.housing).toBe('F0');
       expect(createdPerson.housingSpace).toBe(30);

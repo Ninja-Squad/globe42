@@ -68,3 +68,9 @@ footer {
   line-height: 35px;
   background-color: $gray-100;
 }
+
+@media print {
+  gl-menu *, footer * {
+    visibility: hidden;
+  }
+}

@@ -24,9 +24,9 @@ class PersonDaoTest : BaseDaoTest() {
                 withDefaultValue("housing", Housing.UNKNOWN)
                 withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
                 withDefaultValue("health_insurance", HealthInsurance.UNKNOWN)
-                columns("id", "first_name", "last_name", "mediation_enabled", "gender", "adherent", "deleted")
-                values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false, false)
-                values(2L, "Old", "Oldie", false, Gender.MALE, false, true)
+                columns("id", "first_name", "last_name", "mediation_enabled", "gender", "deleted")
+                values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false)
+                values(2L, "Old", "Oldie", false, Gender.MALE, true)
             }
 
             insertInto("participation") {

@@ -30,8 +30,8 @@ class TaskDaoTest : BaseDaoTest() {
                 withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
                 withDefaultValue("health_insurance", HealthInsurance.UNKNOWN)
                 withDefaultValue("deleted", false)
-                columns("id", "first_name", "last_name", "gender", "adherent", "mediation_enabled")
-                values(1L, "Cedric", "Exbrayat", Gender.MALE, true, false)
+                columns("id", "first_name", "last_name", "gender", "mediation_enabled")
+                values(1L, "Cedric", "Exbrayat", Gender.MALE, false)
             }
 
             insertInto("guser") {

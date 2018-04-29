@@ -27,7 +27,6 @@ export interface PersonModel extends PersonIdentityModel {
   address: string;
   city: CityModel;
   email: string;
-  adherent: boolean;
   entryDate: string;
   gender: Gender;
   phoneNumber: string;

@@ -350,7 +350,6 @@ class PersonControllerTest : BaseTest() {
         assertThat(person.city!!.code).isEqualTo(command.city!!.code)
         assertThat(person.city!!.city).isEqualTo(command.city!!.city)
         assertThat(person.email).isEqualTo(command.email)
-        assertThat(person.adherent).isEqualTo(command.adherent)
         assertThat(person.entryDate).isEqualTo(command.entryDate)
         assertThat(person.gender).isEqualTo(command.gender)
         assertThat(person.phoneNumber).isEqualTo(command.phoneNumber)
@@ -414,7 +413,6 @@ class PersonControllerTest : BaseTest() {
                 address = "somewhere",
                 city = CityDTO("42000", "Saint-Etienne"),
                 email = "cyril@ninja-squad.com",
-                adherent = true,
                 entryDate = LocalDate.of(2017, 4, 13),
                 gender = Gender.MALE,
                 phoneNumber = "01234567",

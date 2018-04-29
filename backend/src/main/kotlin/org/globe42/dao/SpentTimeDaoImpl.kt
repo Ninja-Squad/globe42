@@ -1,10 +1,10 @@
 package org.globe42.dao
 
+import org.globe42.domain.PARIS_TIME_ZONE
 import org.globe42.domain.SpentTimeStatistic
 import org.globe42.domain.TaskCategory
 import org.globe42.domain.User
 import org.globe42.web.tasks.SpentTimeStatisticsCriteriaDTO
-import java.time.ZoneId
 import java.util.*
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -58,9 +58,5 @@ class SpentTimeDaoImpl : SpentTimeDaoCustom {
         if (criteria.to != null) {
             query.setParameter("toInstant", criteria.to.plusDays(1).atStartOfDay(PARIS_TIME_ZONE).toInstant())
         }
-    }
-
-    companion object {
-        private val PARIS_TIME_ZONE = ZoneId.of("Europe/Paris")
     }
 }
