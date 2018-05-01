@@ -66,8 +66,6 @@ describe('PersonComponent', () => {
       id: 'FRA',
       name: 'France'
     },
-    frenchFamilySituation: null,
-    abroadFamilySituation: null,
     deleted: false
   };
 

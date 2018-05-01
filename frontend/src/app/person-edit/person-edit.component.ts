@@ -100,13 +100,6 @@ export class PersonEditComponent {
     });
 
     if (this.editedPerson) {
-      if (this.editedPerson.frenchFamilySituation) {
-        this.showFrenchFamilySituation();
-      }
-      if (this.editedPerson.abroadFamilySituation) {
-        this.showAbroadFamilySituation();
-      }
-
       this.personForm.patchValue(this.editedPerson);
     }
 
@@ -126,22 +119,6 @@ export class PersonEditComponent {
         fiscalNumberCtrl.setValue(null);
       }
     });
-  }
-
-  showFrenchFamilySituation() {
-    this.personForm.addControl('frenchFamilySituation', this.createFamilySituationGroup());
-  }
-
-  hideFrenchFamilySituation() {
-    this.personForm.removeControl('frenchFamilySituation');
-  }
-
-  showAbroadFamilySituation() {
-    this.personForm.addControl('abroadFamilySituation', this.createFamilySituationGroup());
-  }
-
-  hideAbroadFamilySituation() {
-    this.personForm.removeControl('abroadFamilySituation');
   }
 
   save() {
@@ -166,14 +143,5 @@ export class PersonEditComponent {
       );
     }
     action.subscribe((personId) => this.router.navigate(['persons', personId]));
-  }
-
-  private createFamilySituationGroup(): FormGroup {
-    return this.fb.group({
-      parentsPresent: this.fb.control(false),
-      spousePresent: this.fb.control(false),
-      childCount: this.fb.control(''),
-      siblingCount: this.fb.control('')
-    });
   }
 }

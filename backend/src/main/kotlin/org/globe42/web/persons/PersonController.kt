@@ -5,7 +5,6 @@ import org.globe42.dao.CoupleDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.City
 import org.globe42.domain.Couple
-import org.globe42.domain.FamilySituation
 import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
@@ -126,8 +125,6 @@ class PersonController(
                 accompanying = command.accompanying
                 socialSecurityNumber = command.socialSecurityNumber
                 cafNumber = command.cafNumber
-                frenchFamilySituation = command.frenchFamilySituation.toFamilySituation()
-                abroadFamilySituation = command.abroadFamilySituation.toFamilySituation()
                 nationality = command.nationalityId?.let {
                     countryDao.findById(it).orElseThrow {
                         BadRequestException("No nationality with ID ${command.nationalityId}")
@@ -136,10 +133,6 @@ class PersonController(
                 handleCouple(this, command.spouseId)
             }
         }
-    }
-
-    private fun FamilySituationDTO?.toFamilySituation(): FamilySituation? {
-        return this?.let { FamilySituation(parentsPresent, spousePresent, childCount) }
     }
 
     private fun mediationCodeLetter(person: Person): Char {

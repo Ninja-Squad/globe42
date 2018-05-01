@@ -164,27 +164,15 @@ class Person {
     var fiscalStatusUpToDate: Boolean = false
 
     /**
-     * The family situation of the person in France. Only requested to mediation-enabled persons, and not mandatory
-     */
-    @OneToOne(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
-    var frenchFamilySituation: FamilySituation? = null
-
-    /**
-     * The family situation of the person abroad. Only requested to mediation-enabled persons, and not mandatory
-     */
-    @OneToOne(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
-    var abroadFamilySituation: FamilySituation? = null
-
-    /**
      * The incomes of the person. Only requested to mediation-enabled persons
      */
-    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    @OneToMany(mappedBy = "person", cascade = [CascadeType.ALL], orphanRemoval = true)
     private val incomes: MutableSet<Income> = HashSet()
 
     /**
      * The charges of the person. Only requested to mediation-enabled persons
      */
-    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    @OneToMany(mappedBy = "person", cascade = [CascadeType.ALL], orphanRemoval = true)
     private val charges: MutableSet<Charge> = HashSet()
 
     /**
@@ -248,7 +236,7 @@ class Person {
     /**
      * The notes added on the person
      */
-    @OneToMany(cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
     @JoinTable(
         name = "person_note",
         joinColumns = [JoinColumn(name = "person_id")],
@@ -259,13 +247,13 @@ class Person {
     /**
      * The participations to activity types of the person
      */
-    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    @OneToMany(mappedBy = "person", cascade = [CascadeType.ALL], orphanRemoval = true)
     private val participations: MutableSet<Participation> = HashSet()
 
     /**
      * The wedding events of the person. Only requested to mediation-enabled persons.
      */
-    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    @OneToMany(mappedBy = "person", cascade = [CascadeType.ALL], orphanRemoval = true)
     private val weddingEvents: MutableSet<WeddingEvent> = HashSet()
 
     /**
@@ -275,6 +263,12 @@ class Person {
 
     val spouse: Person?
         get() = couple?.getSpouseOf(this)
+
+    /**
+     * The family situation of the person. Only requested to mediation-enabled persons, and not mandatory.
+     */
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var family: Family? = null
 
     constructor()
 

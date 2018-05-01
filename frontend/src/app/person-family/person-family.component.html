@@ -1,0 +1,38 @@
+<div *ngIf="!family" id="no-family">
+  <div class="text-center">
+    <span style="font-size: 60px;" class="fa fa-info-circle text-info"></span>
+    <br/>
+    <span class="lead">Pas d'information&nbsp;!</span>
+  </div>
+
+  <div>
+    <a class="btn btn-outline-primary" [routerLink]="['/persons', person.id, 'family', 'edit']">
+      <span class="fa fa-plus"></span>
+      Renseigner
+    </a>
+  </div>
+</div>
+
+<div *ngIf="family" id="family">
+  <div class="row">
+    <div class="col">
+      <h2>En France</h2>
+      <gl-situation [situation]="france"></gl-situation>
+    </div>
+
+    <div class="col">
+      <h2>Au Pays</h2>
+      <gl-situation [situation]="abroad"></gl-situation>
+    </div>
+  </div>
+
+  <a class="btn btn-outline-primary" [routerLink]="['/persons', person.id, 'family', 'edit']">
+    <span class="fa fa-edit"></span>
+    Éditer
+  </a>
+  &ngsp;
+  <button class="btn btn-outline-danger" (click)="delete()">
+    <span class="fa fa-trash"></span>
+    Supprimer
+  </button>
+</div>

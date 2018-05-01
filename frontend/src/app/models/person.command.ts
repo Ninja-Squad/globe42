@@ -1,5 +1,5 @@
 import {
-  CityModel, FamilySituation, FiscalStatus, Gender, HealthCareCoverage, Housing,
+  CityModel, FiscalStatus, Gender, HealthCareCoverage, Housing,
   MaritalStatus
 } from './person.model';
 
@@ -35,6 +35,4 @@ export interface PersonCommand {
   healthInsurance: string;
   healthInsuranceStartDate: string;
   nationalityId: string;
-  frenchFamilySituation: FamilySituation;
-  abroadFamilySituation: FamilySituation;
 }

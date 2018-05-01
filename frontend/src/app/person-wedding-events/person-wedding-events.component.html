@@ -12,7 +12,10 @@
 </div>
 
 <div class="mt-4">
-  <button *ngIf="!newEvent" id="newEventButton" class="btn btn-outline-primary" (click)="showEventCreation()">Ajouter un événement</button>
+  <button *ngIf="!newEvent" id="newEventButton" class="btn btn-outline-primary" (click)="showEventCreation()">
+    <span class="fa fa-plus"></span>
+    Ajouter un événement
+  </button>
 
   <form *ngIf="newEvent" [formGroup]="newEvent" (ngSubmit)="create()">
     <div class="form-group">

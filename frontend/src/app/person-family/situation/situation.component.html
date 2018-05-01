@@ -1,0 +1,26 @@
+<div class="read-only-form">
+  <div class="form-group row">
+    <label class="col col-form-label">Parent présent</label>
+    <div class="col">
+      <p class="form-control-plaintext">{{ situation.parentPresent ? 'Oui' : 'Non' }}</p>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col col-form-label">Époux(se) présent(e)</label>
+    <div class="col">
+      <p class="form-control-plaintext">{{ situation.spousePresent ? 'Oui' : 'Non' }}</p>
+    </div>
+  </div>
+  <div class="form-group" *ngIf="situation.children.length">
+    <label>{{ situation.children.length }} enfant(s)</label>
+    <ul>
+      <li *ngFor="let child of situation.children">
+        {{ child.firstName }}
+        <ng-container *ngIf="child.firstName && child.birthDate">&ndash;</ng-container>
+        {{ child.birthDate | date }}
+        <ng-container *ngIf="child.birthDate"> &ndash; {{ age(child) | number:'.0-0' }} ans</ng-container>
+        <ng-container *ngIf="!child.firstName && !child.birthDate">aucune information</ng-container>
+      </li>
+    </ul>
+  </div>
+</div>
