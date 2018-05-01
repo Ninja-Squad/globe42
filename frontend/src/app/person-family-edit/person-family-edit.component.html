@@ -1,4 +1,4 @@
-<h1>Editer la situation familiale de {{ person | fullname }}</h1>
+<h1>Éditer la situation familiale de {{ person | fullname }}</h1>
 
 <form [formGroup]="familyForm" (ngSubmit)="save()">
   <div class="form-group row">
@@ -39,10 +39,10 @@
       <div *ngFor="let child of children.controls; index as i" [formGroupName]="i" class="mb-2">
         <div class="form-inline">
 
-          <input class="form-control mr-sm-2" placeholder="Prénom" formControlName="firstName" />
+          <input class="form-control mr-sm-2" placeholder="Prénom" formControlName="firstName" [id]="'childFirstName' + i"/>
 
           <gl-datepicker-container class="mr-sm-2">
-            <input class="form-control" placeholder="Date de naissance" formControlName="birthDate"
+            <input class="form-control" placeholder="Date de naissance" formControlName="birthDate" [id]="'childBirthDate' + i"
                    ngbDatepicker [minDate]="{year: 1900, month: 1}"/>
           </gl-datepicker-container>
 
@@ -56,10 +56,12 @@
                    formControlName="location" value="ABROAD">
             <label class="form-check-label" [for]="'childLocationAbroad' + i">au Pays</label>
           </div>
-          <button type="button" class="btn btn-secondary btn-sm" (click)="removeChild(i)"><span class="fa fa-trash"></span> Supprimer</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="removeChild(i)" [id]="'removeChild' + i">
+            <span class="fa fa-trash"></span>&ngsp;Supprimer
+          </button>
         </div>
       </div>
-      <button type="button" class="btn btn-secondary btn-sm" (click)="addChild()">
+      <button type="button" class="btn btn-secondary btn-sm" (click)="addChild()" id="add-child">
         <span class="fa fa-plus"></span>
         Ajouter un enfant
       </button>
@@ -68,8 +70,7 @@
 
   <div class="row">
     <div class="offset-sm-3 col">
-      <button class="btn btn-primary">Enregistrer</button>
-      &ngsp;
+      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
       <a class="btn btn-danger" [routerLink]="['/persons', person.id, 'family']">Annuler</a>
     </div>
   </div>

@@ -12,7 +12,7 @@ export class FamilyResolverService implements Resolve<FamilyModel | null> {
   constructor(private familyService: FamilyService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<FamilyModel | null> {
-    const id = +(route.paramMap.get('id') || route.parent.paramMap.get('id'));
+    const id = +(route.paramMap.get('id') || route.parent.data.person.id);
     return this.familyService.get(id);
   }
 }

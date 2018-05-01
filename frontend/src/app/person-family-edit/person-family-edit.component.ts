@@ -37,8 +37,6 @@ export class PersonFamilyEditComponent implements OnInit {
         ) : []
       )
     });
-
-    console.log(this.familyForm);
   }
 
   get children(): FormArray {

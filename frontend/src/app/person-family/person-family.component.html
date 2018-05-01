@@ -26,12 +26,11 @@
     </div>
   </div>
 
-  <a class="btn btn-outline-primary" [routerLink]="['/persons', person.id, 'family', 'edit']">
+  <a class="btn btn-outline-primary mr-2" [routerLink]="['/persons', person.id, 'family', 'edit']">
     <span class="fa fa-edit"></span>
     Éditer
   </a>
-  &ngsp;
-  <button class="btn btn-outline-danger" (click)="delete()">
+  <button class="btn btn-outline-danger" id="delete" (click)="delete()">
     <span class="fa fa-trash"></span>
     Supprimer
   </button>
