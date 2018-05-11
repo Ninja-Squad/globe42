@@ -1,0 +1,50 @@
+<h2>Réseau</h2>
+
+<ng-container *ngIf="!memberForm">
+  <div class="row align-items-baseline mb-2 member-item" *ngFor="let member of members">
+    <div class="col-md-3">
+      <strong>{{ member.type | displayNetworkMemberType }}</strong>
+    </div>
+    <div class="col-md-9 col-lg-5" style="white-space: pre-line;">{{ member.text }}</div>
+    <div class="col-lg-4 text-right">
+      <button class="btn btn-outline-secondary btn-sm mr-1 edit" (click)="showMemberEdition(member)">
+        <span class="fa fa-edit"></span>
+        Éditer
+      </button>
+      <button type="button" class="btn btn-outline-danger btn-sm delete" (click)="delete(member)">
+        <span class="fa fa-trash"></span>
+        Supprimer
+      </button>
+    </div>
+  </div>
+  <div class="mt-4">
+    <button type="button" id="newMemberButton" class="btn btn-outline-primary" (click)="showMemberEdition(null)">
+      <span class="fa fa-plus"></span>
+      Ajouter un membre au réseau
+    </button>
+  </div>
+</ng-container>
+
+<form *ngIf="memberForm" [formGroup]="memberForm" (ngSubmit)="save()">
+  <div class="form-group">
+    <label for="type">Type</label>
+    <select class="form-control" id="type" formControlName="type">
+      <option></option>
+      <option *ngFor="let memberType of memberTypes" [value]="memberType">{{ memberType | displayNetworkMemberType }}</option>
+    </select>
+    <div class="invalid-feedback">
+      <span *ngIf="memberForm.get('type').hasError('required')">Le type est obligatoire</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="type">Texte (nom, adresse, n° de téléphone, etc.)</label>
+    <textarea id="text" formControlName="text" class="form-control" rows="3"></textarea>
+    <div class="invalid-feedback">
+      <span *ngIf="memberForm.get('text').hasError('required')">Le texte est obligatoire</span>
+    </div>
+  </div>
+
+  <button id="saveButton" class="btn btn-primary mr-2">Enregistrer</button>
+  <button id="cancelEditionButton" type="button" class="btn btn-secondary" (click)="cancelMemberEdition()">Annuler</button>
+</form>

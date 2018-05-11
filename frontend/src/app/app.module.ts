@@ -77,6 +77,8 @@ import { PersonMembershipPrintComponent } from './person-membership-print/person
 import { PersonFamilyComponent } from './person-family/person-family.component';
 import { SituationComponent } from './person-family/situation/situation.component';
 import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
+import { PersonNetworkMembersComponent } from './person-network-members/person-network-members.component';
+import { DisplayNetworkMemberTypePipe } from './display-network-member-type.pipe';
 
 registerLocaleData(localeFr);
 
@@ -147,7 +149,9 @@ registerLocaleData(localeFr);
     PersonMembershipPrintComponent,
     PersonFamilyComponent,
     SituationComponent,
-    PersonFamilyEditComponent
+    PersonFamilyEditComponent,
+    PersonNetworkMembersComponent,
+    DisplayNetworkMemberTypePipe
   ],
   entryComponents: [
     ConfirmModalContentComponent
