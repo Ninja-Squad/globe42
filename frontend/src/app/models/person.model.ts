@@ -15,12 +15,6 @@ export interface PersonIdentityModel {
   mediationCode: string;
 }
 
-export interface FamilySituation {
-  parentsPresent: boolean;
-  spousePresent: boolean;
-  childCount: number;
-}
-
 export interface PersonModel extends PersonIdentityModel {
   birthName: string;
   birthDate: string;
@@ -48,8 +42,6 @@ export interface PersonModel extends PersonIdentityModel {
   socialSecurityNumber: string;
   cafNumber: string;
   nationality: CountryModel;
-  frenchFamilySituation: FamilySituation;
-  abroadFamilySituation: FamilySituation;
   deleted: boolean;
 }
 

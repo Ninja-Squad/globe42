@@ -26,7 +26,6 @@ import { IncomesResolverService } from './incomes-resolver.service';
 import { PersonLayoutComponent } from './person-layout/person-layout.component';
 import { PersonResourcesComponent } from './person-resources/person-resources.component';
 import { PersonIncomeEditComponent } from './person-income-edit/person-income-edit.component';
-import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
 import { TasksResolverService } from './tasks-resolver.service';
@@ -64,6 +63,9 @@ import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-
 import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
 import { MembershipsResolverService } from './memberships-resolver.service';
 import { PersonMembershipPrintComponent } from './person-membership-print/person-membership-print.component';
+import { PersonFamilyComponent } from './person-family/person-family.component';
+import { FamilyResolverService } from './family-resolver.service';
+import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -107,7 +109,13 @@ export const routes: Routes = [
                   perUnitRevenueInformation: PerUnitRevenueInformationResolverService
                 }
               },
-              {path: 'family', component: PersonFamilySituationComponent},
+              {
+                path: 'family',
+                component: PersonFamilyComponent,
+                resolve: {
+                  family: FamilyResolverService
+                }
+              },
               {
                 path: 'wedding-events',
                 component: PersonWeddingEventsComponent,
@@ -199,6 +207,14 @@ export const routes: Routes = [
             component: PersonMembershipPrintComponent,
             resolve: {
               person: PersonResolverService
+            }
+          },
+          {
+            path: ':id/family/edit',
+            component: PersonFamilyEditComponent,
+            resolve: {
+              person: PersonResolverService,
+              family: FamilyResolverService
             }
           }
         ]

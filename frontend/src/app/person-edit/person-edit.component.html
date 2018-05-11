@@ -269,23 +269,6 @@
                [inputFormatter]="countryTypeahead.formatter" [editable]="false">
       </div>
     </div>
-
-    <h3>Situation familiale</h3>
-    <div class="row">
-      <div class="col-md" id="frenchFamilySituation">
-        <h4>En France</h4>
-        <div *ngIf="!personForm.contains('frenchFamilySituation')">Inconnue &mdash; <button type="button" class="btn btn-outline-success btn-sm" (click)="showFrenchFamilySituation()">Renseigner</button></div>
-        <div *ngIf="personForm.contains('frenchFamilySituation')"><button type="button" class="btn btn-outline-danger btn-sm" type="button" (click)="hideFrenchFamilySituation()">Rendre inconnue</button></div>
-        <gl-family-situation-edit *ngIf="personForm.contains('frenchFamilySituation')" [situation]="personForm.get('frenchFamilySituation')" location="french"></gl-family-situation-edit>
-      </div>
-
-      <div class="col-md" id="abroadFamilySituation">
-        <h4>Au pays</h4>
-        <div *ngIf="!personForm.contains('abroadFamilySituation')">Inconnue &mdash; <button type="button" class="btn btn-outline-success btn-sm" (click)="showAbroadFamilySituation()">Renseigner</button></div>
-        <div *ngIf="personForm.contains('abroadFamilySituation')"><button type="button" class="btn btn-outline-danger btn-sm" type="button" (click)="hideAbroadFamilySituation()">Rendre inconnue</button></div>
-        <gl-family-situation-edit *ngIf="personForm.contains('abroadFamilySituation')" [situation]="personForm.get('abroadFamilySituation')" location="abroad"></gl-family-situation-edit>
-      </div>
-    </div>
   </div>
 
   <div class="row mt-5">

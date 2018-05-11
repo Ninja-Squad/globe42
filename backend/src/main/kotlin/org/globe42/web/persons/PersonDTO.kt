@@ -37,8 +37,6 @@ data class PersonDTO(
     val cafNumber: String?,
     val spouse: PersonIdentityDTO?,
     val nationality: CountryDTO?,
-    val frenchFamilySituation: FamilySituationDTO?,
-    val abroadFamilySituation: FamilySituationDTO?,
     val deleted: Boolean
 ) {
 
@@ -70,8 +68,6 @@ data class PersonDTO(
         cafNumber = person.cafNumber,
         spouse = person.spouse?.let(::PersonIdentityDTO),
         nationality = person.nationality?.let(::CountryDTO),
-        frenchFamilySituation = person.frenchFamilySituation?.let(::FamilySituationDTO),
-        abroadFamilySituation = person.abroadFamilySituation?.let(::FamilySituationDTO),
         deleted = person.deleted
     )
 }

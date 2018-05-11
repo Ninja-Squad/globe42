@@ -10,15 +10,13 @@ import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../displa
 import { PersonCommand } from '../models/person.command';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { DisplayGenderPipe } from '../display-gender.pipe';
 import { DisplayHousingPipe } from '../display-housing.pipe';
 import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
 import { DisplayHealthInsurancePipe } from '../display-health-insurance.pipe';
-import { FamilySituationEditComponent } from '../family-situation-edit/family-situation-edit.component';
-import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
@@ -74,7 +72,6 @@ describe('PersonEditComponent', () => {
       DisplayFiscalStatusPipe,
       DisplayHealthCareCoveragePipe,
       DisplayHealthInsurancePipe,
-      FamilySituationEditComponent,
       FullnamePipe
     ]
   })
@@ -123,12 +120,6 @@ describe('PersonEditComponent', () => {
         id: 'FRA',
         name: 'France'
       },
-      frenchFamilySituation: {
-        parentsPresent: false,
-        spousePresent: true,
-        childCount: 1
-      },
-      abroadFamilySituation: null,
       deleted: false
     };
 
@@ -220,19 +211,6 @@ describe('PersonEditComponent', () => {
       expect(cafNumber.value).toBe(person.cafNumber);
       const nationality = nativeElement.querySelector('#nationality');
       expect(nationality.value).toBe(person.nationality.name);
-      const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
-      expect(frenchFamilySituation.textContent).not.toContain('Inconnue');
-      expect(frenchFamilySituation.textContent).not.toContain('Renseigner');
-      expect(frenchFamilySituation.textContent).toContain('Rendre inconnue');
-      expect(frenchFamilySituation.querySelector('gl-family-situation-edit')).toBeTruthy();
-      expect(fixture.debugElement.query(By.directive(FamilySituationEditComponent)).componentInstance.situation)
-        .toBe(fixture.componentInstance.personForm.get('frenchFamilySituation'));
-
-      const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
-      expect(abroadFamilySituation.textContent).toContain('Inconnue');
-      expect(abroadFamilySituation.textContent).toContain('Renseigner');
-      expect(abroadFamilySituation.textContent).not.toContain('Rendre inconnue');
-      expect(abroadFamilySituation.querySelector('gl-family-situation-edit')).toBeFalsy();
 
       lastName.value = 'Do';
       lastName.dispatchEvent(new Event('input'));
@@ -295,34 +273,6 @@ describe('PersonEditComponent', () => {
       spouse.dispatchEvent(new Event('blur'));
       fixture.detectChanges();
       expect(spouse.value).toBeFalsy();
-    });
-
-    it('should make family situation known and then unknown', () => {
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
-      const nativeElement = fixture.nativeElement;
-      const component = fixture.componentInstance;
-
-      expect(component.personForm.contains('abroadFamilySituation')).toBeFalsy();
-
-      const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
-      const makeKnownButton = abroadFamilySituation.querySelector('button');
-      expect(makeKnownButton.textContent).toContain('Renseigner');
-
-      makeKnownButton.click();
-      fixture.detectChanges();
-      expect(component.personForm.contains('abroadFamilySituation')).toBeTruthy();
-
-      const familySituationEditComponent: FamilySituationEditComponent =
-        fixture.debugElement.query(By.css('#abroadFamilySituation gl-family-situation-edit')).componentInstance;
-      expect(familySituationEditComponent.situation).toBe(component.personForm.get('abroadFamilySituation') as FormGroup);
-
-      const makeUnknownButton = abroadFamilySituation.querySelector('button');
-      expect(makeUnknownButton.textContent).toContain('Rendre inconnue');
-
-      makeUnknownButton.click();
-      fixture.detectChanges();
-      expect(component.personForm.contains('abroadFamilySituation')).toBeFalsy();
     });
 
     it('should warn if selecting a spouse already in couple with someone else', () => {
@@ -466,9 +416,7 @@ describe('PersonEditComponent', () => {
         'socialSecurityNumber',
         'accompanying',
         'cafNumber',
-        'nationality',
-        'frenchFamilySituation',
-        'abroadFamilySituation'
+        'nationality'
       ];
 
       mediationDependantIds.forEach(id => {
@@ -523,11 +471,6 @@ describe('PersonEditComponent', () => {
       expect(healthInsuranceStartDate).toBeFalsy();
       const nationality = nativeElement.querySelector('#nationality');
       expect(nationality.value).toBe('');
-      const frenchFamilySituation = nativeElement.querySelector('#frenchFamilySituation');
-      expect(frenchFamilySituation.textContent).toContain('Inconnue');
-
-      const abroadFamilySituation = nativeElement.querySelector('#abroadFamilySituation');
-      expect(abroadFamilySituation.textContent).toContain('Inconnue');
 
       lastName.value = 'Doe';
       lastName.dispatchEvent(new Event('input'));

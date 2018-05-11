@@ -40,7 +40,5 @@ class PersonCommandDTO(
     val accompanying: String?,
     val socialSecurityNumber: String?,
     val cafNumber: String?,
-    val nationalityId: String?,
-    val frenchFamilySituation: FamilySituationDTO?,
-    val abroadFamilySituation: FamilySituationDTO?
+    val nationalityId: String?
 )

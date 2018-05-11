@@ -1,0 +1,77 @@
+<h1>Éditer la situation familiale de {{ person | fullname }}</h1>
+
+<form [formGroup]="familyForm" (ngSubmit)="save()">
+  <div class="form-group row">
+    <label class="form-check-label col-sm-3">Parents</label>
+    <div class="col-sm-9">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="parentInFrance" formControlName="parentInFrance"/>
+        <label class="form-check-label" for="parentInFrance">en France</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="parentAbroad" formControlName="parentAbroad"/>
+        <label class="form-check-label" for="parentAbroad">au Pays</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="form-check-label col-sm-3">Époux(se)</label>
+    <div class="col-sm-9">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="spouseInFrance" value="FRANCE" name="spouseLocation" formControlName="spouseLocation"/>
+        <label class="form-check-label" for="spouseInFrance">en France</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="spouseAbroad" value="ABROAD" name="spouseLocation" formControlName="spouseLocation"/>
+        <label class="form-check-label" for="spouseAbroad">au Pays</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="noSpouse" [value]="null" name="spouseLocation" formControlName="spouseLocation"/>
+        <label class="form-check-label" for="noSpouse">Pas d'époux(se)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="form-col-label col-sm-3">Enfants</label>
+    <div class="col-sm-9" formArrayName="children">
+      <div *ngFor="let child of children.controls; index as i" [formGroupName]="i" class="mb-2">
+        <div class="form-inline">
+
+          <input class="form-control mr-sm-2" placeholder="Prénom" formControlName="firstName" [id]="'childFirstName' + i"/>
+
+          <gl-datepicker-container class="mr-sm-2">
+            <input class="form-control" placeholder="Date de naissance" formControlName="birthDate" [id]="'childBirthDate' + i"
+                   ngbDatepicker [minDate]="{year: 1900, month: 1}"/>
+          </gl-datepicker-container>
+
+          <div class="form-check mr-sm-2">
+            <input class="form-check-input" type="radio" [id]="'childLocationFrance' + i"
+                   formControlName="location" value="FRANCE">
+            <label class="form-check-label" [for]="'childLocationFrance' + i">en France</label>
+          </div>
+          <div class="form-check mr-sm-2">
+            <input class="form-check-input" type="radio" [id]="'childLocationAbroad' + i"
+                   formControlName="location" value="ABROAD">
+            <label class="form-check-label" [for]="'childLocationAbroad' + i">au Pays</label>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="removeChild(i)" [id]="'removeChild' + i">
+            <span class="fa fa-trash"></span>&ngsp;Supprimer
+          </button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary btn-sm" (click)="addChild()" id="add-child">
+        <span class="fa fa-plus"></span>
+        Ajouter un enfant
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="offset-sm-3 col">
+      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
+      <a class="btn btn-danger" [routerLink]="['/persons', person.id, 'family']">Annuler</a>
+    </div>
+  </div>
+</form>

@@ -377,18 +377,6 @@ class PersonControllerTest : BaseTest() {
         } else {
             assertThat(person.nationality!!.id).isEqualTo(command.nationalityId)
         }
-        assertFamilySituationEqualsCommand(person.frenchFamilySituation, command.frenchFamilySituation)
-        assertFamilySituationEqualsCommand(person.abroadFamilySituation, command.abroadFamilySituation)
-    }
-
-    private fun assertFamilySituationEqualsCommand(familySituation: FamilySituation?, dto: FamilySituationDTO?) {
-        if (dto == null) {
-            assertThat(familySituation).isNull()
-        } else {
-            assertThat(familySituation!!.parentsPresent).isEqualTo(dto.parentsPresent)
-            assertThat(familySituation.spousePresent).isEqualTo(dto.spousePresent)
-            assertThat(familySituation.childCount).isEqualTo(dto.childCount)
-        }
     }
 
     companion object {
@@ -433,9 +421,7 @@ class PersonControllerTest : BaseTest() {
                 accompanying = "Nadia DURAND",
                 socialSecurityNumber = "277126912340454",
                 cafNumber = "123765",
-                nationalityId = nationalityId,
-                frenchFamilySituation = FamilySituationDTO(false, true, 2),
-                abroadFamilySituation = FamilySituationDTO(true, false, 0)
+                nationalityId = nationalityId
             )
         }
     }

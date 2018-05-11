@@ -32,12 +32,9 @@ import { ErrorService } from './error.service';
 import { ErrorComponent } from './error/error.component';
 import { FullnamePipe } from './fullname.pipe';
 import { DisplayFiscalStatusPipe } from './display-fiscal-status.pipe';
-import { PersonFamilySituationComponent } from './person-family-situation/person-family-situation.component';
-import { FamilySituationComponent } from './family-situation/family-situation.component';
 import { DisplayHousingPipe } from './display-housing.pipe';
 import { DisplayHealthCareCoveragePipe } from './display-health-care-coverage.pipe';
 import { DisplayHealthInsurancePipe } from './display-health-insurance.pipe';
-import { FamilySituationEditComponent } from './family-situation-edit/family-situation-edit.component';
 import { CitiesUploadComponent } from './cities-upload/cities-upload.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { TasksLayoutComponent } from './tasks-layout/tasks-layout.component';
@@ -77,6 +74,9 @@ import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-
 import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
 import { DisplayPaymentModePipe } from './display-payment-mode.pipe';
 import { PersonMembershipPrintComponent } from './person-membership-print/person-membership-print.component';
+import { PersonFamilyComponent } from './person-family/person-family.component';
+import { SituationComponent } from './person-family/situation/situation.component';
+import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
 
 registerLocaleData(localeFr);
 
@@ -110,10 +110,7 @@ registerLocaleData(localeFr);
     DisplayFiscalStatusPipe,
     DisplayHealthCareCoveragePipe,
     DisplayHealthInsurancePipe,
-    PersonFamilySituationComponent,
-    FamilySituationComponent,
     DisplayHousingPipe,
-    FamilySituationEditComponent,
     CitiesUploadComponent,
     TasksComponent,
     TasksLayoutComponent,
@@ -147,7 +144,10 @@ registerLocaleData(localeFr);
     PersonPerUnitRevenueInformationEditComponent,
     PersonMembershipsComponent,
     DisplayPaymentModePipe,
-    PersonMembershipPrintComponent
+    PersonMembershipPrintComponent,
+    PersonFamilyComponent,
+    SituationComponent,
+    PersonFamilyEditComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
