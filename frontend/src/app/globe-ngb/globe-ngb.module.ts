@@ -1,13 +1,9 @@
 /* tslint:disable:no-use-before-declare */
 
 import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
-import {
-  NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerConfig, NgbDatepickerI18n,
-  NgbModule
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerConfig, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DateStringAdapterService } from './date-string-adapter.service';
 import { FrenchDateParserFormatterService } from './french-date-parser-formatter.service';
-import { FrenchDatepickerI18nService } from './french-datepicker-i18n.service';
 import { NonEditableTypeaheadDirective } from './non-editable-typeahead.directive';
 import { DatepickerContainerComponent } from './datepicker-container.component';
 
@@ -44,7 +40,6 @@ export class GlobeNgbModule {
   imports: [NgbModule.forRoot(), GlobeNgbModule],
   exports: [GlobeNgbModule],
   providers: [
-    { provide: NgbDatepickerI18n, useClass: FrenchDatepickerI18nService },
     { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
     { provide: NgbDateAdapter, useClass: DateStringAdapterService },
     { provide: NgbDatepickerConfig, useClass: GlobeNgbDatepickerConfig }

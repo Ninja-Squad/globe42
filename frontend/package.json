@@ -22,7 +22,7 @@
     "@angular/platform-browser": "6.0.1",
     "@angular/platform-browser-dynamic": "6.0.1",
     "@angular/router": "6.0.1",
-    "@ng-bootstrap/ng-bootstrap": "1.1.2",
+    "@ng-bootstrap/ng-bootstrap": "2.0.0",
     "@types/chart.js": "2.7.15",
     "@types/luxon": "0.5.2",
     "bootstrap": "4.1.1",
@@ -31,7 +31,6 @@
     "font-awesome": "4.7.0",
     "luxon": "1.2.0",
     "rxjs": "6.1.0",
-    "rxjs-compat": "6.1.0",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
