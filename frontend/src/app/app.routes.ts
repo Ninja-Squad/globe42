@@ -59,6 +59,7 @@ import { CountriesResolverService } from './countries-resolver.service';
 import { PersonWeddingEventsComponent } from './person-wedding-events/person-wedding-events.component';
 import { WeddingEventsResolverService } from './wedding-events-resolver.service';
 import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-information-resolver.service';
+// tslint:disable-next-line:max-line-length
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
 import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
 import { MembershipsResolverService } from './memberships-resolver.service';
