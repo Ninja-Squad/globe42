@@ -24,6 +24,8 @@ import { CountryModel } from '../models/country.model';
 import { ComponentTester, TestButton, TestInput, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { DisplayResidencePermitPipe } from '../display-residence-permit.pipe';
+import { DisplayVisaPipe } from '../display-visa.pipe';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -154,6 +156,22 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.input('#nationality');
   }
 
+  get visa() {
+    return this.select('#visa');
+  }
+
+  get residencePermit() {
+    return this.select('#residencePermit');
+  }
+
+  get residencePermitDepositDate() {
+    return this.input('#residencePermitDepositDate');
+  }
+
+  get residencePermitRenewalDate() {
+    return this.input('#residencePermitRenewalDate');
+  }
+
   get firstTypeaheadOption() {
     return this.button('ngb-typeahead-window button');
   }
@@ -219,6 +237,8 @@ describe('PersonEditComponent', () => {
       DisplayFiscalStatusPipe,
       DisplayHealthCareCoveragePipe,
       DisplayHealthInsurancePipe,
+      DisplayVisaPipe,
+      DisplayResidencePermitPipe,
       FullnamePipe,
       ValidationDefaultsComponent
     ]
@@ -268,6 +288,10 @@ describe('PersonEditComponent', () => {
         id: 'FRA',
         name: 'France'
       },
+      visa: 'LONG_STAY',
+      residencePermit: 'TEN_YEAR_OLD_RESIDENT',
+      residencePermitDepositDate: '2018-02-02',
+      residencePermitRenewalDate: '2018-10-02',
       deleted: false
     };
 
@@ -333,6 +357,10 @@ describe('PersonEditComponent', () => {
       expect(tester.socialSecurityNumber).toHaveValue(person.socialSecurityNumber);
       expect(tester.cafNumber).toHaveValue(person.cafNumber);
       expect(tester.nationality).toHaveValue(person.nationality.name);
+      expect(tester.visa).toHaveSelectedValue(person.visa);
+      expect(tester.residencePermit).toHaveSelectedValue(person.residencePermit);
+      expect(tester.residencePermitDepositDate).toHaveValue('02/02/2018');
+      expect(tester.residencePermitRenewalDate).toHaveValue('02/10/2018');
 
       tester.lastName.fillWith('Do');
 
@@ -542,6 +570,10 @@ describe('PersonEditComponent', () => {
       expect(tester.healthInsurance).toHaveSelectedValue('UNKNOWN');
       expect(tester.healthInsuranceStartDate).toBeFalsy();
       expect(tester.nationality).toHaveValue('');
+      expect(tester.visa).toHaveSelectedValue('UNKNOWN');
+      expect(tester.residencePermit).toHaveSelectedValue('UNKNOWN');
+      expect(tester.residencePermitDepositDate).toHaveValue('');
+      expect(tester.residencePermitRenewalDate).toHaveValue('');
 
       tester.lastName.fillWith('Doe');
       tester.firstName.fillWith('Jane');
@@ -639,6 +671,10 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.healthInsuranceStartDate).toBe('2017-02-02');
       expect((createdPerson as any).nationality).not.toBeDefined();
       expect(createdPerson.nationalityId).toBe('BEL');
+      expect(createdPerson.visa).toBe('UNKNOWN');
+      expect(createdPerson.residencePermit).toBe('UNKNOWN');
+      expect(createdPerson.residencePermitDepositDate).toBe(null);
+      expect(createdPerson.residencePermitRenewalDate).toBe(null);
 
       expect(router.navigate).toHaveBeenCalledWith(['persons', 43]);
     }));

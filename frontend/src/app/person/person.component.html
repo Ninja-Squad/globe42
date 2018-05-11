@@ -77,6 +77,39 @@
           </p>
         </div>
       </div>
+
+      <h2 class="mt-3">Séjour</h2>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
+        <div class="col-sm-6">
+          <p id="entryDate" class="form-control-plaintext">{{ person.entryDate | date }}</p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Type de Visa</label>
+        <div class="col-sm-6">
+          <p id="visa" class="form-control-plaintext">{{ person.visa | displayVisa }}</p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Type de carte de séjour</label>
+        <div class="col-sm-6">
+          <p id="residencePermit" class="form-control-plaintext">{{ person.residencePermit | displayResidencePermit }}</p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Date de dépôt</label>
+        <div class="col-sm-6">
+          <p id="residencePermitDepositDate" class="form-control-plaintext">{{ person.residencePermitDepositDate | date }}</p>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Date de renouvellement</label>
+        <div class="col-sm-6">
+          <p id="residencePermitRenewalDate" class="form-control-plaintext">{{ person.residencePermitRenewalDate | date }}</p>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -84,12 +117,6 @@
     <div *ngIf="person.mediationEnabled">
       <h2 class="mt-3 mt-lg-0">Informations</h2>
 
-      <div class="form-group row" *ngIf="person.mediationEnabled">
-        <label class="col-sm-6 col-form-label">Entré(e) en France le</label>
-        <div class="col-sm-6">
-          <p id="entryDate" class="form-control-plaintext">{{ person.entryDate | date }}</p>
-        </div>
-      </div>
       <div class="form-group row" *ngIf="person.mediationEnabled">
         <label class="col-sm-6 col-form-label">1<sup>er</sup> RDV médiation</label>
         <div class="col-sm-6">

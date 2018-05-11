@@ -11,6 +11,8 @@ import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
 import { DisplayHealthInsurancePipe } from '../display-health-insurance.pipe';
 import { DisplayHousingPipe } from '../display-housing.pipe';
+import { DisplayResidencePermitPipe } from '../display-residence-permit.pipe';
+import { DisplayVisaPipe } from '../display-visa.pipe';
 import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmService } from '../confirm.service';
@@ -70,6 +72,10 @@ describe('PersonComponent', () => {
         id: 'FRA',
         name: 'France'
       },
+      visa: 'LONG_STAY',
+      residencePermit: 'TEN_YEAR_OLD_RESIDENT',
+      residencePermitDepositDate: '2018-02-02',
+      residencePermitRenewalDate: '2018-10-02',
       deleted: false
     };
 
@@ -90,6 +96,8 @@ describe('PersonComponent', () => {
         DisplayHousingPipe,
         DisplayHealthCareCoveragePipe,
         DisplayHealthInsurancePipe,
+        DisplayResidencePermitPipe,
+        DisplayVisaPipe,
         FullnamePipe
       ],
       providers: [
@@ -153,6 +161,16 @@ describe('PersonComponent', () => {
     expect(cafNumber.textContent).toContain('123765');
     const nationality = nativeElement.querySelector('#nationality');
     expect(nationality.textContent).toContain('France');
+    const visa = nativeElement.querySelector('#visa');
+    expect(visa.textContent).toBe('D (long séjour)');
+    const residencePermit = nativeElement.querySelector('#residencePermit');
+    expect(residencePermit.textContent).toBe('Carte de résident de 10 ans');
+    const residencePermitDepositDate = nativeElement.querySelector('#residencePermitDepositDate');
+    expect(residencePermitDepositDate.textContent).toBe('2 févr. 2018');
+    const residencePermitRenewalDate = nativeElement.querySelector('#residencePermitRenewalDate');
+    expect(residencePermitRenewalDate.textContent).toBe('2 oct. 2018');
+
+
   });
 
   it('should display a person with mediation disabled', () => {
@@ -174,7 +192,11 @@ describe('PersonComponent', () => {
       'accompanying',
       'socialSecurityNumber',
       'cafNumber',
-      'nationality'
+      'nationality',
+      'visa',
+      'residencePermit',
+      'residencePermitDepositDate',
+      'residencePermitRenewalDate'
     ];
     mediationDependantElementIds.forEach(id =>
       expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));

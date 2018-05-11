@@ -16,6 +16,8 @@ import { CityTypeahead } from './city-typeahead';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { CountryTypeahead } from '../person/country-typeahead';
+import { VISA_TRANSLATIONS } from '../display-visa.pipe';
+import { RESIDENCE_PERMIT_TRANSLATIONS } from '../display-residence-permit.pipe';
 
 export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;
 
@@ -43,6 +45,9 @@ export class PersonEditComponent {
   spouseIsInCouple = false;
 
   countryTypeahead: CountryTypeahead;
+
+  visas = VISA_TRANSLATIONS.map(t => t.key);
+  residencePermits = RESIDENCE_PERMIT_TRANSLATIONS.map(t => t.key);
 
   private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
     if (!ctrl.value) {
@@ -96,7 +101,11 @@ export class PersonEditComponent {
       fiscalStatus: 'UNKNOWN',
       fiscalNumber: ['', Validators.pattern(FISCAL_NUMBER_PATTERN)],
       fiscalStatusUpToDate: false,
-      nationality: null
+      nationality: null,
+      visa: 'UNKNOWN',
+      residencePermit: 'UNKNOWN',
+      residencePermitDepositDate: null,
+      residencePermitRenewalDate: null,
     });
 
     if (this.editedPerson) {

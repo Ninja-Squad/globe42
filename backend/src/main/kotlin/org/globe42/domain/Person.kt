@@ -234,6 +234,32 @@ class Person {
     var nationality: Country? = null
 
     /**
+     * The visa type. Only requested to mediation-enabled persons, and unknown by default (so, technically
+     * mandatory, but can be left as unknown)
+     */
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    var visa = Visa.UNKNOWN
+
+    /**
+     * The type of residence permit. Only requested to mediation-enabled persons, and unknown by default (so, technically
+     * mandatory, but can be left as unknown)
+     */
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    var residencePermit = ResidencePermit.UNKNOWN
+
+    /**
+     * The date of the deposit of the residence permit for France. Only requested to mediation-enabled persons, but not mandatory
+     */
+    var residencePermitDepositDate: LocalDate? = null
+
+    /**
+     * The date of the renewal of the residence permit for France. Only requested to mediation-enabled persons, but not mandatory
+     */
+    var residencePermitRenewalDate: LocalDate? = null
+
+    /**
      * The notes added on the person
      */
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)

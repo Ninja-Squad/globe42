@@ -40,5 +40,9 @@ class PersonCommandDTO(
     val accompanying: String?,
     val socialSecurityNumber: String?,
     val cafNumber: String?,
-    val nationalityId: String?
+    val nationalityId: String?,
+    @field:NotNull val visa: Visa = Visa.UNKNOWN,
+    @field:NotNull val residencePermit: ResidencePermit = ResidencePermit.UNKNOWN,
+    val residencePermitDepositDate: LocalDate?,
+    val residencePermitRenewalDate: LocalDate?
 )

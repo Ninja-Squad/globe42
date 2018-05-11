@@ -29,6 +29,8 @@ class TaskDaoTest : BaseDaoTest() {
                 withDefaultValue("housing", Housing.UNKNOWN)
                 withDefaultValue("health_care_coverage", HealthCareCoverage.UNKNOWN)
                 withDefaultValue("health_insurance", HealthInsurance.UNKNOWN)
+                withDefaultValue("visa", Visa.UNKNOWN)
+                withDefaultValue("residence_permit", ResidencePermit.UNKNOWN)
                 withDefaultValue("deleted", false)
                 columns("id", "first_name", "last_name", "gender", "mediation_enabled")
                 values(1L, "Cedric", "Exbrayat", Gender.MALE, false)

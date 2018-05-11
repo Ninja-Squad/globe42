@@ -37,6 +37,10 @@ data class PersonDTO(
     val cafNumber: String?,
     val spouse: PersonIdentityDTO?,
     val nationality: CountryDTO?,
+    val visa: Visa,
+    val residencePermit: ResidencePermit,
+    val residencePermitDepositDate: LocalDate?,
+    val residencePermitRenewalDate: LocalDate?,
     val deleted: Boolean
 ) {
 
@@ -68,6 +72,10 @@ data class PersonDTO(
         cafNumber = person.cafNumber,
         spouse = person.spouse?.let(::PersonIdentityDTO),
         nationality = person.nationality?.let(::CountryDTO),
+        visa = person.visa,
+        residencePermit = person.residencePermit,
+        residencePermitDepositDate = person.residencePermitDepositDate,
+        residencePermitRenewalDate = person.residencePermitRenewalDate,
         deleted = person.deleted
     )
 }

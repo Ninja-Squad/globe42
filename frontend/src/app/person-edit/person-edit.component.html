@@ -104,14 +104,6 @@
     </div>
 
     <div class="form-group row">
-      <label for="entryDate" class="col-sm-3 col-form-label">Date d'entrée en France</label>
-      <gl-datepicker-container class="col-sm-9">
-        <input class="form-control" id="entryDate" placeholder="01/01/2010"
-               formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
-      </gl-datepicker-container>
-    </div>
-
-    <div class="form-group row">
       <label for="accompanying" class="col-sm-3 col-form-label">Accompagnant</label>
       <div class="col-sm-9">
         <input class="form-control" id="accompanying" placeholder="Accompagnant" formControlName="accompanying">
@@ -231,6 +223,45 @@
       <div class="col-sm-9">
         <input class="form-control" id="hostName" placeholder="Nom de la personne qui héberge" formControlName="hostName">
       </div>
+    </div>
+
+    <h3>Séjour</h3>
+    <div class="form-group row">
+      <label for="entryDate" class="col-sm-3 col-form-label">Date d'entrée en France</label>
+      <gl-datepicker-container class="col-sm-9">
+        <input class="form-control" id="entryDate" placeholder="01/01/2010"
+               formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+      </gl-datepicker-container>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label" for="visa">Type de Visa</label>
+      <div class="col-sm-9">
+        <select id="visa" class="form-control" formControlName="visa">
+          <option *ngFor="let visa of visas " [value]="visa">{{ visa | displayVisa }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label" for="visa">Type de carte de séjour</label>
+      <div class="col-sm-9">
+        <select id="residencePermit" class="form-control" formControlName="residencePermit">
+          <option *ngFor="let rp of residencePermits" [value]="rp">{{ rp | displayResidencePermit }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="residencePermitDepositDate" class="col-sm-3 col-form-label">Date de dépôt</label>
+      <gl-datepicker-container class="col-sm-9">
+        <input class="form-control" id="residencePermitDepositDate" placeholder="01/01/2010"
+               formControlName="residencePermitDepositDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+      </gl-datepicker-container>
+    </div>
+    <div class="form-group row">
+      <label for="residencePermitRenewalDate" class="col-sm-3 col-form-label">Date de renouvellement</label>
+      <gl-datepicker-container class="col-sm-9">
+        <input class="form-control" id="residencePermitRenewalDate" placeholder="01/01/2010"
+               formControlName="residencePermitRenewalDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+      </gl-datepicker-container>
     </div>
 
     <h3>Situation fiscale</h3>

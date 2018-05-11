@@ -377,6 +377,10 @@ class PersonControllerTest : BaseTest() {
         } else {
             assertThat(person.nationality!!.id).isEqualTo(command.nationalityId)
         }
+        assertThat(person.visa).isEqualTo(command.visa)
+        assertThat(person.residencePermit).isEqualTo(command.residencePermit)
+        assertThat(person.residencePermitDepositDate).isEqualTo(command.residencePermitDepositDate)
+        assertThat(person.residencePermitRenewalDate).isEqualTo(command.residencePermitRenewalDate)
     }
 
     companion object {
@@ -421,7 +425,12 @@ class PersonControllerTest : BaseTest() {
                 accompanying = "Nadia DURAND",
                 socialSecurityNumber = "277126912340454",
                 cafNumber = "123765",
-                nationalityId = nationalityId
+                nationalityId = nationalityId,
+                visa = Visa.SHORT_STAY,
+                residencePermit = ResidencePermit.TEN_YEAR_OLD_RESIDENT,
+                residencePermitDepositDate = LocalDate.of(2017, 12, 1),
+                residencePermitRenewalDate = LocalDate.of(2019, 12, 1)
+
             )
         }
     }

@@ -130,6 +130,10 @@ class PersonController(
                         BadRequestException("No nationality with ID ${command.nationalityId}")
                     }
                 }
+                visa = command.visa
+                residencePermit = command.residencePermit
+                residencePermitDepositDate = command.residencePermitDepositDate
+                residencePermitRenewalDate = command.residencePermitRenewalDate
                 handleCouple(this, command.spouseId)
             }
         }

@@ -1,6 +1,6 @@
 import {
   CityModel, FiscalStatus, Gender, HealthCareCoverage, Housing,
-  MaritalStatus
+  MaritalStatus, Visa, ResidencePermit
 } from './person.model';
 
 export interface PersonCommand {
@@ -35,4 +35,8 @@ export interface PersonCommand {
   healthInsurance: string;
   healthInsuranceStartDate: string;
   nationalityId: string;
+  visa: Visa;
+  residencePermit: ResidencePermit;
+  residencePermitDepositDate: string;
+  residencePermitRenewalDate: string
 }
