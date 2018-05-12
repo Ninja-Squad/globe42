@@ -1,8 +1,0 @@
-allprojects {
-    apply plugin: 'project-report'
-    version = '1.0-SNAPSHOT'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.7'
-}
