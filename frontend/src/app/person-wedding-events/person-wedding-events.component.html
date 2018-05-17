@@ -19,9 +19,9 @@
 
   <form *ngIf="newEvent" [formGroup]="newEvent" (ngSubmit)="create()">
     <div class="form-group">
-      <label for="date" class="mr-2">Date</label>
-      <gl-datepicker-container class="mr-2">
-        <input class="form-control" style="width: 8em;" id="date" formControlName="date"
+      <label for="date">Date</label>
+      <gl-datepicker-container>
+        <input class="form-control" id="date" formControlName="date"
                ngbDatepicker [minDate]="{year: 1900, month: 1}" [maxDate]="maxMonth">
         <div class="invalid-feedback">
           <span *ngIf="newEvent.get('date').hasError('required')">La date est obligatoire</span>
@@ -31,8 +31,8 @@
     </div>
 
     <div class="form-group">
-      <label for="type" class="mr-2">Type d'événement</label>
-      <select id="type" formControlName="type" class="form-control mr-2">
+      <label for="type">Type d'événement</label>
+      <select id="type" formControlName="type" class="form-control">
         <option value=""></option>
         <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{ eventType.translation }}</option>
       </select>

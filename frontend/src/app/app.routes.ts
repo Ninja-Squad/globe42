@@ -66,6 +66,8 @@ import { PersonMembershipPrintComponent } from './person-membership-print/person
 import { PersonFamilyComponent } from './person-family/person-family.component';
 import { FamilyResolverService } from './family-resolver.service';
 import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
+import { PersonNetworkMembersComponent } from './person-network-members/person-network-members.component';
+import { NetworkMembersResolverService } from './network-members-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -114,6 +116,13 @@ export const routes: Routes = [
                 component: PersonFamilyComponent,
                 resolve: {
                   family: FamilyResolverService
+                }
+              },
+              {
+                path: 'network',
+                component: PersonNetworkMembersComponent,
+                resolve: {
+                  members: NetworkMembersResolverService
                 }
               },
               {

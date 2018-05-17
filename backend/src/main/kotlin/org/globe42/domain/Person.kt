@@ -257,6 +257,12 @@ class Person {
     private val weddingEvents: MutableSet<WeddingEvent> = HashSet()
 
     /**
+     * The members of the network of the person. Only requested to mediation-enabled persons
+     */
+    @OneToMany(mappedBy = "person", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
+    private val networkMembers: MutableSet<NetworkMember> = HashSet()
+
+    /**
      * Flag indicating that the given person is logically deleted
      */
     var deleted: Boolean = false
@@ -345,5 +351,18 @@ class Person {
 
     fun removeWeddingEvent(weddingEvent: WeddingEvent) {
         weddingEvents.remove(weddingEvent)
+    }
+
+    fun getNetworkMembers(): Set<NetworkMember> {
+        return Collections.unmodifiableSet(networkMembers)
+    }
+
+    fun addNetworkMember(networkMember: NetworkMember) {
+        networkMember.person = this
+        networkMembers.add(networkMember)
+    }
+
+    fun removeNetworkMember(networkMember: NetworkMember) {
+        networkMembers.remove(networkMember)
     }
 }
