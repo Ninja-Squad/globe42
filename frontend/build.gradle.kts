@@ -15,33 +15,49 @@ tasks {
         enabled = false
     }
 
-    val npm_run_build by getting {
-        dependsOn("yarn_install")
-        inputs.dir("src")
-        outputs.dir("dist")
-    }
-
-    val npm_run_test by getting {
-        inputs.dir("src")
-        outputs.dir("coverage")
-    }
-
     val yarn_install by getting {
         inputs.file("package.json")
         inputs.file("yarn.lock")
         outputs.dir("node_modules")
     }
 
+    val deleteMomentLocales by creating(Delete::class) {
+        dependsOn(yarn_install)
+        delete(fileTree("${projectDir}/node_modules/moment/locale") {
+            include("*.js")
+        })
+    }
+
+    val prepare by creating {
+        dependsOn(deleteMomentLocales)
+    }
+
+    val yarn_build by getting {
+        dependsOn(prepare)
+        inputs.dir("src")
+        outputs.dir("dist")
+    }
+
+    val yarn_run_test by getting {
+        dependsOn(prepare)
+        inputs.dir("src")
+        outputs.dir("coverage")
+    }
+
     val test by creating {
-        dependsOn("npm_run_test")
+        dependsOn(yarn_run_test)
     }
 
     val check by getting {
-        dependsOn("test")
+        dependsOn(test)
+    }
+
+    val assemble by getting {
+        dependsOn(yarn_build)
     }
 
     val clean by getting {
-        dependsOn("cleanNpm_run_build")
-        dependsOn("cleanNpm_run_test")
+        dependsOn("cleanYarn_run_build")
+        dependsOn("cleanYarn_run_test")
     }
 }

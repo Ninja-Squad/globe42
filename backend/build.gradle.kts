@@ -58,7 +58,7 @@ tasks {
 
     val bootJar by getting(BootJar::class) {
         archiveName = "globe42.jar"
-        dependsOn(":frontend:npm_run_build")
+        dependsOn(":frontend:assemble")
         dependsOn(buildInfo)
 
         into("BOOT-INF/classes/static") {
