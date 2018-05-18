@@ -7,7 +7,6 @@ import { ActivatedRoute } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { FullnamePipe } from '../fullname.pipe';
-import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
@@ -59,24 +58,23 @@ describe('PersonParticipationsComponent', () => {
 
     it('should create a participation when item is selected', () => {
       const socialMediationItem: ParticipationItem = component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0];
-      socialMediationItem.selected = true;
 
       const participation = { id: 22 } as ParticipationModel;
       spyOn(participationService, 'create').and.returnValue(of(participation));
 
-      component.selectionChanged(socialMediationItem);
+      component.selectItem(socialMediationItem);
 
       expect(socialMediationItem.id).toBe(participation.id);
+      expect(socialMediationItem.selected).toBe(true);
       expect(participationService.create).toHaveBeenCalledWith(person.id, socialMediationItem.activityType);
     });
 
     it('should switch back to unselected if creation fails', () => {
       const socialMediationItem: ParticipationItem = component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0];
-      socialMediationItem.selected = true;
 
       spyOn(participationService, 'create').and.returnValue(throwError('error'));
 
-      component.selectionChanged(socialMediationItem);
+      component.selectItem(socialMediationItem);
 
       expect(socialMediationItem.id).toBeFalsy();
       expect(socialMediationItem.selected).toBe(false);
@@ -86,22 +84,21 @@ describe('PersonParticipationsComponent', () => {
     it('should delete a participation when item is unselected', () => {
       const mealItem: ParticipationItem = component.items.filter(item => item.activityType === 'MEAL')[0];
       const participationId = mealItem.id;
-      mealItem.selected = false;
       spyOn(participationService, 'delete').and.returnValue(of(null));
 
-      component.selectionChanged(mealItem);
+      component.selectItem(mealItem);
 
       expect(mealItem.id).toBeFalsy();
+      expect(mealItem.selected).toBe(false);
       expect(participationService.delete).toHaveBeenCalledWith(person.id, participationId);
     });
 
     it('should switch back to selected if deletion fails', () => {
       const mealItem: ParticipationItem = component.items.filter(item => item.activityType === 'MEAL')[0];
       const participationId = mealItem.id;
-      mealItem.selected = false;
       spyOn(participationService, 'delete').and.returnValue(throwError('error'));
 
-      component.selectionChanged(mealItem);
+      component.selectItem(mealItem);
 
       expect(mealItem.selected).toBe(true);
       expect(participationService.delete).toHaveBeenCalledWith(person.id, participationId);
@@ -114,7 +111,7 @@ describe('PersonParticipationsComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         declarations: [PersonParticipationsComponent, FullnamePipe, DisplayActivityTypePipe],
-        imports: [HttpClientModule, FormsModule, RouterTestingModule],
+        imports: [HttpClientModule, RouterTestingModule],
         providers: [{ provide: ActivatedRoute, useValue: route }]
       });
 
@@ -136,7 +133,7 @@ describe('PersonParticipationsComponent', () => {
 
     it('should trigger selection change', async(() => {
       const component = fixture.componentInstance;
-      spyOn(component, 'selectionChanged');
+      spyOn(component, 'selectItem');
 
       fixture.nativeElement.querySelector('#activityType-MEAL').click();
       fixture.detectChanges();
@@ -144,7 +141,7 @@ describe('PersonParticipationsComponent', () => {
       fixture.whenStable().then(() => {
         expect(fixture.nativeElement.querySelector('#activityType-MEAL').checked).toBe(false);
         const mealItem = component.items.filter(item => item.activityType === 'MEAL')[0];
-        expect(component.selectionChanged).toHaveBeenCalledWith(mealItem);
+        expect(component.selectItem).toHaveBeenCalledWith(mealItem);
       });
     }));
   });

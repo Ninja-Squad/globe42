@@ -35,7 +35,8 @@ export class PersonParticipationsComponent {
     });
   }
 
-  selectionChanged(item: ParticipationItem) {
+  selectItem(item: ParticipationItem) {
+    item.selected = !item.selected;
     if (item.selected) {
       this.participationService.create(this.person.id, item.activityType)
         .subscribe(participation => {
