@@ -3,14 +3,20 @@ import { TaskModel } from '../models/task.model';
 import { DateTime } from 'luxon';
 import { SpentTimeModel } from '../models/spent-time.model';
 
-class Task {
+export class Task {
   opened = false;
   spentTimesOpened = false;
   addSpentTimeOpened = false;
 
-  constructor(public model: TaskModel) {}
+  relativeDueDate: string;
+  dueDateClass: string;
 
-  relativeDueDate(): string {
+  constructor(public model: TaskModel) {
+    this.relativeDueDate = this.computeRelativeDueDate();
+    this.dueDateClass = this.computeDueDateClass()
+  }
+
+  private computeRelativeDueDate(): string {
     const dueDateTime = DateTime.fromISO(this.model.dueDate);
     const today = DateTime.local().startOf('day');
     if (today.equals(dueDateTime)) {
@@ -27,7 +33,7 @@ class Task {
     return `il y a ${d} jour${d > 1 ? 's' : ''}`;
   }
 
-  dueDateClass() {
+  private computeDueDateClass() {
     const dueDateTime = DateTime.fromISO(this.model.dueDate);
     const today = DateTime.local().startOf('day');
     const days = dueDateTime.diff(today, ['days']).days;
