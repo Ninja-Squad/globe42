@@ -1,14 +1,14 @@
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { PersonNotesComponent } from './person-notes.component';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NoteComponent } from '../note/note.component';
 import { PersonNoteService } from '../person-note.service';
 import { PersonModel } from '../models/person.model';
 import { NoteModel } from '../models/note.model';
 import { ConfirmService } from '../confirm.service';
-import { Subject, of, throwError } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
@@ -22,7 +22,7 @@ describe('PersonNotesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), FormsModule, HttpClientModule, GlobeNgbModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), ReactiveFormsModule, HttpClientModule, GlobeNgbModule.forRoot()],
       declarations: [PersonNotesComponent, NoteComponent]
     });
 
@@ -169,7 +169,7 @@ describe('PersonNotesComponent', () => {
     expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(2);
   });
 
-  it('should update note', async(() => {
+  it('should update note', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
     spyOn(personNoteService, 'update').and.returnValue(of(null));
@@ -184,27 +184,24 @@ describe('PersonNotesComponent', () => {
     noteComponents[0].nativeElement.querySelector('button').click();
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
+    // change first note text
+    const textArea = noteComponents[0].nativeElement.querySelector('textarea');
+    textArea.value = 'new text';
+    textArea.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
 
-      // change first note text
-      const textArea = noteComponents[0].nativeElement.querySelector('textarea');
-      textArea.value = 'new text';
-      textArea.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+    const noteComponentInstance: NoteComponent = noteComponents[0].componentInstance;
+    expect(noteComponentInstance.noteForm.value.text).toBe('new text');
 
-      expect(noteComponents[0].componentInstance.editedText).toBe('new text');
+    // save the change
+    noteComponents[0].nativeElement.querySelector('button').click();
+    fixture.detectChanges();
 
-      // save the change
-      noteComponents[0].nativeElement.querySelector('button').click();
-      fixture.detectChanges();
+    expect(personNoteService.update).toHaveBeenCalledWith(person.id, notes[0].id, 'new text');
+    expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
-      expect(personNoteService.update).toHaveBeenCalledWith(person.id, notes[0].id, 'new text');
-      expect(personNoteService.list).toHaveBeenCalledWith(person.id);
-
-      expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(2);
-    });
-  }));
+    expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(2);
+  });
 
   it('should add a note at the end when creating, and remove it when cancelling', () => {
     // create component with 2 notes
@@ -246,7 +243,7 @@ describe('PersonNotesComponent', () => {
     expect(noteComponents[1].componentInstance.disabled).toBe(false);
   });
 
-  it('should create a note', async(() => {
+  it('should create a note',() => {
     // create component with 2 notes
     const newNote = {
       id: 3,
@@ -273,31 +270,28 @@ describe('PersonNotesComponent', () => {
     addNoteButton.click();
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
+    expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
-      expect(noteEditedObserver).toHaveBeenCalledWith(true);
+    // enter text of new note
+    const noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
+    const textArea = noteComponents[2].nativeElement.querySelector('textarea');
+    textArea.value = 'new text';
+    textArea.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
 
-      // enter text of new note
-      const noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
-      const textArea = noteComponents[2].nativeElement.querySelector('textarea');
-      textArea.value = 'new text';
-      textArea.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+    const noteComponentInstance: NoteComponent = noteComponents[2].componentInstance;
+    expect(noteComponentInstance.noteForm.value.text).toBe('new text');
 
-      expect(noteComponents[2].componentInstance.editedText).toBe('new text');
+    // save new note
+    noteComponents[2].nativeElement.querySelector('button').click();
+    fixture.detectChanges();
 
-      // save new note
-      noteComponents[2].nativeElement.querySelector('button').click();
-      fixture.detectChanges();
+    expect(personNoteService.create).toHaveBeenCalledWith(person.id, 'new text');
+    expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
-      expect(personNoteService.create).toHaveBeenCalledWith(person.id, 'new text');
-      expect(personNoteService.list).toHaveBeenCalledWith(person.id);
-
-      fixture.detectChanges();
-      expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(3);
-      expect(fixture.componentInstance.editedNote).toBe(null);
-      expect(noteEditedObserver).toHaveBeenCalledWith(false);
-    });
-  }));
+    fixture.detectChanges();
+    expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(3);
+    expect(fixture.componentInstance.editedNote).toBe(null);
+    expect(noteEditedObserver).toHaveBeenCalledWith(false);
+  });
 });

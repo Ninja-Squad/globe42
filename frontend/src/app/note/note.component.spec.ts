@@ -1,7 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { NoteComponent, NoteEditionEvent } from './note.component';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Component, LOCALE_ID } from '@angular/core';
 import { NoteModel } from '../models/note.model';
 import { UserModel } from '../models/user.model';
@@ -28,7 +28,7 @@ class TestComponent {
 describe('NoteComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule],
+      imports: [ReactiveFormsModule],
       declarations: [NoteComponent, TestComponent],
       providers: [
         { provide: LOCALE_ID, useValue: 'fr-FR' }
@@ -122,13 +122,9 @@ describe('NoteComponent', () => {
     fixture.componentInstance.note.text = 'a\nb\nc\nd';
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-
-      const element = fixture.nativeElement;
-      const textArea: HTMLTextAreaElement = element.querySelector('textarea');
-      expect(textArea.rows).toBe(4);
-    });
+    const element = fixture.nativeElement;
+    const textArea: HTMLTextAreaElement = element.querySelector('textarea');
+    expect(textArea.rows).toBe(4);
   });
 
   it('should cancel edition', () => {
@@ -141,27 +137,23 @@ describe('NoteComponent', () => {
     fixture.componentInstance.edited = true;
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
+    const element = fixture.nativeElement;
+    const textArea: HTMLTextAreaElement = element.querySelector('textarea');
+    textArea.value = 'new text';
+    textArea.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
 
-      const element = fixture.nativeElement;
-      const textArea: HTMLTextAreaElement = element.querySelector('textarea');
-      textArea.value = 'new text';
-      textArea.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+    expect(fixture.componentInstance.note.text).toBe('hello world');
 
-      expect(fixture.componentInstance.note.text).toBe('hello world');
+    element.querySelectorAll('button')[1].click();
+    fixture.detectChanges();
 
-      element.querySelectorAll('button')[1].click();
-      fixture.detectChanges();
-
-      expect(fixture.componentInstance.editionEvent).toEqual({
-        id: 42,
-        text: 'new text'
-      });
-      expect(element.textContent).toContain('hello world');
-      expect(element.querySelector('textarea')).toBeFalsy();
+    expect(fixture.componentInstance.editionEvent).toEqual({
+      id: 42,
+      text: 'new text'
     });
+    expect(element.textContent).toContain('hello world');
+    expect(element.querySelector('textarea')).toBeFalsy();
   });
 
   it('should save edition', () => {
@@ -174,22 +166,18 @@ describe('NoteComponent', () => {
     fixture.componentInstance.edited = true;
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
+    const element = fixture.nativeElement;
+    const textArea: HTMLTextAreaElement = element.querySelector('textarea');
+    textArea.value = 'new text';
+    textArea.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
 
-      const element = fixture.nativeElement;
-      const textArea: HTMLTextAreaElement = element.querySelector('textarea');
-      textArea.value = 'new text';
-      textArea.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+    element.querySelectorAll('button')[0].click();
+    fixture.detectChanges();
 
-      element.querySelectorAll('button')[0].click();
-      fixture.detectChanges();
-
-      expect(fixture.componentInstance.editionEvent).toEqual({
-        id: 42,
-        text: 'new text'
-      });
+    expect(fixture.componentInstance.editionEvent).toEqual({
+      id: 42,
+      text: 'new text'
     });
   });
 });
