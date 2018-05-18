@@ -5,6 +5,7 @@ import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeCommand } from '../models/income.command';
 import { IncomeService } from '../income.service';
 import { sortBy } from '../utils';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-person-income-edit',
@@ -15,29 +16,47 @@ export class PersonIncomeEditComponent implements OnInit {
 
   person: PersonModel;
   incomeSources: Array<IncomeSourceModel>;
+  incomeForm: FormGroup;
 
-  income: {
-    source: IncomeSourceModel,
-    monthlyAmount: number
+  private monthlyAmountValidator: ValidatorFn = (control: AbstractControl) => {
+    if (!this.selectedSource || !this.selectedSource.maxMonthlyAmount) {
+      return null;
+    }
+
+    return Validators.max(this.selectedSource.maxMonthlyAmount)(control);
   };
 
   constructor(private route: ActivatedRoute,
               private incomeService: IncomeService,
-              private router: Router) { }
+              private router: Router,
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.person = this.route.snapshot.data['person'];
     this.incomeSources = sortBy<IncomeSourceModel>(this.route.snapshot.data['incomeSources'], source => source.name);
-    this.income = {
-      source: null,
-      monthlyAmount: null
-    };
+    this.incomeForm = this.fb.group({
+      source: [null, Validators.required],
+      monthlyAmount: [null, Validators.compose([Validators.required, this.monthlyAmountValidator, Validators.min(1)])]
+    });
+  }
+
+  get selectedSource(): IncomeSourceModel | null {
+    return this.incomeForm && this.incomeForm.value.source;
+  }
+
+  get monthlyAmountCtrl(): FormControl {
+    return this.incomeForm.get('monthlyAmount') as FormControl;
   }
 
   save() {
+    if (this.incomeForm.invalid) {
+      return;
+    }
+
+    const formValue = this.incomeForm.value;
     const command: IncomeCommand = {
-      sourceId: this.income.source.id,
-      monthlyAmount: this.income.monthlyAmount
+      sourceId: formValue.source.id,
+      monthlyAmount: formValue.monthlyAmount
     };
     this.incomeService.create(this.person.id, command)
       .subscribe(() => this.router.navigate(['persons', this.person.id, 'resources']));
