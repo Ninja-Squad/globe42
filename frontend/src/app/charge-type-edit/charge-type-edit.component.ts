@@ -7,6 +7,7 @@ import { ChargeTypeService } from '../charge-type.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-charge-type-edit',
@@ -18,11 +19,12 @@ export class ChargeTypeEditComponent implements OnInit {
   editedChargeType: ChargeTypeModel;
 
   chargeCategories: Array<ChargeCategoryModel>;
-  chargeType: ChargeTypeCommand;
+  chargeTypeForm: FormGroup;
 
   constructor(private route: ActivatedRoute,
               private chargeTypeService: ChargeTypeService,
               private router: Router,
+              private fb: FormBuilder,
               private errorService: ErrorService) { }
 
   ngOnInit() {
@@ -31,27 +33,24 @@ export class ChargeTypeEditComponent implements OnInit {
 
     this.editedChargeType = this.route.snapshot.data['chargeType'];
 
-    if (this.editedChargeType) {
-      this.chargeType = {
-        name: this.editedChargeType.name,
-        categoryId: this.editedChargeType.category.id,
-        maxMonthlyAmount: this.editedChargeType.maxMonthlyAmount
-      };
-    } else {
-      this.chargeType = {
-        name: '',
-        categoryId: null,
-        maxMonthlyAmount: null
-      };
-    }
+    this.chargeTypeForm = this.fb.group({
+      name: [this.editedChargeType ? this.editedChargeType.name : '', Validators.required],
+      categoryId: [this.editedChargeType ? this.editedChargeType.category.id : null, Validators.required],
+      maxMonthlyAmount: [this.editedChargeType ? this.editedChargeType.maxMonthlyAmount : null, Validators.min(1)]
+    });
   }
 
   save() {
+    if (this.chargeTypeForm.invalid) {
+      return;
+    }
+
     let action: Observable<ChargeTypeModel | void>;
+    const command: ChargeTypeCommand = this.chargeTypeForm.value;
     if (this.editedChargeType) {
-      action = this.chargeTypeService.update(this.editedChargeType.id, this.chargeType);
+      action = this.chargeTypeService.update(this.editedChargeType.id, command);
     } else {
-      action = this.chargeTypeService.create(this.chargeType);
+      action = this.chargeTypeService.create(command);
     }
     action.subscribe(
       () => this.router.navigate(['/charge-types']),

@@ -11,7 +11,7 @@ import { ChargeCategoryModel } from '../models/charge-category.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 
-fdescribe('ChargeCategoryEditComponent', () => {
+describe('ChargeCategoryEditComponent', () => {
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
     declarations: [ChargeCategoryEditComponent],
