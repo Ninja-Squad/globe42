@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
@@ -55,8 +55,6 @@ import { ActivityTypesComponent } from './activity-types/activity-types.componen
 import { ParticipantsComponent } from './participants/participants.component';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { MinValidatorDirective } from './min-validator.directive';
-import { MaxValidatorDirective } from './max-validator.directive';
 import { Settings } from 'luxon';
 import { DurationPipe } from './duration.pipe';
 import { SpentTimesComponent } from './spent-times/spent-times.component';
@@ -132,8 +130,6 @@ registerLocaleData(localeFr);
     DisplayActivityTypePipe,
     ActivityTypesComponent,
     ParticipantsComponent,
-    MinValidatorDirective,
-    MaxValidatorDirective,
     DurationPipe,
     SpentTimesComponent,
     SpentTimeAddComponent,
@@ -159,7 +155,6 @@ registerLocaleData(localeFr);
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    FormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
     GlobeNgbModule.forRoot(),

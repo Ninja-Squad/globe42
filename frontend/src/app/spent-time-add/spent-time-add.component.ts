@@ -19,9 +19,8 @@ export class SpentTimeAddComponent {
   addForm: FormGroup;
 
   private addableValidator: ValidatorFn = (form: AbstractControl) => {
-    console.log('validating');
     return form.get('hours').value > 0 || form.get('minutes').value > 0 ? null : { addable: false };
-  };
+  }
 
   constructor(private taskService: TaskService,
               fb: FormBuilder) {

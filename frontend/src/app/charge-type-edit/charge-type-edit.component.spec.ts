@@ -80,7 +80,7 @@ describe('ChargeTypeEditComponent', () => {
       const maxMonthlyAmount: HTMLInputElement = element.querySelector('#maxMonthlyAmount');
       expect(maxMonthlyAmount.value).toBe('');
       maxMonthlyAmount.value = '0';
-      maxMonthlyAmount.dispatchEvent(new Event('input'))
+      maxMonthlyAmount.dispatchEvent(new Event('input'));
 
       const chargeTypeService: ChargeTypeService = TestBed.get(ChargeTypeService);
 

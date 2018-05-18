@@ -46,8 +46,7 @@ export class TaskEditComponent implements OnInit {
     let concernedPerson: PersonIdentityModel = null;
     if (this.editedTask && this.editedTask.concernedPerson) {
       concernedPerson = this.findWithId(this.personTypeahead.elements, this.editedTask.concernedPerson.id);
-    }
-    else if (concernedPersonId) {
+    } else if (concernedPersonId) {
       concernedPerson = this.findWithId(this.personTypeahead.elements, +concernedPersonId);
     }
 
@@ -57,7 +56,7 @@ export class TaskEditComponent implements OnInit {
       category: [this.editedTask ? this.findWithId(this.categories, this.editedTask.category.id) : null, Validators.required],
       dueDate: this.editedTask ? this.editedTask.dueDate : null,
       concernedPerson,
-      assignee: this.editedTask && this.editedTask.assignee? this.findWithId(this.users, this.editedTask.assignee.id) : null
+      assignee: this.editedTask && this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null
     });
   }
 

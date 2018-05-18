@@ -25,7 +25,7 @@ export class PersonChargeEditComponent implements OnInit {
     }
 
     return Validators.max(this.selectedChargeType.maxMonthlyAmount)(control);
-  };
+  }
 
   constructor(private route: ActivatedRoute,
               private chargeService: ChargeService,

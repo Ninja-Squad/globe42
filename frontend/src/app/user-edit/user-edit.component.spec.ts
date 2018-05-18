@@ -7,7 +7,7 @@ import { UserModel } from '../models/user.model';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
@@ -15,7 +15,7 @@ import { of } from 'rxjs';
 describe('UserEditComponent', () => {
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
     declarations: [UserEditComponent]
   })
   class TestModule {}
@@ -43,33 +43,32 @@ describe('UserEditComponent', () => {
 
       const component = fixture.componentInstance;
       expect(component.createdUser).toBeUndefined();
-      expect(component.user).toEqual({ login: '', admin: false });
+      expect(component.userForm.value).toEqual({ login: '', admin: false });
     });
 
-    it('should display the user in a form, and have the save button disabled', () => {
+    it('should display the user in a form, and validate the form', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const login: HTMLInputElement = element.querySelector('#login');
+      expect(login.value).toBe('');
 
-        const login = nativeElement.querySelector('#login');
-        expect(login.value).toBe('');
+      const noAdmin: HTMLInputElement = element.querySelector('#role-no-admin');
+      expect(noAdmin.checked).toBe(true);
 
-        const noAdmin = nativeElement.querySelector('#role-no-admin');
-        expect(noAdmin.checked).toBe(true);
+      const admin: HTMLInputElement = element.querySelector('#role-admin');
+      expect(admin.checked).toBe(false);
 
-        const admin = nativeElement.querySelector('#role-admin');
-        expect(admin.checked).toBe(false);
+      const save: HTMLButtonElement = element.querySelector('#save');
+      save.click();
+      fixture.detectChanges();
 
-        const save = nativeElement.querySelector('#save');
-        expect(save.disabled).toBe(true);
+      expect(element.textContent).toContain(`L'identifiant est obligatoire`);
 
-        const createdUser = nativeElement.querySelector('#created-user');
-        expect(createdUser).toBeNull();
-      });
+      const createdUser = element.querySelector('#created-user');
+      expect(createdUser).toBeNull();
     });
 
     it('should save the user and display the result', () => {
@@ -82,33 +81,26 @@ describe('UserEditComponent', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const login: HTMLInputElement = element.querySelector('#login');
+      login.value = 'foo';
+      login.dispatchEvent(new Event('input'));
 
-        const login = nativeElement.querySelector('#login');
-        login.value = 'foo';
-        login.dispatchEvent(new Event('input'));
+      const admin: HTMLInputElement = element.querySelector('#role-admin');
+      admin.click();
+      fixture.detectChanges();
 
-        const admin = nativeElement.querySelector('#role-admin');
-        admin.click();
+      const save: HTMLButtonElement = element.querySelector('#save');
+      save.click();
+      fixture.detectChanges();
 
-        const save = nativeElement.querySelector('#save');
-        fixture.detectChanges();
+      expect(userService.create).toHaveBeenCalledWith({ login: 'foo', admin: true });
 
-        expect(save.disabled).toBe(false);
-        save.click();
-
-        expect(userService.create).toHaveBeenCalledWith({ login: 'foo', admin: true });
-
-        fixture.detectChanges();
-
-        const createdUser = nativeElement.querySelector('#created-user');
-        expect(createdUser).not.toBeNull();
-        expect(createdUser.textContent).toContain('foo');
-        expect(createdUser.textContent).toContain('passw0rd');
-      });
+      const createdUser = element.querySelector('#created-user');
+      expect(createdUser).not.toBeNull();
+      expect(createdUser.textContent).toContain('foo');
+      expect(createdUser.textContent).toContain('passw0rd');
     });
   });
 
@@ -140,33 +132,26 @@ describe('UserEditComponent', () => {
 
       const component = fixture.componentInstance;
       expect(component.createdUser).toBeUndefined();
-      expect(component.user).toEqual({ login: 'jb', admin: true });
+      expect(component.userForm.value).toEqual({ login: 'jb', admin: true });
     });
 
     it('should display the user in a form, and have the save button enabled', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const login: HTMLInputElement = element.querySelector('#login');
+      expect(login.value).toBe('jb');
 
-        const login = nativeElement.querySelector('#login');
-        expect(login.value).toBe('jb');
+      const noAdmin: HTMLInputElement = element.querySelector('#role-no-admin');
+      expect(noAdmin.checked).toBe(false);
 
-        const noAdmin = nativeElement.querySelector('#role-no-admin');
-        expect(noAdmin.checked).toBe(false);
+      const admin: HTMLInputElement = element.querySelector('#role-admin');
+      expect(admin.checked).toBe(true);
 
-        const admin = nativeElement.querySelector('#role-admin');
-        expect(admin.checked).toBe(true);
-
-        const save = nativeElement.querySelector('#save');
-        expect(save.disabled).toBe(false);
-
-        const createdUser = nativeElement.querySelector('#created-user');
-        expect(createdUser).toBeNull();
-      });
+      const createdUser = element.querySelector('#created-user');
+      expect(createdUser).toBeNull();
     });
 
     it('should save the user and navigate to the users page', () => {
@@ -179,19 +164,13 @@ describe('UserEditComponent', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
+      const save: HTMLButtonElement = element.querySelector('#save');
+      save.click();
+      fixture.detectChanges();
 
-        const nativeElement = fixture.nativeElement;
-        const save = nativeElement.querySelector('#save');
-        save.click();
-
-        expect(userService.update).toHaveBeenCalledWith(42, { login: 'jb', admin: true });
-
-        fixture.detectChanges();
-
-        expect(router.navigate).toHaveBeenCalledWith(['/users']);
-      });
+      expect(userService.update).toHaveBeenCalledWith(42, { login: 'jb', admin: true });
+      expect(router.navigate).toHaveBeenCalledWith(['/users']);
     });
   });
 });
