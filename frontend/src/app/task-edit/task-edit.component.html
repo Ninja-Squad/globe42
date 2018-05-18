@@ -1,43 +1,41 @@
 <h1 *ngIf="!editedTask">Nouvelle tâche</h1>
 <h1 *ngIf="editedTask">Modification de la tâche <em>{{ editedTask.title }}</em></h1>
 
-<form (ngSubmit)="taskForm.valid && save()" #taskForm="ngForm">
+<form (ngSubmit)="save()" [formGroup]="taskForm">
   <div class="form-group row">
     <label for="category" class="col-sm-3 col-form-label">Catégorie</label>
     <div class="col-sm-9">
-      <select class="form-control" id="category" name="category" [(ngModel)]="task.category" required #categoryCtrl="ngModel">
+      <select class="form-control" id="category" formControlName="category">
         <option></option>
         <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
       </select>
-      <div class="invalid-feedback" *ngIf="categoryCtrl.hasError('required')">La catégorie est obligatoire</div>
+      <div class="invalid-feedback" *ngIf="taskForm.get('category').hasError('required')">La catégorie est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
     <label for="title" class="col-sm-3 col-form-label">Libellé</label>
     <div class="col-sm-9">
-      <input class="form-control" id="title" name="title" [(ngModel)]="task.title" required #titleCtrl="ngModel"/>
-      <div class="invalid-feedback" *ngIf="titleCtrl.hasError('required')">Le libellé est obligatoire</div>
+      <input class="form-control" id="title" formControlName="title" />
+      <div class="invalid-feedback" *ngIf="taskForm.get('title').hasError('required')">Le libellé est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
     <label for="description" class="col-sm-3 col-form-label">Description</label>
     <div class="col-sm-9">
-      <textarea class="form-control" id="description" name="description" [(ngModel)]="task.description" required
-                style="height: 12rem;" #descriptionCtrl="ngModel"></textarea>
-      <div class="invalid-feedback" *ngIf="descriptionCtrl.hasError('required')">La description est obligatoire</div>
+      <textarea class="form-control" id="description" formControlName="description" style="height: 12rem;"></textarea>
+      <div class="invalid-feedback" *ngIf="taskForm.get('description').hasError('required')">La description est obligatoire</div>
     </div>
   </div>
   <div class="form-group row">
     <label for="dueDate" class="col-sm-3 col-form-label">Echéance</label>
     <gl-datepicker-container class="col-sm-9">
-      <input class="form-control" id="dueDate" name="dueDate" [(ngModel)]="task.dueDate"
-             ngbDatepicker [minDate]="{year: 2017, month: 1}" />
+      <input class="form-control" id="dueDate" formControlName="dueDate" ngbDatepicker [minDate]="{year: 2017, month: 1}" />
     </gl-datepicker-container>
   </div>
   <div class="form-group row">
-    <label for="title" class="col-sm-3 col-form-label">Concerne</label>
+    <label for="concernedPerson" class="col-sm-3 col-form-label">Concerne</label>
     <div class="col-sm-9">
-      <input class="form-control" id="concernedPerson" name="concernedPerson" [(ngModel)]="task.concernedPerson"
+      <input class="form-control" id="concernedPerson" formControlName="concernedPerson"
              [ngbTypeahead]="personTypeahead.searcher" [resultFormatter]="personTypeahead.formatter"
              [inputFormatter]="personTypeahead.formatter" [editable]="false" />
     </div>
@@ -45,7 +43,7 @@
   <div class="form-group row">
     <label for="assignee" class="col-sm-3 col-form-label">Assignée à</label>
     <div class="col-sm-9">
-      <select class="form-control" id="assignee" name="assignee" [(ngModel)]="task.assignee">
+      <select class="form-control" id="assignee" formControlName="assignee">
         <option></option>
         <hr/>
         <ng-container *ngFor="let user of users; let index = index">

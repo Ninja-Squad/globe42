@@ -9,15 +9,7 @@ import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CurrentUserService } from '../current-user/current-user.service';
-
-interface TaskFormModel {
-  title: string;
-  description: string;
-  category: TaskCategoryModel;
-  dueDate: string;
-  concernedPerson: PersonIdentityModel;
-  assignee: UserModel;
-}
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-task-edit',
@@ -27,16 +19,7 @@ interface TaskFormModel {
 export class TaskEditComponent implements OnInit {
 
   editedTask: TaskModel;
-
-  task: TaskFormModel = {
-    title: '',
-    description: '',
-    category: null,
-    dueDate: null,
-    concernedPerson: null,
-    assignee: null
-  };
-
+  taskForm: FormGroup;
   users: Array<UserModel>;
   categories: Array<TaskCategoryModel>;
 
@@ -46,7 +29,8 @@ export class TaskEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private taskService: TaskService,
               private router: Router,
-              private currentUserService: CurrentUserService) { }
+              private currentUserService: CurrentUserService,
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.editedTask = this.route.snapshot.data.task;
@@ -59,30 +43,39 @@ export class TaskEditComponent implements OnInit {
       this.cancelOrRedirectDestination = ['/persons', concernedPersonId, 'tasks'];
     }
 
-    if (this.editedTask) {
-      this.task.title = this.editedTask.title;
-      this.task.description = this.editedTask.description;
-      this.task.category = this.findWithId(this.categories, this.editedTask.category.id);
-      this.task.dueDate = this.editedTask.dueDate;
-      this.task.concernedPerson =
-        this.editedTask.concernedPerson ? this.findWithId(this.personTypeahead.elements, this.editedTask.concernedPerson.id) : null;
-      this.task.assignee = this.editedTask.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null;
-    } else {
-      if (concernedPersonId) {
-        this.task.concernedPerson = this.findWithId(this.personTypeahead.elements, +concernedPersonId);
-      }
+    let concernedPerson: PersonIdentityModel = null;
+    if (this.editedTask && this.editedTask.concernedPerson) {
+      concernedPerson = this.findWithId(this.personTypeahead.elements, this.editedTask.concernedPerson.id);
     }
+    else if (concernedPersonId) {
+      concernedPerson = this.findWithId(this.personTypeahead.elements, +concernedPersonId);
+    }
+
+    this.taskForm = this.fb.group({
+      title: [this.editedTask ? this.editedTask.title : '', Validators.required],
+      description: [this.editedTask ? this.editedTask.description : '', Validators.required],
+      category: [this.editedTask ? this.findWithId(this.categories, this.editedTask.category.id) : null, Validators.required],
+      dueDate: this.editedTask ? this.editedTask.dueDate : null,
+      concernedPerson,
+      assignee: this.editedTask && this.editedTask.assignee? this.findWithId(this.users, this.editedTask.assignee.id) : null
+    });
   }
 
   save() {
+    if (this.taskForm.invalid) {
+      return;
+    }
+
+    const formValue = this.taskForm.value;
     const command: TaskCommand = {
-      title: this.task.title,
-      description: this.task.description,
-      categoryId: this.task.category.id,
-      dueDate: this.task.dueDate,
-      concernedPersonId: this.task.concernedPerson ? this.task.concernedPerson.id : null,
-      assigneeId: this.task.assignee ? this.task.assignee.id : null
+      title: formValue.title,
+      description: formValue.description,
+      categoryId: formValue.category.id,
+      dueDate: formValue.dueDate,
+      concernedPersonId: formValue.concernedPerson ? formValue.concernedPerson.id : null,
+      assigneeId: formValue.assignee ? formValue.assignee.id : null
     };
+
     if (this.editedTask) {
       this.taskService.update(this.editedTask.id, command)
         .subscribe(() => this.router.navigate(this.cancelOrRedirectDestination));
@@ -107,6 +100,6 @@ export class TaskEditComponent implements OnInit {
   }
 
   private findWithId<T extends { id: number }>(array: Array<T>, id: number): T {
-    return array.filter(element => element.id === id)[0];
+    return array.find(element => element.id === id);
   }
 }
