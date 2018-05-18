@@ -7,20 +7,24 @@
       Erreur d'authentification, essayez encore.
     </div>
 
-    <form (ngSubmit)="authenticate()" #loginForm="ngForm">
+    <form (ngSubmit)="authenticate()" [formGroup]="loginForm">
       <div class="form-group">
         <label class="from-control-label" for="login">Identifiant</label>
-        <input id="login" class="form-control" name="login" [(ngModel)]="credentials.login" required #loginCtrl="ngModel">
-        <div class="invalid-feedback" *ngIf="loginCtrl.hasError('required')">L'identifiant est obligatoire</div>
+        <input id="login" class="form-control" formControlName="login" />
+        <div class="invalid-feedback">
+          <div *ngIf="loginForm.get('login').hasError('required')">L'identifiant est obligatoire</div>
+        </div>
       </div>
 
       <div class="form-group">
         <label class="from-control-label" for="password">Mot de passe</label>
-        <input id="password" class="form-control" type="password" name="password" [(ngModel)]="credentials.password" required #passwordCtrl="ngModel">
-        <div class="invalid-feedback" *ngIf="passwordCtrl.hasError('required')">Le mot de passe est obligatoire</div>
+        <input id="password" class="form-control" type="password" formControlName="password" >
+        <div class="invalid-feedback">
+          <div *ngIf="loginForm.get('password').hasError('required')">Le mot de passe est obligatoire</div>
+        </div>
       </div>
 
-      <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Connexion</button>
+      <button class="btn btn-primary" id="submit" type="submit">Connexion</button>
     </form>
   </div>
 </div>
