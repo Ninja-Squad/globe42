@@ -67,8 +67,8 @@ class AuthenticationControllerTest : BaseTest() {
     }
 }
 
-internal fun createCredentials(): CredentialsDTO {
-    return CredentialsDTO("JB", "passw0rd")
+internal fun createCredentials(): CredentialsCommandDTO {
+    return CredentialsCommandDTO("JB", "passw0rd")
 }
 
 internal fun createUser(): User {

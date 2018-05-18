@@ -22,7 +22,7 @@ class AuthenticationController(
 ) {
 
     @PostMapping
-    fun authenticate(@RequestBody credentials: CredentialsDTO): AuthenticatedUserDTO {
+    fun authenticate(@RequestBody credentials: CredentialsCommandDTO): AuthenticatedUserDTO {
         val user = userDao.findNotDeletedByLogin(credentials.login).orElseThrow(::UnauthorizedException)
         if (!passwordDigester.match(credentials.password, user.password)) {
             throw UnauthorizedException()
