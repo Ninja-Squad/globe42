@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeService } from '../charge.service';
 import { sortBy } from '../utils';
 import { ChargeCommand } from '../models/charge.command';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-person-charge-edit',
@@ -16,29 +17,49 @@ export class PersonChargeEditComponent implements OnInit {
   person: PersonModel;
   chargeTypes: Array<ChargeTypeModel>;
 
-  charge: {
-    type: ChargeTypeModel,
-    monthlyAmount: number
+  chargeForm: FormGroup;
+
+  private monthlyAmountValidator: ValidatorFn = (control: AbstractControl) => {
+    if (!this.selectedChargeType || !this.selectedChargeType.maxMonthlyAmount) {
+      return null;
+    }
+
+    return Validators.max(this.selectedChargeType.maxMonthlyAmount)(control);
   };
 
   constructor(private route: ActivatedRoute,
               private chargeService: ChargeService,
-              private router: Router) { }
+              private router: Router,
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.person = this.route.snapshot.data['person'];
     this.chargeTypes = sortBy<ChargeTypeModel>(this.route.snapshot.data['chargeTypes'], type => type.name);
-    this.charge = {
-      type: null,
-      monthlyAmount: null
-    };
+    this.chargeForm = this.fb.group({
+      type: [null, Validators.required],
+      monthlyAmount: [null, Validators.compose([Validators.required, this.monthlyAmountValidator, Validators.min(1)])]
+    });
+  }
+
+  get selectedChargeType(): ChargeTypeModel | null {
+    return this.chargeForm && this.chargeForm.value.type;
+  }
+
+  get monthlyAmountCtrl(): FormControl {
+    return this.chargeForm.get('monthlyAmount') as FormControl;
   }
 
   save() {
+    if (this.chargeForm.invalid) {
+      return;
+    }
+
+    const formValue = this.chargeForm.value;
     const command: ChargeCommand = {
-      typeId: this.charge.type.id,
-      monthlyAmount: this.charge.monthlyAmount
+      typeId: formValue.type.id,
+      monthlyAmount: formValue.monthlyAmount
     };
+
     this.chargeService.create(this.person.id, command)
       .subscribe(() => this.router.navigate(['persons', this.person.id, 'resources']));
   }

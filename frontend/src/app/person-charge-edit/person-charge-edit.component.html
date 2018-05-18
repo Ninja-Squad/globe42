@@ -1,28 +1,41 @@
 <h1 id="fullName">Créer une nouvelle charge pour {{ person | fullname }}</h1>
 
-<form (ngSubmit)="save()" #chargeForm="ngForm">
+<form (ngSubmit)="save()" [formGroup]="chargeForm">
   <div class="form-group row">
     <label for="type" class="col-sm-3 col-form-label">Nature de la charge</label>
     <div class="col-sm-9">
-      <select class="form-control" id="type" name="type" [(ngModel)]="charge.type" required>
-        <option value=""></option>
+      <select class="form-control" id="type" formControlName="type">
+        <option></option>
         <option *ngFor="let type of chargeTypes" [ngValue]="type">{{ type.name }}</option>
       </select>
+      <div class="invalid-feedback">
+        <div *ngIf="chargeForm.get('type').hasError('required')">
+          La nature de la charge est obligatoire
+        </div>
+      </div>
     </div>
   </div>
   <div class="form-group row">
     <label for="monthlyAmount" class="col-sm-3 col-form-label">Montant mensuel</label>
     <div class="col-sm-9">
-      <input type="number" class="form-control" id="monthlyAmount" name="monthlyAmount" min="1" [max]="charge.type?.maxMonthlyAmount"
-             [(ngModel)]="charge.monthlyAmount" #monthlyAmountCtrl="ngModel"/>
-      <div class="invalid-feedback" *ngIf="monthlyAmountCtrl.hasError('max')">
-        Le montant ne peut pas dépasser la valeur maximale pour ce type de charge&nbsp;: {{ monthlyAmountCtrl.errors['max'].max | currency:'EUR' }}
+      <input type="number" class="form-control" id="monthlyAmount" formControlName="monthlyAmount"
+             min="1" [max]="selectedChargeType?.maxMonthlyAmount" />
+      <div class="invalid-feedback">
+        <div *ngIf="monthlyAmountCtrl.hasError('required')">
+          Le montant mensuel est obligatoire
+        </div>
+        <div *ngIf="monthlyAmountCtrl.hasError('max')">
+          Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge&nbsp;: {{ monthlyAmountCtrl.errors['max'].max | currency:'EUR' }}
+        </div>
+        <div *ngIf="monthlyAmountCtrl.hasError('min')">
+          Le montant mensuel doit être positif
+        </div>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" [disabled]="!chargeForm.valid" id="save">Enregistrer</button>
+      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
       <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'resources']">Annuler</a>
     </div>
   </div>
