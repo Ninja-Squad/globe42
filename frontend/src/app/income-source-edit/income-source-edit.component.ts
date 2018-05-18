@@ -34,7 +34,7 @@ export class IncomeSourceEditComponent implements OnInit {
     this.editedIncomeSource = this.route.snapshot.data['incomeSource'];
 
     this.incomeSourceForm = this.fb.group({
-      name: [this.editedIncomeSource ? this.editedIncomeSource.name: '', Validators.required],
+      name: [this.editedIncomeSource ? this.editedIncomeSource.name : '', Validators.required],
       typeId: [this.editedIncomeSource ? this.editedIncomeSource.type.id : null, Validators.required],
       maxMonthlyAmount: [this.editedIncomeSource ? this.editedIncomeSource.maxMonthlyAmount : null, Validators.min(1)]
     });

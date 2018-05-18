@@ -243,7 +243,7 @@ describe('PersonNotesComponent', () => {
     expect(noteComponents[1].componentInstance.disabled).toBe(false);
   });
 
-  it('should create a note',() => {
+  it('should create a note', () => {
     // create component with 2 notes
     const newNote = {
       id: 3,

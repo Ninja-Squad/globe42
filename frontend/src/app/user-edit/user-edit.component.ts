@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { ErrorService } from '../error.service';
 import { UserService } from '../user.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-user-edit',
@@ -16,28 +17,34 @@ export class UserEditComponent implements OnInit {
   editedUser: UserModel;
   createdUser: UserWithPasswordModel;
 
-  user: UserCommand;
+  userForm: FormGroup;
 
   constructor(private userService: UserService,
               private route: ActivatedRoute,
               private router: Router,
-              private errorService: ErrorService) { }
+              private errorService: ErrorService,
+              private fb: FormBuilder) { }
 
   ngOnInit() {
     this.editedUser = this.route.snapshot.data['user'];
-    this.user = this.editedUser ? { login: this.editedUser.login, admin: this.editedUser.admin } : {
-      login: '',
-      admin: false
-    };
+    this.userForm = this.fb.group({
+      login: [this.editedUser ? this.editedUser.login : '', Validators.required],
+      admin: this.editedUser ? this.editedUser.admin : false
+    });
   }
 
   save() {
+    if (this.userForm.invalid) {
+      return;
+    }
+
+    const command: UserCommand = this.userForm.value;
     if (this.editedUser) {
-      this.userService.update(this.editedUser.id, this.user).subscribe(
+      this.userService.update(this.editedUser.id, command).subscribe(
         () => this.router.navigate(['/users']),
         this.errorService.functionalErrorHandler());
     } else {
-      this.userService.create(this.user).subscribe(
+      this.userService.create(command).subscribe(
         createdUser => this.createdUser = createdUser,
         this.errorService.functionalErrorHandler());
     }

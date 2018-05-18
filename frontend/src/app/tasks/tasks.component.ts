@@ -13,7 +13,7 @@ export class Task {
 
   constructor(public model: TaskModel) {
     this.relativeDueDate = this.computeRelativeDueDate();
-    this.dueDateClass = this.computeDueDateClass()
+    this.dueDateClass = this.computeDueDateClass();
   }
 
   private computeRelativeDueDate(): string {

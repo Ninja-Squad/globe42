@@ -24,7 +24,7 @@ export class PersonIncomeEditComponent implements OnInit {
     }
 
     return Validators.max(this.selectedSource.maxMonthlyAmount)(control);
-  };
+  }
 
   constructor(private route: ActivatedRoute,
               private incomeService: IncomeService,
