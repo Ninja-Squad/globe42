@@ -3,32 +3,40 @@
   <ng-container *ngIf="!editedIncomeSource">Nouvelle nature de prestation</ng-container>
 </h1>
 
-<form (ngSubmit)="save()" #sourceForm="ngForm">
+<form (ngSubmit)="save()" [formGroup]="incomeSourceForm">
   <div class="form-group row">
     <label for="name" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
-      <input class="form-control" id="name" name="name" [(ngModel)]="incomeSource.name" required />
+      <input class="form-control" id="name" formControlName="name" />
+      <div class="invalid-feedback">
+        <div *ngIf="incomeSourceForm.get('name').hasError('required')">Le nom est obligatoire</div>
+      </div>
     </div>
   </div>
   <div class="form-group row">
     <label for="type" class="col-sm-3 col-form-label">Organisme payeur</label>
     <div class="col-sm-9">
-      <select class="form-control" id="type" name="type" [(ngModel)]="incomeSource.typeId" required>
+      <select class="form-control" id="type" formControlName="typeId">
         <option value=""></option>
         <option *ngFor="let type of incomeSourceTypes" [ngValue]="type.id">{{ type.type }}</option>
       </select>
+      <div class="invalid-feedback">
+        <div *ngIf="incomeSourceForm.get('typeId').hasError('required')">L'organisme payeur est obligatoire</div>
+      </div>
     </div>
   </div>
   <div class="form-group row">
     <label for="maxMonthlyAmount" class="col-sm-3 col-form-label">Montant mensuel maximum</label>
     <div class="col-sm-9">
-      <input type="number" class="form-control" id="maxMonthlyAmount" name="maxMonthlyAmount"
-             [(ngModel)]="incomeSource.maxMonthlyAmount" min="1" />
+      <input type="number" class="form-control" id="maxMonthlyAmount" formControlName="maxMonthlyAmount" min="1" />
+      <div class="invalid-feedback">
+        <div *ngIf="incomeSourceForm.get('maxMonthlyAmount').hasError('min')">Le montant mensuel maximum doit être positif</div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" [disabled]="!sourceForm.valid" id="save">Enregistrer</button>
+      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
       <a class="btn btn-secondary" routerLink="/income-sources">Annuler</a>
     </div>
   </div>
