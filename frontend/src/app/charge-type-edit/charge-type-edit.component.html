@@ -3,32 +3,40 @@
   <ng-container *ngIf="!editedChargeType">Nouvelle nature des charges</ng-container>
 </h1>
 
-<form (ngSubmit)="save()" #chargeTypeForm="ngForm">
+<form (ngSubmit)="save()" [formGroup]="chargeTypeForm">
   <div class="form-group row">
     <label for="name" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
-      <input class="form-control" id="name" name="name" [(ngModel)]="chargeType.name" required />
+      <input class="form-control" id="name" formControlName="name" />
+      <div class="invalid-feedback">
+        <div *ngIf="chargeTypeForm.get('name').hasError('required')">Le nom est obligatoire</div>
+      </div>
     </div>
   </div>
   <div class="form-group row">
     <label for="category" class="col-sm-3 col-form-label">Dépense</label>
     <div class="col-sm-9">
-      <select class="form-control" id="category" name="category" [(ngModel)]="chargeType.categoryId" required>
-        <option value=""></option>
+      <select class="form-control" id="category" formControlName="categoryId">
+        <option></option>
         <option *ngFor="let category of chargeCategories" [ngValue]="category.id">{{ category.name }}</option>
       </select>
+      <div class="invalid-feedback">
+        <div *ngIf="chargeTypeForm.get('categoryId').hasError('required')">La dépense est obligatoire</div>
+      </div>
     </div>
   </div>
   <div class="form-group row">
     <label for="maxMonthlyAmount" class="col-sm-3 col-form-label">Montant mensuel maximum</label>
     <div class="col-sm-9">
-      <input type="number" class="form-control" id="maxMonthlyAmount" name="maxMonthlyAmount"
-             [(ngModel)]="chargeType.maxMonthlyAmount" min="1" />
+      <input type="number" class="form-control" id="maxMonthlyAmount" formControlName="maxMonthlyAmount" min="1"/>
+      <div class="invalid-feedback">
+        <div *ngIf="chargeTypeForm.get('maxMonthlyAmount').hasError('min')">Le montant mensuel maximum doit être positif</div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" [disabled]="!chargeTypeForm.valid" id="save">Enregistrer</button>
+      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
       <a class="btn btn-secondary" routerLink="/charge-types">Annuler</a>
     </div>
   </div>
