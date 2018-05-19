@@ -14,6 +14,7 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of, throwError } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
+import { fakeRoute, fakeSnapshot } from 'ngx-fixture';
 
 describe('PersonResourcesComponent', () => {
   const incomes = [
@@ -48,19 +49,25 @@ describe('PersonResourcesComponent', () => {
     monoParental: true
   };
 
-  const activatedRoute = {
-    snapshot: { data: { incomes, charges, perUnitRevenueInformation } },
-    parent: {
-      snapshot: {
+  const activatedRoute = fakeRoute({
+    snapshot: fakeSnapshot({
+      data: {
+        incomes,
+        charges,
+        perUnitRevenueInformation
+      }
+    }),
+    parent: fakeRoute({
+      snapshot: fakeSnapshot({
         data: {
           person: {
             id: 42,
             nickName: 'JB'
           }
         }
-      }
-    }
-  };
+      })
+    })
+  });
 
   beforeEach(async(() => TestBed.configureTestingModule({
     imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],

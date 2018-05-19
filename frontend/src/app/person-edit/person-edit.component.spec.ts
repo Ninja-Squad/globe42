@@ -167,7 +167,7 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
   }
 }
 
-fdescribe('PersonEditComponent', () => {
+describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
     code: 42000,
     city: 'SAINT-ETIENNE'
