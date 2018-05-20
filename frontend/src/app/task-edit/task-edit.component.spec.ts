@@ -52,8 +52,7 @@ class TaskEditTester extends ComponentTester<TaskEditComponent> {
   }
 
   concernedPersonSuggestions() {
-    return this.elements<HTMLButtonElement>('button.dropdown-item')
-      .map(el => new TestButton(this, el.nativeElement));
+    return this.elements('button.dropdown-item') as Array<TestButton>;
   }
 
   assignee() {
@@ -65,7 +64,7 @@ class TaskEditTester extends ComponentTester<TaskEditComponent> {
   }
 
   cancel() {
-    return this.element<HTMLAnchorElement>('#cancel');
+    return this.element('#cancel');
   }
 }
 
