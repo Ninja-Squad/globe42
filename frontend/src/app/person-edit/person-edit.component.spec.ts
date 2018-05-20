@@ -61,7 +61,7 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
   }
 
   mediationCode() {
-    return this.element<HTMLElement>('#mediationCode').textContent;
+    return this.element('#mediationCode').textContent;
   }
 
   address() {

@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PersonResourcesComponent } from './person-resources.component';
 import { IncomeModel } from '../models/income.model';
@@ -14,7 +14,65 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of, throwError } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
-import { fakeRoute, fakeSnapshot } from 'ngx-fixture';
+import { ComponentTester, fakeRoute, fakeSnapshot, TestButton } from 'ngx-fixture';
+
+class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
+  constructor(fixture: ComponentFixture<PersonResourcesComponent>) {
+    super(fixture);
+  }
+
+  incomeItems() {
+    return this.elements('.income-item');
+  }
+
+  noIncome() {
+    return this.element('#no-income');
+  }
+
+  totalIncome() {
+    return this.element('#total-income');
+  }
+
+  deleteIncomeButtons() {
+    return this.elements('.delete-income-button') as Array<TestButton>;
+  }
+
+  chargeItems() {
+    return this.elements('.charge-item');
+  }
+
+  noCharge() {
+    return this.element('#no-charge');
+  }
+
+  totalCharge() {
+    return this.element('#total-charge');
+  }
+
+  deleteChargeButtons() {
+    return this.elements('.delete-charge-button') as Array<TestButton> ;
+  }
+
+  total() {
+    return this.element('#total');
+  }
+
+  unitItems() {
+    return this.elements('.unit-item');
+  }
+
+  noPerUnitRevenue() {
+    return this.element('#no-per-unit-revenue');
+  }
+
+  perUnitRevenue() {
+    return this.element('#per-unit-revenue');
+  }
+
+  deletePerUnitRevenueInformationButton() {
+    return this.button('#delete-per-unit-revenue-information-button');
+  }
+}
 
 describe('PersonResourcesComponent', () => {
   const incomes = [
@@ -79,68 +137,53 @@ describe('PersonResourcesComponent', () => {
   })));
 
   it('should list incomes', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const incomeElements = nativeElement.querySelectorAll('div.income-item');
-    expect(incomeElements.length).toBe(2);
-
-    const income1 = incomeElements[0];
+    expect(tester.incomeItems().length).toBe(2);
+    const income1 = tester.incomeItems()[0];
     expect(income1.textContent).toContain('Allocations familiales');
     expect(income1.textContent).toContain('789,01 € / mois');
 
-    expect(nativeElement.querySelector('#no-income')).toBeFalsy();
+    expect(tester.noIncome()).toBeFalsy();
   });
 
   it('should display no income message and no total income when no income', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.componentInstance.incomes = [];
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.componentInstance.incomes = [];
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const incomeElements = nativeElement.querySelectorAll('div.income-item');
-    expect(incomeElements.length).toBe(0);
-
-    const noIncome = nativeElement.querySelector('#no-income');
-    expect(noIncome.textContent).toContain('Aucun revenu\u00A0!');
-
-    const totalIncome = nativeElement.querySelector('#total-income');
-    expect(totalIncome).toBeNull();
+    expect(tester.incomeItems().length).toBe(0);
+    expect(tester.noIncome().textContent).toContain('Aucun revenu\u00A0!');
+    expect(tester.totalIncome()).toBeNull();
   });
 
   it('should display total income', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const totalIncome = nativeElement.querySelector('#total-income');
-    expect(totalIncome.textContent).toContain('Total');
-    expect(totalIncome.textContent).toContain('1\u00A0089,01 € / mois');
+    expect(tester.totalIncome().textContent).toContain('Total');
+    expect(tester.totalIncome().textContent).toContain('1\u00A0089,01 € / mois');
   });
 
   it('should ask for confirmation before deletion of income', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
     const incomeService = TestBed.get(IncomeService);
     spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
     spyOn(incomeService, 'delete');
 
-    const nativeElement = fixture.nativeElement;
-    const deleteButton: HTMLButtonElement = nativeElement.querySelectorAll('.delete-income-button')[0];
-    deleteButton.click();
-
-    fixture.detectChanges();
+    tester.deleteIncomeButtons()[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(incomeService.delete).not.toHaveBeenCalled();
   });
 
   it('should delete income once confirmed', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
     const incomeService = TestBed.get(IncomeService);
@@ -156,80 +199,62 @@ describe('PersonResourcesComponent', () => {
     ] as Array<IncomeModel>;
     spyOn(incomeService, 'list').and.returnValue(of(newIncomes));
 
-    const nativeElement = fixture.nativeElement;
-    const deleteButton: HTMLButtonElement = nativeElement.querySelectorAll('.delete-income-button')[0];
-    deleteButton.click();
-
-    fixture.detectChanges();
+    tester.deleteIncomeButtons()[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(incomeService.delete).toHaveBeenCalledWith(42, 12);
-    expect(fixture.componentInstance.incomes).toEqual(newIncomes);
+    expect(tester.componentInstance.incomes).toEqual(newIncomes);
   });
 
   it('should list charges', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const chargeElements = nativeElement.querySelectorAll('div.charge-item');
-    expect(chargeElements.length).toBe(2);
+    expect(tester.chargeItems().length).toBe(2);
 
-    const income1 = chargeElements[0];
+    const income1 = tester.chargeItems()[0];
     expect(income1.textContent).toContain('Loyer');
     expect(income1.textContent).toContain('400,00 € / mois');
 
-    expect(nativeElement.querySelector('#no-charge')).toBeFalsy();
+    expect(tester.noCharge()).toBeFalsy();
   });
 
   it('should display no charge message and no total charge when no charge', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.componentInstance.charges = [];
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.componentInstance.charges = [];
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const chargeElements = nativeElement.querySelectorAll('div.charge-item');
-    expect(chargeElements.length).toBe(0);
-
-    const noIncome = nativeElement.querySelector('#no-charge');
-    expect(noIncome.textContent).toContain('Aucune charge\u00A0!');
-
-    const totalIncome = nativeElement.querySelector('#total-charge');
-    expect(totalIncome).toBeNull();
+    expect(tester.chargeItems().length).toBe(0);
+    expect(tester.noCharge().textContent).toContain('Aucune charge\u00A0!');
+    expect(tester.totalCharge()).toBeNull();
   });
 
   it('should display total charge', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const totalCharge = nativeElement.querySelector('#total-charge');
-    expect(totalCharge.textContent).toContain('Total');
-    expect(totalCharge.textContent).toContain('450,00 € / mois');
+    expect(tester.totalCharge().textContent).toContain('Total');
+    expect(tester.totalCharge().textContent).toContain('450,00 € / mois');
   });
 
   it('should ask for confirmation before deletion of charge', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
     const chargeService = TestBed.get(ChargeService);
     spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
     spyOn(chargeService, 'delete');
 
-    const nativeElement = fixture.nativeElement;
-    const deleteButton: HTMLButtonElement = nativeElement.querySelectorAll('.delete-charge-button')[0];
-    deleteButton.click();
-
-    fixture.detectChanges();
+    tester.deleteChargeButtons()[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(chargeService.delete).not.toHaveBeenCalled();
   });
 
   it('should delete charge once confirmed', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
     const chargeService = TestBed.get(ChargeService);
@@ -245,109 +270,88 @@ describe('PersonResourcesComponent', () => {
     ] as Array<ChargeModel>;
     spyOn(chargeService, 'list').and.returnValue(of(newCharges));
 
-    const nativeElement = fixture.nativeElement;
-    const deleteButton: HTMLButtonElement = nativeElement.querySelectorAll('.delete-charge-button')[0];
-    deleteButton.click();
-
-    fixture.detectChanges();
+    tester.deleteChargeButtons()[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(chargeService.delete).toHaveBeenCalledWith(42, 14);
-    expect(fixture.componentInstance.charges).toEqual(newCharges);
+    expect(tester.componentInstance.charges).toEqual(newCharges);
   });
 
   it('should display the grand total', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    let totalIncome = nativeElement.querySelector('#total');
-    expect(totalIncome.textContent).toContain('Reste à vivre');
-    expect(totalIncome.textContent).toContain('639,01 € / mois');
+    expect(tester.total().textContent).toContain('Reste à vivre');
+    expect(tester.total().textContent).toContain('639,01 € / mois');
 
-    fixture.componentInstance.charges = [];
-    fixture.detectChanges();
-    expect(totalIncome.textContent).toContain('1\u00A0089,01 € / mois');
+    tester.componentInstance.charges = [];
+    tester.detectChanges();
+    expect(tester.total().textContent).toContain('1\u00A0089,01 € / mois');
 
-    fixture.componentInstance.incomes = [];
-    fixture.componentInstance.charges = charges;
-    fixture.detectChanges();
-    expect(totalIncome.textContent).toContain('-450,00 € / mois');
+    tester.componentInstance.incomes = [];
+    tester.componentInstance.charges = charges;
+    tester.detectChanges();
+    expect(tester.total().textContent).toContain('-450,00 € / mois');
 
-    fixture.componentInstance.charges = [];
-    fixture.detectChanges();
-    totalIncome = nativeElement.querySelector('#total');
-    expect(totalIncome).toBeNull();
+    tester.componentInstance.charges = [];
+    tester.detectChanges();
+    expect(tester.total()).toBeNull();
   });
 
   it('should list units', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const unitElements = nativeElement.querySelectorAll('div.unit-item');
-    expect(unitElements.length).toBe(4);
-    expect(unitElements[0].textContent).toContain('1 unité');
-    expect(unitElements[1].textContent).toContain('1,5 unité(s)');
-    expect(unitElements[2].textContent).toContain('0,6 unité(s)');
-    expect(unitElements[3].textContent).toContain('0,2 unité');
+    const unitItems = tester.unitItems();
+    expect(unitItems.length).toBe(4);
+    expect(unitItems[0].textContent).toContain('1 unité');
+    expect(unitItems[1].textContent).toContain('1,5 unité(s)');
+    expect(unitItems[2].textContent).toContain('0,6 unité(s)');
+    expect(unitItems[3].textContent).toContain('0,2 unité');
 
-    expect(nativeElement.querySelector('#no-per-unit-revenue')).toBeFalsy();
-    expect(nativeElement.querySelector('#per-unit-revenue').textContent).toContain('330,00 € / mois');
+    expect(tester.noPerUnitRevenue()).toBeFalsy();
+    expect(tester.perUnitRevenue().textContent).toContain('330,00 € / mois');
   });
 
   it('should display no information message when no information', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.componentInstance.perUnitRevenueInformation = null;
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.componentInstance.perUnitRevenueInformation = null;
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const unitElements = nativeElement.querySelectorAll('div.unit-item');
-    expect(unitElements.length).toBe(0);
-
-    const noInfo = nativeElement.querySelector('#no-per-unit-revenue');
-    expect(noInfo.textContent).toContain('Information non renseignée\u00A0!');
-
-    const perUnitRevenue = nativeElement.querySelector('#per-unit-revenue');
-    expect(perUnitRevenue).toBeNull();
+    expect(tester.unitItems().length).toBe(0);
+    expect(tester.noPerUnitRevenue().textContent).toContain('Information non renseignée\u00A0!');
+    expect(tester.perUnitRevenue()).toBeNull();
   });
 
   it('should ask for confirmation before deletion of info', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
     const infoService = TestBed.get(PerUnitRevenueInformationService);
     spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
     spyOn(infoService, 'delete');
 
-    const nativeElement = fixture.nativeElement;
-    const deleteButton: HTMLButtonElement = nativeElement.querySelector('#delete-per-unit-revenue-information-button');
-    deleteButton.click();
-
-    fixture.detectChanges();
+    tester.deletePerUnitRevenueInformationButton().click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(infoService.delete).not.toHaveBeenCalled();
   });
 
   it('should delete info once confirmed', () => {
-    const fixture = TestBed.createComponent(PersonResourcesComponent);
-    fixture.detectChanges();
+    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
+    tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
     const infoService = TestBed.get(PerUnitRevenueInformationService);
     spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(infoService, 'delete').and.returnValue(of(undefined));
 
-    const nativeElement = fixture.nativeElement;
-    const deleteButton: HTMLButtonElement = nativeElement.querySelector('#delete-per-unit-revenue-information-button');
-    deleteButton.click();
-
-    fixture.detectChanges();
+    tester.deletePerUnitRevenueInformationButton().click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(infoService.delete).toHaveBeenCalledWith(42);
-    expect(fixture.componentInstance.perUnitRevenueInformation).toBeNull();
+    expect(tester.componentInstance.perUnitRevenueInformation).toBeNull();
   });
 });
+
