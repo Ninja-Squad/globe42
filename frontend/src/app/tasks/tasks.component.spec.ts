@@ -19,6 +19,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ComponentTester, TestHtmlElement } from 'ngx-fixture';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -29,6 +30,44 @@ class TestComponent {
 
   onTaskClicked(event: TaskEvent) {
     this.event = event;
+  }
+}
+
+// Beware: this tester assumes that the component has one and only has one task
+class TasksComponentTester extends ComponentTester<TestComponent> {
+  constructor(fixture: ComponentFixture<TestComponent>) {
+    super(fixture);
+  }
+
+  get text() {
+    return this.element('.task-item').textContent;
+  }
+
+  get addSpentTimeLink() {
+    return this.element('.add-spent-time-link') as TestHtmlElement<HTMLElement>;
+  }
+
+  get spentTimesLink() {
+    return this.element('.spent-times-link') as TestHtmlElement<HTMLElement>;
+  }
+
+  get addSpentTimeComponent(): SpentTimeAddComponent {
+    const spentTimeAddDebugElement = this.debugElement.query(By.directive(SpentTimeAddComponent));
+    return spentTimeAddDebugElement && spentTimeAddDebugElement.componentInstance;
+  }
+
+  get spentTimesComponent(): SpentTimesComponent {
+    const spentTimesDebugElement =
+      this.debugElement.query(By.directive(SpentTimesComponent));
+    return spentTimesDebugElement && spentTimesDebugElement.componentInstance;
+  }
+
+  get title() {
+    return this.element('.task-title') as TestHtmlElement<any>;
+  }
+
+  actionButton(type: 'edit' | 'unassign' | 'assign' | 'cancel' | 'done' | 'resurrect') {
+    return this.button(`.${type}-button`);
   }
 }
 
@@ -148,16 +187,16 @@ describe('TasksComponent', () => {
   });
 
   describe('UI', () => {
-    let fixture: ComponentFixture<TestComponent>;
+    let tester: TasksComponentTester;
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(TestComponent);
-      fixture.componentInstance.tasks = tasks;
-      fixture.detectChanges();
+      tester = new TasksComponentTester(TestBed.createComponent(TestComponent));
+      tester.componentInstance.tasks = tasks;
+      tester.detectChanges();
     });
 
     it('should display everything but the description and the no task message when not opened', () => {
-      const text = fixture.nativeElement.textContent;
+      const text = tester.text;
       expect(text).not.toContain('Rien à faire');
       expect(text).toContain('Some title');
       expect(text).toContain('#Various');
@@ -170,27 +209,23 @@ describe('TasksComponent', () => {
     });
 
     it('should add a spent time, and close on cancel', () => {
-      fixture.nativeElement.querySelector('a.add-spent-time-link').click();
-      fixture.detectChanges();
+      tester.addSpentTimeLink.click();
 
-      const spentTimeAddDebugElement = fixture.debugElement.query(By.directive(SpentTimeAddComponent));
-      expect(spentTimeAddDebugElement).toBeTruthy();
-      const spentTimeAddComponent: SpentTimeAddComponent = spentTimeAddDebugElement.componentInstance;
+      const spentTimeAddComponent = tester.addSpentTimeComponent;
+
       spentTimeAddComponent.cancel();
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.debugElement.query(By.directive(SpentTimeAddComponent))).toBeFalsy();
+      expect(tester.addSpentTimeComponent).toBeFalsy();
     });
 
     it('should add a spent time, recompute total spent time and close when added', () => {
-      expect(fixture.nativeElement.querySelector('a.spent-times-link')).toBeFalsy();
+      expect(tester.spentTimesLink).toBeFalsy();
 
-      fixture.nativeElement.querySelector('a.add-spent-time-link').click();
-      fixture.detectChanges();
+      tester.addSpentTimeLink.click();
 
-      const spentTimeAddDebugElement = fixture.debugElement.query(By.directive(SpentTimeAddComponent));
-      expect(spentTimeAddDebugElement).toBeTruthy();
-      const spentTimeAddComponent: SpentTimeAddComponent = spentTimeAddDebugElement.componentInstance;
+      const spentTimeAddComponent = tester.addSpentTimeComponent;
+
       spentTimeAddComponent.spentTimeAdded.emit({
         task: tasks[0],
         spentTime: {
@@ -198,126 +233,109 @@ describe('TasksComponent', () => {
           minutes: 100
         } as SpentTimeModel
       });
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.debugElement.query(By.directive(SpentTimeAddComponent))).toBeFalsy();
-      const spentTimesLink = fixture.nativeElement.querySelector('a.spent-times-link');
-      expect(spentTimesLink).toBeTruthy();
-      expect(spentTimesLink.textContent).toContain('1h40m');
+      expect(tester.addSpentTimeComponent).toBeFalsy();
+      expect(tester.spentTimesLink).toBeTruthy();
+      expect(tester.spentTimesLink.textContent).toContain('1h40m');
     });
 
     it('should display spent times and recompute total spent time when deleted', () => {
       tasks[0].totalSpentTimeInMinutes = 100;
-      fixture.detectChanges();
-      const spentTimesLink = fixture.nativeElement.querySelector('a.spent-times-link');
-      expect(spentTimesLink).toBeTruthy();
+      tester.detectChanges();
+
+      expect(tester.spentTimesLink).toBeTruthy();
 
       const taskService = TestBed.get(TaskService);
       spyOn(taskService, 'listSpentTimes').and.returnValue(of([]));
 
-      fixture.nativeElement.querySelector('a.spent-times-link').click();
-      fixture.detectChanges();
+      tester.spentTimesLink.click();
 
-      const spentTimesDebugElement = fixture.debugElement.query(By.directive(SpentTimesComponent));
-      expect(spentTimesDebugElement).toBeTruthy();
-      const spentTimesComponent: SpentTimesComponent = spentTimesDebugElement.componentInstance;
-      spentTimesComponent.spentTimeDeleted.emit({
+      tester.spentTimesComponent.spentTimeDeleted.emit({
         task: tasks[0],
         spentTime: {
           id: 1,
           minutes: 10
         } as SpentTimeModel
       });
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(spentTimesLink.textContent).toContain('1h30m');
-      expect(fixture.debugElement.query(By.directive(SpentTimesComponent))).toBeFalsy();
+      expect(tester.spentTimesLink.textContent).toContain('1h30m');
+      expect(tester.spentTimesComponent).toBeFalsy();
     });
 
     it('should display status instead of due date when DONE', () => {
       tasks[0].status = 'DONE';
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const text = fixture.nativeElement.textContent;
-      expect(text).toContain('Faite');
-      expect(text).not.toContain('aujourd\'hui');
+      expect(tester.text).toContain('Faite');
+      expect(tester.text).not.toContain('aujourd\'hui');
     });
 
     it('should display status instead of due date when CANCELLED', () => {
       tasks[0].status = 'CANCELLED';
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const text = fixture.nativeElement.textContent;
-      expect(text).toContain('Annulée');
-      expect(text).not.toContain('aujourd\'hui');
+      expect(tester.text).toContain('Annulée');
+      expect(tester.text).not.toContain('aujourd\'hui');
     });
 
     it('should display the description when opened', () => {
-      fixture.nativeElement.querySelector('.task-title').click();
-      fixture.detectChanges();
-
-      const text = fixture.nativeElement.textContent;
-
-      expect(text).toContain('Some description');
+      tester.title.click();
+      expect(tester.text).toContain('Some description');
     });
 
     it('should not crash when no due date, no assignee or no concerned person', () => {
       tasks[0].dueDate = null;
       tasks[0].assignee = null;
       tasks[0].concernedPerson = null;
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const text = fixture.nativeElement.textContent;
-      expect(text).toContain('Some title');
+      expect(tester.text).toContain('Some title');
     });
 
     it('should invoke actions', () => {
-      fixture.nativeElement.querySelector('.edit-button').click();
-      fixture.detectChanges();
+      tester.actionButton('edit').click();
 
-      expect(fixture.componentInstance.event).toEqual({
+      expect(tester.componentInstance.event).toEqual({
         type: 'edit',
         task: tasks[0]
       });
 
-      fixture.nativeElement.querySelector('.unassign-button').click();
-      fixture.detectChanges();
+      tester.actionButton('unassign').click();
 
-      expect(fixture.componentInstance.event).toEqual({
+      expect(tester.componentInstance.event).toEqual({
         type: 'unassign',
         task: tasks[0]
       });
 
       tasks[0].assignee = null;
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      fixture.nativeElement.querySelector('.assign-button').click();
-      fixture.detectChanges();
+      tester.actionButton('assign').click();
 
-      expect(fixture.componentInstance.event).toEqual({
+      expect(tester.componentInstance.event).toEqual({
         type: 'assign',
         task: tasks[0]
       });
 
-      fixture.nativeElement.querySelector('.cancel-button').click();
-      fixture.detectChanges();
-      expect(fixture.componentInstance.event).toEqual({
+      tester.actionButton('cancel').click();
+      expect(tester.componentInstance.event).toEqual({
         type: 'cancel',
         task: tasks[0]
       });
 
-      fixture.nativeElement.querySelector('.done-button').click();
-      fixture.detectChanges();
-      expect(fixture.componentInstance.event).toEqual({
+      tester.actionButton('done').click();
+      expect(tester.componentInstance.event).toEqual({
         type: 'markAsDone',
         task: tasks[0]
       });
 
       tasks[0].status = 'DONE';
-      fixture.detectChanges();
-      fixture.nativeElement.querySelector('.resurrect-button').click();
-      fixture.detectChanges();
-      expect(fixture.componentInstance.event).toEqual({
+      tester.detectChanges();
+      tester.actionButton('resurrect').click();
+
+      expect(tester.componentInstance.event).toEqual({
         type: 'resurrect',
         task: tasks[0]
       });
