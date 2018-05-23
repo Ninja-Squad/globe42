@@ -21,55 +21,55 @@ class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
     super(fixture);
   }
 
-  incomeItems() {
+  get incomeItems() {
     return this.elements('.income-item');
   }
 
-  noIncome() {
+  get noIncome() {
     return this.element('#no-income');
   }
 
-  totalIncome() {
+  get totalIncome() {
     return this.element('#total-income');
   }
 
-  deleteIncomeButtons() {
+  get deleteIncomeButtons() {
     return this.elements('.delete-income-button') as Array<TestButton>;
   }
 
-  chargeItems() {
+  get chargeItems() {
     return this.elements('.charge-item');
   }
 
-  noCharge() {
+  get noCharge() {
     return this.element('#no-charge');
   }
 
-  totalCharge() {
+  get totalCharge() {
     return this.element('#total-charge');
   }
 
-  deleteChargeButtons() {
+  get deleteChargeButtons() {
     return this.elements('.delete-charge-button') as Array<TestButton> ;
   }
 
-  total() {
+  get total() {
     return this.element('#total');
   }
 
-  unitItems() {
+  get unitItems() {
     return this.elements('.unit-item');
   }
 
-  noPerUnitRevenue() {
+  get noPerUnitRevenue() {
     return this.element('#no-per-unit-revenue');
   }
 
-  perUnitRevenue() {
+  get perUnitRevenue() {
     return this.element('#per-unit-revenue');
   }
 
-  deletePerUnitRevenueInformationButton() {
+  get deletePerUnitRevenueInformationButton() {
     return this.button('#delete-per-unit-revenue-information-button');
   }
 }
@@ -140,12 +140,12 @@ describe('PersonResourcesComponent', () => {
     const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
-    expect(tester.incomeItems().length).toBe(2);
-    const income1 = tester.incomeItems()[0];
+    expect(tester.incomeItems.length).toBe(2);
+    const income1 = tester.incomeItems[0];
     expect(income1.textContent).toContain('Allocations familiales');
     expect(income1.textContent).toContain('789,01 € / mois');
 
-    expect(tester.noIncome()).toBeFalsy();
+    expect(tester.noIncome).toBeFalsy();
   });
 
   it('should display no income message and no total income when no income', () => {
@@ -153,17 +153,17 @@ describe('PersonResourcesComponent', () => {
     tester.componentInstance.incomes = [];
     tester.detectChanges();
 
-    expect(tester.incomeItems().length).toBe(0);
-    expect(tester.noIncome().textContent).toContain('Aucun revenu\u00A0!');
-    expect(tester.totalIncome()).toBeNull();
+    expect(tester.incomeItems.length).toBe(0);
+    expect(tester.noIncome.textContent).toContain('Aucun revenu\u00A0!');
+    expect(tester.totalIncome).toBeNull();
   });
 
   it('should display total income', () => {
     const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
-    expect(tester.totalIncome().textContent).toContain('Total');
-    expect(tester.totalIncome().textContent).toContain('1\u00A0089,01 € / mois');
+    expect(tester.totalIncome.textContent).toContain('Total');
+    expect(tester.totalIncome.textContent).toContain('1\u00A0089,01 € / mois');
   });
 
   it('should ask for confirmation before deletion of income', () => {
@@ -175,7 +175,7 @@ describe('PersonResourcesComponent', () => {
     spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
     spyOn(incomeService, 'delete');
 
-    tester.deleteIncomeButtons()[0].click();
+    tester.deleteIncomeButtons[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(incomeService.delete).not.toHaveBeenCalled();
@@ -199,7 +199,7 @@ describe('PersonResourcesComponent', () => {
     ] as Array<IncomeModel>;
     spyOn(incomeService, 'list').and.returnValue(of(newIncomes));
 
-    tester.deleteIncomeButtons()[0].click();
+    tester.deleteIncomeButtons[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(incomeService.delete).toHaveBeenCalledWith(42, 12);
@@ -210,13 +210,13 @@ describe('PersonResourcesComponent', () => {
     const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
-    expect(tester.chargeItems().length).toBe(2);
+    expect(tester.chargeItems.length).toBe(2);
 
-    const income1 = tester.chargeItems()[0];
+    const income1 = tester.chargeItems[0];
     expect(income1.textContent).toContain('Loyer');
     expect(income1.textContent).toContain('400,00 € / mois');
 
-    expect(tester.noCharge()).toBeFalsy();
+    expect(tester.noCharge).toBeFalsy();
   });
 
   it('should display no charge message and no total charge when no charge', () => {
@@ -224,17 +224,17 @@ describe('PersonResourcesComponent', () => {
     tester.componentInstance.charges = [];
     tester.detectChanges();
 
-    expect(tester.chargeItems().length).toBe(0);
-    expect(tester.noCharge().textContent).toContain('Aucune charge\u00A0!');
-    expect(tester.totalCharge()).toBeNull();
+    expect(tester.chargeItems.length).toBe(0);
+    expect(tester.noCharge.textContent).toContain('Aucune charge\u00A0!');
+    expect(tester.totalCharge).toBeNull();
   });
 
   it('should display total charge', () => {
     const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
-    expect(tester.totalCharge().textContent).toContain('Total');
-    expect(tester.totalCharge().textContent).toContain('450,00 € / mois');
+    expect(tester.totalCharge.textContent).toContain('Total');
+    expect(tester.totalCharge.textContent).toContain('450,00 € / mois');
   });
 
   it('should ask for confirmation before deletion of charge', () => {
@@ -246,7 +246,7 @@ describe('PersonResourcesComponent', () => {
     spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
     spyOn(chargeService, 'delete');
 
-    tester.deleteChargeButtons()[0].click();
+    tester.deleteChargeButtons[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(chargeService.delete).not.toHaveBeenCalled();
@@ -270,7 +270,7 @@ describe('PersonResourcesComponent', () => {
     ] as Array<ChargeModel>;
     spyOn(chargeService, 'list').and.returnValue(of(newCharges));
 
-    tester.deleteChargeButtons()[0].click();
+    tester.deleteChargeButtons[0].click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(chargeService.delete).toHaveBeenCalledWith(42, 14);
@@ -281,36 +281,36 @@ describe('PersonResourcesComponent', () => {
     const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
-    expect(tester.total().textContent).toContain('Reste à vivre');
-    expect(tester.total().textContent).toContain('639,01 € / mois');
+    expect(tester.total.textContent).toContain('Reste à vivre');
+    expect(tester.total.textContent).toContain('639,01 € / mois');
 
     tester.componentInstance.charges = [];
     tester.detectChanges();
-    expect(tester.total().textContent).toContain('1\u00A0089,01 € / mois');
+    expect(tester.total.textContent).toContain('1\u00A0089,01 € / mois');
 
     tester.componentInstance.incomes = [];
     tester.componentInstance.charges = charges;
     tester.detectChanges();
-    expect(tester.total().textContent).toContain('-450,00 € / mois');
+    expect(tester.total.textContent).toContain('-450,00 € / mois');
 
     tester.componentInstance.charges = [];
     tester.detectChanges();
-    expect(tester.total()).toBeNull();
+    expect(tester.total).toBeNull();
   });
 
   it('should list units', () => {
     const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
-    const unitItems = tester.unitItems();
+    const unitItems = tester.unitItems;
     expect(unitItems.length).toBe(4);
     expect(unitItems[0].textContent).toContain('1 unité');
     expect(unitItems[1].textContent).toContain('1,5 unité(s)');
     expect(unitItems[2].textContent).toContain('0,6 unité(s)');
     expect(unitItems[3].textContent).toContain('0,2 unité');
 
-    expect(tester.noPerUnitRevenue()).toBeFalsy();
-    expect(tester.perUnitRevenue().textContent).toContain('330,00 € / mois');
+    expect(tester.noPerUnitRevenue).toBeFalsy();
+    expect(tester.perUnitRevenue.textContent).toContain('330,00 € / mois');
   });
 
   it('should display no information message when no information', () => {
@@ -318,9 +318,9 @@ describe('PersonResourcesComponent', () => {
     tester.componentInstance.perUnitRevenueInformation = null;
     tester.detectChanges();
 
-    expect(tester.unitItems().length).toBe(0);
-    expect(tester.noPerUnitRevenue().textContent).toContain('Information non renseignée\u00A0!');
-    expect(tester.perUnitRevenue()).toBeNull();
+    expect(tester.unitItems.length).toBe(0);
+    expect(tester.noPerUnitRevenue.textContent).toContain('Information non renseignée\u00A0!');
+    expect(tester.perUnitRevenue).toBeNull();
   });
 
   it('should ask for confirmation before deletion of info', () => {
@@ -332,7 +332,7 @@ describe('PersonResourcesComponent', () => {
     spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
     spyOn(infoService, 'delete');
 
-    tester.deletePerUnitRevenueInformationButton().click();
+    tester.deletePerUnitRevenueInformationButton.click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(infoService.delete).not.toHaveBeenCalled();
@@ -347,7 +347,7 @@ describe('PersonResourcesComponent', () => {
     spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(infoService, 'delete').and.returnValue(of(undefined));
 
-    tester.deletePerUnitRevenueInformationButton().click();
+    tester.deletePerUnitRevenueInformationButton.click();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(infoService.delete).toHaveBeenCalledWith(42);

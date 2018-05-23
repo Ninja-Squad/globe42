@@ -28,23 +28,23 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     super(fixture);
   }
 
-  title() {
+  get title() {
     return this.element('h1').textContent;
   }
 
-  firstName() {
+  get firstName() {
     return this.input('#firstName');
   }
 
-  lastName() {
+  get lastName() {
     return this.input('#lastName');
   }
 
-  birthName() {
+  get birthName() {
     return this.input('#birthName');
   }
 
-  nickName() {
+  get nickName() {
     return this.input('#nickName');
   }
 
@@ -52,7 +52,7 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.input(`#gender${gender}`);
   }
 
-  birthDate() {
+  get birthDate() {
     return this.input('#birthDate');
   }
 
@@ -60,51 +60,51 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.input(`#mediationEnabled${yesOrNo}`);
   }
 
-  mediationCode() {
+  get mediationCode() {
     return this.element('#mediationCode').textContent;
   }
 
-  address() {
+  get address() {
     return this.input('#address');
   }
 
-  city() {
+  get city() {
     return this.input('#city');
   }
 
-  email() {
+  get email() {
     return this.input('#email');
   }
 
-  phoneNumber() {
+  get phoneNumber() {
     return this.input('#phoneNumber');
   }
 
-  firstMediationAppointmentDate() {
+  get firstMediationAppointmentDate() {
     return this.input('#firstMediationAppointmentDate');
   }
 
-  maritalStatus() {
+  get maritalStatus() {
     return this.select('#maritalStatus');
   }
 
-  spouse() {
+  get spouse() {
     return this.input('#spouse');
   }
 
-  entryDate() {
+  get entryDate() {
     return this.input('#entryDate');
   }
 
-  housing() {
+  get housing() {
     return this.select('#housing');
   }
 
-  housingSpace() {
+  get housingSpace() {
     return this.input('#housingSpace');
   }
 
-  hostName() {
+  get hostName() {
     return this.input('#hostName');
   }
 
@@ -112,51 +112,51 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.input(`#fiscalStatus${status}`);
   }
 
-  fiscalNumber() {
+  get fiscalNumber() {
     return this.input('#fiscalNumber');
   }
 
-  fiscalStatusUpToDate() {
+  get fiscalStatusUpToDate() {
     return this.input('#fiscalStatusUpToDate');
   }
 
-  healthCareCoverage() {
+  get healthCareCoverage() {
     return this.select('#healthCareCoverage');
   }
 
-  healthCareCoverageStartDate() {
+  get healthCareCoverageStartDate() {
     return this.input('#healthCareCoverageStartDate');
   }
 
-  healthInsurance() {
+  get healthInsurance() {
     return this.select('#healthInsurance');
   }
 
-  healthInsuranceStartDate() {
+  get healthInsuranceStartDate() {
     return this.input('#healthInsuranceStartDate');
   }
 
-  accompanying() {
+  get accompanying() {
     return this.input('#accompanying');
   }
 
-  socialSecurityNumber() {
+  get socialSecurityNumber() {
     return this.input('#socialSecurityNumber');
   }
 
-  cafNumber() {
+  get cafNumber() {
     return this.input('#cafNumber');
   }
 
-  nationality() {
+  get nationality() {
     return this.input('#nationality');
   }
 
-  firstTypeaheadOption() {
+  get firstTypeaheadOption() {
     return this.button('ngb-typeahead-window button');
   }
 
-  save(): TestButton {
+  get save(): TestButton {
     return this.button('#save');
   }
 
@@ -281,7 +281,7 @@ describe('PersonEditComponent', () => {
       const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
       tester.detectChanges();
 
-      expect(tester.title()).toContain('Modification de l\'adhérent John Doe (john)');
+      expect(tester.title).toContain('Modification de l\'adhérent John Doe (john)');
     });
 
     it('should edit and update an existing person', () => {
@@ -293,41 +293,41 @@ describe('PersonEditComponent', () => {
       const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
       tester.detectChanges();
 
-      expect(tester.firstName().value).toBe(person.firstName);
-      expect(tester.lastName().value).toBe(person.lastName);
-      expect(tester.birthName().value).toBe(person.birthName);
-      expect(tester.nickName().value).toBe(person.nickName);
+      expect(tester.firstName.value).toBe(person.firstName);
+      expect(tester.lastName.value).toBe(person.lastName);
+      expect(tester.birthName.value).toBe(person.birthName);
+      expect(tester.nickName.value).toBe(person.nickName);
       expect(tester.gender('MALE').checked).toBe(true);
-      expect(tester.birthDate().value).toBe('01/01/1980');
-      expect(tester.mediationCode()).toContain('Généré automatiquement');
-      expect(tester.address().value).toBe(person.address);
-      expect(tester.city().value).toBe(displayCity(person.city));
-      expect(tester.email().value).toBe(person.email);
-      expect(tester.phoneNumber().value).toBe(person.phoneNumber);
-      expect(tester.firstMediationAppointmentDate().value).toBe('01/12/2017');
-      expect(tester.maritalStatus().selectedValue).toBe(person.maritalStatus);
-      expect(tester.spouse().value).toBe('Jane Doe');
-      expect(tester.entryDate().value).toBe('01/12/2016');
-      expect(tester.housing().selectedValue).toBe(person.housing);
-      expect(+tester.housingSpace().value).toBe(person.housingSpace);
-      expect(tester.hostName().value).toBe(person.hostName);
+      expect(tester.birthDate.value).toBe('01/01/1980');
+      expect(tester.mediationCode).toContain('Généré automatiquement');
+      expect(tester.address.value).toBe(person.address);
+      expect(tester.city.value).toBe(displayCity(person.city));
+      expect(tester.email.value).toBe(person.email);
+      expect(tester.phoneNumber.value).toBe(person.phoneNumber);
+      expect(tester.firstMediationAppointmentDate.value).toBe('01/12/2017');
+      expect(tester.maritalStatus.selectedValue).toBe(person.maritalStatus);
+      expect(tester.spouse.value).toBe('Jane Doe');
+      expect(tester.entryDate.value).toBe('01/12/2016');
+      expect(tester.housing.selectedValue).toBe(person.housing);
+      expect(+tester.housingSpace.value).toBe(person.housingSpace);
+      expect(tester.hostName.value).toBe(person.hostName);
       expect(tester.fiscalStatus('UNKNOWN').checked).toBe(false);
       expect(tester.fiscalStatus('NOT_TAXABLE').checked).toBe(false);
       expect(tester.fiscalStatus('TAXABLE').checked).toBe(true);
-      expect(tester.fiscalNumber().value).toBe('0123456789012');
-      expect(tester.fiscalStatusUpToDate().checked).toBe(person.fiscalStatusUpToDate);
-      expect(tester.healthCareCoverage().selectedValue).toBe(person.healthCareCoverage);
-      expect(tester.healthCareCoverageStartDate().value).toBe('01/01/2017');
-      expect(tester.healthInsurance().selectedValue).toBe(person.healthInsurance);
-      expect(tester.healthInsuranceStartDate().value).toBe('02/02/2017');
-      expect(tester.accompanying().value).toBe(person.accompanying);
-      expect(tester.socialSecurityNumber().value).toBe(person.socialSecurityNumber);
-      expect(tester.cafNumber().value).toBe(person.cafNumber);
-      expect(tester.nationality().value).toBe(person.nationality.name);
+      expect(tester.fiscalNumber.value).toBe('0123456789012');
+      expect(tester.fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
+      expect(tester.healthCareCoverage.selectedValue).toBe(person.healthCareCoverage);
+      expect(tester.healthCareCoverageStartDate.value).toBe('01/01/2017');
+      expect(tester.healthInsurance.selectedValue).toBe(person.healthInsurance);
+      expect(tester.healthInsuranceStartDate.value).toBe('02/02/2017');
+      expect(tester.accompanying.value).toBe(person.accompanying);
+      expect(tester.socialSecurityNumber.value).toBe(person.socialSecurityNumber);
+      expect(tester.cafNumber.value).toBe(person.cafNumber);
+      expect(tester.nationality.value).toBe(person.nationality.name);
 
-      tester.lastName().fillWith('Do');
+      tester.lastName.fillWith('Do');
 
-      tester.save().click();
+      tester.save.click();
 
       expect(personService.update).toHaveBeenCalled();
 
@@ -348,18 +348,18 @@ describe('PersonEditComponent', () => {
 
       tester.detectChanges();
 
-      expect(tester.city().value).toBe(displayCity(person.city));
+      expect(tester.city.value).toBe(displayCity(person.city));
 
       // erase something in the field, which should make its model null
-      tester.city().fillWith('42000 SAINT-ETIENN');
+      tester.city.fillWith('42000 SAINT-ETIENN');
 
       expect(tester.componentInstance.personForm.value.city).toBeFalsy();
-      expect(tester.city().classes).toContain('is-warning');
+      expect(tester.city.classes).toContain('is-warning');
 
       // move out of the field, which should clear it
-      tester.city().dispatchEventOfType('blur');
+      tester.city.dispatchEventOfType('blur');
 
-      expect(tester.city().value).toBeFalsy();
+      expect(tester.city.value).toBeFalsy();
     });
 
     it('should clear the spouse input on blur if not valid anymore', () =>  {
@@ -370,18 +370,18 @@ describe('PersonEditComponent', () => {
 
       tester.detectChanges();
 
-      expect(tester.spouse().value).toBe('Jane Doe');
+      expect(tester.spouse.value).toBe('Jane Doe');
 
       // erase something in the field, which should make its model null
-      tester.spouse().fillWith('Jane');
+      tester.spouse.fillWith('Jane');
 
       expect(tester.componentInstance.personForm.value.spouse).toBeFalsy();
-      expect(tester.spouse().classes).toContain('is-warning');
+      expect(tester.spouse.classes).toContain('is-warning');
 
       // move out of the field, which should clear it
-      tester.spouse().dispatchEventOfType('blur');
+      tester.spouse.dispatchEventOfType('blur');
 
-      expect(tester.spouse().value).toBeFalsy();
+      expect(tester.spouse.value).toBeFalsy();
     });
 
     it('should warn if selecting a spouse already in couple with someone else', () => {
@@ -436,10 +436,10 @@ describe('PersonEditComponent', () => {
       tester.detectChanges();
       const component = tester.componentInstance;
 
-      tester.fiscalNumber().fillWith('INVALID');
+      tester.fiscalNumber.fillWith('INVALID');
       tester.fiscalStatus('UNKNOWN').check();
 
-      expect(tester.fiscalNumber()).toBeNull();
+      expect(tester.fiscalNumber).toBeNull();
       expect(component.personForm.get('fiscalNumber').value).toBeNull();
     });
   });
@@ -458,7 +458,7 @@ describe('PersonEditComponent', () => {
       const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
       tester.detectChanges();
 
-      expect(tester.title()).toContain('Nouvel adhérent');
+      expect(tester.title).toContain('Nouvel adhérent');
     });
 
     it('should create and save a new person', fakeAsync(() => {
@@ -472,18 +472,18 @@ describe('PersonEditComponent', () => {
       tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => of([cityModel]);
       tester.detectChanges();
 
-      expect(tester.firstName().value).toBe('');
-      expect(tester.lastName().value).toBe('');
-      expect(tester.birthName().value).toBe('');
-      expect(tester.nickName().value).toBe('');
+      expect(tester.firstName.value).toBe('');
+      expect(tester.lastName.value).toBe('');
+      expect(tester.birthName.value).toBe('');
+      expect(tester.nickName.value).toBe('');
       expect(tester.gender('MALE').checked).toBe(false);
       expect(tester.gender('FEMALE').checked).toBe(false);
       expect(tester.gender('OTHER').checked).toBe(false);
-      expect(tester.birthDate().value).toBe('');
-      expect(tester.address().value).toBe('');
-      expect(tester.city().value).toBe('');
-      expect(tester.email().value).toBe('');
-      expect(tester.phoneNumber().value).toBe('');
+      expect(tester.birthDate.value).toBe('');
+      expect(tester.address.value).toBe('');
+      expect(tester.city.value).toBe('');
+      expect(tester.email.value).toBe('');
+      expect(tester.phoneNumber.value).toBe('');
 
       expect(tester.mediationEnabled(true).checked).toBe(false);
       expect(tester.mediationEnabled(false).checked).toBe(true);
@@ -512,85 +512,85 @@ describe('PersonEditComponent', () => {
         expect(tester.element(`#${id}`)).not.toBeNull(`#${id} should be present`);
       });
 
-      expect(tester.mediationCode()).toContain('Généré automatiquement');
-      expect(tester.firstMediationAppointmentDate().value).toBe('');
-      expect(tester.maritalStatus().selectedValue).toBe('UNKNOWN');
-      expect(tester.spouse().value).toBe('');
-      expect(tester.entryDate().value).toBe('');
-      expect(tester.housing().selectedValue).toBe('UNKNOWN');
-      expect(tester.housingSpace()).toBeFalsy();
-      expect(tester.hostName().value).toBe('');
+      expect(tester.mediationCode).toContain('Généré automatiquement');
+      expect(tester.firstMediationAppointmentDate.value).toBe('');
+      expect(tester.maritalStatus.selectedValue).toBe('UNKNOWN');
+      expect(tester.spouse.value).toBe('');
+      expect(tester.entryDate.value).toBe('');
+      expect(tester.housing.selectedValue).toBe('UNKNOWN');
+      expect(tester.housingSpace).toBeFalsy();
+      expect(tester.hostName.value).toBe('');
       expect(tester.fiscalStatus('UNKNOWN').checked).toBe(true);
-      expect(tester.fiscalNumber()).toBeFalsy();
-      expect(tester.fiscalStatusUpToDate()).toBeFalsy();
-      expect(tester.accompanying().value).toBe('');
-      expect(tester.socialSecurityNumber().value).toBe('');
-      expect(tester.cafNumber().value).toBe('');
-      expect(tester.healthCareCoverage().selectedValue).toBe('UNKNOWN');
-      expect(tester.healthCareCoverageStartDate()).toBeFalsy();
-      expect(tester.healthInsurance().selectedValue).toBe('UNKNOWN');
-      expect(tester.healthInsuranceStartDate()).toBeFalsy();
-      expect(tester.nationality().value).toBe('');
+      expect(tester.fiscalNumber).toBeFalsy();
+      expect(tester.fiscalStatusUpToDate).toBeFalsy();
+      expect(tester.accompanying.value).toBe('');
+      expect(tester.socialSecurityNumber.value).toBe('');
+      expect(tester.cafNumber.value).toBe('');
+      expect(tester.healthCareCoverage.selectedValue).toBe('UNKNOWN');
+      expect(tester.healthCareCoverageStartDate).toBeFalsy();
+      expect(tester.healthInsurance.selectedValue).toBe('UNKNOWN');
+      expect(tester.healthInsuranceStartDate).toBeFalsy();
+      expect(tester.nationality.value).toBe('');
 
-      tester.lastName().fillWith('Doe');
-      tester.firstName().fillWith('Jane');
-      tester.birthName().fillWith('Jos');
-      tester.nickName().fillWith('jane');
+      tester.lastName.fillWith('Doe');
+      tester.firstName.fillWith('Jane');
+      tester.birthName.fillWith('Jos');
+      tester.nickName.fillWith('jane');
       tester.gender('FEMALE').check();
-      tester.birthDate().fillWith('03/03/1985');
-      tester.address().fillWith('Avenue Liberté');
+      tester.birthDate.fillWith('03/03/1985');
+      tester.address.fillWith('Avenue Liberté');
 
       // trigger city typeahead
-      tester.fillAndTick(tester.city(), '4200');
+      tester.fillAndTick(tester.city, '4200');
       // select first result
-      const cityResult = tester.firstTypeaheadOption();
+      const cityResult = tester.firstTypeaheadOption;
       expect(cityResult.textContent).toContain(displayCity(cityModel));
       cityResult.click();
 
-      tester.email().fillWith('jane@mail.com');
-      tester.phoneNumber().fillWith('06 13 13 13 13');
+      tester.email.fillWith('jane@mail.com');
+      tester.phoneNumber.fillWith('06 13 13 13 13');
 
-      tester.maritalStatus().selectIndex(2);
+      tester.maritalStatus.selectIndex(2);
 
       // trigger spouse typeahead
       spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
-      tester.fillAndTick(tester.spouse(), 'Jane');
+      tester.fillAndTick(tester.spouse, 'Jane');
       // select first result
-      const spouseResult = tester.firstTypeaheadOption();
+      const spouseResult = tester.firstTypeaheadOption;
       expect(spouseResult.textContent).toContain('Jane Doe');
       spouseResult.click();
 
-      tester.entryDate().fillWith('02/02/2015');
-      tester.firstMediationAppointmentDate().fillWith('02/02/2017');
-      tester.housing().selectIndex(1);
-      expect(tester.housingSpace()).toBeTruthy();
-      tester.housingSpace().fillWith('30');
-      tester.hostName().fillWith('Bruno');
-      tester.accompanying().fillWith('Paulette');
-      tester.socialSecurityNumber().fillWith('453287654309876');
-      tester.cafNumber().fillWith('78654');
+      tester.entryDate.fillWith('02/02/2015');
+      tester.firstMediationAppointmentDate.fillWith('02/02/2017');
+      tester.housing.selectIndex(1);
+      expect(tester.housingSpace).toBeTruthy();
+      tester.housingSpace.fillWith('30');
+      tester.hostName.fillWith('Bruno');
+      tester.accompanying.fillWith('Paulette');
+      tester.socialSecurityNumber.fillWith('453287654309876');
+      tester.cafNumber.fillWith('78654');
 
       tester.fiscalStatus('TAXABLE').check();
-      expect(tester.fiscalNumber()).toBeTruthy();
-      tester.fiscalNumber().fillWith('0123456789012');
-      expect(tester.fiscalStatusUpToDate()).toBeTruthy();
-      tester.fiscalStatusUpToDate().check();
+      expect(tester.fiscalNumber).toBeTruthy();
+      tester.fiscalNumber.fillWith('0123456789012');
+      expect(tester.fiscalStatusUpToDate).toBeTruthy();
+      tester.fiscalStatusUpToDate.check();
 
-      tester.healthCareCoverage().selectIndex(1);
-      expect(tester.healthCareCoverageStartDate()).toBeTruthy();
-      tester.healthCareCoverageStartDate().fillWith('01/01/2017');
+      tester.healthCareCoverage.selectIndex(1);
+      expect(tester.healthCareCoverageStartDate).toBeTruthy();
+      tester.healthCareCoverageStartDate.fillWith('01/01/2017');
 
-      tester.healthInsurance().selectIndex(1);
-      expect(tester.healthInsuranceStartDate()).toBeTruthy();
-      tester.healthInsuranceStartDate().fillWith('02/02/2017');
+      tester.healthInsurance.selectIndex(1);
+      expect(tester.healthInsuranceStartDate).toBeTruthy();
+      tester.healthInsuranceStartDate.fillWith('02/02/2017');
 
       // trigger nationality typeahead
-      tester.fillAndTick(tester.nationality(), 'Bel');
+      tester.fillAndTick(tester.nationality, 'Bel');
       // select first result
-      expect(tester.firstTypeaheadOption().textContent).toContain('Belgique');
-      tester.firstTypeaheadOption().click();
+      expect(tester.firstTypeaheadOption.textContent).toContain('Belgique');
+      tester.firstTypeaheadOption.click();
 
-      tester.save().click();
+      tester.save.click();
 
       expect(personService.create).toHaveBeenCalled();
 
