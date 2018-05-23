@@ -129,12 +129,12 @@ describe('TaskEditComponent', () => {
 
       expect(tester.pageTitle).toContain('Nouvelle tâche');
 
-      expect(tester.title.value).toBe('');
-      expect(tester.description.value).toBe('');
+      expect(tester.title).toHaveValue('');
+      expect(tester.description).toHaveValue('');
       expect(tester.category.selectedIndex).toBe(-1);
       expect(tester.category.optionLabels).toEqual(['', 'Various', 'Meal']);
-      expect(tester.dueDate.value).toBe('');
-      expect(tester.concernedPerson.value).toBe('');
+      expect(tester.dueDate).toHaveValue('');
+      expect(tester.concernedPerson).toHaveValue('');
       expect(tester.assignee.optionLabels).toEqual(['', 'Moi', 'agnes', 'cyril']);
       expect(tester.assignee.selectedIndex).toBe(-1);
 
@@ -171,7 +171,7 @@ describe('TaskEditComponent', () => {
       tester.fillConcernedPersonAndTick('ced');
       tester.concernedPersonSuggestions[0].click();
 
-      expect(tester.concernedPerson.value).toBe('Cedric Exbrayat (Hype)');
+      expect(tester.concernedPerson).toHaveValue('Cedric Exbrayat (Hype)');
       expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
 
       tester.fillConcernedPersonAndTick('Cedric Exbrayat (Hyp');
@@ -180,7 +180,7 @@ describe('TaskEditComponent', () => {
       expect(tester.concernedPerson).toHaveClass('is-warning');
 
       tester.concernedPerson.dispatchEventOfType('blur');
-      expect(tester.concernedPerson.value).toBe('');
+      expect(tester.concernedPerson).toHaveValue('');
     }));
 
     it('should save', fakeAsync(() => {
@@ -227,7 +227,7 @@ describe('TaskEditComponent', () => {
       tester.detectChanges();
 
       expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
-      expect(tester.concernedPerson.value).toBe('Cedric Exbrayat (Hype)');
+      expect(tester.concernedPerson).toHaveValue('Cedric Exbrayat (Hype)');
       expect(tester.cancel.attr('href')).toBe('/persons/1/tasks');
 
       tester.title.fillWith('test title');
@@ -277,13 +277,13 @@ describe('TaskEditComponent', () => {
       tester.detectChanges();
 
       expect(tester.pageTitle).toContain('Modification de la tâche test title');
-      expect(tester.title.value).toBe('test title');
-      expect(tester.description.value).toBe('test description');
+      expect(tester.title).toHaveValue('test title');
+      expect(tester.description).toHaveValue('test description');
       expect(tester.category.selectedIndex).toBe(2);
       expect(tester.componentInstance.taskForm.value.category).toEqual(categories[1]);
-      expect(tester.dueDate.value).toBe('02/01/2018');
+      expect(tester.dueDate).toHaveValue('02/01/2018');
       expect(tester.componentInstance.taskForm.value.dueDate).toBe('2018-01-02');
-      expect(tester.concernedPerson.value).toBe('Cedric Exbrayat (Hype)');
+      expect(tester.concernedPerson).toHaveValue('Cedric Exbrayat (Hype)');
       expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
       expect(tester.assignee.selectedIndex).toBe(1);
       expect(tester.componentInstance.taskForm.value.assignee).toEqual(users[2]);
