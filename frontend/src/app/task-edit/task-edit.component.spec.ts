@@ -1,4 +1,4 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { TaskEditComponent } from './task-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
-import { ComponentTester, TestButton } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
 
 class TaskEditTester extends ComponentTester<TaskEditComponent> {
   constructor() {
@@ -74,7 +74,7 @@ describe('TaskEditComponent', () => {
   let users: Array<UserModel>;
   let categories: Array<TaskCategoryModel>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     persons = [
       { id: 1, firstName: 'Cedric', lastName: 'Exbrayat', nickName: 'Hype', mediationCode: 'C1' },
       { id: 2, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: null, mediationCode: null },
@@ -90,7 +90,9 @@ describe('TaskEditComponent', () => {
       { id: 6, name: 'Various' },
       { id: 7, name: 'Meal' },
     ];
-  }));
+
+    jasmine.addMatchers(speculoosMatchers);
+  });
 
   function prepareModule(task: TaskModel, concernedPersonId: number) {
     const activatedRoute = {
@@ -175,7 +177,7 @@ describe('TaskEditComponent', () => {
       tester.fillConcernedPersonAndTick('Cedric Exbrayat (Hyp');
 
       expect(tester.componentInstance.taskForm.value.concernedPerson).toBeFalsy();
-      expect(tester.concernedPerson.classes).toContain('is-warning');
+      expect(tester.concernedPerson).toHaveClass('is-warning');
 
       tester.concernedPerson.dispatchEventOfType('blur');
       expect(tester.concernedPerson.value).toBe('');
