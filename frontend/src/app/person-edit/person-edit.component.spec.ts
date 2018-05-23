@@ -21,7 +21,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
-import { ComponentTester, TestButton, TestInput } from 'ngx-speculoos';
+import { ComponentTester, TestButton, TestInput, speculoosMatchers } from 'ngx-speculoos';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -272,10 +272,12 @@ describe('PersonEditComponent', () => {
       snapshot: {data: {person, persons, countries}}
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
+    beforeEach(() => TestBed.configureTestingModule({
       imports: [TestModule],
       providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
-    })));
+    }));
+
+    beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 
     it('should have a title', () => {
       const tester = new PersonEditTester();
@@ -354,7 +356,7 @@ describe('PersonEditComponent', () => {
       tester.city.fillWith('42000 SAINT-ETIENN');
 
       expect(tester.componentInstance.personForm.value.city).toBeFalsy();
-      expect(tester.city.classes).toContain('is-warning');
+      expect(tester.city).toHaveClass('is-warning');
 
       // move out of the field, which should clear it
       tester.city.dispatchEventOfType('blur');
@@ -376,7 +378,7 @@ describe('PersonEditComponent', () => {
       tester.spouse.fillWith('Jane');
 
       expect(tester.componentInstance.personForm.value.spouse).toBeFalsy();
-      expect(tester.spouse.classes).toContain('is-warning');
+      expect(tester.spouse).toHaveClass('is-warning');
 
       // move out of the field, which should clear it
       tester.spouse.dispatchEventOfType('blur');
