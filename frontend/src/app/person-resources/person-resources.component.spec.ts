@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { PersonResourcesComponent } from './person-resources.component';
 import { IncomeModel } from '../models/income.model';
@@ -17,8 +17,8 @@ import { PerUnitRevenueInformationService } from '../per-unit-revenue-informatio
 import { ComponentTester, fakeRoute, fakeSnapshot, TestButton } from 'ngx-fixture';
 
 class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
-  constructor(fixture: ComponentFixture<PersonResourcesComponent>) {
-    super(fixture);
+  constructor() {
+    super(PersonResourcesComponent);
   }
 
   get incomeItems() {
@@ -127,17 +127,22 @@ describe('PersonResourcesComponent', () => {
     })
   });
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
-    declarations: [PersonResourcesComponent],
-    providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: LOCALE_ID, useValue: 'fr-FR' }
-    ]
-  })));
+  let tester: PersonResourcesTester;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
+      declarations: [PersonResourcesComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: LOCALE_ID, useValue: 'fr-FR' }
+      ]
+    });
+
+    tester = new PersonResourcesTester();
+  }));
 
   it('should list incomes', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     expect(tester.incomeItems.length).toBe(2);
@@ -149,7 +154,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should display no income message and no total income when no income', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.componentInstance.incomes = [];
     tester.detectChanges();
 
@@ -159,7 +163,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should display total income', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     expect(tester.totalIncome.textContent).toContain('Total');
@@ -167,7 +170,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should ask for confirmation before deletion of income', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
@@ -182,7 +184,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should delete income once confirmed', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
@@ -207,7 +208,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should list charges', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     expect(tester.chargeItems.length).toBe(2);
@@ -220,7 +220,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should display no charge message and no total charge when no charge', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.componentInstance.charges = [];
     tester.detectChanges();
 
@@ -230,7 +229,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should display total charge', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     expect(tester.totalCharge.textContent).toContain('Total');
@@ -238,7 +236,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should ask for confirmation before deletion of charge', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
@@ -253,7 +250,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should delete charge once confirmed', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
@@ -278,7 +274,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should display the grand total', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     expect(tester.total.textContent).toContain('Reste à vivre');
@@ -299,7 +294,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should list units', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     const unitItems = tester.unitItems;
@@ -314,7 +308,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should display no information message when no information', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.componentInstance.perUnitRevenueInformation = null;
     tester.detectChanges();
 
@@ -324,7 +317,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should ask for confirmation before deletion of info', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);
@@ -339,7 +331,6 @@ describe('PersonResourcesComponent', () => {
   });
 
   it('should delete info once confirmed', () => {
-    const tester = new PersonResourcesTester(TestBed.createComponent(PersonResourcesComponent));
     tester.detectChanges();
 
     const confirmService = TestBed.get(ConfirmService);

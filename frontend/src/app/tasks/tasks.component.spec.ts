@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { Task, TaskEvent, TasksComponent } from './tasks.component';
 import { TaskModel } from '../models/task.model';
@@ -35,8 +35,8 @@ class TestComponent {
 
 // Beware: this tester assumes that the component has one and only has one task
 class TasksComponentTester extends ComponentTester<TestComponent> {
-  constructor(fixture: ComponentFixture<TestComponent>) {
-    super(fixture);
+  constructor() {
+    super(TestComponent);
   }
 
   get text() {
@@ -190,7 +190,7 @@ describe('TasksComponent', () => {
     let tester: TasksComponentTester;
 
     beforeEach(() => {
-      tester = new TasksComponentTester(TestBed.createComponent(TestComponent));
+      tester = new TasksComponentTester();
       tester.componentInstance.tasks = tasks;
       tester.detectChanges();
     });

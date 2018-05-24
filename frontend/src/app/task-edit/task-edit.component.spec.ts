@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { TaskEditComponent } from './task-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -17,8 +17,8 @@ import { of } from 'rxjs';
 import { ComponentTester, TestButton } from 'ngx-fixture';
 
 class TaskEditTester extends ComponentTester<TaskEditComponent> {
-  constructor(fixture: ComponentFixture<TaskEditComponent>) {
-    super(fixture);
+  constructor() {
+    super(TaskEditComponent);
   }
 
   get pageTitle() {
@@ -122,7 +122,7 @@ describe('TaskEditComponent', () => {
     });
 
     it('should have a title and an empty form', () => {
-      const tester = new TaskEditTester(TestBed.createComponent(TaskEditComponent));
+      const tester = new TaskEditTester();
       tester.detectChanges();
 
       expect(tester.pageTitle).toContain('Nouvelle tâche');
@@ -149,7 +149,7 @@ describe('TaskEditComponent', () => {
     }
 
     it('should have a typeahead searching by various parts of the identity', fakeAsync(() => {
-      const tester = new TaskEditTester(TestBed.createComponent(TaskEditComponent));
+      const tester = new TaskEditTester();
       tester.detectChanges();
 
       // search by first name
@@ -163,7 +163,7 @@ describe('TaskEditComponent', () => {
     }));
 
     it('should select a person, then display a warning when text is edited, and clear the field on blur', fakeAsync(() => {
-      const tester = new TaskEditTester(TestBed.createComponent(TaskEditComponent));
+      const tester = new TaskEditTester();
       tester.detectChanges();
 
       tester.fillConcernedPersonAndTick('ced');
@@ -182,7 +182,7 @@ describe('TaskEditComponent', () => {
     }));
 
     it('should save', fakeAsync(() => {
-      const tester = new TaskEditTester(TestBed.createComponent(TaskEditComponent));
+      const tester = new TaskEditTester();
       tester.detectChanges();
 
       tester.title.fillWith('test title');
@@ -221,7 +221,7 @@ describe('TaskEditComponent', () => {
     });
 
     it('should have a prepopulated concerned person and redirect to the person task page after save', () => {
-      const tester = new TaskEditTester(TestBed.createComponent(TaskEditComponent));
+      const tester = new TaskEditTester();
       tester.detectChanges();
 
       expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
@@ -271,7 +271,7 @@ describe('TaskEditComponent', () => {
     });
 
     it('should have a title and a prepopulated form', () => {
-      const tester = new TaskEditTester(TestBed.createComponent(TaskEditComponent));
+      const tester = new TaskEditTester();
       tester.detectChanges();
 
       expect(tester.pageTitle).toContain('Modification de la tâche test title');
@@ -289,7 +289,7 @@ describe('TaskEditComponent', () => {
     });
 
     it('should save', () => {
-      const tester = new TaskEditTester(TestBed.createComponent(TaskEditComponent));
+      const tester = new TaskEditTester();
       tester.detectChanges();
 
       const taskService = TestBed.get(TaskService);
