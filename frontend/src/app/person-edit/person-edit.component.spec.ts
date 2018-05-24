@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -24,8 +24,8 @@ import { CountryModel } from '../models/country.model';
 import { ComponentTester, TestButton, TestInput } from 'ngx-fixture';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
-  constructor(fixture: ComponentFixture<PersonEditComponent>) {
-    super(fixture);
+  constructor() {
+    super(PersonEditComponent);
   }
 
   get title() {
@@ -278,7 +278,7 @@ describe('PersonEditComponent', () => {
     })));
 
     it('should have a title', () => {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
       tester.detectChanges();
 
       expect(tester.title).toContain('Modification de l\'adhérent John Doe (john)');
@@ -290,7 +290,7 @@ describe('PersonEditComponent', () => {
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
 
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
       tester.detectChanges();
 
       expect(tester.firstName.value).toBe(person.firstName);
@@ -341,7 +341,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should clear the city input on blur if not valid anymore', () =>  {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
 
       // fake typeahead results
       tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
@@ -363,7 +363,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should clear the spouse input on blur if not valid anymore', () =>  {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
 
       // fake typeahead results
       tester.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
@@ -385,7 +385,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should warn if selecting a spouse already in couple with someone else', () => {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
       tester.detectChanges();
       const component = tester.componentInstance;
 
@@ -400,7 +400,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should not warn if selecting a spouse not already in couple with someone else', () => {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
       tester.detectChanges();
       const nativeElement = tester.nativeElement;
       const component = tester.componentInstance;
@@ -416,7 +416,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should not warn if selecting the current spouse of the edited person', () => {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
       tester.detectChanges();
       const nativeElement = tester.nativeElement;
       const component = tester.componentInstance;
@@ -432,7 +432,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should set the fiscal number to null if invalid when setting the fiscal status to UNKNONW', () => {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
       tester.detectChanges();
       const component = tester.componentInstance;
 
@@ -455,7 +455,7 @@ describe('PersonEditComponent', () => {
     })));
 
     it('should have a title', () => {
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
       tester.detectChanges();
 
       expect(tester.title).toContain('Nouvel adhérent');
@@ -466,7 +466,7 @@ describe('PersonEditComponent', () => {
       spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
-      const tester = new PersonEditTester(TestBed.createComponent(PersonEditComponent));
+      const tester = new PersonEditTester();
 
       // fake typeahead results
       tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => of([cityModel]);
