@@ -21,7 +21,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
-import { ComponentTester, TestButton, TestInput } from 'ngx-fixture';
+import { ComponentTester, TestButton, TestInput } from 'ngx-speculoos';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {

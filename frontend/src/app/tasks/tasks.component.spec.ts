@@ -19,7 +19,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ComponentTester, TestHtmlElement } from 'ngx-fixture';
+import { ComponentTester, TestHtmlElement } from 'ngx-speculoos';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
