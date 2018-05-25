@@ -14,7 +14,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
-import { ComponentTester, TestButton } from 'ngx-fixture';
+import { ComponentTester, TestButton } from 'ngx-speculoos';
 
 class TaskEditTester extends ComponentTester<TaskEditComponent> {
   constructor() {

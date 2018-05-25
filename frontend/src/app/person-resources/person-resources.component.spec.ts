@@ -14,7 +14,7 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of, throwError } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
-import { ComponentTester, fakeRoute, fakeSnapshot, TestButton } from 'ngx-fixture';
+import { ComponentTester, fakeRoute, fakeSnapshot, TestButton } from 'ngx-speculoos';
 
 class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
   constructor() {
