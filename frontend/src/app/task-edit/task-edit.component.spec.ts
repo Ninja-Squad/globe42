@@ -22,7 +22,7 @@ class TaskEditTester extends ComponentTester<TaskEditComponent> {
   }
 
   get pageTitle() {
-    return this.element('h1').textContent;
+    return this.element('h1');
   }
 
   get title() {
@@ -127,8 +127,7 @@ describe('TaskEditComponent', () => {
       const tester = new TaskEditTester();
       tester.detectChanges();
 
-      expect(tester.pageTitle).toContain('Nouvelle tâche');
-
+      expect(tester.pageTitle).toHaveText('Nouvelle tâche');
       expect(tester.title).toHaveValue('');
       expect(tester.description).toHaveValue('');
       expect(tester.category.selectedIndex).toBe(-1);
@@ -276,7 +275,7 @@ describe('TaskEditComponent', () => {
       const tester = new TaskEditTester();
       tester.detectChanges();
 
-      expect(tester.pageTitle).toContain('Modification de la tâche test title');
+      expect(tester.pageTitle).toHaveText('Modification de la tâche test title');
       expect(tester.title).toHaveValue('test title');
       expect(tester.description).toHaveValue('test description');
       expect(tester.category.selectedIndex).toBe(2);
