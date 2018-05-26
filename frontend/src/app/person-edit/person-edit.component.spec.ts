@@ -29,7 +29,7 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
   }
 
   get title() {
-    return this.element('h1').textContent;
+    return this.element('h1');
   }
 
   get firstName() {
@@ -61,7 +61,7 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
   }
 
   get mediationCode() {
-    return this.element('#mediationCode').textContent;
+    return this.element('#mediationCode');
   }
 
   get address() {
@@ -283,7 +283,7 @@ describe('PersonEditComponent', () => {
       const tester = new PersonEditTester();
       tester.detectChanges();
 
-      expect(tester.title).toContain('Modification de l\'adhérent John Doe (john)');
+      expect(tester.title).toHaveText('Modification de l\'adhérent John Doe (john)');
     });
 
     it('should edit and update an existing person', () => {
@@ -299,9 +299,9 @@ describe('PersonEditComponent', () => {
       expect(tester.lastName).toHaveValue(person.lastName);
       expect(tester.birthName).toHaveValue(person.birthName);
       expect(tester.nickName).toHaveValue(person.nickName);
-      expect(tester.gender('MALE').checked).toBe(true);
+      expect(tester.gender('MALE')).toBeChecked();
       expect(tester.birthDate).toHaveValue('01/01/1980');
-      expect(tester.mediationCode).toContain('Généré automatiquement');
+      expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
       expect(tester.address).toHaveValue(person.address);
       expect(tester.city).toHaveValue(displayCity(person.city));
       expect(tester.email).toHaveValue(person.email);
@@ -313,11 +313,11 @@ describe('PersonEditComponent', () => {
       expect(tester.housing.selectedValue).toBe(person.housing);
       expect(tester.housingSpace).toHaveValue(`${person.housingSpace}`);
       expect(tester.hostName).toHaveValue(person.hostName);
-      expect(tester.fiscalStatus('UNKNOWN').checked).toBe(false);
-      expect(tester.fiscalStatus('NOT_TAXABLE').checked).toBe(false);
-      expect(tester.fiscalStatus('TAXABLE').checked).toBe(true);
+      expect(tester.fiscalStatus('UNKNOWN')).not.toBeChecked();
+      expect(tester.fiscalStatus('NOT_TAXABLE')).not.toBeChecked();
+      expect(tester.fiscalStatus('TAXABLE')).toBeChecked();
       expect(tester.fiscalNumber).toHaveValue('0123456789012');
-      expect(tester.fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
+      expect(tester.fiscalStatusUpToDate).toBeChecked();
       expect(tester.healthCareCoverage.selectedValue).toBe(person.healthCareCoverage);
       expect(tester.healthCareCoverageStartDate).toHaveValue('01/01/2017');
       expect(tester.healthInsurance.selectedValue).toBe(person.healthInsurance);
@@ -462,7 +462,7 @@ describe('PersonEditComponent', () => {
       const tester = new PersonEditTester();
       tester.detectChanges();
 
-      expect(tester.title).toContain('Nouvel adhérent');
+      expect(tester.title).toHaveText('Nouvel adhérent');
     });
 
     it('should create and save a new person', fakeAsync(() => {
@@ -480,17 +480,17 @@ describe('PersonEditComponent', () => {
       expect(tester.lastName).toHaveValue('');
       expect(tester.birthName).toHaveValue('');
       expect(tester.nickName).toHaveValue('');
-      expect(tester.gender('MALE').checked).toBe(false);
-      expect(tester.gender('FEMALE').checked).toBe(false);
-      expect(tester.gender('OTHER').checked).toBe(false);
+      expect(tester.gender('MALE')).not.toBeChecked();
+      expect(tester.gender('FEMALE')).not.toBeChecked();
+      expect(tester.gender('OTHER')).not.toBeChecked();
       expect(tester.birthDate).toHaveValue('');
       expect(tester.address).toHaveValue('');
       expect(tester.city).toHaveValue('');
       expect(tester.email).toHaveValue('');
       expect(tester.phoneNumber).toHaveValue('');
 
-      expect(tester.mediationEnabled(true).checked).toBe(false);
-      expect(tester.mediationEnabled(false).checked).toBe(true);
+      expect(tester.mediationEnabled(true)).not.toBeChecked();
+      expect(tester.mediationEnabled(false)).toBeChecked();
 
       const mediationDependantIds = [
         'mediationCode',
@@ -516,7 +516,7 @@ describe('PersonEditComponent', () => {
         expect(tester.element(`#${id}`)).not.toBeNull(`#${id} should be present`);
       });
 
-      expect(tester.mediationCode).toContain('Généré automatiquement');
+      expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
       expect(tester.firstMediationAppointmentDate).toHaveValue('');
       expect(tester.maritalStatus.selectedValue).toBe('UNKNOWN');
       expect(tester.spouse).toHaveValue('');
@@ -524,7 +524,7 @@ describe('PersonEditComponent', () => {
       expect(tester.housing.selectedValue).toBe('UNKNOWN');
       expect(tester.housingSpace).toBeFalsy();
       expect(tester.hostName).toHaveValue('');
-      expect(tester.fiscalStatus('UNKNOWN').checked).toBe(true);
+      expect(tester.fiscalStatus('UNKNOWN')).toBeChecked();
       expect(tester.fiscalNumber).toBeFalsy();
       expect(tester.fiscalStatusUpToDate).toBeFalsy();
       expect(tester.accompanying).toHaveValue('');
@@ -548,7 +548,7 @@ describe('PersonEditComponent', () => {
       tester.fillAndTick(tester.city, '4200');
       // select first result
       const cityResult = tester.firstTypeaheadOption;
-      expect(cityResult.textContent).toContain(displayCity(cityModel));
+      expect(cityResult).toHaveText(displayCity(cityModel));
       cityResult.click();
 
       tester.email.fillWith('jane@mail.com');
@@ -561,7 +561,7 @@ describe('PersonEditComponent', () => {
       tester.fillAndTick(tester.spouse, 'Jane');
       // select first result
       const spouseResult = tester.firstTypeaheadOption;
-      expect(spouseResult.textContent).toContain('Jane Doe');
+      expect(spouseResult).toHaveText('Jane Doe');
       spouseResult.click();
 
       tester.entryDate.fillWith('02/02/2015');
@@ -591,7 +591,7 @@ describe('PersonEditComponent', () => {
       // trigger nationality typeahead
       tester.fillAndTick(tester.nationality, 'Bel');
       // select first result
-      expect(tester.firstTypeaheadOption.textContent).toContain('Belgique');
+      expect(tester.firstTypeaheadOption).toHaveText('Belgique');
       tester.firstTypeaheadOption.click();
 
       tester.save.click();
