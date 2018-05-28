@@ -130,12 +130,12 @@ describe('TaskEditComponent', () => {
       expect(tester.pageTitle).toHaveText('Nouvelle tâche');
       expect(tester.title).toHaveValue('');
       expect(tester.description).toHaveValue('');
-      expect(tester.category.selectedIndex).toBe(-1);
+      expect(tester.category).toHaveSelectedValue(null);
       expect(tester.category.optionLabels).toEqual(['', 'Various', 'Meal']);
       expect(tester.dueDate).toHaveValue('');
       expect(tester.concernedPerson).toHaveValue('');
       expect(tester.assignee.optionLabels).toEqual(['', 'Moi', 'agnes', 'cyril']);
-      expect(tester.assignee.selectedIndex).toBe(-1);
+      expect(tester.assignee).toHaveSelectedValue(null);
 
       expect(tester.save.disabled).toBe(false);
       expect(tester.cancel.attr('href')).toBe('/tasks');
@@ -278,13 +278,13 @@ describe('TaskEditComponent', () => {
       expect(tester.pageTitle).toHaveText('Modification de la tâche test title');
       expect(tester.title).toHaveValue('test title');
       expect(tester.description).toHaveValue('test description');
-      expect(tester.category.selectedIndex).toBe(2);
+      expect(tester.category).toHaveSelectedLabel('Meal');
       expect(tester.componentInstance.taskForm.value.category).toEqual(categories[1]);
       expect(tester.dueDate).toHaveValue('02/01/2018');
       expect(tester.componentInstance.taskForm.value.dueDate).toBe('2018-01-02');
       expect(tester.concernedPerson).toHaveValue('Cedric Exbrayat (Hype)');
       expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
-      expect(tester.assignee.selectedIndex).toBe(1);
+      expect(tester.assignee).toHaveSelectedLabel('Moi');
       expect(tester.componentInstance.taskForm.value.assignee).toEqual(users[2]);
       expect(tester.save.disabled).toBe(false);
     });
