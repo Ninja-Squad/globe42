@@ -3,17 +3,19 @@
   <ng-container *ngIf="!editedIncomeType">Nouvel organisme payeur</ng-container>
 </h1>
 
-<form (ngSubmit)="save()" #typeForm="ngForm">
+<form (ngSubmit)="save()" [formGroup]="incomeTypeForm">
   <div class="form-group row">
     <label for="type" class="col-sm-2 col-form-label">Organisme</label>
     <div class="col-sm-10">
-      <input class="form-control" id="type" name="type" [(ngModel)]="incomeType.type" required #typeCtrl="ngModel"/>
-      <div *ngIf="typeCtrl.control.dirty && typeCtrl.control.hasError('required')">Le type est obligatoire</div>
+      <input class="form-control" id="type" formControlName="type" />
+      <div class="invalid-feedback">
+        <div *ngIf="incomeTypeForm.get('type').hasError('required')">Le type est obligatoire</div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-10 offset-sm-2">
-      <button class="btn btn-primary mr-2" [disabled]="!typeForm.valid" id="save">Enregistrer</button>
+      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
       <a class="btn btn-secondary" routerLink="/income-types">Annuler</a>
     </div>
   </div>

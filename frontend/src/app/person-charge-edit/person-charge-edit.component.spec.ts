@@ -3,25 +3,29 @@ import { async, TestBed } from '@angular/core/testing';
 import { PersonChargeEditComponent } from './person-charge-edit.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FullnamePipe } from '../fullname.pipe';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { ChargeService } from '../charge.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { ChargeTypeModel } from '../models/charge-type.model';
 
 describe('PersonChargeEditComponent', () => {
   const chargeTypes = [
     { id: 1, name: 'B' },
-    { id: 2, name: 'A' }
-  ];
+    { id: 2, name: 'A', maxMonthlyAmount: 100 }
+  ] as Array<ChargeTypeModel>;
 
   const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', 'nickName': 'JB'};
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule],
-    declarations: [PersonChargeEditComponent, FullnamePipe]
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
+    declarations: [PersonChargeEditComponent, FullnamePipe],
+    providers: [
+      { provide: LOCALE_ID, useValue: 'fr-FR' }
+    ]
   })
   class TestModule {}
 
@@ -55,29 +59,47 @@ describe('PersonChargeEditComponent', () => {
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
-      expect(component.charge).toEqual({ type: null, monthlyAmount: null });
+      expect(component.chargeForm.value).toEqual({ type: null, monthlyAmount: null });
     });
 
-    it('should display the charge in a form, and have the save button disabled', () => {
+    it('should display the charge in a form, and validate the form', () => {
       const fixture = TestBed.createComponent(PersonChargeEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const chargeType: HTMLSelectElement = element.querySelector('#type');
+      expect(chargeType.selectedIndex).toBe(-1);
+      expect(chargeType.options.length).toBe(chargeTypes.length + 1);
 
-        const source: HTMLSelectElement = nativeElement.querySelector('#type');
-        expect(source.selectedIndex).toBe(-1);
-        expect(source.options.length).toBe(chargeTypes.length + 1);
+      const monthlyAmount: HTMLInputElement = element.querySelector('#monthlyAmount');
+      expect(monthlyAmount.value).toBe('');
 
+      const save: HTMLButtonElement = element.querySelector('#save');
+      save.click();
+      fixture.detectChanges();
 
-        const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
-        expect(monthlyAmount.value).toBe('');
+      expect(element.textContent).toContain('La nature de la charge est obligatoire');
+      expect(element.textContent).toContain('Le montant mensuel est obligatoire');
 
-        const save = nativeElement.querySelector('#save');
-        expect(save.disabled).toBe(true);
-      });
+      monthlyAmount.value = '0';
+      monthlyAmount.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      expect(element.textContent).toContain('La nature de la charge est obligatoire');
+      expect(element.textContent).toContain('Le montant mensuel doit être positif');
+
+      chargeType.selectedIndex = 1;
+      chargeType.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+
+      monthlyAmount.value = '101';
+      monthlyAmount.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      expect(element.textContent).not.toContain('La nature de la charge est obligatoire');
+      expect(element.textContent).toContain(
+        'Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge\u00a0: 100,00\u00a0€');
     });
 
     it('should save the charge and navigate to the resource list', () => {
@@ -92,32 +114,28 @@ describe('PersonChargeEditComponent', () => {
       const fixture = TestBed.createComponent(PersonChargeEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const nativeElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const type: HTMLSelectElement = nativeElement.querySelector('#type');
+      type.selectedIndex = 1;
+      type.dispatchEvent(new Event('change'));
 
-        const type: HTMLSelectElement = nativeElement.querySelector('#type');
-        type.selectedIndex = 1;
-        type.dispatchEvent(new Event('change'));
+      const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
+      monthlyAmount.value = '12';
+      monthlyAmount.dispatchEvent(new Event('input'));
 
-        const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
-        monthlyAmount.value = '123';
-        monthlyAmount.dispatchEvent(new Event('input'));
+      const save = nativeElement.querySelector('#save');
+      fixture.detectChanges();
 
-        const save = nativeElement.querySelector('#save');
-        fixture.detectChanges();
+      expect(save.disabled).toBe(false);
 
-        expect(save.disabled).toBe(false);
+      save.click();
 
-        save.click();
+      expect(incomeService.create).toHaveBeenCalledWith(42, { typeId: 2, monthlyAmount: 12 });
 
-        expect(incomeService.create).toHaveBeenCalledWith(42, { typeId: 2, monthlyAmount: 123 });
+      fixture.detectChanges();
 
-        fixture.detectChanges();
-
-        expect(router.navigate).toHaveBeenCalledWith(['persons', person.id, 'resources']);
-      });
+      expect(router.navigate).toHaveBeenCalledWith(['persons', person.id, 'resources']);
     });
   });
 });

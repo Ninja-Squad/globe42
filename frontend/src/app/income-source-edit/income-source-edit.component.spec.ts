@@ -4,11 +4,12 @@ import { IncomeSourceEditComponent } from './income-source-edit.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeSourceService } from '../income-source.service';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('IncomeSourceEditComponent', () => {
 
@@ -16,12 +17,10 @@ describe('IncomeSourceEditComponent', () => {
     { id: 1, type: 'B' },
     { id: 2, type: 'A' }
   ];
-  const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, FormsModule],
-    declarations: [IncomeSourceEditComponent],
-    providers: [{ provide: Router, useValue: fakeRouter }]
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
+    declarations: [IncomeSourceEditComponent]
   })
   class TestModule {}
 
@@ -57,74 +56,76 @@ describe('IncomeSourceEditComponent', () => {
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
-      expect(component.incomeSource).toEqual({ name: '', typeId: null, maxMonthlyAmount: null });
+      expect(component.incomeSourceForm.value).toEqual({ name: '', typeId: null, maxMonthlyAmount: null });
     });
 
-    it('should display the income source in a form, and have the save button disabled', () => {
+    it('should display the income source in a form, and validate the form', () => {
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const name: HTMLInputElement = element.querySelector('#name');
+      expect(name.value).toBe('');
 
-        const name = nativeElement.querySelector('#name');
-        expect(name.value).toBe('');
+      const type: HTMLSelectElement = element.querySelector('#type');
+      expect(type.selectedIndex).toBe(-1);
+      expect(type.options.length).toBe(incomeSourceTypes.length + 1);
 
-        const type: HTMLSelectElement = nativeElement.querySelector('#type');
-        expect(type.selectedIndex).toBe(-1);
-        expect(type.options.length).toBe(incomeSourceTypes.length + 1);
+      const maxMonthlyAmount: HTMLInputElement = element.querySelector('#maxMonthlyAmount');
+      expect(maxMonthlyAmount.value).toBe('');
+      maxMonthlyAmount.value = '0';
+      maxMonthlyAmount.dispatchEvent(new Event('input'));
 
-        const maxMonthlyAmount = nativeElement.querySelector('#maxMonthlyAmount');
-        expect(maxMonthlyAmount.value).toBe('');
+      const incomeSourceService: IncomeSourceService = TestBed.get(IncomeSourceService);
 
-        const save = nativeElement.querySelector('#save');
-        expect(save.disabled).toBe(true);
-      });
+      spyOn(incomeSourceService, 'create');
+      const save: HTMLButtonElement = element.querySelector('#save');
+      save.click();
+      fixture.detectChanges();
+
+      expect(element.textContent).toContain('Le nom est obligatoire');
+      expect(element.textContent).toContain(`L'organisme payeur est obligatoire`);
+      expect(element.textContent).toContain('Le montant mensuel maximum doit être positif');
+
+      expect(incomeSourceService.create).not.toHaveBeenCalled();
     });
 
     it('should save the income source and navigate to the list', () => {
-      const incomeSourceService = TestBed.get(IncomeSourceService);
-      const router = TestBed.get(Router);
+      const incomeSourceService: IncomeSourceService = TestBed.get(IncomeSourceService);
+      const router: Router = TestBed.get(Router);
 
       spyOn(incomeSourceService, 'create').and.returnValue(of({
         id: 42
       }));
+      spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const name: HTMLInputElement = element.querySelector('#name');
+      name.value = 'foo';
+      name.dispatchEvent(new Event('input'));
 
-        const name = nativeElement.querySelector('#name');
-        name.value = 'foo';
-        name.dispatchEvent(new Event('input'));
+      const type: HTMLSelectElement = element.querySelector('#type');
+      type.selectedIndex = 1;
+      type.dispatchEvent(new Event('change'));
 
-        const type: HTMLSelectElement = nativeElement.querySelector('#type');
-        type.selectedIndex = 1;
-        type.dispatchEvent(new Event('change'));
+      const maxMonthlyAmount: HTMLInputElement = element.querySelector('#maxMonthlyAmount');
+      maxMonthlyAmount.value = '123';
+      maxMonthlyAmount.dispatchEvent(new Event('input'));
 
-        const maxMonthlyAmount = nativeElement.querySelector('#maxMonthlyAmount');
-        maxMonthlyAmount.value = '123';
-        maxMonthlyAmount.dispatchEvent(new Event('input'));
+      const save: HTMLButtonElement = element.querySelector('#save');
+      fixture.detectChanges();
 
-        const save = nativeElement.querySelector('#save');
-        fixture.detectChanges();
+      expect(save.disabled).toBe(false);
 
-        expect(save.disabled).toBe(false);
+      save.click();
 
-        save.click();
-
-        expect(incomeSourceService.create).toHaveBeenCalledWith({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
-
-        fixture.detectChanges();
-
-        expect(router.navigate).toHaveBeenCalledWith(['/income-sources']);
-      });
+      expect(incomeSourceService.create).toHaveBeenCalledWith({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+      expect(router.navigate).toHaveBeenCalledWith(['/income-sources']);
     });
   });
 
@@ -158,54 +159,41 @@ describe('IncomeSourceEditComponent', () => {
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
-      expect(component.incomeSource).toEqual({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+      expect(component.incomeSourceForm.value).toEqual({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
     });
 
     it('should display the income source in a form, and have the save button enabled', () => {
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const name: HTMLInputElement = element.querySelector('#name');
+      expect(name.value).toBe('foo');
 
-        const name = nativeElement.querySelector('#name');
-        expect(name.value).toBe('foo');
+      const type: HTMLSelectElement = element.querySelector('#type');
+      expect(type.selectedIndex).toBe(1);
 
-        const type: HTMLSelectElement = nativeElement.querySelector('#type');
-        expect(type.selectedIndex).toBe(1);
-
-        const maxMonthlyAmount = nativeElement.querySelector('#maxMonthlyAmount');
-        expect(maxMonthlyAmount.value).toBe('123');
-
-        const save = nativeElement.querySelector('#save');
-        expect(save.disabled).toBe(false);
-      });
+      const maxMonthlyAmount: HTMLInputElement = element.querySelector('#maxMonthlyAmount');
+      expect(maxMonthlyAmount.value).toBe('123');
     });
 
     it('should save the income source and navigate to the income sources page', () => {
-      const incomeSourceService = TestBed.get(IncomeSourceService);
-      const router = TestBed.get(Router);
+      const incomeSourceService: IncomeSourceService = TestBed.get(IncomeSourceService);
+      const router: Router = TestBed.get(Router);
 
       spyOn(incomeSourceService, 'update').and.returnValue(of(null));
+      spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(IncomeSourceEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const nativeElement: HTMLElement = fixture.nativeElement;
+      const save: HTMLButtonElement = nativeElement.querySelector('#save');
+      save.click();
 
-        const nativeElement = fixture.nativeElement;
-        const save = nativeElement.querySelector('#save');
-        save.click();
-
-        expect(incomeSourceService.update).toHaveBeenCalledWith(42, { name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
-
-        fixture.detectChanges();
-
-        expect(router.navigate).toHaveBeenCalledWith(['/income-sources']);
-      });
+      expect(incomeSourceService.update).toHaveBeenCalledWith(42, { name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+      expect(router.navigate).toHaveBeenCalledWith(['/income-sources']);
     });
   });
 });

@@ -3,36 +3,40 @@ import { async, TestBed } from '@angular/core/testing';
 import { PersonIncomeEditComponent } from './person-income-edit.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IncomeService } from '../income.service';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FullnamePipe } from '../fullname.pipe';
 import { of } from 'rxjs';
+import { IncomeSourceModel } from '../models/income-source.model';
+import { IncomeService } from '../income.service';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
     { id: 1, name: 'B' },
-    { id: 2, name: 'A' }
-  ];
+    { id: 2, name: 'A', maxMonthlyAmount: 100 }
+  ] as Array<IncomeSourceModel>;
 
   const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', 'nickName': 'JB'};
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, FormsModule, RouterTestingModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe]
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
+    declarations: [PersonIncomeEditComponent, FullnamePipe],
+    providers: [
+      { provide: LOCALE_ID, useValue: 'fr-FR' }
+    ]
   })
   class TestModule {}
 
   describe('in creation mode', () => {
     const activatedRoute = {
-      snapshot: { data: { person, incomeSources } }
+      snapshot: {data: {person, incomeSources}}
     };
 
     beforeEach(async(() => TestBed.configureTestingModule({
       imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
     })));
 
     it('should have a title', () => {
@@ -55,32 +59,50 @@ describe('PersonIncomeEditComponent', () => {
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
-      expect(component.income).toEqual({ source: null, monthlyAmount: null });
+      expect(component.incomeForm.value).toEqual({source: null, monthlyAmount: null});
     });
 
-    it('should display the income in a form, and have the save button disabled', () => {
+    it('should display the income in a form, and validate the form', () => {
       const fixture = TestBed.createComponent(PersonIncomeEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const element: HTMLElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const incomeSource: HTMLSelectElement = element.querySelector('#source');
+      expect(incomeSource.selectedIndex).toBe(-1);
+      expect(incomeSource.options.length).toBe(incomeSources.length + 1);
 
-        const source: HTMLSelectElement = nativeElement.querySelector('#source');
-        expect(source.selectedIndex).toBe(-1);
-        expect(source.options.length).toBe(incomeSources.length + 1);
+      const monthlyAmount: HTMLInputElement = element.querySelector('#monthlyAmount');
+      expect(monthlyAmount.value).toBe('');
 
+      const save: HTMLButtonElement = element.querySelector('#save');
+      save.click();
+      fixture.detectChanges();
 
-        const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
-        expect(monthlyAmount.value).toBe('');
+      expect(element.textContent).toContain('La nature de la prestation est obligatoire');
+      expect(element.textContent).toContain('Le montant mensuel est obligatoire');
 
-        const save = nativeElement.querySelector('#save');
-        expect(save.disabled).toBe(true);
-      });
+      monthlyAmount.value = '0';
+      monthlyAmount.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      expect(element.textContent).toContain('La nature de la prestation est obligatoire');
+      expect(element.textContent).toContain('Le montant mensuel doit être positif');
+
+      incomeSource.selectedIndex = 1;
+      incomeSource.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+
+      monthlyAmount.value = '101';
+      monthlyAmount.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      expect(element.textContent).not.toContain('La nature de la prestation est obligatoire');
+      expect(element.textContent).toContain(
+        'Le montant ne peut pas dépasser la valeur maximale pour cette nature de prestation\u00a0: 100,00\u00a0€');
     });
 
-    it('should save the income and navigate to the income list', () => {
+    it('should save the income and navigate to the resource list', () => {
       const incomeService = TestBed.get(IncomeService);
       const router = TestBed.get(Router);
 
@@ -92,32 +114,28 @@ describe('PersonIncomeEditComponent', () => {
       const fixture = TestBed.createComponent(PersonIncomeEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+      const nativeElement = fixture.nativeElement;
 
-        const nativeElement = fixture.nativeElement;
+      const incomeSource: HTMLSelectElement = nativeElement.querySelector('#source');
+      incomeSource.selectedIndex = 1;
+      incomeSource.dispatchEvent(new Event('change'));
 
-        const source: HTMLSelectElement = nativeElement.querySelector('#source');
-        source.selectedIndex = 1;
-        source.dispatchEvent(new Event('change'));
+      const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
+      monthlyAmount.value = '12';
+      monthlyAmount.dispatchEvent(new Event('input'));
 
-        const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
-        monthlyAmount.value = '123';
-        monthlyAmount.dispatchEvent(new Event('input'));
+      const save = nativeElement.querySelector('#save');
+      fixture.detectChanges();
 
-        const save = nativeElement.querySelector('#save');
-        fixture.detectChanges();
+      expect(save.disabled).toBe(false);
 
-        expect(save.disabled).toBe(false);
+      save.click();
 
-        save.click();
+      expect(incomeService.create).toHaveBeenCalledWith(42, {sourceId: 2, monthlyAmount: 12});
 
-        expect(incomeService.create).toHaveBeenCalledWith(42, { sourceId: 2, monthlyAmount: 123 });
+      fixture.detectChanges();
 
-        fixture.detectChanges();
-
-        expect(router.navigate).toHaveBeenCalledWith(['persons', person.id, 'resources']);
-      });
+      expect(router.navigate).toHaveBeenCalledWith(['persons', person.id, 'resources']);
     });
   });
 });

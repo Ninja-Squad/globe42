@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TaskEvent, TasksComponent } from './tasks.component';
+import { Task, TaskEvent, TasksComponent } from './tasks.component';
 import { TaskModel } from '../models/task.model';
 import { UserModel } from '../models/user.model';
 import { PersonIdentityModel } from '../models/person.model';
@@ -18,6 +18,7 @@ import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -63,13 +64,13 @@ describe('TasksComponent', () => {
           lastName: 'Nizet'
         } as PersonIdentityModel
       }
-    ];
+    ] as Array<TaskModel>;
 
     TestBed.overrideTemplate(SpentTimeAddComponent, '');
     TestBed.overrideTemplate(SpentTimesComponent, '');
 
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, ReactiveFormsModule, GlobeNgbModule.forRoot()],
       declarations: [
         TestComponent,
         TasksComponent,
@@ -92,49 +93,45 @@ describe('TasksComponent', () => {
     }
 
     it('should compute relative due date', () => {
-      const component = createComponent();
+      const model: TaskModel = tasks[0];
+      model.dueDate = '2017-08-01';
+      expect(new Task(model).relativeDueDate).toBe('aujourd\'hui');
 
-      const task = component.tasks[0];
-      task.model.dueDate = '2017-08-01';
-      expect(task.relativeDueDate()).toBe('aujourd\'hui');
+      model.dueDate = '2017-08-02';
+      expect(new Task(model).relativeDueDate).toBe('dans 1 jour');
 
-      task.model.dueDate = '2017-08-02';
-      expect(task.relativeDueDate()).toBe('dans 1 jour');
+      model.dueDate = '2017-08-04';
+      expect(new Task(model).relativeDueDate).toBe('dans 3 jours');
 
-      task.model.dueDate = '2017-08-04';
-      expect(task.relativeDueDate()).toBe('dans 3 jours');
+      model.dueDate = '2017-07-31';
+      expect(new Task(model).relativeDueDate).toBe('il y a 1 jour');
 
-      task.model.dueDate = '2017-07-31';
-      expect(task.relativeDueDate()).toBe('il y a 1 jour');
-
-      task.model.dueDate = '2017-07-29';
-      expect(task.relativeDueDate()).toBe('il y a 3 jours');
+      model.dueDate = '2017-07-29';
+      expect(new Task(model).relativeDueDate).toBe('il y a 3 jours');
     });
 
     it('should compute due date class', () => {
-      const component = createComponent();
-      component.taskModels = tasks;
+      const model: TaskModel = tasks[0];
 
-      const task = component.tasks[0];
       // due yesterday
-      task.model.dueDate = '2017-07-31';
-      expect(task.dueDateClass()).toBe('text-danger font-weight-bold');
+      model.dueDate = '2017-07-31';
+      expect(new Task(model).dueDateClass).toBe('text-danger font-weight-bold');
 
       // due today
-      task.model.dueDate = '2017-08-01';
-      expect(task.dueDateClass()).toBe('text-danger');
+      model.dueDate = '2017-08-01';
+      expect(new Task(model).dueDateClass).toBe('text-danger');
 
       // due tomorrow
-      task.model.dueDate = '2017-08-02';
-      expect(task.dueDateClass()).toBe('text-warning');
+      model.dueDate = '2017-08-02';
+      expect(new Task(model).dueDateClass).toBe('text-warning');
 
       // due in 6 days
-      task.model.dueDate = '2017-08-07';
-      expect(task.dueDateClass()).toBe('text-warning');
+      model.dueDate = '2017-08-07';
+      expect(new Task(model).dueDateClass).toBe('text-warning');
 
       // due in more than 6 days
-      task.model.dueDate = '2017-08-08';
-      expect(task.dueDateClass()).toBe('');
+      model.dueDate = '2017-08-08';
+      expect(new Task(model).dueDateClass).toBe('');
     });
 
     it('should toggle', () => {
@@ -150,7 +147,7 @@ describe('TasksComponent', () => {
     });
   });
 
-  describe('ui', () => {
+  describe('UI', () => {
     let fixture: ComponentFixture<TestComponent>;
 
     beforeEach(() => {

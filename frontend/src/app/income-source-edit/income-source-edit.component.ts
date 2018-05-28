@@ -7,6 +7,7 @@ import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceService } from '../income-source.service';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-income-source-edit',
@@ -18,10 +19,11 @@ export class IncomeSourceEditComponent implements OnInit {
   editedIncomeSource: IncomeSourceModel;
 
   incomeSourceTypes: Array<IncomeSourceTypeModel>;
-  incomeSource: IncomeSourceCommand;
+  incomeSourceForm: FormGroup;
 
   constructor(private route: ActivatedRoute,
               private incomeSourceService: IncomeSourceService,
+              private fb: FormBuilder,
               private router: Router,
               private errorService: ErrorService) { }
 
@@ -31,27 +33,25 @@ export class IncomeSourceEditComponent implements OnInit {
 
     this.editedIncomeSource = this.route.snapshot.data['incomeSource'];
 
-    if (this.editedIncomeSource) {
-      this.incomeSource = {
-        name: this.editedIncomeSource.name,
-        typeId: this.editedIncomeSource.type.id,
-        maxMonthlyAmount: this.editedIncomeSource.maxMonthlyAmount
-      };
-    } else {
-      this.incomeSource = {
-        name: '',
-        typeId: null,
-        maxMonthlyAmount: null
-      };
-    }
+    this.incomeSourceForm = this.fb.group({
+      name: [this.editedIncomeSource ? this.editedIncomeSource.name : '', Validators.required],
+      typeId: [this.editedIncomeSource ? this.editedIncomeSource.type.id : null, Validators.required],
+      maxMonthlyAmount: [this.editedIncomeSource ? this.editedIncomeSource.maxMonthlyAmount : null, Validators.min(1)]
+    });
   }
 
   save() {
+    if (this.incomeSourceForm.invalid) {
+      return;
+    }
+
     let action: Observable<IncomeSourceModel | void>;
+    const command: IncomeSourceCommand = this.incomeSourceForm.value;
+
     if (this.editedIncomeSource) {
-      action = this.incomeSourceService.update(this.editedIncomeSource.id, this.incomeSource);
+      action = this.incomeSourceService.update(this.editedIncomeSource.id, command);
     } else {
-      action = this.incomeSourceService.create(this.incomeSource);
+      action = this.incomeSourceService.create(command);
     }
     action.subscribe(
       () => this.router.navigate(['/income-sources']),

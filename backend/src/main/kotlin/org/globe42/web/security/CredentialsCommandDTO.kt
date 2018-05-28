@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty
  * Credentials sent by a user to authenticate
  * @author JB Nizet
  */
-data class CredentialsDTO(
+data class CredentialsCommandDTO(
     @field:NotEmpty val login: String,
 
     /**

@@ -1,40 +1,41 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { ChargeCategoryEditComponent } from './charge-category-edit.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
 import { ChargeCategoryModel } from '../models/charge-category.model';
 import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ChargeCategoryEditComponent', () => {
-  const fakeRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
-
   @NgModule({
-    imports: [CommonModule, HttpClientModule, FormsModule],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
     declarations: [ChargeCategoryEditComponent],
-    providers: [
-      { provide: Router, useValue: fakeRouter },
-    ]
   })
   class TestModule {}
-
 
   describe('in edit mode', () => {
     const chargeCategory: ChargeCategoryModel = { id: 42, name: 'rental' };
     const activatedRoute = {
       snapshot: { data: { chargeCategory } }
     };
+    let router: Router;
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [
-        { provide: ActivatedRoute, useValue: activatedRoute }
-      ]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [
+          { provide: ActivatedRoute, useValue: activatedRoute }
+        ]
+      });
+
+      router = TestBed.get(Router);
+      spyOn(router, 'navigateByUrl');
+    }));
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
@@ -43,29 +44,26 @@ describe('ChargeCategoryEditComponent', () => {
       expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la dépense rental');
     });
 
-    it('should edit and update an existing charge category', async(() => {
+    it('should edit and update an existing charge category', () => {
       const chargeCategoryService = TestBed.get(ChargeCategoryService);
       spyOn(chargeCategoryService, 'update').and.returnValue(of(chargeCategory));
-      const router = TestBed.get(Router);
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        expect(fixture.componentInstance.chargeCategory).toEqual({name: 'rental'});
+      expect(fixture.componentInstance.chargeCategoryForm.value).toEqual({name: 'rental'});
 
-        const nativeElement = fixture.nativeElement;
-        const type = nativeElement.querySelector('#name');
-        expect(type.value).toBe('rental');
+      const nativeElement = fixture.nativeElement;
+      const type = nativeElement.querySelector('#name');
+      expect(type.value).toBe('rental');
 
-        type.value = 'Charges locatives';
-        type.dispatchEvent(new Event('input'));
+      type.value = 'Charges locatives';
+      type.dispatchEvent(new Event('input'));
 
-        nativeElement.querySelector('#save').click();
+      nativeElement.querySelector('#save').click();
 
-        expect(chargeCategoryService.update).toHaveBeenCalledWith(42, { name: 'Charges locatives' });
-        expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');
-      });
-    }));
+      expect(chargeCategoryService.update).toHaveBeenCalledWith(42, { name: 'Charges locatives' });
+      expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');
+    });
 
   });
 
@@ -73,11 +71,17 @@ describe('ChargeCategoryEditComponent', () => {
     const activatedRoute = {
       snapshot: { data: {} }
     };
+    let router: Router;
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      });
+
+      router = TestBed.get(Router);
+      spyOn(router, 'navigateByUrl');
+    }));
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
@@ -86,16 +90,14 @@ describe('ChargeCategoryEditComponent', () => {
       expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle dépense');
     });
 
-    it('should create and save a new charge category', fakeAsync(() => {
+    it('should create and save a new charge category', () => {
       const chargeCategoryService = TestBed.get(ChargeCategoryService);
       spyOn(chargeCategoryService, 'create').and.returnValue(of(null));
-      const router = TestBed.get(Router);
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
 
       fixture.detectChanges();
-      tick();
 
-      expect(fixture.componentInstance.chargeCategory).toEqual({ name: '' });
+      expect(fixture.componentInstance.chargeCategoryForm.value).toEqual({ name: '' });
       const nativeElement = fixture.nativeElement;
 
       const type = nativeElement.querySelector('#name');
@@ -107,6 +109,24 @@ describe('ChargeCategoryEditComponent', () => {
 
       expect(chargeCategoryService.create).toHaveBeenCalledWith({ name: 'Charges locatives' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');
-    }));
+    });
+
+    it('should display an error message if no name', () => {
+      const chargeCategoryService = TestBed.get(ChargeCategoryService);
+      spyOn(chargeCategoryService, 'create').and.returnValue(of(null));
+      const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
+
+      fixture.detectChanges();
+
+      const element: HTMLElement = fixture.nativeElement;
+      const saveButton: HTMLButtonElement = element.querySelector('#save');
+      saveButton.click();
+      fixture.detectChanges();
+
+      expect(element.textContent).toContain('Le nom est obligatoire');
+
+      expect(chargeCategoryService.create).not.toHaveBeenCalled();
+      expect(router.navigateByUrl).not.toHaveBeenCalled();
+    });
   });
 });

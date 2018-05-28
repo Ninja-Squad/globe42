@@ -6,7 +6,7 @@ import { TaskModel } from '../models/task.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { of } from 'rxjs';
@@ -39,7 +39,7 @@ describe('SpentTimeAddComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SpentTimeAddComponent, TestComponent],
-      imports: [CurrentUserModule.forRoot(), HttpClientModule, FormsModule]
+      imports: [CurrentUserModule.forRoot(), HttpClientModule, ReactiveFormsModule]
     });
 
     fixture = TestBed.createComponent(TestComponent);

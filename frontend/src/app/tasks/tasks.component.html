@@ -7,7 +7,7 @@
           &ngsp;
           <small class="text-muted">#{{ task.model.category.name }}</small>
         </div>
-        <small *ngIf="task.model.status === 'TODO' && task.model.dueDate" [class]="task.dueDateClass()">{{ task.relativeDueDate() }}</small>
+        <small *ngIf="task.model.status === 'TODO' && task.model.dueDate" [class]="task.dueDateClass">{{ task.relativeDueDate }}</small>
         <small *ngIf="task.model.status === 'DONE'" class="text-success"><span class="fa fa-check"></span> Faite</small>
         <small *ngIf="task.model.status === 'CANCELLED'" class="text-danger"><span class="fa fa-times"></span> Annulée</small>
       </div>

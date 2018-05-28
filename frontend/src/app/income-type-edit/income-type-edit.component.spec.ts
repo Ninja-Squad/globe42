@@ -1,22 +1,20 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncomeTypeEditComponent } from './income-type-edit.component';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceTypeService } from '../income-source-type.service';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('IncomeTypeEditComponent', () => {
 
-  const fakeRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
-
   @NgModule({
-    imports: [CommonModule, HttpClientModule, FormsModule],
-    declarations: [IncomeTypeEditComponent],
-    providers: [{ provide: Router, useValue: fakeRouter }]
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
+    declarations: [IncomeTypeEditComponent]
   })
   class TestModule {}
 
@@ -41,29 +39,31 @@ describe('IncomeTypeEditComponent', () => {
       expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de l\'organisme payeur CAF');
     });
 
-    it('should edit and update an existing income type', async(() => {
-      const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
+    it('should edit and update an existing income type', () => {
+      const incomeSourceTypeService: IncomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
       spyOn(incomeSourceTypeService, 'update').and.returnValue(of(incomeType));
-      const router = TestBed.get(Router);
+      const router: Router = TestBed.get(Router);
+      spyOn(router, 'navigateByUrl');
+
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        expect(fixture.componentInstance.incomeType).toEqual({ type: 'CAF' });
+      expect(fixture.componentInstance.incomeTypeForm.value).toEqual({ type: 'CAF' });
 
-        const nativeElement = fixture.nativeElement;
-        const type = nativeElement.querySelector('#type');
-        expect(type.value).toBe('CAF');
+      const element: HTMLElement = fixture.nativeElement;
+      const type: HTMLInputElement = element.querySelector('#type');
+      expect(type.value).toBe('CAF');
 
-        type.value = 'Caisse Allocations Familiales';
-        type.dispatchEvent(new Event('input'));
-        nativeElement.querySelector('#save').click();
+      type.value = 'Caisse Allocations Familiales';
+      type.dispatchEvent(new Event('input'));
 
-        expect(incomeSourceTypeService.update).toHaveBeenCalledWith(42, { type: 'Caisse Allocations Familiales' });
+      const saveButton: HTMLButtonElement = element.querySelector('#save');
+      saveButton.click();
 
-        expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');
-      });
-    }));
+      expect(incomeSourceTypeService.update).toHaveBeenCalledWith(42, { type: 'Caisse Allocations Familiales' });
+
+      expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');
+    });
 
   });
 
@@ -84,27 +84,52 @@ describe('IncomeTypeEditComponent', () => {
       expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvel organisme payeur');
     });
 
-    it('should create and save a new income type', fakeAsync(() => {
+    it('should create and save a new income type', () => {
       const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
+      const router: Router = TestBed.get(Router);
+
       spyOn(incomeSourceTypeService, 'create').and.returnValue(of(null));
-      const router = TestBed.get(Router);
+      spyOn(router, 'navigateByUrl');
+
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
 
       fixture.detectChanges();
-      tick();
 
-      expect(fixture.componentInstance.incomeType).toEqual({ type: '' });
-      const nativeElement = fixture.nativeElement;
+      expect(fixture.componentInstance.incomeTypeForm.value).toEqual({ type: '' });
+      const element: HTMLElement = fixture.nativeElement;
 
-      const type = nativeElement.querySelector('#type');
+      const type: HTMLInputElement = element.querySelector('#type');
       expect(type.value).toBe('');
       type.value = 'CAF';
-
       type.dispatchEvent(new Event('input'));
-      nativeElement.querySelector('#save').click();
+
+      const saveButton: HTMLButtonElement = element.querySelector('#save');
+      saveButton.click();
 
       expect(incomeSourceTypeService.create).toHaveBeenCalledWith({ type: 'CAF' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');
-    }));
+    });
+
+    it('should display an error message if no type', () => {
+      const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
+      const router: Router = TestBed.get(Router);
+
+      spyOn(incomeSourceTypeService, 'create').and.returnValue(of(null));
+      spyOn(router, 'navigateByUrl');
+
+      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
+
+      fixture.detectChanges();
+
+      const element: HTMLElement = fixture.nativeElement;
+      const saveButton: HTMLButtonElement = element.querySelector('#save');
+      saveButton.click();
+      fixture.detectChanges();
+
+      expect(element.textContent).toContain('Le type est obligatoire');
+
+      expect(incomeSourceTypeService.create).not.toHaveBeenCalled();
+      expect(router.navigateByUrl).not.toHaveBeenCalled();
+    });
   });
 });

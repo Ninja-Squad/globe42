@@ -1,31 +1,21 @@
 import { async, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { LoginComponent } from './login.component';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { Router } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LoginComponent', () => {
 
-  const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
-  const fakeUserService = jasmine.createSpyObj('UserService', ['authenticate']);
-
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [FormsModule],
+    imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
     declarations: [LoginComponent],
-    providers: [
-      { provide: CurrentUserService, useValue: fakeUserService },
-      { provide: Router, useValue: fakeRouter }
-    ]
   })));
 
-  beforeEach(() => {
-    fakeRouter.navigate.calls.reset();
-    fakeUserService.authenticate.calls.reset();
-  });
-
-  it('should have a credentials field', () => {
+  it('should have a login form', () => {
     const fixture = TestBed.createComponent(LoginComponent);
 
     // when we trigger the change detection
@@ -33,9 +23,10 @@ describe('LoginComponent', () => {
 
     // then we should have a field credentials
     const componentInstance = fixture.componentInstance;
-    expect(componentInstance.credentials).not.toBeNull();
-    expect(componentInstance.credentials.login).toBe('');
-    expect(componentInstance.credentials.password).toBe('');
+    expect(componentInstance.loginForm.value).toEqual({
+      login: '',
+      password: ''
+    });
   });
 
   it('should have a title', () => {
@@ -46,113 +37,112 @@ describe('LoginComponent', () => {
 
     // then we should have a title
     const element = fixture.nativeElement;
-    expect(element.querySelector('h1')).not.toBeNull();
     expect(element.querySelector('h1').textContent).toContain('Connexion');
   });
 
-  it('should have a disabled button if the form is incomplete', async(() => {
-    const fixture = TestBed.createComponent(LoginComponent);
-
-    // when we trigger the change detection
-    fixture.detectChanges();
-
-    // then we should have a disabled button
-    const element = fixture.nativeElement;
-
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(element.querySelector('button')).not.toBeNull();
-      expect(element.querySelector('button').hasAttribute('disabled')).toBe(true);
-    });
-  }));
-
-  it('should be possible to log in if the form is complete', async(() => {
+  it('should validate the form', () => {
     const fixture = TestBed.createComponent(LoginComponent);
 
     fixture.detectChanges();
 
-    const element = fixture.nativeElement;
+    const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
+    const router: Router = TestBed.get(Router);
+    spyOn(currentUserService, 'authenticate');
+    spyOn(router, 'navigate');
 
-    fixture.whenStable().then(() => {
-      const loginInput = element.querySelector('input[name="login"]');
-      expect(loginInput).not.toBeNull();
-      loginInput.value = 'login';
-      loginInput.dispatchEvent(new Event('input'));
-      const passwordInput = element.querySelector('input[name="password"]');
-      expect(passwordInput).not.toBeNull();
-      passwordInput.value = 'password';
-      passwordInput.dispatchEvent(new Event('input'));
+    const element: HTMLElement = fixture.nativeElement;
 
-      // when we trigger the change detection
-      fixture.detectChanges();
+    const loginButton: HTMLButtonElement = element.querySelector('#submit');
+    loginButton.click();
+    fixture.detectChanges();
 
-      // then we should have a submit button enabled
-      expect(element.querySelector('button').hasAttribute('disabled')).toBe(false);
-    });
-  }));
+    expect(element.textContent).toContain(`L'identifiant est obligatoire`);
+    expect(element.textContent).toContain(`Le mot de passe est obligatoire`);
+
+    expect(currentUserService.authenticate).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
 
   it('should call the user service and redirect if success', () => {
     const fixture = TestBed.createComponent(LoginComponent);
-
     fixture.detectChanges();
 
+    const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
+    const router: Router = TestBed.get(Router);
+
     const subject = new Subject<String>();
-    fakeUserService.authenticate.and.returnValue(subject);
+    spyOn(currentUserService, 'authenticate').and.returnValue(subject);
+    spyOn(router, 'navigate');
 
-    const componentInstance = fixture.componentInstance;
-    componentInstance.credentials.login = 'login';
-    componentInstance.credentials.password = 'password';
+    const element: HTMLElement = fixture.nativeElement;
 
-    componentInstance.authenticate();
+    const login: HTMLInputElement = element.querySelector('#login');
+    login.value = 'login';
+    login.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const password: HTMLInputElement = element.querySelector('#password');
+    password.value = 'password';
+    password.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const loginButton: HTMLButtonElement = element.querySelector('#submit');
+    loginButton.click();
+    fixture.detectChanges();
 
     // then we should have called the user service method
-    expect(fakeUserService.authenticate).toHaveBeenCalledWith({
+    expect(currentUserService.authenticate).toHaveBeenCalledWith({
       login: 'login',
       password: 'password'
     });
 
     subject.next('');
-    // and redirect to the home
-    expect(componentInstance.authenticationFailed).toBe(false);
-    expect(fakeRouter.navigate).toHaveBeenCalledWith(['/']);
+    fixture.detectChanges();
 
+    // and redirect to the home
+    expect(fixture.componentInstance.authenticationFailed).toBe(false);
+    expect(router.navigate).toHaveBeenCalledWith(['/']);
   });
 
   it('should call the user service and display a message if failed', () => {
     const fixture = TestBed.createComponent(LoginComponent);
-
     fixture.detectChanges();
 
+    const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
+    const router: Router = TestBed.get(Router);
+
     const subject = new Subject<String>();
-    fakeUserService.authenticate.and.returnValue(subject);
+    spyOn(currentUserService, 'authenticate').and.returnValue(subject);
+    spyOn(router, 'navigate');
 
-    const componentInstance = fixture.componentInstance;
-    componentInstance.credentials.login = 'login';
-    componentInstance.credentials.password = 'password';
+    const element: HTMLElement = fixture.nativeElement;
 
-    componentInstance.authenticate();
+    const login: HTMLInputElement = element.querySelector('#login');
+    login.value = 'login';
+    login.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const password: HTMLInputElement = element.querySelector('#password');
+    password.value = 'password';
+    password.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const loginButton: HTMLButtonElement = element.querySelector('#submit');
+    loginButton.click();
+    fixture.detectChanges();
 
     // then we should have called the user service method
-    expect(fakeUserService.authenticate).toHaveBeenCalledWith({
+    expect(currentUserService.authenticate).toHaveBeenCalledWith({
       login: 'login',
       password: 'password'
     });
 
     subject.error(new Error());
-    // and not redirect to the home
-    expect(fakeRouter.navigate).not.toHaveBeenCalled();
-    expect(componentInstance.authenticationFailed).toBe(true);
-  });
-
-  it('should display a message if auth failed', () => {
-    const fixture = TestBed.createComponent(LoginComponent);
-    const componentInstance = fixture.componentInstance;
-    componentInstance.authenticationFailed = true;
-
     fixture.detectChanges();
 
-    const element = fixture.nativeElement;
-    expect(element.querySelector('.alert')).not.toBeNull();
-    expect(element.querySelector('.alert').textContent).toContain('Erreur d\'authentification, essayez encore.');
+    // and not redirect to the home
+    expect(router.navigate).not.toHaveBeenCalled();
+
+    expect(element.textContent).toContain(`Erreur d'authentification, essayez encore.`);
   });
 });

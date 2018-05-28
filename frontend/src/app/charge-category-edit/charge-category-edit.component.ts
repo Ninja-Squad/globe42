@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-charge-category-edit',
@@ -13,24 +14,32 @@ import { Observable } from 'rxjs';
 })
 export class ChargeCategoryEditComponent implements OnInit {
   editedChargeCategory: ChargeCategoryModel;
-  chargeCategory: ChargeCategoryCommand;
+  chargeCategoryForm: FormGroup;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private fb: FormBuilder,
               private chargeCategoryService: ChargeCategoryService,
               private errorService: ErrorService) { }
 
   ngOnInit() {
     this.editedChargeCategory = this.route.snapshot.data['chargeCategory'];
-    this.chargeCategory = this.editedChargeCategory ? { name: this.editedChargeCategory.name } : { name: '' };
+    this.chargeCategoryForm = this.fb.group({
+      name: [this.editedChargeCategory ? this.editedChargeCategory.name : '', Validators.required]
+    });
   }
 
   save() {
+    if (this.chargeCategoryForm.invalid) {
+      return;
+    }
+
     let action: Observable<ChargeCategoryModel | void>;
+    const command: ChargeCategoryCommand = this.chargeCategoryForm.value;
     if (this.editedChargeCategory) {
-      action = this.chargeCategoryService.update(this.editedChargeCategory.id, this.chargeCategory);
+      action = this.chargeCategoryService.update(this.editedChargeCategory.id, command);
     } else {
-      action = this.chargeCategoryService.create(this.chargeCategory);
+      action = this.chargeCategoryService.create(command);
     }
     action.subscribe(
       () => this.router.navigateByUrl('/charge-categories'),

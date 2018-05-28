@@ -1,5 +1,6 @@
 import { AfterContentChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NoteModel } from '../models/note.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface NoteEditionEvent {
   id: number;
@@ -31,7 +32,7 @@ export class NoteComponent implements AfterContentChecked {
   @Output()
   readonly deletionRequested = new EventEmitter<NoteModel>();
 
-  editedText: string;
+  noteForm: FormGroup;
   rowCount: number;
 
   private shouldGiveFocus = false;
@@ -45,17 +46,19 @@ export class NoteComponent implements AfterContentChecked {
     return this._edited;
   }
 
+  constructor(private fb: FormBuilder) { }
+
   @Input()
   set edited(value) {
     if (value) {
-      this.editedText = this.note.text;
-      this.rowCount = this.editedText.split('\n').length;
+      this.noteForm = this.fb.group({ text: [ this.note.text, Validators.required ] });
+      this.rowCount = this.note.text.split('\n').length;
       if (this.rowCount < 2) {
         this.rowCount = 2;
       }
       this.shouldGiveFocus = true;
     } else {
-      this.editedText = null;
+      this.noteForm = null;
     }
     this._edited = value;
   }
@@ -69,11 +72,11 @@ export class NoteComponent implements AfterContentChecked {
   }
 
   cancel() {
-    this.editionCancelled.emit({id: this.note.id, text: this.editedText});
+    this.editionCancelled.emit({id: this.note.id, text: this.noteForm.value.text});
   }
 
   save() {
-    this.editionDone.emit({id: this.note.id, text: this.editedText});
+    this.editionDone.emit({id: this.note.id, text: this.noteForm.value.text});
   }
 
   ngAfterContentChecked(): void {
