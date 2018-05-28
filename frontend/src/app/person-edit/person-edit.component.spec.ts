@@ -307,10 +307,10 @@ describe('PersonEditComponent', () => {
       expect(tester.email).toHaveValue(person.email);
       expect(tester.phoneNumber).toHaveValue(person.phoneNumber);
       expect(tester.firstMediationAppointmentDate).toHaveValue('01/12/2017');
-      expect(tester.maritalStatus.selectedValue).toBe(person.maritalStatus);
+      expect(tester.maritalStatus).toHaveSelectedValue(person.maritalStatus);
       expect(tester.spouse).toHaveValue('Jane Doe');
       expect(tester.entryDate).toHaveValue('01/12/2016');
-      expect(tester.housing.selectedValue).toBe(person.housing);
+      expect(tester.housing).toHaveSelectedValue(person.housing);
       expect(tester.housingSpace).toHaveValue(`${person.housingSpace}`);
       expect(tester.hostName).toHaveValue(person.hostName);
       expect(tester.fiscalStatus('UNKNOWN')).not.toBeChecked();
@@ -318,9 +318,9 @@ describe('PersonEditComponent', () => {
       expect(tester.fiscalStatus('TAXABLE')).toBeChecked();
       expect(tester.fiscalNumber).toHaveValue('0123456789012');
       expect(tester.fiscalStatusUpToDate).toBeChecked();
-      expect(tester.healthCareCoverage.selectedValue).toBe(person.healthCareCoverage);
+      expect(tester.healthCareCoverage).toHaveSelectedValue(person.healthCareCoverage);
       expect(tester.healthCareCoverageStartDate).toHaveValue('01/01/2017');
-      expect(tester.healthInsurance.selectedValue).toBe(person.healthInsurance);
+      expect(tester.healthInsurance).toHaveSelectedValue(person.healthInsurance);
       expect(tester.healthInsuranceStartDate).toHaveValue('02/02/2017');
       expect(tester.accompanying).toHaveValue(person.accompanying);
       expect(tester.socialSecurityNumber).toHaveValue(person.socialSecurityNumber);
@@ -518,10 +518,10 @@ describe('PersonEditComponent', () => {
 
       expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
       expect(tester.firstMediationAppointmentDate).toHaveValue('');
-      expect(tester.maritalStatus.selectedValue).toBe('UNKNOWN');
+      expect(tester.maritalStatus).toHaveSelectedValue('UNKNOWN');
       expect(tester.spouse).toHaveValue('');
       expect(tester.entryDate).toHaveValue('');
-      expect(tester.housing.selectedValue).toBe('UNKNOWN');
+      expect(tester.housing).toHaveSelectedValue('UNKNOWN');
       expect(tester.housingSpace).toBeFalsy();
       expect(tester.hostName).toHaveValue('');
       expect(tester.fiscalStatus('UNKNOWN')).toBeChecked();
@@ -530,9 +530,9 @@ describe('PersonEditComponent', () => {
       expect(tester.accompanying).toHaveValue('');
       expect(tester.socialSecurityNumber).toHaveValue('');
       expect(tester.cafNumber).toHaveValue('');
-      expect(tester.healthCareCoverage.selectedValue).toBe('UNKNOWN');
+      expect(tester.healthCareCoverage).toHaveSelectedValue('UNKNOWN');
       expect(tester.healthCareCoverageStartDate).toBeFalsy();
-      expect(tester.healthInsurance.selectedValue).toBe('UNKNOWN');
+      expect(tester.healthInsurance).toHaveSelectedValue('UNKNOWN');
       expect(tester.healthInsuranceStartDate).toBeFalsy();
       expect(tester.nationality).toHaveValue('');
 
