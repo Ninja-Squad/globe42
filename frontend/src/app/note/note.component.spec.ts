@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, LOCALE_ID } from '@angular/core';
 import { NoteModel } from '../models/note.model';
 import { UserModel } from '../models/user.model';
+import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
 
 @Component({
   template: ''
@@ -25,6 +26,37 @@ class TestComponent {
   edited = false;
 }
 
+class NoteComponentTester extends ComponentTester<TestComponent> {
+
+  constructor() {
+    super(TestComponent);
+  }
+
+  get form() {
+    return this.element('form');
+  }
+
+  get edit() {
+    return this.button('button');
+  }
+
+  get delete() {
+    return this.elements('button')[1] as TestButton;
+  }
+
+  get textArea() {
+    return this.textarea('textarea');
+  }
+
+  get save() {
+    return this.button('form button');
+  }
+
+  get cancel() {
+    return this.elements('form button')[1] as TestButton;
+  }
+}
+
 describe('NoteComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -34,18 +66,19 @@ describe('NoteComponent', () => {
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
     });
+
+    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should display a note, with its creator and its date', () => {
     TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note"></gl-note>');
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.detectChanges();
 
-    const textContent = fixture.nativeElement.textContent;
-    expect(textContent).toContain('admin');
-    expect(textContent).toContain('9 août 2017');
-    expect(textContent).toContain('hello world');
-    expect(fixture.nativeElement.querySelector('form')).toBeFalsy();
+    expect(tester.testElement).toContainText('admin');
+    expect(tester.testElement).toContainText('9 août 2017');
+    expect(tester.testElement).toContainText('hello world');
+    expect(tester.form).toBeNull();
   });
 
   it('should request to be edited', () => {
@@ -53,13 +86,12 @@ describe('NoteComponent', () => {
       TestComponent,
       '<gl-note [note]="note" (editionRequested)="noteEvent = $event"></gl-note>'
     );
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.detectChanges();
 
-    fixture.nativeElement.querySelector('button').click();
+    tester.edit.click();
 
-    fixture.detectChanges();
-    expect(fixture.componentInstance.noteEvent).toBe(fixture.componentInstance.note);
+    expect(tester.componentInstance.noteEvent).toBe(tester.componentInstance.note);
   });
 
   it('should request to be deleted', () => {
@@ -67,13 +99,12 @@ describe('NoteComponent', () => {
       TestComponent,
       '<gl-note [note]="note" (deletionRequested)="noteEvent = $event"></gl-note>'
     );
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.detectChanges();
 
-    fixture.nativeElement.querySelectorAll('button')[1].click();
+    tester.delete.click();
 
-    fixture.detectChanges();
-    expect(fixture.componentInstance.noteEvent).toBe(fixture.componentInstance.note);
+    expect(tester.componentInstance.noteEvent).toBe(tester.componentInstance.note);
   });
 
   it('should be disabled', () => {
@@ -81,11 +112,11 @@ describe('NoteComponent', () => {
       TestComponent,
       '<gl-note [note]="note" [disabled]="true"></gl-note>'
     );
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('button')[0].disabled).toBe(true);
-    expect(fixture.nativeElement.querySelectorAll('button')[1].disabled).toBe(true);
+    expect(tester.edit.disabled).toBe(true);
+    expect(tester.delete.disabled).toBe(true);
   });
 
   it('should switch to edit mode and give the focus to the text area', () => {
@@ -94,21 +125,17 @@ describe('NoteComponent', () => {
       '<gl-note [note]="note" [edited]="edited"></gl-note>'
     );
 
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.componentInstance.edited = true;
+    tester.detectChanges();
 
-    fixture.componentInstance.edited = true;
-    fixture.detectChanges();
+    tester.fixture.whenStable().then(() => {
+      tester.detectChanges();
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-
-      const element = fixture.nativeElement;
-      expect(element.querySelector('form')).toBeTruthy();
-      const textArea: HTMLTextAreaElement = element.querySelector('textarea');
-      expect(textArea.value).toBe('hello world');
-      expect(textArea.rows).toBe(2);
-      expect(document.activeElement).toBe(textArea);
+      expect(tester.form).toBeTruthy();
+      expect(tester.textArea).toHaveValue('hello world');
+      expect(tester.textArea.nativeElement.rows).toBe(2);
+      expect(document.activeElement).toBe(tester.textArea.nativeElement);
     });
   });
 
@@ -118,13 +145,11 @@ describe('NoteComponent', () => {
       '<gl-note [note]="note" [edited]="true"></gl-note>'
     );
 
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.note.text = 'a\nb\nc\nd';
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.componentInstance.note.text = 'a\nb\nc\nd';
+    tester.detectChanges();
 
-    const element = fixture.nativeElement;
-    const textArea: HTMLTextAreaElement = element.querySelector('textarea');
-    expect(textArea.rows).toBe(4);
+    expect(tester.textArea.nativeElement.rows).toBe(4);
   });
 
   it('should cancel edition', () => {
@@ -133,27 +158,22 @@ describe('NoteComponent', () => {
       '<gl-note [note]="note" [edited]="edited" (editionCancelled)="editionEvent = $event; edited = false"></gl-note>'
     );
 
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.edited = true;
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.componentInstance.edited = true;
+    tester.detectChanges();
 
-    const element = fixture.nativeElement;
-    const textArea: HTMLTextAreaElement = element.querySelector('textarea');
-    textArea.value = 'new text';
-    textArea.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    tester.textArea.fillWith('new text');
 
-    expect(fixture.componentInstance.note.text).toBe('hello world');
+    expect(tester.componentInstance.note.text).toBe('hello world');
 
-    element.querySelectorAll('button')[1].click();
-    fixture.detectChanges();
+    tester.cancel.click();
 
-    expect(fixture.componentInstance.editionEvent).toEqual({
+    expect(tester.componentInstance.editionEvent).toEqual({
       id: 42,
       text: 'new text'
     });
-    expect(element.textContent).toContain('hello world');
-    expect(element.querySelector('textarea')).toBeFalsy();
+    expect(tester.testElement).toContainText('hello world');
+    expect(tester.textArea).toBeFalsy();
   });
 
   it('should save edition', () => {
@@ -162,20 +182,14 @@ describe('NoteComponent', () => {
       '<gl-note [note]="note" [edited]="edited" (editionDone)="editionEvent = $event"></gl-note>'
     );
 
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.edited = true;
-    fixture.detectChanges();
+    const tester = new NoteComponentTester();
+    tester.componentInstance.edited = true;
+    tester.detectChanges();
 
-    const element = fixture.nativeElement;
-    const textArea: HTMLTextAreaElement = element.querySelector('textarea');
-    textArea.value = 'new text';
-    textArea.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    tester.textArea.fillWith('new text');
+    tester.save.click();
 
-    element.querySelectorAll('button')[0].click();
-    fixture.detectChanges();
-
-    expect(fixture.componentInstance.editionEvent).toEqual({
+    expect(tester.componentInstance.editionEvent).toEqual({
       id: 42,
       text: 'new text'
     });
