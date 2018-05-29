@@ -9,16 +9,56 @@ import { PersonModel } from '../models/person.model';
 import { NoteModel } from '../models/note.model';
 import { ConfirmService } from '../confirm.service';
 import { of, Subject, throwError } from 'rxjs';
-import { By } from '@angular/platform-browser';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { ComponentTester, speculoosMatchers, TestButton, TestHtmlElement } from 'ngx-speculoos';
+
+class PersonNotesComponentTester extends ComponentTester<PersonNotesComponent> {
+  constructor() {
+    super(PersonNotesComponent);
+  }
+
+  get spinner() {
+    return this.element('.fa-spinner');
+  }
+
+  get notes() {
+    return this.elements('gl-note') as Array<TestHtmlElement<HTMLElement>>;
+  }
+
+  get noteComponents() {
+    return this.notes.map(note => note.debugElement.componentInstance as NoteComponent);
+  }
+
+  editNote(index: number) {
+    return this.notes[index].button('button');
+  }
+
+  deleteNote(index: number) {
+    return this.notes[index].elements('button')[1] as TestButton;
+  }
+
+  saveNote(index: number) {
+    return this.notes[index].button('form button');
+  }
+
+  cancelNoteEdition(index: number) {
+    return this.notes[index].elements('form button')[1] as TestButton ;
+  }
+
+  get addNote() {
+    return this.button('#addNote');
+  }
+}
 
 describe('PersonNotesComponent', () => {
 
   const person = { id: 42 } as PersonModel;
   let notes: Array<NoteModel>;
+
+  let tester: PersonNotesComponentTester;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -49,28 +89,31 @@ describe('PersonNotesComponent', () => {
 
     const userService = TestBed.get(CurrentUserService);
     userService.userEvents.next({ login: 'admin' } as UserModel);
+
+    tester = new PersonNotesComponentTester();
+
+    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should display notes', () => {
     const personNoteService = TestBed.get(PersonNoteService);
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
-    fixture.detectChanges();
+    tester.componentInstance.person = person;
+    tester.detectChanges();
 
-    expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(2);
+    expect(tester.testElement).not.toContainText('Aucune note');
+    expect(tester.notes.length).toBe(2);
   });
 
   it('should display no note message if no notes', () => {
     const personNoteService = TestBed.get(PersonNoteService);
     spyOn(personNoteService, 'list').and.returnValue(of([]));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
-    fixture.detectChanges();
+    tester.componentInstance.person = person;
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain('Aucune note');
+    expect(tester.testElement).toContainText('Aucune note');
   });
 
   it('should display a spinner after 300 ms until notes are available', fakeAsync(() => {
@@ -78,20 +121,19 @@ describe('PersonNotesComponent', () => {
     const subject = new Subject<Array<NoteModel>>();
     spyOn(personNoteService, 'list').and.returnValue(subject);
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
-    fixture.detectChanges();
+    tester.componentInstance.person = person;
+    tester.detectChanges();
     tick();
 
-    expect(fixture.nativeElement.querySelector('.fa-spinner')).toBeFalsy();
+    expect(tester.spinner).toBeNull();
 
     tick(350);
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.fa-spinner')).toBeTruthy();
+    tester.detectChanges();
+    expect(tester.spinner).not.toBeNull();
 
     subject.next(notes);
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.fa-spinner')).toBeFalsy();
+    tester.detectChanges();
+    expect(tester.spinner).toBeNull();
   }));
 
   it('should disable other notes when editing one', () => {
@@ -99,30 +141,24 @@ describe('PersonNotesComponent', () => {
     const personNoteService = TestBed.get(PersonNoteService);
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
+    tester.componentInstance.person = person;
     const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
-    fixture.componentInstance.noteEdited.subscribe(noteEditedObserver);
-    fixture.detectChanges();
+    tester.componentInstance.noteEdited.subscribe(noteEditedObserver);
+    tester.detectChanges();
 
-    // edit first note
-    const noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
-    noteComponents[0].nativeElement.querySelector('button').click();
-    fixture.detectChanges();
+    tester.editNote(0).click();
 
-    expect(fixture.componentInstance.editedNote).toBe(notes[0]);
-    expect(noteComponents[0].componentInstance.edited).toBe(true);
-    expect(noteComponents[1].componentInstance.disabled).toBe(true);
+    expect(tester.componentInstance.editedNote).toBe(notes[0]);
+    expect(tester.noteComponents[0].edited).toBe(true);
+    expect(tester.noteComponents[1].disabled).toBe(true);
     expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
-    // cancel first note edition
-    noteComponents[0].nativeElement.querySelectorAll('button')[1].click();
-    fixture.detectChanges();
+    tester.cancelNoteEdition(0).click();
 
-    expect(fixture.componentInstance.editedNote).toBeNull();
-    expect(noteComponents[0].componentInstance.edited).toBe(false);
+    expect(tester.componentInstance.editedNote).toBeNull();
+    expect(tester.noteComponents[0].edited).toBe(false);
     expect(noteEditedObserver).toHaveBeenCalledWith(false);
-    expect(noteComponents[1].componentInstance.disabled).toBe(false);
+    expect(tester.noteComponents[1].disabled).toBe(false);
   });
 
   it('should delete note', () => {
@@ -133,22 +169,19 @@ describe('PersonNotesComponent', () => {
     spyOn(personNoteService, 'delete').and.returnValue(of(null));
     spyOn(personNoteService, 'list').and.returnValues(of(notes), of([notes[1]]));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
-    fixture.detectChanges();
+    tester.componentInstance.person = person;
+    tester.detectChanges();
 
     // delete first note and confirm
-    const noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
-    noteComponents[0].nativeElement.querySelectorAll('button')[1].click();
-    fixture.detectChanges();
+    tester.deleteNote(0).click();
 
     expect(personNoteService.delete).toHaveBeenCalledWith(person.id, notes[0].id);
     expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
-    expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(1);
+    expect(tester.notes.length).toBe(1);
   });
 
-  it('should delete note after confirmation', () => {
+  it('should not delete note after confirmation', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
     const confirmService = TestBed.get(ConfirmService);
@@ -156,17 +189,14 @@ describe('PersonNotesComponent', () => {
     spyOn(personNoteService, 'delete').and.returnValue(of(null));
     spyOn(confirmService, 'confirm').and.returnValue(throwError('nok'));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
-    fixture.detectChanges();
+    tester.componentInstance.person = person;
+    tester.detectChanges();
 
     // delete first note and don't confirm
-    const firstNoteComponent = fixture.debugElement.query(By.directive(NoteComponent));
-    firstNoteComponent.nativeElement.querySelectorAll('button')[1].click();
-    fixture.detectChanges();
+    tester.deleteNote(0).click();
 
     expect(personNoteService.delete).not.toHaveBeenCalled();
-    expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(2);
+    expect(tester.notes.length).toBe(2);
   });
 
   it('should update note', () => {
@@ -175,32 +205,24 @@ describe('PersonNotesComponent', () => {
     spyOn(personNoteService, 'update').and.returnValue(of(null));
     spyOn(personNoteService, 'list').and.returnValues(of(notes), of(notes));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
-    fixture.detectChanges();
+    tester.componentInstance.person = person;
+    tester.detectChanges();
 
     // edit first note
-    const noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
-    noteComponents[0].nativeElement.querySelector('button').click();
-    fixture.detectChanges();
+    tester.editNote(0).click();
 
     // change first note text
-    const textArea = noteComponents[0].nativeElement.querySelector('textarea');
-    textArea.value = 'new text';
-    textArea.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    tester.notes[0].textarea('textarea').fillWith('new text');
 
-    const noteComponentInstance: NoteComponent = noteComponents[0].componentInstance;
-    expect(noteComponentInstance.noteForm.value.text).toBe('new text');
+    expect(tester.noteComponents[0].noteForm.value.text).toBe('new text');
 
     // save the change
-    noteComponents[0].nativeElement.querySelector('button').click();
-    fixture.detectChanges();
+    tester.saveNote(0).click();
 
     expect(personNoteService.update).toHaveBeenCalledWith(person.id, notes[0].id, 'new text');
     expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
-    expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(2);
+    expect(tester.notes.length).toBe(2);
   });
 
   it('should add a note at the end when creating, and remove it when cancelling', () => {
@@ -209,38 +231,30 @@ describe('PersonNotesComponent', () => {
     spyOn(personNoteService, 'update').and.returnValue(of(null));
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
+    tester.componentInstance.person = person;
     const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
-    fixture.componentInstance.noteEdited.subscribe(noteEditedObserver);
-    fixture.detectChanges();
+    tester.componentInstance.noteEdited.subscribe(noteEditedObserver);
+    tester.detectChanges();
 
-    // click on Add Note button
-    const addNoteButton = fixture.nativeElement.querySelector('#addNote');
-    addNoteButton.click();
-    fixture.detectChanges();
+    tester.addNote.click();
 
-    let noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
-    expect(noteComponents.length).toBe(3);
-    expect(noteEditedObserver).toHaveBeenCalledWith(true);
+    expect(tester.notes.length).toBe(3);
 
-    expect(fixture.componentInstance.editedNote).toBe(notes[2]);
-    expect(noteComponents[0].componentInstance.disabled).toBe(true);
-    expect(noteComponents[1].componentInstance.disabled).toBe(true);
-    expect(noteComponents[2].componentInstance.edited).toBe(true);
-    expect(addNoteButton.disabled).toBe(true);
-    expect(noteComponents[2].nativeElement.textContent).toContain('admin');
+    expect(tester.componentInstance.editedNote).toBe(notes[2]);
+    expect(tester.noteComponents[0].disabled).toBe(true);
+    expect(tester.noteComponents[1].disabled).toBe(true);
+    expect(tester.noteComponents[2].edited).toBe(true);
+    expect(tester.addNote.disabled).toBe(true);
+    expect(tester.notes[2]).toContainText('admin');
 
     // cancel the edition
-    noteComponents[2].nativeElement.querySelectorAll('button')[1].click();
-    fixture.detectChanges();
-    expect(fixture.componentInstance.editedNote).toBeNull();
+    tester.cancelNoteEdition(2).click();
+    expect(tester.componentInstance.editedNote).toBeNull();
     expect(noteEditedObserver).toHaveBeenCalledWith(false);
 
-    noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
-    expect(noteComponents.length).toBe(2);
-    expect(noteComponents[0].componentInstance.disabled).toBe(false);
-    expect(noteComponents[1].componentInstance.disabled).toBe(false);
+    expect(tester.notes.length).toBe(2);
+    expect(tester.noteComponents[0].disabled).toBe(false);
+    expect(tester.noteComponents[1].disabled).toBe(false);
   });
 
   it('should create a note', () => {
@@ -259,39 +273,28 @@ describe('PersonNotesComponent', () => {
     spyOn(personNoteService, 'create').and.returnValue(of(newNote));
     spyOn(personNoteService, 'list').and.returnValues(of(notes), of([notes[0], notes[1], newNote]));
 
-    const fixture = TestBed.createComponent(PersonNotesComponent);
-    fixture.componentInstance.person = person;
+    tester.componentInstance.person = person;
     const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
-    fixture.componentInstance.noteEdited.subscribe(noteEditedObserver);
-    fixture.detectChanges();
+    tester.componentInstance.noteEdited.subscribe(noteEditedObserver);
+    tester.detectChanges();
 
-    // click on Add Note button
-    const addNoteButton = fixture.nativeElement.querySelector('#addNote');
-    addNoteButton.click();
-    fixture.detectChanges();
+    tester.addNote.click();
 
     expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
     // enter text of new note
-    const noteComponents = fixture.debugElement.queryAll(By.directive(NoteComponent));
-    const textArea = noteComponents[2].nativeElement.querySelector('textarea');
-    textArea.value = 'new text';
-    textArea.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-
-    const noteComponentInstance: NoteComponent = noteComponents[2].componentInstance;
-    expect(noteComponentInstance.noteForm.value.text).toBe('new text');
+    tester.notes[2].textarea('textarea').fillWith('new text');
+    expect(tester.noteComponents[2].noteForm.value.text).toBe('new text');
 
     // save new note
-    noteComponents[2].nativeElement.querySelector('button').click();
-    fixture.detectChanges();
+    tester.saveNote(2).click();
 
     expect(personNoteService.create).toHaveBeenCalledWith(person.id, 'new text');
     expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
-    fixture.detectChanges();
-    expect(fixture.debugElement.queryAll(By.directive(NoteComponent)).length).toBe(3);
-    expect(fixture.componentInstance.editedNote).toBe(null);
+    tester.detectChanges();
+    expect(tester.notes.length).toBe(3);
+    expect(tester.componentInstance.editedNote).toBe(null);
     expect(noteEditedObserver).toHaveBeenCalledWith(false);
   });
 });
