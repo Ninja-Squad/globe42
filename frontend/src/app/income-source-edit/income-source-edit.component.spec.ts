@@ -89,7 +89,7 @@ describe('IncomeSourceEditComponent', () => {
 
       expect(tester.name).toHaveValue('');
       expect(tester.type.selectedLabel).toBeNull();
-      expect(tester.type.optionValues.length).toBe(incomeSourceTypes.length + 1);
+      expect(tester.type.optionLabels).toEqual(['', 'A', 'B']);
       expect(tester.maxMonthlyAmount).toHaveValue('');
 
       tester.maxMonthlyAmount.fillWith('0');
