@@ -8,6 +8,7 @@ import { CurrentUserService } from '../current-user/current-user.service';
 import { of, throwError } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class PasswordChangeComponentTester extends ComponentTester<PasswordChangeComponent> {
 
@@ -39,7 +40,7 @@ describe('PasswordChangeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-      declarations: [PasswordChangeComponent],
+      declarations: [PasswordChangeComponent, ValidationErrorsComponent],
     });
 
     tester = new PasswordChangeComponentTester();
@@ -57,6 +58,9 @@ describe('PasswordChangeComponent', () => {
   });
 
   it('should validate the form', () => {
+    expect(tester.testElement).not.toContainText('Le mot de passe actuel est obligatoire');
+    expect(tester.testElement).not.toContainText('Le nouveau mot de passe est obligatoire');
+
     tester.submit.click();
 
     expect(tester.testElement).toContainText('Le mot de passe actuel est obligatoire');

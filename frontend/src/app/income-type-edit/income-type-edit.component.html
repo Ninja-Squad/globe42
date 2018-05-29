@@ -8,9 +8,9 @@
     <label for="type" class="col-sm-2 col-form-label">Organisme</label>
     <div class="col-sm-10">
       <input class="form-control" id="type" formControlName="type" />
-      <div class="invalid-feedback">
+      <gl-validation-errors [control]="incomeTypeForm.get('type')">
         <div *ngIf="incomeTypeForm.get('type').hasError('required')">Le type est obligatoire</div>
-      </div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="row">

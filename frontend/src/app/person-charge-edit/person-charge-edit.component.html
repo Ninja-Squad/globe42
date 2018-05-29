@@ -8,11 +8,9 @@
         <option></option>
         <option *ngFor="let type of chargeTypes" [ngValue]="type">{{ type.name }}</option>
       </select>
-      <div class="invalid-feedback">
-        <div *ngIf="chargeForm.get('type').hasError('required')">
-          La nature de la charge est obligatoire
-        </div>
-      </div>
+      <gl-validation-errors [control]="chargeForm.get('type')">
+        <div *ngIf="chargeForm.get('type').hasError('required')">La nature de la charge est obligatoire</div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -20,7 +18,7 @@
     <div class="col-sm-9">
       <input type="number" class="form-control" id="monthlyAmount" formControlName="monthlyAmount"
              min="1" [max]="selectedChargeType?.maxMonthlyAmount" />
-      <div class="invalid-feedback">
+      <gl-validation-errors [control]="monthlyAmountCtrl">
         <div *ngIf="monthlyAmountCtrl.hasError('required')">
           Le montant mensuel est obligatoire
         </div>
@@ -30,7 +28,7 @@
         <div *ngIf="monthlyAmountCtrl.hasError('min')">
           Le montant mensuel doit être positif
         </div>
-      </div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="row">

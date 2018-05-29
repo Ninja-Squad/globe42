@@ -12,6 +12,7 @@ import { ChargeTypeModel } from '../models/charge-type.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class ChargeTypeEditComponentTester extends ComponentTester<ChargeTypeEditComponent> {
   constructor() {
@@ -48,7 +49,7 @@ describe('ChargeTypeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [ChargeTypeEditComponent],
+    declarations: [ChargeTypeEditComponent, ValidationErrorsComponent],
     providers: [
       ChargeTypeService,
       ErrorService
@@ -99,6 +100,10 @@ describe('ChargeTypeEditComponent', () => {
 
       const chargeTypeService: ChargeTypeService = TestBed.get(ChargeTypeService);
       spyOn(chargeTypeService, 'create');
+
+      expect(tester.testElement).not.toContainText('Le nom est obligatoire');
+      expect(tester.testElement).not.toContainText('La dépense est obligatoire');
+      expect(tester.testElement).not.toContainText('Le montant mensuel maximum doit être positif');
 
       tester.save.click();
 

@@ -10,11 +10,12 @@ import { ChargeCategoryService } from '../charge-category.service';
 import { ChargeCategoryModel } from '../models/charge-category.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('ChargeCategoryEditComponent', () => {
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [ChargeCategoryEditComponent],
+    declarations: [ChargeCategoryEditComponent, ValidationErrorsComponent],
   })
   class TestModule {}
 
@@ -119,6 +120,8 @@ describe('ChargeCategoryEditComponent', () => {
       fixture.detectChanges();
 
       const element: HTMLElement = fixture.nativeElement;
+      expect(element.textContent).not.toContain('Le nom est obligatoire');
+
       const saveButton: HTMLButtonElement = element.querySelector('#save');
       saveButton.click();
       fixture.detectChanges();

@@ -9,6 +9,7 @@ import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-infor
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let route: ActivatedRoute;
@@ -37,6 +38,7 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
       declarations: [
         PersonPerUnitRevenueInformationEditComponent,
         FullnamePipe,
+        ValidationErrorsComponent
       ],
       providers: [
         { provide: PerUnitRevenueInformationService, useValue: mockPerUnitRevenueInformationService },

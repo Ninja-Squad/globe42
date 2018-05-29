@@ -14,6 +14,7 @@ import { of } from 'rxjs';
 import { throwError } from 'rxjs';
 import { DateTime } from 'luxon';
 import { LOCALE_ID } from '@angular/core';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonWeddingEventsComponent', () => {
   let events: Array<WeddingEventModel>;
@@ -51,7 +52,8 @@ describe('PersonWeddingEventsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         PersonWeddingEventsComponent,
-        DisplayWeddingEventTypePipe
+        DisplayWeddingEventTypePipe,
+        ValidationErrorsComponent
       ],
       imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot() ],
       providers: [
@@ -230,6 +232,10 @@ describe('PersonWeddingEventsComponent', () => {
     it('should show error messages', () => {
       fixture.nativeElement.querySelector('#newEventButton').click();
       fixture.detectChanges();
+
+      expect(fixture.nativeElement.textContent).not.toContain('La date est obligatoire');
+      expect(fixture.nativeElement.textContent).not.toContain('Le type d\'événement est obligatoire');
+      expect(fixture.nativeElement.textContent).not.toContain('La date doit être dans le passé');
 
       fixture.nativeElement.querySelector('#createButton').click();
       fixture.detectChanges();

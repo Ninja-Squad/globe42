@@ -11,12 +11,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('UserEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
-    declarations: [UserEditComponent]
+    declarations: [UserEditComponent, ValidationErrorsComponent]
   })
   class TestModule {}
 

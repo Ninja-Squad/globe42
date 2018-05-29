@@ -9,12 +9,13 @@ import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('IncomeTypeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [IncomeTypeEditComponent]
+    declarations: [IncomeTypeEditComponent, ValidationErrorsComponent]
   })
   class TestModule {}
 
@@ -122,6 +123,8 @@ describe('IncomeTypeEditComponent', () => {
       fixture.detectChanges();
 
       const element: HTMLElement = fixture.nativeElement;
+      expect(element.textContent).not.toContain('Le type est obligatoire');
+
       const saveButton: HTMLButtonElement = element.querySelector('#save');
       saveButton.click();
       fixture.detectChanges();

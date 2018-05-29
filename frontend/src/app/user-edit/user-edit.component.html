@@ -12,9 +12,9 @@
         <span class="fa fa-warning"></span>
         Attention: sensible à la casse.
       </span>
-      <div class="invalid-feedback" *ngIf="userForm.get('login').hasError('required')">
-        L'identifiant est obligatoire
-      </div>
+      <gl-validation-errors [control]="userForm.get('login')">
+        <div *ngIf="userForm.get('login').hasError('required')">L'identifiant est obligatoire</div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">

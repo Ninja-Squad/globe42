@@ -77,6 +77,7 @@ import { SituationComponent } from './person-family/situation/situation.componen
 import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
 import { PersonNetworkMembersComponent } from './person-network-members/person-network-members.component';
 import { DisplayNetworkMemberTypePipe } from './display-network-member-type.pipe';
+import { ValidationErrorsComponent } from './validation-errors/validation-errors.component';
 
 registerLocaleData(localeFr);
 
@@ -147,7 +148,8 @@ registerLocaleData(localeFr);
     SituationComponent,
     PersonFamilyEditComponent,
     PersonNetworkMembersComponent,
-    DisplayNetworkMemberTypePipe
+    DisplayNetworkMemberTypePipe,
+    ValidationErrorsComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

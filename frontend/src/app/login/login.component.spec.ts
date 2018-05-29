@@ -8,7 +8,7 @@ import { CurrentUserService } from '../current-user/current-user.service';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
-import { FormControlValidationDirective } from '../form-control-validation.directive';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class LoginComponentTester extends ComponentTester<LoginComponent> {
 
@@ -40,7 +40,7 @@ describe('LoginComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
-      declarations: [LoginComponent, FormControlValidationDirective],
+      declarations: [LoginComponent, ValidationErrorsComponent],
     });
 
     jasmine.addMatchers(speculoosMatchers);
@@ -65,6 +65,9 @@ describe('LoginComponent', () => {
     const router: Router = TestBed.get(Router);
     spyOn(currentUserService, 'authenticate');
     spyOn(router, 'navigate');
+
+    expect(tester.testElement).not.toContainText(`L'identifiant est obligatoire`);
+    expect(tester.testElement).not.toContainText(`Le mot de passe est obligatoire`);
 
     tester.submit.click();
 

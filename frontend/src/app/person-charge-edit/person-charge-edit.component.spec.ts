@@ -11,6 +11,7 @@ import { ChargeService } from '../charge.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ChargeTypeModel } from '../models/charge-type.model';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonChargeEditComponent', () => {
   const chargeTypes = [
@@ -22,7 +23,7 @@ describe('PersonChargeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [PersonChargeEditComponent, FullnamePipe],
+    declarations: [PersonChargeEditComponent, FullnamePipe, ValidationErrorsComponent],
     providers: [
       { provide: LOCALE_ID, useValue: 'fr-FR' }
     ]

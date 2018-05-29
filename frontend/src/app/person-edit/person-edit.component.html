@@ -11,14 +11,18 @@
     <label for="firstName" class="col-sm-3 col-form-label">Prénom</label>
     <div class="col-sm-9">
       <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName">
-      <div class="invalid-feedback" *ngIf="personForm.get('firstName').hasError('required')">Le prénom est obligatoire</div>
+      <gl-validation-errors [control]="personForm.get('firstName')">
+        <div *ngIf="personForm.get('firstName').hasError('required')">Le prénom est obligatoire</div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">
     <label for="lastName" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
       <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
-      <div class="invalid-feedback" *ngIf="personForm.get('lastName').hasError('required')">Le nom est obligatoire</div>
+      <gl-validation-errors [control]="personForm.get('lastName')">
+        <div *ngIf="personForm.get('lastName').hasError('required')">Le nom est obligatoire</div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -41,7 +45,9 @@
           <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
         </label>
       </div>
-      <div class="invalid-feedback" *ngIf="personForm.get('gender').hasError('required')">Le genre est obligatoire</div>
+      <gl-validation-errors [control]="personForm.get('gender')">
+        <div *ngIf="personForm.get('gender').hasError('required')">Le genre est obligatoire</div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -72,7 +78,9 @@
     <label for="email" class="col-sm-3 col-form-label">Email</label>
     <div class="col-sm-9">
       <input class="form-control" type="email" id="email" placeholder="john@mail.com" formControlName="email">
-      <div class="invalid-feedback" *ngIf="personForm.get('email').hasError('email')">L'email est invalide</div>
+      <gl-validation-errors [control]="personForm.get('email')">
+        <div *ngIf="personForm.get('email').hasError('email')">L'email est invalide</div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -248,7 +256,9 @@
       <label for="fiscalNumber" class="col-sm-3 col-form-label">N° fiscal</label>
       <div class="col-sm-9">
         <input class="form-control" id="fiscalNumber" placeholder="13 chiffres" formControlName="fiscalNumber">
-        <div class="invalid-feedback" *ngIf="personForm.get('fiscalNumber').hasError('pattern')">Le n° fiscal doit être composé de 13 chiffres</div>
+        <gl-validation-errors [control]="personForm.get('fiscalNumber')">
+          <div *ngIf="personForm.get('fiscalNumber').hasError('pattern')">Le n° fiscal doit être composé de 13 chiffres</div>
+        </gl-validation-errors>
       </div>
     </div>
     <div class="row">

@@ -7,10 +7,10 @@
   <div class="form-group row">
     <label for="name" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
-      <input class="form-control" id="name" formControlName="name" />
-      <div class="invalid-feedback">
+      <input class="form-control" id="name" formControlName="name"/>
+      <gl-validation-errors [control]="incomeSourceForm.get('name')">
         <div *ngIf="incomeSourceForm.get('name').hasError('required')">Le nom est obligatoire</div>
-      </div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -20,18 +20,18 @@
         <option value=""></option>
         <option *ngFor="let type of incomeSourceTypes" [ngValue]="type.id">{{ type.type }}</option>
       </select>
-      <div class="invalid-feedback">
+      <gl-validation-errors [control]="incomeSourceForm.get('typeId')">
         <div *ngIf="incomeSourceForm.get('typeId').hasError('required')">L'organisme payeur est obligatoire</div>
-      </div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="form-group row">
     <label for="maxMonthlyAmount" class="col-sm-3 col-form-label">Montant mensuel maximum</label>
     <div class="col-sm-9">
       <input type="number" class="form-control" id="maxMonthlyAmount" formControlName="maxMonthlyAmount" min="1" />
-      <div class="invalid-feedback">
+      <gl-validation-errors [control]="incomeSourceForm.get('maxMonthlyAmount')">
         <div *ngIf="incomeSourceForm.get('maxMonthlyAmount').hasError('min')">Le montant mensuel maximum doit être positif</div>
-      </div>
+      </gl-validation-errors>
     </div>
   </div>
   <div class="row">

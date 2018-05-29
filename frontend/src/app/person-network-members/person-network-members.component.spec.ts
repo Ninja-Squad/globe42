@@ -10,6 +10,7 @@ import { DisplayNetworkMemberTypePipe } from '../display-network-member-type.pip
 import { ConfirmService } from '../confirm.service';
 import { NetworkMemberService } from '../network-member.service';
 import { of, throwError } from 'rxjs';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonNetworkMembersComponent', () => {
 
@@ -49,7 +50,8 @@ describe('PersonNetworkMembersComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         PersonNetworkMembersComponent,
-        DisplayNetworkMemberTypePipe
+        DisplayNetworkMemberTypePipe,
+        ValidationErrorsComponent
       ],
       providers: [
         { provide: ActivatedRoute, useValue: route },
@@ -168,13 +170,16 @@ describe('PersonNetworkMembersComponent', () => {
     const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
     spyOn(networkMemberService, 'create');
 
+    const form = element.querySelector('form');
+
+    expect(form.textContent).not.toContain('Le type est obligatoire');
+    expect(form.textContent).not.toContain('Le texte est obligatoire');
+
     const saveButton = element.querySelector('#saveButton') as HTMLButtonElement;
     saveButton.click();
     fixture.detectChanges();
 
     expect(networkMemberService.create).not.toHaveBeenCalled();
-
-    const form = element.querySelector('form');
 
     expect(form.textContent).toContain('Le type est obligatoire');
     expect(form.textContent).toContain('Le texte est obligatoire');

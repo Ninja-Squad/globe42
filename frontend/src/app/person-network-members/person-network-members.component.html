@@ -32,17 +32,17 @@
       <option></option>
       <option *ngFor="let memberType of memberTypes" [value]="memberType">{{ memberType | displayNetworkMemberType }}</option>
     </select>
-    <div class="invalid-feedback">
-      <span *ngIf="memberForm.get('type').hasError('required')">Le type est obligatoire</span>
-    </div>
+    <gl-validation-errors [control]="memberForm.get('type')">
+      <div *ngIf="memberForm.get('type').hasError('required')">Le type est obligatoire</div>
+    </gl-validation-errors>
   </div>
 
   <div class="form-group">
     <label for="type">Texte (nom, adresse, n° de téléphone, etc.)</label>
     <textarea id="text" formControlName="text" class="form-control" rows="3"></textarea>
-    <div class="invalid-feedback">
-      <span *ngIf="memberForm.get('text').hasError('required')">Le texte est obligatoire</span>
-    </div>
+    <gl-validation-errors [control]="memberForm.get('text')">
+      <div *ngIf="memberForm.get('text').hasError('required')">Le texte est obligatoire</div>
+    </gl-validation-errors>
   </div>
 
   <button id="saveButton" class="btn btn-primary mr-2">Enregistrer</button>

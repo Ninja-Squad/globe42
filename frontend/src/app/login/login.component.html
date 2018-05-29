@@ -11,17 +11,17 @@
       <div class="form-group">
         <label class="from-control-label" for="login">Identifiant</label>
         <input id="login" class="form-control" formControlName="login" />
-        <div class="invalid-feedback">
+        <gl-validation-errors [control]="loginForm.get('login')">
           <div *ngIf="loginForm.get('login').hasError('required')">L'identifiant est obligatoire</div>
-        </div>
+        </gl-validation-errors>
       </div>
 
       <div class="form-group">
         <label class="from-control-label" for="password">Mot de passe</label>
         <input id="password" class="form-control" type="password" formControlName="password" >
-        <div class="invalid-feedback">
+        <gl-validation-errors [control]="loginForm.get('password')">
           <div *ngIf="loginForm.get('password').hasError('required')">Le mot de passe est obligatoire</div>
-        </div>
+        </gl-validation-errors>
       </div>
 
       <button class="btn btn-primary" id="submit" type="submit">Connexion</button>

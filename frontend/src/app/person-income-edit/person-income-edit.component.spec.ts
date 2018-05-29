@@ -11,6 +11,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { of } from 'rxjs';
 import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeService } from '../income.service';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -22,7 +23,7 @@ describe('PersonIncomeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe],
+    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationErrorsComponent],
     providers: [
       { provide: LOCALE_ID, useValue: 'fr-FR' }
     ]
@@ -74,6 +75,9 @@ describe('PersonIncomeEditComponent', () => {
 
       const monthlyAmount: HTMLInputElement = element.querySelector('#monthlyAmount');
       expect(monthlyAmount.value).toBe('');
+
+      expect(element.textContent).not.toContain('La nature de la prestation est obligatoire');
+      expect(element.textContent).not.toContain('Le montant mensuel est obligatoire');
 
       const save: HTMLButtonElement = element.querySelector('#save');
       save.click();

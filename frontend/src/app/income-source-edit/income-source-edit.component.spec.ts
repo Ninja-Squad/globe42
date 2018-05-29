@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class IncomeSourceEditComponentTester extends ComponentTester<IncomeSourceEditComponent> {
   constructor() {
@@ -47,7 +48,7 @@ describe('IncomeSourceEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [IncomeSourceEditComponent]
+    declarations: [IncomeSourceEditComponent, ValidationErrorsComponent]
   })
   class TestModule {}
 
@@ -93,6 +94,11 @@ describe('IncomeSourceEditComponent', () => {
       expect(tester.maxMonthlyAmount).toHaveValue('');
 
       tester.maxMonthlyAmount.fillWith('0');
+
+      expect(tester.testElement).not.toContainText('Le nom est obligatoire');
+      expect(tester.testElement).not.toContainText(`L'organisme payeur est obligatoire`);
+      expect(tester.testElement).not.toContainText('Le montant mensuel maximum doit être positif');
+
       tester.save.click();
 
       expect(tester.testElement).toContainText('Le nom est obligatoire');

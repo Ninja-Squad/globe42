@@ -22,6 +22,7 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
 import { ComponentTester, TestButton, TestInput, speculoosMatchers } from 'ngx-speculoos';
+import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -217,7 +218,8 @@ describe('PersonEditComponent', () => {
       DisplayFiscalStatusPipe,
       DisplayHealthCareCoveragePipe,
       DisplayHealthInsurancePipe,
-      FullnamePipe
+      FullnamePipe,
+      ValidationErrorsComponent
     ]
   })
   class TestModule {
