@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { FISCAL_NUMBER_PATTERN, PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
-import { CityModel, PersonIdentityModel, PersonModel } from '../models/person.model';
+import { CityModel, FiscalStatus, Gender, PersonIdentityModel, PersonModel } from '../models/person.model';
 import { displayCity, DisplayCityPipe } from '../display-city.pipe';
 import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { PersonCommand } from '../models/person.command';
@@ -21,6 +21,151 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
+import { ComponentTester, TestButton, TestInput, speculoosMatchers } from 'ngx-speculoos';
+
+class PersonEditTester extends ComponentTester<PersonEditComponent> {
+  constructor() {
+    super(PersonEditComponent);
+  }
+
+  get title() {
+    return this.element('h1');
+  }
+
+  get firstName() {
+    return this.input('#firstName');
+  }
+
+  get lastName() {
+    return this.input('#lastName');
+  }
+
+  get birthName() {
+    return this.input('#birthName');
+  }
+
+  get nickName() {
+    return this.input('#nickName');
+  }
+
+  gender(gender: Gender) {
+    return this.input(`#gender${gender}`);
+  }
+
+  get birthDate() {
+    return this.input('#birthDate');
+  }
+
+  mediationEnabled(yesOrNo: boolean) {
+    return this.input(`#mediationEnabled${yesOrNo}`);
+  }
+
+  get mediationCode() {
+    return this.element('#mediationCode');
+  }
+
+  get address() {
+    return this.input('#address');
+  }
+
+  get city() {
+    return this.input('#city');
+  }
+
+  get email() {
+    return this.input('#email');
+  }
+
+  get phoneNumber() {
+    return this.input('#phoneNumber');
+  }
+
+  get firstMediationAppointmentDate() {
+    return this.input('#firstMediationAppointmentDate');
+  }
+
+  get maritalStatus() {
+    return this.select('#maritalStatus');
+  }
+
+  get spouse() {
+    return this.input('#spouse');
+  }
+
+  get entryDate() {
+    return this.input('#entryDate');
+  }
+
+  get housing() {
+    return this.select('#housing');
+  }
+
+  get housingSpace() {
+    return this.input('#housingSpace');
+  }
+
+  get hostName() {
+    return this.input('#hostName');
+  }
+
+  fiscalStatus(status: FiscalStatus) {
+    return this.input(`#fiscalStatus${status}`);
+  }
+
+  get fiscalNumber() {
+    return this.input('#fiscalNumber');
+  }
+
+  get fiscalStatusUpToDate() {
+    return this.input('#fiscalStatusUpToDate');
+  }
+
+  get healthCareCoverage() {
+    return this.select('#healthCareCoverage');
+  }
+
+  get healthCareCoverageStartDate() {
+    return this.input('#healthCareCoverageStartDate');
+  }
+
+  get healthInsurance() {
+    return this.select('#healthInsurance');
+  }
+
+  get healthInsuranceStartDate() {
+    return this.input('#healthInsuranceStartDate');
+  }
+
+  get accompanying() {
+    return this.input('#accompanying');
+  }
+
+  get socialSecurityNumber() {
+    return this.input('#socialSecurityNumber');
+  }
+
+  get cafNumber() {
+    return this.input('#cafNumber');
+  }
+
+  get nationality() {
+    return this.input('#nationality');
+  }
+
+  get firstTypeaheadOption() {
+    return this.button('ngb-typeahead-window button');
+  }
+
+  get save(): TestButton {
+    return this.button('#save');
+  }
+
+  fillAndTick(input: TestInput, text: string) {
+    input.fillWith(text);
+    tick(500);
+    this.detectChanges();
+  }
+}
 
 describe('PersonEditComponent', () => {
   const cityModel: CityModel = {
@@ -127,16 +272,18 @@ describe('PersonEditComponent', () => {
       snapshot: {data: {person, persons, countries}}
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
+    beforeEach(() => TestBed.configureTestingModule({
       imports: [TestModule],
       providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
-    })));
+    }));
+
+    beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
+      const tester = new PersonEditTester();
+      tester.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de l\'adhérent John Doe (john)');
+      expect(tester.title).toHaveText('Modification de l\'adhérent John Doe (john)');
     });
 
     it('should edit and update an existing person', () => {
@@ -145,76 +292,44 @@ describe('PersonEditComponent', () => {
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
 
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
+      const tester = new PersonEditTester();
+      tester.detectChanges();
 
-      const nativeElement = fixture.nativeElement;
-      const firstName = nativeElement.querySelector('#firstName');
-      expect(firstName.value).toBe(person.firstName);
-      const lastName = nativeElement.querySelector('#lastName');
-      expect(lastName.value).toBe(person.lastName);
-      const birthName = nativeElement.querySelector('#birthName');
-      expect(birthName.value).toBe(person.birthName);
-      const nickName = nativeElement.querySelector('#nickName');
-      expect(nickName.value).toBe(person.nickName);
-      const gender = nativeElement.querySelector('#genderMALE');
-      expect(gender.checked).toBe(true);
-      const birthDate = nativeElement.querySelector('#birthDate');
-      expect(birthDate.value).toBe('01/01/1980');
-      const mediationCode = nativeElement.querySelector('#mediationCode');
-      expect(mediationCode.textContent).toContain('Généré automatiquement');
-      const address = nativeElement.querySelector('#address');
-      expect(address.value).toBe(person.address);
-      const city = nativeElement.querySelector('#city');
-      expect(city.value).toBe(displayCity(person.city));
-      const email = nativeElement.querySelector('#email');
-      expect(email.value).toBe(person.email);
-      const phoneNumber = nativeElement.querySelector('#phoneNumber');
-      expect(phoneNumber.value).toBe(person.phoneNumber);
-      const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
-      expect(firstMediationAppointmentDate.value).toBe('01/12/2017');
-      const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
-      expect(maritalStatus.options[maritalStatus.selectedIndex].value).toBe(person.maritalStatus);
-      const spouse: HTMLInputElement = nativeElement.querySelector('#spouse');
-      expect(spouse.value).toBe('Jane Doe');
-      const entryDate = nativeElement.querySelector('#entryDate');
-      expect(entryDate.value).toBe('01/12/2016');
-      const housing: HTMLSelectElement = nativeElement.querySelector('#housing');
-      expect(housing.options[housing.selectedIndex].value).toBe(person.housing);
-      const housingSpace = nativeElement.querySelector('#housingSpace');
-      expect(+housingSpace.value).toBe(person.housingSpace);
-      const hostName = nativeElement.querySelector('#hostName');
-      expect(hostName.value).toBe(person.hostName);
-      const fiscalStatusUnknown = nativeElement.querySelector('#fiscalStatusUNKNOWN');
-      expect(fiscalStatusUnknown.checked).toBe(false);
-      const fiscalStatusNotTaxable = nativeElement.querySelector('#fiscalStatusNOT_TAXABLE');
-      expect(fiscalStatusNotTaxable.checked).toBe(false);
-      const fiscalStatusTaxable = nativeElement.querySelector('#fiscalStatusTAXABLE');
-      expect(fiscalStatusTaxable.checked).toBe(true);
-      const fiscalNumber = nativeElement.querySelector('#fiscalNumber');
-      expect(fiscalNumber.value).toBe('0123456789012');
-      const fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
-      expect(fiscalStatusUpToDate.checked).toBe(person.fiscalStatusUpToDate);
-      const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
-      expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe(person.healthCareCoverage);
-      const healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
-      expect(healthCareCoverageStartDate.value).toBe('01/01/2017');
-      const healthInsurance: HTMLSelectElement = nativeElement.querySelector('#healthInsurance');
-      expect(healthInsurance.options[healthInsurance.selectedIndex].value).toBe(person.healthInsurance);
-      const healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
-      expect(healthInsuranceStartDate.value).toBe('02/02/2017');
-      const accompanying = nativeElement.querySelector('#accompanying');
-      expect(accompanying.value).toBe(person.accompanying);
-      const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');
-      expect(socialSecurityNumber.value).toBe(person.socialSecurityNumber);
-      const cafNumber = nativeElement.querySelector('#cafNumber');
-      expect(cafNumber.value).toBe(person.cafNumber);
-      const nationality = nativeElement.querySelector('#nationality');
-      expect(nationality.value).toBe(person.nationality.name);
+      expect(tester.firstName).toHaveValue(person.firstName);
+      expect(tester.lastName).toHaveValue(person.lastName);
+      expect(tester.birthName).toHaveValue(person.birthName);
+      expect(tester.nickName).toHaveValue(person.nickName);
+      expect(tester.gender('MALE')).toBeChecked();
+      expect(tester.birthDate).toHaveValue('01/01/1980');
+      expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
+      expect(tester.address).toHaveValue(person.address);
+      expect(tester.city).toHaveValue(displayCity(person.city));
+      expect(tester.email).toHaveValue(person.email);
+      expect(tester.phoneNumber).toHaveValue(person.phoneNumber);
+      expect(tester.firstMediationAppointmentDate).toHaveValue('01/12/2017');
+      expect(tester.maritalStatus).toHaveSelectedValue(person.maritalStatus);
+      expect(tester.spouse).toHaveValue('Jane Doe');
+      expect(tester.entryDate).toHaveValue('01/12/2016');
+      expect(tester.housing).toHaveSelectedValue(person.housing);
+      expect(tester.housingSpace).toHaveValue(`${person.housingSpace}`);
+      expect(tester.hostName).toHaveValue(person.hostName);
+      expect(tester.fiscalStatus('UNKNOWN')).not.toBeChecked();
+      expect(tester.fiscalStatus('NOT_TAXABLE')).not.toBeChecked();
+      expect(tester.fiscalStatus('TAXABLE')).toBeChecked();
+      expect(tester.fiscalNumber).toHaveValue('0123456789012');
+      expect(tester.fiscalStatusUpToDate).toBeChecked();
+      expect(tester.healthCareCoverage).toHaveSelectedValue(person.healthCareCoverage);
+      expect(tester.healthCareCoverageStartDate).toHaveValue('01/01/2017');
+      expect(tester.healthInsurance).toHaveSelectedValue(person.healthInsurance);
+      expect(tester.healthInsuranceStartDate).toHaveValue('02/02/2017');
+      expect(tester.accompanying).toHaveValue(person.accompanying);
+      expect(tester.socialSecurityNumber).toHaveValue(person.socialSecurityNumber);
+      expect(tester.cafNumber).toHaveValue(person.cafNumber);
+      expect(tester.nationality).toHaveValue(person.nationality.name);
 
-      lastName.value = 'Do';
-      lastName.dispatchEvent(new Event('input'));
-      nativeElement.querySelector('#save').click();
+      tester.lastName.fillWith('Do');
+
+      tester.save.click();
 
       expect(personService.update).toHaveBeenCalled();
 
@@ -228,120 +343,106 @@ describe('PersonEditComponent', () => {
     });
 
     it('should clear the city input on blur if not valid anymore', () =>  {
-      const fixture = TestBed.createComponent(PersonEditComponent);
+      const tester = new PersonEditTester();
+
       // fake typeahead results
-      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
+      tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
 
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const nativeElement = fixture.nativeElement;
-      const city: HTMLInputElement = nativeElement.querySelector('#city');
-      expect(city.value).toBe(displayCity(person.city));
+      expect(tester.city).toHaveValue(displayCity(person.city));
 
       // erase something in the field, which should make its model null
-      city.value = '42000 SAINT-ETIENN';
-      city.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      expect(fixture.componentInstance.personForm.value.city).toBeFalsy();
-      expect(city.classList).toContain('is-warning');
+      tester.city.fillWith('42000 SAINT-ETIENN');
+
+      expect(tester.componentInstance.personForm.value.city).toBeFalsy();
+      expect(tester.city).toHaveClass('is-warning');
 
       // move out of the field, which should clear it
-      city.dispatchEvent(new Event('blur'));
-      fixture.detectChanges();
-      expect(city.value).toBeFalsy();
+      tester.city.dispatchEventOfType('blur');
+
+      expect(tester.city.value).toBeFalsy();
     });
 
     it('should clear the spouse input on blur if not valid anymore', () =>  {
-      const fixture = TestBed.createComponent(PersonEditComponent);
+      const tester = new PersonEditTester();
+
       // fake typeahead results
-      fixture.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
+      tester.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
 
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const nativeElement = fixture.nativeElement;
-      const spouse: HTMLInputElement = nativeElement.querySelector('#spouse');
-      expect(spouse.value).toBe('Jane Doe');
+      expect(tester.spouse).toHaveValue('Jane Doe');
 
       // erase something in the field, which should make its model null
-      spouse.value = 'Jane';
-      spouse.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      expect(fixture.componentInstance.personForm.value.spouse).toBeFalsy();
-      expect(spouse.classList).toContain('is-warning');
+      tester.spouse.fillWith('Jane');
+
+      expect(tester.componentInstance.personForm.value.spouse).toBeFalsy();
+      expect(tester.spouse).toHaveClass('is-warning');
 
       // move out of the field, which should clear it
-      spouse.dispatchEvent(new Event('blur'));
-      fixture.detectChanges();
-      expect(spouse.value).toBeFalsy();
+      tester.spouse.dispatchEventOfType('blur');
+
+      expect(tester.spouse.value).toBeFalsy();
     });
 
     it('should warn if selecting a spouse already in couple with someone else', () => {
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
-      const nativeElement = fixture.nativeElement;
-      const component = fixture.componentInstance;
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+      const component = tester.componentInstance;
 
       const personService = TestBed.get(PersonService);
       spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 54 } }));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
-      fixture.detectChanges();
+      tester.detectChanges();
 
       expect(component.spouseIsInCouple).toBe(true);
-      expect(nativeElement.textContent).toContain(`Jackie Doe est déjà en couple avec quelqu'un d'autre`);
+      expect(tester.nativeElement.textContent).toContain(`Jackie Doe est déjà en couple avec quelqu'un d'autre`);
     });
 
     it('should not warn if selecting a spouse not already in couple with someone else', () => {
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
-      const nativeElement = fixture.nativeElement;
-      const component = fixture.componentInstance;
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+      const nativeElement = tester.nativeElement;
+      const component = tester.componentInstance;
 
       const personService = TestBed.get(PersonService);
       spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
-      fixture.detectChanges();
+      tester.detectChanges();
 
       expect(component.spouseIsInCouple).toBe(false);
       expect(nativeElement.textContent).not.toContain(`Jackie Doe est déjà en couple avec quelqu'un d'autre`);
     });
 
     it('should not warn if selecting the current spouse of the edited person', () => {
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
-      const nativeElement = fixture.nativeElement;
-      const component = fixture.componentInstance;
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+      const nativeElement = tester.nativeElement;
+      const component = tester.componentInstance;
 
       const personService = TestBed.get(PersonService);
       spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 42 } }));
 
       component.personForm.get('spouse').setValue({ id: 43, firstName: 'Jane', lastName: 'Doe' });
-      fixture.detectChanges();
+      tester.detectChanges();
 
       expect(component.spouseIsInCouple).toBe(false);
       expect(nativeElement.textContent).not.toContain(`Jane Doe est déjà en couple avec quelqu'un d'autre`);
     });
 
     it('should set the fiscal number to null if invalid when setting the fiscal status to UNKNONW', () => {
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
-      const nativeElement = fixture.nativeElement;
-      const component = fixture.componentInstance;
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+      const component = tester.componentInstance;
 
-      const fiscalNumber = nativeElement.querySelector('#fiscalNumber');
-      fiscalNumber.value = 'INVALID';
-      fiscalNumber.dispatchEvent(new Event('input'));
+      tester.fiscalNumber.fillWith('INVALID');
+      tester.fiscalStatus('UNKNOWN').check();
 
-      const fiscalStatusUnknown = nativeElement.querySelector('#fiscalStatusUNKNOWN');
-      fiscalStatusUnknown.click();
-
-      fixture.detectChanges();
-
-      expect(fiscalNumber.value).toBe('');
+      expect(tester.fiscalNumber).toBeNull();
       expect(component.personForm.get('fiscalNumber').value).toBeNull();
-
-      fixture.detectChanges();
     });
   });
 
@@ -355,55 +456,41 @@ describe('PersonEditComponent', () => {
       providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
     })));
 
+    beforeEach(() => jasmine.addMatchers(speculoosMatchers));
+
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(PersonEditComponent);
-      fixture.detectChanges();
+      const tester = new PersonEditTester();
+      tester.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvel adhérent');
+      expect(tester.title).toHaveText('Nouvel adhérent');
     });
-
 
     it('should create and save a new person', fakeAsync(() => {
       const personService = TestBed.get(PersonService);
       spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
-      const fixture = TestBed.createComponent(PersonEditComponent);
+      const tester = new PersonEditTester();
+
       // fake typeahead results
-      fixture.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => of([cityModel]);
+      tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => of([cityModel]);
+      tester.detectChanges();
 
-      fixture.detectChanges();
+      expect(tester.firstName).toHaveValue('');
+      expect(tester.lastName).toHaveValue('');
+      expect(tester.birthName).toHaveValue('');
+      expect(tester.nickName).toHaveValue('');
+      expect(tester.gender('MALE')).not.toBeChecked();
+      expect(tester.gender('FEMALE')).not.toBeChecked();
+      expect(tester.gender('OTHER')).not.toBeChecked();
+      expect(tester.birthDate).toHaveValue('');
+      expect(tester.address).toHaveValue('');
+      expect(tester.city).toHaveValue('');
+      expect(tester.email).toHaveValue('');
+      expect(tester.phoneNumber).toHaveValue('');
 
-      const nativeElement = fixture.nativeElement;
-      const firstName = nativeElement.querySelector('#firstName');
-      expect(firstName.value).toBe('');
-      const lastName = nativeElement.querySelector('#lastName');
-      expect(lastName.value).toBe('');
-      const birthName = nativeElement.querySelector('#birthName');
-      expect(birthName.value).toBe('');
-      const nickName = nativeElement.querySelector('#nickName');
-      expect(nickName.value).toBe('');
-      const genderMale = nativeElement.querySelector('#genderMALE');
-      expect(genderMale.checked).toBe(false);
-      const genderFemale = nativeElement.querySelector('#genderFEMALE');
-      expect(genderFemale.checked).toBe(false);
-      const genderOther = nativeElement.querySelector('#genderOTHER');
-      expect(genderOther.checked).toBe(false);
-      const birthDate = nativeElement.querySelector('#birthDate');
-      expect(birthDate.value).toBe('');
-      const address = nativeElement.querySelector('#address');
-      expect(address.value).toBe('');
-      const city = nativeElement.querySelector('#city');
-      expect(city.value).toBe('');
-      const email = nativeElement.querySelector('#email');
-      expect(email.value).toBe('');
-      const phoneNumber = nativeElement.querySelector('#phoneNumber');
-      expect(phoneNumber.value).toBe('');
-
-      const mediationEnabledYes = nativeElement.querySelector('#mediationEnabledtrue');
-      expect(mediationEnabledYes.checked).toBe(false);
-      const mediationEnabledNo = nativeElement.querySelector('#mediationEnabledfalse');
-      expect(mediationEnabledNo.checked).toBe(true);
+      expect(tester.mediationEnabled(true)).not.toBeChecked();
+      expect(tester.mediationEnabled(false)).toBeChecked();
 
       const mediationDependantIds = [
         'mediationCode',
@@ -420,173 +507,94 @@ describe('PersonEditComponent', () => {
       ];
 
       mediationDependantIds.forEach(id => {
-        expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`);
+        expect(tester.element(`#${id}`)).toBeNull(`#${id} should be absent`);
       });
 
-      mediationEnabledYes.checked = true;
-      mediationEnabledYes.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      tick();
+      tester.mediationEnabled(true).check();
 
       mediationDependantIds.forEach(id => {
-        expect(nativeElement.querySelector(`#${id}`)).toBeTruthy(`#${id} should be present`);
+        expect(tester.element(`#${id}`)).not.toBeNull(`#${id} should be present`);
       });
 
-      const mediationCode = nativeElement.querySelector('#mediationCode');
-      expect(mediationCode.textContent).toContain('Généré automatiquement');
-      const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
-      expect(firstMediationAppointmentDate.value).toBe('');
-      const maritalStatus: HTMLSelectElement = nativeElement.querySelector('#maritalStatus');
-      expect(maritalStatus.selectedIndex).toBe(0);
-      const spouse: HTMLInputElement = nativeElement.querySelector('#spouse');
-      expect(spouse.value).toBe('');
-      expect(maritalStatus.options[0].value).toBe('UNKNOWN');
-      const entryDate = nativeElement.querySelector('#entryDate');
-      expect(entryDate.value).toBe('');
-      const housing: HTMLSelectElement = nativeElement.querySelector('#housing');
-      expect(housing.options[housing.selectedIndex].value).toBe('UNKNOWN');
-      let housingSpace = nativeElement.querySelector('#housingSpace');
-      expect(housingSpace).toBeFalsy();
-      const hostName = nativeElement.querySelector('#hostName');
-      expect(hostName.value).toBe('');
-      const fiscalStatusUnknown = nativeElement.querySelector('#fiscalStatusUNKNOWN');
-      expect(fiscalStatusUnknown.checked).toBe(true);
-      let fiscalNumber = nativeElement.querySelector('#fiscalNumber');
-      expect(fiscalNumber).toBeFalsy();
-      let fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
-      expect(fiscalStatusUpToDate).toBeFalsy();
-      const accompanying = nativeElement.querySelector('#accompanying');
-      expect(accompanying.value).toBe('');
-      const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');
-      expect(socialSecurityNumber.value).toBe('');
-      const cafNumber = nativeElement.querySelector('#cafNumber');
-      expect(cafNumber.value).toBe('');
-      const healthCareCoverage: HTMLSelectElement = nativeElement.querySelector('#healthCareCoverage');
-      expect(healthCareCoverage.options[healthCareCoverage.selectedIndex].value).toBe('UNKNOWN');
-      let healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
-      expect(healthCareCoverageStartDate).toBeFalsy();
-      const healthInsurance: HTMLSelectElement = nativeElement.querySelector('#healthInsurance');
-      expect(healthInsurance.options[healthInsurance.selectedIndex].value).toBe('UNKNOWN');
-      let healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
-      expect(healthInsuranceStartDate).toBeFalsy();
-      const nationality = nativeElement.querySelector('#nationality');
-      expect(nationality.value).toBe('');
+      expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
+      expect(tester.firstMediationAppointmentDate).toHaveValue('');
+      expect(tester.maritalStatus).toHaveSelectedValue('UNKNOWN');
+      expect(tester.spouse).toHaveValue('');
+      expect(tester.entryDate).toHaveValue('');
+      expect(tester.housing).toHaveSelectedValue('UNKNOWN');
+      expect(tester.housingSpace).toBeFalsy();
+      expect(tester.hostName).toHaveValue('');
+      expect(tester.fiscalStatus('UNKNOWN')).toBeChecked();
+      expect(tester.fiscalNumber).toBeFalsy();
+      expect(tester.fiscalStatusUpToDate).toBeFalsy();
+      expect(tester.accompanying).toHaveValue('');
+      expect(tester.socialSecurityNumber).toHaveValue('');
+      expect(tester.cafNumber).toHaveValue('');
+      expect(tester.healthCareCoverage).toHaveSelectedValue('UNKNOWN');
+      expect(tester.healthCareCoverageStartDate).toBeFalsy();
+      expect(tester.healthInsurance).toHaveSelectedValue('UNKNOWN');
+      expect(tester.healthInsuranceStartDate).toBeFalsy();
+      expect(tester.nationality).toHaveValue('');
 
-      lastName.value = 'Doe';
-      lastName.dispatchEvent(new Event('input'));
-      firstName.value = 'Jane';
-      firstName.dispatchEvent(new Event('input'));
-      birthName.value = 'Jos';
-      birthName.dispatchEvent(new Event('input'));
-      nickName.value = 'jane';
-      nickName.dispatchEvent(new Event('input'));
-      genderFemale.checked = true;
-      genderFemale.dispatchEvent(new Event('change'));
-      birthDate.value = '03/03/1985';
-      birthDate.dispatchEvent(new Event('change'));
-      address.value = 'Avenue Liberté';
-      address.dispatchEvent(new Event('input'));
+      tester.lastName.fillWith('Doe');
+      tester.firstName.fillWith('Jane');
+      tester.birthName.fillWith('Jos');
+      tester.nickName.fillWith('jane');
+      tester.gender('FEMALE').check();
+      tester.birthDate.fillWith('03/03/1985');
+      tester.address.fillWith('Avenue Liberté');
 
       // trigger city typeahead
-      city.value = '4200';
-      city.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      tick();
+      tester.fillAndTick(tester.city, '4200');
       // select first result
-      const cityResult = nativeElement.querySelector('ngb-typeahead-window button');
-      expect(cityResult.textContent).toContain(displayCity(cityModel));
-      cityResult.dispatchEvent(new Event('click'));
-      fixture.detectChanges();
-      tick();
+      const cityResult = tester.firstTypeaheadOption;
+      expect(cityResult).toHaveText(displayCity(cityModel));
+      cityResult.click();
 
-      email.value = 'jane@mail.com';
-      email.dispatchEvent(new Event('input'));
-      phoneNumber.value = '06 13 13 13 13';
-      phoneNumber.dispatchEvent(new Event('input'));
-      maritalStatus.selectedIndex = 2;
-      maritalStatus.dispatchEvent(new Event('change'));
+      tester.email.fillWith('jane@mail.com');
+      tester.phoneNumber.fillWith('06 13 13 13 13');
+
+      tester.maritalStatus.selectIndex(2);
 
       // trigger spouse typeahead
       spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
-      spouse.value = 'Jane';
-      spouse.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      tick(500);
+      tester.fillAndTick(tester.spouse, 'Jane');
       // select first result
-      const spouseResult = nativeElement.querySelector('ngb-typeahead-window button');
-      expect(spouseResult.textContent).toContain('Jane Doe');
-      spouseResult.dispatchEvent(new Event('click'));
-      fixture.detectChanges();
-      tick();
+      const spouseResult = tester.firstTypeaheadOption;
+      expect(spouseResult).toHaveText('Jane Doe');
+      spouseResult.click();
 
-      entryDate.value = '02/02/2015';
-      entryDate.dispatchEvent(new Event('change'));
-      firstMediationAppointmentDate.value = '02/02/2017';
-      firstMediationAppointmentDate.dispatchEvent(new Event('change'));
-      housing.selectedIndex = 1;
-      housing.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      housingSpace = nativeElement.querySelector('#housingSpace');
-      expect(housingSpace).toBeTruthy();
-      housingSpace.value = '30';
-      housingSpace.dispatchEvent(new Event('input'));
-      hostName.value = 'Bruno';
-      hostName.dispatchEvent(new Event('change'));
-      accompanying.value = 'Paulette';
-      accompanying.dispatchEvent(new Event('input'));
-      socialSecurityNumber.value = '453287654309876';
-      socialSecurityNumber.dispatchEvent(new Event('input'));
-      cafNumber.value = '78654';
-      cafNumber.dispatchEvent(new Event('input'));
-      const fiscalStatusTaxable = nativeElement.querySelector('#fiscalStatusTAXABLE');
-      fiscalStatusTaxable.checked = true;
-      fiscalStatusTaxable.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      tick();
+      tester.entryDate.fillWith('02/02/2015');
+      tester.firstMediationAppointmentDate.fillWith('02/02/2017');
+      tester.housing.selectIndex(1);
+      expect(tester.housingSpace).toBeTruthy();
+      tester.housingSpace.fillWith('30');
+      tester.hostName.fillWith('Bruno');
+      tester.accompanying.fillWith('Paulette');
+      tester.socialSecurityNumber.fillWith('453287654309876');
+      tester.cafNumber.fillWith('78654');
 
-      fiscalNumber = nativeElement.querySelector('#fiscalNumber');
-      expect(fiscalNumber).toBeTruthy();
-      fiscalNumber.value = '0123456789012';
-      fiscalNumber.dispatchEvent(new Event('input'));
+      tester.fiscalStatus('TAXABLE').check();
+      expect(tester.fiscalNumber).toBeTruthy();
+      tester.fiscalNumber.fillWith('0123456789012');
+      expect(tester.fiscalStatusUpToDate).toBeTruthy();
+      tester.fiscalStatusUpToDate.check();
 
-      fiscalStatusUpToDate = nativeElement.querySelector('#fiscalStatusUpToDate');
-      expect(fiscalStatusUpToDate).toBeTruthy();
-      fiscalStatusUpToDate.checked = true;
-      fiscalStatusUpToDate.dispatchEvent(new Event('change'));
+      tester.healthCareCoverage.selectIndex(1);
+      expect(tester.healthCareCoverageStartDate).toBeTruthy();
+      tester.healthCareCoverageStartDate.fillWith('01/01/2017');
 
-      healthCareCoverage.selectedIndex = 1;
-      healthCareCoverage.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      tick();
-      healthCareCoverageStartDate = nativeElement.querySelector('#healthCareCoverageStartDate');
-      expect(healthCareCoverageStartDate).toBeTruthy();
-      healthCareCoverageStartDate.value = '01/01/2017';
-      healthCareCoverageStartDate.dispatchEvent(new Event('change'));
-
-      healthInsurance.selectedIndex = 1;
-      healthInsurance.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      tick();
-      healthInsuranceStartDate = nativeElement.querySelector('#healthInsuranceStartDate');
-      expect(healthInsuranceStartDate).toBeTruthy();
-      healthInsuranceStartDate.value = '02/02/2017';
-      healthInsuranceStartDate.dispatchEvent(new Event('change'));
+      tester.healthInsurance.selectIndex(1);
+      expect(tester.healthInsuranceStartDate).toBeTruthy();
+      tester.healthInsuranceStartDate.fillWith('02/02/2017');
 
       // trigger nationality typeahead
-      nationality.value = 'Bel';
-      nationality.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      tick(500);
+      tester.fillAndTick(tester.nationality, 'Bel');
       // select first result
-      const nationalityResult = nativeElement.querySelector('ngb-typeahead-window button');
-      expect(nationalityResult.textContent).toContain('Belgique');
-      nationalityResult.dispatchEvent(new Event('click'));
-      fixture.detectChanges();
-      tick();
+      expect(tester.firstTypeaheadOption).toHaveText('Belgique');
+      tester.firstTypeaheadOption.click();
 
-      nativeElement.querySelector('#save').click();
-      fixture.detectChanges();
-      tick();
+      tester.save.click();
 
       expect(personService.create).toHaveBeenCalled();
 
@@ -611,7 +619,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.entryDate).toBe('2015-02-02');
       expect(createdPerson.housing).toBe('F0');
       expect(createdPerson.housingSpace).toBe(30);
-      expect(createdPerson.hostName).toBe('');
+      expect(createdPerson.hostName).toBe('Bruno');
       expect(createdPerson.accompanying).toBe('Paulette');
       expect(createdPerson.socialSecurityNumber).toBe('453287654309876');
       expect(createdPerson.cafNumber).toBe('78654');

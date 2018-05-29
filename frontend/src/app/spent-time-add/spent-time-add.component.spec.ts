@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { SpentTimeAddComponent } from './spent-time-add.component';
 import { Component } from '@angular/core';
@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { of } from 'rxjs';
+import { ComponentTester, speculoosMatchers, TestButton, TestInput } from 'ngx-speculoos';
 
 @Component({
   template: `<gl-spent-time-add [taskModel]="task"
@@ -33,8 +34,31 @@ class TestComponent {
   }
 }
 
+class SpentTimeAddComponentTester extends ComponentTester<TestComponent> {
+
+  constructor() {
+    super(TestComponent);
+  }
+
+  get hours() {
+    return this.elements('input')[0] as TestInput;
+  }
+
+  get minutes() {
+    return this.elements('input')[1] as TestInput;
+  }
+
+  get add() {
+    return this.button('button');
+  }
+
+  get cancel() {
+    return this.elements('button')[1] as TestButton;
+  }
+}
+
 describe('SpentTimeAddComponent', () => {
-  let fixture: ComponentFixture<TestComponent>;
+  let tester: SpentTimeAddComponentTester;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -42,44 +66,39 @@ describe('SpentTimeAddComponent', () => {
       imports: [CurrentUserModule.forRoot(), HttpClientModule, ReactiveFormsModule]
     });
 
-    fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    tester = new SpentTimeAddComponentTester();
+    tester.detectChanges();
+
+    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should have 0h0m as default inputs, and not allow to subit', () => {
-    const inputs: Array<HTMLInputElement> = fixture.nativeElement.querySelectorAll('input');
-    expect(inputs[0].value).toBe('0');
-    expect(inputs[1].value).toBe('0');
-    expect(fixture.nativeElement.querySelector('button').disabled).toBe(true);
+    expect(tester.hours).toHaveValue('0');
+    expect(tester.minutes).toHaveValue('0');
+    expect(tester.add.disabled).toBe(true);
   });
 
   it('should cancel', () => {
-    fixture.nativeElement.querySelectorAll('button')[1].click();
-    fixture.detectChanges();
-    expect(fixture.componentInstance.cancelled).toBe(true);
+    tester.cancel.click();
+    expect(tester.componentInstance.cancelled).toBe(true);
   });
 
   it('should add', () => {
-    const inputs: Array<HTMLInputElement> = fixture.nativeElement.querySelectorAll('input');
-    inputs[0].value = '1';
-    inputs[0].dispatchEvent(new Event('change'));
-    fixture.detectChanges();
-    const addButton: HTMLButtonElement = fixture.nativeElement.querySelector('button');
-    expect(addButton.disabled).toBe(false);
+    tester.hours.fillWith('1');
 
-    inputs[1].value = '10';
-    inputs[1].dispatchEvent(new Event('change'));
-    fixture.detectChanges();
+    expect(tester.add.disabled).toBe(false);
+
+    tester.minutes.fillWith('10');
 
     const taskService = TestBed.get(TaskService);
     const spentTime = { id: 1 } as SpentTimeModel;
     spyOn(taskService, 'addSpentTime').and.returnValue(of(spentTime));
 
-    addButton.click();
-    fixture.detectChanges();
+    tester.add.click();
 
-    expect(fixture.componentInstance.spentTimeAddedEvent.task.id).toBe(42);
-    expect(fixture.componentInstance.spentTimeAddedEvent.spentTime.id).toBe(1);
+    const spentTimeAddedEvent = tester.componentInstance.spentTimeAddedEvent;
+    expect(spentTimeAddedEvent.task.id).toBe(42);
+    expect(spentTimeAddedEvent.spentTime.id).toBe(1);
     expect(taskService.addSpentTime).toHaveBeenCalledWith(42, 70);
   });
 });

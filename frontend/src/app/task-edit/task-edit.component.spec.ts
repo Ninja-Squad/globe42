@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { TaskEditComponent } from './task-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,59 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
+import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
+
+class TaskEditTester extends ComponentTester<TaskEditComponent> {
+  constructor() {
+    super(TaskEditComponent);
+  }
+
+  get pageTitle() {
+    return this.element('h1');
+  }
+
+  get title() {
+    return this.input('#title');
+  }
+
+  get description() {
+    return this.textarea('#description');
+  }
+
+  get category() {
+    return this.select('#category');
+  }
+
+  get dueDate() {
+    return this.input('#dueDate');
+  }
+
+  get concernedPerson() {
+    return this.input('#concernedPerson');
+  }
+
+  fillConcernedPersonAndTick(text: string) {
+    this.concernedPerson.fillWith(text);
+    tick(500);
+    this.detectChanges();
+  }
+
+  get concernedPersonSuggestions() {
+    return this.elements('button.dropdown-item') as Array<TestButton>;
+  }
+
+  get assignee() {
+    return this.select('#assignee');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+
+  get cancel() {
+    return this.element('#cancel');
+  }
+}
 
 describe('TaskEditComponent', () => {
 
@@ -21,7 +74,7 @@ describe('TaskEditComponent', () => {
   let users: Array<UserModel>;
   let categories: Array<TaskCategoryModel>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     persons = [
       { id: 1, firstName: 'Cedric', lastName: 'Exbrayat', nickName: 'Hype', mediationCode: 'C1' },
       { id: 2, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: null, mediationCode: null },
@@ -37,7 +90,9 @@ describe('TaskEditComponent', () => {
       { id: 6, name: 'Various' },
       { id: 7, name: 'Meal' },
     ];
-  }));
+
+    jasmine.addMatchers(speculoosMatchers);
+  });
 
   function prepareModule(task: TaskModel, concernedPersonId: number) {
     const activatedRoute = {
@@ -69,134 +124,84 @@ describe('TaskEditComponent', () => {
     });
 
     it('should have a title and an empty form', () => {
-      const fixture = TestBed.createComponent(TaskEditComponent);
-      fixture.detectChanges();
+      const tester = new TaskEditTester();
+      tester.detectChanges();
 
-      const element = fixture.nativeElement;
-      expect(element.querySelector('h1').textContent).toContain('Nouvelle tâche');
+      expect(tester.pageTitle).toHaveText('Nouvelle tâche');
+      expect(tester.title).toHaveValue('');
+      expect(tester.description).toHaveValue('');
+      expect(tester.category).toHaveSelectedValue(null);
+      expect(tester.category.optionLabels).toEqual(['', 'Various', 'Meal']);
+      expect(tester.dueDate).toHaveValue('');
+      expect(tester.concernedPerson).toHaveValue('');
+      expect(tester.assignee.optionLabels).toEqual(['', 'Moi', 'agnes', 'cyril']);
+      expect(tester.assignee).toHaveSelectedValue(null);
 
-      expect(element.querySelector('input#title').value).toBe('');
-      expect(element.querySelector('textarea#description').value).toBe('');
-      expect(element.querySelector('select#category').value).toBe('');
-      const categorySelect: HTMLSelectElement = element.querySelector('select#category');
-      expect(categorySelect.options[0].textContent).toBe('');
-      expect(categorySelect.options[1].textContent).toBe('Various');
-      expect(categorySelect.options[2].textContent).toBe('Meal');
-      expect(element.querySelector('input#dueDate').value).toBe('');
-      expect(element.querySelector('input#concernedPerson').value).toBe('');
-      const assigneeSelect: HTMLSelectElement = element.querySelector('select#assignee');
-      expect(assigneeSelect.options[0].textContent).toBe('');
-      expect(assigneeSelect.options[1].textContent).toBe('Moi');
-      expect(assigneeSelect.options[2].textContent).toBe('agnes');
-      expect(assigneeSelect.options[3].textContent).toBe('cyril');
-      expect(assigneeSelect.selectedIndex).toBe(-1);
-
-      expect(element.querySelector('#save').disabled).toBe(false);
-      expect(element.querySelector('#cancel').getAttribute('href')).toBe('/tasks');
+      expect(tester.save.disabled).toBe(false);
+      expect(tester.cancel.attr('href')).toBe('/tasks');
     });
 
-    function checkPersonTypeaheadWorks(fixture: ComponentFixture<TaskEditComponent>, searchText: string) {
-      const person = fixture.nativeElement.querySelector('input#concernedPerson');
-      person.value = searchText;
-      person.dispatchEvent(new Event('input'));
+    function checkPersonTypeaheadWorks(tester: TaskEditTester, searchText: string) {
+      tester.fillConcernedPersonAndTick(searchText);
 
-      fixture.detectChanges();
-      tick(500);
-      fixture.detectChanges();
-
-      const suggestions = fixture.nativeElement.querySelectorAll('button.dropdown-item');
+      const suggestions = tester.concernedPersonSuggestions;
       expect(suggestions.length).toBe(1);
       expect(suggestions[0].textContent).toContain('Cedric Exbrayat (Hype)');
     }
 
     it('should have a typeahead searching by various parts of the identity', fakeAsync(() => {
-      const fixture = TestBed.createComponent(TaskEditComponent);
-      fixture.detectChanges();
+      const tester = new TaskEditTester();
+      tester.detectChanges();
 
       // search by first name
-      checkPersonTypeaheadWorks(fixture, 'ced');
+      checkPersonTypeaheadWorks(tester, 'ced');
       // search by last name
-      checkPersonTypeaheadWorks(fixture, 'EXBR');
+      checkPersonTypeaheadWorks(tester, 'EXBR');
       // search by nick name
-      checkPersonTypeaheadWorks(fixture, 'Hy');
+      checkPersonTypeaheadWorks(tester, 'Hy');
       // search by mediation code
-      checkPersonTypeaheadWorks(fixture, 'C1');
+      checkPersonTypeaheadWorks(tester, 'C1');
     }));
 
     it('should select a person, then display a warning when text is edited, and clear the field on blur', fakeAsync(() => {
-      const fixture = TestBed.createComponent(TaskEditComponent);
-      fixture.detectChanges();
+      const tester = new TaskEditTester();
+      tester.detectChanges();
 
-      const element = fixture.nativeElement;
-      checkPersonTypeaheadWorks(fixture, 'ced');
+      tester.fillConcernedPersonAndTick('ced');
+      tester.concernedPersonSuggestions[0].click();
 
-      fixture.nativeElement.querySelector('button.dropdown-item').click();
-      fixture.detectChanges();
-      tick();
+      expect(tester.concernedPerson).toHaveValue('Cedric Exbrayat (Hype)');
+      expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
 
-      const personInput = element.querySelector('input#concernedPerson');
-      expect(personInput.value).toBe('Cedric Exbrayat (Hype)');
-      expect(fixture.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
+      tester.fillConcernedPersonAndTick('Cedric Exbrayat (Hyp');
 
-      personInput.value = 'Cedric Exbrayat (Hyp';
-      personInput.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-      tick(500);
-      fixture.detectChanges();
+      expect(tester.componentInstance.taskForm.value.concernedPerson).toBeFalsy();
+      expect(tester.concernedPerson).toHaveClass('is-warning');
 
-      expect(fixture.componentInstance.taskForm.value.concernedPerson).toBeFalsy();
-      expect(personInput.classList).toContain('is-warning');
-
-      personInput.dispatchEvent(new Event('blur'));
-      fixture.detectChanges();
-      expect(personInput.value).toBe('');
+      tester.concernedPerson.dispatchEventOfType('blur');
+      expect(tester.concernedPerson).toHaveValue('');
     }));
 
     it('should save', fakeAsync(() => {
-      const fixture = TestBed.createComponent(TaskEditComponent);
-      fixture.detectChanges();
+      const tester = new TaskEditTester();
+      tester.detectChanges();
 
-      const element = fixture.nativeElement;
+      tester.title.fillWith('test title');
+      tester.description.fillWith('test description');
+      tester.category.selectIndex(1);
+      tester.dueDate.fillWith('02/01/2018');
+      expect(tester.componentInstance.taskForm.value.dueDate).toBe('2018-01-02');
 
-      const title = element.querySelector('#title');
-      title.value = 'test title';
-      title.dispatchEvent(new Event('input'));
-
-      const description = element.querySelector('#description');
-      description.value = 'test description';
-      description.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-
-      const category: HTMLSelectElement = element.querySelector('#category');
-      category.selectedIndex = 1;
-      category.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-
-      const saveButton = element.querySelector('#save');
-      expect(saveButton.disabled).toBe(false);
-
-      const dueDate = element.querySelector('#dueDate');
-      dueDate.value = '02/01/2018';
-      dueDate.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      tick();
-      expect(fixture.componentInstance.taskForm.value.dueDate).toBe('2018-01-02');
-
-      checkPersonTypeaheadWorks(fixture, 'ced');
-      fixture.nativeElement.querySelector('button.dropdown-item').click();
-
-      const assignee: HTMLSelectElement = element.querySelector('#assignee');
-      assignee.selectedIndex = 1;
-      assignee.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
+      tester.fillConcernedPersonAndTick('ced');
+      tester.concernedPersonSuggestions[0].click();
+      tester.assignee.selectIndex(1);
 
       const taskService = TestBed.get(TaskService);
       const router = TestBed.get(Router);
       spyOn(taskService, 'create').and.returnValue(of({id: 42}));
       spyOn(router, 'navigate');
 
-      saveButton.click();
-      fixture.detectChanges();
+      tester.save.click();
 
       expect(taskService.create).toHaveBeenCalledWith({
         title: 'test title',
@@ -217,36 +222,23 @@ describe('TaskEditComponent', () => {
     });
 
     it('should have a prepopulated concerned person and redirect to the person task page after save', () => {
-      const fixture = TestBed.createComponent(TaskEditComponent);
-      fixture.detectChanges();
+      const tester = new TaskEditTester();
+      tester.detectChanges();
 
-      const element = fixture.nativeElement;
-      expect(fixture.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
-      expect(element.querySelector('#concernedPerson').value).toBe('Cedric Exbrayat (Hype)');
-      expect(element.querySelector('#cancel').getAttribute('href')).toBe('/persons/1/tasks');
+      expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
+      expect(tester.concernedPerson).toHaveValue('Cedric Exbrayat (Hype)');
+      expect(tester.cancel.attr('href')).toBe('/persons/1/tasks');
 
-      const title = element.querySelector('#title');
-      title.value = 'test title';
-      title.dispatchEvent(new Event('input'));
-
-      const category: HTMLSelectElement = element.querySelector('#category');
-      category.selectedIndex = 1;
-      category.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-
-      const description = element.querySelector('#description');
-      description.value = 'test description';
-      description.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+      tester.title.fillWith('test title');
+      tester.category.selectIndex(1);
+      tester.description.fillWith('test description');
 
       const taskService = TestBed.get(TaskService);
       const router = TestBed.get(Router);
       spyOn(taskService, 'create').and.returnValue(of({id: 42}));
       spyOn(router, 'navigate');
 
-      const saveButton = element.querySelector('#save');
-      saveButton.click();
-      fixture.detectChanges();
+      tester.save.click();
 
       expect(taskService.create).toHaveBeenCalledWith({
         title: 'test title',
@@ -280,47 +272,33 @@ describe('TaskEditComponent', () => {
     });
 
     it('should have a title and a prepopulated form', () => {
-      const fixture = TestBed.createComponent(TaskEditComponent);
-      fixture.detectChanges();
+      const tester = new TaskEditTester();
+      tester.detectChanges();
 
-      const element = fixture.nativeElement;
-      expect(element.querySelector('h1').textContent).toContain('Modification de la tâche test title');
-
-      expect(element.querySelector('input#title').value).toBe('test title');
-
-      expect(element.querySelector('textarea#description').value).toBe('test description');
-
-      const categorySelect: HTMLSelectElement = element.querySelector('select#category');
-      expect(categorySelect.selectedIndex).toBe(2);
-      expect(fixture.componentInstance.taskForm.value.category).toEqual(categories[1]);
-
-      expect(element.querySelector('input#dueDate').value).toBe('02/01/2018');
-      expect(fixture.componentInstance.taskForm.value.dueDate).toBe('2018-01-02');
-
-      expect(element.querySelector('input#concernedPerson').value).toBe('Cedric Exbrayat (Hype)');
-      expect(fixture.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
-
-      const assigneeSelect: HTMLSelectElement = element.querySelector('select#assignee');
-      expect(assigneeSelect.selectedIndex).toBe(1);
-      expect(fixture.componentInstance.taskForm.value.assignee).toEqual(users[2]);
-
-      expect(element.querySelector('#save').disabled).toBe(false);
+      expect(tester.pageTitle).toHaveText('Modification de la tâche test title');
+      expect(tester.title).toHaveValue('test title');
+      expect(tester.description).toHaveValue('test description');
+      expect(tester.category).toHaveSelectedLabel('Meal');
+      expect(tester.componentInstance.taskForm.value.category).toEqual(categories[1]);
+      expect(tester.dueDate).toHaveValue('02/01/2018');
+      expect(tester.componentInstance.taskForm.value.dueDate).toBe('2018-01-02');
+      expect(tester.concernedPerson).toHaveValue('Cedric Exbrayat (Hype)');
+      expect(tester.componentInstance.taskForm.value.concernedPerson).toEqual(persons[0]);
+      expect(tester.assignee).toHaveSelectedLabel('Moi');
+      expect(tester.componentInstance.taskForm.value.assignee).toEqual(users[2]);
+      expect(tester.save.disabled).toBe(false);
     });
 
     it('should save', () => {
-      const fixture = TestBed.createComponent(TaskEditComponent);
-      fixture.detectChanges();
-
-      const element = fixture.nativeElement;
+      const tester = new TaskEditTester();
+      tester.detectChanges();
 
       const taskService = TestBed.get(TaskService);
       const router = TestBed.get(Router);
       spyOn(taskService, 'update').and.returnValue(of(null));
       spyOn(router, 'navigate');
 
-      const saveButton = element.querySelector('#save');
-      saveButton.click();
-      fixture.detectChanges();
+      tester.save.click();
 
       expect(taskService.update).toHaveBeenCalledWith(42, {
         title: 'test title',
@@ -334,3 +312,4 @@ describe('TaskEditComponent', () => {
     });
   });
 });
+
