@@ -12,7 +12,7 @@
     <div class="col-sm-9">
       <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName">
       <gl-validation-errors [control]="personForm.get('firstName')">
-        <div *ngIf="personForm.get('firstName').hasError('required')">Le prénom est obligatoire</div>
+        <ng-template glError="required">Le prénom est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -21,7 +21,7 @@
     <div class="col-sm-9">
       <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
       <gl-validation-errors [control]="personForm.get('lastName')">
-        <div *ngIf="personForm.get('lastName').hasError('required')">Le nom est obligatoire</div>
+        <ng-template glError="required">Le nom est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -46,7 +46,7 @@
         </label>
       </div>
       <gl-validation-errors [control]="personForm.get('gender')">
-        <div *ngIf="personForm.get('gender').hasError('required')">Le genre est obligatoire</div>
+        <ng-template glError="required">Le genre est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -79,7 +79,7 @@
     <div class="col-sm-9">
       <input class="form-control" type="email" id="email" placeholder="john@mail.com" formControlName="email">
       <gl-validation-errors [control]="personForm.get('email')">
-        <div *ngIf="personForm.get('email').hasError('email')">L'email est invalide</div>
+        <ng-template glError="email">L'email est invalide</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -257,7 +257,7 @@
       <div class="col-sm-9">
         <input class="form-control" id="fiscalNumber" placeholder="13 chiffres" formControlName="fiscalNumber">
         <gl-validation-errors [control]="personForm.get('fiscalNumber')">
-          <div *ngIf="personForm.get('fiscalNumber').hasError('pattern')">Le n° fiscal doit être composé de 13 chiffres</div>
+          <ng-template glError="pattern">Le n° fiscal doit être composé de 13 chiffres</ng-template>
         </gl-validation-errors>
       </div>
     </div>

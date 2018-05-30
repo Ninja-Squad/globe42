@@ -13,7 +13,7 @@
         Attention: sensible à la casse.
       </span>
       <gl-validation-errors [control]="userForm.get('login')">
-        <div *ngIf="userForm.get('login').hasError('required')">L'identifiant est obligatoire</div>
+        <ng-template glError="required">L'identifiant est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>

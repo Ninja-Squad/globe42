@@ -10,7 +10,7 @@
         <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
       </select>
       <gl-validation-errors [control]="taskForm.get('category')">
-        <div *ngIf="taskForm.get('category').hasError('required')">La catégorie est obligatoire</div>
+        <ng-template glError="required">La catégorie est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -19,7 +19,7 @@
     <div class="col-sm-9">
       <input class="form-control" id="title" formControlName="title" />
       <gl-validation-errors [control]="taskForm.get('title')">
-        <div *ngIf="taskForm.get('title').hasError('required')">Le libellé est obligatoire</div>
+        <ng-template glError="required">Le libellé est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -28,7 +28,7 @@
     <div class="col-sm-9">
       <textarea class="form-control" id="description" formControlName="description" style="height: 12rem;"></textarea>
       <gl-validation-errors [control]="taskForm.get('description')">
-        <div *ngIf="taskForm.get('description').hasError('required')">La description est obligatoire</div>
+        <ng-template glError="required">La description est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>

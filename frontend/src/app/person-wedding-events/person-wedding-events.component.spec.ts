@@ -14,7 +14,7 @@ import { of } from 'rxjs';
 import { throwError } from 'rxjs';
 import { DateTime } from 'luxon';
 import { LOCALE_ID } from '@angular/core';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonWeddingEventsComponent', () => {
   let events: Array<WeddingEventModel>;
@@ -53,7 +53,8 @@ describe('PersonWeddingEventsComponent', () => {
       declarations: [
         PersonWeddingEventsComponent,
         DisplayWeddingEventTypePipe,
-        ValidationErrorsComponent
+        ValidationErrorsComponent,
+        ValidationErrorDirective
       ],
       imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot() ],
       providers: [

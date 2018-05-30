@@ -23,7 +23,7 @@
           <option value="CASH">{{ 'CASH' | displayPaymentMode }}</option>
         </select>
         <gl-validation-errors [control]="membershipForm.get('paymentMode')">
-          <div *ngIf="membershipForm.get('paymentMode').hasError('required')">Le mode de paiement est obligatoire</div>
+          <ng-template glError="required">Le mode de paiement est obligatoire</ng-template>
         </gl-validation-errors>
       </div>
     </div>
@@ -35,9 +35,9 @@
           <input class="form-control" id="paymentDate" formControlName="paymentDate" ngbDatepicker
                  [minDate]="{year: currentYear, month: 1}">
           <gl-validation-errors [control]="membershipForm.get('paymentDate')">
-            <div *ngIf="membershipForm.get('paymentDate').hasError('required')">La date de paiement est obligatoire</div>
-            <div *ngIf="membershipForm.get('paymentDate').hasError('pastDate')">La date de paiement doit être dans le passé</div>
-            <div *ngIf="membershipForm.get('paymentDate').hasError('min')">La date de paiement doit être dans l'année en cours</div>
+            <ng-template glError="required">La date de paiement est obligatoire</ng-template>
+            <ng-template glError="pastDate">La date de paiement doit être dans le passé</ng-template>
+            <ng-template glError="min">La date de paiement doit être dans l'année en cours</ng-template>
           </gl-validation-errors>
         </gl-datepicker-container>
       </div>
@@ -48,7 +48,7 @@
       <div class="col-sm-9">
         <input class="form-control" id="cardNumber" formControlName="cardNumber">
         <gl-validation-errors [control]="membershipForm.get('cardNumber')">
-          <div *ngIf="membershipForm.get('cardNumber').hasError('required')">Le n° de carte est obligatoire</div>
+          <ng-template glError="required">Le n° de carte est obligatoire</ng-template>
         </gl-validation-errors>
       </div>
     </div>

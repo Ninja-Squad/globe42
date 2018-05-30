@@ -9,7 +9,7 @@
     <div class="col-sm-10">
       <input class="form-control" id="type" formControlName="type" />
       <gl-validation-errors [control]="incomeTypeForm.get('type')">
-        <div *ngIf="incomeTypeForm.get('type').hasError('required')">Le type est obligatoire</div>
+        <ng-template glError="required">Le type est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>

@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class IncomeSourceEditComponentTester extends ComponentTester<IncomeSourceEditComponent> {
   constructor() {
@@ -48,7 +48,7 @@ describe('IncomeSourceEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [IncomeSourceEditComponent, ValidationErrorsComponent]
+    declarations: [IncomeSourceEditComponent, ValidationErrorsComponent, ValidationErrorDirective]
   })
   class TestModule {}
 

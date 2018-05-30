@@ -10,12 +10,12 @@ import { ChargeCategoryService } from '../charge-category.service';
 import { ChargeCategoryModel } from '../models/charge-category.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('ChargeCategoryEditComponent', () => {
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [ChargeCategoryEditComponent, ValidationErrorsComponent],
+    declarations: [ChargeCategoryEditComponent, ValidationErrorsComponent, ValidationErrorDirective],
   })
   class TestModule {}
 

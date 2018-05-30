@@ -9,7 +9,7 @@
     <div class="col-sm-9">
       <input class="form-control" id="name" formControlName="name" />
       <gl-validation-errors [control]="chargeTypeForm.get('name')">
-        <div *ngIf="chargeTypeForm.get('name').hasError('required')">Le nom est obligatoire</div>
+        <ng-template glError="required">Le nom est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -21,7 +21,7 @@
         <option *ngFor="let category of chargeCategories" [ngValue]="category.id">{{ category.name }}</option>
       </select>
       <gl-validation-errors [control]="chargeTypeForm.get('categoryId')">
-        <div *ngIf="chargeTypeForm.get('categoryId').hasError('required')">La dépense est obligatoire</div>
+        <ng-template glError="required">La dépense est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -30,7 +30,7 @@
     <div class="col-sm-9">
       <input type="number" class="form-control" id="maxMonthlyAmount" formControlName="maxMonthlyAmount" min="1"/>
       <gl-validation-errors [control]="chargeTypeForm.get('maxMonthlyAmount')">
-        <div *ngIf="chargeTypeForm.get('maxMonthlyAmount').hasError('min')">Le montant mensuel maximum doit être positif</div>
+        <ng-template glError="min">Le montant mensuel maximum doit être positif</ng-template>
       </gl-validation-errors>
     </div>
   </div>

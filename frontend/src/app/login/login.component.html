@@ -12,7 +12,7 @@
         <label class="from-control-label" for="login">Identifiant</label>
         <input id="login" class="form-control" formControlName="login" />
         <gl-validation-errors [control]="loginForm.get('login')">
-          <div *ngIf="loginForm.get('login').hasError('required')">L'identifiant est obligatoire</div>
+          <ng-template glError="required">L'identifiant est obligatoire</ng-template>
         </gl-validation-errors>
       </div>
 
@@ -20,7 +20,7 @@
         <label class="from-control-label" for="password">Mot de passe</label>
         <input id="password" class="form-control" type="password" formControlName="password" >
         <gl-validation-errors [control]="loginForm.get('password')">
-          <div *ngIf="loginForm.get('password').hasError('required')">Le mot de passe est obligatoire</div>
+          <ng-template glError="required">Le mot de passe est obligatoire</ng-template>
         </gl-validation-errors>
       </div>
 

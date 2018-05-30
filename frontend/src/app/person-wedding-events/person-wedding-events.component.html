@@ -25,8 +25,8 @@
                ngbDatepicker [minDate]="{year: 1900, month: 1}" [maxDate]="maxMonth">
       </gl-datepicker-container>
       <gl-validation-errors [control]="newEvent.get('date')">
-        <div *ngIf="newEvent.get('date').hasError('required')">La date est obligatoire</div>
-        <div *ngIf="newEvent.get('date').hasError('pastDate')">La date doit être dans le passé</div>
+        <ng-template glError="required">La date est obligatoire</ng-template>
+        <ng-template glError="pastDate">La date doit être dans le passé</ng-template>
       </gl-validation-errors>
     </div>
 
@@ -37,7 +37,7 @@
         <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{ eventType.translation }}</option>
       </select>
       <gl-validation-errors [control]="newEvent.get('type')">
-        <div *ngIf="newEvent.get('type').hasError('required')">Le type d'événement est obligatoire</div>
+        <ng-template glError="required">Le type d'événement est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
 

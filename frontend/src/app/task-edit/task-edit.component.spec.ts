@@ -15,7 +15,7 @@ import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
 import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class TaskEditTester extends ComponentTester<TaskEditComponent> {
   constructor() {
@@ -110,7 +110,7 @@ describe('TaskEditComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), HttpClientModule],
-      declarations: [TaskEditComponent, ValidationErrorsComponent],
+      declarations: [TaskEditComponent, ValidationErrorsComponent, ValidationErrorDirective],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
 

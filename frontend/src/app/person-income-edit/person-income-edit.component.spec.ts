@@ -11,7 +11,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { of } from 'rxjs';
 import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeService } from '../income.service';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -23,7 +23,7 @@ describe('PersonIncomeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationErrorsComponent],
+    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationErrorsComponent, ValidationErrorDirective],
     providers: [
       { provide: LOCALE_ID, useValue: 'fr-FR' }
     ]

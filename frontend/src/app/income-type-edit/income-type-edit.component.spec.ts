@@ -9,13 +9,13 @@ import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('IncomeTypeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [IncomeTypeEditComponent, ValidationErrorsComponent]
+    declarations: [IncomeTypeEditComponent, ValidationErrorsComponent, ValidationErrorDirective]
   })
   class TestModule {}
 

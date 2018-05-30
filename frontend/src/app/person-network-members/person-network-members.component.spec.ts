@@ -10,7 +10,7 @@ import { DisplayNetworkMemberTypePipe } from '../display-network-member-type.pip
 import { ConfirmService } from '../confirm.service';
 import { NetworkMemberService } from '../network-member.service';
 import { of, throwError } from 'rxjs';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 describe('PersonNetworkMembersComponent', () => {
 
@@ -51,7 +51,8 @@ describe('PersonNetworkMembersComponent', () => {
       declarations: [
         PersonNetworkMembersComponent,
         DisplayNetworkMemberTypePipe,
-        ValidationErrorsComponent
+        ValidationErrorsComponent,
+        ValidationErrorDirective
       ],
       providers: [
         { provide: ActivatedRoute, useValue: route },

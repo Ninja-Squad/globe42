@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 
-import { ValidationErrorsComponent } from './validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from './validation-errors.component';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
@@ -8,10 +8,17 @@ import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 @Component({
   template: `
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <input formControlName="foo" />
+      <input formControlName="foo" id="test" />
       <gl-validation-errors [control]="form.get('foo')">
-        error message
+        <ng-template glError="required">foo is required</ng-template>
+        <ng-template glError="pattern">foo is incorrect</ng-template>
       </gl-validation-errors>
+
+      <input formControlName="bar" type="number" id="number"/>
+      <gl-validation-errors [control]="form.get('bar')">
+        <ng-template glError="max" let-error>bar must be max {{ error.max }}</ng-template>
+      </gl-validation-errors>
+
       <button>Submit</button>
     </form>
   `
@@ -21,7 +28,8 @@ class TestComponent {
 
   constructor(fb: FormBuilder) {
     this.form = fb.group({
-      foo: ['', Validators.required]
+      foo: ['', Validators.required],
+      bar: [null, Validators.max(10)]
     });
   }
 
@@ -34,11 +42,19 @@ class ValidationErrorsComponentTester extends ComponentTester<TestComponent> {
   }
 
   get testInput() {
-    return this.input('input');
+    return this.input('#test');
   }
 
-  get errors() {
-    return this.element('gl-validation-errors');
+  get numberInput() {
+    return this.input('#number');
+  }
+
+  get testErrors() {
+    return this.elements('gl-validation-errors')[0];
+  }
+
+  get numberErrors() {
+    return this.elements('gl-validation-errors')[1];
   }
 
   get submit() {
@@ -53,7 +69,8 @@ describe('ValidationErrorsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         TestComponent,
-        ValidationErrorsComponent
+        ValidationErrorsComponent,
+        ValidationErrorDirective
       ],
       imports: [
         ReactiveFormsModule
@@ -67,43 +84,56 @@ describe('ValidationErrorsComponent', () => {
   }));
 
   it('should not display error message if not blurred nor submitted', () => {
-    expect(tester.errors).not.toContainText('error message');
+    expect(tester.testErrors).not.toContainText('foo is required');
   });
 
   it('should display error message if blurred', () => {
     tester.testInput.dispatchEventOfType('blur');
 
-    expect(tester.errors).toContainText('error message');
+    expect(tester.testErrors).toContainText('foo is required');
   });
 
   it('should display error message if submitted', () => {
     tester.submit.click();
 
-    expect(tester.errors).toContainText('error message');
+    expect(tester.testErrors).toContainText('foo is required');
   });
 
   it('should not display error message if valid', () => {
     tester.testInput.fillWith('hello');
     tester.submit.click();
 
-    expect(tester.errors).not.toContainText('error message');
+    expect(tester.testErrors).not.toContainText('foo is required');
+  });
+
+  it('should not display error message if not present', () => {
+    tester.submit.click();
+
+    expect(tester.testErrors).toContainText('foo is required');
+    expect(tester.testErrors).not.toContainText('foo is incorrect');
   });
 
   it('should have CSS class which changes if error should be shown', () => {
-    expect(tester.errors).toHaveClass('invalid-feedback');
-    expect(tester.errors).not.toHaveClass('d-block');
-    expect(tester.errors).toHaveClass('d-none');
+    expect(tester.testErrors).toHaveClass('invalid-feedback');
+    expect(tester.testErrors).not.toHaveClass('d-block');
+    expect(tester.testErrors).toHaveClass('d-none');
 
     tester.submit.click();
 
-    expect(tester.errors).toHaveClass('invalid-feedback');
-    expect(tester.errors).toHaveClass('d-block');
-    expect(tester.errors).not.toHaveClass('d-none');
+    expect(tester.testErrors).toHaveClass('invalid-feedback');
+    expect(tester.testErrors).toHaveClass('d-block');
+    expect(tester.testErrors).not.toHaveClass('d-none');
 
     tester.testInput.fillWith('hello');
 
-    expect(tester.errors).toHaveClass('invalid-feedback');
-    expect(tester.errors).not.toHaveClass('d-block');
-    expect(tester.errors).toHaveClass('d-none');
+    expect(tester.testErrors).toHaveClass('invalid-feedback');
+    expect(tester.testErrors).not.toHaveClass('d-block');
+    expect(tester.testErrors).toHaveClass('d-none');
+  });
+
+  it('should expose the error', () => {
+    tester.numberInput.fillWith('11');
+    tester.submit.click();
+    expect(tester.numberErrors).toContainText('bar must be max 10');
   });
 });

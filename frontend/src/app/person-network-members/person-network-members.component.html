@@ -33,7 +33,7 @@
       <option *ngFor="let memberType of memberTypes" [value]="memberType">{{ memberType | displayNetworkMemberType }}</option>
     </select>
     <gl-validation-errors [control]="memberForm.get('type')">
-      <div *ngIf="memberForm.get('type').hasError('required')">Le type est obligatoire</div>
+      <ng-template glError="required">Le type est obligatoire</ng-template>
     </gl-validation-errors>
   </div>
 
@@ -41,7 +41,7 @@
     <label for="type">Texte (nom, adresse, n° de téléphone, etc.)</label>
     <textarea id="text" formControlName="text" class="form-control" rows="3"></textarea>
     <gl-validation-errors [control]="memberForm.get('text')">
-      <div *ngIf="memberForm.get('text').hasError('required')">Le texte est obligatoire</div>
+      <ng-template glError="required">Le texte est obligatoire</ng-template>
     </gl-validation-errors>
   </div>
 

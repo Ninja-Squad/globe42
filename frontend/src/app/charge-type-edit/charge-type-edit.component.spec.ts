@@ -12,7 +12,7 @@ import { ChargeTypeModel } from '../models/charge-type.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
-import { ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
 
 class ChargeTypeEditComponentTester extends ComponentTester<ChargeTypeEditComponent> {
   constructor() {
@@ -49,7 +49,7 @@ describe('ChargeTypeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [ChargeTypeEditComponent, ValidationErrorsComponent],
+    declarations: [ChargeTypeEditComponent, ValidationErrorsComponent, ValidationErrorDirective],
     providers: [
       ChargeTypeService,
       ErrorService

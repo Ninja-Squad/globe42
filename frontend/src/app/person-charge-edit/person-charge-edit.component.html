@@ -9,7 +9,7 @@
         <option *ngFor="let type of chargeTypes" [ngValue]="type">{{ type.name }}</option>
       </select>
       <gl-validation-errors [control]="chargeForm.get('type')">
-        <div *ngIf="chargeForm.get('type').hasError('required')">La nature de la charge est obligatoire</div>
+        <ng-template glError="required">La nature de la charge est obligatoire</ng-template>
       </gl-validation-errors>
     </div>
   </div>
@@ -19,15 +19,11 @@
       <input type="number" class="form-control" id="monthlyAmount" formControlName="monthlyAmount"
              min="1" [max]="selectedChargeType?.maxMonthlyAmount" />
       <gl-validation-errors [control]="monthlyAmountCtrl">
-        <div *ngIf="monthlyAmountCtrl.hasError('required')">
-          Le montant mensuel est obligatoire
-        </div>
-        <div *ngIf="monthlyAmountCtrl.hasError('max')">
-          Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge&nbsp;: {{ monthlyAmountCtrl.errors['max'].max | currency:'EUR' }}
-        </div>
-        <div *ngIf="monthlyAmountCtrl.hasError('min')">
-          Le montant mensuel doit être positif
-        </div>
+        <ng-template glError="required">Le montant mensuel est obligatoire</ng-template>
+        <ng-template glError="max" let-error>
+          Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge&nbsp;: {{ error.max | currency:'EUR' }}
+        </ng-template>
+        <ng-template glError="min">Le montant mensuel doit être positif</ng-template>
       </gl-validation-errors>
     </div>
   </div>
