@@ -39,10 +39,12 @@ export class PersonChargeEditComponent implements OnInit {
       type: [null, Validators.required],
       monthlyAmount: [null, Validators.compose([Validators.required, this.monthlyAmountValidator, Validators.min(1)])]
     });
+
+    this.chargeForm.get('type').valueChanges.subscribe(() => this.monthlyAmountCtrl.updateValueAndValidity());
   }
 
   get selectedChargeType(): ChargeTypeModel | null {
-    return this.chargeForm && this.chargeForm.value.type;
+    return this.chargeForm && this.chargeForm.get('type').value;
   }
 
   get monthlyAmountCtrl(): FormControl {

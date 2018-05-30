@@ -100,6 +100,12 @@ describe('PersonIncomeEditComponent', () => {
       expect(element.textContent).not.toContain('La nature de la prestation est obligatoire');
       expect(element.textContent).toContain(
         'Le montant ne peut pas dépasser la valeur maximale pour cette nature de prestation\u00a0: 100,00\u00a0€');
+
+      incomeSource.selectedIndex = 0;
+      incomeSource.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+
+      expect(element.textContent).not.toContain('Le montant ne peut pas dépasser la valeur maximale');
     });
 
     it('should save the income and navigate to the resource list', () => {

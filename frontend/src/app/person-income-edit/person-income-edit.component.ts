@@ -38,10 +38,12 @@ export class PersonIncomeEditComponent implements OnInit {
       source: [null, Validators.required],
       monthlyAmount: [null, Validators.compose([Validators.required, this.monthlyAmountValidator, Validators.min(1)])]
     });
+
+    this.incomeForm.get('source').valueChanges.subscribe(() => this.monthlyAmountCtrl.updateValueAndValidity());
   }
 
   get selectedSource(): IncomeSourceModel | null {
-    return this.incomeForm && this.incomeForm.value.source;
+    return this.incomeForm && this.incomeForm.get('source').value;
   }
 
   get monthlyAmountCtrl(): FormControl {

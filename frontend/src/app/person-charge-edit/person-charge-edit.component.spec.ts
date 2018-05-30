@@ -100,6 +100,12 @@ describe('PersonChargeEditComponent', () => {
       expect(element.textContent).not.toContain('La nature de la charge est obligatoire');
       expect(element.textContent).toContain(
         'Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge\u00a0: 100,00\u00a0€');
+
+      chargeType.selectedIndex = 0;
+      chargeType.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+
+      expect(element.textContent).not.toContain('Le montant mensuel ne peut pas dépasser la valeur maximale');
     });
 
     it('should save the charge and navigate to the resource list', () => {
