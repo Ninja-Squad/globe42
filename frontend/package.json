@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "6.0.3",
     "@angular/router": "6.0.3",
     "@ng-bootstrap/ng-bootstrap": "2.0.0",
-    "@types/chart.js": "2.7.19",
+    "@types/chart.js": "2.7.20",
     "@types/luxon": "0.5.2",
     "bootstrap": "4.1.1",
     "chart.js": "2.7.2",
