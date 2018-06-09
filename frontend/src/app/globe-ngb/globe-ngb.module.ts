@@ -1,7 +1,20 @@
 /* tslint:disable:no-use-before-declare */
 
 import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
-import { NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerConfig, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbAlertModule,
+  NgbButtonsModule,
+  NgbDateAdapter,
+  NgbDateParserFormatter,
+  NgbDatepickerConfig,
+  NgbDatepickerModule,
+  NgbDropdownModule,
+  NgbModalModule,
+  NgbPaginationModule,
+  NgbProgressbarModule,
+  NgbTooltipModule,
+  NgbTypeaheadModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { DateStringAdapterService } from './date-string-adapter.service';
 import { FrenchDateParserFormatterService } from './french-date-parser-formatter.service';
 import { NonEditableTypeaheadDirective } from './non-editable-typeahead.directive';
@@ -16,12 +29,22 @@ export class GlobeNgbDatepickerConfig extends NgbDatepickerConfig {
   }
 }
 
+const NGB_MODULES = [
+  NgbModalModule,
+  NgbDatepickerModule,
+  NgbDropdownModule,
+  NgbAlertModule,
+  NgbTooltipModule,
+  NgbTypeaheadModule,
+  NgbButtonsModule,
+  NgbPaginationModule,
+  NgbProgressbarModule
+];
+
 @NgModule({
-  imports: [
-    NgbModule
-  ],
+  imports: NGB_MODULES,
   exports: [
-    NgbModule,
+    ...NGB_MODULES,
     NonEditableTypeaheadDirective,
     DatepickerContainerComponent
   ],
@@ -36,8 +59,20 @@ export class GlobeNgbModule {
   }
 }
 
+const NGB_ROOT_MODULES = [
+  NgbModalModule.forRoot(),
+  NgbDatepickerModule.forRoot(),
+  NgbDropdownModule.forRoot(),
+  NgbAlertModule.forRoot(),
+  NgbTooltipModule.forRoot(),
+  NgbTypeaheadModule.forRoot(),
+  NgbButtonsModule.forRoot(),
+  NgbPaginationModule.forRoot(),
+  NgbProgressbarModule.forRoot()
+];
+
 @NgModule({
-  imports: [NgbModule.forRoot(), GlobeNgbModule],
+  imports: [...NGB_ROOT_MODULES, GlobeNgbModule],
   exports: [GlobeNgbModule],
   providers: [
     { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
