@@ -89,7 +89,7 @@ describe('IncomeSourceEditComponent', () => {
       spyOn(incomeSourceService, 'create');
 
       expect(tester.name).toHaveValue('');
-      expect(tester.type.selectedLabel).toBeNull();
+      expect(tester.type.selectedLabel).toBeFalsy();
       expect(tester.type.optionLabels).toEqual(['', 'A', 'B']);
       expect(tester.maxMonthlyAmount).toHaveValue('');
 
