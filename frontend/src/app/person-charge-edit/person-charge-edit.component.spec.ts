@@ -70,7 +70,7 @@ describe('PersonChargeEditComponent', () => {
       const element: HTMLElement = fixture.nativeElement;
 
       const chargeType: HTMLSelectElement = element.querySelector('#type');
-      expect(chargeType.selectedIndex).toBe(-1);
+      expect(chargeType.selectedIndex).toBeLessThan(1); // 0 on Safari, -1 on good browsers
       expect(chargeType.options.length).toBe(chargeTypes.length + 1);
 
       const monthlyAmount: HTMLInputElement = element.querySelector('#monthlyAmount');

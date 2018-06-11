@@ -92,7 +92,7 @@ describe('ChargeTypeEditComponent', () => {
 
     it('should display the charge type in a form, and validate the form', () => {
       expect(tester.name).toHaveValue('');
-      expect(tester.category).toHaveSelectedLabel(null);
+      expect(tester.category.selectedValue).toBeFalsy(); // toHaveSelectedValue(null) fails on Safari
       expect(tester.category.optionLabels).toEqual(['', 'A', 'B']);
       expect(tester.maxMonthlyAmount).toHaveValue('');
 
