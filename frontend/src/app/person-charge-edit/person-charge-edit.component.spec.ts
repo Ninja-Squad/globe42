@@ -11,7 +11,8 @@ import { ChargeService } from '../charge.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ChargeTypeModel } from '../models/charge-type.model';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('PersonChargeEditComponent', () => {
   const chargeTypes = [
@@ -22,8 +23,8 @@ describe('PersonChargeEditComponent', () => {
   const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', 'nickName': 'JB'};
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [PersonChargeEditComponent, FullnamePipe, ValidationErrorsComponent, ValidationErrorDirective],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    declarations: [PersonChargeEditComponent, FullnamePipe, ValidationDefaultsComponent],
     providers: [
       { provide: LOCALE_ID, useValue: 'fr-FR' }
     ]
@@ -35,10 +36,14 @@ describe('PersonChargeEditComponent', () => {
       snapshot: { data: { person, chargeTypes } }
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+    }));
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(PersonChargeEditComponent);

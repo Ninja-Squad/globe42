@@ -22,7 +22,8 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
 import { ComponentTester, TestButton, TestInput, speculoosMatchers } from 'ngx-speculoos';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -208,7 +209,7 @@ describe('PersonEditComponent', () => {
   ];
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), ValdemortModule],
     declarations: [
       PersonEditComponent,
       DisplayMaritalStatusPipe,
@@ -219,8 +220,7 @@ describe('PersonEditComponent', () => {
       DisplayHealthCareCoveragePipe,
       DisplayHealthInsurancePipe,
       FullnamePipe,
-      ValidationErrorsComponent,
-      ValidationErrorDirective
+      ValidationDefaultsComponent
     ]
   })
   class TestModule {
@@ -275,9 +275,13 @@ describe('PersonEditComponent', () => {
       snapshot: {data: {person, persons, countries}}
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+      });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
     }));
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));

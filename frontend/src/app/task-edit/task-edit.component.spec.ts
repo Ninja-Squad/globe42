@@ -15,7 +15,8 @@ import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
 import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 class TaskEditTester extends ComponentTester<TaskEditComponent> {
   constructor() {
@@ -109,10 +110,19 @@ describe('TaskEditComponent', () => {
     } as any;
 
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), HttpClientModule],
-      declarations: [TaskEditComponent, ValidationErrorsComponent, ValidationErrorDirective],
+      imports: [
+        CurrentUserModule.forRoot(),
+        ReactiveFormsModule,
+        RouterTestingModule,
+        GlobeNgbModule.forRoot(),
+        HttpClientModule,
+        ValdemortModule
+      ],
+      declarations: [TaskEditComponent, ValidationDefaultsComponent],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
+
+    TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
     // different object on purpose
     TestBed.get(CurrentUserService).userEvents.next({id: 3, login: 'admin', admin: false});

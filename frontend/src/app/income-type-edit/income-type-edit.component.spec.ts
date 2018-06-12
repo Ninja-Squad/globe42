@@ -9,16 +9,16 @@ import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('IncomeTypeEditComponent', () => {
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [IncomeTypeEditComponent, ValidationErrorsComponent, ValidationErrorDirective]
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    declarations: [IncomeTypeEditComponent, ValidationDefaultsComponent]
   })
   class TestModule {}
-
 
   describe('in edit mode', () => {
     const incomeType: IncomeSourceTypeModel = { id: 42, type: 'CAF' };
@@ -26,12 +26,16 @@ describe('IncomeTypeEditComponent', () => {
       snapshot: { data: { incomeType } }
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [
-        { provide: ActivatedRoute, useValue: activatedRoute }
-      ]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [
+          { provide: ActivatedRoute, useValue: activatedRoute }
+        ]
+      });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+    }));
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
@@ -73,10 +77,14 @@ describe('IncomeTypeEditComponent', () => {
       snapshot: { data: {} }
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+    }));
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);

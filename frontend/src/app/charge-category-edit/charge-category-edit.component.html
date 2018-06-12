@@ -8,9 +8,7 @@
     <label for="name" class="col-sm-2 col-form-label">Nom</label>
     <div class="col-sm-10">
       <input class="form-control" id="name" formControlName="name" />
-      <gl-validation-errors [control]="chargeCategoryForm.get('name')">
-        <ng-template glError="required">Le nom est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="name" label="Le nom"></val-errors>
     </div>
   </div>
   <div class="row">

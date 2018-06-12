@@ -12,7 +12,8 @@ import { ChargeTypeModel } from '../models/charge-type.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 class ChargeTypeEditComponentTester extends ComponentTester<ChargeTypeEditComponent> {
   constructor() {
@@ -48,8 +49,8 @@ describe('ChargeTypeEditComponent', () => {
   ];
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [ChargeTypeEditComponent, ValidationErrorsComponent, ValidationErrorDirective],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    declarations: [ChargeTypeEditComponent, ValidationDefaultsComponent],
     providers: [
       ChargeTypeService,
       ErrorService
@@ -73,6 +74,8 @@ describe('ChargeTypeEditComponent', () => {
           { provide: ActivatedRoute, useValue: activatedRoute }
         ]
       });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
       tester = new ChargeTypeEditComponentTester();
       tester.detectChanges();
@@ -151,6 +154,8 @@ describe('ChargeTypeEditComponent', () => {
           { provide: ActivatedRoute, useValue: activatedRoute },
         ]
       });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
       tester = new ChargeTypeEditComponentTester();
       tester.detectChanges();

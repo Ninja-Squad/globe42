@@ -11,13 +11,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('UserEditComponent', () => {
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot()],
-    declarations: [UserEditComponent, ValidationErrorsComponent, ValidationErrorDirective]
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), ValdemortModule],
+    declarations: [UserEditComponent, ValidationDefaultsComponent]
   })
   class TestModule {}
 
@@ -26,10 +27,14 @@ describe('UserEditComponent', () => {
       snapshot: { data: {} }
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+    }));
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(UserEditComponent);

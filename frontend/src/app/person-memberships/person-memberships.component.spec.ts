@@ -12,7 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ConfirmService } from '../confirm.service';
 import { LOCALE_ID } from '@angular/core';
 import { of } from 'rxjs';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('PersonMembershipsComponent', () => {
   let person: PersonModel;
@@ -41,15 +42,17 @@ describe('PersonMembershipsComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [PersonMembershipsComponent, DisplayPaymentModePipe, ValidationErrorsComponent, ValidationErrorDirective],
+      declarations: [PersonMembershipsComponent, DisplayPaymentModePipe, ValidationDefaultsComponent],
       providers: [
         { provide: ActivatedRoute, useFactory: () => route },
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ],
       imports: [
-        HttpClientTestingModule, GlobeNgbModule.forRoot(), ReactiveFormsModule
+        HttpClientTestingModule, GlobeNgbModule.forRoot(), ReactiveFormsModule, ValdemortModule
       ]
     });
+
+    TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
   }));
 
   afterEach(() => jasmine.clock().uninstall());

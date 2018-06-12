@@ -8,7 +8,8 @@ import { CurrentUserService } from '../current-user/current-user.service';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 class LoginComponentTester extends ComponentTester<LoginComponent> {
 
@@ -39,11 +40,13 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
-      declarations: [LoginComponent, ValidationErrorsComponent, ValidationErrorDirective],
+      imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule, ValdemortModule],
+      declarations: [LoginComponent, ValidationDefaultsComponent],
     });
 
     jasmine.addMatchers(speculoosMatchers);
+
+    TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
     tester = new LoginComponentTester();
     tester.detectChanges();

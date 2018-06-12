@@ -8,9 +8,7 @@
     <label for="name" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
       <input class="form-control" id="name" formControlName="name"/>
-      <gl-validation-errors [control]="incomeSourceForm.get('name')">
-        <ng-template glError="required">Le nom est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="name" label="Le nom"></val-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -20,18 +18,16 @@
         <option value=""></option>
         <option *ngFor="let type of incomeSourceTypes" [ngValue]="type.id">{{ type.type }}</option>
       </select>
-      <gl-validation-errors [control]="incomeSourceForm.get('typeId')">
-        <ng-template glError="required">L'organisme payeur est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="typeId" label="L'organisme payeur"></val-errors>
     </div>
   </div>
   <div class="form-group row">
     <label for="maxMonthlyAmount" class="col-sm-3 col-form-label">Montant mensuel maximum</label>
     <div class="col-sm-9">
       <input type="number" class="form-control" id="maxMonthlyAmount" formControlName="maxMonthlyAmount" min="1" />
-      <gl-validation-errors [control]="incomeSourceForm.get('maxMonthlyAmount')">
-        <ng-template glError="min">Le montant mensuel maximum doit être positif</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="maxMonthlyAmount" label="Le montant mensuel maximum">
+        <ng-template valError="min" let-label>{{ label }} doit être positif</ng-template>
+      </val-errors>
     </div>
   </div>
   <div class="row">

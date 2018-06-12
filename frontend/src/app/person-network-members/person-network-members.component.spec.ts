@@ -10,7 +10,8 @@ import { DisplayNetworkMemberTypePipe } from '../display-network-member-type.pip
 import { ConfirmService } from '../confirm.service';
 import { NetworkMemberService } from '../network-member.service';
 import { of, throwError } from 'rxjs';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('PersonNetworkMembersComponent', () => {
 
@@ -51,8 +52,7 @@ describe('PersonNetworkMembersComponent', () => {
       declarations: [
         PersonNetworkMembersComponent,
         DisplayNetworkMemberTypePipe,
-        ValidationErrorsComponent,
-        ValidationErrorDirective
+        ValidationDefaultsComponent
       ],
       providers: [
         { provide: ActivatedRoute, useValue: route },
@@ -60,9 +60,12 @@ describe('PersonNetworkMembersComponent', () => {
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
-        GlobeNgbModule.forRoot()
+        GlobeNgbModule.forRoot(),
+        ValdemortModule
       ]
     });
+
+    TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
     fixture = TestBed.createComponent(PersonNetworkMembersComponent);
     component = fixture.componentInstance;

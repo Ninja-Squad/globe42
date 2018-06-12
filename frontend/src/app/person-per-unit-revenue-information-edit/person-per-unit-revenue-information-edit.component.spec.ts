@@ -9,7 +9,8 @@ import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-infor
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let route: ActivatedRoute;
@@ -38,16 +39,17 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
       declarations: [
         PersonPerUnitRevenueInformationEditComponent,
         FullnamePipe,
-        ValidationErrorsComponent,
-        ValidationErrorDirective
+        ValidationDefaultsComponent
       ],
       providers: [
         { provide: PerUnitRevenueInformationService, useValue: mockPerUnitRevenueInformationService },
         { provide: ActivatedRoute, useFactory: () => route }
       ],
-      imports: [ ReactiveFormsModule, RouterTestingModule ]
+      imports: [ ReactiveFormsModule, RouterTestingModule, ValdemortModule ]
     })
     .compileComponents();
+
+    TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
   }));
 
   it('should contain a filled form when person has info', () => {
@@ -112,25 +114,25 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
 
     const adultLikeCount: HTMLInputElement = fixture.nativeElement.querySelector('#adultLikeCount');
     adultLikeCount.value = '0';
-    adultLikeCount.dispatchEvent(new Event('change'));
+    adultLikeCount.dispatchEvent(new Event('input'));
     adultLikeCount.dispatchEvent(new Event('blur'));
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'adultes ou équivalent doit être au moins égal à 1');
+    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'adultes ou équivalent doit être supérieur ou égal à 1');
 
     adultLikeCount.value = '';
-    adultLikeCount.dispatchEvent(new Event('change'));
+    adultLikeCount.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('Le nombre d\'adultes ou équivalent est obligatoire');
 
     const childCount: HTMLInputElement = fixture.nativeElement.querySelector('#childCount');
     childCount.value = '-1';
-    childCount.dispatchEvent(new Event('change'));
+    childCount.dispatchEvent(new Event('input'));
     childCount.dispatchEvent(new Event('blur'));
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'enfants doit être au moins égal à 0');
+    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'enfants doit être supérieur ou égal à 0');
 
     childCount.value = '';
-    childCount.dispatchEvent(new Event('change'));
+    childCount.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('Le nombre d\'enfants est obligatoire');
 

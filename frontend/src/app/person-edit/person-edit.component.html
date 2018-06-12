@@ -11,18 +11,14 @@
     <label for="firstName" class="col-sm-3 col-form-label">Prénom</label>
     <div class="col-sm-9">
       <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName">
-      <gl-validation-errors [control]="personForm.get('firstName')">
-        <ng-template glError="required">Le prénom est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="firstName" label="Le prénom"></val-errors>
     </div>
   </div>
   <div class="form-group row">
     <label for="lastName" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
       <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
-      <gl-validation-errors [control]="personForm.get('lastName')">
-        <ng-template glError="required">Le nom est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="lastName" label="Le nom"></val-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -45,9 +41,7 @@
           <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
         </label>
       </div>
-      <gl-validation-errors [control]="personForm.get('gender')">
-        <ng-template glError="required">Le genre est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="gender" label="Le genre"></val-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -78,9 +72,7 @@
     <label for="email" class="col-sm-3 col-form-label">Email</label>
     <div class="col-sm-9">
       <input class="form-control" type="email" id="email" placeholder="john@mail.com" formControlName="email">
-      <gl-validation-errors [control]="personForm.get('email')">
-        <ng-template glError="email">L'email est invalide</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="email" label="L'email"></val-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -256,9 +248,9 @@
       <label for="fiscalNumber" class="col-sm-3 col-form-label">N° fiscal</label>
       <div class="col-sm-9">
         <input class="form-control" id="fiscalNumber" placeholder="13 chiffres" formControlName="fiscalNumber">
-        <gl-validation-errors [control]="personForm.get('fiscalNumber')">
-          <ng-template glError="pattern">Le n° fiscal doit être composé de 13 chiffres</ng-template>
-        </gl-validation-errors>
+        <val-errors controlName="fiscalNumber" label="Le n° fiscal">
+          <ng-template valError="pattern" let-label>{{ label }} doit être composé de 13 chiffres</ng-template>
+        </val-errors>
       </div>
     </div>
     <div class="row">

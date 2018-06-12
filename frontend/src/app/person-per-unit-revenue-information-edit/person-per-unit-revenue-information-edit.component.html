@@ -8,10 +8,7 @@
       <small class="form-text text-muted">
         Nombre total d'adultes et d'enfants de 14 ans ou plus, y compris {{ person.firstName }}
       </small>
-      <gl-validation-errors [control]="infoGroup.get('adultLikeCount')">
-        <ng-template glError="required">Le nombre d'adultes ou équivalent est obligatoire</ng-template>
-        <ng-template glError="min">Le nombre d'adultes ou équivalent doit être au moins égal à 1</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="adultLikeCount" label="Le nombre d'adultes ou équivalent"></val-errors>
     </div>
   </div>
   <div class="form-group row">
@@ -21,10 +18,7 @@
       <small class="form-text text-muted">
         Nombre d'enfants de moins de 14 ans
       </small>
-      <gl-validation-errors [control]="infoGroup.get('childCount')">
-        <ng-template glError="required">Le nombre d'enfants est obligatoire</ng-template>
-        <ng-template glError="min">Le nombre d'enfants doit être au moins égal à 0</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="childCount" label="Le nombre d'enfants"></val-errors>
     </div>
   </div>
   <div class="row">

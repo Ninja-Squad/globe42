@@ -4352,6 +4352,12 @@ ngx-speculoos@0.2.2:
   dependencies:
     tslib "^1.9.0"
 
+ngx-valdemort@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-0.1.0.tgz#c4e2859d3c3555af1ed218168ce1780621a78fe9"
+  dependencies:
+    tslib "^1.9.0"
+
 no-case@^2.2.0:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.2.tgz#60b813396be39b3f1288a4c1ed5d1e7d28b464ac"

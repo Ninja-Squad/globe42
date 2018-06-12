@@ -77,7 +77,8 @@ import { SituationComponent } from './person-family/situation/situation.componen
 import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
 import { PersonNetworkMembersComponent } from './person-network-members/person-network-members.component';
 import { DisplayNetworkMemberTypePipe } from './display-network-member-type.pipe';
-import { ValidationErrorDirective, ValidationErrorsComponent } from './validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from './validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 registerLocaleData(localeFr);
 
@@ -149,8 +150,7 @@ registerLocaleData(localeFr);
     PersonFamilyEditComponent,
     PersonNetworkMembersComponent,
     DisplayNetworkMemberTypePipe,
-    ValidationErrorsComponent,
-    ValidationErrorDirective
+    ValidationDefaultsComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent
@@ -161,7 +161,8 @@ registerLocaleData(localeFr);
     HttpClientModule,
     RouterModule.forRoot(routes),
     GlobeNgbModule.forRoot(),
-    CurrentUserModule.forRoot()
+    CurrentUserModule.forRoot(),
+    ValdemortModule
   ],
   providers: [
     {

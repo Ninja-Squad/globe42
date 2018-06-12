@@ -10,12 +10,13 @@ import { ChargeCategoryService } from '../charge-category.service';
 import { ChargeCategoryModel } from '../models/charge-category.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('ChargeCategoryEditComponent', () => {
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [ChargeCategoryEditComponent, ValidationErrorsComponent, ValidationErrorDirective],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    declarations: [ChargeCategoryEditComponent, ValidationDefaultsComponent]
   })
   class TestModule {}
 
@@ -33,6 +34,8 @@ describe('ChargeCategoryEditComponent', () => {
           { provide: ActivatedRoute, useValue: activatedRoute }
         ]
       });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
       router = TestBed.get(Router);
       spyOn(router, 'navigateByUrl');
@@ -79,6 +82,8 @@ describe('ChargeCategoryEditComponent', () => {
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
       router = TestBed.get(Router);
       spyOn(router, 'navigateByUrl');

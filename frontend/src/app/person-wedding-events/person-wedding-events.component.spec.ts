@@ -14,7 +14,8 @@ import { of } from 'rxjs';
 import { throwError } from 'rxjs';
 import { DateTime } from 'luxon';
 import { LOCALE_ID } from '@angular/core';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('PersonWeddingEventsComponent', () => {
   let events: Array<WeddingEventModel>;
@@ -53,10 +54,9 @@ describe('PersonWeddingEventsComponent', () => {
       declarations: [
         PersonWeddingEventsComponent,
         DisplayWeddingEventTypePipe,
-        ValidationErrorsComponent,
-        ValidationErrorDirective
+        ValidationDefaultsComponent
       ],
-      imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot() ],
+      imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot(), ValdemortModule ],
       providers: [
         { provide: LOCALE_ID, useValue: 'fr-FR' },
         { provide: ActivatedRoute, useFactory: () => route },
@@ -64,6 +64,8 @@ describe('PersonWeddingEventsComponent', () => {
         { provide: ConfirmService, useValue: confirmService },
       ]
     });
+
+    TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
   }));
 
   afterEach(() => jasmine.clock().uninstall());

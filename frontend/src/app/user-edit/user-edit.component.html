@@ -12,9 +12,7 @@
         <span class="fa fa-warning"></span>
         Attention: sensible à la casse.
       </span>
-      <gl-validation-errors [control]="userForm.get('login')">
-        <ng-template glError="required">L'identifiant est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="login" label="L'identifiant"></val-errors>
     </div>
   </div>
   <div class="form-group row">

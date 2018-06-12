@@ -24,10 +24,7 @@
         <input class="form-control" id="date" formControlName="date"
                ngbDatepicker [minDate]="{year: 1900, month: 1}" [maxDate]="maxMonth">
       </gl-datepicker-container>
-      <gl-validation-errors [control]="newEvent.get('date')">
-        <ng-template glError="required">La date est obligatoire</ng-template>
-        <ng-template glError="pastDate">La date doit être dans le passé</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="date" label="La date"></val-errors>
     </div>
 
     <div class="form-group">
@@ -36,9 +33,7 @@
         <option value=""></option>
         <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{ eventType.translation }}</option>
       </select>
-      <gl-validation-errors [control]="newEvent.get('type')">
-        <ng-template glError="required">Le type d'événement est obligatoire</ng-template>
-      </gl-validation-errors>
+      <val-errors controlName="type" label="Le type d'événement"></val-errors>
     </div>
 
     <button id="createButton" class="btn btn-primary mr-2">Ajouter</button>

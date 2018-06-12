@@ -11,7 +11,8 @@ import { FullnamePipe } from '../fullname.pipe';
 import { of } from 'rxjs';
 import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeService } from '../income.service';
-import { ValidationErrorDirective, ValidationErrorsComponent } from '../validation-errors/validation-errors.component';
+import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
+import { ValdemortModule } from 'ngx-valdemort';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -22,8 +23,8 @@ describe('PersonIncomeEditComponent', () => {
   const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', 'nickName': 'JB'};
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationErrorsComponent, ValidationErrorDirective],
+    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationDefaultsComponent],
     providers: [
       { provide: LOCALE_ID, useValue: 'fr-FR' }
     ]
@@ -35,10 +36,14 @@ describe('PersonIncomeEditComponent', () => {
       snapshot: {data: {person, incomeSources}}
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+      });
+
+      TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+    }));
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(PersonIncomeEditComponent);
@@ -103,13 +108,13 @@ describe('PersonIncomeEditComponent', () => {
 
       expect(element.textContent).not.toContain('La nature de la prestation est obligatoire');
       expect(element.textContent).toContain(
-        'Le montant ne peut pas dépasser la valeur maximale pour cette nature de prestation\u00a0: 100,00\u00a0€');
+        'Le montant mensuel ne peut pas dépasser la valeur maximale pour cette nature de prestation\u00a0: 100,00\u00a0€');
 
       incomeSource.selectedIndex = 0;
       incomeSource.dispatchEvent(new Event('change'));
       fixture.detectChanges();
 
-      expect(element.textContent).not.toContain('Le montant ne peut pas dépasser la valeur maximale');
+      expect(element.textContent).not.toContain('Le montant mensuel ne peut pas dépasser la valeur maximale');
     });
 
     it('should save the income and navigate to the resource list', () => {
