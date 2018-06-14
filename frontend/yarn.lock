@@ -208,9 +208,9 @@
   dependencies:
     "@types/jasmine" "*"
 
-"@types/luxon@0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-0.5.2.tgz#3a12e672cfde45a83fc92b8b11ba91db0622e6fc"
+"@types/luxon@0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-0.5.3.tgz#87c5fb059b881e621620869633023e27b15e1b41"
 
 "@types/node@8.10.20":
   version "8.10.20"
