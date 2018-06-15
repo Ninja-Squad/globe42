@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.2.41"
+    val kotlinVersion = "1.2.50"
 
     java
     jacoco
@@ -23,10 +23,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.0.2.RELEASE"
+    id("org.springframework.boot") version "2.0.3.RELEASE"
     id("org.flywaydb.flyway") version "5.0.3"
-    id("com.gorylenko.gradle-git-properties") version "1.4.21"
-    id("org.jetbrains.dokka") version "0.9.16"
+    id("com.gorylenko.gradle-git-properties") version "1.5.1"
+    id("org.jetbrains.dokka") version "0.9.17"
 }
 
 apply(plugin = "io.spring.dependency-management")
@@ -42,7 +42,7 @@ repositories {
 tasks {
     withType(KotlinCompile::class.java) {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xenable-jvm-default")
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=enable")
             jvmTarget = "1.8"
         }
     }
@@ -61,11 +61,13 @@ tasks {
         dependsOn(":frontend:assemble")
         dependsOn(buildInfo)
 
-        into("BOOT-INF/classes/static") {
-            from("${project(":frontend").projectDir}/dist")
-        }
-        into("BOOT-INF/classes/META-INF") {
-            from(buildInfo.destinationDir)
+        bootInf {
+            into("classes/static") {
+                from("${project(":frontend").projectDir}/dist")
+            }
+            into("classes/META-INF") {
+                from(buildInfo.destinationDir)
+            }
         }
     }
 
@@ -112,7 +114,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt:0.9.0")
-    implementation("com.google.cloud:google-cloud-storage:1.28.0")
+    implementation("com.google.cloud:google-cloud-storage:1.34.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
