@@ -2,7 +2,10 @@
 
 <div class="row align-items-center mb-2 event-item" *ngFor="let event of events">
   <div class="col-sm">{{ event.date | date }}</div>
-  <div class="col-sm">{{ event.type | displayWeddingEventType }}</div>
+  <div class="col-sm">
+    {{ event.type | displayWeddingEventType }}
+    {{ event.location | displayLocation }}
+  </div>
   <div class="col-sm text-right">
     <button type="button" class="btn btn-danger btn-sm" (click)="deleteEvent(event)">
       <span class="fa fa-trash"></span>
@@ -34,6 +37,18 @@
         <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{ eventType.translation }}</option>
       </select>
       <val-errors controlName="type" label="Le type d'événement"></val-errors>
+    </div>
+
+    <div class="form-group">
+      <label>Lieu</label>
+      <div>
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="location" formControlName="location">
+          <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let location of locations">
+            <input ngbButton name="location" id="location{{ location.key }}" type="radio" [value]="location.key"> {{ location.translation }}
+          </label>
+        </div>
+      </div>
+      <val-errors controlName="location" label="Le lieu"></val-errors>
     </div>
 
     <button id="createButton" class="btn btn-primary mr-2">Ajouter</button>

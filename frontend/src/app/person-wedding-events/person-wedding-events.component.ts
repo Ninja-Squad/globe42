@@ -9,6 +9,7 @@ import { ConfirmService } from '../confirm.service';
 import { WeddingEventService } from '../wedding-event.service';
 import { WeddingEventModel } from '../models/wedding-event.model';
 import { pastDate } from '../globe-validators';
+import { LOCATION_TRANSLATIONS } from '../display-location.pipe';
 
 @Component({
   selector: 'gl-person-wedding-events',
@@ -23,6 +24,7 @@ export class PersonWeddingEventsComponent {
   newEvent: FormGroup = null;
   maxMonth: {year: number; month: number; };
   eventTypes = WEDDING_EVENT_TYPE_TRANSLATIONS;
+  locations = LOCATION_TRANSLATIONS;
 
   constructor(route: ActivatedRoute,
               private weddingEventService: WeddingEventService,
@@ -49,7 +51,8 @@ export class PersonWeddingEventsComponent {
     };
     this.newEvent = this.formBuilder.group({
       date: [null, [Validators.required, pastDate]],
-      type: [null, Validators.required]
+      type: [null, Validators.required],
+      location: [null, Validators.required]
     });
   }
 

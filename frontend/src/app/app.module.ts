@@ -79,6 +79,7 @@ import { PersonNetworkMembersComponent } from './person-network-members/person-n
 import { DisplayNetworkMemberTypePipe } from './display-network-member-type.pipe';
 import { ValidationDefaultsComponent } from './validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { DisplayLocationPipe } from './display-location.pipe';
 
 registerLocaleData(localeFr);
 
@@ -150,7 +151,8 @@ registerLocaleData(localeFr);
     PersonFamilyEditComponent,
     PersonNetworkMembersComponent,
     DisplayNetworkMemberTypePipe,
-    ValidationDefaultsComponent
+    ValidationDefaultsComponent,
+    DisplayLocationPipe
   ],
   entryComponents: [
     ConfirmModalContentComponent

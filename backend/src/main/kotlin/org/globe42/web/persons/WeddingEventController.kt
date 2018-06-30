@@ -40,6 +40,7 @@ class WeddingEventController(private val personDao: PersonDao) {
         val event = WeddingEvent()
         event.date = command.date
         event.type = command.type
+        event.location = command.location
         person.addWeddingEvent(event)
 
         personDao.flush()

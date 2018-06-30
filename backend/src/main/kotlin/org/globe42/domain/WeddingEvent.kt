@@ -32,6 +32,10 @@ class WeddingEvent {
     @NotNull
     lateinit var type: WeddingEventType
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    lateinit var location: Location
+
     @ManyToOne
     @NotNull
     lateinit var person: Person

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { PersonWeddingEventsComponent } from './person-wedding-events.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -9,13 +9,57 @@ import { WeddingEventService } from '../wedding-event.service';
 import { DisplayWeddingEventTypePipe, WEDDING_EVENT_TYPE_TRANSLATIONS } from '../display-wedding-event-type.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmService } from '../confirm.service';
-import Spy = jasmine.Spy;
-import { of } from 'rxjs';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { DateTime } from 'luxon';
 import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.pipe';
+import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
+import { Location } from '../models/family.model';
+import Spy = jasmine.Spy;
+
+class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEventsComponent> {
+  constructor() {
+    super(PersonWeddingEventsComponent);
+  }
+
+  get events() {
+    return this.elements('.event-item');
+  }
+
+  get deleteButtons() {
+    return this.elements('.event-item button') as Array<TestButton>;
+  }
+
+  get newEventButton() {
+    return this.button('#newEventButton');
+  }
+
+  get form() {
+    return this.element('form');
+  }
+
+  get cancelCreationButton() {
+    return this.button('#cancelCreationButton');
+  }
+
+  get dateInput() {
+    return this.input('#date');
+  }
+
+  get typeSelect() {
+    return this.select('#type');
+  }
+
+  locationInput(location: Location) {
+    return this.input(`#location${location}`);
+  }
+
+  get createButton() {
+    return this.button('#createButton');
+  }
+}
 
 describe('PersonWeddingEventsComponent', () => {
   let events: Array<WeddingEventModel>;
@@ -29,12 +73,14 @@ describe('PersonWeddingEventsComponent', () => {
       {
         id: 42,
         date: '2001-02-28',
-        type: 'WEDDING'
+        type: 'WEDDING',
+        location: 'ABROAD'
       },
       {
-        id: 42,
+        id: 43,
         date: '2003-03-29',
-        type: 'DIVORCE'
+        type: 'DIVORCE',
+        location: 'FRANCE'
       }
     ];
 
@@ -54,7 +100,8 @@ describe('PersonWeddingEventsComponent', () => {
       declarations: [
         PersonWeddingEventsComponent,
         DisplayWeddingEventTypePipe,
-        ValidationDefaultsComponent
+        ValidationDefaultsComponent,
+        DisplayLocationPipe
       ],
       imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot(), ValdemortModule ],
       providers: [
@@ -80,6 +127,7 @@ describe('PersonWeddingEventsComponent', () => {
     it('should expose events and event types, and not have a form initially', () => {
       expect(component.events).toBe(events);
       expect(component.eventTypes).toBe(WEDDING_EVENT_TYPE_TRANSLATIONS);
+      expect(component.locations).toBe(LOCATION_TRANSLATIONS);
       expect(component.newEvent).toBeNull();
     });
 
@@ -94,7 +142,8 @@ describe('PersonWeddingEventsComponent', () => {
         {
           id: 42,
           date: '2001-02-28',
-          type: 'WEDDING'
+          type: 'WEDDING',
+          location: 'ABROAD'
         }
       ];
       (weddingEventService.list as Spy).and.returnValue(of(newEvents));
@@ -144,14 +193,16 @@ describe('PersonWeddingEventsComponent', () => {
       component.showEventCreation();
       const command = {
         date: '2016-02-28',
-        type: 'WEDDING'
+        type: 'WEDDING',
+        location: 'FRANCE'
       };
       component.newEvent.setValue(command);
 
       const newEvent: WeddingEventModel = {
         id: 42,
         date: '2016-02-28',
-        type: 'WEDDING'
+        type: 'WEDDING',
+        location: 'FRANCE'
       };
       const newEvents: Array<WeddingEventModel> = [ newEvent ];
 
@@ -168,98 +219,83 @@ describe('PersonWeddingEventsComponent', () => {
   });
 
   describe('UI', () => {
-    let fixture: ComponentFixture<PersonWeddingEventsComponent>;
-    let component: PersonWeddingEventsComponent;
+    let tester: PersonWeddingEventsComponentTester;
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(PersonWeddingEventsComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      tester = new PersonWeddingEventsComponentTester();
+      tester.detectChanges();
+
+      jasmine.addMatchers(speculoosMatchers);
     });
 
     it('should list events', () => {
-      const items = fixture.nativeElement.querySelectorAll('.event-item');
+      const items = tester.events;
       expect(items.length).toBe(2);
-      expect(items[0].textContent).toContain('28 févr. 2001');
-      expect(items[0].textContent).toContain('Mariage');
+      expect(items[0]).toContainText('28 févr. 2001');
+      expect(items[0]).toContainText('Mariage au Pays');
     });
 
     it('should delete and event', () => {
-      spyOn(component, 'deleteEvent');
-      const firstDeleteButton = fixture.nativeElement.querySelector('.event-item button');
-      firstDeleteButton.click();
+      spyOn(tester.componentInstance, 'deleteEvent');
+      tester.deleteButtons[0].click();
 
-      expect(component.deleteEvent).toHaveBeenCalledWith(component.events[0]);
+      expect(tester.componentInstance.deleteEvent).toHaveBeenCalledWith(tester.componentInstance.events[0]);
     });
 
     it('should show creation form when clicking button, and hide it when cancelling', () => {
-      let form = fixture.nativeElement.querySelector('form');
-      expect(form).toBeFalsy();
+      expect(tester.form).toBeNull();
 
-      fixture.nativeElement.querySelector('#newEventButton').click();
-      fixture.detectChanges();
+      tester.newEventButton.click();
 
-      form = fixture.nativeElement.querySelector('form');
-      expect(form).toBeTruthy();
+      expect(tester.form).not.toBeNull();
 
-      fixture.nativeElement.querySelector('#cancelCreationButton').click();
-      fixture.detectChanges();
+      tester.cancelCreationButton.click();
 
-      form = fixture.nativeElement.querySelector('form');
-      expect(form).toBeFalsy();
+      expect(tester.form).toBeNull();
     });
 
     it('should create new event', () => {
-      fixture.nativeElement.querySelector('#newEventButton').click();
-      fixture.detectChanges();
+      tester.newEventButton.click();
 
-      const dateInput: HTMLInputElement = fixture.nativeElement.querySelector('#date');
-      dateInput.value = '2017-03-28';
-      dateInput.dispatchEvent(new Event('input'));
+      tester.dateInput.fillWith('2017-03-28');
+      tester.typeSelect.selectValue('WEDDING');
+      tester.locationInput('FRANCE').check();
 
-      const typeSelect: HTMLSelectElement = fixture.nativeElement.querySelector('#type');
-      typeSelect.selectedIndex = 1;
-      typeSelect.dispatchEvent(new Event('change'));
+      spyOn(tester.componentInstance, 'create');
 
-      spyOn(component, 'create');
-      fixture.nativeElement.querySelector('#createButton').click();
-      fixture.detectChanges();
+      tester.createButton.click();
 
-      expect(component.create).toHaveBeenCalled();
-      expect(component.newEvent.value).toEqual({
+      expect(tester.componentInstance.create).toHaveBeenCalled();
+      expect(tester.componentInstance.newEvent.value).toEqual({
         date: '2017-03-28',
-        type: 'WEDDING'
+        type: 'WEDDING',
+        location: 'FRANCE'
       });
     });
 
     it('should show error messages', () => {
-      fixture.nativeElement.querySelector('#newEventButton').click();
-      fixture.detectChanges();
+      tester.newEventButton.click();
 
-      expect(fixture.nativeElement.textContent).not.toContain('La date est obligatoire');
-      expect(fixture.nativeElement.textContent).not.toContain('Le type d\'événement est obligatoire');
-      expect(fixture.nativeElement.textContent).not.toContain('La date doit être dans le passé');
+      expect(tester.testElement).not.toContainText('La date est obligatoire');
+      expect(tester.testElement).not.toContainText('Le type d\'événement est obligatoire');
+      expect(tester.testElement).not.toContainText('La date doit être dans le passé');
+      expect(tester.testElement).not.toContainText('Le lieu est obligatoire');
 
-      fixture.nativeElement.querySelector('#createButton').click();
-      fixture.detectChanges();
+      tester.createButton.click();
 
-      expect(fixture.nativeElement.textContent).toContain('La date est obligatoire');
-      expect(fixture.nativeElement.textContent).toContain('Le type d\'événement est obligatoire');
-      expect(fixture.nativeElement.textContent).not.toContain('La date doit être dans le passé');
+      expect(tester.testElement).toContainText('La date est obligatoire');
+      expect(tester.testElement).toContainText('Le type d\'événement est obligatoire');
+      expect(tester.testElement).not.toContainText('La date doit être dans le passé');
+      expect(tester.testElement).toContainText('Le lieu est obligatoire');
 
-      const dateInput: HTMLInputElement = fixture.nativeElement.querySelector('#date');
-      dateInput.value = '2020-03-28';
-      dateInput.dispatchEvent(new Event('input'));
+      tester.dateInput.fillWith('2050-03-28');
+      tester.typeSelect.selectValue('WEDDING');
+      tester.locationInput('FRANCE').check();
 
-      const typeSelect: HTMLSelectElement = fixture.nativeElement.querySelector('#type');
-      typeSelect.selectedIndex = 1;
-      typeSelect.dispatchEvent(new Event('change'));
-
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.textContent).not.toContain('La date est obligatoire');
-      expect(fixture.nativeElement.textContent).not.toContain('Le type d\'événement est obligatoire');
-      expect(fixture.nativeElement.textContent).toContain('La date doit être dans le passé');
+      expect(tester.testElement).not.toContainText('La date est obligatoire');
+      expect(tester.testElement).not.toContainText('Le type d\'événement est obligatoire');
+      expect(tester.testElement).toContainText('La date doit être dans le passé');
+      expect(tester.testElement).not.toContainText('Le lieu est obligatoire');
     });
   });
 });

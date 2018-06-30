@@ -25,8 +25,8 @@ describe('WeddingEventService', () => {
   });
 
   it('should create wedding event', () => {
-    const expectedEvent: WeddingEventModel = { id: 42, date: '2018-03-20', type: 'DIVORCE' };
-    const command: WeddingEventCommand = { date: '2018-03-20', type: 'DIVORCE' };
+    const expectedEvent: WeddingEventModel = { id: 42, date: '2018-03-20', type: 'DIVORCE', location: 'FRANCE' };
+    const command: WeddingEventCommand = { date: '2018-03-20', type: 'DIVORCE', location: 'FRANCE' };
     httpTester.testPost(
       '/api/persons/1/wedding-events',
       command,

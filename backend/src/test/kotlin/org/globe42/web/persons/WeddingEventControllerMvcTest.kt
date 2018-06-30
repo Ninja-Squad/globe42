@@ -3,10 +3,7 @@ package org.globe42.web.persons
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockito_kotlin.whenever
 import org.globe42.dao.PersonDao
-import org.globe42.domain.Gender
-import org.globe42.domain.Person
-import org.globe42.domain.WeddingEvent
-import org.globe42.domain.WeddingEventType
+import org.globe42.domain.*
 import org.globe42.test.GlobeMvcTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -44,6 +41,7 @@ class WeddingEventControllerMvcTest {
         firstWedding = WeddingEvent(34L)
         firstWedding.date = LocalDate.of(2000, 2, 28)
         firstWedding.type = WeddingEventType.WEDDING
+        firstWedding.location = Location.ABROAD
         person.addWeddingEvent(firstWedding)
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
     }
@@ -56,6 +54,7 @@ class WeddingEventControllerMvcTest {
             .andExpect(jsonPath("$[0].id").value(34))
             .andExpect(jsonPath("$[0].date").value("2000-02-28"))
             .andExpect(jsonPath("$[0].type").value(WeddingEventType.WEDDING.name))
+            .andExpect(jsonPath("$[0].location").value(Location.ABROAD.name))
     }
 
     @Test
@@ -64,7 +63,8 @@ class WeddingEventControllerMvcTest {
         val date = LocalDate.of(2002, 3, 28)
         val command = WeddingEventCommandDTO(
             date,
-            WeddingEventType.DIVORCE
+            WeddingEventType.DIVORCE,
+            Location.FRANCE
         )
         whenever(mockPersonDao.flush()).then {
             person.getWeddingEvents().find { it.date == date }?.let { it.id = 876 }
