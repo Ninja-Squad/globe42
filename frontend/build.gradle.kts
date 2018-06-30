@@ -4,9 +4,9 @@ plugins {
 }
 
 node {
-    version = "8.11.1"
-    npmVersion = "6.0.0"
-    yarnVersion = "1.6.0"
+    version = "8.11.3"
+    npmVersion = "6.1.0"
+    yarnVersion = "1.7.0"
     download = true
 }
 
@@ -38,14 +38,14 @@ tasks {
         outputs.dir("dist")
     }
 
-    val yarn_run_test by getting {
+    val yarn_test by getting {
         dependsOn(prepare)
         inputs.dir("src")
         outputs.dir("coverage")
     }
 
     val test by creating {
-        dependsOn(yarn_run_test)
+        dependsOn(yarn_test)
     }
 
     val check by getting {
@@ -57,7 +57,7 @@ tasks {
     }
 
     val clean by getting {
-        dependsOn("cleanYarn_run_build")
-        dependsOn("cleanYarn_run_test")
+        dependsOn("cleanYarn_build")
+        dependsOn("cleanYarn_test")
     }
 }
