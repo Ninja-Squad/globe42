@@ -133,6 +133,10 @@ describe('NoteComponent', () => {
       tester.detectChanges();
 
       expect(tester.form).toBeTruthy();
+      // this is probably a regression in Jasmine v3
+      // as the matchers should already be available but aren't
+      // runs fine without it in Jasmine 2.99 but not in 3.1
+      jasmine.addMatchers(speculoosMatchers);
       expect(tester.textArea).toHaveValue('hello world');
       expect(tester.textArea.nativeElement.rows).toBe(2);
       expect(document.activeElement).toBe(tester.textArea.nativeElement);
