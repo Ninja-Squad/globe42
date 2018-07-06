@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs';
 import { HomeComponent } from './home.component';
@@ -29,7 +29,7 @@ describe('HomeComponent', () => {
     expect(button.textContent).toContain('Connexion');
   });
 
-  it('should listen to userEvents in ngOnInit', async(() => {
+  it('should listen to userEvents in ngOnInit', () => {
     const component = new HomeComponent(fakeUserService);
     component.ngOnInit();
 
@@ -37,8 +37,8 @@ describe('HomeComponent', () => {
 
     fakeUserService.userEvents.next(user);
 
-    fakeUserService.userEvents.subscribe(() => expect(component.user).toBe(user));
-  }));
+    expect(component.user).toBe(user);
+  });
 
   it('should unsubscribe on destroy', () => {
     const component = new HomeComponent(fakeUserService);

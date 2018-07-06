@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { TasksPageComponent } from './tasks-page.component';
 import { TaskModel } from '../models/task.model';
@@ -125,7 +125,7 @@ describe('TasksPageComponent', () => {
     expect(fixture.nativeElement.querySelector('#newTaskLink')).toBeFalsy();
   });
 
-  it('should navigate to other page when clicking page', async(() => {
+  it('should navigate to other page when clicking page', fakeAsync(() => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
@@ -138,10 +138,10 @@ describe('TasksPageComponent', () => {
     expect(page2Link.textContent).toContain('2');
     page2Link.click();
 
+    tick();
     fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(router.navigate).toHaveBeenCalledWith(['.'], {relativeTo: activatedRoute, queryParams: {page: '1'}});
-    });
+
+    expect(router.navigate).toHaveBeenCalledWith(['.'], {relativeTo: activatedRoute, queryParams: {page: '1'}});
   }));
 
   it('should assign a task and refresh', () => {

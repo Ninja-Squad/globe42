@@ -131,18 +131,16 @@ describe('PersonParticipationsComponent', () => {
       expect(fixture.nativeElement.querySelector('#activityType-HEALTH_WORKSHOP').checked).toBe(false);
     });
 
-    it('should trigger selection change', async(() => {
+    it('should trigger selection change', () => {
       const component = fixture.componentInstance;
       spyOn(component, 'selectItem');
 
       fixture.nativeElement.querySelector('#activityType-MEAL').click();
       fixture.detectChanges();
 
-      fixture.whenStable().then(() => {
-        expect(fixture.nativeElement.querySelector('#activityType-MEAL').checked).toBe(false);
-        const mealItem = component.items.filter(item => item.activityType === 'MEAL')[0];
-        expect(component.selectItem).toHaveBeenCalledWith(mealItem);
-      });
-    }));
+      expect(fixture.nativeElement.querySelector('#activityType-MEAL').checked).toBe(false);
+      const mealItem = component.items.filter(item => item.activityType === 'MEAL')[0];
+      expect(component.selectItem).toHaveBeenCalledWith(mealItem);
+    });
   });
 });

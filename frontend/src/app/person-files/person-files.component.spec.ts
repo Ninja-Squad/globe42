@@ -115,7 +115,7 @@ describe('PersonFilesComponent', () => {
   it('should upload a file', () => {
     // create component with 1 file
     const personFileService = TestBed.get(PersonFileService);
-    spyOn(personFileService, 'list').and.returnValues(of([files[0]]), of([files]));
+    spyOn(personFileService, 'list').and.returnValues(of([files[0]]), of(files));
 
     const fakeEvents = new Subject<any>();
     spyOn(personFileService, 'create').and.returnValues(fakeEvents);
@@ -167,10 +167,6 @@ describe('PersonFilesComponent', () => {
     fakeEvents.complete();
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.querySelectorAll('.file-item').length).toBe(2);
-    });
+    expect(fixture.nativeElement.querySelectorAll('.file-item').length).toBe(2);
   });
 });
