@@ -12,26 +12,30 @@ import { MembershipModel } from '../models/membership.model';
 import { MembershipService } from '../membership.service';
 
 describe('PersonLayoutComponent', () => {
-  const person = {
-    id: 42,
-    firstName: 'John',
-    lastName: 'Doe',
-    nickName: 'john',
-    mediationEnabled: true
-  } as PersonModel;
+  let person: PersonModel;
 
-  const activatedRoute = {
-    data: of({ person }),
-    snapshot: {}
-  };
+  beforeEach(async(() => {
+    person = {
+      id: 42,
+      firstName: 'John',
+      lastName: 'Doe',
+      nickName: 'john',
+      mediationEnabled: true
+    } as PersonModel;
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientTestingModule],
-    declarations: [PersonLayoutComponent, FullnamePipe],
-    providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute }
-    ]
-  })));
+    const activatedRoute = {
+      data: of({ person }),
+      snapshot: {}
+    };
+
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      declarations: [PersonLayoutComponent, FullnamePipe],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute }
+      ]
+    });
+  }));
 
   it('should display the person full name as title', () => {
     const fixture = TestBed.createComponent(PersonLayoutComponent);

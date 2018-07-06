@@ -119,7 +119,7 @@ describe('NoteComponent', () => {
     expect(tester.delete.disabled).toBe(true);
   });
 
-  it('should switch to edit mode and give the focus to the text area', () => {
+  it('should switch to edit mode and give the focus to the text area', async(() => {
     TestBed.overrideTemplate(
       TestComponent,
       '<gl-note [note]="note" [edited]="edited"></gl-note>'
@@ -133,15 +133,11 @@ describe('NoteComponent', () => {
       tester.detectChanges();
 
       expect(tester.form).toBeTruthy();
-      // this is probably a regression in Jasmine v3
-      // as the matchers should already be available but aren't
-      // runs fine without it in Jasmine 2.99 but not in 3.1
-      jasmine.addMatchers(speculoosMatchers);
       expect(tester.textArea).toHaveValue('hello world');
       expect(tester.textArea.nativeElement.rows).toBe(2);
       expect(document.activeElement).toBe(tester.textArea.nativeElement);
     });
-  });
+  }));
 
   it('should display a textarea with the right number of rows', () => {
     TestBed.overrideTemplate(

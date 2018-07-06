@@ -20,79 +20,85 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of, throwError } from 'rxjs';
 
 describe('PersonComponent', () => {
-  const cityModel: CityModel = {
-    code: 42000,
-    city: 'SAINT-ETIENNE'
-  };
-  const person: PersonModel = {
-    id: 0,
-    firstName: 'John',
-    lastName: 'Doe',
-    birthName: 'Abba',
-    nickName: 'john',
-    mediationCode: 'D1',
-    birthDate: '1980-01-01',
-    address: 'Chemin de la gare',
-    city: cityModel,
-    email: 'john@mail.com',
-    entryDate: '2016-12-01',
-    gender: 'MALE',
-    phoneNumber: '06 12 34 56 78',
-    mediationEnabled: true,
-    firstMediationAppointmentDate: '2017-12-01',
-    maritalStatus: 'MARRIED',
-    spouse: {
-      id: 43,
-      firstName: 'Jane',
+
+  let person: PersonModel;
+  let activatedRoute: ActivatedRoute;
+
+  beforeEach(async(() => {
+    const cityModel: CityModel = {
+      code: 42000,
+      city: 'SAINT-ETIENNE'
+    };
+    person = {
+      id: 0,
+      firstName: 'John',
       lastName: 'Doe',
-      nickName: null,
-      mediationCode: 'D2'
-    },
-    housing: 'F6',
-    housingSpace: 80,
-    hostName: 'Bruno Mala',
-    fiscalStatus: 'TAXABLE',
-    fiscalNumber: '0123456789012',
-    fiscalStatusUpToDate: true,
-    healthCareCoverage: 'AME',
-    healthCareCoverageStartDate: '2017-01-01',
-    healthInsurance: 'CMUC',
-    healthInsuranceStartDate: '2017-02-02',
-    accompanying: 'Paul',
-    socialSecurityNumber: '277126912340454',
-    cafNumber: '123765',
-    nationality: {
-      id: 'FRA',
-      name: 'France'
-    },
-    deleted: false
-  };
+      birthName: 'Abba',
+      nickName: 'john',
+      mediationCode: 'D1',
+      birthDate: '1980-01-01',
+      address: 'Chemin de la gare',
+      city: cityModel,
+      email: 'john@mail.com',
+      entryDate: '2016-12-01',
+      gender: 'MALE',
+      phoneNumber: '06 12 34 56 78',
+      mediationEnabled: true,
+      firstMediationAppointmentDate: '2017-12-01',
+      maritalStatus: 'MARRIED',
+      spouse: {
+        id: 43,
+        firstName: 'Jane',
+        lastName: 'Doe',
+        nickName: null,
+        mediationCode: 'D2'
+      },
+      housing: 'F6',
+      housingSpace: 80,
+      hostName: 'Bruno Mala',
+      fiscalStatus: 'TAXABLE',
+      fiscalNumber: '0123456789012',
+      fiscalStatusUpToDate: true,
+      healthCareCoverage: 'AME',
+      healthCareCoverageStartDate: '2017-01-01',
+      healthInsurance: 'CMUC',
+      healthInsuranceStartDate: '2017-02-02',
+      accompanying: 'Paul',
+      socialSecurityNumber: '277126912340454',
+      cafNumber: '123765',
+      nationality: {
+        id: 'FRA',
+        name: 'France'
+      },
+      deleted: false
+    };
 
-  const activatedRoute: any = {
-    parent: {
-      data: of({ person })
-    }
-  };
+    activatedRoute = {
+      parent: {
+        data: of({ person })
+      }
+    } as any;
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [ RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot() ],
-    declarations: [
-      PersonComponent,
-      DisplayGenderPipe,
-      DisplayMaritalStatusPipe,
-      DisplayCityPipe,
-      DisplayFiscalStatusPipe,
-      DisplayHousingPipe,
-      DisplayHealthCareCoveragePipe,
-      DisplayHealthInsurancePipe,
-      FullnamePipe
-    ],
-    providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: LOCALE_ID, useValue: 'fr-FR'}
-    ],
-    schemas: [NO_ERRORS_SCHEMA]
-  })));
+    TestBed.configureTestingModule({
+      imports: [ RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot() ],
+      declarations: [
+        PersonComponent,
+        DisplayGenderPipe,
+        DisplayMaritalStatusPipe,
+        DisplayCityPipe,
+        DisplayFiscalStatusPipe,
+        DisplayHousingPipe,
+        DisplayHealthCareCoveragePipe,
+        DisplayHealthInsurancePipe,
+        FullnamePipe
+      ],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: LOCALE_ID, useValue: 'fr-FR'}
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    });
+  }));
 
   it('should have a maps URL', () => {
     const component = new PersonComponent(activatedRoute, null, null, null);
