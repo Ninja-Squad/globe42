@@ -497,7 +497,7 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-app-root-path@^2.0.1:
+app-root-path@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-2.1.0.tgz#98bf6599327ecea199309866e8140368fd2e646a"
 
@@ -1380,11 +1380,11 @@ codecov@3.0.4:
     request "^2.87.0"
     urlgrey "^0.4.4"
 
-codelyzer@4.4.2:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-4.4.2.tgz#af11fed6ddf9362ed5b174495467fb7315306fb1"
+codelyzer@4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-4.4.4.tgz#29b7dbb51ba9ecc45c7300d61280a6564765d402"
   dependencies:
-    app-root-path "^2.0.1"
+    app-root-path "^2.1.0"
     css-selector-tokenizer "^0.7.0"
     cssauron "^1.4.0"
     semver-dsl "^1.0.1"
