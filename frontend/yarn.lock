@@ -9,15 +9,22 @@
     "@angular-devkit/core" "0.7.2"
     rxjs "^6.0.0"
 
-"@angular-devkit/build-angular@0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-0.7.2.tgz#066f6475eb483542e36cadfbbff1a7913ecfcfb1"
+"@angular-devkit/architect@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.7.4.tgz#c6c65bcf88f03a44fc393db822eda7467e43a2b4"
   dependencies:
-    "@angular-devkit/architect" "0.7.2"
-    "@angular-devkit/build-optimizer" "0.7.2"
-    "@angular-devkit/build-webpack" "0.7.2"
-    "@angular-devkit/core" "0.7.2"
-    "@ngtools/webpack" "6.1.2"
+    "@angular-devkit/core" "0.7.4"
+    rxjs "^6.0.0"
+
+"@angular-devkit/build-angular@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-0.7.4.tgz#490c0d7f0a5c303b3c06248d823aa5b89960def1"
+  dependencies:
+    "@angular-devkit/architect" "0.7.4"
+    "@angular-devkit/build-optimizer" "0.7.4"
+    "@angular-devkit/build-webpack" "0.7.4"
+    "@angular-devkit/core" "0.7.4"
+    "@ngtools/webpack" "6.1.4"
     ajv "~6.4.0"
     autoprefixer "^8.4.1"
     circular-dependency-plugin "^5.0.2"
@@ -29,9 +36,10 @@
     istanbul "^0.4.5"
     istanbul-instrumenter-loader "^3.0.1"
     karma-source-map-support "^1.2.0"
-    less "^3.0.4"
+    less "^3.7.1"
     less-loader "^4.1.0"
     license-webpack-plugin "^1.3.1"
+    loader-utils "^1.1.0"
     mini-css-extract-plugin "~0.4.0"
     minimatch "^3.0.4"
     opn "^5.1.0"
@@ -44,6 +52,7 @@
     raw-loader "^0.5.1"
     rxjs "^6.0.0"
     sass-loader "~6.0.7"
+    semver "^5.5.0"
     source-map-loader "^0.2.3"
     source-map-support "^0.5.0"
     stats-webpack-plugin "^0.6.2"
@@ -60,28 +69,37 @@
     webpack-sources "^1.1.0"
     webpack-subresource-integrity "^1.1.0-rc.4"
   optionalDependencies:
-    node-sass "^4.9.1"
+    node-sass "^4.9.3"
 
-"@angular-devkit/build-optimizer@0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-optimizer/-/build-optimizer-0.7.2.tgz#c7cf86e44fa541c0e1c2133cb5be9032c3c46445"
+"@angular-devkit/build-optimizer@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-optimizer/-/build-optimizer-0.7.4.tgz#11c35d339f12218f9c8b718a900325788eb19d42"
   dependencies:
     loader-utils "^1.1.0"
     source-map "^0.5.6"
     typescript "~2.9.1"
     webpack-sources "^1.1.0"
 
-"@angular-devkit/build-webpack@0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.7.2.tgz#a10a4ea1ed5f91a281ec3df866fb9ae51842699c"
+"@angular-devkit/build-webpack@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.7.4.tgz#847e3e81d69bb3dbd63b92f400649a1238edb1c7"
   dependencies:
-    "@angular-devkit/architect" "0.7.2"
-    "@angular-devkit/core" "0.7.2"
+    "@angular-devkit/architect" "0.7.4"
+    "@angular-devkit/core" "0.7.4"
     rxjs "^6.0.0"
 
 "@angular-devkit/core@0.7.2":
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-0.7.2.tgz#f86c65c70daa8fccf67f4f5767a4ade7a5975caf"
+  dependencies:
+    ajv "~6.4.0"
+    chokidar "^2.0.3"
+    rxjs "^6.0.0"
+    source-map "^0.5.6"
+
+"@angular-devkit/core@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-0.7.4.tgz#707ac5a8b534b5768c334ff8d35b0ec754938c58"
   dependencies:
     ajv "~6.4.0"
     chokidar "^2.0.3"
@@ -169,11 +187,11 @@
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-2.2.2.tgz#07c64badd48b563140eb5a6327b5516bf2226834"
 
-"@ngtools/webpack@6.1.2":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-6.1.2.tgz#83d5af4af0e6186a35f83a48b10a7549c39b3236"
+"@ngtools/webpack@6.1.4":
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-6.1.4.tgz#dab670b4f03a88afd07ed15e1b5f27f16c3be3a8"
   dependencies:
-    "@angular-devkit/core" "0.7.2"
+    "@angular-devkit/core" "0.7.4"
     rxjs "^6.0.0"
     tree-kill "^1.0.0"
     webpack-sources "^1.1.0"
@@ -1362,6 +1380,10 @@ clone-deep@^2.0.1:
 clone@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.1.tgz#d217d1e961118e3ac9a4b8bba3285553bf647cdb"
+
+clone@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
 
 co@^4.6.0:
   version "4.6.0"
@@ -3867,9 +3889,11 @@ less-loader@^4.1.0:
     loader-utils "^1.1.0"
     pify "^3.0.0"
 
-less@^3.0.4:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/less/-/less-3.8.0.tgz#44785e40c23841c15ba3be741d36bd2775dd0596"
+less@^3.7.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/less/-/less-3.8.1.tgz#f31758598ef5a1930dd4caefa9e4340641e71e1d"
+  dependencies:
+    clone "^2.1.2"
   optionalDependencies:
     errno "^0.1.1"
     graceful-fs "^4.1.2"
@@ -4423,7 +4447,7 @@ node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
 
-node-gyp@^3.3.1, node-gyp@^3.6.2:
+node-gyp@^3.6.2:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-3.7.0.tgz#789478e8f6c45e277aa014f3e28f958f286f9203"
   dependencies:
@@ -4435,6 +4459,23 @@ node-gyp@^3.3.1, node-gyp@^3.6.2:
     npmlog "0 || 1 || 2 || 3 || 4"
     osenv "0"
     request ">=2.9.0 <2.82.0"
+    rimraf "2"
+    semver "~5.3.0"
+    tar "^2.0.0"
+    which "1"
+
+node-gyp@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-3.8.0.tgz#540304261c330e80d0d5edce253a68cb3964218c"
+  dependencies:
+    fstream "^1.0.0"
+    glob "^7.0.3"
+    graceful-fs "^4.1.2"
+    mkdirp "^0.5.0"
+    nopt "2 || 3"
+    npmlog "0 || 1 || 2 || 3 || 4"
+    osenv "0"
+    request "^2.87.0"
     rimraf "2"
     semver "~5.3.0"
     tar "^2.0.0"
@@ -4483,9 +4524,9 @@ node-pre-gyp@^0.10.0:
     semver "^5.3.0"
     tar "^4"
 
-node-sass@^4.9.1:
-  version "4.9.2"
-  resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.9.2.tgz#5e63fe6bd0f2ae3ac9d6c14ede8620e2b8bdb437"
+node-sass@^4.9.3:
+  version "4.9.3"
+  resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.9.3.tgz#f407cf3d66f78308bb1e346b24fa428703196224"
   dependencies:
     async-foreach "^0.1.3"
     chalk "^1.1.1"
@@ -4500,7 +4541,7 @@ node-sass@^4.9.1:
     meow "^3.7.0"
     mkdirp "^0.5.1"
     nan "^2.10.0"
-    node-gyp "^3.3.1"
+    node-gyp "^3.8.0"
     npmlog "^4.0.0"
     request "2.87.0"
     sass-graph "^2.2.4"
