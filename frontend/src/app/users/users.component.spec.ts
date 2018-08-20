@@ -26,7 +26,7 @@ describe('UsersComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModalModule.forRoot()],
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModalModule],
       declarations: [UsersComponent],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });

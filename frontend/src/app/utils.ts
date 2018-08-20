@@ -1,5 +1,21 @@
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { padNumber, toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+
+export function toInteger(value: any): number {
+  return parseInt(`${value}`, 10);
+}
+
+export function isNumber(value: any): value is number {
+  return !isNaN(toInteger(value));
+}
+
+export function padNumber(value: number) {
+  if (isNumber(value)) {
+    return `0${value}`.slice(-2);
+  } else {
+    return '';
+  }
+}
+
 
 /**
  * Creates a sorted copy of an array, by extracting a value from each element using the given extractor,

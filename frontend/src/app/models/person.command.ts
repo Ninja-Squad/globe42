@@ -38,5 +38,5 @@ export interface PersonCommand {
   visa: Visa;
   residencePermit: ResidencePermit;
   residencePermitDepositDate: string;
-  residencePermitRenewalDate: string
+  residencePermitRenewalDate: string;
 }

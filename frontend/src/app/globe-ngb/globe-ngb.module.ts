@@ -1,5 +1,3 @@
-/* tslint:disable:no-use-before-declare */
-
 import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   NgbAlertModule,
@@ -53,32 +51,13 @@ const NGB_MODULES = [
 export class GlobeNgbModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: GlobeNgbRootModule,
-      providers: []
+      ngModule: GlobeNgbModule,
+      providers: [
+        { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
+        { provide: NgbDateAdapter, useClass: DateStringAdapterService },
+        { provide: NgbDatepickerConfig, useClass: GlobeNgbDatepickerConfig }
+      ]
     };
   }
 }
-
-const NGB_ROOT_MODULES = [
-  NgbModalModule.forRoot(),
-  NgbDatepickerModule.forRoot(),
-  NgbDropdownModule.forRoot(),
-  NgbAlertModule.forRoot(),
-  NgbTooltipModule.forRoot(),
-  NgbTypeaheadModule.forRoot(),
-  NgbButtonsModule.forRoot(),
-  NgbPaginationModule.forRoot(),
-  NgbProgressbarModule.forRoot()
-];
-
-@NgModule({
-  imports: [...NGB_ROOT_MODULES, GlobeNgbModule],
-  exports: [GlobeNgbModule],
-  providers: [
-    { provide: NgbDateParserFormatter, useClass: FrenchDateParserFormatterService },
-    { provide: NgbDateAdapter, useClass: DateStringAdapterService },
-    { provide: NgbDatepickerConfig, useClass: GlobeNgbDatepickerConfig }
-  ]
-})
-export class GlobeNgbRootModule {}
 
