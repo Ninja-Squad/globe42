@@ -1,6 +1,6 @@
 package org.globe42.web.tasks
 
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.globe42.dao.TaskCategoryDao
 import org.globe42.domain.TaskCategory

@@ -1,6 +1,6 @@
 package org.globe42.web.tasks
 
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.SpentTimeDao
 import org.globe42.domain.SpentTimeStatistic
 import org.globe42.domain.TaskCategory

@@ -1,6 +1,6 @@
 package org.globe42.web.persons
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PersonDao
 import org.globe42.domain.Person

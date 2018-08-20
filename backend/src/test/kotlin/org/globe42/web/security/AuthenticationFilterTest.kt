@@ -1,8 +1,8 @@
 package org.globe42.web.security
 
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.impl.DefaultClaims
 import org.assertj.core.api.Assertions.assertThat

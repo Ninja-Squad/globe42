@@ -1,7 +1,7 @@
 package org.globe42.web.persons
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.PersonDao
 import org.globe42.domain.NetworkMember
 import org.globe42.domain.NetworkMemberType

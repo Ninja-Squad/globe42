@@ -1,6 +1,6 @@
 package org.globe42.web.security
 
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.UserDao
 import org.globe42.web.exception.ForbiddenException
