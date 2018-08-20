@@ -1,6 +1,6 @@
 package org.globe42.web.activities
 
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.PersonDao
 import org.globe42.domain.ActivityType
 import org.globe42.domain.Gender

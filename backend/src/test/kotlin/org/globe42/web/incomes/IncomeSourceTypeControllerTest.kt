@@ -1,8 +1,8 @@
 package org.globe42.web.incomes
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSourceType

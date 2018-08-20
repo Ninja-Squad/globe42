@@ -1,7 +1,7 @@
 package org.globe42.web.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.UserDao
 import org.globe42.test.GlobeMvcTest
 import org.junit.jupiter.api.Test

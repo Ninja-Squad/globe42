@@ -1,8 +1,8 @@
 package org.globe42.web.charges
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.ChargeCategoryDao
 import org.globe42.dao.ChargeTypeDao
 import org.globe42.domain.ChargeCategory

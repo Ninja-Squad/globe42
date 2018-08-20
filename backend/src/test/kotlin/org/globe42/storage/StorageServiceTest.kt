@@ -7,7 +7,7 @@ import com.google.cloud.storage.Blob
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.common.io.ByteStreams
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.test.BaseTest
 import org.junit.jupiter.api.BeforeEach

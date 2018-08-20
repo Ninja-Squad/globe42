@@ -1,6 +1,6 @@
 package org.globe42.web.incomes
 
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSourceType
 import org.globe42.test.GlobeMvcTest
