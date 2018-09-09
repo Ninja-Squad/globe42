@@ -11,7 +11,7 @@ node {
 }
 
 tasks {
-    val npmInstall by getting {
+    getByName("npmInstall") {
         enabled = false
     }
 
@@ -48,15 +48,15 @@ tasks {
         dependsOn(yarn_test)
     }
 
-    val check by getting {
+    getByName("check") {
         dependsOn(test)
     }
 
-    val assemble by getting {
+    getByName("assemble") {
         dependsOn(yarn_build)
     }
 
-    val clean by getting {
+    getByName("clean") {
         dependsOn("cleanYarn_build")
         dependsOn("cleanYarn_test")
     }

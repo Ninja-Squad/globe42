@@ -55,7 +55,7 @@ tasks {
         destinationDir = file("$buildDir/buildInfo")
     }
 
-    val bootJar by getting(BootJar::class) {
+    getByName<BootJar>("bootJar") {
         archiveName = "globe42.jar"
         dependsOn(":frontend:assemble")
         dependsOn(buildInfo)
@@ -70,17 +70,17 @@ tasks {
         }
     }
 
-    val bootRun by getting(BootRun::class) {
+    getByName<BootRun>("bootRun") {
         args("--spring.profiles.active=demo")
         args("--globe42.secretKey=QMwbcwa19VV02Oy5T7LSWyV+/wZrOsRRfhCR6TkapsY=")
         args("--globe42.googleCloudStorageCredentialsPath=${rootProject.file("secrets/google-cloud-storage-dev.json")}")
     }
 
-    val test by getting(Test::class) {
+    getByName<Test>("test") {
         useJUnitPlatform()
     }
 
-    val jacocoTestReport by getting(JacocoReport::class) {
+    getByName<JacocoReport>("jacocoTestReport") {
         reports {
             xml.setEnabled(true)
             html.setEnabled(true)
@@ -106,7 +106,7 @@ tasks {
     }
 }
 
-ext["flyway.version"] = "4.2.0" // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
+extra["flyway.version"] = "4.2.0" // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
