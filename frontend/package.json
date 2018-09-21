@@ -41,7 +41,7 @@
     "@angular/language-service": "6.1.7",
     "@types/jasmine": "2.8.8",
     "@types/jasminewd2": "2.0.3",
-    "@types/node": "8.10.29",
+    "@types/node": "8.10.30",
     "bundlesize": "0.17.0",
     "codecov": "3.1.0",
     "codelyzer": "4.4.4",
