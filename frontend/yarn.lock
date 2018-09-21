@@ -246,9 +246,9 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@ng-bootstrap/ng-bootstrap@3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-3.2.0.tgz#d44b5ed18ad6f489125074b0f6099668cdce841d"
+"@ng-bootstrap/ng-bootstrap@3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-3.2.1.tgz#c0429a57cabb6cb2846e80455f7d58927fa9332c"
   dependencies:
     tslib "^1.9.0"
 
