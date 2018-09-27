@@ -280,9 +280,9 @@
     semver "^5.3.0"
     semver-intersect "^1.1.2"
 
-"@types/chart.js@2.7.33":
-  version "2.7.33"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.33.tgz#d19dc5fbe214e32e762c061eb99d59e40e24860b"
+"@types/chart.js@2.7.36":
+  version "2.7.36"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.36.tgz#561fee60e09acabc25c6414d36554f80dcf33dca"
 
 "@types/jasmine@*", "@types/jasmine@2.8.8":
   version "2.8.8"
