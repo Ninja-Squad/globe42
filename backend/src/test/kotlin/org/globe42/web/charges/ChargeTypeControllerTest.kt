@@ -9,7 +9,7 @@ import org.globe42.dao.ChargeCategoryDao
 import org.globe42.dao.ChargeTypeDao
 import org.globe42.domain.ChargeCategory
 import org.globe42.domain.ChargeType
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +25,8 @@ import java.util.*
  * Unit tests for [ChargeTypeController]
  * @author JB Nizet
  */
-class ChargeTypeControllerTest : BaseTest() {
+@Mockito
+class ChargeTypeControllerTest {
     @Mock
     private lateinit var mockChargeTypeDao: ChargeTypeDao
 

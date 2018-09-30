@@ -9,7 +9,7 @@ import com.google.cloud.storage.Storage
 import com.google.common.io.ByteStreams
 import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -24,7 +24,8 @@ import java.time.Instant
  * Unit tests for [StorageService]
  * @author JB Nizet
  */
-class StorageServiceTest : BaseTest() {
+@Mockito
+class StorageServiceTest {
     @Mock
     private lateinit var mockStorage: Storage
 

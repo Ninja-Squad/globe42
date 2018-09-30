@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.globe42.dao.PostalCityDao
 import org.globe42.domain.PostalCity
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -15,7 +15,8 @@ import java.util.*
  * Unit tests for [PostalCityController]
  * @author JB Nizet
  */
-class PostalCityControllerTest : BaseTest() {
+@Mockito
+class PostalCityControllerTest {
     @Mock
     private lateinit var mockPostalCityDao: PostalCityDao
 

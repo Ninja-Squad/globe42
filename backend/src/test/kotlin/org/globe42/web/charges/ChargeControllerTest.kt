@@ -13,7 +13,7 @@ import org.globe42.domain.Charge
 import org.globe42.domain.ChargeCategory
 import org.globe42.domain.ChargeType
 import org.globe42.domain.Person
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
@@ -27,7 +27,8 @@ import java.util.*
  * Unit tests for [ChargeController]
  * @author JB Nizet
  */
-class ChargeControllerTest : BaseTest() {
+@Mockito
+class ChargeControllerTest {
 
     @Mock
     private lateinit var mockPersonDao: PersonDao

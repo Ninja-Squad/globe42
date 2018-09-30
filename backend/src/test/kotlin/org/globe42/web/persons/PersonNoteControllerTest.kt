@@ -9,7 +9,7 @@ import org.globe42.domain.Gender
 import org.globe42.domain.Note
 import org.globe42.domain.Person
 import org.globe42.domain.User
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
 import org.junit.jupiter.api.BeforeEach
@@ -24,7 +24,8 @@ import java.util.*
  * Unit tests for [PersonNoteController]
  * @author JB Nizet
  */
-class PersonNoteControllerTest : BaseTest() {
+@Mockito
+class PersonNoteControllerTest {
     @Mock
     private lateinit var mockPersonDao: PersonDao
 
@@ -90,8 +91,8 @@ class PersonNoteControllerTest : BaseTest() {
     @Test
     fun `should create`() {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
-        whenever(mockPersonDao.flush()).thenAnswer {
-            val addedNote = person.getNotes().find({ it.text == "test3" })
+        whenever(mockPersonDao.flush()).thenAnswer { _ ->
+            val addedNote = person.getNotes().find { it.text == "test3" }
             addedNote?.let { it.id = 3L }
             Unit
         }

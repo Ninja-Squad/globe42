@@ -8,7 +8,7 @@ import org.globe42.dao.PersonDao
 import org.globe42.domain.NetworkMember
 import org.globe42.domain.NetworkMemberType
 import org.globe42.domain.Person
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,7 +20,8 @@ import java.util.*
  * Unit tests for [NetworkMemberController]
  * @author JB Nizet
  */
-class NetworkMemberControllerTest : BaseTest() {
+@Mockito
+class NetworkMemberControllerTest {
     @Mock
     private lateinit var mockPersonDao: PersonDao
 

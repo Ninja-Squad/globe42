@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
@@ -21,7 +21,8 @@ import java.util.*
  * Unit tests for [MembershipController]
  * @author JB Nizet
  */
-class MembershipControllerTest : BaseTest() {
+@Mockito
+class MembershipControllerTest {
     @Mock
     lateinit var mockMembershipDao: MembershipDao
 

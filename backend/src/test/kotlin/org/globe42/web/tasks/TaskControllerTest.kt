@@ -9,7 +9,7 @@ import org.globe42.dao.TaskCategoryDao
 import org.globe42.dao.TaskDao
 import org.globe42.dao.UserDao
 import org.globe42.domain.*
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
@@ -29,7 +29,8 @@ import java.util.*
  * Unit tests for [TaskController]
  * @author JB Nizet
  */
-class TaskControllerTest : BaseTest() {
+@Mockito
+class TaskControllerTest {
 
     @Mock
     private lateinit var mockTaskDao: TaskDao

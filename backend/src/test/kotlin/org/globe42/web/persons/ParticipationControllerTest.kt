@@ -7,7 +7,7 @@ import org.globe42.domain.ActivityType
 import org.globe42.domain.Gender
 import org.globe42.domain.Participation
 import org.globe42.domain.Person
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -18,7 +18,8 @@ import java.util.*
  * Unit tests for [ParticipationController]
  * @author JB Nizet
  */
-class ParticipationControllerTest : BaseTest() {
+@Mockito
+class ParticipationControllerTest {
     @Mock
     private lateinit var mockPersonDao: PersonDao
 

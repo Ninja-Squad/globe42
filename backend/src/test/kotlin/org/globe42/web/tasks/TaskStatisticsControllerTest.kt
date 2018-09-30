@@ -6,7 +6,7 @@ import org.globe42.dao.SpentTimeDao
 import org.globe42.domain.SpentTimeStatistic
 import org.globe42.domain.TaskCategory
 import org.globe42.domain.User
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -15,7 +15,8 @@ import org.mockito.Mock
  * Unit tests for [TaskStatisticsController]
  * @author JB Nizet
  */
-class TaskStatisticsControllerTest : BaseTest() {
+@Mockito
+class TaskStatisticsControllerTest {
 
     @Mock
     private lateinit var mockSpentTimeDao: SpentTimeDao
