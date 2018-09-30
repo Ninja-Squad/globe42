@@ -9,7 +9,7 @@ import org.globe42.dao.IncomeSourceDao
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSource
 import org.globe42.domain.IncomeSourceType
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +25,8 @@ import java.util.*
  * Unit tests for [IncomeSourceController]
  * @author JB Nizet
  */
-class IncomeSourceControllerTest : BaseTest() {
+@Mockito
+class IncomeSourceControllerTest {
     @Mock
     private lateinit var mockIncomeSourceDao: IncomeSourceDao
 

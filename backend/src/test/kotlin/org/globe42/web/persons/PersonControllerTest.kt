@@ -10,7 +10,7 @@ import org.globe42.dao.CountryDao
 import org.globe42.dao.CoupleDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
@@ -27,7 +27,8 @@ import java.util.*
  * Unit tests for PersonController
  * @author JB Nizet
  */
-class PersonControllerTest : BaseTest() {
+@Mockito
+class PersonControllerTest {
 
     @Mock
     private lateinit var mockPersonDao: PersonDao

@@ -13,7 +13,7 @@ import org.globe42.domain.Income
 import org.globe42.domain.IncomeSource
 import org.globe42.domain.IncomeSourceType
 import org.globe42.domain.Person
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
@@ -27,7 +27,8 @@ import java.util.*
  * Unit tests for [IncomeController]
  * @author JB Nizet
  */
-class IncomeControllerTest : BaseTest() {
+@Mockito
+class IncomeControllerTest {
 
     @Mock
     private lateinit var mockPersonDao: PersonDao

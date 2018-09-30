@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions
 import org.globe42.dao.UserDao
 import org.globe42.domain.User
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.ForbiddenException
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -14,7 +14,8 @@ import org.mockito.Mock
  * Unit tests for [AdminOnlyAspect]
  * @author JB Nizet
  */
-class AdminOnlyAspectTest : BaseTest() {
+@Mockito
+class AdminOnlyAspectTest {
     @Mock
     private lateinit var mockCurrentUser: CurrentUser
 

@@ -7,7 +7,7 @@ import org.globe42.domain.Person
 import org.globe42.storage.FileDTO
 import org.globe42.storage.ReadableFile
 import org.globe42.storage.StorageService
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -26,7 +26,8 @@ import java.util.*
  * Unit tests for [PersonFileController]
  * @author JB Nizet
  */
-class PersonFileControllerTest : BaseTest() {
+@Mockito
+class PersonFileControllerTest {
     @Mock
     private lateinit var mockPersonDao: PersonDao
 

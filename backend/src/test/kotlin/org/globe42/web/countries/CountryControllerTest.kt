@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.globe42.dao.CountryDao
 import org.globe42.domain.Country
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -13,7 +13,8 @@ import org.mockito.Mock
  * Unit test for [CountryController]
  * @author JB Nizet
  */
-class CountryControllerTest : BaseTest() {
+@Mockito
+class CountryControllerTest {
 
     @Mock
     private lateinit var mockCountryDao: CountryDao

@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.UserDao
 import org.globe42.domain.User
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.UnauthorizedException
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -16,7 +16,8 @@ import java.util.*
  * Unit tests for AuthenticationController
  * @author JB Nizet
  */
-class AuthenticationControllerTest : BaseTest() {
+@Mockito
+class AuthenticationControllerTest {
     @Mock
     private lateinit var mockUserDao: UserDao
 

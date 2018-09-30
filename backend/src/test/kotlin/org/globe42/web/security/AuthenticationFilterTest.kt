@@ -7,7 +7,7 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.impl.DefaultClaims
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.UserDao
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletRequest
  * Unit tests for [AuthenticationFilter]
  * @author JB Nizet
  */
-class AuthenticationFilterTest : BaseTest() {
+@Mockito
+class AuthenticationFilterTest {
 
     @Spy
     private val currentUser = CurrentUser()

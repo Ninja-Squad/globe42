@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSourceType
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.test.thenReturnModifiedFirstArgument
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,7 +20,8 @@ import java.util.*
  * Unit tests for [IncomeSourceTypeController]
  * @author JB Nizet
  */
-class IncomeSourceTypeControllerTest : BaseTest() {
+@Mockito
+class IncomeSourceTypeControllerTest {
 
     @Mock
     private lateinit var mockIncomeSourceTypeDao: IncomeSourceTypeDao

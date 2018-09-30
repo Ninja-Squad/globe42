@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.ChargeCategoryDao
 import org.globe42.domain.ChargeCategory
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.test.thenReturnModifiedFirstArgument
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,7 +20,8 @@ import java.util.*
  * Unit tests for [ChargeCategoryController]
  * @author JB Nizet
  */
-class ChargeCategoryControllerTest : BaseTest() {
+@Mockito
+class ChargeCategoryControllerTest {
 
     @Mock
     private lateinit var mockChargeCategoryDao: ChargeCategoryDao

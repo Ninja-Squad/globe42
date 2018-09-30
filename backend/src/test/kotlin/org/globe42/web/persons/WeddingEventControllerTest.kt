@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -16,7 +16,8 @@ import java.util.*
  * Unit tests for [WeddingEventController]
  * @author JB Nizet
  */
-class WeddingEventControllerTest : BaseTest() {
+@Mockito
+class WeddingEventControllerTest {
     @Mock
     private lateinit var mockPersonDao: PersonDao
 

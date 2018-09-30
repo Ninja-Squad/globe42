@@ -128,6 +128,9 @@ dependencies {
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1")
+    testImplementation("org.mockito:mockito-junit-jupiter:2.22.0")
+
+    println(project.extra.properties)
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

@@ -7,7 +7,7 @@ import org.globe42.dao.PersonDao
 import org.globe42.domain.Gender
 import org.globe42.domain.PerUnitRevenueInformation
 import org.globe42.domain.Person
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -19,7 +19,8 @@ import java.util.*
  * Unit tests for [PerUnitRevenueController]
  * @author JB Nizet
  */
-class PerUnitRevenueControllerTest: BaseTest() {
+@Mockito
+class PerUnitRevenueControllerTest {
 
     @Mock
     private lateinit var mockPersonDao: PersonDao

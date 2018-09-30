@@ -8,7 +8,7 @@ import org.globe42.domain.Child
 import org.globe42.domain.Family
 import org.globe42.domain.Location
 import org.globe42.domain.Person
-import org.globe42.test.BaseTest
+import org.globe42.test.Mockito
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -22,7 +22,8 @@ import java.util.*
  * Unit tests for [FamilyController]
  * @author JB Nizet
  */
-class FamilyControllerTest : BaseTest() {
+@Mockito
+class FamilyControllerTest {
     @Mock
     private lateinit var mockPersonDao: PersonDao
 
