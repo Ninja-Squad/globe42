@@ -19,7 +19,7 @@ import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.p
 import { DisplayHealthInsurancePipe } from '../display-health-insurance.pipe';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
 import { ComponentTester, TestButton, TestInput, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
@@ -508,7 +508,11 @@ describe('PersonEditComponent', () => {
       const tester = new PersonEditTester();
 
       // fake typeahead results
-      tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => of([cityModel]);
+      tester.componentInstance.cityTypeahead.searcher =
+        (text: Observable<string>) => text.pipe(
+          filter(v => !!v),
+          map(() => [cityModel])
+        );
       tester.detectChanges();
 
       expect(tester.firstName).toHaveValue('');
