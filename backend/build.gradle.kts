@@ -10,12 +10,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.2")
+        classpath("org.postgresql:postgresql:42.2.5")
     }
 }
 
 plugins {
-    val kotlinVersion = "1.2.60"
+    val kotlinVersion = "1.2.71"
 
     java
     jacoco
@@ -23,10 +23,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.0.4.RELEASE"
+    id("org.springframework.boot") version "2.0.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
-    id("org.flywaydb.flyway") version "5.0.3"
-    id("com.gorylenko.gradle-git-properties") version "1.5.1"
+    id("org.flywaydb.flyway") version "5.2.0"
+    id("com.gorylenko.gradle-git-properties") version "1.5.2"
     id("org.jetbrains.dokka") version "0.9.17"
 }
 
@@ -113,7 +113,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("com.google.cloud:google-cloud-storage:1.40.0")
+    implementation("com.google.cloud:google-cloud-storage:1.49.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -127,10 +127,8 @@ dependencies {
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1")
-    testImplementation("org.mockito:mockito-junit-jupiter:2.22.0")
-
-    println(project.extra.properties)
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3")
+    testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
