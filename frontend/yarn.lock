@@ -341,10 +341,15 @@
   resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.36.tgz#561fee60e09acabc25c6414d36554f80dcf33dca"
   integrity sha512-J92LO6oqKMIQ5WRPSdRHiZffpfZVXVpHgFSR8TpPlwi+C0MfaA9aNVMKPcUTZgoM26JrvqkRKQWEm+XPoPXmBA==
 
-"@types/jasmine@*", "@types/jasmine@2.8.8":
+"@types/jasmine@*":
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-2.8.8.tgz#bf53a7d193ea8b03867a38bfdb4fbb0e0bf066c9"
   integrity sha512-OJSUxLaxXsjjhob2DBzqzgrkLmukM3+JMpRp0r0E4HTdT1nwDCWhaswjYxazPij6uOdzHCJfNbDjmQ1/rnNbCg==
+
+"@types/jasmine@2.8.9":
+  version "2.8.9"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-2.8.9.tgz#e028c891e8551fdf6de905d959581fc4fa0b5509"
+  integrity sha512-8dPZwjosElZOGGYw1nwTvOEMof4gjwAWNFS93nBI091BoEfd5drnHOLRMiRF/LOPuMTn5LgEdv0bTUO8QFVuHQ==
 
 "@types/jasminewd2@2.0.4":
   version "2.0.4"
