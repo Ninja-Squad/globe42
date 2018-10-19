@@ -71,7 +71,6 @@ tasks {
     }
 
     getByName<BootRun>("bootRun") {
-        args("--spring.profiles.active=demo")
         args("--globe42.secretKey=QMwbcwa19VV02Oy5T7LSWyV+/wZrOsRRfhCR6TkapsY=")
         args("--globe42.googleCloudStorageCredentialsPath=${rootProject.file("secrets/google-cloud-storage-dev.json")}")
     }

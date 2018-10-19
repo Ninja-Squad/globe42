@@ -34,8 +34,3 @@ logging:
    level:
       # Hides HHH000424: Disabling contextual LOB creation as createClob() method threw error
       org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: WARN
----
-spring:
-  profiles: demo
-  flyway:
-    locations: classpath:/db/migration,classpath:/demo/db/migration
