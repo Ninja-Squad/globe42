@@ -23,7 +23,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.0.6.RELEASE"
+    id("org.springframework.boot") version "2.1.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
     id("org.flywaydb.flyway") version "5.2.0"
     id("com.gorylenko.gradle-git-properties") version "1.5.2"
@@ -101,6 +101,7 @@ tasks {
             user = "globe42"
             password = "globe42"
             (this as DefaultTask).group = "Database"
+            table = "schema_version"
         }
     }
 }
@@ -116,6 +117,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.flywaydb:flyway-core:${extra["flyway.version"]}")
 
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.flywaydb:flyway-core")
