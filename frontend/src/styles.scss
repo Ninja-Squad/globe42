@@ -58,6 +58,10 @@ h1 {
   vertical-align: text-bottom;
 }
 
+button.close:focus {
+  outline: 0;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
