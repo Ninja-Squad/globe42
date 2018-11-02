@@ -4830,10 +4830,10 @@ ngx-speculoos@1.0.0:
   dependencies:
     tslib "^1.9.0"
 
-ngx-valdemort@0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-0.1.1.tgz#e4c2eb1f343837392bf7c026a3b5b7644f9202ba"
-  integrity sha512-OTdx3yOlZV/EWUXid5GStCCO3JZKfaCG3XqjFueMX2XuOq2wZNuBMSnR/KwWGBka0wMl5VCAnf1ugKFFe0+bnw==
+ngx-valdemort@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-1.0.0.tgz#234473831e2f3fd6c116423bc9149396b959f1ee"
+  integrity sha512-w02fh3MOQiPXgU0a3imCicatFNDxiwU62yT+QC5+fGDsyZayFGWkKEuErhdkJ8Ww5nmKs7rKOVosHIffyzBFpA==
   dependencies:
     tslib "^1.9.0"
 
