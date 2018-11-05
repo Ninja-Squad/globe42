@@ -38,6 +38,10 @@ repositories {
     mavenCentral()
 }
 
+jacoco {
+    toolVersion = "0.8.2"
+}
+
 tasks {
     withType(KotlinCompile::class.java) {
         kotlinOptions {
