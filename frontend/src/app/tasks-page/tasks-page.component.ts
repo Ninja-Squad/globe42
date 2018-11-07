@@ -19,8 +19,18 @@ export class TasksPageComponent implements OnInit {
   taskListType: string;
   page: Page<TaskModel>;
 
-  // the person, in case the task list type is 'person'. null otherwise
+  // the person, in case the task list type is 'person-xxx'. null otherwise
   person: PersonModel = null;
+
+  titleSuffixes = {
+    todo: 'à faire',
+    urgent: 'urgentes',
+    mine: 'dans ma liste',
+    unassigned: 'non assignées',
+    archived: 'archivées',
+    'person-todo': 'à faire',
+    'person-archived': 'archivées',
+  };
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -32,7 +42,7 @@ export class TasksPageComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.page = data.tasks;
       this.taskListType = data.taskListType;
-      this.person = this.taskListType === 'person' ? this.route.parent.snapshot.data.person : null;
+      this.person = this.taskListType.startsWith('person-') ? this.route.parent.parent.snapshot.data.person : null;
     });
   }
 

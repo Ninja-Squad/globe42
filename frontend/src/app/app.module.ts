@@ -82,6 +82,7 @@ import { DisplayNetworkMemberTypePipe } from './display-network-member-type.pipe
 import { ValidationDefaultsComponent } from './validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe } from './display-location.pipe';
+import { PageTitleDirective } from './page-title.directive';
 
 registerLocaleData(localeFr);
 
@@ -156,7 +157,8 @@ registerLocaleData(localeFr);
     ValidationDefaultsComponent,
     DisplayLocationPipe,
     DisplayVisaPipe,
-    DisplayResidencePermitPipe
+    DisplayResidencePermitPipe,
+    PageTitleDirective
   ],
   entryComponents: [
     ConfirmModalContentComponent

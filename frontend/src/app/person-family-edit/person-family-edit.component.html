@@ -1,3 +1,4 @@
+<gl-page-title [title]="(person | fullname) + ': Éditer la situation familiale'"></gl-page-title>
 <h1>Éditer la situation familiale de {{ person | fullname }}</h1>
 
 <form [formGroup]="familyForm" (ngSubmit)="save()">

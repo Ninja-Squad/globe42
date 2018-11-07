@@ -11,6 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let route: ActivatedRoute;
@@ -39,7 +40,8 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
       declarations: [
         PersonPerUnitRevenueInformationEditComponent,
         FullnamePipe,
-        ValidationDefaultsComponent
+        ValidationDefaultsComponent,
+        PageTitleDirective
       ],
       providers: [
         { provide: PerUnitRevenueInformationService, useValue: mockPerUnitRevenueInformationService },

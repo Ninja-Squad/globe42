@@ -12,6 +12,8 @@ import { NetworkMemberService } from '../network-member.service';
 import { of, throwError } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonNetworkMembersComponent', () => {
 
@@ -52,7 +54,9 @@ describe('PersonNetworkMembersComponent', () => {
       declarations: [
         PersonNetworkMembersComponent,
         DisplayNetworkMemberTypePipe,
-        ValidationDefaultsComponent
+        ValidationDefaultsComponent,
+        PageTitleDirective,
+        FullnamePipe
       ],
       providers: [
         { provide: ActivatedRoute, useValue: route },

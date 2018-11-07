@@ -1,3 +1,6 @@
+<gl-page-title *ngIf="person" [title]="(person | fullname) + ': Tâches ' + titleSuffixes[taskListType]"></gl-page-title>
+<gl-page-title *ngIf="!person" [title]="'Tâches ' + titleSuffixes[taskListType]"></gl-page-title>
+
 <div class="text-center" *ngIf="page.totalElements === 0 && taskListType !== 'archived'">
   <span style="font-size: 60px;" class="fa fa-thumbs-up text-success"></span>
   <br/>
@@ -21,7 +24,7 @@
                   [rotate]="true"></ngb-pagination>
 </div>
 
-<div class="mt-5" *ngIf="taskListType === 'person'">
+<div class="mt-5" *ngIf="taskListType.startsWith('person-')">
   <a id="newTaskLink" class="btn btn-outline-primary" [routerLink]="['/tasks/create', { 'concerned-person': person?.id }]">
     <span class="fa fa-plus"></span>
     Nouvelle tâche

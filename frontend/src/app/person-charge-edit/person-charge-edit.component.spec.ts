@@ -13,6 +13,7 @@ import { of } from 'rxjs';
 import { ChargeTypeModel } from '../models/charge-type.model';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonChargeEditComponent', () => {
   const chargeTypes = [
@@ -24,7 +25,7 @@ describe('PersonChargeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [PersonChargeEditComponent, FullnamePipe, ValidationDefaultsComponent],
+    declarations: [PersonChargeEditComponent, FullnamePipe, ValidationDefaultsComponent, PageTitleDirective],
     providers: [
       { provide: LOCALE_ID, useValue: 'fr-FR' }
     ]

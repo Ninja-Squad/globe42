@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IncomeSourceModel } from '../models/income-source.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LOCALE_ID } from '@angular/core';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('IncomeSourcesComponent', () => {
   const incomeSources: Array<IncomeSourceModel> = [
@@ -27,7 +28,7 @@ describe('IncomeSourcesComponent', () => {
 
   beforeEach(async(() => TestBed.configureTestingModule({
     imports: [RouterTestingModule],
-    declarations: [IncomeSourcesComponent],
+    declarations: [IncomeSourcesComponent, PageTitleDirective],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },
       { provide: LOCALE_ID, useValue: 'fr-FR'}

@@ -1,5 +1,8 @@
-<h1 *ngIf="!editedTask">Nouvelle tâche</h1>
+<gl-page-title *ngIf="editedTask" [title]="'Modification de la tâche ' + editedTask.title"></gl-page-title>
+<gl-page-title *ngIf="!editedTask" title="Nouvelle tâche"></gl-page-title>
+
 <h1 *ngIf="editedTask">Modification de la tâche <em>{{ editedTask.title }}</em></h1>
+<h1 *ngIf="!editedTask">Nouvelle tâche</h1>
 
 <form (ngSubmit)="save()" [formGroup]="taskForm">
   <div class="form-group row">

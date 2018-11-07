@@ -1,5 +1,8 @@
+<gl-page-title *ngIf="editedChargeCategory" [title]="'Modification de la dépense ' + editedChargeCategory.name"></gl-page-title>
+<gl-page-title *ngIf="!editedChargeCategory" title="Nouvelle dépense"></gl-page-title>
+
 <h1>
-  <ng-container *ngIf="editedChargeCategory">Modification de la dépense {{ editedChargeCategory.name }}</ng-container>
+  <ng-container *ngIf="editedChargeCategory">Modification de la dépense <em>{{ editedChargeCategory.name }}</em></ng-container>
   <ng-container *ngIf="!editedChargeCategory">Nouvelle dépense</ng-container>
 </h1>
 

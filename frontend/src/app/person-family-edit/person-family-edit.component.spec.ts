@@ -11,6 +11,7 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { FamilyCommand } from '../models/family.command';
 import { FamilyModel } from '../models/family.model';
 import { of } from 'rxjs';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonFamilyEditComponent', () => {
   let route: ActivatedRoute;
@@ -29,7 +30,7 @@ describe('PersonFamilyEditComponent', () => {
     } as any;
 
     TestBed.configureTestingModule({
-      declarations: [PersonFamilyEditComponent, FullnamePipe],
+      declarations: [PersonFamilyEditComponent, FullnamePipe, PageTitleDirective],
       providers: [
         FamilyService,
         { provide: ActivatedRoute, useFactory: () => route },

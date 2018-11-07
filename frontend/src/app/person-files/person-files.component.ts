@@ -15,7 +15,7 @@ import { finalize, switchMap } from 'rxjs/operators';
 })
 export class PersonFilesComponent implements OnInit {
 
-  private person: PersonModel;
+  person: PersonModel;
   loading = false;
   uploading = false;
   uploadProgress: number;

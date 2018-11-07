@@ -20,6 +20,7 @@ import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('TasksPageComponent', () => {
   let page: Page<TaskModel>;
@@ -72,8 +73,10 @@ describe('TasksPageComponent', () => {
     activatedRoute = {
       data: of(data),
       parent: {
-        snapshot: {
-          data: { }
+        parent: {
+          snapshot: {
+            data: {}
+          }
         }
       }
     } as any;
@@ -89,7 +92,8 @@ describe('TasksPageComponent', () => {
         FullnamePipe,
         SpentTimesComponent,
         SpentTimeAddComponent,
-        DurationPipe
+        DurationPipe,
+        PageTitleDirective
       ],
       providers: [{ provide: ActivatedRoute, useFactory: () => activatedRoute }]
     });
@@ -177,9 +181,9 @@ describe('TasksPageComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/tasks', task.id, 'edit']);
   });
 
-  it('should edit a task when list type is person', () => {
-    data.taskListType = 'person';
-    activatedRoute.parent.snapshot.data['person'] = { id: 42 };
+  it('should edit a task when list type is person-todo', () => {
+    data.taskListType = 'person-todo';
+    activatedRoute.parent.parent.snapshot.data['person'] = { id: 42 };
 
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
@@ -262,9 +266,9 @@ describe('TasksPageComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('Aucune tâche archivée');
   });
 
-  it('should display a new task link with the concerned person as param is list type is person', () => {
-    data.taskListType = 'person';
-    activatedRoute.parent.snapshot.data['person'] = { id: 42 };
+  it('should display a new task link with the concerned person as param is list type is person-todo', () => {
+    data.taskListType = 'person-todo';
+    activatedRoute.parent.parent.snapshot.data['person'] = { id: 42 };
 
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();

@@ -1,5 +1,8 @@
+<gl-page-title *ngIf="editedUser" [title]="'Modification de l\'utilisateur ' + editedUser.login"></gl-page-title>
+<gl-page-title *ngIf="!editedUser" title="Nouvel utilisateur"></gl-page-title>
+
 <h1>
-  <ng-container *ngIf="editedUser">Modification de l'utilisateur {{ editedUser.login }}</ng-container>
+  <ng-container *ngIf="editedUser">Modification de l'utilisateur <em>{{ editedUser.login }}</em></ng-container>
   <ng-container *ngIf="!editedUser">Nouvel utilisateur</ng-container>
 </h1>
 

@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('PasswordResetComponent', () => {
   const user: UserModel = {id: 42, login: 'jb', admin: false};
@@ -18,7 +19,7 @@ describe('PasswordResetComponent', () => {
 
   beforeEach(async(() => TestBed.configureTestingModule({
     imports: [ HttpClientModule, GlobeNgbModule.forRoot() ],
-    declarations: [ PasswordResetComponent ],
+    declarations: [ PasswordResetComponent, PageTitleDirective ],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },
       { provide: Router, useValue: fakeRouter }

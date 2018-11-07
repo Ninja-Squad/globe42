@@ -20,6 +20,7 @@ import { PersonService } from '../person.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of, throwError } from 'rxjs';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonComponent', () => {
 
@@ -98,7 +99,8 @@ describe('PersonComponent', () => {
         DisplayHealthInsurancePipe,
         DisplayResidencePermitPipe,
         DisplayVisaPipe,
-        FullnamePipe
+        FullnamePipe,
+        PageTitleDirective
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },

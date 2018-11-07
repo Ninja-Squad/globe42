@@ -1,5 +1,8 @@
+<gl-page-title *ngIf="editedChargeType" [title]="'Modification de la nature des charges ' + editedChargeType.name"></gl-page-title>
+<gl-page-title *ngIf="!editedChargeType" title="Nouvelle nature des charges"></gl-page-title>
+
 <h1>
-  <ng-container *ngIf="editedChargeType">Modification de la nature des charges {{ editedChargeType.name }}</ng-container>
+  <ng-container *ngIf="editedChargeType">Modification de la nature des charges <em>{{ editedChargeType.name }}</em></ng-container>
   <ng-container *ngIf="!editedChargeType">Nouvelle nature des charges</ng-container>
 </h1>
 

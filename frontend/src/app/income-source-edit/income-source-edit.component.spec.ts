@@ -13,6 +13,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 class IncomeSourceEditComponentTester extends ComponentTester<IncomeSourceEditComponent> {
   constructor() {
@@ -49,7 +50,7 @@ describe('IncomeSourceEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [IncomeSourceEditComponent, ValidationDefaultsComponent]
+    declarations: [IncomeSourceEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
 

@@ -13,6 +13,7 @@ import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeService } from '../income.service';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -24,7 +25,7 @@ describe('PersonIncomeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationDefaultsComponent],
+    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationDefaultsComponent, PageTitleDirective],
     providers: [
       { provide: LOCALE_ID, useValue: 'fr-FR' }
     ]

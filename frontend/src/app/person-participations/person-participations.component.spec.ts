@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FullnamePipe } from '../fullname.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonParticipationsComponent', () => {
 
@@ -110,7 +111,7 @@ describe('PersonParticipationsComponent', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [PersonParticipationsComponent, FullnamePipe, DisplayActivityTypePipe],
+        declarations: [PersonParticipationsComponent, FullnamePipe, DisplayActivityTypePipe, PageTitleDirective],
         imports: [HttpClientModule, RouterTestingModule],
         providers: [{ provide: ActivatedRoute, useValue: route }]
       });

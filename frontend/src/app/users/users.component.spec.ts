@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('UsersComponent', () => {
   const users: Array<UserModel> = [
@@ -27,7 +28,7 @@ describe('UsersComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModalModule],
-      declarations: [UsersComponent],
+      declarations: [UsersComponent, PageTitleDirective],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
 

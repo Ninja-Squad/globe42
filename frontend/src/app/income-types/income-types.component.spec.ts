@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IncomeTypesComponent } from './income-types.component';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('IncomeTypesComponent', () => {
   const incomeTypes: Array<IncomeSourceTypeModel> = [{ id: 42, type: 'CAF' }];
@@ -13,7 +14,7 @@ describe('IncomeTypesComponent', () => {
 
   beforeEach(async(() => TestBed.configureTestingModule({
     imports: [RouterTestingModule],
-    declarations: [IncomeTypesComponent],
+    declarations: [IncomeTypesComponent, PageTitleDirective],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   })));
 

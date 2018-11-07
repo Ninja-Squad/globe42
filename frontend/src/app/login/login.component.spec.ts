@@ -10,6 +10,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 class LoginComponentTester extends ComponentTester<LoginComponent> {
 
@@ -41,7 +42,7 @@ describe('LoginComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule, ValdemortModule],
-      declarations: [LoginComponent, ValidationDefaultsComponent],
+      declarations: [LoginComponent, ValidationDefaultsComponent, PageTitleDirective],
     });
 
     jasmine.addMatchers(speculoosMatchers);

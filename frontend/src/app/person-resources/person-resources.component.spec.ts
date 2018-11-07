@@ -15,6 +15,8 @@ import { of, throwError } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
 import { ComponentTester, fakeRoute, fakeSnapshot, TestButton } from 'ngx-speculoos';
+import { PageTitleDirective } from '../page-title.directive';
+import { FullnamePipe } from '../fullname.pipe';
 
 class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
   constructor() {
@@ -132,7 +134,7 @@ describe('PersonResourcesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
-      declarations: [PersonResourcesComponent],
+      declarations: [PersonResourcesComponent, PageTitleDirective, FullnamePipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: LOCALE_ID, useValue: 'fr-FR' }

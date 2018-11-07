@@ -13,12 +13,13 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('UserEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), ValdemortModule],
-    declarations: [UserEditComponent, ValidationDefaultsComponent]
+    declarations: [UserEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
 

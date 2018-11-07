@@ -5,6 +5,7 @@ import { SearchCityService } from '../search-city.service';
 import { Subject } from 'rxjs';
 import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { PageTitleDirective } from '../page-title.directive';
 
 function tickSeconds(seconds: number) {
   tick(seconds * 1000);
@@ -15,7 +16,7 @@ describe('CitiesUploadComponent', () => {
     async(() => {
       TestBed.configureTestingModule({
         imports: [GlobeNgbModule.forRoot(), HttpClientModule],
-        declarations: [CitiesUploadComponent]
+        declarations: [CitiesUploadComponent, PageTitleDirective]
       });
     })
   );

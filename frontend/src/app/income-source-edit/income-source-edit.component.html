@@ -1,5 +1,8 @@
+<gl-page-title *ngIf="editedIncomeSource" [title]="'Modification de la nature de prestation ' + editedIncomeSource.name"></gl-page-title>
+<gl-page-title *ngIf="!editedIncomeSource" title="Nouvelle nature de prestation"></gl-page-title>
+
 <h1>
-  <ng-container *ngIf="editedIncomeSource">Modification de la nature de prestation {{ editedIncomeSource.name }}</ng-container>
+  <ng-container *ngIf="editedIncomeSource">Modification de la nature de prestation <em>{{ editedIncomeSource.name }}</em></ng-container>
   <ng-container *ngIf="!editedIncomeSource">Nouvelle nature de prestation</ng-container>
 </h1>
 

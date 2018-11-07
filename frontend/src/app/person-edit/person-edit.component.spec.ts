@@ -21,11 +21,12 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { filter, map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
-import { ComponentTester, TestButton, TestInput, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers, TestButton, TestInput } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayResidencePermitPipe } from '../display-residence-permit.pipe';
 import { DisplayVisaPipe } from '../display-visa.pipe';
+import { PageTitleDirective } from '../page-title.directive';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -240,7 +241,8 @@ describe('PersonEditComponent', () => {
       DisplayVisaPipe,
       DisplayResidencePermitPipe,
       FullnamePipe,
-      ValidationDefaultsComponent
+      ValidationDefaultsComponent,
+      PageTitleDirective
     ]
   })
   class TestModule {

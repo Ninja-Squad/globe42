@@ -10,6 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 class PasswordChangeComponentTester extends ComponentTester<PasswordChangeComponent> {
 
@@ -41,7 +42,7 @@ describe('PasswordChangeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-      declarations: [PasswordChangeComponent, ValidationDefaultsComponent],
+      declarations: [PasswordChangeComponent, ValidationDefaultsComponent, PageTitleDirective],
     });
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();

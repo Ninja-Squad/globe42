@@ -11,6 +11,8 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { FamilyModel } from '../models/family.model';
 import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
+import { PageTitleDirective } from '../page-title.directive';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonFamilyComponent', () => {
   let route: ActivatedRoute;
@@ -33,7 +35,7 @@ describe('PersonFamilyComponent', () => {
     } as any;
 
     TestBed.configureTestingModule({
-      declarations: [PersonFamilyComponent, SituationComponent],
+      declarations: [PersonFamilyComponent, SituationComponent, PageTitleDirective, FullnamePipe],
       providers: [
         FamilyService,
         ConfirmService,

@@ -11,12 +11,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('IncomeTypeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [IncomeTypeEditComponent, ValidationDefaultsComponent]
+    declarations: [IncomeTypeEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
 

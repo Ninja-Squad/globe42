@@ -2,6 +2,8 @@ import { PersonModel } from '../models/person.model';
 import { async, TestBed } from '@angular/core/testing';
 import { PersonMembershipPrintComponent } from './person-membership-print.component';
 import { ActivatedRoute } from '@angular/router';
+import { PageTitleDirective } from '../page-title.directive';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonMembershipPrintComponent', () => {
   let person: PersonModel;
@@ -20,7 +22,7 @@ describe('PersonMembershipPrintComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [PersonMembershipPrintComponent],
+      declarations: [PersonMembershipPrintComponent, PageTitleDirective, FullnamePipe],
       providers: [
         { provide: ActivatedRoute, useFactory: () => route }
       ]

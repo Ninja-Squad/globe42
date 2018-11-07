@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
 import { Subject } from 'rxjs';
 import { ParticipantModel } from '../models/participant.model';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('ParticipantsComponent', () => {
   let component: ParticipantsComponent;
@@ -24,7 +25,7 @@ describe('ParticipantsComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ ParticipantsComponent, FullnamePipe, DisplayActivityTypePipe ],
+      declarations: [ ParticipantsComponent, FullnamePipe, DisplayActivityTypePipe, PageTitleDirective ],
       imports: [ RouterTestingModule ],
       providers: [
         { provide: ActivatedRoute, useValue: route }

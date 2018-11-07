@@ -1,3 +1,4 @@
+<gl-page-title [title]="(person | fullname) + ': Editer les informations nécessaires au calcul de revenu par unité de consommation'"></gl-page-title>
 <h1>Editer les informations nécessaires au calcul de revenu par unité de consommation pour {{ person | fullname }}</h1>
 
 <form (ngSubmit)="infoGroup.valid && save()" [formGroup]="infoGroup">

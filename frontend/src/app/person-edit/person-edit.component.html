@@ -1,3 +1,6 @@
+<gl-page-title *ngIf="editedPerson" [title]="'Modification de l\'adhérent ' + (editedPerson | fullname)"></gl-page-title>
+<gl-page-title title="Nouvel adhérent"></gl-page-title>
+
 <h1>
   <ng-container *ngIf="editedPerson">Modification de l'adhérent <span [class.deleted]="editedPerson.deleted">{{ editedPerson | fullname }}</span></ng-container>
   <ng-container *ngIf="!editedPerson">Nouvel adhérent</ng-container>

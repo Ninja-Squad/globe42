@@ -5,6 +5,7 @@ import { ChargeTypeModel } from '../models/charge-type.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LOCALE_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('ChargeTypesComponent', () => {
   const chargeTypes: Array<ChargeTypeModel> = [
@@ -27,7 +28,7 @@ describe('ChargeTypesComponent', () => {
 
   beforeEach(async(() => TestBed.configureTestingModule({
     imports: [RouterTestingModule],
-    declarations: [ChargeTypesComponent],
+    declarations: [ChargeTypesComponent, PageTitleDirective],
     providers: [
       { provide: ActivatedRoute, useValue: activatedRoute },
       { provide: LOCALE_ID, useValue: 'fr-FR'}

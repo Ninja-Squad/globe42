@@ -17,6 +17,7 @@ import { of } from 'rxjs';
 import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 class TaskEditTester extends ComponentTester<TaskEditComponent> {
   constructor() {
@@ -118,7 +119,7 @@ describe('TaskEditComponent', () => {
         HttpClientModule,
         ValdemortModule
       ],
-      declarations: [TaskEditComponent, ValidationDefaultsComponent],
+      declarations: [TaskEditComponent, ValidationDefaultsComponent, PageTitleDirective],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
 

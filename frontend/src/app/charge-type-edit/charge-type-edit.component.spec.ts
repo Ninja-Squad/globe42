@@ -14,6 +14,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 class ChargeTypeEditComponentTester extends ComponentTester<ChargeTypeEditComponent> {
   constructor() {
@@ -50,7 +51,7 @@ describe('ChargeTypeEditComponent', () => {
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [ChargeTypeEditComponent, ValidationDefaultsComponent],
+    declarations: [ChargeTypeEditComponent, ValidationDefaultsComponent, PageTitleDirective],
     providers: [
       ChargeTypeService,
       ErrorService

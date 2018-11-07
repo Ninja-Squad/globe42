@@ -17,7 +17,9 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.pipe';
 import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
 import { Location } from '../models/family.model';
+import { PageTitleDirective } from '../page-title.directive';
 import Spy = jasmine.Spy;
+import { FullnamePipe } from '../fullname.pipe';
 
 class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEventsComponent> {
   constructor() {
@@ -101,7 +103,9 @@ describe('PersonWeddingEventsComponent', () => {
         PersonWeddingEventsComponent,
         DisplayWeddingEventTypePipe,
         ValidationDefaultsComponent,
-        DisplayLocationPipe
+        DisplayLocationPipe,
+        PageTitleDirective,
+        FullnamePipe
       ],
       imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot(), ValdemortModule ],
       providers: [

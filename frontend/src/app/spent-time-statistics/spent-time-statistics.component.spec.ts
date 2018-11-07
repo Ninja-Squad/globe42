@@ -15,6 +15,7 @@ import { By } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { EMPTY, of } from 'rxjs';
+import { PageTitleDirective } from '../page-title.directive';
 
 function createRoute(queryParams: {[key: string]: string}): ActivatedRoute {
   return {
@@ -36,7 +37,7 @@ describe('SpentTimeStatisticsComponent', () => {
 
     TestBed.overrideTemplate(ChartComponent, '');
     TestBed.configureTestingModule({
-      declarations: [SpentTimeStatisticsComponent, ChartComponent, DurationPipe],
+      declarations: [SpentTimeStatisticsComponent, ChartComponent, DurationPipe, PageTitleDirective],
       imports: [RouterTestingModule.withRoutes([
         {
           path: 'tasks/statistics', component: SpentTimeStatisticsComponent

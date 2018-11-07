@@ -10,11 +10,13 @@ import { FileSizePipe } from '../file-size.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, of } from 'rxjs';
-import { By } from '@angular/platform-browser';
+import { By, Title } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { PageTitleDirective } from '../page-title.directive';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonFilesComponent', () => {
-  const person = { id: 42 } as PersonModel;
+  const person = { id: 42, firstName: 'John', lastName: 'Doe' } as PersonModel;
   let files: Array<FileModel>;
 
   const activatedRoute = {
@@ -30,7 +32,7 @@ describe('PersonFilesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
-      declarations: [PersonFilesComponent, FileSizePipe],
+      declarations: [PersonFilesComponent, FileSizePipe, PageTitleDirective, FullnamePipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
       ]
@@ -168,5 +170,13 @@ describe('PersonFilesComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelectorAll('.file-item').length).toBe(2);
+  });
+
+  it('should set the page title', () => {
+    const titleService: Title = TestBed.get(Title);
+    const fixture = TestBed.createComponent(PersonFilesComponent);
+    fixture.detectChanges();
+
+    expect(titleService.getTitle()).toContain('John Doe: Documents');
   });
 });

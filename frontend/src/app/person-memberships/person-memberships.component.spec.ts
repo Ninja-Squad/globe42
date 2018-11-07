@@ -14,6 +14,8 @@ import { LOCALE_ID } from '@angular/core';
 import { of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
+import { FullnamePipe } from '../fullname.pipe';
 
 describe('PersonMembershipsComponent', () => {
   let person: PersonModel;
@@ -42,7 +44,13 @@ describe('PersonMembershipsComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [PersonMembershipsComponent, DisplayPaymentModePipe, ValidationDefaultsComponent],
+      declarations: [
+        PersonMembershipsComponent,
+        DisplayPaymentModePipe,
+        ValidationDefaultsComponent,
+        PageTitleDirective,
+        FullnamePipe
+      ],
       providers: [
         { provide: ActivatedRoute, useFactory: () => route },
         { provide: LOCALE_ID, useValue: 'fr-FR' }

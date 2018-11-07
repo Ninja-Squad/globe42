@@ -1,3 +1,5 @@
+<gl-page-title [title]="(person | fullname) + ': Activités'"></gl-page-title>
+
 <p id="message">{{ person | fullname }} participe aux types d'activités suivants&nbsp;:</p>
 
 <div *ngFor="let item of items" class="form-check ml-5">

@@ -19,7 +19,7 @@ import { LOCATION_TRANSLATIONS } from '../display-location.pipe';
 export class PersonWeddingEventsComponent {
 
   events: Array<WeddingEventModel>;
-  private person: PersonModel;
+  person: PersonModel;
 
   newEvent: FormGroup = null;
   maxMonth: {year: number; month: number; };

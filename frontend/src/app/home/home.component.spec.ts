@@ -6,6 +6,7 @@ import { UserModel } from '../models/user.model';
 import { HttpClientModule } from '@angular/common/http';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('HomeComponent', () => {
 
@@ -13,7 +14,7 @@ describe('HomeComponent', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule],
-    declarations: [HomeComponent]
+    declarations: [HomeComponent, PageTitleDirective]
   }));
 
   it('display a link to go the login', () => {

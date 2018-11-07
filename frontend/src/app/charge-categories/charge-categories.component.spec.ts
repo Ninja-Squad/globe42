@@ -4,6 +4,7 @@ import { ChargeCategoriesComponent } from './charge-categories.component';
 import { ChargeCategoryModel } from '../models/charge-category.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('ChargeCategoriesComponent', () => {
   const chargeCategories: Array<ChargeCategoryModel> = [{ id: 42, name: 'rental' }];
@@ -13,7 +14,7 @@ describe('ChargeCategoriesComponent', () => {
 
   beforeEach(async(() => TestBed.configureTestingModule({
     imports: [RouterTestingModule],
-    declarations: [ChargeCategoriesComponent],
+    declarations: [ChargeCategoriesComponent, PageTitleDirective],
     providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
   })));
 

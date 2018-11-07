@@ -12,11 +12,12 @@ import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
+import { PageTitleDirective } from '../page-title.directive';
 
 describe('ChargeCategoryEditComponent', () => {
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [ChargeCategoryEditComponent, ValidationDefaultsComponent]
+    declarations: [ChargeCategoryEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
 
