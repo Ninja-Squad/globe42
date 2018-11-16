@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.2.71"
+    val kotlinVersion = "1.3.10"
 
     java
     jacoco
@@ -128,7 +128,7 @@ dependencies {
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
     testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
