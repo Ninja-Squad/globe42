@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+tslint-result.txt
 
 # dependencies
 /node_modules

@@ -23,9 +23,11 @@ tasks {
 
     val deleteMomentLocales by creating(Delete::class) {
         dependsOn(yarn_install)
-        delete(fileTree("${projectDir}/node_modules/moment/locale") {
-            include("*.js")
-        })
+        doLast {
+            delete(fileTree("${projectDir}/node_modules/moment/locale") {
+                include("*.js")
+            })
+        }
     }
 
     val prepare by creating {
@@ -48,7 +50,19 @@ tasks {
         dependsOn(yarn_test)
     }
 
+    val yarn_lint by getting {
+        dependsOn(prepare)
+        inputs.dir("src")
+        inputs.file("tslint.json")
+        outputs.file("tslint-result.txt")
+    }
+
+    val lint by creating {
+        dependsOn("yarn_lint")
+    }
+
     getByName("check") {
+        dependsOn(lint)
         dependsOn(test)
     }
 
@@ -59,5 +73,6 @@ tasks {
     getByName("clean") {
         dependsOn("cleanYarn_build")
         dependsOn("cleanYarn_test")
+        dependsOn("cleanYarn_lint")
     }
 }

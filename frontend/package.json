@@ -9,7 +9,7 @@
     "test": "ng test --code-coverage --no-progress --no-watch",
     "bundlesize": "bundlesize",
     "codecov": "codecov",
-    "lint": "ng lint",
+    "lint": "ng lint > tslint-result.txt",
     "e2e": "ng e2e",
     "postinstall": "npm rebuild node-sass"
   },
