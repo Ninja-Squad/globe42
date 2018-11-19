@@ -10,7 +10,6 @@ describe('AuthenticatedGuard', () => {
 
   let guard: AuthenticatedGuard;
   let userService: CurrentUserService;
-  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,23 +18,18 @@ describe('AuthenticatedGuard', () => {
 
     guard = TestBed.get(AuthenticatedGuard);
     userService = TestBed.get(CurrentUserService);
-    router = TestBed.get(Router);
-
   });
 
   it('should not do anything if logged in', () => {
     spyOn(userService, 'isLoggedIn').and.returnValue(true);
-    spyOn(router, 'navigate');
 
     expect(guard.canActivate()).toBe(true);
-    expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('should navigate to login if not logged in', () => {
+  it('should return th UrlTree to login if not logged in', () => {
     spyOn(userService, 'isLoggedIn').and.returnValue(false);
-    spyOn(router, 'navigate');
 
-    expect(guard.canActivate()).toBe(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    const router: Router = TestBed.get(Router);
+    expect(guard.canActivate()).toEqual(router.parseUrl('/login'));
   });
 });
