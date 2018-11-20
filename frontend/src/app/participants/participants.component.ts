@@ -19,7 +19,7 @@ export class ParticipantsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
-      this.participants = sortBy(data['participants'], p => displayFullname(p));
+      this.participants = sortBy<ParticipantModel>(data.participants, displayFullname);
     });
     this.route.paramMap.subscribe(paramMap => {
       this.activityType = paramMap.get('activityType') as ActivityType;

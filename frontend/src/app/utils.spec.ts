@@ -1,4 +1,4 @@
-import { dateToIso, interpolate, isoToDate, sortBy } from './utils';
+import { Comparator, dateToIso, interpolate, isoToDate, sortBy } from './utils';
 
 describe('utils', () => {
   it('should sort by', () => {
@@ -24,9 +24,52 @@ describe('utils', () => {
       { foo: 'b' }
     ];
 
-    const result = sortBy(array, o => o.foo, true);
+    const result = sortBy(array, Comparator.comparing<{ foo: string }>(o => o.foo).reversed());
     expect(result.map(o => o.foo)).toEqual(['c', 'b', 'b', 'a', 'a']);
     expect(result).not.toBe(array);
+  });
+
+  it('should compare then compare by a second function', () => {
+    const array = [
+      { foo: 'b', bar: 1 },
+      { foo: 'a', bar: 1 },
+      { foo: 'c', bar: 1 },
+      { foo: 'a', bar: 0 },
+      { foo: 'b', bar: 0 }
+    ];
+
+    const result = sortBy(array, Comparator.comparing<{ foo: string, bar: number }>(o => o.foo).thenComparing(o => o.bar));
+    expect(result).toEqual(
+      [
+        { foo: 'a', bar: 0 },
+        { foo: 'a', bar: 1 },
+        { foo: 'b', bar: 0 },
+        { foo: 'b', bar: 1 },
+        { foo: 'c', bar: 1 }
+      ]
+    );
+  });
+
+  it('should compare then compare by a second comparator', () => {
+    const array = [
+      { foo: 'b', bar: 1 },
+      { foo: 'a', bar: 1 },
+      { foo: 'c', bar: 1 },
+      { foo: 'a', bar: 0 },
+      { foo: 'b', bar: 0 }
+    ];
+
+    const result = sortBy(array, Comparator.comparing<{ foo: string, bar: number }>(o => o.foo)
+      .thenComparing(Comparator.comparing<{ foo: string, bar: number }>(o => o.bar).reversed()));
+    expect(result).toEqual(
+      [
+        { foo: 'a', bar: 1 },
+        { foo: 'a', bar: 0 },
+        { foo: 'b', bar: 1 },
+        { foo: 'b', bar: 0 },
+        { foo: 'c', bar: 1 }
+      ]
+    );
   });
 
   it('should interpolate', () => {

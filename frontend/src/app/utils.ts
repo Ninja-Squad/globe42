@@ -16,27 +16,52 @@ export function padNumber(value: number) {
   }
 }
 
+export class Comparator<T> {
+  constructor(private fn: (a: T, b: T) => number) {}
 
-/**
- * Creates a sorted copy of an array, by extracting a value from each element using the given extractor,
- * and comparing the values.
- *
- * Usages of this method could be replaced by Lodash's sortBy method
- */
-export function sortBy<T>(array: Array<T>, extractor: (t: T) => any, reverse = false): Array<T> {
+  static comparing<T>(extractor: (t: T) => any): Comparator<T> {
+    const fn = (a: T, b: T) => {
+      const v1 = extractor(a);
+      const v2 = extractor(b);
+      let r = 0;
+      if (v1 < v2) {
+        r = -1;
+      }
+      if (v1 > v2) {
+        r = 1;
+      }
+      return r;
+    };
+    return new Comparator(fn);
+  }
+
+  thenComparing(comparatorOrExtractor: Comparator<T> | ((t: T) => any)): Comparator<T> {
+    const otherComparator: Comparator<T> =
+      (comparatorOrExtractor instanceof Comparator) ? comparatorOrExtractor : Comparator.comparing<T>(comparatorOrExtractor);
+    const fn = (a: T, b: T) => {
+      const r = this.fn(a, b);
+      if (r === 0) {
+        return otherComparator.fn(a, b);
+      }
+      return r;
+    };
+    return new Comparator<T>(fn);
+  }
+
+  reversed(): Comparator<T> {
+    return new Comparator<T>((a, b) => -this.fn(a, b));
+  }
+
+  sort(array: Array<T>): void {
+    array.sort(this.fn);
+  }
+}
+
+export function sortBy<T>(array: Array<T>, comparatorOrExtractor: Comparator<T> | ((t: T) => any)): Array<T> {
   const result = array.slice();
-  result.sort((e1, e2) => {
-    const v1 = extractor(e1);
-    const v2 = extractor(e2);
-    let r = 0;
-    if (v1 < v2) {
-      r = -1;
-    }
-    if (v1 > v2) {
-      r = 1;
-    }
-    return reverse ? - r : r;
-  });
+  const comparator: Comparator<T> =
+    (comparatorOrExtractor instanceof Comparator) ? comparatorOrExtractor : Comparator.comparing(comparatorOrExtractor);
+  comparator.sort(result);
   return result;
 }
 

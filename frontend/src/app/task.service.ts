@@ -5,7 +5,7 @@ import { TaskModel } from './models/task.model';
 import { Page } from './models/page';
 import { TaskCommand } from './models/task.command';
 import { SpentTimeModel } from './models/spent-time.model';
-import { sortBy } from './utils';
+import { Comparator, sortBy } from './utils';
 import { TaskCategoryModel } from './models/task-category.model';
 import { CurrentUserService } from './current-user/current-user.service';
 import { SpentTimeStatisticsCriteria } from './models/spent-time-statistics.criteria';
@@ -90,7 +90,7 @@ export class TaskService {
 
   listSpentTimes(taskId: number): Observable<Array<SpentTimeModel>> {
     return this.http.get<Array<SpentTimeModel>>(`/api/tasks/${taskId}/spent-times`).pipe(
-      map(list => sortBy(list, spentTime => spentTime.creationInstant, true))
+      map(list => sortBy(list, Comparator.comparing<SpentTimeModel>(spentTime => spentTime.creationInstant).reversed()))
     );
   }
 
