@@ -4,7 +4,7 @@ import { FileModel } from '../models/file.model';
 import { PersonFileService } from '../person-file.service';
 import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
-import { sortBy } from '../utils';
+import { Comparator, sortBy } from '../utils';
 import { HttpEventType } from '@angular/common/http';
 import { finalize, switchMap } from 'rxjs/operators';
 
@@ -69,7 +69,7 @@ export class PersonFilesComponent implements OnInit {
     this.personFileService.list(this.person.id)
       .subscribe(files => {
         this.loading = false;
-        this.files = sortBy(files, file => file.creationInstant, true);
+        this.files = sortBy(files, Comparator.comparing<FileModel>(file => file.creationInstant).reversed());
       });
   }
 }

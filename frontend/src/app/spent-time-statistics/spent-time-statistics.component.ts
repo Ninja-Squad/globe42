@@ -68,7 +68,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.users = sortBy(this.route.snapshot.data['users'], user => user.login);
+    this.users = sortBy<UserModel>(this.route.snapshot.data.users, user => user.login);
 
     // If no param, default to the current month
     const paramMap = this.route.snapshot.queryParamMap;
