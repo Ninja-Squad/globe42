@@ -1,0 +1,10 @@
+// make the placeholders lighter
+$input-placeholder-color: #dcdedf;
+
+$custom-file-text: (
+  fr: "Parcourir"
+);
+
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
