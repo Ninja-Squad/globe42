@@ -55,6 +55,6 @@ export class PersonFamilyComponent implements OnInit {
       this.family = null;
       this.france = null;
       this.abroad = null;
-    }, () => {});
+    });
   }
 }

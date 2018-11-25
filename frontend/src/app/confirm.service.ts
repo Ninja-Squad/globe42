@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
-import { Observable, from } from 'rxjs';
+import { Observable, from, EMPTY, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface ConfirmOptions {
   message: string;
   title?: string;
+  errorOnClose?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -17,6 +19,8 @@ export class ConfirmService {
     const modalRef = this.modalService.open(ConfirmModalContentComponent);
     modalRef.componentInstance.title = options.title || 'Confirmation';
     modalRef.componentInstance.message = options.message;
-    return from(modalRef.result);
+    return from(modalRef.result).pipe(
+      catchError(err => options.errorOnClose ? throwError(err || 'not confirmed') : EMPTY)
+    );
   }
 }

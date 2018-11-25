@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit {
     this.confirmService.confirm({message: `Voulez-vous vraiment supprimer l\'utilisateur ${user.login}\u00A0?`}).pipe(
       switchMap(() => this.userService.delete(user.id)),
       switchMap(() => this.userService.list())
-    ).subscribe(users => this.users = sortBy(users, u => u.login), () => {});
+    ).subscribe(users => this.users = sortBy(users, u => u.login));
   }
 
   isCurrentUser(user: UserModel) {

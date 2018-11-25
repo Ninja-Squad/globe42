@@ -40,7 +40,7 @@ export class PersonNetworkMembersComponent implements OnInit {
     }).pipe(
       switchMap(() => this.networkMemberService.delete(this.person.id, member.id)),
       switchMap(() => this.networkMemberService.list(this.person.id)),
-    ).subscribe(members => this.members = members, () => {});
+    ).subscribe(members => this.members = members);
   }
 
   showMemberEdition(member: NetworkMemberModel | null) {

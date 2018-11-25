@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
 import { ConfirmService } from '../confirm.service';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentUserModule } from '../current-user/current-user.module';
@@ -68,7 +68,7 @@ describe('UsersComponent', () => {
     const confirmService = TestBed.get(ConfirmService);
 
     spyOn(userService, 'delete');
-    spyOn(confirmService, 'confirm').and.returnValue(throwError('nope'));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
 
     const fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();

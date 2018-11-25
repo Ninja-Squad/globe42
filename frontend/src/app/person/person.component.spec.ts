@@ -19,7 +19,7 @@ import { ConfirmService } from '../confirm.service';
 import { PersonService } from '../person.service';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of, throwError } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonComponent', () => {
@@ -233,7 +233,7 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(throwError('nok'));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
@@ -276,7 +276,7 @@ describe('PersonComponent', () => {
     const personService = TestBed.get(PersonService);
     const router = TestBed.get(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(throwError('nok'));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 

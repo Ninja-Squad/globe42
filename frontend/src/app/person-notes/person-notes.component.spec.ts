@@ -8,7 +8,7 @@ import { PersonNoteService } from '../person-note.service';
 import { PersonModel } from '../models/person.model';
 import { NoteModel } from '../models/note.model';
 import { ConfirmService } from '../confirm.service';
-import { of, Subject, throwError } from 'rxjs';
+import { EMPTY, of, Subject } from 'rxjs';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
@@ -181,13 +181,13 @@ describe('PersonNotesComponent', () => {
     expect(tester.notes.length).toBe(1);
   });
 
-  it('should not delete note after confirmation', () => {
+  it('should not delete note if not confirmed', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
     const confirmService = TestBed.get(ConfirmService);
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
     spyOn(personNoteService, 'delete').and.returnValue(of(null));
-    spyOn(confirmService, 'confirm').and.returnValue(throwError('nok'));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
 
     tester.componentInstance.person = person;
     tester.detectChanges();

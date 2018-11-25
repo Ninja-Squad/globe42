@@ -37,14 +37,14 @@ export class PersonComponent implements OnInit {
     this.confirmService.confirm(
       { message: `Voulez-vous vraiment supprimer ${displayFullname(this.person)}\u00a0?`}).pipe(
       switchMap(() => this.personService.delete(this.person.id))
-    ).subscribe(() => this.router.navigate(['/persons']), () => {});
+    ).subscribe(() => this.router.navigate(['/persons']));
   }
 
   resurrect() {
     this.confirmService.confirm(
       { message: `Voulez-vous vraiment annuler la suppression de ${displayFullname(this.person)}\u00a0?`}).pipe(
       switchMap(() => this.personService.resurrect(this.person.id))
-    ).subscribe(() => this.router.navigate(['/persons']), () => {});
+    ).subscribe(() => this.router.navigate(['/persons']));
   }
 
   private createMapsUrl() {

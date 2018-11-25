@@ -11,7 +11,7 @@ import { LOCALE_ID } from '@angular/core';
 import { ChargeModel } from '../models/charge.model';
 import { ChargeService } from '../charge.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { of, throwError } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
 import { ComponentTester, fakeRoute, fakeSnapshot, TestButton } from 'ngx-speculoos';
@@ -176,7 +176,7 @@ describe('PersonResourcesComponent', () => {
 
     const confirmService = TestBed.get(ConfirmService);
     const incomeService = TestBed.get(IncomeService);
-    spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(incomeService, 'delete');
 
     tester.deleteIncomeButtons[0].click();
@@ -242,7 +242,7 @@ describe('PersonResourcesComponent', () => {
 
     const confirmService = TestBed.get(ConfirmService);
     const chargeService = TestBed.get(ChargeService);
-    spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(chargeService, 'delete');
 
     tester.deleteChargeButtons[0].click();
@@ -323,7 +323,7 @@ describe('PersonResourcesComponent', () => {
 
     const confirmService = TestBed.get(ConfirmService);
     const infoService = TestBed.get(PerUnitRevenueInformationService);
-    spyOn(confirmService, 'confirm').and.returnValue(throwError(null));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(infoService, 'delete');
 
     tester.deletePerUnitRevenueInformationButton.click();

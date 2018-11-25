@@ -10,7 +10,7 @@ import { ConfirmService } from '../confirm.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { FamilyModel } from '../models/family.model';
 import { By } from '@angular/platform-browser';
-import { of, throwError } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 
@@ -168,7 +168,7 @@ describe('PersonFamilyComponent', () => {
     const confirmService: ConfirmService = TestBed.get(ConfirmService);
     const familyService: FamilyService = TestBed.get(FamilyService);
 
-    spyOn(confirmService, 'confirm').and.returnValue(throwError(undefined));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(familyService, 'delete').and.returnValue(of(undefined));
 
     fixture.nativeElement.querySelector('#delete').click();

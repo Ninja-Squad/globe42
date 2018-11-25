@@ -16,7 +16,8 @@ export class PersonNoteEditionGuard implements CanDeactivate<PersonComponent> {
     }
 
     return this.confirmService.confirm({
-      message: `Vous avez une note en cours d'édition. Voulez-vous vraiment quitter la page\u00a0?`
+      message: `Vous avez une note en cours d'édition. Voulez-vous vraiment quitter la page\u00a0?`,
+      errorOnClose: true
     }).pipe(
       map(() => true),
       catchError(() => of(false))

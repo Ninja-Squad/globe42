@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PersonNoteEditionGuard } from './person-note-edition.guard';
 import { PersonComponent } from './person/person.component';
-import { ConfirmService } from './confirm.service';
+import { ConfirmOptions, ConfirmService } from './confirm.service';
 import { Observable, of, throwError } from 'rxjs';
 
 describe('PersonNoteEditionGuard', () => {
@@ -50,6 +50,8 @@ describe('PersonNoteEditionGuard', () => {
     (guard.canDeactivate(component) as Observable<boolean>).subscribe(r => result = r);
 
     expect(result).toBe(false);
-    expect(confirmService.confirm).toHaveBeenCalled();
+    expect(confirmService.confirm).toHaveBeenCalledWith({
+      asymmetricMatch: (actual: ConfirmOptions) => actual.errorOnClose
+    });
   });
 });

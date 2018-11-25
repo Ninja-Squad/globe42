@@ -9,7 +9,7 @@ import { WeddingEventService } from '../wedding-event.service';
 import { DisplayWeddingEventTypePipe, WEDDING_EVENT_TYPE_TRANSLATIONS } from '../display-wedding-event-type.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmService } from '../confirm.service';
-import { of, throwError } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { DateTime } from 'luxon';
 import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
@@ -18,8 +18,8 @@ import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.
 import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
 import { Location } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
-import Spy = jasmine.Spy;
 import { FullnamePipe } from '../fullname.pipe';
+import Spy = jasmine.Spy;
 
 class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEventsComponent> {
   constructor() {
@@ -164,7 +164,7 @@ describe('PersonWeddingEventsComponent', () => {
       const confirmService = TestBed.get(ConfirmService);
       const weddingEventService = TestBed.get(WeddingEventService);
 
-      (confirmService.confirm as Spy).and.returnValue(throwError(null));
+      (confirmService.confirm as Spy).and.returnValue(EMPTY);
 
       component.deleteEvent(events[1]);
       expect(component.events).toEqual(events);

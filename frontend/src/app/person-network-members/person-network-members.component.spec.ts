@@ -9,7 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DisplayNetworkMemberTypePipe } from '../display-network-member-type.pipe';
 import { ConfirmService } from '../confirm.service';
 import { NetworkMemberService } from '../network-member.service';
-import { of, throwError } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
@@ -118,7 +118,7 @@ describe('PersonNetworkMembersComponent', () => {
     const confirmService: ConfirmService = TestBed.get(ConfirmService);
     const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
 
-    spyOn(confirmService, 'confirm').and.returnValue(throwError(undefined));
+    spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(networkMemberService, 'delete');
     spyOn(networkMemberService, 'list');
 

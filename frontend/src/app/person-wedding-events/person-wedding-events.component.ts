@@ -40,7 +40,7 @@ export class PersonWeddingEventsComponent {
     }).pipe(
       switchMap(() => this.weddingEventService.delete(this.person.id, event.id)),
       switchMap(() => this.weddingEventService.list(this.person.id))
-    ).subscribe(events => this.events = events, () => {});
+    ).subscribe(events => this.events = events);
   }
 
   showEventCreation() {

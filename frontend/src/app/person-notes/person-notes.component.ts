@@ -79,11 +79,12 @@ export class PersonNotesComponent implements OnInit {
 
   deleteNote(note: NoteModel) {
     this.confirmService.confirm({
-      message: 'Voulez-vous vraiment supprimer définitivement cette note\u00a0?'
+      message: 'Voulez-vous vraiment supprimer définitivement cette note\u00a0?',
+      errorOnClose: true
     }).subscribe(() => {
       const action = this.personNoteService.delete(this.person.id, note.id);
       this.reloadAfterAction(action);
-    }, () => {});
+    });
   }
 
   private reloadAfterAction(action: Observable<any>) {

@@ -37,14 +37,14 @@ export class PersonResourcesComponent {
     this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer le revenu ${income.source.name}\u00A0?`}).pipe(
       switchMap(() => this.incomeService.delete(this.person.id, income.id)),
       switchMap(() => this.incomeService.list(this.person.id))
-    ).subscribe(incomes => this.incomes = incomes, () => {});
+    ).subscribe(incomes => this.incomes = incomes);
   }
 
   deleteCharge(charge: ChargeModel) {
     this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer la charge ${charge.type.name}\u00A0?`}).pipe(
       switchMap(() => this.chargeService.delete(this.person.id, charge.id)),
       switchMap(() => this.chargeService.list(this.person.id))
-    ).subscribe(charges => this.charges = charges, () => {});
+    ).subscribe(charges => this.charges = charges);
   }
 
   totalMonthlyIncomeAmount() {
@@ -85,6 +85,6 @@ export class PersonResourcesComponent {
       message: 'Voulez-vous vraiment supprimer les informations utilisées pour le calcul du revenu par unité de consommation\u00A0?'
     }).pipe(
       switchMap(() => this.perUnitRevenueInformationService.delete(this.person.id))
-    ).subscribe(() => this.perUnitRevenueInformation = null, () => {});
+    ).subscribe(() => this.perUnitRevenueInformation = null);
   }
 }
