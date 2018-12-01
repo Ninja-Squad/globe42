@@ -17,6 +17,7 @@
     "noUnusedParameters": false, // easy, but only spots overrides that don't use one of the params
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "importHelpers": true,
     "experimentalDecorators": true,
     "target": "es5",
     "typeRoots": [
