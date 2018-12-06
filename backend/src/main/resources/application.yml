@@ -20,6 +20,7 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 20MB
+      file-size-threshold: 11MB # never written to disk because clever cloud has a bug
   jpa:
     open-in-view: false
 management:
