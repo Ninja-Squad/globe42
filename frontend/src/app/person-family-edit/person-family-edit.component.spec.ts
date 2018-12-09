@@ -61,15 +61,11 @@ describe('PersonFamilyEditComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.familyForm.value).toEqual({
-      parentInFrance: false,
-      parentAbroad: false,
       spouseLocation: null,
       children: []
     } as FamilyCommand);
 
     const element: HTMLElement = fixture.nativeElement;
-    expect((element.querySelector('#parentInFrance') as HTMLInputElement).checked).toBe(false);
-    expect((element.querySelector('#parentAbroad') as HTMLInputElement).checked).toBe(false);
     expect((element.querySelector('#spouseInFrance') as HTMLInputElement).checked).toBe(false);
     expect((element.querySelector('#spouseAbroad') as HTMLInputElement).checked).toBe(false);
     expect((element.querySelector('#noSpouse') as HTMLInputElement).checked).toBe(true);
@@ -77,8 +73,6 @@ describe('PersonFamilyEditComponent', () => {
 
   it('should have a form when family is present', () => {
     route.snapshot.data.family = {
-      parentInFrance: true,
-      parentAbroad: true,
       spouseLocation: 'FRANCE',
       children: [
         {
@@ -93,8 +87,6 @@ describe('PersonFamilyEditComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.familyForm.value).toEqual({
-      parentInFrance: true,
-      parentAbroad: true,
       spouseLocation: 'FRANCE',
       children: [
         {
@@ -106,8 +98,6 @@ describe('PersonFamilyEditComponent', () => {
     } as FamilyCommand);
 
     const element: HTMLElement = fixture.nativeElement;
-    expect((element.querySelector('#parentInFrance') as HTMLInputElement).checked).toBe(true);
-    expect((element.querySelector('#parentAbroad') as HTMLInputElement).checked).toBe(true);
     expect((element.querySelector('#spouseInFrance') as HTMLInputElement).checked).toBe(true);
     expect((element.querySelector('#spouseAbroad') as HTMLInputElement).checked).toBe(false);
     expect((element.querySelector('#noSpouse') as HTMLInputElement).checked).toBe(false);
@@ -119,8 +109,6 @@ describe('PersonFamilyEditComponent', () => {
 
   it('should add and remove child', () => {
     route.snapshot.data.family = {
-      parentInFrance: true,
-      parentAbroad: true,
       spouseLocation: 'FRANCE',
       children: [
         {
@@ -154,8 +142,6 @@ describe('PersonFamilyEditComponent', () => {
 
   it('should save the family is present', () => {
     route.snapshot.data.family = {
-      parentInFrance: true,
-      parentAbroad: true,
       spouseLocation: 'FRANCE',
       children: [
         {
@@ -179,8 +165,6 @@ describe('PersonFamilyEditComponent', () => {
     fixture.detectChanges();
 
     const command: FamilyCommand = {
-      parentInFrance: true,
-      parentAbroad: true,
       spouseLocation: 'FRANCE',
       children: [
         {

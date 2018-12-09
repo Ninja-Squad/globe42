@@ -31,8 +31,6 @@ class FamilyController(val personDao: PersonDao) {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         val family = Family()
         with(family) {
-            parentInFrance = command.parentInFrance
-            parentAbroad = command.parentAbroad
             spouseLocation = command.spouseLocation
             command.children.forEach { childCommand ->
                 addChild(Child().apply {

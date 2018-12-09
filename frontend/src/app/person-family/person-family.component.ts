@@ -7,7 +7,6 @@ import { ConfirmService } from '../confirm.service';
 import { switchMap } from 'rxjs/operators';
 
 export interface Situation {
-  parentPresent: boolean;
   spousePresent: boolean;
   children: Array<ChildModel>;
 }
@@ -33,13 +32,11 @@ export class PersonFamilyComponent implements OnInit {
     this.family = this.route.snapshot.data.family;
     if (this.family) {
       this.france = {
-        parentPresent: this.family.parentInFrance,
         spousePresent: this.family.spouseLocation === 'FRANCE',
         children: this.family.children.filter(child => child.location === 'FRANCE')
       };
 
       this.abroad = {
-        parentPresent: this.family.parentAbroad,
         spousePresent: this.family.spouseLocation === 'ABROAD',
         children: this.family.children.filter(child => child.location === 'ABROAD')
       };

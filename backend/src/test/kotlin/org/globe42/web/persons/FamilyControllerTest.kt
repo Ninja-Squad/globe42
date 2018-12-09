@@ -49,8 +49,6 @@ class FamilyControllerTest {
 
         val family = Family().apply {
             id = 56L;
-            parentInFrance = true
-            parentAbroad = true
             spouseLocation = Location.FRANCE
             addChild(child)
         }
@@ -60,8 +58,6 @@ class FamilyControllerTest {
 
         assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
         with(result.body!!) {
-            assertThat(parentInFrance).isEqualTo(family.parentInFrance)
-            assertThat(parentAbroad).isEqualTo(family.parentAbroad)
             assertThat(spouseLocation).isEqualTo(family.spouseLocation)
             assertThat(children).hasSize(1)
             with(children.get(0)) {
@@ -95,16 +91,12 @@ class FamilyControllerTest {
             Location.ABROAD
         )
         val command = FamilyCommand(
-            true,
-            true,
-            Location.FRANCE,
-            setOf(childDTO)
+            spouseLocation = Location.FRANCE,
+            children = setOf(childDTO)
         )
         controller.save(person.id!!, command)
 
         with(person.family!!) {
-            assertThat(parentInFrance).isEqualTo(command.parentInFrance)
-            assertThat(parentAbroad).isEqualTo(command.parentAbroad)
             assertThat(spouseLocation).isEqualTo(command.spouseLocation)
             assertThat(getChildren()).hasSize(1)
             with(getChildren().first()) {

@@ -66,8 +66,6 @@ describe('PersonFamilyComponent', () => {
 
   it('should display family if family present', () => {
     const family = {
-      parentInFrance: true,
-      parentAbroad: false,
       spouseLocation: 'ABROAD',
       children: [
         {
@@ -90,7 +88,6 @@ describe('PersonFamilyComponent', () => {
     const component = fixture.componentInstance;
     expect(component.family).toBe(family);
     expect(component.france).toEqual({
-      parentPresent: true,
       spousePresent: false,
       children: [
         {
@@ -101,7 +98,6 @@ describe('PersonFamilyComponent', () => {
       ]
     } as Situation);
     expect(component.abroad).toEqual({
-      parentPresent: false,
       spousePresent: true,
       children: [
         {
@@ -122,8 +118,6 @@ describe('PersonFamilyComponent', () => {
 
   it('should delete family after confirmation', () => {
     const family = {
-      parentInFrance: true,
-      parentAbroad: false,
       spouseLocation: 'ABROAD',
       children: []
     } as FamilyModel;
@@ -155,8 +149,6 @@ describe('PersonFamilyComponent', () => {
 
   it('should not delete family if no confirmation', () => {
     const family = {
-      parentInFrance: true,
-      parentAbroad: false,
       spouseLocation: 'ABROAD',
       children: []
     } as FamilyModel;

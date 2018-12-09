@@ -28,13 +28,11 @@ describe('SituationComponent', () => {
   it('should display family situation when no child', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.componentInstance.situation = {
-      parentPresent: true,
       spousePresent: true,
       children: []
     };
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toMatch(/Parent présentOui/);
     expect(fixture.nativeElement.textContent).toMatch(/Époux\(se\) présent\(e\)Oui/);
     expect(fixture.nativeElement.textContent).not.toContain('enfant');
   });
@@ -42,7 +40,6 @@ describe('SituationComponent', () => {
   it('should display family situation when empty child present', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.componentInstance.situation = {
-      parentPresent: false,
       spousePresent: false,
       children: [
         {
@@ -54,7 +51,6 @@ describe('SituationComponent', () => {
     };
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toMatch(/Parent présentNon/);
     expect(fixture.nativeElement.textContent).toMatch(/Époux\(se\) présent\(e\)Non/);
     expect(fixture.nativeElement.textContent).toContain('1 enfant(s)');
     expect(fixture.nativeElement.querySelector('li').textContent.trim()).toBe('aucune information');
@@ -63,7 +59,6 @@ describe('SituationComponent', () => {
   it('should display child with only first name', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.componentInstance.situation = {
-      parentPresent: false,
       spousePresent: false,
       children: [
         {
@@ -81,7 +76,6 @@ describe('SituationComponent', () => {
   it('should display child with only birth date', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.componentInstance.situation = {
-      parentPresent: false,
       spousePresent: false,
       children: [
         {
@@ -100,7 +94,6 @@ describe('SituationComponent', () => {
   it('should display child with first name and birth date', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.componentInstance.situation = {
-      parentPresent: false,
       spousePresent: false,
       children: [
         {

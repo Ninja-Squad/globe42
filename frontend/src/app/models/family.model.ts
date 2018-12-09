@@ -7,8 +7,6 @@ export interface ChildModel {
 }
 
 export interface FamilyModel {
-  parentInFrance: boolean;
-  parentAbroad: boolean;
   spouseLocation: Location;
   children: Array<ChildModel>;
 }

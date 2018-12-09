@@ -47,7 +47,6 @@ class FamilyControllerMvcTest {
     fun `should get family of person`() {
         person.family = Family().apply {
             id = 56L
-            parentInFrance = true
             addChild(Child().apply {
                 id = 67
                 location = Location.ABROAD
@@ -56,18 +55,14 @@ class FamilyControllerMvcTest {
 
         mvc.perform(get("/api/persons/{personId}/family", person.id!!))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.parentInFrance").value(true))
             .andExpect(jsonPath("$.children[0].location").value(Location.ABROAD.name))
     }
 
     @Test
     fun `should save family`() {
         val command = FamilyCommand(
-            true,
-            true,
-            Location.FRANCE,
-            emptySet()
-        )
+            spouseLocation = Location.FRANCE,
+            children = emptySet())
 
         mvc.perform(
             put("/api/persons/{personId}/family", person.id!!)
