@@ -25,8 +25,6 @@ export class PersonFamilyEditComponent implements OnInit {
     const family: FamilyModel = this.route.snapshot.data.family;
 
     this.familyForm = this.fb.group({
-      parentInFrance: family ? family.parentInFrance : false,
-      parentAbroad: family ? family.parentAbroad : false,
       spouseLocation: family ? family.spouseLocation : null,
       children: this.fb.array(
         family ? family.children.map(child => this.fb.group({

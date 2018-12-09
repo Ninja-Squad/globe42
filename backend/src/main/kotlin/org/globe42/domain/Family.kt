@@ -17,16 +17,6 @@ class Family {
     var id: Long? = null
 
     /**
-     * true if the person has a parent in France
-     */
-    var parentInFrance = false;
-
-    /**
-     * true if the person has a parent abroad
-     */
-    var parentAbroad = false;
-
-    /**
      * null if the person doesn't have a spouse. Otherwise, the location of the spouse.
      */
     @Enumerated(EnumType.STRING)

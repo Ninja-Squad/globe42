@@ -8,14 +8,10 @@ import org.globe42.domain.Location
  * @author JB Nizet
  */
 data class FamilyDTO(
-    val parentInFrance: Boolean,
-    val parentAbroad: Boolean,
     val spouseLocation: Location?,
     val children: List<ChildDTO>
 ) {
     constructor(family: Family) : this(
-        family.parentInFrance,
-        family.parentAbroad,
         family.spouseLocation,
         family.getChildren().map(::ChildDTO)
     )

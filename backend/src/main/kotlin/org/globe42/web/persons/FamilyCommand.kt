@@ -7,8 +7,6 @@ import org.globe42.domain.Location
  * @author JB Nizet
  */
 data class FamilyCommand(
-    val parentInFrance: Boolean,
-    val parentAbroad: Boolean,
     val spouseLocation: Location?,
     val children: Set<ChildDTO>
 )
