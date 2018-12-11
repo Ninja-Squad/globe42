@@ -11,7 +11,7 @@ node {
 }
 
 tasks {
-    getByName("npmInstall") {
+    npmInstall {
         enabled = false
     }
 
@@ -59,16 +59,16 @@ tasks {
         dependsOn("yarn_lint")
     }
 
-    getByName("check") {
+    check {
         dependsOn(lint)
         dependsOn(test)
     }
 
-    getByName("assemble") {
+    assemble {
         dependsOn(yarn_build)
     }
 
-    getByName("clean") {
+    clean {
         dependsOn("cleanYarn_build")
         dependsOn("cleanYarn_test")
         dependsOn("cleanYarn_lint")

@@ -55,7 +55,7 @@ tasks {
         destinationDir = file("$buildDir/buildInfo")
     }
 
-    getByName<BootJar>("bootJar") {
+    bootJar {
         archiveName = "globe42.jar"
         dependsOn(":frontend:assemble")
         dependsOn(buildInfo)
@@ -70,16 +70,16 @@ tasks {
         }
     }
 
-    getByName<BootRun>("bootRun") {
+    bootRun {
         args("--globe42.secretKey=QMwbcwa19VV02Oy5T7LSWyV+/wZrOsRRfhCR6TkapsY=")
         args("--globe42.googleCloudStorageCredentialsPath=${rootProject.file("secrets/google-cloud-storage-dev.json")}")
     }
 
-    getByName<Test>("test") {
+    test {
         useJUnitPlatform()
     }
 
-    getByName<JacocoReport>("jacocoTestReport") {
+    jacocoTestReport {
         reports {
             xml.setEnabled(true)
             html.setEnabled(true)
