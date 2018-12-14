@@ -135,6 +135,11 @@
     "use-life-cycle-interface": true,
     "use-output-property-decorator": true,
     "use-pipe-transform-interface": true,
-    "use-view-encapsulation": true
+    "use-view-encapsulation": true,
+    "ban": [
+      true,
+      {"name": "fit", "message": "Focused tests are not allowed."},
+      {"name": "fdescribe", "message": "Focused test suites are not allowed."}
+    ]
   }
 }
