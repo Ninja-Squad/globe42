@@ -29,7 +29,7 @@
     "chart.js": "2.7.3",
     "core-js": "2.6.1",
     "font-awesome": "4.7.0",
-    "luxon": "1.8.2",
+    "luxon": "1.8.3",
     "ngx-valdemort": "1.0.0",
     "rxjs": "6.3.3",
     "tslib": "1.9.3",
