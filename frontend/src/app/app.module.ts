@@ -83,6 +83,7 @@ import { ValidationDefaultsComponent } from './validation-defaults/validation-de
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe } from './display-location.pipe';
 import { PageTitleDirective } from './page-title.directive';
+import { NavigationProgressComponent } from './navigation-progress/navigation-progress.component';
 
 registerLocaleData(localeFr);
 
@@ -158,7 +159,8 @@ registerLocaleData(localeFr);
     DisplayLocationPipe,
     DisplayVisaPipe,
     DisplayResidencePermitPipe,
-    PageTitleDirective
+    PageTitleDirective,
+    NavigationProgressComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

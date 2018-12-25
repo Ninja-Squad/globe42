@@ -1,0 +1,17 @@
+@import '../../common';
+
+.navigation-progress-wrapper {
+  background-color: $light;
+  height: .1rem;
+
+  .progress {
+    background-color: $light;
+    @include border-radius(0);
+  }
+
+  .progress-bar {
+    @include transition(width .5s ease);
+  }
+}
+
+
