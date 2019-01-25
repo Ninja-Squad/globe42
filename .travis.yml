@@ -4,6 +4,7 @@ dist: trusty
 
 addons:
   chrome: stable
+  postgresql: "9.6"
 
 services:
   - postgresql
@@ -12,7 +13,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install language-pack-fr
   - sudo /etc/init.d/postgresql stop
-  - sudo /etc/init.d/postgresql start 9.2
+  - sudo /etc/init.d/postgresql start 9.6
 
 before_script:
   - psql -f backend/database/database.sql -U postgres
