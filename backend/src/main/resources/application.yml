@@ -23,6 +23,8 @@ spring:
       file-size-threshold: 11MB # never written to disk because clever cloud has a bug
   jpa:
     open-in-view: false
+  flyway:
+    table: schema_version
 management:
   endpoint:
     health:
