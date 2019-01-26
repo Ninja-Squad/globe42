@@ -1,8 +1,7 @@
+
 import org.flywaydb.gradle.task.FlywayCleanTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.buildinfo.BuildInfo
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-import org.springframework.boot.gradle.tasks.run.BootRun
 
 buildscript {
     repositories {
@@ -15,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.3.10"
+    val kotlinVersion = "1.3.20"
 
     java
     jacoco
@@ -23,10 +22,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.1.1.RELEASE"
+    id("org.springframework.boot") version "2.1.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
-    id("org.flywaydb.flyway") version "5.2.0"
-    id("com.gorylenko.gradle-git-properties") version "1.5.2"
+    id("org.flywaydb.flyway") version "5.2.4"
+    id("com.gorylenko.gradle-git-properties") version "2.0.0"
     id("org.jetbrains.dokka") version "0.9.17"
 }
 
@@ -106,8 +105,6 @@ tasks {
     }
 }
 
-extra["flyway.version"] = "4.2.0" // old version needed because Clever cloud only supports postgresql 9.2, and Flyway 5 doesn't support 9.2 anymore
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -117,7 +114,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.flywaydb:flyway-core:${extra["flyway.version"]}")
+    implementation("org.flywaydb:flyway-core")
 
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.flywaydb:flyway-core")
