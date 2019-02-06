@@ -25,7 +25,7 @@ export class IncomeTypeEditComponent implements OnInit {
               private errorService: ErrorService) { }
 
   ngOnInit() {
-    this.editedIncomeType = this.route.snapshot.data['incomeType'];
+    this.editedIncomeType = this.route.snapshot.data.incomeType;
     this.incomeTypeForm = this.fb.group({
       type: [this.editedIncomeType ? this.editedIncomeType.type : '', Validators.required]
     });

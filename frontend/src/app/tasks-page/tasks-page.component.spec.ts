@@ -183,7 +183,7 @@ describe('TasksPageComponent', () => {
 
   it('should edit a task when list type is person-todo', () => {
     data.taskListType = 'person-todo';
-    activatedRoute.parent.parent.snapshot.data['person'] = { id: 42 };
+    activatedRoute.parent.parent.snapshot.data.person = { id: 42 };
 
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
@@ -268,7 +268,7 @@ describe('TasksPageComponent', () => {
 
   it('should display a new task link with the concerned person as param is list type is person-todo', () => {
     data.taskListType = 'person-todo';
-    activatedRoute.parent.parent.snapshot.data['person'] = { id: 42 };
+    activatedRoute.parent.parent.snapshot.data.person = { id: 42 };
 
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();

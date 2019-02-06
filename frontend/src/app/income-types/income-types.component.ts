@@ -14,7 +14,7 @@ export class IncomeTypesComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.incomeTypes = this.route.snapshot.data['incomeTypes'];
+    this.incomeTypes = this.route.snapshot.data.incomeTypes;
   }
 
 }

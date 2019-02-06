@@ -17,7 +17,7 @@ export class PasswordResetComponent implements OnInit {
   constructor(private route: ActivatedRoute, private userService: UserService) { }
 
   ngOnInit() {
-    this.user = this.route.snapshot.data['user'];
+    this.user = this.route.snapshot.data.user;
   }
 
   resetPassword() {

@@ -42,7 +42,7 @@ export class ErrorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      tap(null, error => this.handleError(error))
+      tap({ error: error => this.handleError(error) })
     );
   }
 

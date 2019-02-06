@@ -35,7 +35,7 @@ describe('ErrorService', () => {
       error = err;
     });
 
-    httpClient.get('/test').subscribe(null, noop);
+    httpClient.get('/test').subscribe({ error: noop });
     http.expectOne('/test').error({ message: 'not good' } as ErrorEvent);
 
     expect(error.status).toBe(0);
@@ -48,7 +48,7 @@ describe('ErrorService', () => {
       error = err;
     });
 
-    httpClient.get('/test').subscribe(null, noop);
+    httpClient.get('/test').subscribe({ error: noop });
     http.expectOne('/test').flush(null, {status: 500, statusText: 'Server Error'});
 
     expect(error.status).toBe(500);
@@ -61,7 +61,7 @@ describe('ErrorService', () => {
       error = err;
     });
 
-    httpClient.get('/test').subscribe(null, noop);
+    httpClient.get('/test').subscribe({ error: noop });
     http.expectOne('/test').flush({message: 'Not good'}, {status: 500, statusText: 'Server Error'});
 
     expect(error.status).toBe(500);
@@ -79,7 +79,7 @@ describe('ErrorService', () => {
       technicalError = err;
     });
 
-    httpClient.get('/test').subscribe(null, noop);
+    httpClient.get('/test').subscribe({ error: noop });
 
     const functionalErrorBody = {
       message: 'Not good',
@@ -105,7 +105,7 @@ describe('ErrorService', () => {
       technicalError = err;
     });
 
-    httpClient.get('/api/authentication').subscribe(null, noop);
+    httpClient.get('/api/authentication').subscribe({ error: noop });
     http.expectOne('/api/authentication').flush(null, {status: 401, statusText: 'Unauthorized'});
 
     expect(functionalError).toBeUndefined();

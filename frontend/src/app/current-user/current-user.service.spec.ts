@@ -120,7 +120,7 @@ describe('CurrentUserService', () => {
     service.userEvents.next({login: 'jb'} as UserModel);
 
     let ok = false;
-    service.checkPassword('secret').subscribe(null, () => ok = true);
+    service.checkPassword('secret').subscribe({ error: () => ok = true });
 
     const testRequest = http.expectOne({ url: '/api/authentication', method: 'POST' });
     expect(testRequest.request.body).toEqual({login: 'jb', password: 'secret'});

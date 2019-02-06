@@ -11,7 +11,7 @@ export class PersonsResolverService implements Resolve<Array<PersonIdentityModel
   constructor(private personService: PersonService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Array<PersonIdentityModel>> {
-    const listType = route.data['personListType'];
+    const listType = route.data.personListType;
     return (listType === 'deleted') ? this.personService.listDeleted() : this.personService.list();
   }
 }

@@ -21,7 +21,7 @@ describe('PersonIncomeEditComponent', () => {
     { id: 2, name: 'A', maxMonthlyAmount: 100 }
   ] as Array<IncomeSourceModel>;
 
-  const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', 'nickName': 'JB'};
+  const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: 'JB'};
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],

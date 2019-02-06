@@ -11,7 +11,7 @@ export class ChargesResolverService implements Resolve<Array<ChargeModel>> {
   constructor(private chargeService: ChargeService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Array<ChargeModel>> {
-    const person: PersonModel = route.parent.data['person'];
+    const person: PersonModel = route.parent.data.person;
     return this.chargeService.list(person.id);
   }
 }

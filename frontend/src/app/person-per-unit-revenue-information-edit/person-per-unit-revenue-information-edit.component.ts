@@ -26,8 +26,8 @@ export class PersonPerUnitRevenueInformationEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.person = this.route.snapshot.data['person'];
-    const info = this.route.snapshot.data['perUnitRevenueInformation'];
+    this.person = this.route.snapshot.data.person;
+    const info = this.route.snapshot.data.perUnitRevenueInformation;
     if (info) {
       this.infoGroup.setValue(info);
     }

@@ -61,16 +61,16 @@ export class PersonEditComponent {
               private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder) {
-    this.editedPerson = this.route.snapshot.data['person'];
+    this.editedPerson = this.route.snapshot.data.person;
 
-    let persons: Array<PersonIdentityModel> = this.route.snapshot.data['persons'];
+    let persons: Array<PersonIdentityModel> = this.route.snapshot.data.persons;
     if (this.editedPerson) {
       persons = persons.filter(p => p.id !== this.editedPerson.id);
     }
 
     this.cityTypeahead = new CityTypeahead(this.searchCityService);
     this.spouseTypeahead = new PersonTypeahead(persons);
-    this.countryTypeahead = new CountryTypeahead(this.route.snapshot.data['countries']);
+    this.countryTypeahead = new CountryTypeahead(this.route.snapshot.data.countries);
 
     this.personForm = this.fb.group({
       firstName: ['', Validators.required],

@@ -20,7 +20,7 @@ export class PersonsComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.allPersons = sortBy<PersonIdentityModel>(this.route.snapshot.data['persons'], displayFullname);
+    this.allPersons = sortBy<PersonIdentityModel>(this.route.snapshot.data.persons, displayFullname);
     this.filterCtrl.valueChanges.subscribe(text => this.filter(text));
     this.filter('');
   }

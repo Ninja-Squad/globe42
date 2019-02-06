@@ -86,7 +86,7 @@ describe('LoginComponent', () => {
     const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
     const router: Router = TestBed.get(Router);
 
-    const subject = new Subject<String>();
+    const subject = new Subject<string>();
     spyOn(currentUserService, 'authenticate').and.returnValue(subject);
     spyOn(router, 'navigate');
 
@@ -112,7 +112,7 @@ describe('LoginComponent', () => {
     const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
     const router: Router = TestBed.get(Router);
 
-    const subject = new Subject<String>();
+    const subject = new Subject<string>();
     spyOn(currentUserService, 'authenticate').and.returnValue(subject);
     spyOn(router, 'navigate');
 

@@ -11,7 +11,7 @@ export class TasksResolverService implements Resolve<Array<TaskModel> | Page<Tas
   constructor(private taskService: TaskService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Page<TaskModel>> {
-    const listType = route.data['taskListType'];
+    const listType = route.data.taskListType;
     const pageNumber = route.queryParamMap.get('page') ? +route.queryParamMap.get('page') : 0;
 
     switch (listType) {

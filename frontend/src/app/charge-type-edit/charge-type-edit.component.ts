@@ -29,9 +29,9 @@ export class ChargeTypeEditComponent implements OnInit {
 
   ngOnInit() {
     this.chargeCategories =
-      sortBy<ChargeCategoryModel>(this.route.snapshot.data['chargeCategories'], category => category.name);
+      sortBy<ChargeCategoryModel>(this.route.snapshot.data.chargeCategories, category => category.name);
 
-    this.editedChargeType = this.route.snapshot.data['chargeType'];
+    this.editedChargeType = this.route.snapshot.data.chargeType;
 
     this.chargeTypeForm = this.fb.group({
       name: [this.editedChargeType ? this.editedChargeType.name : '', Validators.required],
