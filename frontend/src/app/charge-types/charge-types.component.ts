@@ -14,7 +14,7 @@ export class ChargeTypesComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.chargeTypes = this.route.snapshot.data['chargeTypes'];
+    this.chargeTypes = this.route.snapshot.data.chargeTypes;
   }
 
 }

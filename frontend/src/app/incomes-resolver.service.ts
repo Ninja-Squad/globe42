@@ -14,7 +14,7 @@ export class IncomesResolverService implements Resolve<Array<IncomeModel>> {
   constructor(private incomeService: IncomeService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Array<IncomeModel>> {
-    const person: PersonModel = route.parent.data['person'];
+    const person: PersonModel = route.parent.data.person;
     return this.incomeService.list(person.id);
   }
 }

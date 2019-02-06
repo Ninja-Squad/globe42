@@ -23,7 +23,7 @@ export class ChargeCategoryEditComponent implements OnInit {
               private errorService: ErrorService) { }
 
   ngOnInit() {
-    this.editedChargeCategory = this.route.snapshot.data['chargeCategory'];
+    this.editedChargeCategory = this.route.snapshot.data.chargeCategory;
     this.chargeCategoryForm = this.fb.group({
       name: [this.editedChargeCategory ? this.editedChargeCategory.name : '', Validators.required]
     });

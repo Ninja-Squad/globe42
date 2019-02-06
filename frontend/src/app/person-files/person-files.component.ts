@@ -24,7 +24,7 @@ export class PersonFilesComponent implements OnInit {
   constructor(route: ActivatedRoute,
               private personFileService: PersonFileService,
               private confirmService: ConfirmService) {
-    this.person = route.parent.snapshot.data['person'];
+    this.person = route.parent.snapshot.data.person;
   }
 
   ngOnInit(): void {

@@ -42,11 +42,11 @@ export class NoteComponent implements AfterContentChecked {
 
   private _edited = false;
 
+  constructor(private fb: FormBuilder) { }
+
   get edited() {
     return this._edited;
   }
-
-  constructor(private fb: FormBuilder) { }
 
   @Input()
   set edited(value) {

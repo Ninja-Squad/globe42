@@ -11,7 +11,7 @@ export class ParticipationsResolverService implements Resolve<Array<Participatio
   constructor(private participationService: ParticipationService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Array<ParticipationModel>> {
-    const person: PersonModel = route.parent.data['person'];
+    const person: PersonModel = route.parent.data.person;
     return this.participationService.list(person.id);
   }
 }

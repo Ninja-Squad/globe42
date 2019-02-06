@@ -75,7 +75,7 @@ describe('ConfirmService and its modal component', () => {
   });
 
   it('should error when not confirming and errorOnClose is true', (done: DoneFn) => {
-    confirm({message: 'Really?', errorOnClose: true}).subscribe(null, () => done());
+    confirm({message: 'Really?', errorOnClose: true}).subscribe({ error: () => done() });
     const noButton = modalContent.querySelectorAll('button')[2];
     expect(noButton.textContent).toBe('Non');
     noButton.click();
@@ -86,7 +86,7 @@ describe('ConfirmService and its modal component', () => {
   });
 
   it('should error when closing and errorOnClose is true', (done: DoneFn) => {
-    confirm({message: 'Really?', errorOnClose: true}).subscribe(null, () => done());
+    confirm({message: 'Really?', errorOnClose: true}).subscribe({ error: () => done() });
     const closeButton = modalContent.querySelectorAll('button')[0];
     expect(closeButton.textContent).toContain('×');
     closeButton.click();
@@ -97,7 +97,10 @@ describe('ConfirmService and its modal component', () => {
   });
 
   it('should do nothing when not confirming and errorOnClose is not set', (done: DoneFn) => {
-    confirm({message: 'Really?'}).subscribe(null, () => fail(), () => done());
+    confirm({message: 'Really?'}).subscribe({
+      error: () => fail(),
+      complete: () => done()
+    });
     const noButton = modalContent.querySelectorAll('button')[2];
     expect(noButton.textContent).toBe('Non');
     noButton.click();

@@ -11,7 +11,7 @@ export class WeddingEventsResolverService implements Resolve<Array<WeddingEventM
   constructor(private weddingEventService: WeddingEventService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Array<WeddingEventModel>> {
-    const person: PersonModel = route.parent.data['person'];
+    const person: PersonModel = route.parent.data.person;
     return this.weddingEventService.list(person.id);
   }
 }

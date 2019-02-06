@@ -16,7 +16,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
   selector: 'gl-datepicker-container',
   templateUrl: './datepicker-container.component.html',
   host: {
-    'class': 'input-group'
+    class: 'input-group'
   }
 })
 export class DatepickerContainerComponent {

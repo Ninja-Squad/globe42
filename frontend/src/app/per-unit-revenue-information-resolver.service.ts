@@ -10,7 +10,7 @@ export class PerUnitRevenueInformationResolverService implements Resolve<PerUnit
   constructor(private perUnitRevenueInformationService: PerUnitRevenueInformationService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<PerUnitRevenueInformationModel | null> {
-    const personId = +(route.paramMap.get('id') || route.parent.data['person'].id);
+    const personId = +(route.paramMap.get('id') || route.parent.data.person.id);
     return this.perUnitRevenueInformationService.get(personId);
   }
 }

@@ -26,7 +26,7 @@ export class UserEditComponent implements OnInit {
               private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.editedUser = this.route.snapshot.data['user'];
+    this.editedUser = this.route.snapshot.data.user;
     this.userForm = this.fb.group({
       login: [this.editedUser ? this.editedUser.login : '', Validators.required],
       admin: this.editedUser ? this.editedUser.admin : false

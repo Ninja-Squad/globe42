@@ -22,9 +22,9 @@ export class PersonParticipationsComponent {
   person: PersonModel;
 
   constructor(route: ActivatedRoute, private participationService: ParticipationService) {
-    this.person = route.parent.snapshot.data['person'];
+    this.person = route.parent.snapshot.data.person;
 
-    const participations: Array<ParticipationModel> = route.snapshot.data['participations'];
+    const participations: Array<ParticipationModel> = route.snapshot.data.participations;
     this.items = ACTIVITY_TYPE_TRANSLATIONS.map(t => {
       const participation = participations.filter(p => p.activityType === t.key)[0];
       return {

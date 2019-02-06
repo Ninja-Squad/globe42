@@ -33,8 +33,8 @@ export class PersonChargeEditComponent implements OnInit {
               private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.person = this.route.snapshot.data['person'];
-    this.chargeTypes = sortBy<ChargeTypeModel>(this.route.snapshot.data['chargeTypes'], type => type.name);
+    this.person = this.route.snapshot.data.person;
+    this.chargeTypes = sortBy<ChargeTypeModel>(this.route.snapshot.data.chargeTypes, type => type.name);
     this.chargeForm = this.fb.group({
       type: [null, Validators.required],
       monthlyAmount: [null, Validators.compose([Validators.required, this.monthlyAmountValidator, Validators.min(1)])]

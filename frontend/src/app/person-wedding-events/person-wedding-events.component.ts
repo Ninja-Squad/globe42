@@ -30,8 +30,8 @@ export class PersonWeddingEventsComponent {
               private weddingEventService: WeddingEventService,
               private formBuilder: FormBuilder,
               private confirmService: ConfirmService) {
-    this.person = route.parent.snapshot.data['person'];
-    this.events = route.snapshot.data['events'];
+    this.person = route.parent.snapshot.data.person;
+    this.events = route.snapshot.data.events;
   }
 
   deleteEvent(event: WeddingEventModel) {

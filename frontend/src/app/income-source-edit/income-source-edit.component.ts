@@ -29,9 +29,9 @@ export class IncomeSourceEditComponent implements OnInit {
 
   ngOnInit() {
     this.incomeSourceTypes =
-      sortBy<IncomeSourceTypeModel>(this.route.snapshot.data['incomeSourceTypes'], type => type.type);
+      sortBy<IncomeSourceTypeModel>(this.route.snapshot.data.incomeSourceTypes, type => type.type);
 
-    this.editedIncomeSource = this.route.snapshot.data['incomeSource'];
+    this.editedIncomeSource = this.route.snapshot.data.incomeSource;
 
     this.incomeSourceForm = this.fb.group({
       name: [this.editedIncomeSource ? this.editedIncomeSource.name : '', Validators.required],

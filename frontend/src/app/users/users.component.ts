@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit {
               private currentUserService: CurrentUserService) { }
 
   ngOnInit() {
-    this.users = sortBy<UserModel>(this.route.snapshot.data['users'], u => u.login);
+    this.users = sortBy<UserModel>(this.route.snapshot.data.users, u => u.login);
   }
 
   delete(user: UserModel) {

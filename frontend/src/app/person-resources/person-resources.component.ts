@@ -27,10 +27,10 @@ export class PersonResourcesComponent {
               private chargeService: ChargeService,
               private perUnitRevenueInformationService: PerUnitRevenueInformationService,
               private confirmService: ConfirmService) {
-    this.incomes = route.snapshot.data['incomes'];
-    this.charges = route.snapshot.data['charges'];
-    this.perUnitRevenueInformation = route.snapshot.data['perUnitRevenueInformation'];
-    this.person = route.parent.snapshot.data['person'];
+    this.incomes = route.snapshot.data.incomes;
+    this.charges = route.snapshot.data.charges;
+    this.perUnitRevenueInformation = route.snapshot.data.perUnitRevenueInformation;
+    this.person = route.parent.snapshot.data.person;
   }
 
   deleteIncome(income: IncomeModel) {
