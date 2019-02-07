@@ -27,7 +27,7 @@
     "@types/luxon": "1.10.2",
     "bootstrap": "4.2.1",
     "chart.js": "2.7.3",
-    "core-js": "2.6.3",
+    "core-js": "2.6.4",
     "font-awesome": "4.7.0",
     "luxon": "1.11.1",
     "ngx-valdemort": "1.0.0",
