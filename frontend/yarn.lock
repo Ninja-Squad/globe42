@@ -342,10 +342,10 @@
   dependencies:
     "@types/jasmine" "*"
 
-"@types/luxon@1.10.2":
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.10.2.tgz#36ed140a3dadea3e7be4982cecb47d89aa098a20"
-  integrity sha512-LEqrz+1tzeWwyzmC9hJ6negMjGGc1ABaAwVPwkeN1a2/Oqql/SowlcENFd5e2EkWYJd7FhMojFBTuyWOPUx8sg==
+"@types/luxon@1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.11.0.tgz#862041d849bafb991937f25f68d2ff0a4ca3f1e2"
+  integrity sha512-4MBC4fp+W+LJ7Abr03qJtJn2yS6sy9B9xgU+fEaWiIHYxRkFgLVl4WEsLK/dKYXe8VdWtLM4fED4HWaJpMnJMg==
 
 "@types/node@*":
   version "10.12.18"
@@ -4619,10 +4619,10 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-luxon@1.11.1:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.11.1.tgz#4b59f28264ae7ec27b42fe0fb18564dae771d2f7"
-  integrity sha512-ZmfPxP91Swg5MmHOeV/hvdIWiUYm6LCySg0xVRBVtOHZdNqiD32qxUhMek4XbyyXWtKdGMUD+hW+o5pilbRVuA==
+luxon@1.11.2:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.11.2.tgz#0073566e8b6f493d68891c6b871dd72196547c24"
+  integrity sha512-dD6sJotzprPhqJAp9eZbc1y1cc0CMiwRabsaEfFBJT2lRkWdOqJe3QmxB8GNwjOHZ6fciuGiLK3htgxZgphGxA==
 
 magic-string@^0.25.0:
   version "0.25.1"
