@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.1.2.RELEASE"
+    id("org.springframework.boot") version "2.1.3.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
     id("org.flywaydb.flyway") version "5.2.4"
     id("com.gorylenko.gradle-git-properties") version "2.0.0"
@@ -110,7 +110,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("com.google.cloud:google-cloud-storage:1.49.0")
+    implementation("com.google.cloud:google-cloud-storage:1.62.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -125,8 +125,8 @@ dependencies {
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
-    testImplementation("org.mockito:mockito-junit-jupiter:2.23.0")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+    testImplementation("org.mockito:mockito-junit-jupiter")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
