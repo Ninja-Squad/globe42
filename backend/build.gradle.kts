@@ -38,7 +38,7 @@ repositories {
 }
 
 tasks {
-    withType(KotlinCompile::class.java) {
+    withType<KotlinCompile>() {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=enable")
             jvmTarget = "1.8"
@@ -55,7 +55,7 @@ tasks {
     }
 
     bootJar {
-        archiveName = "globe42.jar"
+        archiveFileName.set("globe42.jar")
         dependsOn(":frontend:assemble")
         dependsOn(buildInfo)
 
