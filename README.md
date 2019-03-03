@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Ninja-Squad/globe42.svg?branch=master)](https://travis-ci.org/Ninja-Squad/globe42)
+[![Build Status](https://circleci.com/gh/Ninja-Squad/globe42.svg?style=svg)](https://circleci.com/gh/Ninja-Squad/globe42)
 [![Codecov](https://codecov.io/gh/Ninja-Squad/globe42/branch/master/graph/badge.svg)](https://codecov.io/gh/Ninja-Squad/globe42)
 
 # Projet de gestion sécurisée des adhérents pour l'association Globe 42
