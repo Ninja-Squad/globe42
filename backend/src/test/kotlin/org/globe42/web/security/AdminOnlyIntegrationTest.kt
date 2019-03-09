@@ -1,17 +1,17 @@
 package org.globe42.web.security
 
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.UserDao
 import org.globe42.web.exception.ForbiddenException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.boot.test.mock.mockito.SpyBean
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.EnableAspectJAutoProxy
 
 /**
  * Integration test to verify that calling a method annotated with [AdminOnly] while not being an admin
@@ -19,17 +19,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
  * @author JB Nizet
  */
 @SpringBootTest
-@ExtendWith(SpringExtension::class)
-@TestPropertySource("/test.properties")
 class AdminOnlyIntegrationTest {
 
-    @MockBean
+    @Autowired
     private lateinit var mockCurrentUser: CurrentUser
 
-    @MockBean
+    @Autowired
     private lateinit var mockUserDao: UserDao
 
-    @SpyBean
+    @Autowired
     private lateinit var adminOnlyTester: AdminOnlyTester
 
     @BeforeEach
@@ -55,5 +53,21 @@ class AdminOnlyIntegrationTest {
         }
 
         open fun bar() {}
+    }
+
+    @Configuration
+    @EnableAspectJAutoProxy
+    class AlternateConfiguration {
+        @Bean
+        fun adminOnlyTester() = AdminOnlyTester()
+
+        @Bean
+        fun currentUser() = mock<CurrentUser>()
+
+        @Bean
+        fun userDao() = mock<UserDao>()
+
+        @Bean
+        fun adminOnlyAspect() = AdminOnlyAspect(currentUser(), userDao())
     }
 }
