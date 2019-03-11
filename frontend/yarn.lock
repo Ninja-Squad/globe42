@@ -319,10 +319,10 @@
     semver "5.6.0"
     semver-intersect "1.4.0"
 
-"@types/chart.js@2.7.47":
-  version "2.7.47"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.47.tgz#22639168943f560e909d2d64345e6a1ace034515"
-  integrity sha512-DsCte7tItmyNOZZchKKkZwSK2f37Pi9rCABn22pTC24CJ9yM4CUkGgdXj/E4w1YqrWYvOXlQBVRS7ideVTKp2g==
+"@types/chart.js@2.7.48":
+  version "2.7.48"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.48.tgz#db7b6d6ed33659f97ee49181f22c980bb0790a7b"
+  integrity sha512-U8paSPZGkW2WrHf8sgJj7s9MhfRgSz7wfU3CN73JVrcGJ13jGiqiXyr3Bg/4UFl4cbN3S8avHTsbtzYBrnWeVg==
 
 "@types/jasmine@*":
   version "2.8.8"
