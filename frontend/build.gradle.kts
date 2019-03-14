@@ -21,15 +21,8 @@ tasks {
         outputs.dir("node_modules")
     }
 
-    val deleteMomentLocales by creating(Delete::class) {
-        dependsOn(yarn_install)
-        delete(fileTree("${projectDir}/node_modules/moment/locale") {
-            include("*.js")
-        })
-    }
-
     val prepare by creating {
-        dependsOn(deleteMomentLocales)
+        dependsOn(yarn_install)
     }
 
     val yarn_build by getting {
