@@ -9,12 +9,8 @@ import java.nio.channels.Channels
  * @author JB Nizet
  */
 open class ReadableFile(private val blob: Blob, prefix: String) {
-    open val file: FileDTO
+    open val file: FileDTO = FileDTO(blob, prefix)
 
     open val inputStream: InputStream
         get() = Channels.newInputStream(this.blob.reader())
-
-    init {
-        this.file = FileDTO(blob, prefix)
-    }
 }
