@@ -117,7 +117,7 @@ describe('IncomeSourceEditComponent', () => {
       const router: Router = TestBed.get(Router);
       spyOn(incomeSourceService, 'create').and.returnValue(of({
         id: 42
-      }));
+      } as IncomeSourceModel));
       spyOn(router, 'navigate');
 
       tester.name.fillWith('foo');

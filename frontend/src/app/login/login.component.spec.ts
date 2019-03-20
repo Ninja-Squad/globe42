@@ -11,6 +11,7 @@ import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { UserModel } from '../models/user.model';
 
 class LoginComponentTester extends ComponentTester<LoginComponent> {
 
@@ -86,7 +87,7 @@ describe('LoginComponent', () => {
     const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
     const router: Router = TestBed.get(Router);
 
-    const subject = new Subject<string>();
+    const subject = new Subject<UserModel>();
     spyOn(currentUserService, 'authenticate').and.returnValue(subject);
     spyOn(router, 'navigate');
 
@@ -100,7 +101,7 @@ describe('LoginComponent', () => {
       password: 'password'
     });
 
-    subject.next('');
+    subject.next({} as UserModel);
     tester.detectChanges();
 
     // and redirect to the home
@@ -112,7 +113,7 @@ describe('LoginComponent', () => {
     const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
     const router: Router = TestBed.get(Router);
 
-    const subject = new Subject<string>();
+    const subject = new Subject<UserModel>();
     spyOn(currentUserService, 'authenticate').and.returnValue(subject);
     spyOn(router, 'navigate');
 

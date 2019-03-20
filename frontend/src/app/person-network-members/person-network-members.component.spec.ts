@@ -96,13 +96,15 @@ describe('PersonNetworkMembersComponent', () => {
 
     spyOn(confirmService, 'confirm').and.returnValue(of(undefined));
     spyOn(networkMemberService, 'delete').and.returnValue(of(undefined));
-    spyOn(networkMemberService, 'list').and.returnValue(of([
+
+    const members: Array<NetworkMemberModel> = [
       {
         id: 42,
         type: 'DOCTOR',
         text: 'Dr. No no no'
       }
-    ]));
+    ];
+    spyOn(networkMemberService, 'list').and.returnValue(of(members));
 
     const secondDeleteButton = element.querySelectorAll('.member-item .delete')[1] as HTMLButtonElement;
     secondDeleteButton.click();
@@ -196,7 +198,7 @@ describe('PersonNetworkMembersComponent', () => {
   it('should create and reload the list', () => {
     const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
     spyOn(networkMemberService, 'create').and.returnValue(of({} as NetworkMemberModel));
-    spyOn(networkMemberService, 'list').and.returnValue(of([
+    const members: Array<NetworkMemberModel> = [
       component.members[0],
       component.members[1],
       {
@@ -204,7 +206,8 @@ describe('PersonNetworkMembersComponent', () => {
         type: 'PERSON_TO_WARN',
         text: 'Mummy'
       }
-    ]));
+    ];
+    spyOn(networkMemberService, 'list').and.returnValue(of(members));
 
     const createButton = element.querySelector('#newMemberButton') as HTMLButtonElement;
     createButton.click();

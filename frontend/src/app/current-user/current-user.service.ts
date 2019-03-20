@@ -17,7 +17,7 @@ export class CurrentUserService {
     this._retrieveUser();
   }
 
-  authenticate(credentials: CredentialsCommand) {
+  authenticate(credentials: CredentialsCommand): Observable<UserModel> {
     return this.http.post<UserModel>('/api/authentication', credentials).pipe(
       tap(user => this.storeLoggedInUser(user))
     );
