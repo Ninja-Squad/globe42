@@ -123,7 +123,7 @@ describe('ChargeTypeEditComponent', () => {
       const router: Router = TestBed.get(Router);
       spyOn(chargeTypeService, 'create').and.returnValue(of({
         id: 42
-      }));
+      } as ChargeTypeModel));
       spyOn(router, 'navigate');
 
       tester.name.fillWith('foo');

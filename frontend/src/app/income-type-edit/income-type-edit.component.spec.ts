@@ -47,7 +47,7 @@ describe('IncomeTypeEditComponent', () => {
 
     it('should edit and update an existing income type', () => {
       const incomeSourceTypeService: IncomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
-      spyOn(incomeSourceTypeService, 'update').and.returnValue(of(incomeType));
+      spyOn(incomeSourceTypeService, 'update').and.returnValue(of(undefined));
       const router: Router = TestBed.get(Router);
       spyOn(router, 'navigateByUrl');
 
