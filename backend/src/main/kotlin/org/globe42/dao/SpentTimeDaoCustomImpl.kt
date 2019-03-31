@@ -14,7 +14,7 @@ import javax.persistence.TypedQuery
  * Implementation of the custom methods of [SpentTimeDao], defined in [SpentTimeDaoCustom]
  * @author JB Nizet
  */
-class SpentTimeDaoImpl : SpentTimeDaoCustom {
+class SpentTimeDaoCustomImpl : SpentTimeDaoCustom {
 
     @PersistenceContext
     private lateinit var em: EntityManager

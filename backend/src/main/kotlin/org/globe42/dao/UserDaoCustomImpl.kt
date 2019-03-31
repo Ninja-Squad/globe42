@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext
  * Implementation of [UserDaoCustom]
  * @author JB Nizet
  */
-class UserDaoImpl : UserDaoCustom {
+class UserDaoCustomImpl : UserDaoCustom {
 
     @PersistenceContext
     private lateinit var em: EntityManager
