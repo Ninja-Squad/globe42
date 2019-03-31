@@ -13,7 +13,7 @@ import org.globe42.domain.PostalCity
  * Implementation of custom methods of [PostalCityDao]
  * @author JB Nizet
  */
-class PostalCityDaoImpl : PostalCityDaoCustom {
+class PostalCityDaoCustomImpl : PostalCityDaoCustom {
 
     @PersistenceContext
     private lateinit var em: EntityManager
