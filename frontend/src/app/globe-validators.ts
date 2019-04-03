@@ -1,5 +1,4 @@
-import { AbstractControl } from '@angular/forms';
-import { ValidatorFn } from '@angular/forms/src/directives/validators';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 import { DateTime } from 'luxon';
 
 export function min(minValue: any): ValidatorFn {
