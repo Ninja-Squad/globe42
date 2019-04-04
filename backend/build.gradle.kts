@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.3.20"
+    val kotlinVersion = "1.3.21"
 
     java
     jacoco
@@ -22,11 +22,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.1.3.RELEASE"
+    id("org.springframework.boot") version "2.1.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
     id("org.flywaydb.flyway") version "5.2.4"
     id("com.gorylenko.gradle-git-properties") version "2.0.0"
-    id("org.jetbrains.dokka") version "0.9.17"
+    id("org.jetbrains.dokka") version "0.9.18"
 }
 
 java {
@@ -35,6 +35,7 @@ java {
 
 repositories {
     mavenCentral()
+    jcenter() // necessary for dokka
 }
 
 tasks {
@@ -110,7 +111,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("com.google.cloud:google-cloud-storage:1.62.0")
+    implementation("com.google.cloud:google-cloud-storage:1.68.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
