@@ -50,6 +50,13 @@ tasks {
 
     val lint by creating {
         dependsOn("yarn_lint")
+        doLast {
+            file("tslint-result.txt").useLines { sequence ->
+                if (sequence.any { it.contains("WARNING") }) {
+                    throw GradleException("Lint warning found. Check tslint-result.txt")
+                }
+            }
+        }
     }
 
     check {
