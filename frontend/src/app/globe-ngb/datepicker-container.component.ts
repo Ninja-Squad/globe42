@@ -1,4 +1,4 @@
-/* tslint:disable:use-host-property-decorator */
+/* tslint:disable:no-host-metadata-property */
 import { Component, ContentChild } from '@angular/core';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 

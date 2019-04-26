@@ -6,9 +6,10 @@
   "rules": {
     "array-type": false,
     "arrow-parens": false,
-    "deprecation": {
-      "severity": "warn"
-    },
+    "deprecation": false, // TODO reenable when issue #29905 of angular is fixed
+    // "deprecation": {
+    //  "severity": "warn"
+    // },
     "import-blacklist": [
       true,
       "rxjs/Rx"
@@ -62,24 +63,23 @@
     ],
     "trailing-comma": false,
     "no-import-side-effect": [true, {"ignore-module": "(core-js/.*|zone\\.js/.*)$"}],
-    "angular-whitespace": [true, "check-semicolon", "check-interpolation"],
-    "banana-in-box": true,
+    "template-banana-in-box": true,
     "component-class-suffix": true,
-    "contextual-life-cycle": true,
+    "contextual-lifecycle": true,
     "directive-class-suffix": true,
-    "no-conflicting-life-cycle-hooks": true,
+    "no-conflicting-lifecycle": true,
     "no-input-rename": true,
     "no-output-on-prefix": true,
     "no-output-rename": true,
     "prefer-output-readonly": true,
     "template-conditional-complexity": true,
-    "templates-no-negated-async": true,
-    "use-host-property-decorator": true,
-    "use-input-property-decorator": true,
-    "use-life-cycle-interface": true,
-    "use-output-property-decorator": true,
+    "template-no-negated-async": true,
+    "no-host-metadata-property": true,
+    "no-inputs-metadata-property": true,
+    "use-lifecycle-interface": true,
+    "no-outputs-metadata-property": true,
     "use-pipe-transform-interface": true,
-    "use-view-encapsulation": true,
+    "use-component-view-encapsulation": true,
     "variable-name": [
       true,
       "ban-keywords",

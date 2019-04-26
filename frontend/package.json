@@ -15,13 +15,13 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "7.2.14",
-    "@angular/compiler": "7.2.14",
-    "@angular/core": "7.2.14",
-    "@angular/forms": "7.2.14",
-    "@angular/platform-browser": "7.2.14",
-    "@angular/platform-browser-dynamic": "7.2.14",
-    "@angular/router": "7.2.14",
+    "@angular/common": "8.0.0-rc.0",
+    "@angular/compiler": "8.0.0-rc.0",
+    "@angular/core": "8.0.0-rc.0",
+    "@angular/forms": "8.0.0-rc.0",
+    "@angular/platform-browser": "8.0.0-rc.0",
+    "@angular/platform-browser-dynamic": "8.0.0-rc.0",
+    "@angular/router": "8.0.0-rc.0",
     "@ng-bootstrap/ng-bootstrap": "4.1.2",
     "@types/chart.js": "2.7.52",
     "@types/luxon": "1.12.0",
@@ -36,16 +36,16 @@
     "zone.js": "0.9.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.13.8",
-    "@angular/cli": "7.3.8",
-    "@angular/compiler-cli": "7.2.14",
-    "@angular/language-service": "7.2.14",
+    "@angular-devkit/build-angular": "0.800.0-rc.0",
+    "@angular/cli": "8.0.0-rc.0",
+    "@angular/compiler-cli": "8.0.0-rc.0",
+    "@angular/language-service": "8.0.0-rc.0",
     "@types/jasmine": "3.3.12",
     "@types/jasminewd2": "2.0.6",
     "@types/node": "8.10.48",
     "bundlesize": "0.17.1",
     "codecov": "3.3.0",
-    "codelyzer": "4.5.0",
+    "codelyzer": "5.0.1",
     "jasmine-core": "3.4.0",
     "jasmine-spec-reporter": "4.2.1",
     "karma": "4.1.0",
@@ -57,7 +57,7 @@
     "protractor": "6.0.0",
     "ts-node": "8.1.0",
     "tslint": "5.16.0",
-    "typescript": "3.2.4"
+    "typescript": "3.4.5"
   },
   "bundlesize": [
     {

@@ -1,4 +1,12 @@
-import { AfterContentChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { NoteModel } from '../models/note.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -12,7 +20,7 @@ export interface NoteEditionEvent {
   templateUrl: './note.component.html',
   styleUrls: ['./note.component.scss']
 })
-export class NoteComponent implements AfterContentChecked {
+export class NoteComponent implements AfterViewChecked {
 
   @Input()
   note: NoteModel;
@@ -37,6 +45,8 @@ export class NoteComponent implements AfterContentChecked {
 
   private shouldGiveFocus = false;
 
+  // TODO use a view query and give the focus when the textarea is emitted by the observable
+  // check that it works in the real world
   @ViewChild('textArea')
   private textArea: ElementRef<HTMLTextAreaElement>;
 
@@ -79,7 +89,7 @@ export class NoteComponent implements AfterContentChecked {
     this.editionDone.emit({id: this.note.id, text: this.noteForm.value.text});
   }
 
-  ngAfterContentChecked(): void {
+  ngAfterViewChecked(): void {
     if (this.shouldGiveFocus && this.textArea && this.textArea.nativeElement) {
       this.textArea.nativeElement.focus();
       this.shouldGiveFocus = false;
