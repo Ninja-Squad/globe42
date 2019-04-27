@@ -1,14 +1,17 @@
 import {
-  AfterViewChecked,
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   Output,
-  ViewChild
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { NoteModel } from '../models/note.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { filter } from 'rxjs/operators';
+import { concat, of } from 'rxjs';
 
 export interface NoteEditionEvent {
   id: number;
@@ -20,7 +23,7 @@ export interface NoteEditionEvent {
   templateUrl: './note.component.html',
   styleUrls: ['./note.component.scss']
 })
-export class NoteComponent implements AfterViewChecked {
+export class NoteComponent implements AfterViewInit {
 
   @Input()
   note: NoteModel;
@@ -43,12 +46,8 @@ export class NoteComponent implements AfterViewChecked {
   noteForm: FormGroup;
   rowCount: number;
 
-  private shouldGiveFocus = false;
-
-  // TODO use a view query and give the focus when the textarea is emitted by the observable
-  // check that it works in the real world
-  @ViewChild('textArea')
-  private textArea: ElementRef<HTMLTextAreaElement>;
+  @ViewChildren('textArea')
+  private textAreaQuery: QueryList<ElementRef<HTMLTextAreaElement>>;
 
   private _edited = false;
 
@@ -66,7 +65,6 @@ export class NoteComponent implements AfterViewChecked {
       if (this.rowCount < 2) {
         this.rowCount = 2;
       }
-      this.shouldGiveFocus = true;
     } else {
       this.noteForm = null;
     }
@@ -89,10 +87,11 @@ export class NoteComponent implements AfterViewChecked {
     this.editionDone.emit({id: this.note.id, text: this.noteForm.value.text});
   }
 
-  ngAfterViewChecked(): void {
-    if (this.shouldGiveFocus && this.textArea && this.textArea.nativeElement) {
-      this.textArea.nativeElement.focus();
-      this.shouldGiveFocus = false;
-    }
+  ngAfterViewInit() {
+    concat(of(this.textAreaQuery), this.textAreaQuery.changes).pipe(
+      filter(() => this.textAreaQuery.length === 1)
+    ).subscribe(
+      () => this.textAreaQuery.first.nativeElement.focus()
+    );
   }
 }
