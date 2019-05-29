@@ -1,27 +1,47 @@
 package org.globe42.web
 
+import org.springframework.core.annotation.Order
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import java.io.IOException
 import javax.servlet.*
 import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 /**
- * Filter that forwards all GET requests to non-static and non-api resources to index.html
+ * Filter that forwards all GET requests to non-static and non-api resources to index.html.
+ *
+ * In production (based on the X-Forwarded-Proto header, as described in the
+ * [clever cloud documentation](https://www.clever-cloud.com/doc/get-help/faq/#how-to-know-if-a-user-comes-from-a-secure-connection-),
+ * it also redirects from the http to the https https url, or sends a 403.
  * @author JB Nizet
  */
 @Component
 @WebFilter(value = ["/*"])
+@Order(-1) // so that it's called before the authentication filter
 class IndexFilter : Filter {
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(
-        req: ServletRequest,
+        request: ServletRequest,
         response: ServletResponse,
         chain: FilterChain
     ) {
-        val request = req as HttpServletRequest
+        request as HttpServletRequest
+        response as HttpServletResponse
+
         if (mustForward(request)) {
-            request.getRequestDispatcher("/index.html").forward(request, response)
+            if (request.inProductionOnHttp()) {
+                response.sendRedirect(request.toCompleteHttpsUrl())
+            }
+            else {
+                request.getRequestDispatcher("/index.html").forward(request, response)
+            }
+            return
+        }
+
+        if (request.inProductionOnHttp()) {
+            response.sendError(HttpStatus.FORBIDDEN.value(), "HTTP is not supported. Only HTTPS is.")
             return
         }
 
@@ -38,7 +58,6 @@ class IndexFilter : Filter {
         return !(uri.startsWith("/api")
                 || uri.endsWith(".js")
                 || uri.endsWith(".css")
-                || uri.startsWith("/index.html")
                 || uri.endsWith(".ico")
                 || uri.endsWith(".png")
                 || uri.endsWith(".jpg")
@@ -51,12 +70,7 @@ class IndexFilter : Filter {
                 || uri.startsWith("/actuator"))
     }
 
-    @Throws(ServletException::class)
-    override fun init(filterConfig: FilterConfig) {
-        // nothing to do
-    }
-
-    override fun destroy() {
-        // nothing to do
-    }
+    private fun HttpServletRequest.inProductionOnHttp() = getHeader("X-Forwarded-Proto") == "http"
+    private fun HttpServletRequest.toCompleteHttpsUrl() =
+        "https://bd.globe42.fr" + requestURI + (queryString?.let { "?" + queryString } ?: "")
 }

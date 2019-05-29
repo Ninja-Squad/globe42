@@ -32,10 +32,6 @@ class AuthenticationFilter : Filter {
     @Autowired
     private lateinit var userDao: UserDao
 
-    override fun init(filterConfig: FilterConfig) {
-        // nothing to do
-    }
-
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(req: ServletRequest, resp: ServletResponse, chain: FilterChain) {
         val request = req as HttpServletRequest
@@ -63,10 +59,6 @@ class AuthenticationFilter : Filter {
     private fun isProtectedApiRequest(request: HttpServletRequest): Boolean {
         val requestURI = request.requestURI
         return requestURI.startsWith("/api") && requestURI != "/api/authentication"
-    }
-
-    override fun destroy() {
-        // nothing to do
     }
 
     private fun extractUserIdFromToken(request: HttpServletRequest): Long? {
