@@ -21,6 +21,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 20MB
       file-size-threshold: 11MB # never written to disk because clever cloud has a bug
+      location: '/tmp' # even with a larger file threshold, tomcat checks that the directory exists and is a directory. So hopefully, with this value, the check should pass on clever cloud
   jpa:
     open-in-view: false
   flyway:
