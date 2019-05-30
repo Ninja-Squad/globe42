@@ -341,10 +341,10 @@
   dependencies:
     "@types/jasmine" "*"
 
-"@types/luxon@1.13.0":
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.13.0.tgz#e92338702d0b1b96e8d5ea6fe39d9938891aacd0"
-  integrity sha512-XmDiRVoJWgVdqX9x1a/GU4p9bSgZY7q8SOyMLs3fx1AdQcxLYAPIt/jfZm2e+PBVRWuEx1FqYNJ37kBZ53TMqA==
+"@types/luxon@1.15.0":
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.15.0.tgz#30219caf634bf8084118f94ed878fbce5b3c9458"
+  integrity sha512-eDzc9ByxV8oeRFoJEWEKlMkNiOD17tQFhIsjEqgsh0cCzUQXAM77RvdekaQeuIlvdqdq0xvqH1WcLZYSfAd6Ug==
 
 "@types/node@*":
   version "10.12.18"
