@@ -12,7 +12,7 @@ import { Chart, ChartConfiguration } from 'chart.js';
 export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   @Input() configuration: ChartConfiguration;
-  @ViewChild('canvas') canvas: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvas', { static: false }) canvas: ElementRef<HTMLCanvasElement>;
 
   private chart: Chart;
 
