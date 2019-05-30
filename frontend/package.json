@@ -61,7 +61,11 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/main.*.js",
+      "path": "./dist/main-es5.*.js",
+      "maxSize": "340Kb"
+    },
+    {
+      "path": "./dist/main-es2015.*.js",
       "maxSize": "340Kb"
     }
   ]
