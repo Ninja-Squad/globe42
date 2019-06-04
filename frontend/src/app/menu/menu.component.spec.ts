@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MenuComponent } from './menu.component';
 import { UserModel } from '../models/user.model';
 import { CurrentUserService } from '../current-user/current-user.service';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('MenuComponent', () => {
 
@@ -14,7 +15,7 @@ describe('MenuComponent', () => {
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
+    imports: [RouterTestingModule, GlobeNgbModule],
     declarations: [MenuComponent],
     providers: [
       { provide: CurrentUserService, useValue: fakeUserService }

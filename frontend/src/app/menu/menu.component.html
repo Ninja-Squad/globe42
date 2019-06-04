@@ -42,7 +42,7 @@
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li class="nav-item mr-2" ngbDropdown placement="bottom-right">
+        <li class="nav-item mr-2" ngbDropdown [display]="dropdownDisplay" placement="bottom-right">
           <a class="nav-link" ngbDropdownToggle id="userDropDown">
             <span class="fa fa-user-circle"></span> {{ user.login }}
           </a>
