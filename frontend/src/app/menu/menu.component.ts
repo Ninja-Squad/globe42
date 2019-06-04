@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { UserModel } from '../models/user.model';
 import { CurrentUserService } from '../current-user/current-user.service';
 
+const MD_BREAKPOINT = 768;
+
 @Component({
   selector: 'gl-menu',
   templateUrl: './menu.component.html',
@@ -40,4 +42,13 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.router.navigate(['/']);
   }
 
+  /**
+   * In order for the dropdown menus that don't have the standard position to display correctly when the menu is
+   * collapsed on smaller devices, the display of the dropdown must be set to static.
+   * See https://ng-bootstrap.github.io/#/positioning#dropdown
+   * This is a hack, but it does the trick.
+   */
+  get dropdownDisplay(): 'dynamic' | 'static' {
+    return (window.outerWidth < MD_BREAKPOINT) ? 'static' : 'dynamic';
+  }
 }
