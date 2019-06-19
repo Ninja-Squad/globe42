@@ -1,6 +1,6 @@
 import { PersonFilesComponent } from './person-files.component';
 import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap';
 import { FileModel } from '../models/file.model';
 import { PersonModel } from '../models/person.model';
@@ -9,11 +9,12 @@ import { ConfirmService } from '../confirm.service';
 import { FileSizePipe } from '../file-size.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { By, Title } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PersonFilesComponent', () => {
   const person = { id: 42, firstName: 'John', lastName: 'Doe' } as PersonModel;
@@ -31,7 +32,7 @@ describe('PersonFilesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
+      imports: [HttpClientTestingModule, RouterTestingModule, GlobeNgbModule.forRoot()],
       declarations: [PersonFilesComponent, FileSizePipe, PageTitleDirective, FullnamePipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
