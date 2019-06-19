@@ -6,10 +6,9 @@
   "rules": {
     "array-type": false,
     "arrow-parens": false,
-    "deprecation": false, // TODO reenable when issue #29905 of angular is fixed
-    //"deprecation": {
-    //  "severity": "warn"
-    //},
+    "deprecation": {
+      "severity": "warn"
+    },
     "import-blacklist": [
       true,
       "rxjs/Rx"
