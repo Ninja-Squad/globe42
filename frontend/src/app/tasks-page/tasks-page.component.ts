@@ -22,7 +22,7 @@ export class TasksPageComponent implements OnInit {
   // the person, in case the task list type is 'person-xxx'. null otherwise
   person: PersonModel = null;
 
-  titleSuffixes = {
+  titleSuffixes: {[key: string]: string} = {
     todo: 'à faire',
     urgent: 'urgentes',
     mine: 'dans ma liste',

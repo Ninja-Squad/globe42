@@ -120,7 +120,7 @@ export class TasksComponent {
     }
   }
 
-  toggleAddSpentTime(task: Task, event: Event) {
+  toggleAddSpentTime(task: Task, event: Event = null) {
     task.addSpentTimeOpened = !task.addSpentTimeOpened;
     if (task.addSpentTimeOpened) {
       task.spentTimesOpened = false;
