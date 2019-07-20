@@ -42,11 +42,11 @@
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li class="nav-item mr-2" ngbDropdown [display]="dropdownDisplay" placement="bottom-right">
+        <li class="nav-item mr-2" ngbDropdown>
           <a class="nav-link" ngbDropdownToggle id="userDropDown">
             <span class="fa fa-user-circle"></span> {{ user.login }}
           </a>
-          <div ngbDropdownMenu aria-labelledby="userDropDown">
+          <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu-right">
             <a class="dropdown-item" (click)="logout($event)" href="#">
               <span class="fa fa-power-off"></span> Déconnexion
             </a>
