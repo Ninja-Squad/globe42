@@ -4,6 +4,8 @@ import { BaseEnumPipe } from './base-enum-pipe';
 
 export const HOUSING_TRANSLATIONS: Array<{ key: Housing; translation: string; }> = [
   {key: 'UNKNOWN', translation: 'Inconnu'},
+  {key: 'NONE', translation: 'Aucun'},
+  {key: 'EMERGENCY', translation: '115'},
   {key: 'F0', translation: 'F0'},
   {key: 'F1', translation: 'F1'},
   {key: 'F2', translation: 'F2'},

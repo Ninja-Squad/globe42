@@ -6,6 +6,8 @@ package org.globe42.domain
  */
 enum class Housing {
     UNKNOWN,
+    NONE,
+    EMERGENCY,
     F0,
     F1,
     F2,

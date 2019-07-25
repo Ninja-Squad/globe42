@@ -611,7 +611,11 @@ describe('PersonEditComponent', () => {
 
       tester.entryDate.fillWith('02/02/2015');
       tester.firstMediationAppointmentDate.fillWith('02/02/2017');
-      tester.housing.selectIndex(1);
+      tester.housing.selectLabel('Aucun');
+      expect(tester.housingSpace).toBeFalsy();
+      tester.housing.selectLabel('115');
+      expect(tester.housingSpace).toBeFalsy();
+      tester.housing.selectLabel('F0');
       expect(tester.housingSpace).toBeTruthy();
       tester.housingSpace.fillWith('30');
       tester.hostName.fillWith('Bruno');

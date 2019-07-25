@@ -215,7 +215,7 @@
         </select>
       </div>
     </div>
-    <div *ngIf="personForm.value.housing !== 'UNKNOWN'" class="form-group row">
+    <div *ngIf="!['UNKNOWN', 'NONE', 'EMERGENCY'].includes(personForm.value.housing)" class="form-group row">
       <label for="housingSpace" class="col-sm-3 col-form-label">Surface du logement (m<sup>2</sup>)</label>
       <div class="col-sm-9">
         <input type="number" class="form-control" id="housingSpace" formControlName="housingSpace" min="1" />
