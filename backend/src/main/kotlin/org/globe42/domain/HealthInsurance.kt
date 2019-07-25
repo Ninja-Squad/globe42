@@ -6,6 +6,7 @@ package org.globe42.domain
  */
 enum class HealthInsurance {
     UNKNOWN,
+    NONE,
     CMUC,
     AME,
     ACS,

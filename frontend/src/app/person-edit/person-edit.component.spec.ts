@@ -633,7 +633,7 @@ describe('PersonEditComponent', () => {
       expect(tester.healthCareCoverageStartDate).toBeTruthy();
       tester.healthCareCoverageStartDate.fillWith('01/01/2017');
 
-      tester.healthInsurance.selectIndex(1);
+      tester.healthInsurance.selectLabel('CMU-C');
       expect(tester.healthInsuranceStartDate).toBeTruthy();
       tester.healthInsuranceStartDate.fillWith('02/02/2017');
 
