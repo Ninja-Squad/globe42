@@ -72,13 +72,13 @@ class PersonNoteControllerTest {
         val result = controller.list(person.id!!)
 
         assertThat(result).hasSize(2)
-        val (id, text, creator, creationInstant) = result[0]
-        assertThat(id).isEqualTo(note2.id) // sorted chronologically
+        val (id, text, creator, creationInstant) = result[1]
+        assertThat(id).isEqualTo(note2.id) // sorted anti-chronologically
         assertThat(creationInstant).isEqualTo(note2.creationInstant)
         assertThat(text).isEqualTo(note2.text) // sorted chronologically
         assertThat(creator.id).isEqualTo(note2.creator.id) // sorted chronologically
 
-        assertThat(result[1].creator.id).isEqualTo(creator.id)
+        assertThat(result[0].creator.id).isEqualTo(creator.id)
     }
 
     @Test

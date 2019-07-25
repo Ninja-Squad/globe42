@@ -30,7 +30,7 @@ class PersonNoteController(
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         return person.getNotes()
             .stream()
-            .sorted(Comparator.comparing(Note::creationInstant))
+            .sorted(Comparator.comparing(Note::creationInstant).reversed())
             .map(::NoteDTO)
             .collect(Collectors.toList())
     }

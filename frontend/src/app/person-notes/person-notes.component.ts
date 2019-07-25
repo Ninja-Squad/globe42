@@ -59,13 +59,13 @@ export class PersonNotesComponent implements OnInit {
       creationInstant: DateTime.utc().toISO(),
       creator: this.currentUserService.userEvents.getValue()
     };
-    this.notes.push(this.editedNote);
+    this.notes.unshift(this.editedNote);
   }
 
   cancelNoteEdition(event: NoteEditionEvent) {
     this.editedNote = null;
     if (!event.id) {
-      this.notes.pop();
+      this.notes.shift();
     }
   }
 

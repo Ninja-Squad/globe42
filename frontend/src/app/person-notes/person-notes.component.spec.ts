@@ -225,7 +225,7 @@ describe('PersonNotesComponent', () => {
     expect(tester.notes.length).toBe(2);
   });
 
-  it('should add a note at the end when creating, and remove it when cancelling', () => {
+  it('should add a note at the beginning when creating, and remove it when cancelling', () => {
     // create component with 2 notes
     const personNoteService = TestBed.get(PersonNoteService);
     spyOn(personNoteService, 'update').and.returnValue(of(null));
@@ -240,15 +240,15 @@ describe('PersonNotesComponent', () => {
 
     expect(tester.notes.length).toBe(3);
 
-    expect(tester.componentInstance.editedNote).toBe(notes[2]);
-    expect(tester.noteComponents[0].disabled).toBe(true);
+    expect(tester.componentInstance.editedNote).toBe(notes[0]);
     expect(tester.noteComponents[1].disabled).toBe(true);
-    expect(tester.noteComponents[2].edited).toBe(true);
+    expect(tester.noteComponents[2].disabled).toBe(true);
+    expect(tester.noteComponents[0].edited).toBe(true);
     expect(tester.addNote.disabled).toBe(true);
-    expect(tester.notes[2]).toContainText('admin');
+    expect(tester.notes[0]).toContainText('admin');
 
     // cancel the edition
-    tester.cancelNoteEdition(2).click();
+    tester.cancelNoteEdition(0).click();
     expect(tester.componentInstance.editedNote).toBeNull();
     expect(noteEditedObserver).toHaveBeenCalledWith(false);
 
@@ -271,7 +271,7 @@ describe('PersonNotesComponent', () => {
 
     const personNoteService = TestBed.get(PersonNoteService);
     spyOn(personNoteService, 'create').and.returnValue(of(newNote));
-    spyOn(personNoteService, 'list').and.returnValues(of(notes), of([notes[0], notes[1], newNote]));
+    spyOn(personNoteService, 'list').and.returnValues(of(notes), of([newNote, notes[0], notes[1]]));
 
     tester.componentInstance.person = person;
     const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
@@ -283,11 +283,11 @@ describe('PersonNotesComponent', () => {
     expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
     // enter text of new note
-    tester.notes[2].textarea('textarea').fillWith('new text');
-    expect(tester.noteComponents[2].noteForm.value.text).toBe('new text');
+    tester.notes[0].textarea('textarea').fillWith('new text');
+    expect(tester.noteComponents[0].noteForm.value.text).toBe('new text');
 
     // save new note
-    tester.saveNote(2).click();
+    tester.saveNote(0).click();
 
     expect(personNoteService.create).toHaveBeenCalledWith(person.id, 'new text');
     expect(personNoteService.list).toHaveBeenCalledWith(person.id);

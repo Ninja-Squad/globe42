@@ -10,6 +10,11 @@
     <span class="lead">Aucune note</span>
   </div>
 
+  <button type="button" class="btn btn-outline-primary mb-2" [disabled]="editedNote" (click)="addNote()" id="addNote">
+    <span class="fa fa-plus"></span>
+    Ajouter une note
+  </button>
+
   <gl-note *ngFor="let note of notes" [note]="note"
            [edited]="editedNote === note"
            [disabled]="!!editedNote && note !== editedNote"
@@ -17,9 +22,4 @@
            (editionCancelled)="cancelNoteEdition($event)"
            (editionDone)="saveNote($event)"
            (deletionRequested)="deleteNote($event)"></gl-note>
-
-  <button type="button" class="btn btn-outline-primary" [disabled]="editedNote" (click)="addNote()" id="addNote">
-    <span class="fa fa-plus"></span>
-    Ajouter une note
-  </button>
 </ng-container>
