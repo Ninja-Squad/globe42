@@ -6,10 +6,12 @@ package org.globe42.domain
  */
 enum class HealthCareCoverage {
     UNKNOWN,
+    NONE,
     GENERAL,
-    PUMA,
     AGR,
     AME,
+    CNAREFE,
+    PUMA,
     SSI,
     OTHER
 }

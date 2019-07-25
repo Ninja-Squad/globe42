@@ -4,11 +4,13 @@ import { BaseEnumPipe } from './base-enum-pipe';
 
 export const HEALTH_CARE_COVERAGE_TRANSLATIONS: Array<{ key: HealthCareCoverage; translation: string; }> = [
   {key: 'UNKNOWN', translation: 'Inconnue'},
+  {key: 'NONE', translation: 'Aucune'},
   {key: 'GENERAL', translation: 'Régime général'},
   {key: 'PUMA', translation: 'Protection Universelle Maladie'},
   {key: 'AGR', translation: 'Régime agricole'},
   {key: 'AME', translation: 'Aide médicale de l\'Etat'},
   {key: 'SSI', translation: 'Sécurité sociale des indépendants'},
+  {key: 'CNAREFE', translation: 'Centre National des Retraités de France à l\'Étranger'},
   {key: 'OTHER', translation: 'Autre'}
 ];
 

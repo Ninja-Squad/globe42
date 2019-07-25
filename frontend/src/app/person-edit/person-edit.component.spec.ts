@@ -629,7 +629,7 @@ describe('PersonEditComponent', () => {
       expect(tester.fiscalStatusUpToDate).toBeTruthy();
       tester.fiscalStatusUpToDate.check();
 
-      tester.healthCareCoverage.selectIndex(1);
+      tester.healthCareCoverage.selectLabel('Régime général');
       expect(tester.healthCareCoverageStartDate).toBeTruthy();
       tester.healthCareCoverageStartDate.fillWith('01/01/2017');
 
