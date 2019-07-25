@@ -4,7 +4,11 @@ import { WeddingEventType } from './models/wedding-event.model';
 
 export const WEDDING_EVENT_TYPE_TRANSLATIONS: Array<{ key: WeddingEventType; translation: string; }> = [
   {key: 'WEDDING', translation: 'Mariage'},
-  {key: 'DIVORCE', translation: 'Divorce'}
+  {key: 'PACS', translation: 'PACS'},
+  {key: 'COHABITATION', translation: 'Concubinage'},
+  {key: 'DIVORCE', translation: 'Divorce'},
+  {key: 'SPOUSE_DEATH', translation: 'Décès du conjoint'},
+  {key: 'SEPARATION', translation: 'Séparation'}
 ];
 
 @Pipe({

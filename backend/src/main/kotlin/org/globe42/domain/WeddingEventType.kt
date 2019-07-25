@@ -5,5 +5,5 @@ package org.globe42.domain
  * @author JB Nizet
  */
 enum class WeddingEventType {
-    WEDDING, DIVORCE
+    WEDDING, PACS, COHABITATION, DIVORCE, SPOUSE_DEATH, SEPARATION
 }
