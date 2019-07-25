@@ -13,7 +13,7 @@ import { merge, Subscription } from 'rxjs';
 export class PersonLayoutComponent implements OnDestroy {
 
   person: PersonModel;
-  membershipStatus: 'OK' | 'KO' | 'loading' = 'loading';
+  membershipStatus: 'OK' | 'KO' | 'OUT_OF_DATE' | 'loading' = 'loading';
   private membershipSubscription: Subscription;
 
   constructor(route: ActivatedRoute,
@@ -28,7 +28,13 @@ export class PersonLayoutComponent implements OnDestroy {
         switchMap(data => membershipService.getCurrent(data.person.id))
       ),
       membershipService.currentMembership$
-    ).subscribe(membership => this.membershipStatus = membership ? 'OK' : 'KO');
+    ).subscribe(membership => {
+      if (membership) {
+        this.membershipStatus = membership.paymentMode === 'OUT_OF_DATE' ? 'OUT_OF_DATE' : 'OK';
+      } else {
+        this.membershipStatus = 'KO';
+      }
+    });
   }
 
   ngOnDestroy(): void {

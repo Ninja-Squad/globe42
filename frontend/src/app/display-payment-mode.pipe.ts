@@ -3,8 +3,10 @@ import { BaseEnumPipe } from './base-enum-pipe';
 import { PaymentMode } from './models/membership.model';
 
 export const PAYMENT_MODE_TRANSLATIONS: Array<{ key: PaymentMode; translation: string; }> = [
-  {key: 'CASH', translation: 'Espèces'},
   {key: 'CHECK', translation: 'Chèque'},
+  {key: 'CASH', translation: 'Espèces'},
+  {key: 'FREE', translation: 'Gratuité'},
+  {key: 'OUT_OF_DATE', translation: 'Pas à jour'},
   {key: 'UNKNOWN', translation: 'Inconnu'}
 ];
 

@@ -30,7 +30,11 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="memberships" routerLinkActive="active">
           Adhésion
-          <span id="membership-warning-icon" *ngIf="membershipStatus === 'KO'" class="text-warning fa fa-exclamation-triangle" ngbTooltip="Pas d'adhésion pour l'année en cours"></span>
+          <span
+            id="membership-warning-icon"
+            *ngIf="membershipStatus === 'KO' || membershipStatus === 'OUT_OF_DATE'"
+            class="text-warning fa fa-exclamation-triangle"
+            [ngbTooltip]="membershipStatus === 'KO' ? 'Pas d\'adhésion pour l\'année en cours' : 'Paiement de l\'adhésion pas à jour'"></span>
         </a>
       </li>
     </ul>
