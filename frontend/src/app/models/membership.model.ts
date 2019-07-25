@@ -1,4 +1,4 @@
-export type PaymentMode = 'CASH' | 'CHECK' | 'UNKNOWN';
+export type PaymentMode = 'CASH' | 'CHECK' | 'FREE' | 'OUT_OF_DATE' | 'UNKNOWN';
 
 export interface MembershipModel {
   id: number;

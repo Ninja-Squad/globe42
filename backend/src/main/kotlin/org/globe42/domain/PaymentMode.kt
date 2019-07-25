@@ -1,5 +1,5 @@
 package org.globe42.domain
 
 enum class PaymentMode {
-    CASH, CHECK, UNKNOWN
+    CASH, CHECK, FREE, OUT_OF_DATE, UNKNOWN
 }

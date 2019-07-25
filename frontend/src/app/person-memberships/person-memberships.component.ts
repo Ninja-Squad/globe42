@@ -9,6 +9,7 @@ import { MembershipService } from '../membership.service';
 import { MembershipCommand } from '../models/membership.command';
 import { ConfirmService } from '../confirm.service';
 import { switchMap } from 'rxjs/operators';
+import { PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
 
 @Component({
   selector: 'gl-person-memberships',
@@ -23,6 +24,8 @@ export class PersonMembershipsComponent implements OnInit {
   person: PersonModel;
 
   membershipForm: FormGroup;
+
+  paymentModes = PAYMENT_MODE_TRANSLATIONS.map(t => t.key).filter(key => key !== 'UNKNOWN');
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,

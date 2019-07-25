@@ -7,7 +7,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PersonMembershipsComponent } from './person-memberships.component';
 import { DateTime } from 'luxon';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { DisplayPaymentModePipe } from '../display-payment-mode.pipe';
+import { DisplayPaymentModePipe, PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConfirmService } from '../confirm.service';
 import { LOCALE_ID } from '@angular/core';
@@ -101,7 +101,7 @@ describe('PersonMembershipsComponent', () => {
     const cardNumber: HTMLInputElement = element.querySelector('#cardNumber');
 
     expect(paymentMode.selectedIndex).toBe(0);
-    expect(paymentMode.options.length).toBe(3);
+    expect(paymentMode.options.length).toBe(PAYMENT_MODE_TRANSLATIONS.length);
     expect(paymentMode.options[0].textContent).toBe('');
     expect(paymentMode.options[1].textContent).toBe('Chèque');
     expect(paymentMode.options[2].textContent).toBe('Espèces');

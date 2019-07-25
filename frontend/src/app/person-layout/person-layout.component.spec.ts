@@ -10,6 +10,7 @@ import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MembershipModel } from '../models/membership.model';
 import { MembershipService } from '../membership.service';
+import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('PersonLayoutComponent', () => {
   let person: PersonModel;
@@ -29,7 +30,7 @@ describe('PersonLayoutComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
+      imports: [RouterTestingModule, HttpClientTestingModule, GlobeNgbModule.forRoot()],
       declarations: [PersonLayoutComponent, FullnamePipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute }
@@ -92,14 +93,19 @@ describe('PersonLayoutComponent', () => {
     expect(fixture.componentInstance.membershipStatus).toBe('KO');
     expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeTruthy();
 
-    membershipService.currentMembership$.next({} as MembershipModel);
+    membershipService.currentMembership$.next({ paymentMode: 'CASH' } as MembershipModel);
     fixture.detectChanges();
     expect(fixture.componentInstance.membershipStatus).toBe('OK');
     expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeFalsy();
 
+    membershipService.currentMembership$.next({ paymentMode: 'OUT_OF_DATE' } as MembershipModel);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.membershipStatus).toBe('OUT_OF_DATE');
+    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeTruthy();
+
     fixture.componentInstance.ngOnDestroy();
     membershipService.currentMembership$.next(null);
     fixture.detectChanges();
-    expect(fixture.componentInstance.membershipStatus).toBe('OK'); // should have been unsubscribed
+    expect(fixture.componentInstance.membershipStatus).toBe('OUT_OF_DATE'); // should have been unsubscribed
   });
 });
