@@ -3,8 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-information-resolver.service';
 import { PerUnitRevenueInformationService } from './per-unit-revenue-information.service';
 import { PerUnitRevenueInformationModel } from './models/per-unit-revenue-information.model';
-import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { Observable, of } from 'rxjs';
+import { fakeSnapshot } from 'ngx-speculoos';
+import { CurrentPersonService } from './current-person.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PerUnitRevenueInformationResolverService', () => {
 
@@ -17,41 +19,37 @@ describe('PerUnitRevenueInformationResolverService', () => {
       jasmine.createSpyObj('perUnitRevenueInformationService', ['get']);
     info = of({} as PerUnitRevenueInformationModel);
     (mockPerUnitRevenueInformationService.get as jasmine.Spy).and.returnValue(info);
+
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [
         { provide: PerUnitRevenueInformationService, useValue: mockPerUnitRevenueInformationService }
       ]
     });
 
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 });
+
     resolver = TestBed.get(PerUnitRevenueInformationResolverService);
   });
 
   it('should load when person ID is set on the current route', () => {
-    const route = {
-      paramMap: convertToParamMap({
+    const routeSnapshot = fakeSnapshot({
+      params: {
         id: '42'
-      })
-    } as ActivatedRouteSnapshot;
+      }
+    });
 
-    const result = resolver.resolve(route);
+    const result = resolver.resolve(routeSnapshot);
     expect(result).toBe(info);
     expect(mockPerUnitRevenueInformationService.get).toHaveBeenCalledWith(42);
   });
 
-  it('should load when person data is set on the parent route', () => {
-    const route = {
-      paramMap: convertToParamMap({}),
-      parent: {
-        data: {
-          person: {
-            id: 42
-          }
-        }
-      }
-    } as any;
+  it('should load when person is in the currentPersonService', () => {
+    const routeSnapshot = fakeSnapshot({params: {}});
 
-    const result = resolver.resolve(route);
+    const result = resolver.resolve(routeSnapshot);
     expect(result).toBe(info);
-    expect(mockPerUnitRevenueInformationService.get).toHaveBeenCalledWith(42);
+    expect(mockPerUnitRevenueInformationService.get).toHaveBeenCalledWith(54);
   });
 });

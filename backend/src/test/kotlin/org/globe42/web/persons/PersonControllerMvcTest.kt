@@ -3,11 +3,13 @@ package org.globe42.web.persons
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
+import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.CountryDao
 import org.globe42.dao.CoupleDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.Country
 import org.globe42.domain.Gender
+import org.globe42.domain.Participation
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
 import org.globe42.test.thenReturnModifiedFirstArgument
@@ -132,5 +134,20 @@ class PersonControllerMvcTest {
 
         mvc.perform(delete("/api/persons/{personId}/deletion", person.id))
             .andExpect(status().isNoContent)
+    }
+
+    @Test
+    fun `should signal death`() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        person.addParticipation(Participation(65L))
+
+        val command = PersonDeathCommandDTO(LocalDate.now())
+        mvc.perform(put("/api/persons/{personId}/death", person.id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(command)))
+            .andExpect(status().isNoContent)
+
+        assertThat(person.deathDate).isEqualTo(command.deathDate)
+        assertThat(person.getParticipations()).isEmpty()
     }
 }

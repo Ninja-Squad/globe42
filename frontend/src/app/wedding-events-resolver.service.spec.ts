@@ -1,17 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 
 import { WeddingEventsResolverService } from './wedding-events-resolver.service';
-import { PersonModel } from './models/person.model';
 import { of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { WeddingEventService } from './wedding-event.service';
 import { WeddingEventModel } from './models/wedding-event.model';
+import { CurrentPersonService } from './current-person.service';
 
 describe('WeddingEventsResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule]
     });
+
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
   });
 
   it('should resolve the list of wedding events of a person', () => {
@@ -21,8 +24,7 @@ describe('WeddingEventsResolverService', () => {
     spyOn(weddingEventService, 'list').and.returnValue(events);
 
     const resolver = TestBed.get(WeddingEventsResolverService);
-    const route: any = { parent: { data: { person: { id: 42 } as PersonModel } } };
-    const result = resolver.resolve(route, null);
+    const result = resolver.resolve();
     expect(result).toBe(events);
     expect(weddingEventService.list).toHaveBeenCalledWith(42);
   });

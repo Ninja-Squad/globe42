@@ -10,13 +10,15 @@ import { FullnamePipe } from '../fullname.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
+import { CurrentPersonService } from '../current-person.service';
+import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 
 describe('PersonParticipationsComponent', () => {
 
   let participations: Array<ParticipationModel>;
   let person: PersonModel;
-  let route: any;
-
+  let route: ActivatedRoute;
+  let currentPersonService: CurrentPersonService;
   beforeEach(() => {
     participations = [
       {
@@ -27,18 +29,17 @@ describe('PersonParticipationsComponent', () => {
 
     person = { id: 1, firstName: 'JB', lastName: 'Nizet' } as PersonModel;
 
-    route = {
-      parent: {snapshot: {data: {person}}},
-      snapshot: {data: {participations}}
-    };
+    route = fakeRoute({
+      snapshot: fakeSnapshot({data: {participations}})
+    });
+    currentPersonService = { snapshot: person } as CurrentPersonService;
   });
 
   describe('logic', () => {
     let component: PersonParticipationsComponent;
     const participationService = new ParticipationService(null);
-
     beforeEach(() => {
-      component = new PersonParticipationsComponent(route, participationService);
+      component = new PersonParticipationsComponent(currentPersonService, route, participationService);
     });
 
     it('should initialize person and items', () => {
@@ -113,8 +114,13 @@ describe('PersonParticipationsComponent', () => {
       TestBed.configureTestingModule({
         declarations: [PersonParticipationsComponent, FullnamePipe, DisplayActivityTypePipe, PageTitleDirective],
         imports: [HttpClientModule, RouterTestingModule],
-        providers: [{ provide: ActivatedRoute, useValue: route }]
+        providers: [
+          { provide: ActivatedRoute, useValue: route }
+        ]
       });
+
+      currentPersonService = TestBed.get(CurrentPersonService);
+      spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
       fixture = TestBed.createComponent(PersonParticipationsComponent);
       fixture.detectChanges();

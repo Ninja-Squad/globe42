@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { PersonIdentityModel, PersonModel } from './models/person.model';
 import { HttpClient } from '@angular/common/http';
-import { PersonCommand } from './models/person.command';
+import { PersonCommand, PersonDeathCommand } from './models/person.command';
 
 @Injectable({ providedIn: 'root' })
 export class PersonService {
@@ -36,5 +36,9 @@ export class PersonService {
 
   resurrect(id: number) {
     return this.http.delete<void>(`/api/persons/${id}/deletion`);
+  }
+
+  signalDeath(id: number, command: PersonDeathCommand): Observable<void> {
+    return this.http.put<void>(`/api/persons/${id}/death`, command);
   }
 }

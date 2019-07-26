@@ -10,6 +10,7 @@ import { WeddingEventService } from '../wedding-event.service';
 import { WeddingEventModel } from '../models/wedding-event.model';
 import { pastDate } from '../globe-validators';
 import { LOCATION_TRANSLATIONS } from '../display-location.pipe';
+import { CurrentPersonService } from '../current-person.service';
 
 @Component({
   selector: 'gl-person-wedding-events',
@@ -27,10 +28,11 @@ export class PersonWeddingEventsComponent {
   locations = LOCATION_TRANSLATIONS;
 
   constructor(route: ActivatedRoute,
+              currentPersonService: CurrentPersonService,
               private weddingEventService: WeddingEventService,
               private formBuilder: FormBuilder,
               private confirmService: ConfirmService) {
-    this.person = route.parent.snapshot.data.person;
+    this.person = currentPersonService.snapshot;
     this.events = route.snapshot.data.events;
   }
 

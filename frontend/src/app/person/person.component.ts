@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
 import { displayFullname } from '../fullname.pipe';
 import { PersonService } from '../person.service';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
+import { CurrentPersonService } from '../current-person.service';
 
 @Component({
   selector: 'gl-person',
@@ -19,15 +20,13 @@ export class PersonComponent implements OnInit {
 
   noteEdited = false;
 
-  constructor(private route: ActivatedRoute,
-              private confirmService: ConfirmService,
+  constructor(private confirmService: ConfirmService,
               private personService: PersonService,
+              private currentPersonService: CurrentPersonService,
               private router: Router) { }
 
   ngOnInit() {
-    this.route.parent.data.pipe(
-      map(data => data.person as PersonModel)
-    ).subscribe(person => {
+    this.currentPersonService.personChanges$.subscribe(person => {
       this.person = person;
       this.mapsUrl = this.person.city && this.person.address ? this.createMapsUrl() : null;
     });

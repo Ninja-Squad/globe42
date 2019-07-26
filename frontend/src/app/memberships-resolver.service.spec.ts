@@ -1,16 +1,19 @@
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
 import { MembershipsResolverService } from './memberships-resolver.service';
 import { MembershipService } from './membership.service';
 import { MembershipModel } from './models/membership.model';
-import { PersonModel } from './models/person.model';
+import { CurrentPersonService } from './current-person.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('MembershipsResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule]
+      imports: [HttpClientTestingModule]
     });
+
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
   });
 
   it('should resolve the list of memberships of a person', () => {
@@ -20,14 +23,7 @@ describe('MembershipsResolverService', () => {
     spyOn(membershipService, 'list').and.returnValue(memberships);
 
     const resolver: MembershipsResolverService = TestBed.get(MembershipsResolverService);
-    const route: any = {
-      parent: {
-        data: {
-          person: { id: 42 } as PersonModel
-        }
-      }
-    };
-    const result = resolver.resolve(route);
+    const result = resolver.resolve();
     expect(result).toBe(memberships);
     expect(membershipService.list).toHaveBeenCalledWith(42);
   });

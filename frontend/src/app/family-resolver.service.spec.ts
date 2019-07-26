@@ -5,7 +5,8 @@ import { FamilyService } from './family.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FamilyModel } from './models/family.model';
 import { Observable, of } from 'rxjs';
-import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
+import { CurrentPersonService } from './current-person.service';
+import { fakeSnapshot } from 'ngx-speculoos';
 
 describe('FamilyResolverService', () => {
   let familyService: FamilyService;
@@ -19,6 +20,9 @@ describe('FamilyResolverService', () => {
       ]
     });
 
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 });
+
     familyService = TestBed.get(FamilyService);
     family = of({} as FamilyModel);
     spyOn(familyService, 'get').and.returnValue(family);
@@ -26,25 +30,18 @@ describe('FamilyResolverService', () => {
   });
 
   it('should resolve family when editing it', () => {
-    const route = {
-      paramMap: convertToParamMap({
+    const route = fakeSnapshot({
+      params: {
         id: 42
-      })
-    } as ActivatedRouteSnapshot;
+      }
+    });
     expect(resolver.resolve(route)).toBe(family);
+    expect(familyService.get).toHaveBeenCalledWith(42);
   });
 
   it('should resolve family when displaying it', () => {
-    const route: any = {
-      parent: {
-        data: {
-          person: {
-            id: 42
-          }
-        }
-      },
-      paramMap: convertToParamMap({})
-    };
+    const route = fakeSnapshot({ params: {}});
     expect(resolver.resolve(route)).toBe(family);
+    expect(familyService.get).toHaveBeenCalledWith(54);
   });
 });

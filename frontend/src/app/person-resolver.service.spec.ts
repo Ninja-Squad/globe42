@@ -1,30 +1,27 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { PersonResolverService } from './person-resolver.service';
-import { PersonService } from './person.service';
 import { PersonModel } from './models/person.model';
 import { of } from 'rxjs';
+import { CurrentPersonService } from './current-person.service';
+import { fakeSnapshot } from 'ngx-speculoos';
 
 describe('PersonResolverService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [HttpClientModule]
   }));
 
-  it('should retrieve a person', () => {
-    const personService = TestBed.get(PersonService);
+  it('should retrieve a person and refresh the current person', () => {
+    const currentPersonService = TestBed.get(CurrentPersonService);
     const expectedResult = of({ firstName: 'John', lastName: 'Doe' } as PersonModel);
 
-    spyOn(personService, 'get').and.returnValue(expectedResult);
+    spyOn(currentPersonService, 'refresh').and.returnValue(expectedResult);
 
     const resolver = TestBed.get(PersonResolverService);
-    const params = { id: '42' } as Params;
-    const paramMap = convertToParamMap(params);
-
-    const routeSnapshot = { paramMap } as ActivatedRouteSnapshot;
+    const routeSnapshot = fakeSnapshot({ params: { id: '42' } });
     const result = resolver.resolve(routeSnapshot);
 
     expect(result).toBe(expectedResult);
-    expect(personService.get).toHaveBeenCalledWith(42);
+    expect(currentPersonService.refresh).toHaveBeenCalledWith(42);
   });
 });

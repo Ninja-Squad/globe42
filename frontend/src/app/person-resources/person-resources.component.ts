@@ -9,6 +9,7 @@ import { ChargeService } from '../charge.service';
 import { switchMap } from 'rxjs/operators';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
+import { CurrentPersonService } from '../current-person.service';
 
 @Component({
   selector: 'gl-person-resources',
@@ -22,15 +23,16 @@ export class PersonResourcesComponent {
   charges: Array<ChargeModel>;
   perUnitRevenueInformation: PerUnitRevenueInformationModel | null;
 
-  constructor(route: ActivatedRoute,
+  constructor(currentPersonService: CurrentPersonService,
+              route: ActivatedRoute,
               private incomeService: IncomeService,
               private chargeService: ChargeService,
               private perUnitRevenueInformationService: PerUnitRevenueInformationService,
               private confirmService: ConfirmService) {
+    this.person = currentPersonService.snapshot;
     this.incomes = route.snapshot.data.incomes;
     this.charges = route.snapshot.data.charges;
     this.perUnitRevenueInformation = route.snapshot.data.perUnitRevenueInformation;
-    this.person = route.parent.snapshot.data.person;
   }
 
   deleteIncome(income: IncomeModel) {

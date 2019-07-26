@@ -10,6 +10,7 @@ import { MembershipCommand } from '../models/membership.command';
 import { ConfirmService } from '../confirm.service';
 import { switchMap } from 'rxjs/operators';
 import { PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
+import { CurrentPersonService } from '../current-person.service';
 
 @Component({
   selector: 'gl-person-memberships',
@@ -27,7 +28,8 @@ export class PersonMembershipsComponent implements OnInit {
 
   paymentModes = PAYMENT_MODE_TRANSLATIONS.map(t => t.key).filter(key => key !== 'UNKNOWN');
 
-  constructor(private route: ActivatedRoute,
+  constructor(private currentPersonService: CurrentPersonService,
+              private route: ActivatedRoute,
               private fb: FormBuilder,
               private membershipService: MembershipService,
               private confirmService: ConfirmService) { }
@@ -42,7 +44,7 @@ export class PersonMembershipsComponent implements OnInit {
     } else {
       this.oldMemberships = memberships;
     }
-    this.person = this.route.snapshot.parent.data.person;
+    this.person = this.currentPersonService.snapshot;
 
     this.membershipForm = this.fb.group({
       paymentMode: [null, Validators.required],

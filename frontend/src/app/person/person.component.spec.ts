@@ -1,6 +1,6 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { PersonComponent } from './person.component';
 import { CityModel, PersonModel } from '../models/person.model';
@@ -22,11 +22,12 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
+import { CurrentPersonService } from '../current-person.service';
 
 describe('PersonComponent', () => {
 
   let person: PersonModel;
-  let activatedRoute: ActivatedRoute;
+  let currentPersonService: CurrentPersonService;
 
   beforeEach(async(() => {
     const cityModel: CityModel = {
@@ -79,14 +80,9 @@ describe('PersonComponent', () => {
       residencePermit: 'TEN_YEAR_OLD_RESIDENT',
       residencePermitDepositDate: '2018-02-02',
       residencePermitRenewalDate: '2018-10-02',
+      deathDate: null,
       deleted: false
     };
-
-    activatedRoute = {
-      parent: {
-        data: of({ person })
-      }
-    } as any;
 
     TestBed.configureTestingModule({
       imports: [ RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot() ],
@@ -106,15 +102,17 @@ describe('PersonComponent', () => {
         PageTitleDirective
       ],
       providers: [
-        { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: LOCALE_ID, useValue: 'fr-FR'}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     });
+
+    currentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
   }));
 
   it('should have a maps URL', () => {
-    const component = new PersonComponent(activatedRoute, null, null, null);
+    const component = new PersonComponent(null, null, currentPersonService, null);
     component.ngOnInit();
     expect(component.mapsUrl).toBe('https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE');
   });

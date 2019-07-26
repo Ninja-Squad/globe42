@@ -5,6 +5,7 @@ import { FamilyService } from '../family.service';
 import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
 import { switchMap } from 'rxjs/operators';
+import { CurrentPersonService } from '../current-person.service';
 
 export interface Situation {
   spousePresent: boolean;
@@ -23,12 +24,13 @@ export class PersonFamilyComponent implements OnInit {
   france: Situation;
   abroad: Situation;
 
-  constructor(private route: ActivatedRoute,
+  constructor(private currentPersonService: CurrentPersonService,
+              private route: ActivatedRoute,
               private familyService: FamilyService,
               private confirmService: ConfirmService) { }
 
   ngOnInit() {
-    this.person = this.route.snapshot.parent.data.person;
+    this.person = this.currentPersonService.snapshot;
     this.family = this.route.snapshot.data.family;
     if (this.family) {
       this.france = {

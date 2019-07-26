@@ -1,5 +1,9 @@
 <h1 id="fullName" [class.deleted]="person.deleted">{{ person | fullname }}</h1>
 
+<p class="bg-dark rounded p-2 text-center text-light" *ngIf="person.deathDate" id="death-message">
+  {{ person | fullname }} est décédé(e) le {{ person.deathDate | date:'longDate' }}
+</p>
+
 <div class="row">
   <div class="col-xs-12 col-md-4 col-lg-2">
     <ul class="nav nav-pills flex-column">
@@ -24,7 +28,7 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="files" routerLinkActive="active">Documents</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!person.deathDate">
         <a class="nav-link" routerLink="participations" routerLinkActive="active">Activités</a>
       </li>
       <li class="nav-item">
@@ -35,6 +39,11 @@
             *ngIf="membershipStatus === 'KO' || membershipStatus === 'OUT_OF_DATE'"
             class="text-warning fa fa-exclamation-triangle"
             [ngbTooltip]="membershipStatus === 'KO' ? 'Pas d\'adhésion pour l\'année en cours' : 'Paiement de l\'adhésion pas à jour'"></span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="!person.deathDate">
+        <a class="nav-link" routerLink="death" routerLinkActive="active">
+          Décès
         </a>
       </li>
     </ul>

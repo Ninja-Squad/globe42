@@ -4,11 +4,13 @@ import { TaskModel } from './models/task.model';
 import { Observable } from 'rxjs';
 import { TaskService } from './task.service';
 import { Page } from './models/page';
+import { CurrentPersonService } from './current-person.service';
 
 @Injectable({ providedIn: 'root' })
 export class TasksResolverService implements Resolve<Array<TaskModel> | Page<TaskModel>> {
 
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService,
+              private currentPersonService: CurrentPersonService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Page<TaskModel>> {
     const listType = route.data.taskListType;
@@ -26,9 +28,9 @@ export class TasksResolverService implements Resolve<Array<TaskModel> | Page<Tas
       case 'archived':
         return this.taskService.listArchived(pageNumber);
       case 'person-todo':
-        return this.taskService.listTodoForPerson(route.parent.parent.data.person.id, pageNumber);
+        return this.taskService.listTodoForPerson(this.currentPersonService.snapshot.id, pageNumber);
       case 'person-archived':
-        return this.taskService.listArchivedForPerson(route.parent.parent.data.person.id, pageNumber);
+        return this.taskService.listArchivedForPerson(this.currentPersonService.snapshot.id, pageNumber);
       default:
         throw new Error(`Unknown listType: ${listType}`);
     }
