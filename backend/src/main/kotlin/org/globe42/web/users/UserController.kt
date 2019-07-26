@@ -29,29 +29,29 @@ class UserController(
 
     @GetMapping("/me")
     fun getCurrentUser(): CurrentUserDTO {
-        val user = userDao.findNotDeletedById(currentUser.userId!!).orElseThrow(::NotFoundException)
+        val user = userDao.findNotDeletedById(currentUser.userId!!) ?: throw NotFoundException()
         return CurrentUserDTO(user)
     }
 
     @GetMapping("/me/profile")
     fun getCurrentUserProfile(): ProfileDTO {
-        val user = userDao.findNotDeletedById(currentUser.userId!!).orElseThrow(::NotFoundException)
+        val user = userDao.findNotDeletedById(currentUser.userId!!) ?: throw NotFoundException()
         return ProfileDTO(user)
     }
 
     @PutMapping("/me/profile")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun updateCurrentUserProfile(@Validated @RequestBody command: ProfileCommandDTO) {
-        userDao.findNotDeletedById(currentUser.userId!!).orElseThrow(::NotFoundException).apply {
+        userDao.findNotDeletedById(currentUser.userId!!)?.apply {
             email = command.email
             taskAssignmentEmailNotificationEnabled = command.taskAssignmentEmailNotificationEnabled
-        }
+        } ?: throw NotFoundException()
     }
 
     @PutMapping("/me/passwords")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun changePassword(@Validated @RequestBody command: ChangePasswordCommandDTO) {
-        val user = userDao.findNotDeletedById(currentUser.userId!!).orElseThrow(::NotFoundException)
+        val user = userDao.findNotDeletedById(currentUser.userId!!) ?: throw NotFoundException()
         user.password = passwordDigester.hash(command.newPassword)
     }
 
@@ -64,7 +64,7 @@ class UserController(
     @GetMapping("/{userId}")
     @AdminOnly
     fun get(@PathVariable("userId") userId: Long): UserDTO {
-        return userDao.findNotDeletedById(userId).map(::UserDTO).orElseThrow(::NotFoundException)
+        return userDao.findNotDeletedById(userId)?.let(::UserDTO) ?: throw NotFoundException()
     }
 
     @PostMapping
@@ -90,11 +90,11 @@ class UserController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @AdminOnly
     fun update(@PathVariable("userId") userId: Long, @Validated @RequestBody command: UserCommandDTO) {
-        val user = userDao.findNotDeletedById(userId).orElseThrow { NotFoundException("No user with ID " + userId) }
+        val user = userDao.findNotDeletedById(userId) ?: throw NotFoundException("No user with ID " + userId)
 
         userDao.findNotDeletedByLogin(command.login)
-            .filter { other -> other.id != userId }
-            .ifPresent { _ -> throw BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS) }
+            ?.takeIf { other -> other.id != userId }
+            ?.let { _ -> throw BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS) }
 
         copyCommandToUser(command, user)
     }
@@ -103,14 +103,14 @@ class UserController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @AdminOnly
     fun delete(@PathVariable("userId") userId: Long) {
-        userDao.findNotDeletedById(userId).ifPresent { user -> user.deleted = true }
+        userDao.findNotDeletedById(userId)?.let { user -> user.deleted = true }
     }
 
     @PostMapping("/{userId}/password-resets")
     @ResponseStatus(HttpStatus.CREATED)
     @AdminOnly
     fun resetPassword(@PathVariable("userId") userId: Long): UserWithPasswordDTO {
-        val user = userDao.findNotDeletedById(userId).orElseThrow { NotFoundException("No user with ID " + userId) }
+        val user = userDao.findNotDeletedById(userId) ?: throw NotFoundException("No user with ID " + userId)
         val generatedPassword = passwordGenerator.generatePassword()
         user.password = passwordDigester.hash(generatedPassword)
         return UserWithPasswordDTO(user, generatedPassword)

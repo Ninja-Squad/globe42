@@ -1,6 +1,8 @@
 package org.globe42.web.tasks
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -46,6 +49,9 @@ class TaskControllerTest {
 
     @Mock
     private lateinit var mockCurrentUser: CurrentUser
+
+    @Mock
+    private lateinit var mockEventPublisher: ApplicationEventPublisher
 
     @InjectMocks
     private lateinit var controller: TaskController
@@ -177,17 +183,37 @@ class TaskControllerTest {
     @Test
     fun `should assign`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
-        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(user)
 
         controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
 
         assertThat(task2.assignee).isEqualTo(user)
+
+        verify(mockEventPublisher).publishEvent(
+            TaskAssignmentEvent(
+                taskId = task2.id!!,
+                newAssigneeId = user.id!!
+            )
+        )
+    }
+
+    @Test
+    fun `should assign without publishing event if new assignee is same as previous`() {
+        task2.assignee = user
+        whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(user)
+
+        controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
+
+        assertThat(task2.assignee).isEqualTo(user)
+
+        verify(mockEventPublisher, never()).publishEvent(any())
     }
 
     @Test
     fun `should throw when assigning unexisting task`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.empty())
-        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(user)
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
@@ -197,7 +223,7 @@ class TaskControllerTest {
     @Test
     fun `should throw when assigning to unexisting user`() {
         whenever(mockTaskDao.findById(task2.id!!)).thenReturn(Optional.of(task2))
-        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.empty())
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(null)
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
             controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
@@ -256,14 +282,14 @@ class TaskControllerTest {
     }
 
     @Test
-    fun `should create`() {
+    fun `should create and publish event if assignment`() {
         val command = createCommand(12L, 13L)
 
         val person = Person(command.concernedPersonId!!, "John", "Doe", Gender.MALE)
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         val user = User(command.assigneeId!!, "JB")
-        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(user)
 
         whenever(mockCurrentUser.userId).thenReturn(user.id)
         whenever(mockUserDao.getOne(mockCurrentUser.userId!!)).thenReturn(user)
@@ -278,6 +304,13 @@ class TaskControllerTest {
         assertThat(task.dueDate).isEqualTo(command.dueDate)
         assertThat(task.concernedPerson!!.id).isEqualTo(person.id!!)
         assertThat(task.assignee!!.id).isEqualTo(user.id!!)
+
+        verify(mockEventPublisher).publishEvent(
+            TaskAssignmentEvent(
+                taskId = task.id,
+                newAssigneeId = user.id!!
+            )
+        )
     }
 
     @Test
@@ -291,6 +324,8 @@ class TaskControllerTest {
         val task = controller.create(command)
         assertThat(task.concernedPerson).isNull()
         assertThat(task.assignee).isNull()
+
+        verify(mockEventPublisher, never()).publishEvent(any())
     }
 
     @Test
@@ -301,7 +336,7 @@ class TaskControllerTest {
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
 
         val user = User(command.assigneeId!!)
-        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(user)
 
         whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
 
@@ -313,6 +348,26 @@ class TaskControllerTest {
         assertThat(task1.dueDate).isEqualTo(command.dueDate)
         assertThat(task1.concernedPerson!!.id).isEqualTo(person.id!!)
         assertThat(task1.assignee!!.id).isEqualTo(user.id!!)
+
+        verify(mockEventPublisher).publishEvent(
+            TaskAssignmentEvent(
+                taskId = task1.id!!,
+                newAssigneeId = command.assigneeId!!
+            )
+        )
+    }
+
+    @Test
+    fun `should not publish task assignment event when updating with same assignee`() {
+        val command = createCommand(null, task1.assignee!!.id!!)
+
+        whenever(mockUserDao.findNotDeletedById(user.id!!)).thenReturn(task1.assignee)
+
+        whenever(mockTaskDao.findById(task1.id!!)).thenReturn(Optional.of(task1))
+
+        controller.update(task1.id!!, command)
+
+        verify(mockEventPublisher, never()).publishEvent(any())
     }
 
     @Test

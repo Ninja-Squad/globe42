@@ -109,6 +109,7 @@ tasks {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("com.google.cloud:google-cloud-storage:1.81.0")
@@ -127,6 +128,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     testImplementation("org.mockito:mockito-junit-jupiter")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.0.1")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

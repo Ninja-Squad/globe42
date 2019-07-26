@@ -131,7 +131,7 @@ class TaskControllerMvcTest {
     fun `should assign`() {
         whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
         val otherUser = User(5433L)
-        whenever(mockUserDao.findNotDeletedById(otherUser.id!!)).thenReturn(Optional.of(otherUser))
+        whenever(mockUserDao.findNotDeletedById(otherUser.id!!)).thenReturn(otherUser)
 
         mvc.perform(
             post("/api/tasks/{taskId}/assignments", task.id)
