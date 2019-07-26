@@ -85,6 +85,7 @@ import { DisplayLocationPipe } from './display-location.pipe';
 import { PageTitleDirective } from './page-title.directive';
 import { NavigationProgressComponent } from './navigation-progress/navigation-progress.component';
 import { DisplayEntryTypePipe } from './display-entry-type.pipe';
+import { PersonDeathComponent } from './person-death/person-death.component';
 
 registerLocaleData(localeFr);
 
@@ -162,7 +163,8 @@ registerLocaleData(localeFr);
     DisplayResidencePermitPipe,
     PageTitleDirective,
     NavigationProgressComponent,
-    DisplayEntryTypePipe
+    DisplayEntryTypePipe,
+    PersonDeathComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

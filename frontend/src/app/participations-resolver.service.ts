@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ParticipationService } from './participation.service';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Resolve } from '@angular/router';
 import { ParticipationModel } from './models/participation.model';
 import { Observable } from 'rxjs';
-import { PersonModel } from './models/person.model';
+import { CurrentPersonService } from './current-person.service';
 
 @Injectable({ providedIn: 'root' })
 export class ParticipationsResolverService implements Resolve<Array<ParticipationModel>> {
 
-  constructor(private participationService: ParticipationService) { }
+  constructor(private currentPersonService: CurrentPersonService,
+              private participationService: ParticipationService) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Array<ParticipationModel>> {
-    const person: PersonModel = route.parent.data.person;
-    return this.participationService.list(person.id);
+  resolve(): Observable<Array<ParticipationModel>> {
+    return this.participationService.list(this.currentPersonService.snapshot.id);
   }
 }

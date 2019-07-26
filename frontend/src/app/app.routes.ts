@@ -68,6 +68,7 @@ import { FamilyResolverService } from './family-resolver.service';
 import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
 import { PersonNetworkMembersComponent } from './person-network-members/person-network-members.component';
 import { NetworkMembersResolverService } from './network-members-resolver.service';
+import { PersonDeathComponent } from './person-death/person-death.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -175,6 +176,10 @@ export const routes: Routes = [
                 resolve: {
                   memberships: MembershipsResolverService
                 }
+              },
+              {
+                path: 'death',
+                component: PersonDeathComponent
               }
             ]
           },

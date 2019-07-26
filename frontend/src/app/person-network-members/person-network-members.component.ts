@@ -9,6 +9,7 @@ import { NETWORK_MEMBER_TYPE_TRANSLATIONS } from '../display-network-member-type
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NetworkMemberCommand } from '../models/network-member.command';
 import { Observable } from 'rxjs';
+import { CurrentPersonService } from '../current-person.service';
 
 @Component({
   selector: 'gl-person-network-members',
@@ -24,14 +25,15 @@ export class PersonNetworkMembersComponent implements OnInit {
   editedMember: NetworkMemberModel;
   memberForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
+  constructor(private currentPersonService: CurrentPersonService,
+              private route: ActivatedRoute,
               private confirmService: ConfirmService,
               private networkMemberService: NetworkMemberService,
               private fb: FormBuilder) { }
 
   ngOnInit() {
     this.members = this.route.snapshot.data.members;
-    this.person = this.route.snapshot.parent.data.person;
+    this.person = this.currentPersonService.snapshot;
   }
 
   delete(member: NetworkMemberModel) {

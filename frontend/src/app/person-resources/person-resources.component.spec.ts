@@ -17,6 +17,7 @@ import { PerUnitRevenueInformationService } from '../per-unit-revenue-informatio
 import { ComponentTester, fakeRoute, fakeSnapshot, TestButton } from 'ngx-speculoos';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
+import { CurrentPersonService } from '../current-person.service';
 
 class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
   constructor() {
@@ -116,16 +117,6 @@ describe('PersonResourcesComponent', () => {
         charges,
         perUnitRevenueInformation
       }
-    }),
-    parent: fakeRoute({
-      snapshot: fakeSnapshot({
-        data: {
-          person: {
-            id: 42,
-            nickName: 'JB'
-          }
-        }
-      })
     })
   });
 
@@ -139,6 +130,12 @@ describe('PersonResourcesComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
+    });
+
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({
+      id: 42,
+      nickName: 'JB'
     });
 
     tester = new PersonResourcesTester();

@@ -5,12 +5,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NetworkMemberService } from './network-member.service';
 import { Observable, of } from 'rxjs';
 import { NetworkMemberModel } from './models/network-member.model';
+import { CurrentPersonService } from './current-person.service';
 
 describe('NetworkMembersResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
+
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
   });
 
   it('should resolve network members', () => {
@@ -20,16 +24,7 @@ describe('NetworkMembersResolverService', () => {
     const members: Observable<Array<NetworkMemberModel>> = of([]);
     spyOn(service, 'list').and.returnValue(members);
 
-    const route = {
-      parent: {
-        data: {
-          person: {
-            id: 42
-          }
-        }
-      }
-    } as any;
-
-    expect(resolver.resolve(route)).toBe(members);
+    expect(resolver.resolve()).toBe(members);
+    expect(service.list).toHaveBeenCalledWith(42);
   });
 });

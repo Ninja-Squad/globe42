@@ -8,36 +8,28 @@ import { PersonFileService } from '../person-file.service';
 import { ConfirmService } from '../confirm.service';
 import { FileSizePipe } from '../file-size.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 import { By, Title } from '@angular/platform-browser';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CurrentPersonService } from '../current-person.service';
 
 describe('PersonFilesComponent', () => {
   const person = { id: 42, firstName: 'John', lastName: 'Doe' } as PersonModel;
   let files: Array<FileModel>;
 
-  const activatedRoute = {
-    parent: {
-      snapshot: {
-        data: {
-          person
-        }
-      }
-    }
-  };
+  let currentPersonService: CurrentPersonService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule, GlobeNgbModule.forRoot()],
-      declarations: [PersonFilesComponent, FileSizePipe, PageTitleDirective, FullnamePipe],
-      providers: [
-        { provide: ActivatedRoute, useValue: activatedRoute },
-      ]
+      declarations: [PersonFilesComponent, FileSizePipe, PageTitleDirective, FullnamePipe]
     });
+
+    currentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     files = [
       {

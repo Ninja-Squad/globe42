@@ -15,11 +15,13 @@ import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.pipe';
-import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot, speculoosMatchers, TestButton } from 'ngx-speculoos';
 import { Location } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import Spy = jasmine.Spy;
+import { CurrentPersonService } from '../current-person.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEventsComponent> {
   constructor() {
@@ -66,7 +68,7 @@ class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEv
 describe('PersonWeddingEventsComponent', () => {
   let events: Array<WeddingEventModel>;
   let person: PersonModel;
-  let route: any;
+  let route: ActivatedRoute;
 
   beforeEach(async(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2018-03-25T15:30:00').toJSDate());
@@ -88,10 +90,9 @@ describe('PersonWeddingEventsComponent', () => {
 
     person = { id: 1, firstName: 'JB', lastName: 'Nizet' } as PersonModel;
 
-    route = {
-      parent: {snapshot: {data: {person}}},
-      snapshot: {data: {events}}
-    };
+    route = fakeRoute({
+      snapshot: fakeSnapshot({data: {events}})
+    });
 
     const weddingEventService: WeddingEventService =
       jasmine.createSpyObj('weddingEventService', ['list', 'create', 'delete']);
@@ -107,7 +108,7 @@ describe('PersonWeddingEventsComponent', () => {
         PageTitleDirective,
         FullnamePipe
       ],
-      imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot(), ValdemortModule ],
+      imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot(), ValdemortModule, HttpClientTestingModule ],
       providers: [
         { provide: LOCALE_ID, useValue: 'fr-FR' },
         { provide: ActivatedRoute, useFactory: () => route },
@@ -115,6 +116,9 @@ describe('PersonWeddingEventsComponent', () => {
         { provide: ConfirmService, useValue: confirmService },
       ]
     });
+
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
   }));

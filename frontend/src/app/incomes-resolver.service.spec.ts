@@ -5,11 +5,17 @@ import { IncomeService } from './income.service';
 import { HttpClientModule } from '@angular/common/http';
 import { IncomeModel } from './models/income.model';
 import { of } from 'rxjs';
+import { CurrentPersonService } from './current-person.service';
 
 describe('IncomesResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule],
+    });
+
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+  });
 
   it('should retrieve the incomes of the person stored in the data of the parent route', () => {
     const incomeService = TestBed.get(IncomeService);
@@ -18,14 +24,7 @@ describe('IncomesResolverService', () => {
     spyOn(incomeService, 'list').and.returnValue(expectedResults);
 
     const resolver = TestBed.get(IncomesResolverService);
-    const route = {
-      parent: {
-        data: {
-          person: { id: 42 }
-        }
-      }
-    };
-    const result = resolver.resolve(route);
+    const result = resolver.resolve();
 
     expect(result).toBe(expectedResults);
     expect(incomeService.list).toHaveBeenCalledWith(42);

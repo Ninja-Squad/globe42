@@ -8,6 +8,7 @@ import { TaskModel } from './models/task.model';
 import { Page } from './models/page';
 import { CurrentUserModule } from './current-user/current-user.module';
 import { of } from 'rxjs';
+import { CurrentPersonService } from './current-person.service';
 
 describe('TasksResolverService', () => {
   let resolver: TasksResolverService;
@@ -74,15 +75,9 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for person-todo list type', () => {
     const route: any = routeWithType('person-todo');
-    route.parent = {
-      parent: {
-        data: {
-          person: {
-            id: 42
-          }
-        }
-      }
-    };
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+
     const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listTodoForPerson').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);
@@ -91,15 +86,9 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for person-archived list type', () => {
     const route: any = routeWithType('person-archived');
-    route.parent = {
-      parent: {
-        data: {
-          person: {
-            id: 42
-          }
-        }
-      }
-    };
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+
     const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listArchivedForPerson').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);

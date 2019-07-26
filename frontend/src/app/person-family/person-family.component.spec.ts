@@ -4,7 +4,6 @@ import { PersonFamilyComponent, Situation } from './person-family.component';
 import { FamilyService } from '../family.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
-import { PersonModel } from '../models/person.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfirmService } from '../confirm.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
@@ -13,39 +12,40 @@ import { By } from '@angular/platform-browser';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
+import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { CurrentPersonService } from '../current-person.service';
 
 describe('PersonFamilyComponent', () => {
   let route: ActivatedRoute;
+  let currentPersonService: CurrentPersonService;
 
   beforeEach(async(() => {
-    route = {
-      snapshot: {
-        parent: {
-          data: {
-            person: {
-              id: 42,
-              firstName: 'John',
-              lastName: 'Doe'
-            } as PersonModel
-          }
-        },
+    route = fakeRoute({
+      snapshot: fakeSnapshot({
         data: {
         }
-      }
-    } as any;
+      })
+    });
 
     TestBed.configureTestingModule({
       declarations: [PersonFamilyComponent, SituationComponent, PageTitleDirective, FullnamePipe],
       providers: [
         FamilyService,
         ConfirmService,
-        { provide: ActivatedRoute, useFactory: () => route },
+        { provide: ActivatedRoute, useFactory: () => route }
       ],
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
         GlobeNgbModule.forRoot()
       ]
+    });
+
+    currentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({
+      id: 42,
+      firstName: 'John',
+      lastName: 'Doe'
     });
   }));
 

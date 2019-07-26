@@ -300,6 +300,11 @@ class Person {
      */
     var deleted: Boolean = false
 
+    /**
+     * The date of death of the person
+     */
+    var deathDate: LocalDate? = null
+
     val spouse: Person?
         get() = couple?.getSpouseOf(this)
 
@@ -371,6 +376,10 @@ class Person {
 
     fun removeParticipation(participation: Participation) {
         participations.remove(participation)
+    }
+
+    fun clearParticipations() {
+        participations.clear()
     }
 
     fun getWeddingEvents(): Set<WeddingEvent> {

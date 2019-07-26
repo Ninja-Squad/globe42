@@ -16,6 +16,8 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
+import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { CurrentPersonService } from '../current-person.service';
 
 describe('PersonMembershipsComponent', () => {
   let person: PersonModel;
@@ -30,18 +32,13 @@ describe('PersonMembershipsComponent', () => {
 
     memberships = [];
 
-    const route: any = {
-      snapshot: {
-        parent: {
-          data: {
-            person
-          }
-        },
+    const route = fakeRoute({
+      snapshot: fakeSnapshot({
         data: {
           memberships
         }
-      }
-    };
+      })
+    });
 
     TestBed.configureTestingModule({
       declarations: [
@@ -59,6 +56,9 @@ describe('PersonMembershipsComponent', () => {
         HttpClientTestingModule, GlobeNgbModule.forRoot(), ReactiveFormsModule, ValdemortModule
       ]
     });
+
+    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
   }));

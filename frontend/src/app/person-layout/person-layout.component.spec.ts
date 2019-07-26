@@ -3,7 +3,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { PersonLayoutComponent } from './person-layout.component';
 import { PersonModel } from '../models/person.model';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
 import { of } from 'rxjs';
@@ -11,9 +11,35 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MembershipModel } from '../models/membership.model';
 import { MembershipService } from '../membership.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { LOCALE_ID } from '@angular/core';
+import { CurrentPersonService } from '../current-person.service';
+
+class PersonLayoutComponentTester extends ComponentTester<PersonLayoutComponent> {
+  constructor() {
+    super(PersonLayoutComponent);
+  }
+
+  get title() {
+    return this.element('h1#fullName');
+  }
+
+  get navLinks() {
+    return this.elements('a.nav-link');
+  }
+
+  get membershipWarningIcon() {
+    return this.element('#membership-warning-icon');
+  }
+
+  get deathMessage() {
+    return this.element('#death-message');
+  }
+}
 
 describe('PersonLayoutComponent', () => {
   let person: PersonModel;
+  let tester: PersonLayoutComponentTester;
 
   beforeEach(async(() => {
     person = {
@@ -24,88 +50,98 @@ describe('PersonLayoutComponent', () => {
       mediationEnabled: true
     } as PersonModel;
 
-    const activatedRoute = {
-      data: of({ person }),
-      snapshot: {}
-    };
-
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule, GlobeNgbModule.forRoot()],
       declarations: [PersonLayoutComponent, FullnamePipe],
       providers: [
-        { provide: ActivatedRoute, useValue: activatedRoute }
+        { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
     });
+
+    const currentPersonService = TestBed.get(CurrentPersonService);
+    spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
+
+    tester = new PersonLayoutComponentTester();
+
+    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should display the person full name as title', () => {
-    const fixture = TestBed.createComponent(PersonLayoutComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const name = nativeElement.querySelector('h1#fullName');
-    expect(name.textContent).toContain('John Doe (john)');
+    expect(tester.title).toContainText('John Doe (john)');
   });
 
-  it('should have 9 nav links and a router outlet', () => {
-    const fixture = TestBed.createComponent(PersonLayoutComponent);
-    fixture.detectChanges();
+  it('should have 10 nav links and a router outlet', () => {
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(9);
+    expect(tester.navLinks.length).toBe(10);
 
-    const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
+    const outlet = tester.debugElement.query(By.directive(RouterOutlet));
     expect(outlet).toBeTruthy();
   });
 
-  it('should only have 5 nav links if mediation is not enabled', () => {
+  it('should only have 6 nav links if mediation is not enabled', () => {
     person.mediationEnabled = false;
-    const fixture = TestBed.createComponent(PersonLayoutComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const links = nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(5);
+    expect(tester.navLinks.length).toBe(6);
   });
 
   it('should have a loading membership status initially', () => {
-    const fixture = TestBed.createComponent(PersonLayoutComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.componentInstance.membershipStatus).toBe('loading');
-    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeFalsy();
+    expect(tester.componentInstance.membershipStatus).toBe('loading');
+    expect(tester.membershipWarningIcon).toBeFalsy();
   });
 
   it('should change the working status when the current membership is loaded or when it is created or deleted', () => {
     const membershipService: MembershipService = TestBed.get(MembershipService);
     spyOn(membershipService, 'getCurrent').and.returnValue(of({} as MembershipModel));
 
-    const fixture = TestBed.createComponent(PersonLayoutComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.componentInstance.membershipStatus).toBe('OK');
+    expect(tester.componentInstance.membershipStatus).toBe('OK');
     expect(membershipService.getCurrent).toHaveBeenCalledWith(person.id);
-    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeFalsy();
+    expect(tester.membershipWarningIcon).toBeFalsy();
 
     membershipService.currentMembership$.next(null);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.membershipStatus).toBe('KO');
-    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeTruthy();
+    tester.detectChanges();
+    expect(tester.componentInstance.membershipStatus).toBe('KO');
+    expect(tester.membershipWarningIcon).toBeTruthy();
 
     membershipService.currentMembership$.next({ paymentMode: 'CASH' } as MembershipModel);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.membershipStatus).toBe('OK');
-    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeFalsy();
+    tester.detectChanges();
+    expect(tester.componentInstance.membershipStatus).toBe('OK');
+    expect(tester.membershipWarningIcon).toBeFalsy();
 
     membershipService.currentMembership$.next({ paymentMode: 'OUT_OF_DATE' } as MembershipModel);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.membershipStatus).toBe('OUT_OF_DATE');
-    expect(fixture.nativeElement.querySelector('#membership-warning-icon')).toBeTruthy();
+    tester.detectChanges();
+    expect(tester.componentInstance.membershipStatus).toBe('OUT_OF_DATE');
+    expect(tester.membershipWarningIcon).toBeTruthy();
 
-    fixture.componentInstance.ngOnDestroy();
+    tester.componentInstance.ngOnDestroy();
     membershipService.currentMembership$.next(null);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.membershipStatus).toBe('OUT_OF_DATE'); // should have been unsubscribed
+    tester.detectChanges();
+    expect(tester.componentInstance.membershipStatus).toBe('OUT_OF_DATE'); // should have been unsubscribed
+  });
+
+  it('should not display a death message if not dead', () => {
+    tester.detectChanges();
+    expect(tester.deathMessage).toBeNull();
+  });
+
+  it('should display a death message if dead', () => {
+    person.deathDate = '2019-07-26';
+    tester.detectChanges();
+    expect(tester.deathMessage).toContainText('John Doe (john) est décédé(e) le 26 juillet 2019');
+  });
+
+  it('should not display death navlink and activities navlink if dead', () => {
+    person.deathDate = '2019-07-26';
+    tester.detectChanges();
+    expect(tester.navLinks.length).toBe(8);
+    expect(tester.testElement).not.toContainText('Décès');
+    expect(tester.testElement).not.toContainText('Activités');
   });
 });

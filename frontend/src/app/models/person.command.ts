@@ -41,3 +41,7 @@ export interface PersonCommand {
   residencePermitDepositDate: string;
   residencePermitRenewalDate: string;
 }
+
+export interface PersonDeathCommand {
+  deathDate: string;
+}

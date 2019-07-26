@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { PersonModel } from './models/person.model';
+import { Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
 import { WeddingEventModel } from './models/wedding-event.model';
 import { WeddingEventService } from './wedding-event.service';
+import { CurrentPersonService } from './current-person.service';
 
 @Injectable({ providedIn: 'root' })
 export class WeddingEventsResolverService implements Resolve<Array<WeddingEventModel>> {
 
-  constructor(private weddingEventService: WeddingEventService) { }
+  constructor(private currentPersonService: CurrentPersonService,
+              private weddingEventService: WeddingEventService) { }
 
-  resolve(route: ActivatedRouteSnapshot): Observable<Array<WeddingEventModel>> {
-    const person: PersonModel = route.parent.data.person;
-    return this.weddingEventService.list(person.id);
+  resolve(): Observable<Array<WeddingEventModel>> {
+    return this.weddingEventService.list(this.currentPersonService.snapshot.id);
   }
 }

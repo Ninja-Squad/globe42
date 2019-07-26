@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { FileModel } from '../models/file.model';
 import { PersonFileService } from '../person-file.service';
 import { PersonModel } from '../models/person.model';
@@ -7,6 +6,7 @@ import { ConfirmService } from '../confirm.service';
 import { Comparator, sortBy } from '../utils';
 import { HttpEventType } from '@angular/common/http';
 import { finalize, switchMap } from 'rxjs/operators';
+import { CurrentPersonService } from '../current-person.service';
 
 @Component({
   selector: 'gl-person-files',
@@ -21,10 +21,10 @@ export class PersonFilesComponent implements OnInit {
   uploadProgress: number;
   files: Array<FileModel>;
 
-  constructor(route: ActivatedRoute,
+  constructor(currentPersonService: CurrentPersonService,
               private personFileService: PersonFileService,
               private confirmService: ConfirmService) {
-    this.person = route.parent.snapshot.data.person;
+    this.person = currentPersonService.snapshot;
   }
 
   ngOnInit(): void {

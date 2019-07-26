@@ -1,0 +1,20 @@
+<h2>Décès</h2>
+
+<ngb-alert [dismissible]="false" type="danger">
+  <span class="fa fa-exclamation-triangle"></span>
+  Attention! Cette opération est irréversible. Vérifiez qu'il s'agit bien de la bonne personne.<br/>
+  Une fois cette opération effectuée, {{ person | fullname }} sera enlevé(e) de toutes les activités auxquelles
+  il/elle participait.
+</ngb-alert>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <div class="form-group">
+    <label for="deathDate" class="mr-2">Date du décès</label>
+    <gl-datepicker-container class="mr-2">
+      <input class="form-control" formControlName="deathDate" ngbDatepicker id="deathDate"/>
+    </gl-datepicker-container>
+    <val-errors controlName="deathDate" label="La date du décès"></val-errors>
+  </div>
+
+  <button class="btn btn-primary" id="save">Enregistrer le décès</button>
+</form>

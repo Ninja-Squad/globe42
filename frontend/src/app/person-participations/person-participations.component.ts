@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ActivityType, ParticipationModel } from '../models/participation.model';
 import { ACTIVITY_TYPE_TRANSLATIONS } from '../display-activity-type.pipe';
 import { ParticipationService } from '../participation.service';
 import { PersonModel } from '../models/person.model';
+import { CurrentPersonService } from '../current-person.service';
+import { ActivatedRoute } from '@angular/router';
 
 export interface ParticipationItem {
   id: number;
@@ -21,8 +22,10 @@ export class PersonParticipationsComponent {
   items: Array<ParticipationItem>;
   person: PersonModel;
 
-  constructor(route: ActivatedRoute, private participationService: ParticipationService) {
-    this.person = route.parent.snapshot.data.person;
+  constructor(currentPersonService: CurrentPersonService,
+              route: ActivatedRoute,
+              private participationService: ParticipationService) {
+    this.person = currentPersonService.snapshot;
 
     const participations: Array<ParticipationModel> = route.snapshot.data.participations;
     this.items = ACTIVITY_TYPE_TRANSLATIONS.map(t => {

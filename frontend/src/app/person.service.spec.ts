@@ -48,4 +48,9 @@ describe('PersonService', () => {
   it('should resurrect a person', () => {
     httpTester.testDelete('/api/persons/1/deletion', service.resurrect(1));
   });
+
+  it('should signal the death of a person', () => {
+    const command = { deathDate: '2019-07-26' };
+    httpTester.testPut('/api/persons/2/death', command, service.signalDeath(2, command));
+  });
 });

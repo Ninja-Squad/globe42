@@ -92,6 +92,14 @@ class PersonController(
         person.deleted = false
     }
 
+    @PutMapping("/{personId}/death")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun signalDeath(@PathVariable("personId") id: Long, @Validated @RequestBody command: PersonDeathCommandDTO) {
+        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+        person.deathDate = command.deathDate
+        person.clearParticipations();
+    }
+
     private fun copyCommandToPerson(command: PersonCommandDTO, person: Person) {
         with(person) {
             firstName = command.firstName

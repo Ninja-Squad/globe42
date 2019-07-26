@@ -301,6 +301,7 @@ describe('PersonEditComponent', () => {
       residencePermit: 'TEN_YEAR_OLD_RESIDENT',
       residencePermitDepositDate: '2018-02-02',
       residencePermitRenewalDate: '2018-10-02',
+      deathDate: null,
       deleted: false
     };
 
