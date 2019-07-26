@@ -37,9 +37,9 @@ class UserDaoTest : BaseDaoTest() {
     @Test
     fun `should find not deleted by login`() {
         skipNextLaunch()
-        assertThat(userDao.findNotDeletedByLogin("jb")).isNotEmpty
-        assertThat(userDao.findNotDeletedByLogin("old")).isEmpty
-        assertThat(userDao.findNotDeletedByLogin("ced")).isEmpty
+        assertThat(userDao.findNotDeletedByLogin("jb")).isNotNull()
+        assertThat(userDao.findNotDeletedByLogin("old")).isNull()
+        assertThat(userDao.findNotDeletedByLogin("ced")).isNull()
     }
 
     @Test
@@ -53,9 +53,9 @@ class UserDaoTest : BaseDaoTest() {
     @Test
     fun `should find not deleted by id`() {
         skipNextLaunch()
-        assertThat(userDao.findNotDeletedById(1L)).isNotEmpty
-        assertThat(userDao.findNotDeletedById(2L)).isEmpty
-        assertThat(userDao.findNotDeletedById(1234L)).isEmpty
+        assertThat(userDao.findNotDeletedById(1L)).isNotNull()
+        assertThat(userDao.findNotDeletedById(2L)).isNull()
+        assertThat(userDao.findNotDeletedById(1234L)).isNull()
     }
 
     @Test

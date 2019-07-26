@@ -34,7 +34,7 @@ class AuthenticationControllerTest {
     fun `should throw when unknown user`() {
         val credentials = createCredentials()
 
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.empty())
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(null)
 
         assertThatExceptionOfType(UnauthorizedException::class.java).isThrownBy { controller.authenticate(credentials) }
     }
@@ -44,7 +44,7 @@ class AuthenticationControllerTest {
         val credentials = createCredentials()
 
         val user = createUser()
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(user)
         whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(false)
 
         assertThatExceptionOfType(UnauthorizedException::class.java).isThrownBy { controller.authenticate(credentials) }
@@ -55,7 +55,7 @@ class AuthenticationControllerTest {
         val credentials = createCredentials()
 
         val user = createUser()
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(user)
         whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(true)
         val token = "token"
         whenever(mockJwtHelper.buildToken(user.id)).thenReturn(token)

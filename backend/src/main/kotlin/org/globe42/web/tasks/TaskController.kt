@@ -12,6 +12,7 @@ import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
 import org.globe42.web.util.PageDTO
 import org.globe42.web.util.toDTO
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.PageRequest
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -36,7 +37,8 @@ class TaskController(
     private val userDao: UserDao,
     private val personDao: PersonDao,
     private val taskCategoryDao: TaskCategoryDao,
-    private val currentUser: CurrentUser
+    private val currentUser: CurrentUser,
+    private val eventPublisher: ApplicationEventPublisher
 ) {
 
     @GetMapping
@@ -92,11 +94,19 @@ class TaskController(
     @ResponseStatus(HttpStatus.CREATED)
     fun assign(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: TaskAssignmentCommandDTO) {
         val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
-        val user = userDao.findNotDeletedById(command.userId).orElseThrow {
-            BadRequestException("user ${command.userId} doesn't exist")
-        }
+        val user = userDao.findNotDeletedById(command.userId) ?: throw BadRequestException("user ${command.userId} doesn't exist")
 
+        val previousAssignee = task.assignee
         task.assignee = user
+
+        if (task.assignee != previousAssignee) {
+            eventPublisher.publishEvent(
+                TaskAssignmentEvent(
+                    taskId = task.id!!,
+                    newAssigneeId = user.id!!
+                )
+            )
+        }
     }
 
     @DeleteMapping("/{taskId}/assignments")
@@ -123,15 +133,33 @@ class TaskController(
         task.creator = userDao.getOne(currentUser.userId!!)
 
         copyCommandToTask(command, task)
+        taskDao.save(task)
 
-        return TaskDTO(taskDao.save(task))
+        task.assignee?.let { assignee ->
+            eventPublisher.publishEvent(TaskAssignmentEvent(
+                taskId = task.id!!,
+                newAssigneeId = assignee.id!!
+            ))
+        }
+
+        return TaskDTO(task)
     }
 
     @PutMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: TaskCommandDTO) {
         val task = taskDao.findById(taskId).orElseThrow { NotFoundException() }
+
+        val previousAssignee = task.assignee
         copyCommandToTask(command, task)
+        task.assignee?.let { assignee ->
+            if (assignee != previousAssignee) {
+                eventPublisher.publishEvent(TaskAssignmentEvent(
+                    taskId = task.id!!,
+                    newAssigneeId = assignee.id!!
+                ))
+            }
+        }
     }
 
     @GetMapping("/{taskId}/spent-times")
@@ -180,9 +208,7 @@ class TaskController(
             }
 
             assignee = command.assigneeId?.let {
-                userDao.findNotDeletedById(it).orElseThrow {
-                    BadRequestException("no user with id $it")
-                }
+                userDao.findNotDeletedById(it) ?: throw BadRequestException("no user with id $it")
             }
         }
     }

@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
 
 /**
  * MVC test for [UserController]
@@ -49,7 +48,7 @@ class UserControllerMvcTest {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
         mvc.perform(get("/api/users/me"))
             .andExpect(status().isOk)
@@ -63,7 +62,7 @@ class UserControllerMvcTest {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
         whenever(mockPasswordDigester.hash("newPassword")).thenReturn("hashedNewPassword")
 
         val command = ChangePasswordCommandDTO("newPassword")
@@ -111,7 +110,7 @@ class UserControllerMvcTest {
     fun `should update`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
         val command = UserCommandDTO("test", true)
 
@@ -127,7 +126,7 @@ class UserControllerMvcTest {
     fun `should delete`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
         mvc.perform(delete("/api/users/{userId}", user.id))
             .andExpect(status().isNoContent)
@@ -137,7 +136,7 @@ class UserControllerMvcTest {
     fun `should reset password`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
         whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
         whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
@@ -153,7 +152,7 @@ class UserControllerMvcTest {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
         mvc.perform(get("/api/users/me/profile"))
             .andExpect(status().isOk)
@@ -168,7 +167,7 @@ class UserControllerMvcTest {
         val userId = 42L
         val user = createUser(userId)
         whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
         val command = ProfileCommandDTO(
             email = "jb@bar.com",

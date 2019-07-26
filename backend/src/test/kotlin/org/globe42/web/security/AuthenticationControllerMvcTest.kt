@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
 
 /**
  * Unit tests for AuthenticationController
@@ -40,7 +39,7 @@ class AuthenticationControllerMvcTest {
         val credentials = createCredentials()
 
         val user = createUser()
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(Optional.of(user))
+        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(user)
         whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(true)
         val token = "token"
         whenever(mockJwtHelper.buildToken(user.id)).thenReturn(token)
