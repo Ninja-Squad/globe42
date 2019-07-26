@@ -27,6 +27,7 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayResidencePermitPipe } from '../display-residence-permit.pipe';
 import { DisplayVisaPipe } from '../display-visa.pipe';
 import { PageTitleDirective } from '../page-title.directive';
+import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -99,6 +100,10 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
 
   get entryDate() {
     return this.input('#entryDate');
+  }
+
+  get entryType() {
+    return this.select('#entryType');
   }
 
   get housing() {
@@ -240,6 +245,7 @@ describe('PersonEditComponent', () => {
       DisplayHealthInsurancePipe,
       DisplayVisaPipe,
       DisplayResidencePermitPipe,
+      DisplayEntryTypePipe,
       FullnamePipe,
       ValidationDefaultsComponent,
       PageTitleDirective
@@ -261,6 +267,7 @@ describe('PersonEditComponent', () => {
       city: cityModel,
       email: 'john@mail.com',
       entryDate: '2016-12-01',
+      entryType: 'REGULAR',
       gender: 'MALE',
       phoneNumber: '06 12 34 56 78',
       mediationEnabled: true,
@@ -343,6 +350,7 @@ describe('PersonEditComponent', () => {
       expect(tester.maritalStatus).toHaveSelectedValue(person.maritalStatus);
       expect(tester.spouse).toHaveValue('Jane Doe');
       expect(tester.entryDate).toHaveValue('01/12/2016');
+      expect(tester.entryType).toHaveSelectedValue(person.entryType);
       expect(tester.housing).toHaveSelectedValue(person.housing);
       expect(tester.housingSpace).toHaveValue(`${person.housingSpace}`);
       expect(tester.hostName).toHaveValue(person.hostName);
@@ -538,6 +546,7 @@ describe('PersonEditComponent', () => {
         'firstMediationAppointmentDate',
         'maritalStatus',
         'entryDate',
+        'entryType',
         'housing',
         'hostName',
         'fiscalStatusUNKNOWN',
@@ -562,6 +571,7 @@ describe('PersonEditComponent', () => {
       expect(tester.maritalStatus).toHaveSelectedValue('UNKNOWN');
       expect(tester.spouse).toHaveValue('');
       expect(tester.entryDate).toHaveValue('');
+      expect(tester.entryType).toHaveSelectedValue('UNKNOWN');
       expect(tester.housing).toHaveSelectedValue('UNKNOWN');
       expect(tester.housingSpace).toBeFalsy();
       expect(tester.hostName).toHaveValue('');
@@ -610,6 +620,7 @@ describe('PersonEditComponent', () => {
       spouseResult.click();
 
       tester.entryDate.fillWith('02/02/2015');
+      tester.entryType.selectLabel('Irrégulière');
       tester.firstMediationAppointmentDate.fillWith('02/02/2017');
       tester.housing.selectLabel('Aucun');
       expect(tester.housingSpace).toBeFalsy();
@@ -666,6 +677,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.spouseId).toBe(1);
       expect((createdPerson as any).spouse).not.toBeDefined();
       expect(createdPerson.entryDate).toBe('2015-02-02');
+      expect(createdPerson.entryType).toBe('IRREGULAR');
       expect(createdPerson.housing).toBe('F0');
       expect(createdPerson.housingSpace).toBe(30);
       expect(createdPerson.hostName).toBe('Bruno');

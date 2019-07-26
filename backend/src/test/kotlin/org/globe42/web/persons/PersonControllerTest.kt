@@ -352,6 +352,7 @@ class PersonControllerTest {
         assertThat(person.city!!.city).isEqualTo(command.city!!.city)
         assertThat(person.email).isEqualTo(command.email)
         assertThat(person.entryDate).isEqualTo(command.entryDate)
+        assertThat(person.entryType).isEqualTo(command.entryType)
         assertThat(person.gender).isEqualTo(command.gender)
         assertThat(person.phoneNumber).isEqualTo(command.phoneNumber)
         assertThat(person.maritalStatus).isEqualTo(command.maritalStatus)
@@ -407,6 +408,7 @@ class PersonControllerTest {
                 city = CityDTO("42000", "Saint-Etienne"),
                 email = "cyril@ninja-squad.com",
                 entryDate = LocalDate.of(2017, 4, 13),
+                entryType = EntryType.REGULAR,
                 gender = Gender.MALE,
                 phoneNumber = "01234567",
                 mediationEnabled = mediationEnabled,
@@ -431,7 +433,6 @@ class PersonControllerTest {
                 residencePermit = ResidencePermit.TEN_YEAR_OLD_RESIDENT,
                 residencePermitDepositDate = LocalDate.of(2017, 12, 1),
                 residencePermitRenewalDate = LocalDate.of(2019, 12, 1)
-
             )
         }
     }

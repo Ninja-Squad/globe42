@@ -21,6 +21,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
+import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
 
 describe('PersonComponent', () => {
 
@@ -44,6 +45,7 @@ describe('PersonComponent', () => {
       city: cityModel,
       email: 'john@mail.com',
       entryDate: '2016-12-01',
+      entryType: 'REGULAR',
       gender: 'MALE',
       phoneNumber: '06 12 34 56 78',
       mediationEnabled: true,
@@ -99,6 +101,7 @@ describe('PersonComponent', () => {
         DisplayHealthInsurancePipe,
         DisplayResidencePermitPipe,
         DisplayVisaPipe,
+        DisplayEntryTypePipe,
         FullnamePipe,
         PageTitleDirective
       ],
@@ -134,6 +137,8 @@ describe('PersonComponent', () => {
     expect(phoneNumber.textContent).toContain('06 12 34 56 78');
     const entryDate = nativeElement.querySelector('#entryDate');
     expect(entryDate.textContent).toBe('1 déc. 2016');
+    const entryType = nativeElement.querySelector('#entryType');
+    expect(entryType.textContent).toBe('Régulière');
     const mediationCode = nativeElement.querySelector('#mediationCode');
     expect(mediationCode.textContent).toBe('D1');
     const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
@@ -183,6 +188,7 @@ describe('PersonComponent', () => {
     const nativeElement = fixture.nativeElement;
     const mediationDependantElementIds = [
       'entryDate',
+      'entryType',
       'mediationCode',
       'housing',
       'fiscalStatus',

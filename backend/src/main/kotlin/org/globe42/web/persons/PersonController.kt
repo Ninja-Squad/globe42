@@ -110,6 +110,7 @@ class PersonController(
             // in case mediation is re-enabled later, to not lose valuable information.
             if (command.mediationEnabled) {
                 entryDate = command.entryDate
+                entryType = command.entryType
                 firstMediationAppointmentDate = command.firstMediationAppointmentDate
                 maritalStatus = command.maritalStatus
                 housing = command.housing

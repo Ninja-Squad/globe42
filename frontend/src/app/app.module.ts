@@ -84,6 +84,7 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe } from './display-location.pipe';
 import { PageTitleDirective } from './page-title.directive';
 import { NavigationProgressComponent } from './navigation-progress/navigation-progress.component';
+import { DisplayEntryTypePipe } from './display-entry-type.pipe';
 
 registerLocaleData(localeFr);
 
@@ -160,7 +161,8 @@ registerLocaleData(localeFr);
     DisplayVisaPipe,
     DisplayResidencePermitPipe,
     PageTitleDirective,
-    NavigationProgressComponent
+    NavigationProgressComponent,
+    DisplayEntryTypePipe
   ],
   entryComponents: [
     ConfirmModalContentComponent

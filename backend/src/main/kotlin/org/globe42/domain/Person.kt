@@ -107,6 +107,13 @@ class Person {
     var entryDate: LocalDate? = null
 
     /**
+     * The type of entry in France. Only requested to mediation-enabled persons, but not mandatory
+     */
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    var entryType: EntryType = EntryType.UNKNOWN
+
+    /**
      * The marital status. Only requested to mediation-enabled persons, and unknown by default (so, technically
      * mandatory, but can be left as unknown)
      */
