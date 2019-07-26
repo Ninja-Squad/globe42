@@ -6,6 +6,7 @@ package org.globe42.domain
  */
 enum class Visa {
     UNKNOWN,
+    NONE,
     SHORT_STAY,
     LONG_STAY
 }

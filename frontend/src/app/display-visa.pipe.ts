@@ -4,6 +4,7 @@ import { BaseEnumPipe } from './base-enum-pipe';
 
 export const VISA_TRANSLATIONS: Array<{ key: Visa; translation: string; }> = [
   {key: 'UNKNOWN', translation: 'Inconnu'},
+  {key: 'NONE', translation: 'Aucun'},
   {key: 'SHORT_STAY', translation: 'C (court séjour)'},
   {key: 'LONG_STAY', translation: 'D (long séjour)'},
 ];
