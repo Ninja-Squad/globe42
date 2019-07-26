@@ -23,10 +23,12 @@ import org.mockito.Mock
 import java.util.*
 
 fun createUser(id: Long): User {
-    val user = User(id)
-    user.login = "JB"
-    user.password = "hashedPassword"
-    return user
+    return User(id).apply {
+        login = "JB"
+        password = "hashedPassword"
+        email = "jb@foo.com"
+        taskAssignmentEmailNotificationEnabled = false
+    }
 }
 
 /**

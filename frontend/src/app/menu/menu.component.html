@@ -44,17 +44,20 @@
       <ul class="navbar-nav">
         <li class="nav-item mr-2" ngbDropdown>
           <a class="nav-link" ngbDropdownToggle id="userDropDown">
-            <span class="fa fa-user-circle"></span> {{ user.login }}
+            <span class="fa fa-user-circle fa-fw"></span> {{ user.login }}
           </a>
           <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu-right">
             <a class="dropdown-item" (click)="logout($event)" href="#">
-              <span class="fa fa-power-off"></span> Déconnexion
+              <span class="fa fa-power-off fa-fw"></span> Déconnexion
+            </a>
+            <a class="dropdown-item" routerLink="/profile">
+              <span class="fa fa-address-card"></span> Profil et préférences
             </a>
             <a class="dropdown-item" routerLink="/password-changes">
-              <span class="fa fa-lock"></span> Changer de mot de passe
+              <span class="fa fa-lock fa-fw"></span> Changer de mot de passe
             </a>
             <a class="dropdown-item" *ngIf="user?.admin" routerLink="/users">
-              <span class="fa fa-user"></span> Utilisateurs
+              <span class="fa fa-user fa-fw"></span> Utilisateurs
             </a>
           </div>
         </li>

@@ -38,6 +38,7 @@ class TaskDaoTest : BaseDaoTest() {
             }
 
             insertInto("guser") {
+                withDefaultValue("task_assignment_email_notification_enabled", false)
                 columns("id", "login", "password", "admin", "deleted")
                 values(1L, "jb", "hashedPassword", true, false)
                 values(2L, "ced", "hashedPassword", true, false)

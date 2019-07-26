@@ -33,6 +33,21 @@ class UserController(
         return CurrentUserDTO(user)
     }
 
+    @GetMapping("/me/profile")
+    fun getCurrentUserProfile(): ProfileDTO {
+        val user = userDao.findNotDeletedById(currentUser.userId!!).orElseThrow(::NotFoundException)
+        return ProfileDTO(user)
+    }
+
+    @PutMapping("/me/profile")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun updateCurrentUserProfile(@Validated @RequestBody command: ProfileCommandDTO) {
+        userDao.findNotDeletedById(currentUser.userId!!).orElseThrow(::NotFoundException).apply {
+            email = command.email
+            taskAssignmentEmailNotificationEnabled = command.taskAssignmentEmailNotificationEnabled
+        }
+    }
+
     @PutMapping("/me/passwords")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun changePassword(@Validated @RequestBody command: ChangePasswordCommandDTO) {

@@ -4,3 +4,13 @@ export interface UserModel {
   admin: boolean;
   token?: string;
 }
+
+export interface ProfileModel extends UserModel {
+  email: string;
+  taskAssignmentEmailNotificationEnabled: boolean;
+}
+
+export interface ProfileCommand {
+  email: string;
+  taskAssignmentEmailNotificationEnabled: boolean;
+}

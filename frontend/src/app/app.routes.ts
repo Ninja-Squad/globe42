@@ -69,6 +69,8 @@ import { PersonFamilyEditComponent } from './person-family-edit/person-family-ed
 import { PersonNetworkMembersComponent } from './person-network-members/person-network-members.component';
 import { NetworkMembersResolverService } from './network-members-resolver.service';
 import { PersonDeathComponent } from './person-death/person-death.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ProfileResolverService } from './profile-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -328,6 +330,13 @@ export const routes: Routes = [
         ]
       },
       { path: 'password-changes', component: PasswordChangeComponent },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        resolve: {
+          profile: ProfileResolverService
+        }
+      },
       {
         path: 'users',
         children: [

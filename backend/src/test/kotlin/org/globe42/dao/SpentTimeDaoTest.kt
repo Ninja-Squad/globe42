@@ -27,6 +27,7 @@ class SpentTimeDaoTest : BaseDaoTest() {
                 withDefaultValue("password", "hashedPassword")
                 withDefaultValue("admin", true)
                 withDefaultValue("deleted", false)
+                withDefaultValue("task_assignment_email_notification_enabled", false)
                 columns("id", "login")
                 values(1L, "jb")
                 values(2L, "ced")

@@ -86,6 +86,7 @@ import { PageTitleDirective } from './page-title.directive';
 import { NavigationProgressComponent } from './navigation-progress/navigation-progress.component';
 import { DisplayEntryTypePipe } from './display-entry-type.pipe';
 import { PersonDeathComponent } from './person-death/person-death.component';
+import { ProfileComponent } from './profile/profile.component';
 
 registerLocaleData(localeFr);
 
@@ -164,7 +165,8 @@ registerLocaleData(localeFr);
     PageTitleDirective,
     NavigationProgressComponent,
     DisplayEntryTypePipe,
-    PersonDeathComponent
+    PersonDeathComponent,
+    ProfileComponent
   ],
   entryComponents: [
     ConfirmModalContentComponent

@@ -3,6 +3,7 @@ package org.globe42.web.users
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
+import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.UserDao
 import org.globe42.domain.User
 import org.globe42.test.GlobeMvcTest
@@ -145,5 +146,41 @@ class UserControllerMvcTest {
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.login").value(user.login))
             .andExpect(jsonPath("$.generatedPassword").value("password"))
+    }
+
+    @Test
+    fun `should get profile`() {
+        val userId = 42L
+        val user = createUser(userId)
+        whenever(mockCurrentUser.userId).thenReturn(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+
+        mvc.perform(get("/api/users/me/profile"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.login").value(user.login))
+            .andExpect(jsonPath("$.admin").value(user.admin))
+            .andExpect(jsonPath("$.email").value(user.email!!))
+            .andExpect(jsonPath("$.taskAssignmentEmailNotificationEnabled").value(user.taskAssignmentEmailNotificationEnabled))
+    }
+
+    @Test
+    fun `should update profile`() {
+        val userId = 42L
+        val user = createUser(userId)
+        whenever(mockCurrentUser.userId).thenReturn(userId)
+        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(Optional.of(user))
+
+        val command = ProfileCommandDTO(
+            email = "jb@bar.com",
+            taskAssignmentEmailNotificationEnabled = true
+        )
+
+        mvc.perform(put("/api/users/me/profile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(command)))
+            .andExpect(status().isNoContent)
+
+        assertThat(user.email).isEqualTo(command.email)
+        assertThat(user.taskAssignmentEmailNotificationEnabled).isEqualTo(command.taskAssignmentEmailNotificationEnabled)
     }
 }

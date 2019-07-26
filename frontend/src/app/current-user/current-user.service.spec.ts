@@ -5,7 +5,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { JwtInterceptorService } from './jwt-interceptor.service';
 import { HttpTester } from '../http-tester.spec';
 import { CurrentUserModule } from './current-user.module';
-import { UserModel } from '../models/user.model';
+import { ProfileCommand, ProfileModel, UserModel } from '../models/user.model';
 
 describe('CurrentUserService', () => {
   let service: CurrentUserService;
@@ -127,5 +127,15 @@ describe('CurrentUserService', () => {
     testRequest.flush(null, { status: 401, statusText: 'Unauthorized' });
 
     expect(ok).toBe(true);
+  });
+
+  it('should get the user profile', () => {
+    const expectedUser = { id: 1 } as ProfileModel;
+    httpTester.testGet('/api/users/me/profile', expectedUser, service.getProfile());
+  });
+
+  it('should update the user profile', () => {
+    const command = { email: 'jb@foo.com' } as ProfileCommand;
+    httpTester.testPut('/api/users/me/profile', command, service.updateProfile(command));
   });
 });

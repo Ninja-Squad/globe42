@@ -90,7 +90,7 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Médiation activée pour cet adhérent</label>
     <div class="col-sm-9">
-      <div class="btn-group btn-group-toggle" ngbRadioGroup name="gender" formControlName="mediationEnabled">
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="mediationEnabled" formControlName="mediationEnabled">
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
           <input ngbButton name="mediationEnabled" id="mediationEnabled{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
         </label>

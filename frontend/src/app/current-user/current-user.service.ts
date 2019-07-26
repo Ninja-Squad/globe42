@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { UserModel } from '../models/user.model';
+import { ProfileCommand, ProfileModel, UserModel } from '../models/user.model';
 import { JwtInterceptorService } from './jwt-interceptor.service';
 import { tap } from 'rxjs/operators';
 import { CredentialsCommand } from '../models/credentials.command';
@@ -63,6 +63,14 @@ export class CurrentUserService {
 
   changePassword(newPassword: string): Observable<void> {
     return this.http.put<void>('/api/users/me/passwords', {newPassword});
+  }
+
+  getProfile(): Observable<ProfileModel> {
+    return this.http.get<ProfileModel>('/api/users/me/profile');
+  }
+
+  updateProfile(command: ProfileCommand): Observable<void> {
+    return this.http.put<void>('/api/users/me/profile', command);
   }
 
   private storeCookie(token: string) {

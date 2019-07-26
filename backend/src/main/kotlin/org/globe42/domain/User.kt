@@ -1,6 +1,7 @@
 package org.globe42.domain
 
 import javax.persistence.*
+import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
 
 const val USER_GENERATOR = "UserGenerator"
@@ -39,6 +40,17 @@ class User {
      * anymore, and can't log in anymore.
      */
     var deleted: Boolean = false
+
+    /**
+     * The email address of the user, filled by the user herself
+     */
+    @Email
+    var email: String? = null
+
+    /**
+     * Whether or not to send task assignment notifications
+     */
+    var taskAssignmentEmailNotificationEnabled: Boolean = false
 
     constructor()
 
