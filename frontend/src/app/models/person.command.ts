@@ -1,6 +1,6 @@
 import {
   CityModel, FiscalStatus, Gender, HealthCareCoverage, Housing,
-  MaritalStatus, Visa, ResidencePermit
+  MaritalStatus, Visa, ResidencePermit, EntryType
 } from './person.model';
 
 export interface PersonCommand {
@@ -18,6 +18,7 @@ export interface PersonCommand {
   phoneNumber: string;
   mediationEnabled: boolean;
   entryDate: string;
+  entryType: EntryType;
   firstMediationAppointmentDate: string;
   maritalStatus: MaritalStatus;
   spouseId: number;

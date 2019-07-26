@@ -18,6 +18,7 @@ import { EMPTY } from 'rxjs';
 import { CountryTypeahead } from '../person/country-typeahead';
 import { VISA_TRANSLATIONS } from '../display-visa.pipe';
 import { RESIDENCE_PERMIT_TRANSLATIONS } from '../display-residence-permit.pipe';
+import { ENTRY_TYPE_TRANSLATIONS } from '../display-entry-type.pipe';
 
 export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;
 
@@ -38,6 +39,9 @@ export class PersonEditComponent {
   fiscalStatuses = FISCAL_STATUS_TRANSLATIONS.map(t => t.key);
   healthCareCoverages = HEALTH_CARE_COVERAGE_TRANSLATIONS.map(t => t.key);
   healthInsurances = HEALTH_INSURANCE_TRANSLATIONS.map(t => t.key);
+  visas = VISA_TRANSLATIONS.map(t => t.key);
+  residencePermits = RESIDENCE_PERMIT_TRANSLATIONS.map(t => t.key);
+  entryTypes = ENTRY_TYPE_TRANSLATIONS.map(t => t.key);
 
   cityTypeahead: CityTypeahead;
   spouseTypeahead: PersonTypeahead;
@@ -45,9 +49,6 @@ export class PersonEditComponent {
   spouseIsInCouple = false;
 
   countryTypeahead: CountryTypeahead;
-
-  visas = VISA_TRANSLATIONS.map(t => t.key);
-  residencePermits = RESIDENCE_PERMIT_TRANSLATIONS.map(t => t.key);
 
   private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
     if (!ctrl.value) {
@@ -95,6 +96,7 @@ export class PersonEditComponent {
       socialSecurityNumber: '',
       cafNumber: '',
       entryDate: null,
+      entryType: 'UNKNOWN',
       housing: 'UNKNOWN',
       housingSpace: null,
       hostName: '',

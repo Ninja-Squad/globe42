@@ -21,6 +21,7 @@ class PersonCommandDTO(
     @field:Valid val city: CityDTO?,
     val email: String?,
     val entryDate: LocalDate?,
+    @field:NotNull val entryType: EntryType = EntryType.UNKNOWN,
     @field:NotNull val gender: Gender,
     val phoneNumber: String?,
     val mediationEnabled: Boolean,

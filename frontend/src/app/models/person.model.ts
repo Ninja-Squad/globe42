@@ -15,7 +15,7 @@ export type ResidencePermit =
   | 'TEN_YEAR_OLD_RESIDENT'
   | 'TEMPORARY_RESIDENCE_PRIVATE_AND_FAMILY_LIFE'
   | 'OTHER';
-
+export type EntryType = 'UNKNOWN' | 'REGULAR' | 'IRREGULAR';
 
 export interface PersonIdentityModel {
   id: number;
@@ -32,6 +32,7 @@ export interface PersonModel extends PersonIdentityModel {
   city: CityModel;
   email: string;
   entryDate: string;
+  entryType: EntryType;
   gender: Gender;
   phoneNumber: string;
   mediationEnabled: boolean;

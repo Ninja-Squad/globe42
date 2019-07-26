@@ -229,18 +229,33 @@
     </div>
 
     <h3>Séjour</h3>
-    <div class="form-group row">
-      <label for="entryDate" class="col-sm-3 col-form-label">Date d'entrée en France</label>
-      <gl-datepicker-container class="col-sm-9">
-        <input class="form-control" id="entryDate" placeholder="01/01/2010"
-               formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
-      </gl-datepicker-container>
+    <div class="row">
+      <div class="form-group col-lg-6">
+        <div class="row">
+          <label for="entryDate" class="col-sm-3 col-lg-6 col-form-label">Entrée en France le</label>
+          <gl-datepicker-container class="col-sm-9 col-lg-6">
+            <input class="form-control" id="entryDate" placeholder="01/01/2010"
+                   formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+          </gl-datepicker-container>
+        </div>
+      </div>
+      <div class="form-group col-lg-6">
+        <div class="row">
+          <label for="entryType" class="col-sm-3 col-lg-6 col-form-label">de manière</label>
+          <div class="col-sm-9 col-lg-6">
+            <select id="entryType" class="form-control" formControlName="entryType">
+              <option *ngFor="let entryType of entryTypes" [value]="entryType">{{ entryType | displayEntryType }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
+
     <div class="form-group row">
       <label class="col-sm-3 col-form-label" for="visa">Type de Visa</label>
       <div class="col-sm-9">
         <select id="visa" class="form-control" formControlName="visa">
-          <option *ngFor="let visa of visas " [value]="visa">{{ visa | displayVisa }}</option>
+          <option *ngFor="let visa of visas" [value]="visa">{{ visa | displayVisa }}</option>
         </select>
       </div>
     </div>
