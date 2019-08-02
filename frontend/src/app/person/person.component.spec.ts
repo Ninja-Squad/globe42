@@ -59,6 +59,7 @@ describe('PersonComponent', () => {
         nickName: null,
         mediationCode: 'D2'
       },
+      partner: null,
       housing: 'F6',
       housingSpace: 80,
       hostName: 'Bruno Mala',
@@ -145,6 +146,8 @@ describe('PersonComponent', () => {
     expect(maritalStatus.textContent).toBe('Marié(e)');
     const spouse = nativeElement.querySelector('#spouse');
     expect(spouse.textContent).toContain('Jane Doe');
+    const partner = nativeElement.querySelector('#partner');
+    expect(partner).toBeFalsy();
     const housing = nativeElement.querySelector('#housing');
     expect(housing.textContent).toContain('F6 ou plus');
     expect(housing.textContent).toContain('80 m2');
@@ -174,8 +177,17 @@ describe('PersonComponent', () => {
     expect(residencePermitDepositDate.textContent).toBe('2 févr. 2018');
     const residencePermitRenewalDate = nativeElement.querySelector('#residencePermitRenewalDate');
     expect(residencePermitRenewalDate.textContent).toBe('2 oct. 2018');
+  });
 
+  it('should display a person with no spouse but a partner', () => {
+    person.spouse = null;
+    person.partner = 'old friend';
+    const fixture = TestBed.createComponent(PersonComponent);
+    fixture.detectChanges();
 
+    const nativeElement = fixture.nativeElement;
+    const partner = nativeElement.querySelector('#partner');
+    expect(partner.textContent).toBe('old friend');
   });
 
   it('should display a person with mediation disabled', () => {

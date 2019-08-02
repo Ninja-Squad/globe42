@@ -133,12 +133,41 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">En couple avec</label>
       <div class="col-sm-9">
-        <input class="form-control" formControlName="spouse" id="spouse"
-               [ngbTypeahead]="spouseTypeahead.searcher" [resultFormatter]="spouseTypeahead.formatter"
-               [inputFormatter]="spouseTypeahead.formatter" [editable]="false" />
-        <div class="warning-feedback" *ngIf="spouseIsInCouple">
-          <span class="fa fa-warning"></span>
-          {{ personForm.value.spouse | fullname }} est déjà en couple avec quelqu'un d'autre
+        <div class="form-row">
+          <div class="col-md-4">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="spouseType" value="none" [formControl]="spouseTypeCtrl" id="spouse-type-none">
+              <label class="form-check-label" for="spouse-type-none">Personne / Inconnu</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-4 d-flex align-items-center">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="spouseType" value="spouse" [formControl]="spouseTypeCtrl" id="spouse-type-spouse">
+              <label class="form-check-label" for="spouse-type-spouse">Un autre membre</label>
+            </div>
+          </div>
+          <div class="col-md-8" *ngIf="spouseTypeCtrl.value === 'spouse'">
+            <input class="form-control" formControlName="spouse" id="spouse"
+                   [ngbTypeahead]="spouseTypeahead.searcher" [resultFormatter]="spouseTypeahead.formatter"
+                   [inputFormatter]="spouseTypeahead.formatter" [editable]="false" />
+            <div class="warning-feedback" *ngIf="spouseIsInCouple">
+              <span class="fa fa-warning"></span>
+              {{ personForm.value.spouse | fullname }} est déjà en couple avec quelqu'un d'autre
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-4 d-flex align-items-center">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="spouseType" value="partner" [formControl]="spouseTypeCtrl" id="spouse-type-partner">
+              <label class="form-check-label" for="spouse-type-partner">Une persone non-membre</label>
+            </div>
+          </div>
+          <div class="col-md-8" *ngIf="spouseTypeCtrl.value === 'partner'">
+            <input class="form-control" formControlName="partner" id="partner" />
+          </div>
         </div>
       </div>
     </div>

@@ -28,6 +28,7 @@ class PersonCommandDTO(
     val firstMediationAppointmentDate: LocalDate?,
     @field:NotNull val maritalStatus: MaritalStatus = MaritalStatus.UNKNOWN,
     val spouseId: Long?,
+    val partner: String?,
     @field:NotNull val housing: Housing = Housing.UNKNOWN,
     val housingSpace: Int?,
     val hostName: String?,

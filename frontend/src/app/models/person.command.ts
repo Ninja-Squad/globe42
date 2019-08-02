@@ -22,6 +22,7 @@ export interface PersonCommand {
   firstMediationAppointmentDate: string;
   maritalStatus: MaritalStatus;
   spouseId: number;
+  partner: string;
   housing: Housing;
   housingSpace: number;
   hostName: string;

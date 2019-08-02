@@ -97,7 +97,7 @@ class PersonController(
     fun signalDeath(@PathVariable("personId") id: Long, @Validated @RequestBody command: PersonDeathCommandDTO) {
         val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
         person.deathDate = command.deathDate
-        person.clearParticipations();
+        person.clearParticipations()
     }
 
     private fun copyCommandToPerson(command: PersonCommandDTO, person: Person) {
@@ -144,6 +144,7 @@ class PersonController(
                 residencePermitDepositDate = command.residencePermitDepositDate
                 residencePermitRenewalDate = command.residencePermitRenewalDate
                 handleCouple(this, command.spouseId)
+                person.partner = if (command.spouseId == null) command.partner?.takeIf { it.isNotBlank() } else null
             }
         }
     }
@@ -172,6 +173,7 @@ class PersonController(
                 newSpouse.couple = null
                 coupleDao.delete(newSpouseCurrentCouple)
             }
+            newSpouse.partner = null
 
             val newCouple = Couple(person, newSpouse)
             coupleDao.save(newCouple)
