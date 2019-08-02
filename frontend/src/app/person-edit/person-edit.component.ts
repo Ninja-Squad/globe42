@@ -32,6 +32,7 @@ export class PersonEditComponent {
   editedPerson: PersonModel | null;
 
   personForm: FormGroup;
+  spouseTypeCtrl: FormControl;
 
   genders: Array<Gender> = GENDER_TRANSLATIONS.map(t => t.key);
   maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
@@ -88,6 +89,7 @@ export class PersonEditComponent {
       firstMediationAppointmentDate: null,
       maritalStatus: 'UNKNOWN',
       spouse: null,
+      partner: '',
       healthCareCoverage: 'UNKNOWN',
       healthCareCoverageStartDate: null,
       healthInsurance: 'UNKNOWN',
@@ -110,15 +112,23 @@ export class PersonEditComponent {
       residencePermitRenewalDate: null,
     });
 
+
+    this.spouseTypeCtrl = new FormControl('none');
+
     if (this.editedPerson) {
       this.personForm.patchValue(this.editedPerson);
+      if (this.editedPerson.spouse) {
+        this.spouseTypeCtrl.setValue('spouse');
+      } else if (this.editedPerson.partner) {
+        this.spouseTypeCtrl.setValue('partner');
+      }
     }
 
     this.personForm.get('spouse').valueChanges.pipe(
       tap(() => this.spouseIsInCouple = false),
       switchMap(spouse => spouse ? this.personService.get(spouse.id) : EMPTY)
     ).subscribe(spouse =>
-      this.spouseIsInCouple = !!(spouse.spouse && (!this.editedPerson || (spouse.spouse.id !== this.editedPerson.id)))
+      this.spouseIsInCouple = !!spouse.partner || !!(spouse.spouse && (!this.editedPerson || (spouse.spouse.id !== this.editedPerson.id)))
     );
 
     // We try to keep the previously entered fiscal number even if the user chooses to set the
@@ -142,6 +152,13 @@ export class PersonEditComponent {
     delete formValue.nationality;
 
     const command: PersonCommand = formValue;
+    const spouseType = this.spouseTypeCtrl.value;
+    if (spouseType !== 'spouse') {
+      command.spouseId = null;
+    }
+    if (spouseType !== 'partner') {
+      command.partner = null;
+    }
 
     let action;
     if (this.editedPerson && this.editedPerson.id !== undefined) {

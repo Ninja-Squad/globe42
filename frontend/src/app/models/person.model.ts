@@ -39,6 +39,7 @@ export interface PersonModel extends PersonIdentityModel {
   firstMediationAppointmentDate: string;
   maritalStatus: MaritalStatus;
   spouse: PersonIdentityModel;
+  partner: string;
   housing: Housing;
   housingSpace: number;
   hostName: string;

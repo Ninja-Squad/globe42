@@ -146,7 +146,7 @@ class PersonControllerTest {
     @Test
     fun `should create with spouse`() {
         val spouseId = 200L
-        val command = createCommand("Lacote", true, spouseId)
+        val command = createCommand(lastName = "Lacote", mediationEnabled = true, spouseId = spouseId)
 
         val agnes = Person(spouseId, "Agnes", "Crepet", Gender.FEMALE)
         whenever(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes))
@@ -162,6 +162,36 @@ class PersonControllerTest {
         assertPersonEqualsCommand(savedPerson, command)
         assertThat(savedPerson.spouse).isEqualTo(agnes)
         assertThat(agnes.spouse).isEqualTo(savedPerson)
+    }
+
+    @Test
+    fun `should create with partner`() {
+        val command = createCommand(partner = "old friend")
+
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.create(command)
+
+        verify(mockPersonDao).save(personArgumentCaptor.capture())
+
+        val savedPerson = personArgumentCaptor.value
+        assertThat(savedPerson.partner).isEqualTo("old friend")
+    }
+
+    @Test
+    fun `should create with blank partner`() {
+        val command = createCommand(partner = "   ")
+
+        whenever(mockPersonDao.save(any<Person>())).thenReturnModifiedFirstArgument<Person> { it.id = 42L }
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.create(command)
+
+        verify(mockPersonDao).save(personArgumentCaptor.capture())
+
+        val savedPerson = personArgumentCaptor.value
+        assertThat(savedPerson.partner).isNull()
     }
 
     @Test
@@ -256,6 +286,22 @@ class PersonControllerTest {
     }
 
     @Test
+    fun `should update with spouse when partner before`() {
+        person.partner = "old friend"
+        val spouseId = 200L
+        val command = createCommand("Lacote", true, spouseId)
+
+        val agnes = Person(spouseId)
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.update(person.id!!, command)
+
+        assertThat(person.partner).isNull()
+    }
+
+    @Test
     fun `should update without spouse when other spouse before`() {
         val command = createCommand("Lacote", true, null)
 
@@ -294,6 +340,25 @@ class PersonControllerTest {
 
         assertThat(previousSpouseOfAgnes.spouse).isNull()
         verify<CoupleDao>(mockCoupleDao).delete(previousCoupleOfAgnes)
+    }
+
+    @Test
+    fun `should drop partner of new spouse`() {
+        val spouseId = 200L
+        val command = createCommand("Lacote", true, spouseId)
+
+        val agnes = Person(spouseId).apply { partner = "old friend" }
+
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.findById(spouseId)).thenReturn(Optional.of(agnes))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+
+        controller.update(person.id!!, command)
+
+        verify<CoupleDao>(mockCoupleDao).save(coupleArgumentCaptor.capture())
+        assertThat(person.spouse).isEqualTo(agnes)
+        assertThat(agnes.spouse).isEqualTo(person)
+        assertThat(agnes.partner).isNull()
     }
 
     @Test
@@ -358,8 +423,10 @@ class PersonControllerTest {
         assertThat(person.maritalStatus).isEqualTo(command.maritalStatus)
         if (command.spouseId == null) {
             assertThat(person.spouse).isNull()
+            assertThat(person.partner).isNull()
         } else {
             assertThat(person.spouse!!.id).isEqualTo(command.spouseId!!)
+            assertThat(person.partner).isEqualTo(command.partner?.takeIf { it.isNotBlank() })
         }
         assertThat(person.housing).isEqualTo(command.housing)
         assertThat(person.housingSpace).isEqualTo(command.housingSpace)
@@ -396,7 +463,8 @@ class PersonControllerTest {
             lastName: String = "Lacote",
             mediationEnabled: Boolean = true,
             spouseId: Long? = null,
-            nationalityId: String? = "FRA"
+            nationalityId: String? = "FRA",
+            partner: String? = null
         ): PersonCommandDTO {
             return PersonCommandDTO(
                 firstName = "Cyril",
@@ -415,6 +483,7 @@ class PersonControllerTest {
                 firstMediationAppointmentDate = LocalDate.of(2017, 12, 1),
                 maritalStatus = MaritalStatus.CONCUBINAGE,
                 spouseId = spouseId,
+                partner = partner,
                 housing = Housing.F3,
                 housingSpace = 70,
                 hostName = "Bruno Mala",

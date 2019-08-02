@@ -126,9 +126,16 @@ class Person {
      * mediation-enabled persons, and not mandatory. Note that it would make sense to only have a couple if
      * for some marital statuses, but no such check is made for now (in case we would preserve this association
      * for later).
+     * Also note that, if the person is in couple with someone which is not a Person (i.e. a person outside of the
+     * database), then this field is null and the field partner is filled instead.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     var couple: Couple? = null
+
+    /**
+     * The partner that this person is in couple with, if he/she's not a person in the database
+     */
+    var partner: String?  = null
 
     /**
      * The housing kind. Only requested to mediation-enabled persons, and unknown by default (so, technically

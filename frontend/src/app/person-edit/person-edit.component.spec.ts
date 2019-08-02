@@ -94,8 +94,16 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.select('#maritalStatus');
   }
 
+  spouseType(type: 'none' | 'spouse' | 'partner') {
+    return this.input(`#spouse-type-${type}`);
+  }
+
   get spouse() {
     return this.input('#spouse');
+  }
+
+  get partner() {
+    return this.input('#partner');
   }
 
   get entryDate() {
@@ -280,6 +288,7 @@ describe('PersonEditComponent', () => {
         nickName: null,
         mediationCode: 'D2'
       },
+      partner: null,
       housing: 'F4',
       housingSpace: 80,
       hostName: 'Bruno Mala',
@@ -349,7 +358,11 @@ describe('PersonEditComponent', () => {
       expect(tester.phoneNumber).toHaveValue(person.phoneNumber);
       expect(tester.firstMediationAppointmentDate).toHaveValue('01/12/2017');
       expect(tester.maritalStatus).toHaveSelectedValue(person.maritalStatus);
+      expect(tester.spouseType('none')).not.toBeChecked();
+      expect(tester.spouseType('spouse')).toBeChecked();
+      expect(tester.spouseType('partner')).not.toBeChecked();
       expect(tester.spouse).toHaveValue('Jane Doe');
+      expect(tester.partner).toBeNull();
       expect(tester.entryDate).toHaveValue('01/12/2016');
       expect(tester.entryType).toHaveSelectedValue(person.entryType);
       expect(tester.housing).toHaveSelectedValue(person.housing);
@@ -384,8 +397,59 @@ describe('PersonEditComponent', () => {
       const personUpdated = personService.update.calls.argsFor(0)[1];
       expect(personUpdated.lastName).toBe('Do');
       expect(personUpdated.firstName).toBe('John');
+      expect(personUpdated.partner).toBeNull();
 
       expect(router.navigate).toHaveBeenCalledWith(['persons', 42]);
+    });
+
+    it('should save with a partner and ignore the spouse', () => {
+      const personService = TestBed.get(PersonService);
+      spyOn(personService, 'update').and.returnValue(of(person));
+      const router = TestBed.get(Router);
+      spyOn(router, 'navigate');
+
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+
+      tester.spouseType('partner').check();
+      expect(tester.spouseType('none')).not.toBeChecked();
+      expect(tester.spouseType('spouse')).not.toBeChecked();
+      expect(tester.spouseType('partner')).toBeChecked();
+      tester.partner.fillWith('Mary Doe');
+
+      tester.save.click();
+
+      expect(personService.update).toHaveBeenCalled();
+
+      const personUpdated = personService.update.calls.argsFor(0)[1];
+      expect(personUpdated.partner).toBe('Mary Doe');
+      expect(personUpdated.spouseId).toBeNull();
+    });
+
+    it('should save with no spouse and no partner', () => {
+      const personService = TestBed.get(PersonService);
+      spyOn(personService, 'update').and.returnValue(of(person));
+      const router = TestBed.get(Router);
+      spyOn(router, 'navigate');
+
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+
+      tester.spouseType('partner').check();
+      tester.partner.fillWith('Mary doe');
+
+      tester.spouseType('none').check();
+      expect(tester.spouseType('none')).toBeChecked();
+      expect(tester.spouseType('spouse')).not.toBeChecked();
+      expect(tester.spouseType('partner')).not.toBeChecked();
+
+      tester.save.click();
+
+      expect(personService.update).toHaveBeenCalled();
+
+      const personUpdated = personService.update.calls.argsFor(0)[1];
+      expect(personUpdated.partner).toBeNull();
+      expect(personUpdated.spouseId).toBeNull();
     });
 
     it('should clear the city input on blur if not valid anymore', () =>  {
@@ -570,7 +634,9 @@ describe('PersonEditComponent', () => {
       expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
       expect(tester.firstMediationAppointmentDate).toHaveValue('');
       expect(tester.maritalStatus).toHaveSelectedValue('UNKNOWN');
-      expect(tester.spouse).toHaveValue('');
+      expect(tester.spouseType('none')).toBeChecked();
+      expect(tester.spouse).toBeNull();
+      expect(tester.partner).toBeNull();
       expect(tester.entryDate).toHaveValue('');
       expect(tester.entryType).toHaveSelectedValue('UNKNOWN');
       expect(tester.housing).toHaveSelectedValue('UNKNOWN');
@@ -612,6 +678,7 @@ describe('PersonEditComponent', () => {
 
       tester.maritalStatus.selectIndex(2);
 
+      tester.spouseType('spouse').check();
       // trigger spouse typeahead
       spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
       tester.fillAndTick(tester.spouse, 'Jane');
@@ -676,6 +743,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.firstMediationAppointmentDate).toBe('2017-02-02');
       expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
       expect(createdPerson.spouseId).toBe(1);
+      expect(createdPerson.partner).toBeNull();
       expect((createdPerson as any).spouse).not.toBeDefined();
       expect(createdPerson.entryDate).toBe('2015-02-02');
       expect(createdPerson.entryType).toBe('IRREGULAR');
