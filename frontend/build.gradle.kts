@@ -1,12 +1,12 @@
 plugins {
     base
-    id("com.moowork.node") version "1.2.0"
+    id("com.moowork.node") version "1.3.1"
 }
 
 node {
-    version = "12.3.1"
-    npmVersion = "6.9.0"
-    yarnVersion = "1.16.0"
+    version = "12.9.1"
+    npmVersion = "6.11.2"
+    yarnVersion = "1.17.3"
     download = true
 }
 
