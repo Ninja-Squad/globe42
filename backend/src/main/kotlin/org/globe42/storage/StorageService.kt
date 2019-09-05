@@ -11,14 +11,15 @@ import java.io.InputStream
 import java.io.UncheckedIOException
 import java.nio.channels.Channels
 
-internal const val PERSON_FILES_BUCKET = "personfiles"
-
 /**
  * Service used to wrap the Google cloud storage API
  * @author JB Nizet
  */
 @Service
-class StorageService(private val storage: Storage) {
+class StorageService(
+    private val storage: Storage,
+    private val storageProperties: StorageProperties
+) {
 
     /**
      * Lists the files in the given directory
@@ -29,7 +30,7 @@ class StorageService(private val storage: Storage) {
     fun list(directory: String): List<FileDTO> {
         val prefix = directory.endingWithSlash()
         val page = storage.list(
-            PERSON_FILES_BUCKET,
+            storageProperties.bucket,
             Storage.BlobListOption.pageSize(10_000),
             Storage.BlobListOption.currentDirectory(),
             Storage.BlobListOption.prefix(prefix)
@@ -47,7 +48,7 @@ class StorageService(private val storage: Storage) {
      */
     fun get(directory: String, name: String): ReadableFile {
         val prefix = directory.endingWithSlash()
-        val blob = storage.get(PERSON_FILES_BUCKET, prefix + name)
+        val blob = storage.get(storageProperties.bucket, prefix + name)
         return ReadableFile(blob, prefix)
     }
 
@@ -58,7 +59,7 @@ class StorageService(private val storage: Storage) {
         data: InputStream
     ): FileDTO {
         val prefix = directory.endingWithSlash()
-        val blobId = BlobId.of(PERSON_FILES_BUCKET, prefix + name)
+        val blobId = BlobId.of(storageProperties.bucket, prefix + name)
         val blobInfo = BlobInfo.newBuilder(blobId)
             .setContentType(contentType ?: MediaType.APPLICATION_OCTET_STREAM.toString())
             .build()
@@ -73,7 +74,7 @@ class StorageService(private val storage: Storage) {
 
     fun delete(directory: String, name: String) {
         val prefix = directory.endingWithSlash()
-        storage.delete(PERSON_FILES_BUCKET, prefix + name)
+        storage.delete(storageProperties.bucket, prefix + name)
     }
 
     private fun String.endingWithSlash(): String {

@@ -12,7 +12,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
@@ -29,7 +28,8 @@ class StorageServiceTest {
     @Mock
     private lateinit var mockStorage: Storage
 
-    @InjectMocks
+    private lateinit var storageProperties: StorageProperties
+
     private lateinit var service: StorageService
 
     private lateinit var blob: Blob
@@ -42,6 +42,12 @@ class StorageServiceTest {
         doReturn("text/plain").whenever(blob).contentType
         val createTime = System.currentTimeMillis() - 100000L
         doReturn(createTime).whenever(blob).createTime
+
+        storageProperties = StorageProperties().apply {
+            bucket = "personfiles"
+        }
+
+        service = StorageService(mockStorage, storageProperties)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -52,7 +58,7 @@ class StorageServiceTest {
 
         whenever(
             mockStorage.list(
-                PERSON_FILES_BUCKET,
+                storageProperties.bucket,
                 Storage.BlobListOption.pageSize(10000),
                 Storage.BlobListOption.currentDirectory(),
                 Storage.BlobListOption.prefix("foo/")
@@ -71,7 +77,7 @@ class StorageServiceTest {
 
     @Test
     fun `should get`() {
-        whenever(mockStorage.get(PERSON_FILES_BUCKET, blob.name)).thenReturn(blob)
+        whenever(mockStorage.get(storageProperties.bucket, blob.name)).thenReturn(blob)
 
         val mockChannel = mock<ReadChannel>()
         doReturn(mockChannel).whenever<Blob>(blob).reader()
@@ -91,7 +97,7 @@ class StorageServiceTest {
 
     @Test
     fun `should create`() {
-        val blobInfo = BlobInfo.newBuilder(PERSON_FILES_BUCKET, "foo/new.txt")
+        val blobInfo = BlobInfo.newBuilder(storageProperties.bucket, "foo/new.txt")
             .setContentType("text/plain")
             .build()
 
@@ -121,7 +127,7 @@ class StorageServiceTest {
     fun `should delete`() {
         service.delete("foo", "hello.txt")
 
-        verify(mockStorage).delete(PERSON_FILES_BUCKET, "foo/hello.txt")
+        verify(mockStorage).delete(storageProperties.bucket, "foo/hello.txt")
     }
 
     private class FakeReadAnswer : Answer<Int> {
