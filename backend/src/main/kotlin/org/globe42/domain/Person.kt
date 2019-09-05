@@ -274,6 +274,16 @@ class Person {
     var residencePermitRenewalDate: LocalDate? = null
 
     /**
+     * The validity start date of the residence permit for France. Only requested to mediation-enabled persons, but not mandatory
+     */
+    var residencePermitValidityStartDate: LocalDate? = null
+
+    /**
+     * The validity end date of the residence permit for France. Only requested to mediation-enabled persons, but not mandatory
+     */
+    var residencePermitValidityEndDate: LocalDate? = null
+
+    /**
      * The notes added on the person
      */
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)

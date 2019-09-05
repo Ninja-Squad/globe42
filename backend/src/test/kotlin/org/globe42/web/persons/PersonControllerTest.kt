@@ -450,6 +450,8 @@ class PersonControllerTest {
         assertThat(person.residencePermit).isEqualTo(command.residencePermit)
         assertThat(person.residencePermitDepositDate).isEqualTo(command.residencePermitDepositDate)
         assertThat(person.residencePermitRenewalDate).isEqualTo(command.residencePermitRenewalDate)
+        assertThat(person.residencePermitValidityStartDate).isEqualTo(command.residencePermitValidityStartDate)
+        assertThat(person.residencePermitValidityEndDate).isEqualTo(command.residencePermitValidityEndDate)
     }
 
     companion object {
@@ -501,7 +503,9 @@ class PersonControllerTest {
                 visa = Visa.SHORT_STAY,
                 residencePermit = ResidencePermit.TEN_YEAR_OLD_RESIDENT,
                 residencePermitDepositDate = LocalDate.of(2017, 12, 1),
-                residencePermitRenewalDate = LocalDate.of(2019, 12, 1)
+                residencePermitRenewalDate = LocalDate.of(2019, 12, 1),
+                residencePermitValidityStartDate = LocalDate.of(2018, 12, 1),
+                residencePermitValidityEndDate = LocalDate.of(2028, 12, 1)
             )
         }
     }

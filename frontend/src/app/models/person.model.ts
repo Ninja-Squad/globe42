@@ -58,6 +58,8 @@ export interface PersonModel extends PersonIdentityModel {
   residencePermit: ResidencePermit;
   residencePermitDepositDate: string;
   residencePermitRenewalDate: string;
+  residencePermitValidityStartDate: string;
+  residencePermitValidityEndDate: string;
   deathDate: string;
   deleted: boolean;
 }

@@ -143,6 +143,8 @@ class PersonController(
                 residencePermit = command.residencePermit
                 residencePermitDepositDate = command.residencePermitDepositDate
                 residencePermitRenewalDate = command.residencePermitRenewalDate
+                residencePermitValidityStartDate = command.residencePermitValidityStartDate
+                residencePermitValidityEndDate = command.residencePermitValidityEndDate
                 handleCouple(this, command.spouseId)
                 person.partner = if (command.spouseId == null) command.partner?.takeIf { it.isNotBlank() } else null
             }
