@@ -46,5 +46,7 @@ class PersonCommandDTO(
     @field:NotNull val visa: Visa = Visa.UNKNOWN,
     @field:NotNull val residencePermit: ResidencePermit = ResidencePermit.UNKNOWN,
     val residencePermitDepositDate: LocalDate?,
-    val residencePermitRenewalDate: LocalDate?
+    val residencePermitRenewalDate: LocalDate?,
+    val residencePermitValidityStartDate: LocalDate?,
+    val residencePermitValidityEndDate: LocalDate?
 )

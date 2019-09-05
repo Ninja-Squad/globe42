@@ -41,6 +41,8 @@ export interface PersonCommand {
   residencePermit: ResidencePermit;
   residencePermitDepositDate: string;
   residencePermitRenewalDate: string;
+  residencePermitValidityStartDate: string;
+  residencePermitValidityEndDate: string;
 }
 
 export interface PersonDeathCommand {

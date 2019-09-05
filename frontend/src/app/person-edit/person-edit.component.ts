@@ -110,6 +110,8 @@ export class PersonEditComponent {
       residencePermit: 'UNKNOWN',
       residencePermitDepositDate: null,
       residencePermitRenewalDate: null,
+      residencePermitValidityStartDate: null,
+      residencePermitValidityEndDate: null,
     });
 
 

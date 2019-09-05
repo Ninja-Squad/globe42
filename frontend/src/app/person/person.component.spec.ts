@@ -81,6 +81,8 @@ describe('PersonComponent', () => {
       residencePermit: 'TEN_YEAR_OLD_RESIDENT',
       residencePermitDepositDate: '2018-02-02',
       residencePermitRenewalDate: '2018-10-02',
+      residencePermitValidityStartDate: '2019-03-02',
+      residencePermitValidityEndDate: '2029-03-02',
       deathDate: null,
       deleted: false
     };
@@ -177,6 +179,10 @@ describe('PersonComponent', () => {
     expect(residencePermitDepositDate.textContent).toBe('2 févr. 2018');
     const residencePermitRenewalDate = nativeElement.querySelector('#residencePermitRenewalDate');
     expect(residencePermitRenewalDate.textContent).toBe('2 oct. 2018');
+    const residencePermitValidityStartDate = nativeElement.querySelector('#residencePermitValidityStartDate');
+    expect(residencePermitValidityStartDate.textContent).toBe('2 mars 2019');
+    const residencePermitValidityEndDate = nativeElement.querySelector('#residencePermitValidityEndDate');
+    expect(residencePermitValidityEndDate.textContent).toBe('2 mars 2029');
   });
 
   it('should display a person with no spouse but a partner', () => {

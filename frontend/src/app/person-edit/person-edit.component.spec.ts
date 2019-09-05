@@ -186,6 +186,14 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.input('#residencePermitRenewalDate');
   }
 
+  get residencePermitValidityStartDate() {
+    return this.input('#residencePermitValidityStartDate');
+  }
+
+  get residencePermitValidityEndDate() {
+    return this.input('#residencePermitValidityEndDate');
+  }
+
   get firstTypeaheadOption() {
     return this.button('ngb-typeahead-window button');
   }
@@ -310,6 +318,8 @@ describe('PersonEditComponent', () => {
       residencePermit: 'TEN_YEAR_OLD_RESIDENT',
       residencePermitDepositDate: '2018-02-02',
       residencePermitRenewalDate: '2018-10-02',
+      residencePermitValidityStartDate: '2019-03-02',
+      residencePermitValidityEndDate: '2029-03-02',
       deathDate: null,
       deleted: false
     };
@@ -385,6 +395,8 @@ describe('PersonEditComponent', () => {
       expect(tester.residencePermit).toHaveSelectedValue(person.residencePermit);
       expect(tester.residencePermitDepositDate).toHaveValue('02/02/2018');
       expect(tester.residencePermitRenewalDate).toHaveValue('02/10/2018');
+      expect(tester.residencePermitValidityStartDate).toHaveValue('02/03/2019');
+      expect(tester.residencePermitValidityEndDate).toHaveValue('02/03/2029');
 
       tester.lastName.fillWith('Do');
 
@@ -657,6 +669,8 @@ describe('PersonEditComponent', () => {
       expect(tester.residencePermit).toHaveSelectedValue('UNKNOWN');
       expect(tester.residencePermitDepositDate).toHaveValue('');
       expect(tester.residencePermitRenewalDate).toHaveValue('');
+      expect(tester.residencePermitValidityStartDate).toHaveValue('');
+      expect(tester.residencePermitValidityEndDate).toHaveValue('');
 
       tester.lastName.fillWith('Doe');
       tester.firstName.fillWith('Jane');
@@ -722,6 +736,9 @@ describe('PersonEditComponent', () => {
       expect(tester.firstTypeaheadOption).toHaveText('Belgique');
       tester.firstTypeaheadOption.click();
 
+      tester.residencePermitValidityStartDate.fillWith('02/03/2019');
+      tester.residencePermitValidityEndDate.fillWith('02/03/2029');
+
       tester.save.click();
 
       expect(personService.create).toHaveBeenCalled();
@@ -766,6 +783,8 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.residencePermit).toBe('UNKNOWN');
       expect(createdPerson.residencePermitDepositDate).toBe(null);
       expect(createdPerson.residencePermitRenewalDate).toBe(null);
+      expect(createdPerson.residencePermitValidityStartDate).toBe('2019-03-02');
+      expect(createdPerson.residencePermitValidityEndDate).toBe('2029-03-02');
 
       expect(router.navigate).toHaveBeenCalledWith(['persons', 43]);
     }));

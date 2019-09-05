@@ -296,19 +296,45 @@
         </select>
       </div>
     </div>
-    <div class="form-group row">
-      <label for="residencePermitDepositDate" class="col-sm-3 col-form-label">Date de dépôt</label>
-      <gl-datepicker-container class="col-sm-9">
-        <input class="form-control" id="residencePermitDepositDate" placeholder="01/01/2010"
-               formControlName="residencePermitDepositDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
-      </gl-datepicker-container>
+    <div class="row">
+      <div class="form-group col-lg-6">
+        <div class="row">
+          <label for="residencePermitDepositDate" class="col-sm-3 col-lg-6 col-form-label">Date de dépôt</label>
+          <gl-datepicker-container class="col-sm-9 col-lg-6">
+            <input class="form-control" id="residencePermitDepositDate" placeholder="01/01/2010"
+                   formControlName="residencePermitDepositDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+          </gl-datepicker-container>
+        </div>
+      </div>
+      <div class="form-group col-lg-6">
+        <div class="row">
+          <label for="residencePermitRenewalDate" class="col-sm-3 col-lg-6 col-form-label">Date de renouvellement</label>
+          <gl-datepicker-container class="col-sm-9 col-lg-6">
+            <input class="form-control" id="residencePermitRenewalDate" placeholder="01/01/2010"
+                   formControlName="residencePermitRenewalDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+          </gl-datepicker-container>
+        </div>
+      </div>
     </div>
-    <div class="form-group row">
-      <label for="residencePermitRenewalDate" class="col-sm-3 col-form-label">Date de renouvellement</label>
-      <gl-datepicker-container class="col-sm-9">
-        <input class="form-control" id="residencePermitRenewalDate" placeholder="01/01/2010"
-               formControlName="residencePermitRenewalDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
-      </gl-datepicker-container>
+    <div class="row">
+      <div class="form-group col-lg-6">
+        <div class="row">
+          <label for="residencePermitValidityStartDate" class="col-sm-3 col-lg-6 col-form-label">Valide du</label>
+          <gl-datepicker-container class="col-sm-9 col-lg-6">
+            <input class="form-control" id="residencePermitValidityStartDate" placeholder="01/01/2010"
+                   formControlName="residencePermitValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+          </gl-datepicker-container>
+        </div>
+      </div>
+      <div class="form-group col-lg-6">
+        <div class="row">
+          <label for="residencePermitRenewalDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
+          <gl-datepicker-container class="col-sm-9 col-lg-6">
+            <input class="form-control" id="residencePermitValidityEndDate" placeholder="01/01/2010"
+                   formControlName="residencePermitValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+          </gl-datepicker-container>
+        </div>
+      </div>
     </div>
 
     <h3>Situation fiscale</h3>
