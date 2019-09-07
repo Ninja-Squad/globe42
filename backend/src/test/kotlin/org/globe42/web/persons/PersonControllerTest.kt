@@ -217,6 +217,18 @@ class PersonControllerTest {
     }
 
     @Test
+    fun `should update when no passport`() {
+        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        whenever(mockPersonDao.nextMediationCode('L')).thenReturn(37)
+        val command = createCommand(passportStatus = PassportStatus.NO_PASSPORT)
+        controller.update(person.id!!, command)
+
+        assertThat(person.passportNumber).isNull()
+        assertThat(person.passportValidityStartDate).isNull()
+        assertThat(person.passportValidityEndDate).isNull()
+    }
+
+    @Test
     fun `should not update mediation code if letter stays the same`() {
         person.mediationCode = "L42"
         whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
@@ -446,6 +458,11 @@ class PersonControllerTest {
         } else {
             assertThat(person.nationality!!.id).isEqualTo(command.nationalityId)
         }
+
+        assertThat(person.passportStatus).isEqualTo(command.passportStatus)
+        assertThat(person.passportNumber).isEqualTo(command.passportNumber)
+        assertThat(person.passportValidityStartDate).isEqualTo(command.passportValidityStartDate)
+        assertThat(person.passportValidityEndDate).isEqualTo(command.passportValidityEndDate)
         assertThat(person.visa).isEqualTo(command.visa)
         assertThat(person.residencePermit).isEqualTo(command.residencePermit)
         assertThat(person.residencePermitDepositDate).isEqualTo(command.residencePermitDepositDate)
@@ -466,7 +483,8 @@ class PersonControllerTest {
             mediationEnabled: Boolean = true,
             spouseId: Long? = null,
             nationalityId: String? = "FRA",
-            partner: String? = null
+            partner: String? = null,
+            passportStatus: PassportStatus = PassportStatus.PASSPORT
         ): PersonCommandDTO {
             return PersonCommandDTO(
                 firstName = "Cyril",
@@ -500,6 +518,10 @@ class PersonControllerTest {
                 socialSecurityNumber = "277126912340454",
                 cafNumber = "123765",
                 nationalityId = nationalityId,
+                passportStatus = passportStatus,
+                passportNumber = "P1",
+                passportValidityStartDate = LocalDate.of(2019, 9, 1),
+                passportValidityEndDate = LocalDate.of(2024, 9, 1),
                 visa = Visa.SHORT_STAY,
                 residencePermit = ResidencePermit.TEN_YEAR_OLD_RESIDENT,
                 residencePermitDepositDate = LocalDate.of(2017, 12, 1),

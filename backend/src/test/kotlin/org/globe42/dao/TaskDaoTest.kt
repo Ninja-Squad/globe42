@@ -33,6 +33,7 @@ class TaskDaoTest : BaseDaoTest() {
                 withDefaultValue("residence_permit", ResidencePermit.UNKNOWN)
                 withDefaultValue("deleted", false)
                 withDefaultValue("entry_type", EntryType.UNKNOWN)
+                withDefaultValue("passport_status", PassportStatus.UNKNOWN)
                 columns("id", "first_name", "last_name", "gender", "mediation_enabled")
                 values(1L, "Cedric", "Exbrayat", Gender.MALE, false)
             }

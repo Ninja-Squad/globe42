@@ -4,7 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { FISCAL_NUMBER_PATTERN, PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
-import { CityModel, FiscalStatus, Gender, PersonIdentityModel, PersonModel } from '../models/person.model';
+import {
+  CityModel,
+  FiscalStatus,
+  Gender,
+  PassportStatus,
+  PersonIdentityModel,
+  PersonModel
+} from '../models/person.model';
 import { displayCity, DisplayCityPipe } from '../display-city.pipe';
 import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { PersonCommand } from '../models/person.command';
@@ -28,6 +35,7 @@ import { DisplayResidencePermitPipe } from '../display-residence-permit.pipe';
 import { DisplayVisaPipe } from '../display-visa.pipe';
 import { PageTitleDirective } from '../page-title.directive';
 import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
+import { DisplayPassportStatusPipe } from '../display-passport-status.pipe';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -170,6 +178,22 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.input('#nationality');
   }
 
+  passportStatus(status: PassportStatus) {
+    return this.input(`#passportStatus${status}`);
+  }
+
+  get passportNumber() {
+    return this.input('#passportNumber');
+  }
+
+  get passportValidityStartDate() {
+    return this.input('#passportValidityStartDate');
+  }
+
+  get passportValidityEndDate() {
+    return this.input('#passportValidityEndDate');
+  }
+
   get visa() {
     return this.select('#visa');
   }
@@ -248,6 +272,8 @@ describe('PersonEditComponent', () => {
     }
   ];
 
+  let personService: jasmine.SpyObj<PersonService>;
+
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), ValdemortModule],
     declarations: [
@@ -262,6 +288,7 @@ describe('PersonEditComponent', () => {
       DisplayVisaPipe,
       DisplayResidencePermitPipe,
       DisplayEntryTypePipe,
+      DisplayPassportStatusPipe,
       FullnamePipe,
       ValidationDefaultsComponent,
       PageTitleDirective
@@ -314,6 +341,10 @@ describe('PersonEditComponent', () => {
         id: 'FRA',
         name: 'France'
       },
+      passportStatus: 'PASSPORT',
+      passportNumber: 'P1',
+      passportValidityStartDate: '2019-09-01',
+      passportValidityEndDate: '2024-09-01',
       visa: 'LONG_STAY',
       residencePermit: 'TEN_YEAR_OLD_RESIDENT',
       residencePermitDepositDate: '2018-02-02',
@@ -335,6 +366,7 @@ describe('PersonEditComponent', () => {
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+      personService = TestBed.get(PersonService);
     }));
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -347,8 +379,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should edit and update an existing person', () => {
-      const personService = TestBed.get(PersonService);
-      spyOn(personService, 'update').and.returnValue(of(person));
+      spyOn(personService, 'update').and.returnValue(of(undefined));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
 
@@ -391,6 +422,10 @@ describe('PersonEditComponent', () => {
       expect(tester.socialSecurityNumber).toHaveValue(person.socialSecurityNumber);
       expect(tester.cafNumber).toHaveValue(person.cafNumber);
       expect(tester.nationality).toHaveValue(person.nationality.name);
+      expect(tester.passportStatus('PASSPORT')).toBeChecked();
+      expect(tester.passportNumber).toHaveValue(person.passportNumber);
+      expect(tester.passportValidityStartDate).toHaveValue('01/09/2019');
+      expect(tester.passportValidityEndDate).toHaveValue('01/09/2024');
       expect(tester.visa).toHaveSelectedValue(person.visa);
       expect(tester.residencePermit).toHaveSelectedValue(person.residencePermit);
       expect(tester.residencePermitDepositDate).toHaveValue('02/02/2018');
@@ -415,8 +450,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should save with a partner and ignore the spouse', () => {
-      const personService = TestBed.get(PersonService);
-      spyOn(personService, 'update').and.returnValue(of(person));
+      spyOn(personService, 'update').and.returnValue(of(undefined));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
 
@@ -439,8 +473,7 @@ describe('PersonEditComponent', () => {
     });
 
     it('should save with no spouse and no partner', () => {
-      const personService = TestBed.get(PersonService);
-      spyOn(personService, 'update').and.returnValue(of(person));
+      spyOn(personService, 'update').and.returnValue(of(undefined));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
 
@@ -513,7 +546,6 @@ describe('PersonEditComponent', () => {
       tester.detectChanges();
       const component = tester.componentInstance;
 
-      const personService = TestBed.get(PersonService);
       spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 54 } }));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
@@ -529,7 +561,6 @@ describe('PersonEditComponent', () => {
       const nativeElement = tester.nativeElement;
       const component = tester.componentInstance;
 
-      const personService = TestBed.get(PersonService);
       spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
@@ -545,7 +576,6 @@ describe('PersonEditComponent', () => {
       const nativeElement = tester.nativeElement;
       const component = tester.componentInstance;
 
-      const personService = TestBed.get(PersonService);
       spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 42 } }));
 
       component.personForm.get('spouse').setValue({ id: 43, firstName: 'Jane', lastName: 'Doe' });
@@ -566,6 +596,53 @@ describe('PersonEditComponent', () => {
       expect(tester.fiscalNumber).toBeNull();
       expect(component.personForm.get('fiscalNumber').value).toBeNull();
     });
+
+    it('should set the passport fields to null if passport status is not PASSPORT', () => {
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+
+      tester.passportStatus('NO_PASSPORT').check();
+
+      spyOn(personService, 'update').and.returnValue(of(undefined));
+      const router = TestBed.get(Router);
+      spyOn(router, 'navigate');
+
+      tester.save.click();
+
+      expect(personService.update).toHaveBeenCalled();
+
+      const personUpdated: PersonCommand = personService.update.calls.argsFor(0)[1];
+      expect(personUpdated.passportNumber).toBeNull();
+      expect(personUpdated.passportValidityStartDate).toBeNull();
+      expect(personUpdated.passportValidityEndDate).toBeNull();
+    });
+
+    it('should validate the residence permit validity', () => {
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+
+      tester.residencePermitValidityEndDate.fillWith(tester.residencePermitValidityStartDate.value);
+      tester.save.click();
+      const error = 'La date de fin de validité doit être ultérieure à la date de début de validité';
+      expect(tester.testElement).toContainText(error);
+
+      tester.residencePermitValidityStartDate.fillWith('');
+      expect(tester.testElement).not.toContainText(error);
+    });
+
+    it('should validate the passport validity only when status is PASSPORT', () => {
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+
+      tester.passportValidityEndDate.fillWith(tester.passportValidityStartDate.value);
+      tester.save.click();
+      const error = 'La date de fin de validité doit être ultérieure à la date de début de validité';
+      expect(tester.testElement).toContainText(error);
+
+      tester.passportStatus('NO_PASSPORT').check();
+      expect(tester.testElement).not.toContainText(error);
+      expect(tester.componentInstance.personForm.valid).toBe(true);
+    });
   });
 
   describe('in create mode', () => {
@@ -573,10 +650,14 @@ describe('PersonEditComponent', () => {
       snapshot: {data: {person: null as PersonModel, persons, countries}}
     };
 
-    beforeEach(async(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
-    })));
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+      });
+
+      personService = TestBed.get(PersonService);
+    }));
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 
@@ -588,7 +669,6 @@ describe('PersonEditComponent', () => {
     });
 
     it('should create and save a new person', fakeAsync(() => {
-      const personService = TestBed.get(PersonService);
       spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
       const router = TestBed.get(Router);
       spyOn(router, 'navigate');
@@ -665,6 +745,10 @@ describe('PersonEditComponent', () => {
       expect(tester.healthInsurance).toHaveSelectedValue('UNKNOWN');
       expect(tester.healthInsuranceStartDate).toBeFalsy();
       expect(tester.nationality).toHaveValue('');
+      expect(tester.passportStatus('UNKNOWN')).toBeChecked();
+      expect(tester.passportNumber).toBeNull();
+      expect(tester.passportValidityStartDate).toBeNull();
+      expect(tester.passportValidityEndDate).toBeNull();
       expect(tester.visa).toHaveSelectedValue('UNKNOWN');
       expect(tester.residencePermit).toHaveSelectedValue('UNKNOWN');
       expect(tester.residencePermitDepositDate).toHaveValue('');
@@ -736,6 +820,11 @@ describe('PersonEditComponent', () => {
       expect(tester.firstTypeaheadOption).toHaveText('Belgique');
       tester.firstTypeaheadOption.click();
 
+      tester.passportStatus('PASSPORT').check();
+      tester.passportNumber.fillWith('P1');
+      tester.passportValidityStartDate.fillWith('01/09/2019');
+      tester.passportValidityEndDate.fillWith('01/09/2024');
+
       tester.residencePermitValidityStartDate.fillWith('02/03/2019');
       tester.residencePermitValidityEndDate.fillWith('02/03/2029');
 
@@ -779,6 +868,10 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.healthInsuranceStartDate).toBe('2017-02-02');
       expect((createdPerson as any).nationality).not.toBeDefined();
       expect(createdPerson.nationalityId).toBe('BEL');
+      expect(createdPerson.passportStatus).toBe('PASSPORT');
+      expect(createdPerson.passportNumber).toBe('P1');
+      expect(createdPerson.passportValidityStartDate).toBe('2019-09-01');
+      expect(createdPerson.passportValidityEndDate).toBe('2024-09-01');
       expect(createdPerson.visa).toBe('UNKNOWN');
       expect(createdPerson.residencePermit).toBe('UNKNOWN');
       expect(createdPerson.residencePermitDepositDate).toBe(null);

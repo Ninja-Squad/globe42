@@ -19,8 +19,31 @@ import { CountryTypeahead } from '../person/country-typeahead';
 import { VISA_TRANSLATIONS } from '../display-visa.pipe';
 import { RESIDENCE_PERMIT_TRANSLATIONS } from '../display-residence-permit.pipe';
 import { ENTRY_TYPE_TRANSLATIONS } from '../display-entry-type.pipe';
+import { PASSPORT_STATUS_TRANSLATIONS } from '../display-passport-status.pipe';
 
 export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;
+
+function validateValidityDates(
+  startPath: string,
+  endPath: string,
+  error: string,
+  condition: (form: FormGroup) => boolean): (form: FormGroup) => ValidationErrors | null {
+
+  return (form: FormGroup) => {
+    if (!condition(form)) {
+      return null;
+    }
+
+    const startDate = form.get(startPath).value;
+    const endDate = form.get(endPath).value;
+
+    if (startDate && endDate && endDate <= startDate) {
+      return { [error]: true};
+    }
+    return null;
+  };
+
+}
 
 @Component({
   selector: 'gl-person-edit',
@@ -43,6 +66,7 @@ export class PersonEditComponent {
   visas = VISA_TRANSLATIONS.map(t => t.key);
   residencePermits = RESIDENCE_PERMIT_TRANSLATIONS.map(t => t.key);
   entryTypes = ENTRY_TYPE_TRANSLATIONS.map(t => t.key);
+  passportStatuses = PASSPORT_STATUS_TRANSLATIONS.map(t => t.key);
 
   cityTypeahead: CityTypeahead;
   spouseTypeahead: PersonTypeahead;
@@ -106,14 +130,22 @@ export class PersonEditComponent {
       fiscalNumber: ['', Validators.pattern(FISCAL_NUMBER_PATTERN)],
       fiscalStatusUpToDate: false,
       nationality: null,
+      passportStatus: 'UNKNOWN',
+      passportNumber: '',
+      passportValidityStartDate: null,
+      passportValidityEndDate: null,
       visa: 'UNKNOWN',
       residencePermit: 'UNKNOWN',
       residencePermitDepositDate: null,
       residencePermitRenewalDate: null,
       residencePermitValidityStartDate: null,
       residencePermitValidityEndDate: null,
+    }, {
+      validators: [
+        validateValidityDates('residencePermitValidityStartDate', 'residencePermitValidityEndDate', 'residencePermitValidity', () => true),
+        validateValidityDates('passportValidityStartDate', 'passportValidityEndDate', 'passportValidity', (form) => form.get('passportStatus').value === 'PASSPORT')
+      ]
     });
-
 
     this.spouseTypeCtrl = new FormControl('none');
 
@@ -160,6 +192,12 @@ export class PersonEditComponent {
     }
     if (spouseType !== 'partner') {
       command.partner = null;
+    }
+
+    if (command.passportStatus !== 'PASSPORT') {
+      command.passportNumber = null;
+      command.passportValidityStartDate = null;
+      command.passportValidityEndDate = null;
     }
 
     let action;

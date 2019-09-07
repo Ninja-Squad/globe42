@@ -23,6 +23,7 @@ import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
 import { CurrentPersonService } from '../current-person.service';
+import { DisplayPassportStatusPipe } from '../display-passport-status.pipe';
 
 describe('PersonComponent', () => {
 
@@ -77,6 +78,10 @@ describe('PersonComponent', () => {
         id: 'FRA',
         name: 'France'
       },
+      passportStatus: 'PASSPORT',
+      passportNumber: 'P1',
+      passportValidityStartDate: '2019-09-01',
+      passportValidityEndDate: '2024-09-01',
       visa: 'LONG_STAY',
       residencePermit: 'TEN_YEAR_OLD_RESIDENT',
       residencePermitDepositDate: '2018-02-02',
@@ -101,6 +106,7 @@ describe('PersonComponent', () => {
         DisplayResidencePermitPipe,
         DisplayVisaPipe,
         DisplayEntryTypePipe,
+        DisplayPassportStatusPipe,
         FullnamePipe,
         PageTitleDirective
       ],
@@ -171,6 +177,14 @@ describe('PersonComponent', () => {
     expect(cafNumber.textContent).toContain('123765');
     const nationality = nativeElement.querySelector('#nationality');
     expect(nationality.textContent).toContain('France');
+    const passportStatus = nativeElement.querySelector('#passportStatus');
+    expect(passportStatus.textContent).toContain('Oui');
+    const passportNumber = nativeElement.querySelector('#passportNumber');
+    expect(passportNumber.textContent).toContain('P1');
+    const passportValidityStartDate = nativeElement.querySelector('#passportValidityStartDate');
+    expect(passportValidityStartDate.textContent).toContain('1 sept. 2019');
+    const passportValidityEndDate = nativeElement.querySelector('#passportValidityEndDate');
+    expect(passportValidityEndDate.textContent).toContain('1 sept. 2024');
     const visa = nativeElement.querySelector('#visa');
     expect(visa.textContent).toBe('D (long séjour)');
     const residencePermit = nativeElement.querySelector('#residencePermit');
