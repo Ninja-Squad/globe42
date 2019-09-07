@@ -87,6 +87,7 @@ import { NavigationProgressComponent } from './navigation-progress/navigation-pr
 import { DisplayEntryTypePipe } from './display-entry-type.pipe';
 import { PersonDeathComponent } from './person-death/person-death.component';
 import { ProfileComponent } from './profile/profile.component';
+import { DisplayPassportStatusPipe } from './display-passport-status.pipe';
 
 registerLocaleData(localeFr);
 
@@ -166,7 +167,8 @@ registerLocaleData(localeFr);
     NavigationProgressComponent,
     DisplayEntryTypePipe,
     PersonDeathComponent,
-    ProfileComponent
+    ProfileComponent,
+    DisplayPassportStatusPipe
   ],
   entryComponents: [
     ConfirmModalContentComponent

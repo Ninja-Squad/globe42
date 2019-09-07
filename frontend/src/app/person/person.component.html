@@ -212,6 +212,36 @@
         </div>
       </div>
 
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Possède un passeport</label>
+        <div class="col-sm-6">
+          <p id="passportStatus" class="form-control-plaintext">{{ person.passportStatus | displayPassportStatus }}</p>
+        </div>
+      </div>
+
+      <ng-container *ngIf="person.passportStatus === 'PASSPORT'">
+        <div class="form-group row">
+          <label class="col-sm-6 col-form-label">N° du passeport</label>
+          <div class="col-sm-6">
+            <p id="passportNumber" class="form-control-plaintext"><code>{{ person.passportNumber }}</code></p>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-6 col-form-label">Valide du</label>
+          <div class="col-sm-6">
+            <p id="passportValidityStartDate" class="form-control-plaintext">{{ person.passportValidityStartDate | date }}</p>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-6 col-form-label">Valide jusqu'au</label>
+          <div class="col-sm-6">
+            <p id="passportValidityEndDate" class="form-control-plaintext">{{ person.passportValidityEndDate | date }}</p>
+          </div>
+        </div>
+      </ng-container>
+
     </div>
   </div>
 </div>

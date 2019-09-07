@@ -328,10 +328,15 @@
       </div>
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="residencePermitRenewalDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
+          <label for="residencePermitValidityEndDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="residencePermitValidityEndDate" placeholder="01/01/2010"
                    formControlName="residencePermitValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+            <val-errors [control]="personForm">
+              <ng-template valError="residencePermitValidity">
+                La date de fin de validité doit être ultérieure à la date de début de validité
+              </ng-template>
+            </val-errors>
           </gl-datepicker-container>
         </div>
       </div>
@@ -375,6 +380,53 @@
                [inputFormatter]="countryTypeahead.formatter" [editable]="false">
       </div>
     </div>
+
+    <div class="form-group row">
+      <label class="col-sm-3 col-form-label">Possède un passeport</label>
+      <div class="col-sm-9">
+        <div class="btn-group btn-group-toggle" ngbRadioGroup name="passportStatus" formControlName="passportStatus">
+          <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let passportStatus of passportStatuses">
+            <input ngbButton name="passportStatus" id="passportStatus{{ passportStatus }}" type="radio" [value]="passportStatus"> {{ passportStatus | displayPassportStatus }}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="personForm.value.passportStatus === 'PASSPORT'">
+      <div class="form-group row">
+        <label for="passportNumber" class="col-sm-3 col-form-label">N° de passeport</label>
+        <div class="col-sm-9">
+          <input class="form-control" id="passportNumber" formControlName="passportNumber" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <div class="row">
+            <label for="passportValidityStartDate" class="col-sm-3 col-lg-6 col-form-label">Valide du</label>
+            <gl-datepicker-container class="col-sm-9 col-lg-6">
+              <input class="form-control" id="passportValidityStartDate" placeholder="01/01/2010"
+                     formControlName="passportValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+            </gl-datepicker-container>
+          </div>
+        </div>
+        <div class="form-group col-lg-6">
+          <div class="row">
+            <label for="passportValidityEndDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
+            <gl-datepicker-container class="col-sm-9 col-lg-6">
+              <input class="form-control" id="passportValidityEndDate" placeholder="01/01/2010"
+                     formControlName="passportValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+              <val-errors [control]="personForm">
+                <ng-template valError="passportValidity">
+                  La date de fin de validité doit être ultérieure à la date de début de validité
+                </ng-template>
+              </val-errors>
+            </gl-datepicker-container>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
   </div>
 
   <div class="row mt-5">

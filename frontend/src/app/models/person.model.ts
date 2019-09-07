@@ -16,6 +16,7 @@ export type ResidencePermit =
   | 'TEMPORARY_RESIDENCE_PRIVATE_AND_FAMILY_LIFE'
   | 'OTHER';
 export type EntryType = 'UNKNOWN' | 'REGULAR' | 'IRREGULAR';
+export type PassportStatus = 'UNKNOWN' | 'PASSPORT' | 'NO_PASSPORT';
 
 export interface PersonIdentityModel {
   id: number;
@@ -54,6 +55,10 @@ export interface PersonModel extends PersonIdentityModel {
   socialSecurityNumber: string;
   cafNumber: string;
   nationality: CountryModel;
+  passportStatus: PassportStatus;
+  passportNumber: string;
+  passportValidityStartDate: string;
+  passportValidityEndDate: string;
   visa: Visa;
   residencePermit: ResidencePermit;
   residencePermitDepositDate: string;

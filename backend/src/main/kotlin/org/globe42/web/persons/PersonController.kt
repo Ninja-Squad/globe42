@@ -5,6 +5,7 @@ import org.globe42.dao.CoupleDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.City
 import org.globe42.domain.Couple
+import org.globe42.domain.PassportStatus
 import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
@@ -139,6 +140,10 @@ class PersonController(
                         BadRequestException("No nationality with ID ${command.nationalityId}")
                     }
                 }
+                passportStatus = command.passportStatus
+                passportNumber = command.passportNumber?.takeIf { passportStatus == PassportStatus.PASSPORT }
+                passportValidityStartDate = command.passportValidityStartDate?.takeIf { passportStatus == PassportStatus.PASSPORT }
+                passportValidityEndDate = command.passportValidityEndDate?.takeIf { passportStatus == PassportStatus.PASSPORT }
                 visa = command.visa
                 residencePermit = command.residencePermit
                 residencePermitDepositDate = command.residencePermitDepositDate
