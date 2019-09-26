@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { PersonNoteService } from '../person-note.service';
 import { ConfirmService } from '../confirm.service';
 import { DateTime } from 'luxon';
@@ -14,7 +14,7 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: './person-notes.component.html',
   styleUrls: ['./person-notes.component.scss']
 })
-export class PersonNotesComponent implements OnInit {
+export class PersonNotesComponent implements OnChanges {
 
   notes: Array<NoteModel>;
 
@@ -32,7 +32,7 @@ export class PersonNotesComponent implements OnInit {
               private currentUserService: CurrentUserService,
               private confirmService: ConfirmService) { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     // display the spinner after 300ms, unless the notes have loaded before. Note: delay() is untestable,
     // see https://github.com/angular/angular/issues/10127
     window.setTimeout(() => this.spinnerDisplayed = !this.notes, 300);

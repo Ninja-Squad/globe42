@@ -14,10 +14,19 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { ComponentTester, speculoosMatchers, TestButton, TestHtmlElement } from 'ngx-speculoos';
+import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
-class PersonNotesComponentTester extends ComponentTester<PersonNotesComponent> {
+@Component({
+  template: '<gl-person-notes [person]="person"></gl-person-notes>'
+})
+class TestComponent {
+  person: PersonModel;
+}
+
+class TestComponentTester extends ComponentTester<TestComponent> {
   constructor() {
-    super(PersonNotesComponent);
+    super(TestComponent);
   }
 
   get spinner() {
@@ -51,6 +60,10 @@ class PersonNotesComponentTester extends ComponentTester<PersonNotesComponent> {
   get addNote() {
     return this.button('#addNote');
   }
+
+  get notesComponentInstance(): PersonNotesComponent {
+    return this.debugElement.query(By.directive(PersonNotesComponent)).componentInstance;
+  }
 }
 
 describe('PersonNotesComponent', () => {
@@ -58,12 +71,12 @@ describe('PersonNotesComponent', () => {
   const person = { id: 42 } as PersonModel;
   let notes: Array<NoteModel>;
 
-  let tester: PersonNotesComponentTester;
+  let tester: TestComponentTester;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), ReactiveFormsModule, HttpClientModule, GlobeNgbModule.forRoot()],
-      declarations: [PersonNotesComponent, NoteComponent]
+      declarations: [PersonNotesComponent, NoteComponent, TestComponent]
     });
 
     notes = [
@@ -90,7 +103,7 @@ describe('PersonNotesComponent', () => {
     const userService = TestBed.get(CurrentUserService);
     userService.userEvents.next({ login: 'admin' } as UserModel);
 
-    tester = new PersonNotesComponentTester();
+    tester = new TestComponentTester();
 
     jasmine.addMatchers(speculoosMatchers);
   }));
@@ -102,6 +115,22 @@ describe('PersonNotesComponent', () => {
     tester.componentInstance.person = person;
     tester.detectChanges();
 
+    expect(tester.testElement).not.toContainText('Aucune note');
+    expect(tester.notes.length).toBe(2);
+  });
+
+  it('should refetch notes when the person change', () => {
+    const personNoteService = TestBed.get(PersonNoteService);
+    spyOn(personNoteService, 'list').and.returnValues(of([]), of(notes));
+
+    tester.componentInstance.person = person;
+    tester.detectChanges();
+
+    expect(tester.testElement).toContainText('Aucune note');
+    expect(tester.notes.length).toBe(0);
+
+    tester.componentInstance.person = { id: 43 } as PersonModel;
+    tester.detectChanges();
     expect(tester.testElement).not.toContainText('Aucune note');
     expect(tester.notes.length).toBe(2);
   });
@@ -143,19 +172,19 @@ describe('PersonNotesComponent', () => {
 
     tester.componentInstance.person = person;
     const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
-    tester.componentInstance.noteEdited.subscribe(noteEditedObserver);
+    tester.notesComponentInstance.noteEdited.subscribe(noteEditedObserver);
     tester.detectChanges();
 
     tester.editNote(0).click();
 
-    expect(tester.componentInstance.editedNote).toBe(notes[0]);
+    expect(tester.notesComponentInstance.editedNote).toBe(notes[0]);
     expect(tester.noteComponents[0].edited).toBe(true);
     expect(tester.noteComponents[1].disabled).toBe(true);
     expect(noteEditedObserver).toHaveBeenCalledWith(true);
 
     tester.cancelNoteEdition(0).click();
 
-    expect(tester.componentInstance.editedNote).toBeNull();
+    expect(tester.notesComponentInstance.editedNote).toBeNull();
     expect(tester.noteComponents[0].edited).toBe(false);
     expect(noteEditedObserver).toHaveBeenCalledWith(false);
     expect(tester.noteComponents[1].disabled).toBe(false);
@@ -233,14 +262,14 @@ describe('PersonNotesComponent', () => {
 
     tester.componentInstance.person = person;
     const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
-    tester.componentInstance.noteEdited.subscribe(noteEditedObserver);
+    tester.notesComponentInstance.noteEdited.subscribe(noteEditedObserver);
     tester.detectChanges();
 
     tester.addNote.click();
 
     expect(tester.notes.length).toBe(3);
 
-    expect(tester.componentInstance.editedNote).toBe(notes[0]);
+    expect(tester.notesComponentInstance.editedNote).toBe(notes[0]);
     expect(tester.noteComponents[1].disabled).toBe(true);
     expect(tester.noteComponents[2].disabled).toBe(true);
     expect(tester.noteComponents[0].edited).toBe(true);
@@ -249,7 +278,7 @@ describe('PersonNotesComponent', () => {
 
     // cancel the edition
     tester.cancelNoteEdition(0).click();
-    expect(tester.componentInstance.editedNote).toBeNull();
+    expect(tester.notesComponentInstance.editedNote).toBeNull();
     expect(noteEditedObserver).toHaveBeenCalledWith(false);
 
     expect(tester.notes.length).toBe(2);
@@ -275,7 +304,7 @@ describe('PersonNotesComponent', () => {
 
     tester.componentInstance.person = person;
     const noteEditedObserver = jasmine.createSpy('noteEditedObserver');
-    tester.componentInstance.noteEdited.subscribe(noteEditedObserver);
+    tester.notesComponentInstance.noteEdited.subscribe(noteEditedObserver);
     tester.detectChanges();
 
     tester.addNote.click();
@@ -294,7 +323,7 @@ describe('PersonNotesComponent', () => {
 
     tester.detectChanges();
     expect(tester.notes.length).toBe(3);
-    expect(tester.componentInstance.editedNote).toBe(null);
+    expect(tester.notesComponentInstance.editedNote).toBe(null);
     expect(noteEditedObserver).toHaveBeenCalledWith(false);
   });
 });
