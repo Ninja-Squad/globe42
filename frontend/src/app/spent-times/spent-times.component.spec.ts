@@ -80,7 +80,7 @@ describe('SpentTimesComponent', () => {
       expect(component.spentTimes).toEqual([{ id: 2 }] as Array<SpentTimeModel>);
       expect(component.spentTimeDeleted.emit).toHaveBeenCalledWith({
         task,
-        spentTime: { id: 1 }
+        spentTime: { id: 1 } as SpentTimeModel
       });
     });
   });

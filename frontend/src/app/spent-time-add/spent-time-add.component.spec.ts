@@ -14,7 +14,7 @@ import { ComponentTester, speculoosMatchers, TestButton, TestInput } from 'ngx-s
 
 @Component({
   template: `<gl-spent-time-add [taskModel]="task"
-                                (cancelled)="onCancelled($event)"
+                                (cancelled)="onCancelled()"
                                 (spentTimeAdded)="onSpentTimeAdded($event)"></gl-spent-time-add>`
 })
 class TestComponent {
@@ -25,7 +25,7 @@ class TestComponent {
   cancelled = false;
   spentTimeAddedEvent: SpentTimeEvent;
 
-  onCancelled(event: SpentTimeEvent) {
+  onCancelled() {
     this.cancelled = true;
   }
 
