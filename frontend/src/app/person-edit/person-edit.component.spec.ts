@@ -546,7 +546,7 @@ describe('PersonEditComponent', () => {
       tester.detectChanges();
       const component = tester.componentInstance;
 
-      spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 54 } }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 54 } } as PersonModel));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
       tester.detectChanges();
@@ -561,7 +561,7 @@ describe('PersonEditComponent', () => {
       const nativeElement = tester.nativeElement;
       const component = tester.componentInstance;
 
-      spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: null } as PersonModel));
 
       component.personForm.get('spouse').setValue({ id: 17, firstName: 'Jackie', lastName: 'Doe' });
       tester.detectChanges();
@@ -576,7 +576,7 @@ describe('PersonEditComponent', () => {
       const nativeElement = tester.nativeElement;
       const component = tester.componentInstance;
 
-      spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 42 } }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: { id: 42 } } as PersonModel));
 
       component.personForm.get('spouse').setValue({ id: 43, firstName: 'Jane', lastName: 'Doe' });
       tester.detectChanges();
@@ -778,7 +778,7 @@ describe('PersonEditComponent', () => {
 
       tester.spouseType('spouse').check();
       // trigger spouse typeahead
-      spyOn(personService, 'get').and.returnValue(of({ spouse: null }));
+      spyOn(personService, 'get').and.returnValue(of({ spouse: null } as PersonModel));
       tester.fillAndTick(tester.spouse, 'Jane');
       // select first result
       const spouseResult = tester.firstTypeaheadOption;

@@ -27,6 +27,7 @@ describe('CitiesUploadComponent', () => {
 
       expect(component.status).toBe('pending');
 
+      const fakeFile = ('fakeFile' as unknown) as Blob;
       const fileChangeEvent = {
         target: {
           files: ['fakeFile']
@@ -40,7 +41,7 @@ describe('CitiesUploadComponent', () => {
 
       component.upload(fileChangeEvent);
       expect(fileReader.onload).toBeDefined();
-      expect(fileReader.readAsText).toHaveBeenCalledWith('fakeFile', 'UTF8');
+      expect(fileReader.readAsText).toHaveBeenCalledWith(fakeFile, 'UTF8');
 
       const fileLoadedEvent: any = {
         target: {
@@ -99,9 +100,10 @@ describe('CitiesUploadComponent', () => {
 
       expect(component.status).toBe('pending');
 
+      const fakeFile = ('fakeFile' as unknown) as Blob;
       const fileChangeEvent = {
         target: {
-          files: ['fakeFile']
+          files: [fakeFile]
         }
       } as any;
 
@@ -111,7 +113,7 @@ describe('CitiesUploadComponent', () => {
 
       component.upload(fileChangeEvent);
       expect(fileReader.onload).toBeDefined();
-      expect(fileReader.readAsText).toHaveBeenCalledWith('fakeFile', 'UTF8');
+      expect(fileReader.readAsText).toHaveBeenCalledWith(fakeFile, 'UTF8');
 
       const fileLoadedEvent: any = {
         target: {
