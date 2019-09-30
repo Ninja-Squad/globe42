@@ -12,7 +12,7 @@ import java.time.LocalDate
  */
 data class TaskDTO(
     val id: Long,
-    val description: String,
+    val description: String?,
     val title: String,
     val category: TaskCategoryDTO,
     val status: TaskStatus,

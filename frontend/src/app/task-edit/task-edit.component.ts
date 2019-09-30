@@ -52,7 +52,7 @@ export class TaskEditComponent implements OnInit {
 
     this.taskForm = this.fb.group({
       title: [this.editedTask ? this.editedTask.title : '', Validators.required],
-      description: [this.editedTask ? this.editedTask.description : '', Validators.required],
+      description: this.editedTask ? this.editedTask.description : '',
       category: [this.editedTask ? this.findWithId(this.categories, this.editedTask.category.id) : null, Validators.required],
       dueDate: this.editedTask ? this.editedTask.dueDate : null,
       concernedPerson,

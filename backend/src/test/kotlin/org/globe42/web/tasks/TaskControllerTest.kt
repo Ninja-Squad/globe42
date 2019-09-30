@@ -300,7 +300,7 @@ class TaskControllerTest {
         assertThat(task.id).isEqualTo(42L)
         assertThat(task.title).isEqualTo(command.title)
         assertThat(task.category.id).isEqualTo(variousCategory.id)
-        assertThat(task.description).isEqualTo(command.description)
+        assertThat(task.description).isEqualTo(command.description?.trim())
         assertThat(task.dueDate).isEqualTo(command.dueDate)
         assertThat(task.concernedPerson!!.id).isEqualTo(person.id!!)
         assertThat(task.assignee!!.id).isEqualTo(user.id!!)
@@ -326,6 +326,18 @@ class TaskControllerTest {
         assertThat(task.assignee).isNull()
 
         verify(mockEventPublisher, never()).publishEvent(any())
+    }
+
+    @Test
+    fun `should create with blank description`() {
+        val command = createCommand(null, null).copy(description = " ")
+
+        whenever(mockCurrentUser.userId).thenReturn(user.id)
+        whenever(mockUserDao.getOne(mockCurrentUser.userId!!)).thenReturn(user)
+        whenever(mockTaskDao.save(any<Task>())).thenReturnModifiedFirstArgument<Task> { task -> task.id = 42L }
+
+        val task = controller.create(command)
+        assertThat(task.description).isNull()
     }
 
     @Test
@@ -422,7 +434,7 @@ internal fun createTask(id: Long?, user: User, person: Person, category: TaskCat
     val task = Task()
     task.id = id
     task.status = TaskStatus.TODO
-    task.description = "description"
+    task.description = " description "
     task.title = "title"
     task.category = category
     task.dueDate = LocalDate.of(2017, 8, 1)

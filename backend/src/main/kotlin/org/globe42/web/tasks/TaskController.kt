@@ -194,7 +194,7 @@ class TaskController(
 
     private fun copyCommandToTask(command: TaskCommandDTO, task: Task) {
         with(task) {
-            description = command.description
+            description = command.description?.trim()?.takeIf { it.isNotEmpty() }
             title = command.title
             category = taskCategoryDao.findById(command.categoryId).orElseThrow {
                 BadRequestException("No category with ID ${command.categoryId}")

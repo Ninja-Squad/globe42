@@ -80,7 +80,9 @@ export class TasksComponent {
   }
 
   toggle(task: Task, event: Event) {
-    task.opened = !task.opened;
+    if (task.model.description) {
+      task.opened = !task.opened;
+    }
     event.stopPropagation();
     event.preventDefault();
   }

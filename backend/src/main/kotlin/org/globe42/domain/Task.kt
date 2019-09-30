@@ -24,8 +24,7 @@ class Task {
     /**
      * The description of the task, which is free text describing what to do.
      */
-    @NotEmpty
-    lateinit var description: String
+    var description: String? = null
 
     /**
      * A one-line title shortly describing the task, which appears in the to-do list.
