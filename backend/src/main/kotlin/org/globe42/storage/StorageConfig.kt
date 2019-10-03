@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets
  * @author JB Nizet
  */
 @Configuration
-@EnableConfigurationProperties(StorageProperties::class)
 class StorageConfig(private val properties: StorageProperties) {
 
     @Bean

@@ -11,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient
  * @author JB Nizet
  */
 @Configuration
-@EnableConfigurationProperties(SendgridProperties::class)
 class EmailConfig(
     private val webClientBuilder: WebClient.Builder,
     private val properties: SendgridProperties
