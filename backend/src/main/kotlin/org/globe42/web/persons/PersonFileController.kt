@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
-import java.io.IOException
 import javax.transaction.Transactional
 
 /**
@@ -51,7 +50,6 @@ class PersonFileController(private val personDao: PersonDao, private val storage
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Throws(IOException::class)
     fun create(
         @PathVariable("personId") personId: Long,
         @RequestParam("file") multipartFile: MultipartFile

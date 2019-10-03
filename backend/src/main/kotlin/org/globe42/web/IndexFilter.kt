@@ -3,8 +3,10 @@ package org.globe42.web
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
-import java.io.IOException
-import javax.servlet.*
+import javax.servlet.Filter
+import javax.servlet.FilterChain
+import javax.servlet.ServletRequest
+import javax.servlet.ServletResponse
 import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -21,7 +23,6 @@ import javax.servlet.http.HttpServletResponse
 @WebFilter(value = ["/*"])
 @Order(-1) // so that it's called before the authentication filter
 class IndexFilter : Filter {
-    @Throws(IOException::class, ServletException::class)
     override fun doFilter(
         request: ServletRequest,
         response: ServletResponse,

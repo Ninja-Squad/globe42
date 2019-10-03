@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets
 class StorageConfig(private val properties: StorageProperties) {
 
     @Bean
-    @Throws(IOException::class)
     fun storage(): Storage {
         fun InputStream.toStorage() = StorageOptions
             .newBuilder()

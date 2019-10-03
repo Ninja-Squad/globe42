@@ -4,9 +4,11 @@ import org.globe42.dao.UserDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import java.io.IOException
 import java.util.*
-import javax.servlet.*
+import javax.servlet.Filter
+import javax.servlet.FilterChain
+import javax.servlet.ServletRequest
+import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -32,7 +34,6 @@ class AuthenticationFilter : Filter {
     @Autowired
     private lateinit var userDao: UserDao
 
-    @Throws(IOException::class, ServletException::class)
     override fun doFilter(req: ServletRequest, resp: ServletResponse, chain: FilterChain) {
         val request = req as HttpServletRequest
         val response = resp as HttpServletResponse

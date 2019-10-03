@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.io.IOException
 
 /**
  * Unit tests for [PersonCommandDTO]
@@ -22,7 +21,6 @@ class PersonCommandDTOTest {
     private lateinit var objectMapper: ObjectMapper
 
     @Test
-    @Throws(IOException::class)
     fun `should deserialize`() {
         val json = """{
             "firstName": "Agnes",

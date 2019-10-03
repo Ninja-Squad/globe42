@@ -8,23 +8,24 @@ import org.globe42.dao.UserDao
 import org.globe42.domain.User
 import org.globe42.test.GlobeMvcTest
 import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.jsonValue
 import org.globe42.web.security.CurrentUser
 import org.globe42.web.security.PasswordDigester
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.*
 
 /**
  * MVC test for [UserController]
  * @author JB Nizet
  */
 @GlobeMvcTest(UserController::class)
-class UserControllerMvcTest {
+class UserControllerMvcTest(
+    @Autowired private val mvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
     @MockBean
     private lateinit var mockCurrentUser: CurrentUser
 
@@ -37,12 +38,6 @@ class UserControllerMvcTest {
     @MockBean
     private lateinit var mockPasswordDigester: PasswordDigester
 
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
-
-    @Autowired
-    private lateinit var mvc: MockMvc
-
     @Test
     fun `should get current user`() {
         val userId = 42L
@@ -50,11 +45,12 @@ class UserControllerMvcTest {
         whenever(mockCurrentUser.userId).thenReturn(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
-        mvc.perform(get("/api/users/me"))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(user.id!!))
-            .andExpect(jsonPath("$.login").value(user.login))
-            .andExpect(jsonPath("$.password").doesNotExist())
+        mvc.get("/api/users/me").andExpect {
+            status { isOk }
+            jsonValue("$.id", user.id!!)
+            jsonValue("$.login", user.login)
+            jsonPath("$.password") { doesNotExist() }
+        }
     }
 
     @Test
@@ -67,12 +63,12 @@ class UserControllerMvcTest {
 
         val command = ChangePasswordCommandDTO("newPassword")
 
-        mvc.perform(
-            put("/api/users/me/passwords")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isNoContent)
+        mvc.put("/api/users/me/passwords") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isNoContent }
+        }
     }
 
     @Test
@@ -80,11 +76,12 @@ class UserControllerMvcTest {
         val user = createUser(42L)
         whenever(mockUserDao.findNotDeleted()).thenReturn(listOf(user))
 
-        mvc.perform(get("/api/users"))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].id").value(user.id!!))
-            .andExpect(jsonPath("$[0].login").value(user.login))
-            .andExpect(jsonPath("$[0].password").doesNotExist())
+        mvc.get("/api/users").andExpect {
+            status { isOk }
+            jsonValue("$[0].id", user.id!!)
+            jsonValue("$[0].login", user.login)
+            jsonPath("$[0].password") { doesNotExist() }
+        }
     }
 
     @Test
@@ -96,14 +93,14 @@ class UserControllerMvcTest {
         whenever(mockUserDao.save(any<User>()))
             .thenReturnModifiedFirstArgument<User> { it.id = 42L }
 
-        mvc.perform(
-            post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.login").value(command.login))
-            .andExpect(jsonPath("$.generatedPassword").value("password"))
+        mvc.post("/api/users") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isCreated }
+            jsonValue("$.login", command.login)
+            jsonValue("$.generatedPassword", "password")
+        }
     }
 
     @Test
@@ -114,12 +111,12 @@ class UserControllerMvcTest {
 
         val command = UserCommandDTO("test", true)
 
-        mvc.perform(
-            put("/api/users/{userId}", user.id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isNoContent)
+        mvc.put("/api/users/{userId}", user.id) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isNoContent }
+        }
     }
 
     @Test
@@ -128,8 +125,9 @@ class UserControllerMvcTest {
         val user = createUser(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
-        mvc.perform(delete("/api/users/{userId}", user.id))
-            .andExpect(status().isNoContent)
+        mvc.delete("/api/users/{userId}", user.id).andExpect {
+            status { isNoContent }
+        }
     }
 
     @Test
@@ -141,10 +139,11 @@ class UserControllerMvcTest {
         whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
         whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
 
-        mvc.perform(post("/api/users/{userId}/password-resets", user.id))
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.login").value(user.login))
-            .andExpect(jsonPath("$.generatedPassword").value("password"))
+        mvc.post("/api/users/{userId}/password-resets", user.id).andExpect {
+            status { isCreated }
+            jsonValue("$.login", user.login)
+            jsonValue("$.generatedPassword", "password")
+        }
     }
 
     @Test
@@ -154,12 +153,13 @@ class UserControllerMvcTest {
         whenever(mockCurrentUser.userId).thenReturn(userId)
         whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
-        mvc.perform(get("/api/users/me/profile"))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.login").value(user.login))
-            .andExpect(jsonPath("$.admin").value(user.admin))
-            .andExpect(jsonPath("$.email").value(user.email!!))
-            .andExpect(jsonPath("$.taskAssignmentEmailNotificationEnabled").value(user.taskAssignmentEmailNotificationEnabled))
+        mvc.get("/api/users/me/profile").andExpect {
+            status { isOk }
+            jsonValue("$.login", user.login)
+            jsonValue("$.admin", user.admin)
+            jsonValue("$.email", user.email!!)
+            jsonValue("$.taskAssignmentEmailNotificationEnabled", user.taskAssignmentEmailNotificationEnabled)
+        }
     }
 
     @Test
@@ -174,11 +174,12 @@ class UserControllerMvcTest {
             taskAssignmentEmailNotificationEnabled = true
         )
 
-        mvc.perform(put("/api/users/me/profile")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(command)))
-            .andExpect(status().isNoContent)
-
+        mvc.put("/api/users/me/profile") {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isNoContent }
+        }
         assertThat(user.email).isEqualTo(command.email)
         assertThat(user.taskAssignmentEmailNotificationEnabled).isEqualTo(command.taskAssignmentEmailNotificationEnabled)
     }

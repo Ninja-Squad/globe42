@@ -7,15 +7,13 @@ import org.globe42.domain.NetworkMember
 import org.globe42.domain.NetworkMemberType
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.*
 import java.util.*
 
 /**
@@ -23,15 +21,12 @@ import java.util.*
  * @author JB Nizet
  */
 @GlobeMvcTest(NetworkMemberController::class)
-class NetworkMemberControllerMvcTest {
+class NetworkMemberControllerMvcTest(
+    @Autowired private val mvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
     @MockBean
     private lateinit var mockPersonDao: PersonDao
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
-
-    @Autowired
-    private lateinit var mvc: MockMvc
 
     private lateinit var person: Person
 
@@ -44,11 +39,12 @@ class NetworkMemberControllerMvcTest {
 
     @Test
     fun `should list`() {
-        mvc.perform(get("/api/persons/{personId}/network-members", person.id))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].id").value(345L))
-            .andExpect(jsonPath("$[0].type").value(NetworkMemberType.DOCTOR.name))
-            .andExpect(jsonPath("$[0].text").value("Dr. No"))
+        mvc.get("/api/persons/{personId}/network-members", person.id).andExpect {
+            status { isOk }
+            jsonValue("$[0].id", 345L)
+            jsonValue("$[0].type", NetworkMemberType.DOCTOR.name)
+            jsonValue("$[0].text", "Dr. No")
+        }
     }
 
     @Test
@@ -59,29 +55,30 @@ class NetworkMemberControllerMvcTest {
             Unit
         }
 
-        mvc.perform(
-            post("/api/persons/{personId}/network-members", person.id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isCreated())
+        mvc.post("/api/persons/{personId}/network-members", person.id) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isCreated }
+        }
     }
 
     @Test
     fun `should update`() {
         val command = NetworkMemberCommandDTO(NetworkMemberType.LAWYER, "Dr. Yes")
 
-        mvc.perform(
-            put("/api/persons/{personId}/network-members/{memberId}", person.id, 345L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isNoContent())
+        mvc.put("/api/persons/{personId}/network-members/{memberId}", person.id, 345L) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isNoContent }
+        }
     }
 
     @Test
     fun `should delete`() {
-        mvc.perform(delete("/api/persons/{personId}/network-members/{memberId}", person.id, 345L))
-            .andExpect(status().isNoContent())
+        mvc.delete("/api/persons/{personId}/network-members/{memberId}", person.id, 345L).andExpect {
+            status { isNoContent }
+        }
     }
 }

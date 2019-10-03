@@ -9,15 +9,16 @@ import org.globe42.domain.Family
 import org.globe42.domain.Location
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.put
 import java.util.*
 
 /**
@@ -25,15 +26,12 @@ import java.util.*
  * @author JB Nizet
  */
 @GlobeMvcTest(FamilyController::class)
-class FamilyControllerMvcTest {
+class FamilyControllerMvcTest(
+    @Autowired private val mvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
     @MockBean
     private lateinit var mockPersonDao: PersonDao
-
-    @Autowired
-    private lateinit var mvc: MockMvc
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     private lateinit var person: Person
 
@@ -53,9 +51,10 @@ class FamilyControllerMvcTest {
             })
         }
 
-        mvc.perform(get("/api/persons/{personId}/family", person.id!!))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.children[0].location").value(Location.ABROAD.name))
+        mvc.get("/api/persons/{personId}/family", person.id!!).andExpect {
+            status { isOk }
+            jsonValue("$.children[0].location", Location.ABROAD.name)
+        }
     }
 
     @Test
@@ -64,12 +63,13 @@ class FamilyControllerMvcTest {
             spouseLocation = Location.FRANCE,
             children = emptySet())
 
-        mvc.perform(
-            put("/api/persons/{personId}/family", person.id!!)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isNoContent())
+        mvc.put("/api/persons/{personId}/family", person.id!!) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isNoContent }
+        }
+
         assertThat(person.family).isNotNull()
     }
 
@@ -77,8 +77,9 @@ class FamilyControllerMvcTest {
     fun `should delete family`() {
         person.family = Family()
 
-        mvc.perform(delete("/api/persons/{personId}/family", person.id!!))
-            .andExpect(status().isNoContent())
+        mvc.delete("/api/persons/{personId}/family", person.id!!).andExpect {
+            status { isNoContent }
+        }
 
         assertThat(person.family).isNull()
     }

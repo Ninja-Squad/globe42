@@ -8,15 +8,16 @@ import org.globe42.domain.Gender
 import org.globe42.domain.Participation
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import java.util.*
 
 /**
@@ -24,15 +25,12 @@ import java.util.*
  * @author JB Nizet
  */
 @GlobeMvcTest(ParticipationController::class)
-class ParticipationControllerMvcTest {
+class ParticipationControllerMvcTest(
+    @Autowired private val mvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
     @MockBean
     private lateinit var mockPersonDao: PersonDao
-
-    @Autowired
-    private lateinit var mvc: MockMvc
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     private lateinit var person: Person
     private lateinit var mealParticipation: Participation
@@ -48,9 +46,10 @@ class ParticipationControllerMvcTest {
 
     @Test
     fun `should list`() {
-        mvc.perform(get("/api/persons/{personId}/participations", person.id))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].id").value(34))
+        mvc.get("/api/persons/{personId}/participations", person.id).andExpect {
+            status { isOk }
+            jsonValue("$[0].id", 34)
+        }
     }
 
     @Test
@@ -60,24 +59,20 @@ class ParticipationControllerMvcTest {
             person.getParticipations().find { it.activityType == ActivityType.SOCIAL_MEDIATION }?.let { it.id = 345L }
             Unit
         }
-        mvc.perform(
-            post("/api/persons/{personId}/participations", person.id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.activityType").value(ActivityType.SOCIAL_MEDIATION.name))
+        mvc.post("/api/persons/{personId}/participations", person.id) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isCreated }
+            jsonValue("$.activityType", ActivityType.SOCIAL_MEDIATION.name)
+        }
     }
 
     @Test
     fun `should delete`() {
-        mvc.perform(
-            delete(
-                "/api/persons/{personId}/participations/{participationId}",
-                person.id,
-                mealParticipation.id
-            )
-        )
-            .andExpect(status().isNoContent)
+        mvc.delete("/api/persons/{personId}/participations/{participationId}", person.id, mealParticipation.id)
+            .andExpect {
+                status { isNoContent }
+            }
     }
 }

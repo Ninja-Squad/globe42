@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.security.NoSuchAlgorithmException
 import java.util.*
 import javax.crypto.KeyGenerator
 
@@ -44,7 +43,6 @@ class JwtHelper(@param:Value("\${globe42.secretKey}") private val secretKey: Str
         /**
          * Allows generating a real secret key
          */
-        @Throws(NoSuchAlgorithmException::class)
         @JvmStatic
         fun main(args: Array<String>) {
             val keyGenerator = KeyGenerator.getInstance(SIGNATURE_ALGORITHM.jcaName)

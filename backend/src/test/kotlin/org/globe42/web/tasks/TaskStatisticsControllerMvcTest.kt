@@ -6,13 +6,12 @@ import org.globe42.domain.SpentTimeStatistic
 import org.globe42.domain.TaskCategory
 import org.globe42.domain.User
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.get
 import java.time.LocalDate
 
 /**
@@ -20,13 +19,10 @@ import java.time.LocalDate
  * @author JB Nizet
  */
 @GlobeMvcTest(TaskStatisticsController::class)
-class TaskStatisticsControllerMvcTest {
+class TaskStatisticsControllerMvcTest(@Autowired private val mvc: MockMvc) {
 
     @MockBean
     private lateinit var mockSpentTimeDao: SpentTimeDao
-
-    @Autowired
-    private lateinit var mvc: MockMvc
 
     @Test
     fun `should get spent time statistics`() {
@@ -41,14 +37,14 @@ class TaskStatisticsControllerMvcTest {
         whenever(mockSpentTimeDao.findSpentTimeStatistics(criteria))
             .thenReturn(listOf(SpentTimeStatistic(meal, user, 100)))
 
-        mvc.perform(
-            get("/api/task-statistics/spent-times")
-                .param("from", criteria.from.toString())
-                .param("to", criteria.to.toString())
-        )
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.statistics[0].user.login").value(user.login))
-            .andExpect(jsonPath("$.statistics[0].category.name").value(meal.name))
-            .andExpect(jsonPath("$.statistics[0].minutes").value(100))
+        mvc.get("/api/task-statistics/spent-times") {
+            param("from", criteria.from.toString())
+            param("to", criteria.to.toString())
+        }.andExpect {
+            status { isOk }
+            jsonValue("$.statistics[0].user.login", user.login)
+            jsonValue("$.statistics[0].category.name", meal.name)
+            jsonValue("$.statistics[0].minutes", 100)
+        }
     }
 }

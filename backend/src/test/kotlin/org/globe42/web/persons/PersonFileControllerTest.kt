@@ -17,7 +17,6 @@ import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.util.*
@@ -58,7 +57,6 @@ class PersonFileControllerTest {
     }
 
     @Test
-    @Throws(IOException::class)
     fun `should get`() {
         val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
         val readableFile = mock<ReadableFile>()
@@ -77,7 +75,6 @@ class PersonFileControllerTest {
     }
 
     @Test
-    @Throws(IOException::class)
     fun `should create`() {
         val multipartFile = MockMultipartFile(
             "file",
@@ -102,7 +99,6 @@ class PersonFileControllerTest {
     }
 
     @Test
-    @Throws(IOException::class)
     fun `should delete`() {
         controller.delete(person.id!!, "hello.txt")
         verify(mockStorageService).delete(directory, "hello.txt")

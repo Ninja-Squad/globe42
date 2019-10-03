@@ -10,6 +10,8 @@ import org.globe42.storage.FileDTO
 import org.globe42.storage.ReadableFile
 import org.globe42.storage.StorageService
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.andGetAsyncResult
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,9 +20,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.multipart
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import java.time.Instant
@@ -31,16 +32,13 @@ import java.util.*
  * @author JB Nizet
  */
 @GlobeMvcTest(PersonFileController::class)
-class PersonFileControllerMvcTest {
+class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
 
     @MockBean
     private lateinit var mockStorageService: StorageService
 
     @MockBean
     private lateinit var mockPersonDao: PersonDao
-
-    @Autowired
-    private lateinit var mvc: MockMvc
 
     private lateinit var person: Person
     private lateinit var directory: String
@@ -53,7 +51,6 @@ class PersonFileControllerMvcTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should create`() {
         val file = FileDTO("new.txt", 3L, Instant.now(), "text/plain")
         val multipartFile = MockMultipartFile(
@@ -72,16 +69,15 @@ class PersonFileControllerMvcTest {
             )
         ).thenReturn(file)
 
-        mvc.perform(
-            multipart("/api/persons/{personId}/files", person.id)
-                .file(multipartFile)
-        )
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.name").value("new.txt"))
+        mvc.multipart("/api/persons/{personId}/files", person.id) {
+            file(multipartFile)
+        }.andExpect {
+            status { isCreated }
+            jsonValue("$.name", "new.txt")
+        }
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should get`() {
         val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
         val readableFile = mock<ReadableFile>()
@@ -89,11 +85,13 @@ class PersonFileControllerMvcTest {
         whenever(readableFile.inputStream).thenReturn(ByteArrayInputStream("hello".toByteArray(StandardCharsets.UTF_8)))
         whenever(mockStorageService.get(directory, file.name)).thenReturn(readableFile)
 
-        mvc.perform(get("/api/persons/{personId}/files/{name}", person.id, file.name))
-            .andDo { it.getAsyncResult() }
-            .andExpect(status().isOk)
-            .andExpect(content().contentType(MediaType.TEXT_PLAIN))
-            .andExpect(content().bytes("hello".toByteArray(StandardCharsets.UTF_8)))
-            .andExpect(header().longValue(HttpHeaders.CONTENT_LENGTH, 5L))
+        mvc.get("/api/persons/{personId}/files/{name}", person.id, file.name).andGetAsyncResult().andExpect {
+            status { isOk }
+            header { longValue(HttpHeaders.CONTENT_LENGTH, 5L) }
+            content {
+                contentType(MediaType.TEXT_PLAIN)
+                bytes("hello".toByteArray(StandardCharsets.UTF_8))
+            }
+        }
     }
 }

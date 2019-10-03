@@ -5,14 +5,13 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.PostalCityDao
 import org.globe42.domain.PostalCity
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import java.util.*
 
 /**
@@ -20,7 +19,7 @@ import java.util.*
  * @author JB Nizet
  */
 @GlobeMvcTest(PostalCityController::class)
-class PostalCityControllerMvcTest {
+class PostalCityControllerMvcTest(@Autowired private val mvc: MockMvc) {
 
     @MockBean
     private lateinit var mockPostalCityDao: PostalCityDao
@@ -28,29 +27,31 @@ class PostalCityControllerMvcTest {
     @MockBean
     private lateinit var mockUploadParser: PostalCityUploadParser
 
-    @Autowired
-    private lateinit var mvc: MockMvc
-
     @Test
     fun `should search`() {
         val postalCity = PostalCity("42000", "ST ETIENNE")
         whenever(mockPostalCityDao.findByCity("ST E", LIMIT)).thenReturn(listOf(postalCity))
 
-        mvc.perform(get("/api/cities").param("query", "ST E"))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].code").value("42000"))
-            .andExpect(jsonPath("$[0].city").value("ST ETIENNE"))
+        mvc.get("/api/cities") {
+            param("query", "ST E")
+        }.andExpect {
+            status { isOk }
+            jsonValue("$[0].code", "42000")
+            jsonValue("$[0].city", "ST ETIENNE")
+        }
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should upload`() {
         val body = "fake".toByteArray()
         val parsedCities = Arrays.asList(PostalCity("42000", "ST ETIENNE"))
         whenever(mockUploadParser.parse(body)).thenReturn(parsedCities)
 
-        mvc.perform(post("/api/cities/uploads").content(body))
-            .andExpect(status().isCreated)
+        mvc.post("/api/cities/uploads") {
+            content = body
+        }.andExpect {
+            status { isCreated }
+        }
 
         verify(mockPostalCityDao).saveAllEfficiently(parsedCities)
     }

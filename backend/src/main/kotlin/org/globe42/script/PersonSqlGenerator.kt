@@ -2,7 +2,6 @@ package org.globe42.script
 
 import com.google.common.base.Strings
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 import java.time.LocalDate
 import java.time.format.DateTimeFormatterBuilder
@@ -173,7 +172,6 @@ class PersonSqlGenerator(private val lines: Stream<String>) {
 
     companion object {
 
-        @Throws(IOException::class)
         @JvmStatic
         fun main(args: Array<String>) {
             BufferedReader(

@@ -131,7 +131,6 @@ class StorageServiceTest {
     private class FakeReadAnswer : Answer<Int> {
         private var count = 0
 
-        @Throws(Throwable::class)
         override fun answer(invocation: InvocationOnMock): Int? {
             if (count == 0) {
                 val buffer = invocation.getArgument<ByteBuffer>(0)

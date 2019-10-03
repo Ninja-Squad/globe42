@@ -10,15 +10,16 @@ import org.globe42.domain.Income
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
 import org.globe42.test.thenReturnModifiedFirstArgument
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import java.math.BigDecimal
 import java.util.*
 
@@ -27,7 +28,10 @@ import java.util.*
  * @author JB Nizet
  */
 @GlobeMvcTest(IncomeController::class)
-class IncomeControllerMvcTest {
+class IncomeControllerMvcTest(
+    @Autowired private val mvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
     @MockBean
     private lateinit var mockPersonDao: PersonDao
 
@@ -36,12 +40,6 @@ class IncomeControllerMvcTest {
 
     @MockBean
     private lateinit var mockIncomeSourceDao: IncomeSourceDao
-
-    @Autowired
-    private lateinit var mvc: MockMvc
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     private lateinit var person: Person
 
@@ -52,32 +50,31 @@ class IncomeControllerMvcTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should list`() {
         val income = createIncome(12L)
         person.addIncome(income)
 
-        mvc.perform(get("/api/persons/{personId}/incomes", person.id))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].id").value(income.id!!.toInt()))
-            .andExpect(jsonPath("$[0].monthlyAmount").value(income.monthlyAmount.toDouble()))
-            .andExpect(jsonPath("$[0].source.id").value(income.source.id!!.toInt()))
+        mvc.get("/api/persons/{personId}/incomes", person.id).andExpect {
+            status { isOk }
+            jsonValue("$[0].id", income.id!!.toInt())
+            jsonValue("$[0].monthlyAmount", income.monthlyAmount.toDouble())
+            jsonValue("$[0].source.id", income.source.id!!.toInt())
+        }
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should delete`() {
         val income = createIncome(12L)
         person.addIncome(income)
 
         whenever(mockIncomeDao.findById(income.id!!)).thenReturn(Optional.of(income))
 
-        mvc.perform(delete("/api/persons/{personId}/incomes/{incomeId}", person.id, income.id))
-            .andExpect(status().isNoContent)
+        mvc.delete("/api/persons/{personId}/incomes/{incomeId}", person.id, income.id).andExpect {
+            status { isNoContent }
+        }
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should create`() {
         val incomeSource = createIncomeSource(12L)
 
@@ -86,12 +83,12 @@ class IncomeControllerMvcTest {
             .thenReturnModifiedFirstArgument<Income> { income -> income.id = 345L }
 
         val command = IncomeCommandDTO(incomeSource.id!!, BigDecimal.TEN)
-        mvc.perform(
-            post("/api/persons/{personId}/incomes", person.id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.id").value(345))
+        mvc.post("/api/persons/{personId}/incomes", person.id) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isCreated }
+            jsonValue("$.id", 345)
+        }
     }
 }

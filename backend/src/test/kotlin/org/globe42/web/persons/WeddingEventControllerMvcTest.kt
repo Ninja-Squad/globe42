@@ -5,15 +5,16 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import java.time.LocalDate
 import java.util.*
 
@@ -22,15 +23,12 @@ import java.util.*
  * @author JB Nizet
  */
 @GlobeMvcTest(WeddingEventController::class)
-class WeddingEventControllerMvcTest {
+class WeddingEventControllerMvcTest(
+    @Autowired private val mvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
     @MockBean
     private lateinit var mockPersonDao: PersonDao
-
-    @Autowired
-    private lateinit var mvc: MockMvc
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     private lateinit var person: Person
     private lateinit var firstWedding: WeddingEvent
@@ -47,18 +45,17 @@ class WeddingEventControllerMvcTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should list`() {
-        mvc.perform(get("/api/persons/{personId}/wedding-events", person.id))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].id").value(34))
-            .andExpect(jsonPath("$[0].date").value("2000-02-28"))
-            .andExpect(jsonPath("$[0].type").value(WeddingEventType.WEDDING.name))
-            .andExpect(jsonPath("$[0].location").value(Location.ABROAD.name))
+        mvc.get("/api/persons/{personId}/wedding-events", person.id).andExpect {
+            status { isOk }
+            jsonValue("$[0].id", 34)
+            jsonValue("$[0].date", "2000-02-28")
+            jsonValue("$[0].type", WeddingEventType.WEDDING.name)
+            jsonValue("$[0].location", Location.ABROAD.name)
+        }
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should create`() {
         val date = LocalDate.of(2002, 3, 28)
         val command = WeddingEventCommandDTO(
@@ -70,19 +67,19 @@ class WeddingEventControllerMvcTest {
             person.getWeddingEvents().find { it.date == date }?.let { it.id = 876 }
             Unit
         }
-        mvc.perform(
-            post("/api/persons/{personId}/wedding-events", person.id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(command))
-        )
-            .andExpect(status().isCreated)
-            .andExpect(jsonPath("$.type").value(WeddingEventType.DIVORCE.name))
+        mvc.post("/api/persons/{personId}/wedding-events", person.id) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsBytes(command)
+        }.andExpect {
+            status { isCreated }
+            jsonValue("$.type", WeddingEventType.DIVORCE.name)
+        }
     }
 
     @Test
-    @Throws(Exception::class)
     fun `should delete`() {
-        mvc.perform(delete("/api/persons/{personId}/wedding-events/{eventId}", person.id, firstWedding.id))
-            .andExpect(status().isNoContent)
+        mvc.delete("/api/persons/{personId}/wedding-events/{eventId}", person.id, firstWedding.id).andExpect {
+            status { isNoContent }
+        }
     }
 }
