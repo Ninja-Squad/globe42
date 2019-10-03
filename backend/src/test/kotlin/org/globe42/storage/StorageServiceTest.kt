@@ -43,9 +43,7 @@ class StorageServiceTest {
         val createTime = System.currentTimeMillis() - 100000L
         doReturn(createTime).whenever(blob).createTime
 
-        storageProperties = StorageProperties().apply {
-            bucket = "personfiles"
-        }
+        storageProperties = StorageProperties(bucket = "personfiles")
 
         service = StorageService(mockStorage, storageProperties)
     }

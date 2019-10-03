@@ -22,8 +22,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.1.8.RELEASE"
-    id("io.spring.dependency-management") version "1.0.7.RELEASE"
+    id("org.springframework.boot") version "2.2.0.RC1"
+    id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("org.flywaydb.flyway") version "6.0.4"
     id("com.gorylenko.gradle-git-properties") version "2.0.0"
     id("org.jetbrains.dokka") version "0.9.18"
@@ -34,6 +34,7 @@ java {
 }
 
 repositories {
+    maven { url = uri("https://repo.spring.io/milestone") }
     mavenCentral()
     jcenter() // necessary for dokka
 }
@@ -106,6 +107,8 @@ tasks {
     }
 }
 
+ext["okhttp3.version"] = "4.2.1"
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -128,7 +131,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     testImplementation("org.mockito:mockito-junit-jupiter")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.0.1")
+    testImplementation("com.squareup.okhttp3:mockwebserver")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

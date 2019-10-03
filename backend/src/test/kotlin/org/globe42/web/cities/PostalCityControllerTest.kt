@@ -2,7 +2,7 @@ package org.globe42.web.cities
 
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.assertj.core.api.Java6Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PostalCityDao
 import org.globe42.domain.PostalCity
 import org.globe42.test.Mockito

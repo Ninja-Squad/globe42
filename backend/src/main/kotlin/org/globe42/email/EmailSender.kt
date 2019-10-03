@@ -48,7 +48,9 @@ class EmailSender(
         webClient.post()
             .uri("/mail/send")
             .contentType(MediaType.APPLICATION_JSON)
-            .syncBody(email).retrieve().bodyToMono<Unit>().subscribe()
+            .bodyValue(email)
+            .retrieve()
+            .bodyToMono<Unit>().subscribe()
     }
 }
 
