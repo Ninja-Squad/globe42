@@ -119,5 +119,6 @@ class SpentTimeDaoTest : BaseDaoTest() {
     }
 }
 
-private data class StatResult(val categoryId: Long, val userId: Long, val minutes: Int);
+private data class StatResult(val categoryId: Long, val userId: Long, val minutes: Int)
+
 private fun SpentTimeStatistic.toStatResult() = StatResult(this.category.id!!, this.user.id!!, this.minutes)

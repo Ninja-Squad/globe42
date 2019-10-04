@@ -72,7 +72,7 @@ class PersonController(
         if (newMediationCodeLetter != oldMediationCodeLetter) {
             if (command.mediationEnabled) {
                 person.mediationCode = newMediationCodeLetter +
-                        personDao.nextMediationCode(newMediationCodeLetter).toString()
+                    personDao.nextMediationCode(newMediationCodeLetter).toString()
             } else {
                 person.mediationCode = null
             }
@@ -142,8 +142,10 @@ class PersonController(
                 }
                 passportStatus = command.passportStatus
                 passportNumber = command.passportNumber?.takeIf { passportStatus == PassportStatus.PASSPORT }
-                passportValidityStartDate = command.passportValidityStartDate?.takeIf { passportStatus == PassportStatus.PASSPORT }
-                passportValidityEndDate = command.passportValidityEndDate?.takeIf { passportStatus == PassportStatus.PASSPORT }
+                passportValidityStartDate =
+                    command.passportValidityStartDate?.takeIf { passportStatus == PassportStatus.PASSPORT }
+                passportValidityEndDate =
+                    command.passportValidityEndDate?.takeIf { passportStatus == PassportStatus.PASSPORT }
                 visa = command.visa
                 residencePermit = command.residencePermit
                 residencePermitDepositDate = command.residencePermitDepositDate

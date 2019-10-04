@@ -80,7 +80,7 @@ class AuthenticationFilter : Filter {
         } else if (request.cookies != null) {
             Arrays.stream(request.cookies)
                 .filter { cookie -> cookie.name == "globe42_token" }
-                .map { it.getValue() }
+                .map { it.value }
                 .findAny()
                 .orElse(null)
         } else {

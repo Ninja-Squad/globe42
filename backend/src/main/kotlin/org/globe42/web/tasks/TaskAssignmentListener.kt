@@ -25,7 +25,7 @@ class TaskAssignmentListener(
     @TransactionalEventListener(TaskAssignmentEvent::class)
     fun taskAssigned(event: TaskAssignmentEvent) {
         if (event.newAssigneeId == currentUser.userId) {
-            return;
+            return
         }
 
         val newAssignee = userDao.findNotDeletedById(event.newAssigneeId) ?: return

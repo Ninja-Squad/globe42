@@ -55,7 +55,7 @@ class ChargeControllerMvcTest(
         person.addCharge(charge)
 
         mvc.get("/api/persons/{personId}/charges", person.id).andExpect {
-            status() { isOk }
+            status { isOk }
 
             jsonValue("$[0].id", charge.id!!)
             jsonValue("$[0].monthlyAmount", charge.monthlyAmount.toDouble())
@@ -71,7 +71,7 @@ class ChargeControllerMvcTest(
         whenever(mockChargeDao.findById(charge.id!!)).thenReturn(Optional.of(charge))
 
         mvc.delete("/api/persons/{personId}/charges/{chargeId}", person.id, charge.id).andExpect {
-            status() { isNoContent }
+            status { isNoContent }
         }
     }
 
@@ -89,7 +89,7 @@ class ChargeControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status() { isCreated }
+            status { isCreated }
             jsonValue("$.id", 345)
         }
     }

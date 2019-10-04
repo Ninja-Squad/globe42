@@ -52,7 +52,7 @@ class ChargeTypeControllerMvcTest(
         whenever(mockChargeTypeDao.findAll()).thenReturn(listOf<ChargeType>(chargeType))
 
         mvc.get("/api/charge-types").andExpect {
-            status{ isOk }
+            status { isOk }
             jsonValue("$[0].id", 42)
             jsonValue("$[0].name", chargeType.name)
             jsonValue("$[0].category.id", chargeType.category.id!!)
@@ -81,7 +81,7 @@ class ChargeTypeControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status() { isCreated }
+            status { isCreated }
             jsonValue("$.id", 42)
         }
     }

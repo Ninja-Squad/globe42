@@ -141,8 +141,8 @@ class PersonSqlGenerator(private val lines: Stream<String>) {
         val dashIndex = result.indexOf('-')
         if (dashIndex >= 0) {
             result = (result.substring(0, dashIndex + 1)
-                    + Character.toUpperCase(result[dashIndex + 1])
-                    + result.substring(dashIndex + 2))
+                + Character.toUpperCase(result[dashIndex + 1])
+                + result.substring(dashIndex + 2))
         }
         return result
     }

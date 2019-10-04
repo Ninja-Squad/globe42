@@ -24,7 +24,7 @@ class Membership {
 
     @ManyToOne
     @NotNull
-    lateinit var person: Person;
+    lateinit var person: Person
 
     val year: Int
 
@@ -38,7 +38,7 @@ class Membership {
     var cardNumber: String? = null
 
     constructor(id: Long) {
-        this.id = id;
+        this.id = id
         this.year = LocalDate.now(PARIS_TIME_ZONE).year
     }
 

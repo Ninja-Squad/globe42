@@ -93,7 +93,7 @@ class IncomeSourceControllerTest {
 
         verify(mockIncomeSourceDao).save(incomeSourceArgumentCaptor.capture())
 
-        assertThat(result).isNotNull()
+        assertThat(result).isNotNull
         assertIncomeSourceEqualsCommand(incomeSourceArgumentCaptor.value, command)
     }
 

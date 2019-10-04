@@ -135,7 +135,7 @@ class Person {
     /**
      * The partner that this person is in couple with, if he/she's not a person in the database
      */
-    var partner: String?  = null
+    var partner: String? = null
 
     /**
      * The housing kind. Only requested to mediation-enabled persons, and unknown by default (so, technically
@@ -251,22 +251,22 @@ class Person {
      * Does the person have a passport. Only requested to mediation-enabled persons.
      */
     @Enumerated(EnumType.STRING)
-    var passportStatus: PassportStatus = PassportStatus.UNKNOWN;
+    var passportStatus: PassportStatus = PassportStatus.UNKNOWN
 
     /**
      * The passport number. Only requested to mediation-enabled persons who have a passport, and not mandatory.
      */
-    var passportNumber: String? = null;
+    var passportNumber: String? = null
 
     /**
      * The passport validity start date. Only requested to mediation-enabled persons who have a passport, and not mandatory.
      */
-    var passportValidityStartDate: LocalDate? = null;
+    var passportValidityStartDate: LocalDate? = null
 
     /**
      * The passport validity end date. Only requested to mediation-enabled persons who have a passport, and not mandatory.
      */
-    var passportValidityEndDate: LocalDate? = null;
+    var passportValidityEndDate: LocalDate? = null
 
     /**
      * The visa type. Only requested to mediation-enabled persons, and unknown by default (so, technically

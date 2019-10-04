@@ -115,7 +115,7 @@ class MembershipControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent() }
+            status { isNoContent }
         }
     }
 
@@ -124,7 +124,7 @@ class MembershipControllerMvcTest(
         whenever(mockMembershipDao.findById(membership.id!!)).thenReturn(Optional.of(membership))
 
         mvc.delete("/api/persons/{personId}/memberships/{membershipId}", person.id!!, membership.id!!).andExpect {
-            status { isNoContent() }
+            status { isNoContent }
         }
     }
 }

@@ -52,7 +52,7 @@ class StorageServiceTest {
     @Test
     fun `should list`() {
         val mockPage = mock<Page<Blob>>()
-        whenever(mockPage.getValues()).thenReturn(listOf(blob))
+        whenever(mockPage.values).thenReturn(listOf(blob))
 
         whenever(
             mockStorage.list(

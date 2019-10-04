@@ -34,8 +34,7 @@ class IndexFilter : Filter {
         if (mustForward(request)) {
             if (request.inProductionOnHttp()) {
                 response.sendRedirect(request.toCompleteHttpsUrl())
-            }
-            else {
+            } else {
                 request.getRequestDispatcher("/index.html").forward(request, response)
             }
             return
@@ -57,18 +56,18 @@ class IndexFilter : Filter {
         val uri = request.requestURI
 
         return !(uri.startsWith("/api")
-                || uri.endsWith(".js")
-                || uri.endsWith(".css")
-                || uri.endsWith(".ico")
-                || uri.endsWith(".png")
-                || uri.endsWith(".jpg")
-                || uri.endsWith(".gif")
-                || uri.endsWith(".eot")
-                || uri.endsWith(".svg")
-                || uri.endsWith(".woff2")
-                || uri.endsWith(".ttf")
-                || uri.endsWith(".woff")
-                || uri.startsWith("/actuator"))
+            || uri.endsWith(".js")
+            || uri.endsWith(".css")
+            || uri.endsWith(".ico")
+            || uri.endsWith(".png")
+            || uri.endsWith(".jpg")
+            || uri.endsWith(".gif")
+            || uri.endsWith(".eot")
+            || uri.endsWith(".svg")
+            || uri.endsWith(".woff2")
+            || uri.endsWith(".ttf")
+            || uri.endsWith(".woff")
+            || uri.startsWith("/actuator"))
     }
 
     private fun HttpServletRequest.inProductionOnHttp() = getHeader("X-Forwarded-Proto") == "http"

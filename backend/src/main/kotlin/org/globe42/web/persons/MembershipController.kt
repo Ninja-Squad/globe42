@@ -59,9 +59,11 @@ class MembershipController(val personDao: PersonDao, val membershipDao: Membersh
      */
     @PutMapping("/{membershipId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable("personId") personId: Long,
-               @PathVariable("membershipId") membershipId: Long,
-               @Validated @RequestBody command: MembershipCommandDTO) {
+    fun update(
+        @PathVariable("personId") personId: Long,
+        @PathVariable("membershipId") membershipId: Long,
+        @Validated @RequestBody command: MembershipCommandDTO
+    ) {
         val person = personDao.findById(personId).orElseThrow(::NotFoundException)
         val membership = membershipDao.findById(membershipId).orElseThrow(::NotFoundException)
         if (membership.person != person) {

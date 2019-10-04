@@ -65,7 +65,8 @@ private data class Personalizations(val to: List<Recipient>)
 
 private data class Recipient(
     val email: String,
-    @field:JsonInclude(JsonInclude.Include.NON_EMPTY) val name: String? = null)
+    @field:JsonInclude(JsonInclude.Include.NON_EMPTY) val name: String? = null
+)
 
 private data class Content(
     val type: String,

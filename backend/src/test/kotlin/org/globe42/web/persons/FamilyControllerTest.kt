@@ -48,7 +48,7 @@ class FamilyControllerTest {
         }
 
         val family = Family().apply {
-            id = 56L;
+            id = 56L
             spouseLocation = Location.FRANCE
             addChild(child)
         }

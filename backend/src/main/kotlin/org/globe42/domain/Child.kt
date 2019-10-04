@@ -18,10 +18,10 @@ class Child {
 
     var firstName: String? = null
 
-    var birthDate: LocalDate? = null;
+    var birthDate: LocalDate? = null
 
     @Enumerated(EnumType.STRING)
-    lateinit var location: Location;
+    lateinit var location: Location
 
     @ManyToOne(fetch = FetchType.LAZY)
     lateinit var family: Family

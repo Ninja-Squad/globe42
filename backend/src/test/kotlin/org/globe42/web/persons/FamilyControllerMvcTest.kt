@@ -61,7 +61,8 @@ class FamilyControllerMvcTest(
     fun `should save family`() {
         val command = FamilyCommand(
             spouseLocation = Location.FRANCE,
-            children = emptySet())
+            children = emptySet()
+        )
 
         mvc.put("/api/persons/{personId}/family", person.id!!) {
             contentType = MediaType.APPLICATION_JSON
@@ -70,7 +71,7 @@ class FamilyControllerMvcTest(
             status { isNoContent }
         }
 
-        assertThat(person.family).isNotNull()
+        assertThat(person.family).isNotNull
     }
 
     @Test

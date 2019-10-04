@@ -94,7 +94,8 @@ class TaskController(
     @ResponseStatus(HttpStatus.CREATED)
     fun assign(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: TaskAssignmentCommandDTO) {
         val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
-        val user = userDao.findNotDeletedById(command.userId) ?: throw BadRequestException("user ${command.userId} doesn't exist")
+        val user = userDao.findNotDeletedById(command.userId)
+            ?: throw BadRequestException("user ${command.userId} doesn't exist")
 
         val previousAssignee = task.assignee
         task.assignee = user
@@ -136,10 +137,12 @@ class TaskController(
         taskDao.save(task)
 
         task.assignee?.let { assignee ->
-            eventPublisher.publishEvent(TaskAssignmentEvent(
-                taskId = task.id!!,
-                newAssigneeId = assignee.id!!
-            ))
+            eventPublisher.publishEvent(
+                TaskAssignmentEvent(
+                    taskId = task.id!!,
+                    newAssigneeId = assignee.id!!
+                )
+            )
         }
 
         return TaskDTO(task)
@@ -154,10 +157,12 @@ class TaskController(
         copyCommandToTask(command, task)
         task.assignee?.let { assignee ->
             if (assignee != previousAssignee) {
-                eventPublisher.publishEvent(TaskAssignmentEvent(
-                    taskId = task.id!!,
-                    newAssigneeId = assignee.id!!
-                ))
+                eventPublisher.publishEvent(
+                    TaskAssignmentEvent(
+                        taskId = task.id!!,
+                        newAssigneeId = assignee.id!!
+                    )
+                )
             }
         }
     }

@@ -94,7 +94,7 @@ class ChargeTypeControllerTest {
 
         verify(mockChargeTypeDao).save(chargeTypeArgumentCaptor.capture())
 
-        assertThat(result).isNotNull()
+        assertThat(result).isNotNull
         assertChargeTypeEqualsCommand(chargeTypeArgumentCaptor.value, command)
     }
 

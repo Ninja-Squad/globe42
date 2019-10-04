@@ -29,4 +29,5 @@ data class PerUnitRevenueInformation(
     /**
      * true if the household is mono-parental
      */
-    val monoParental: Boolean)
+    val monoParental: Boolean
+)

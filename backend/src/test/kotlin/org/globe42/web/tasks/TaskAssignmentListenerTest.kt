@@ -41,8 +41,9 @@ class TaskAssignmentListenerTest {
 
         listener.taskAssigned(
             TaskAssignmentEvent(
-            taskId = 1L,
-            newAssigneeId = 42L)
+                taskId = 1L,
+                newAssigneeId = 42L
+            )
         )
 
         verify(mockEmailSender, never()).sendEmailAsync(any(), any(), any())
@@ -59,7 +60,8 @@ class TaskAssignmentListenerTest {
         listener.taskAssigned(
             TaskAssignmentEvent(
                 taskId = 1L,
-                newAssigneeId = newwAssignee.id!!)
+                newAssigneeId = newwAssignee.id!!
+            )
         )
 
         verify(mockEmailSender, never()).sendEmailAsync(any(), any(), any())
@@ -76,7 +78,8 @@ class TaskAssignmentListenerTest {
         listener.taskAssigned(
             TaskAssignmentEvent(
                 taskId = 1L,
-                newAssigneeId = newwAssignee.id!!)
+                newAssigneeId = newwAssignee.id!!
+            )
         )
 
         verify(mockEmailSender, never()).sendEmailAsync(any(), any(), any())
@@ -100,7 +103,8 @@ class TaskAssignmentListenerTest {
         listener.taskAssigned(
             TaskAssignmentEvent(
                 taskId = 1L,
-                newAssigneeId = newwAssignee.id!!)
+                newAssigneeId = newwAssignee.id!!
+            )
         )
 
         verify(mockEmailSender).sendEmailAsync(
