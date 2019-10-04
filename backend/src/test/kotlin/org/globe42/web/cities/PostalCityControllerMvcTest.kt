@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.globe42.dao.PostalCityDao
 import org.globe42.domain.PostalCity
 import org.globe42.test.GlobeMvcTest
-import org.globe42.web.jsonValue
+import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean

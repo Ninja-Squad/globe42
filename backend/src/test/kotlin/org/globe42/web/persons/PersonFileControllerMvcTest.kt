@@ -10,8 +10,8 @@ import org.globe42.storage.FileDTO
 import org.globe42.storage.ReadableFile
 import org.globe42.storage.StorageService
 import org.globe42.test.GlobeMvcTest
-import org.globe42.web.andGetAsyncResult
-import org.globe42.web.jsonValue
+import org.globe42.web.test.asyncDispatch
+import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -85,7 +85,7 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
         whenever(readableFile.inputStream).thenReturn(ByteArrayInputStream("hello".toByteArray(StandardCharsets.UTF_8)))
         whenever(mockStorageService.get(directory, file.name)).thenReturn(readableFile)
 
-        mvc.get("/api/persons/{personId}/files/{name}", person.id, file.name).andGetAsyncResult().andExpect {
+        mvc.get("/api/persons/{personId}/files/{name}", person.id, file.name).asyncDispatch(mvc).andExpect {
             status { isOk }
             header { longValue(HttpHeaders.CONTENT_LENGTH, 5L) }
             content {

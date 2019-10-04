@@ -10,7 +10,7 @@ import org.globe42.domain.Income
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
 import org.globe42.test.thenReturnModifiedFirstArgument
-import org.globe42.web.jsonValue
+import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

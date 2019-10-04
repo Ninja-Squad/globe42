@@ -12,7 +12,7 @@ import org.globe42.dao.UserDao
 import org.globe42.domain.*
 import org.globe42.test.GlobeMvcTest
 import org.globe42.test.thenReturnModifiedFirstArgument
-import org.globe42.web.jsonValue
+import org.globe42.web.test.jsonValue
 import org.globe42.web.security.CurrentUser
 import org.globe42.web.users.createUser
 import org.junit.jupiter.api.BeforeEach
