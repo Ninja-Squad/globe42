@@ -13,5 +13,5 @@ data class SendgridProperties(
     /**
      * If null or blank, no email will be sent
      */
-    var apiKey: String? = null
+    val apiKey: String? = null
 )

@@ -35,8 +35,7 @@ class EmailSenderTest(@Autowired val webClientBuilder: WebClient.Builder) {
 
     @Test
     fun `should send an email`() {
-        val properties = SendgridProperties()
-        properties.apiKey = "key1"
+        val properties = SendgridProperties("key1")
         val webClient = EmailConfig(webClientBuilder, properties).sendGridWebClient()
         val sender = EmailSender(
             webClient.mutate().baseUrl(server.url("/api/v3").toString()).build(),
