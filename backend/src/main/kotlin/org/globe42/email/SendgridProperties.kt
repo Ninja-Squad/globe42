@@ -2,7 +2,6 @@ package org.globe42.email
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
-import org.springframework.boot.context.properties.ImmutableConfigurationProperties
 import org.springframework.validation.annotation.Validated
 
 /**
