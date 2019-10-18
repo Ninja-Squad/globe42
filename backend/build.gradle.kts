@@ -87,8 +87,8 @@ tasks {
         }
     }
 
-    // remove default tasks added by flyway plugin
-    removeIf { it.name.startsWith("flyway") }
+    // disable default tasks added by flyway plugin
+    matching { it.name.startsWith("flyway") }.forEach { it.enabled = false }
 
     val flywayCleanInteg by creating(FlywayCleanTask::class) {
         url = "jdbc:postgresql://localhost:5432/globe42"
