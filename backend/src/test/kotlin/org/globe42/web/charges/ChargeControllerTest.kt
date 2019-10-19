@@ -1,9 +1,8 @@
 package org.globe42.web.charges
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.ChargeDao
@@ -13,13 +12,9 @@ import org.globe42.domain.Charge
 import org.globe42.domain.ChargeCategory
 import org.globe42.domain.ChargeType
 import org.globe42.domain.Person
-import org.globe42.test.Mockito
-import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.math.BigDecimal
 import java.util.*
 
@@ -27,20 +22,15 @@ import java.util.*
  * Unit tests for [ChargeController]
  * @author JB Nizet
  */
-@Mockito
 class ChargeControllerTest {
 
-    @Mock
-    private lateinit var mockPersonDao: PersonDao
+    private val mockPersonDao = mockk<PersonDao>()
 
-    @Mock
-    private lateinit var mockChargeDao: ChargeDao
+    private val mockChargeDao = mockk<ChargeDao>(relaxUnitFun = true)
 
-    @Mock
-    private lateinit var mockChargeTypeDao: ChargeTypeDao
+    private val mockChargeTypeDao = mockk<ChargeTypeDao>()
 
-    @InjectMocks
-    private lateinit var controller: ChargeController
+    private val controller = ChargeController(mockPersonDao, mockChargeDao, mockChargeTypeDao)
 
     @Test
     fun `should list`() {
@@ -48,7 +38,7 @@ class ChargeControllerTest {
         val person = Person(personId)
         val charge = createCharge(12L)
         person.addCharge(charge)
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
 
         val result = controller.list(personId)
 
@@ -61,7 +51,7 @@ class ChargeControllerTest {
     @Test
     fun `should throw if person not found`() {
         val personId = 42L
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(personId) } returns Optional.empty()
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(personId) }
     }
@@ -72,21 +62,21 @@ class ChargeControllerTest {
         val chargeId = 12L
         val charge = Charge(chargeId)
         charge.person = Person(personId)
-        whenever(mockChargeDao.findById(chargeId)).thenReturn(Optional.of(charge))
+        every { mockChargeDao.findById(chargeId) } returns Optional.of(charge)
 
         controller.delete(personId, chargeId)
 
-        verify(mockChargeDao).delete(charge)
+        verify { mockChargeDao.delete(charge) }
     }
 
     @Test
     fun `should accept deletion if not found to be idempotent`() {
         val chargeId = 12L
-        whenever(mockChargeDao.findById(chargeId)).thenReturn(Optional.empty())
+        every { mockChargeDao.findById(chargeId) } returns Optional.empty()
 
         controller.delete(42L, chargeId)
 
-        verify(mockChargeDao, never()).delete(any())
+        verify(inverse = true) { mockChargeDao.delete(any()) }
     }
 
     @Test
@@ -96,7 +86,7 @@ class ChargeControllerTest {
         val charge = Charge(chargeId)
         charge.person = Person(personId)
 
-        whenever(mockChargeDao.findById(chargeId)).thenReturn(Optional.of(charge))
+        every { mockChargeDao.findById(chargeId) } returns Optional.of(charge)
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(456L, chargeId) }
     }
@@ -109,9 +99,9 @@ class ChargeControllerTest {
         val person = Person(personId)
         val type = createChargeType(typeId)
 
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
-        whenever(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.of(type))
-        whenever(mockChargeDao.save(any<Charge>())).thenReturnModifiedFirstArgument<Charge> { it.id = 34L }
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockChargeTypeDao.findById(typeId) } returns Optional.of(type)
+        every { mockChargeDao.save(any<Charge>()) } answers { arg<Charge>(0).apply { id = 34L } }
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
 
@@ -128,8 +118,8 @@ class ChargeControllerTest {
         val typeId = 12L
 
         val person = Person(personId)
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
-        whenever(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockChargeTypeDao.findById(typeId) } returns Optional.empty()
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
@@ -143,8 +133,8 @@ class ChargeControllerTest {
         val person = Person(personId)
         val type = createChargeType(typeId)
         type.maxMonthlyAmount = BigDecimal("9")
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
-        whenever(mockChargeTypeDao.findById(typeId)).thenReturn(Optional.of(type))
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockChargeTypeDao.findById(typeId) } returns Optional.of(type)
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
@@ -155,7 +145,7 @@ class ChargeControllerTest {
         val personId = 42L
         val typeId = 12L
 
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(personId) } returns Optional.empty()
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.create(personId, command) }

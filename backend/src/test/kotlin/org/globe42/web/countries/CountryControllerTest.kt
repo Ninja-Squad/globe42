@@ -1,32 +1,26 @@
 package org.globe42.web.countries
 
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.CountryDao
 import org.globe42.domain.Country
-import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 
 /**
  * Unit test for [CountryController]
  * @author JB Nizet
  */
-@Mockito
 class CountryControllerTest {
 
-    @Mock
-    private lateinit var mockCountryDao: CountryDao
+    private val mockCountryDao = mockk<CountryDao>()
 
-    @InjectMocks
-    private lateinit var controller: CountryController
+    private val controller = CountryController(mockCountryDao)
 
     @Test
     fun `should list`() {
-        whenever(mockCountryDao.findAllSortedByName()).thenReturn(
+        every { mockCountryDao.findAllSortedByName() } returns
             listOf(Country("BEL", "Belgique"), Country("FRA", "France"))
-        )
 
         val result = controller.list()
 

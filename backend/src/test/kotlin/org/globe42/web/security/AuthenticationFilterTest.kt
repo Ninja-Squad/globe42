@@ -1,17 +1,14 @@
 package org.globe42.web.security
 
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.impl.DefaultClaims
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.UserDao
-import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Spy
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
@@ -24,23 +21,17 @@ import javax.servlet.http.HttpServletRequest
  * Unit tests for [AuthenticationFilter]
  * @author JB Nizet
  */
-@Mockito
 class AuthenticationFilterTest {
 
-    @Spy
-    private val currentUser = CurrentUser()
+    private val currentUser = spyk(CurrentUser())
 
-    @Mock
-    private lateinit var mockJwtHelper: JwtHelper
+    private val mockJwtHelper = mockk<JwtHelper>()
 
-    @Mock
-    private lateinit var mockUserDao: UserDao
+    private val mockUserDao = mockk<UserDao>()
 
-    @InjectMocks
-    private lateinit var filter: AuthenticationFilter
+    private val filter = AuthenticationFilter(mockJwtHelper, currentUser, mockUserDao)
 
-    @Mock
-    private lateinit var mockFilterChain: FilterChain
+    private val mockFilterChain = mockk<FilterChain>(relaxUnitFun = true)
 
     @Test
     fun `should reject if no header and no cookie for api request`() {
@@ -89,7 +80,7 @@ class AuthenticationFilterTest {
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        whenever(mockJwtHelper.extractClaims("hello")).thenThrow(JwtException("invalid"))
+        every { mockJwtHelper.extractClaims("hello") } throws JwtException("invalid")
 
         shouldRejectWithUnauthorized(request)
     }
@@ -102,7 +93,7 @@ class AuthenticationFilterTest {
 
         val claims = DefaultClaims()
         claims.subject = "abcd"
-        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
+        every { mockJwtHelper.extractClaims("hello") } returns claims
 
         shouldRejectWithUnauthorized(request)
     }
@@ -115,8 +106,8 @@ class AuthenticationFilterTest {
 
         val claims = DefaultClaims()
         claims.subject = "1234"
-        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
-        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(false)
+        every { mockJwtHelper.extractClaims("hello") } returns claims
+        every { mockUserDao.existsNotDeletedById(1234L) } returns false
 
         shouldRejectWithUnauthorized(request)
     }
@@ -129,8 +120,8 @@ class AuthenticationFilterTest {
 
         val claims = DefaultClaims()
         claims.subject = "1234"
-        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
-        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true)
+        every { mockJwtHelper.extractClaims("hello") } returns claims
+        every { mockUserDao.existsNotDeletedById(1234L) } returns true
 
         shouldAccept(request)
         assertThat(currentUser.userId).isEqualTo(1234L)
@@ -144,8 +135,8 @@ class AuthenticationFilterTest {
 
         val claims = DefaultClaims()
         claims.subject = "1234"
-        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
-        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true)
+        every { mockJwtHelper.extractClaims("hello") } returns claims
+        every { mockUserDao.existsNotDeletedById(1234L) } returns true
 
         shouldAccept(request)
         assertThat(currentUser.userId).isEqualTo(1234L)
@@ -159,9 +150,9 @@ class AuthenticationFilterTest {
 
         val claims = DefaultClaims()
         claims.subject = "1234"
-        whenever(mockJwtHelper.extractClaims("hello")).thenReturn(claims)
-        whenever(mockUserDao.existsNotDeletedById(1234L)).thenReturn(true)
-        whenever(mockUserDao.existsNotDeletedAdminById(1234L)).thenReturn(false)
+        every { mockJwtHelper.extractClaims("hello") } returns claims
+        every { mockUserDao.existsNotDeletedById(1234L) } returns true
+        every { mockUserDao.existsNotDeletedAdminById(1234L) } returns false
 
         shouldRejectWithForbidden(request)
     }
@@ -170,7 +161,7 @@ class AuthenticationFilterTest {
         val response = MockHttpServletResponse()
         filter.doFilter(request, response, mockFilterChain)
 
-        verify(mockFilterChain, never()).doFilter(request, response)
+        verify(inverse = true) { mockFilterChain.doFilter(request, response) }
         assertThat(response.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
     }
 
@@ -178,7 +169,7 @@ class AuthenticationFilterTest {
         val response = MockHttpServletResponse()
         filter.doFilter(request, response, mockFilterChain)
 
-        verify(mockFilterChain, never()).doFilter(request, response)
+        verify(inverse = true) { mockFilterChain.doFilter(request, response) }
         assertThat(response.status).isEqualTo(HttpStatus.FORBIDDEN.value())
     }
 
@@ -186,6 +177,6 @@ class AuthenticationFilterTest {
         val response = MockHttpServletResponse()
         filter.doFilter(request, response, mockFilterChain)
 
-        verify(mockFilterChain).doFilter(request, response)
+        verify { mockFilterChain.doFilter(request, response) }
     }
 }

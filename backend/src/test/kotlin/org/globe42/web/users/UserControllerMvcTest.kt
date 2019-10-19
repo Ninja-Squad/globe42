@@ -1,19 +1,17 @@
 package org.globe42.web.users
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.UserDao
 import org.globe42.domain.User
 import org.globe42.test.GlobeMvcTest
-import org.globe42.test.thenReturnModifiedFirstArgument
-import org.globe42.web.test.jsonValue
 import org.globe42.web.security.CurrentUser
 import org.globe42.web.security.PasswordDigester
+import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 
@@ -26,24 +24,24 @@ class UserControllerMvcTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper
 ) {
-    @MockBean
+    @MockkBean
     private lateinit var mockCurrentUser: CurrentUser
 
-    @MockBean
+    @MockkBean
     private lateinit var mockUserDao: UserDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockPasswordGenerator: PasswordGenerator
 
-    @MockBean
+    @MockkBean
     private lateinit var mockPasswordDigester: PasswordDigester
 
     @Test
     fun `should get current user`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
+        every { mockCurrentUser.userId } returns userId
+        every { mockUserDao.findNotDeletedById(userId) } returns user
 
         mvc.get("/api/users/me").andExpect {
             status { isOk }
@@ -57,9 +55,9 @@ class UserControllerMvcTest(
     fun `should change password of current user`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
-        whenever(mockPasswordDigester.hash("newPassword")).thenReturn("hashedNewPassword")
+        every { mockCurrentUser.userId } returns userId
+        every { mockUserDao.findNotDeletedById(userId) } returns user
+        every { mockPasswordDigester.hash("newPassword") } returns "hashedNewPassword"
 
         val command = ChangePasswordCommandDTO("newPassword")
 
@@ -74,7 +72,7 @@ class UserControllerMvcTest(
     @Test
     fun `should list`() {
         val user = createUser(42L)
-        whenever(mockUserDao.findNotDeleted()).thenReturn(listOf(user))
+        every { mockUserDao.findNotDeleted() } returns listOf(user)
 
         mvc.get("/api/users").andExpect {
             status { isOk }
@@ -88,10 +86,10 @@ class UserControllerMvcTest(
     fun `should create`() {
         val command = UserCommandDTO("test", true)
 
-        whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
-        whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
-        whenever(mockUserDao.save(any<User>()))
-            .thenReturnModifiedFirstArgument<User> { it.id = 42L }
+        every { mockUserDao.existsByLogin(command.login) } returns false
+        every { mockPasswordGenerator.generatePassword() } returns "password"
+        every { mockPasswordDigester.hash("password") } returns "hashed"
+        every { mockUserDao.save(any<User>()) } answers { arg<User>(0).apply { id = 42L } }
 
         mvc.post("/api/users") {
             contentType = MediaType.APPLICATION_JSON
@@ -107,9 +105,11 @@ class UserControllerMvcTest(
     fun `should update`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
 
         val command = UserCommandDTO("test", true)
+
+        every { mockUserDao.findNotDeletedByLogin(command.login) } returns null
+        every { mockUserDao.findNotDeletedById(userId) } returns user
 
         mvc.put("/api/users/{userId}", user.id) {
             contentType = MediaType.APPLICATION_JSON
@@ -123,7 +123,7 @@ class UserControllerMvcTest(
     fun `should delete`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
+        every { mockUserDao.findNotDeletedById(userId) } returns user
 
         mvc.delete("/api/users/{userId}", user.id).andExpect {
             status { isNoContent }
@@ -134,10 +134,10 @@ class UserControllerMvcTest(
     fun `should reset password`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
+        every { mockUserDao.findNotDeletedById(userId) } returns user
 
-        whenever(mockPasswordGenerator.generatePassword()).thenReturn("password")
-        whenever(mockPasswordDigester.hash("password")).thenReturn("hashed")
+        every { mockPasswordGenerator.generatePassword() } returns "password"
+        every { mockPasswordDigester.hash("password") } returns "hashed"
 
         mvc.post("/api/users/{userId}/password-resets", user.id).andExpect {
             status { isCreated }
@@ -150,8 +150,8 @@ class UserControllerMvcTest(
     fun `should get profile`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
+        every { mockCurrentUser.userId } returns userId
+        every { mockUserDao.findNotDeletedById(userId) } returns user
 
         mvc.get("/api/users/me/profile").andExpect {
             status { isOk }
@@ -166,8 +166,8 @@ class UserControllerMvcTest(
     fun `should update profile`() {
         val userId = 42L
         val user = createUser(userId)
-        whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.findNotDeletedById(userId)).thenReturn(user)
+        every { mockCurrentUser.userId } returns userId
+        every { mockUserDao.findNotDeletedById(userId) } returns user
 
         val command = ProfileCommandDTO(
             email = "jb@bar.com",

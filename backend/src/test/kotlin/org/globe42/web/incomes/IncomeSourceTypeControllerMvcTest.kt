@@ -1,13 +1,13 @@
 package org.globe42.web.incomes
 
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSourceType
 import org.globe42.test.GlobeMvcTest
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 
@@ -18,12 +18,12 @@ import org.springframework.test.web.servlet.get
 @GlobeMvcTest(IncomeSourceTypeController::class)
 class IncomeSourceTypeControllerMvcTest(@Autowired private val mvc: MockMvc) {
 
-    @MockBean
+    @MockkBean
     private lateinit var mockIncomeSourceTypeDao: IncomeSourceTypeDao
 
     @Test
     fun `should list`() {
-        whenever(mockIncomeSourceTypeDao.findAll()).thenReturn(listOf(IncomeSourceType(1L, "type1")))
+        every { mockIncomeSourceTypeDao.findAll() } returns listOf(IncomeSourceType(1L, "type1"))
 
         mvc.get("/api/income-source-types").andExpect {
             status { isOk }

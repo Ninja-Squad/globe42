@@ -1,7 +1,7 @@
 package org.globe42.web.security
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.UserDao
 import org.globe42.web.exception.ForbiddenException
@@ -33,8 +33,8 @@ class AdminOnlyIntegrationTest {
     @BeforeEach
     fun prepare() {
         val userId = 42L
-        whenever(mockCurrentUser.userId).thenReturn(userId)
-        whenever(mockUserDao.existsNotDeletedAdminById(userId)).thenReturn(false)
+        every { mockCurrentUser.userId } returns userId
+        every { mockUserDao.existsNotDeletedAdminById(userId) } returns false
     }
 
     @Test
@@ -62,10 +62,10 @@ class AdminOnlyIntegrationTest {
         fun adminOnlyTester() = AdminOnlyTester()
 
         @Bean
-        fun currentUser() = mock<CurrentUser>()
+        fun currentUser() = mockk<CurrentUser>()
 
         @Bean
-        fun userDao() = mock<UserDao>()
+        fun userDao() = mockk<UserDao>()
 
         @Bean
         fun adminOnlyAspect() = AdminOnlyAspect(currentUser(), userDao())

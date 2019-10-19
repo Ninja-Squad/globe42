@@ -1,7 +1,8 @@
 package org.globe42.web.persons
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.PersonDao
 import org.globe42.domain.NetworkMember
 import org.globe42.domain.NetworkMemberType
@@ -11,7 +12,6 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 import java.util.*
@@ -25,7 +25,7 @@ class NetworkMemberControllerMvcTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper
 ) {
-    @MockBean
+    @MockkBean
     private lateinit var mockPersonDao: PersonDao
 
     private lateinit var person: Person
@@ -34,7 +34,7 @@ class NetworkMemberControllerMvcTest(
     fun prepare() {
         person = Person(42L)
         person.addNetworkMember(NetworkMember(NetworkMemberType.DOCTOR, "Dr. No").apply { id = 345L })
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
     }
 
     @Test
@@ -50,7 +50,7 @@ class NetworkMemberControllerMvcTest(
     @Test
     fun `should create`() {
         val command = NetworkMemberCommandDTO(NetworkMemberType.LAWYER, "Dr. Yes")
-        whenever(mockPersonDao.flush()).then {
+        every { mockPersonDao.flush() } answers {
             person.getNetworkMembers().find { it.type == command.type }?.let { it.id = 876 }
             Unit
         }

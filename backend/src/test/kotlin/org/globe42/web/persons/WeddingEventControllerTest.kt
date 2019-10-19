@@ -1,14 +1,12 @@
 package org.globe42.web.persons
 
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
-import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.time.LocalDate
 import java.util.*
 
@@ -16,13 +14,10 @@ import java.util.*
  * Unit tests for [WeddingEventController]
  * @author JB Nizet
  */
-@Mockito
 class WeddingEventControllerTest {
-    @Mock
-    private lateinit var mockPersonDao: PersonDao
+    private val mockPersonDao = mockk<PersonDao>()
 
-    @InjectMocks
-    private lateinit var controller: WeddingEventController
+    private val controller = WeddingEventController(mockPersonDao)
 
     private lateinit var person: Person
     private lateinit var firstWedding: WeddingEvent
@@ -30,20 +25,24 @@ class WeddingEventControllerTest {
 
     @BeforeEach
     fun prepare() {
-        person = Person(42L, "John", "Doe", Gender.MALE)
-        firstWedding = WeddingEvent(34L)
-        firstWedding.date = LocalDate.of(2000, 2, 28)
-        firstWedding.type = WeddingEventType.WEDDING
-        firstWedding.location = Location.ABROAD
+        firstWedding = WeddingEvent(34L).apply {
+            date = LocalDate.of(2000, 2, 28)
+            type = WeddingEventType.WEDDING
+            location = Location.ABROAD
+        }
 
-        firstDivorce = WeddingEvent(35L)
-        firstDivorce.date = LocalDate.of(2002, 3, 28)
-        firstDivorce.type = WeddingEventType.DIVORCE
-        firstDivorce.location = Location.FRANCE
+        firstDivorce = WeddingEvent(35L).apply {
+            date = LocalDate.of(2002, 3, 28)
+            type = WeddingEventType.DIVORCE
+            location = Location.FRANCE
+        }
 
-        person.addWeddingEvent(firstWedding)
-        person.addWeddingEvent(firstDivorce)
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        person = Person(42L, "John", "Doe", Gender.MALE).apply {
+            addWeddingEvent(firstWedding)
+            addWeddingEvent(firstDivorce)
+        }
+
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
     }
 
     @Test
@@ -72,7 +71,7 @@ class WeddingEventControllerTest {
     fun `should create`() {
         val date = LocalDate.of(2018, 3, 1)
         val command = WeddingEventCommandDTO(date, WeddingEventType.WEDDING, Location.FRANCE)
-        whenever(mockPersonDao.flush()).then {
+        every { mockPersonDao.flush() } answers {
             person.getWeddingEvents().find { it.date == date }?.let { it.id = 876 }
             Unit
         }

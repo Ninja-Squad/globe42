@@ -1,20 +1,18 @@
 package org.globe42.web.charges
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.ChargeDao
 import org.globe42.dao.ChargeTypeDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.Charge
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
-import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
@@ -32,13 +30,13 @@ class ChargeControllerMvcTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper
 ) {
-    @MockBean
+    @MockkBean
     private lateinit var mockPersonDao: PersonDao
 
-    @MockBean
+    @MockkBean(relaxUnitFun = true)
     private lateinit var mockChargeDao: ChargeDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockChargeTypeDao: ChargeTypeDao
 
     private lateinit var person: Person
@@ -46,7 +44,7 @@ class ChargeControllerMvcTest(
     @BeforeEach
     fun prepare() {
         person = Person(42L)
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
     }
 
     @Test
@@ -68,7 +66,7 @@ class ChargeControllerMvcTest(
         val charge = createCharge(12L)
         person.addCharge(charge)
 
-        whenever(mockChargeDao.findById(charge.id!!)).thenReturn(Optional.of(charge))
+        every { mockChargeDao.findById(charge.id!!) } returns Optional.of(charge)
 
         mvc.delete("/api/persons/{personId}/charges/{chargeId}", person.id, charge.id).andExpect {
             status { isNoContent }
@@ -80,9 +78,8 @@ class ChargeControllerMvcTest(
         val chargeTypeId = 12L
         val chargeType = createChargeType(chargeTypeId)
 
-        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
-        whenever(mockChargeDao.save(any<Charge>()))
-            .thenReturnModifiedFirstArgument<Charge> { charge -> charge.id = 345L }
+        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.of(chargeType)
+        every { mockChargeDao.save(any<Charge>()) } answers { arg<Charge>(0).apply { id = 345L } }
 
         val command = ChargeCommandDTO(chargeTypeId, BigDecimal.TEN)
         mvc.post("/api/persons/{personId}/charges", person.id) {

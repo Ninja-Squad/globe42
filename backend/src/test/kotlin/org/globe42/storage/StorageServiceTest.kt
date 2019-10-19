@@ -7,14 +7,10 @@ import com.google.cloud.storage.Blob
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Storage
 import com.google.common.io.ByteStreams
-import com.nhaarman.mockitokotlin2.*
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
-import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mock
-import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.Answer
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 import java.time.Instant
@@ -23,9 +19,7 @@ import java.time.Instant
  * Unit tests for [StorageService]
  * @author JB Nizet
  */
-@Mockito
 class StorageServiceTest {
-    @Mock
     private lateinit var mockStorage: Storage
 
     private lateinit var storageProperties: StorageProperties
@@ -36,12 +30,13 @@ class StorageServiceTest {
 
     @BeforeEach
     fun prepare() {
-        blob = mock<Blob>()
-        doReturn("foo/hello.txt").whenever(blob).name
-        doReturn(5L).whenever(blob).size
-        doReturn("text/plain").whenever(blob).contentType
-        val createTime = System.currentTimeMillis() - 100000L
-        doReturn(createTime).whenever(blob).createTime
+        mockStorage = mockk(relaxed = true)
+        blob = mockk {
+            every { name } returns "foo/hello.txt"
+            every { size } returns 5
+            every { contentType } returns "text/plain"
+            every { createTime } returns System.currentTimeMillis() - 100000L
+        }
 
         storageProperties = StorageProperties(bucket = "personfiles")
 
@@ -51,17 +46,17 @@ class StorageServiceTest {
     @Suppress("UNCHECKED_CAST")
     @Test
     fun `should list`() {
-        val mockPage = mock<Page<Blob>>()
-        whenever(mockPage.values).thenReturn(listOf(blob))
+        val mockPage = mockk<Page<Blob>>()
+        every { mockPage.values } returns listOf(blob)
 
-        whenever(
+        every {
             mockStorage.list(
                 storageProperties.bucket,
                 Storage.BlobListOption.pageSize(10000),
                 Storage.BlobListOption.currentDirectory(),
                 Storage.BlobListOption.prefix("foo/")
             )
-        ).thenReturn(mockPage)
+        }  returns mockPage
 
         val result = service.list("foo")
 
@@ -75,12 +70,13 @@ class StorageServiceTest {
 
     @Test
     fun `should get`() {
-        whenever(mockStorage.get(storageProperties.bucket, blob.name)).thenReturn(blob)
+        val blobName = blob.name
+        every { mockStorage.get(storageProperties.bucket, blobName) } returns blob
 
-        val mockChannel = mock<ReadChannel>()
-        doReturn(mockChannel).whenever<Blob>(blob).reader()
+        val mockChannel = mockk<ReadChannel>()
+        every { blob.reader() } returns mockChannel
 
-        whenever(mockChannel.read(any())).thenAnswer(FakeReadAnswer())
+        every { mockChannel.read(any()) } answers FakeReadAnswer()
 
         val result = service.get("foo", "hello.txt")
 
@@ -100,13 +96,13 @@ class StorageServiceTest {
             .build()
 
         val written = ByteArray(7)
-        val mockWriteChannel = mock<WriteChannel>()
-        whenever(mockWriteChannel.write(any())).thenAnswer { invocation ->
-            val byteBuffer = invocation.getArgument<ByteBuffer>(0)
+        val mockWriteChannel = mockk<WriteChannel>(relaxUnitFun = true)
+        every { mockWriteChannel.write(any()) } answers {
+            val byteBuffer = arg<ByteBuffer>(0)
             byteBuffer.get(written, 0, byteBuffer.limit())
             written.size
         }
-        whenever(mockStorage.writer(blobInfo)).thenReturn(mockWriteChannel)
+        every { mockStorage.writer(blobInfo) } returns mockWriteChannel
 
         val result = service.create(
             "foo",
@@ -125,15 +121,15 @@ class StorageServiceTest {
     fun `should delete`() {
         service.delete("foo", "hello.txt")
 
-        verify(mockStorage).delete(storageProperties.bucket, "foo/hello.txt")
+        verify { mockStorage.delete(storageProperties.bucket, "foo/hello.txt") }
     }
 
     private class FakeReadAnswer : Answer<Int> {
         private var count = 0
 
-        override fun answer(invocation: InvocationOnMock): Int? {
+        override fun answer(call: Call): Int {
             if (count == 0) {
-                val buffer = invocation.getArgument<ByteBuffer>(0)
+                val buffer = call.invocation.args[0] as ByteBuffer
                 buffer.put("hello".toByteArray(StandardCharsets.UTF_8))
                 count++
                 return "hello".length

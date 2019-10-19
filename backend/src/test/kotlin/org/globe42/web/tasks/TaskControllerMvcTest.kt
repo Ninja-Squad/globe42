@@ -1,9 +1,8 @@
 package org.globe42.web.tasks
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PersonDao
 import org.globe42.dao.TaskCategoryDao
@@ -11,14 +10,12 @@ import org.globe42.dao.TaskDao
 import org.globe42.dao.UserDao
 import org.globe42.domain.*
 import org.globe42.test.GlobeMvcTest
-import org.globe42.test.thenReturnModifiedFirstArgument
-import org.globe42.web.test.jsonValue
 import org.globe42.web.security.CurrentUser
+import org.globe42.web.test.jsonValue
 import org.globe42.web.users.createUser
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -41,19 +38,19 @@ class TaskControllerMvcTest(
     @Autowired private val objectMapper: ObjectMapper
 ) {
 
-    @MockBean
+    @MockkBean
     private lateinit var mockTaskDao: TaskDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockUserDao: UserDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockTaskCategoryDao: TaskCategoryDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockPersonDao: PersonDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockCurrentUser: CurrentUser
 
     private lateinit var task: Task
@@ -62,7 +59,7 @@ class TaskControllerMvcTest(
     @BeforeEach
     fun prepare() {
         val variousCategory = TaskCategory(VARIOUS_CATEGORY_ID, "Various")
-        whenever(mockTaskCategoryDao.findById(variousCategory.id!!)).thenReturn(Optional.of(variousCategory))
+        every { mockTaskCategoryDao.findById(variousCategory.id!!) } returns Optional.of(variousCategory)
 
         user = createUser(2L)
         task = createTask(23L, user, Person(45L, "John", "Doe", Gender.MALE), variousCategory)
@@ -70,7 +67,7 @@ class TaskControllerMvcTest(
 
     @Test
     fun `should list todos`() {
-        whenever(mockTaskDao.findTodo(any<Pageable>())).thenReturn(singlePage(listOf(task)))
+        every { mockTaskDao.findTodo(any<Pageable>()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks").andExpect {
             status { isOk }
@@ -81,8 +78,8 @@ class TaskControllerMvcTest(
 
     @Test
     fun `should list todo before`() {
-        whenever(mockTaskDao.findTodoBefore(eq(LocalDate.of(2017, 8, 1)), any()))
-            .thenReturn(singlePage(listOf(task)))
+        every { mockTaskDao.findTodoBefore(eq(LocalDate.of(2017, 8, 1)), any()) } returns
+            singlePage(listOf(task))
 
         mvc.get("/api/tasks?before=2017-08-01").andExpect {
             status { isOk }
@@ -93,8 +90,8 @@ class TaskControllerMvcTest(
     @Test
     fun `should list todo for person`() {
         val person = Person(1L)
-        whenever(mockPersonDao.getOne(1L)).thenReturn(person)
-        whenever(mockTaskDao.findTodoByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
+        every { mockPersonDao.getOne(1L) } returns person
+        every { mockTaskDao.findTodoByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1").andExpect {
             status { isOk }
@@ -105,8 +102,8 @@ class TaskControllerMvcTest(
     @Test
     fun `should list archived for person`() {
         val person = Person(1L)
-        whenever(mockPersonDao.getOne(1L)).thenReturn(person)
-        whenever(mockTaskDao.findArchivedByConcernedPerson(eq(person), any())).thenReturn(singlePage(listOf(task)))
+        every { mockPersonDao.getOne(1L) } returns person
+        every { mockTaskDao.findArchivedByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1&archived").andExpect {
             status { isOk }
@@ -116,7 +113,7 @@ class TaskControllerMvcTest(
 
     @Test
     fun `should list unassigned`() {
-        whenever(mockTaskDao.findTodoUnassigned(any())).thenReturn(singlePage(listOf(task)))
+        every { mockTaskDao.findTodoUnassigned(any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?unassigned").andExpect {
             status { isOk }
@@ -126,9 +123,9 @@ class TaskControllerMvcTest(
 
     @Test
     fun `should assign`() {
-        whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
+        every { mockTaskDao.findById(task.id!!) } returns Optional.of(task)
         val otherUser = User(5433L)
-        whenever(mockUserDao.findNotDeletedById(otherUser.id!!)).thenReturn(otherUser)
+        every { mockUserDao.findNotDeletedById(otherUser.id!!) } returns otherUser
 
         mvc.post("/api/tasks/{taskId}/assignments", task.id) {
             contentType = MediaType.APPLICATION_JSON
@@ -141,7 +138,7 @@ class TaskControllerMvcTest(
 
     @Test
     fun `should change status`() {
-        whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
+        every { mockTaskDao.findById(task.id!!) } returns Optional.of(task)
 
         mvc.post("/api/tasks/{taskId}/status-changes", task.id) {
             contentType = MediaType.APPLICATION_JSON
@@ -156,9 +153,9 @@ class TaskControllerMvcTest(
     fun `should create`() {
         val command = createCommand(null, null)
 
-        whenever(mockCurrentUser.userId).thenReturn(user.id)
-        whenever(mockUserDao.getOne(mockCurrentUser.userId!!)).thenReturn(user)
-        whenever(mockTaskDao.save(any<Task>())).thenReturnModifiedFirstArgument<Task> { task -> task.id = 42L }
+        every { mockCurrentUser.userId } returns user.id
+        every { mockUserDao.getOne(user.id!!) } returns user
+        every { mockTaskDao.save(any<Task>()) } answers { arg<Task>(0).apply { id = 42L } }
 
         mvc.post("/api/tasks") {
             contentType = MediaType.APPLICATION_JSON
@@ -172,7 +169,7 @@ class TaskControllerMvcTest(
     @Test
     fun `should update`() {
         val command = createCommand(null, null)
-        whenever(mockTaskDao.findById(task.id!!)).thenReturn(Optional.of(task))
+        every { mockTaskDao.findById(task.id!!) } returns Optional.of(task)
 
         mvc.put("/api/tasks/{id}", task.id) {
             contentType = MediaType.APPLICATION_JSON

@@ -1,41 +1,36 @@
 package org.globe42.web.persons
 
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PersonDao
 import org.globe42.domain.ActivityType
 import org.globe42.domain.Gender
 import org.globe42.domain.Participation
 import org.globe42.domain.Person
-import org.globe42.test.Mockito
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.util.*
 
 /**
  * Unit tests for [ParticipationController]
  * @author JB Nizet
  */
-@Mockito
 class ParticipationControllerTest {
-    @Mock
-    private lateinit var mockPersonDao: PersonDao
+    private val mockPersonDao = mockk<PersonDao>()
 
-    @InjectMocks
-    private lateinit var controller: ParticipationController
+    private val controller = ParticipationController(mockPersonDao)
 
     private lateinit var person: Person
     private lateinit var mealParticipation: Participation
 
     @BeforeEach
     fun prepare() {
-        person = Person(42L, "John", "Doe", Gender.MALE)
         mealParticipation = Participation(34L)
         mealParticipation.activityType = ActivityType.MEAL
+        person = Person(42L, "John", "Doe", Gender.MALE)
         person.addParticipation(mealParticipation)
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
     }
 
     @Test
@@ -50,7 +45,7 @@ class ParticipationControllerTest {
     @Test
     fun `should create`() {
         val command = ParticipationCommandDTO(ActivityType.SOCIAL_MEDIATION)
-        whenever(mockPersonDao.flush()).then {
+        every { mockPersonDao.flush() } answers {
             person.getParticipations().find { it.activityType == ActivityType.SOCIAL_MEDIATION }?.let { it.id = 345L }
             Unit
         }

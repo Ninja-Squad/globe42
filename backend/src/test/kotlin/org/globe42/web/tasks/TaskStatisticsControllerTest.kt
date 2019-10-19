@@ -1,28 +1,23 @@
 package org.globe42.web.tasks
 
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.SpentTimeDao
 import org.globe42.domain.SpentTimeStatistic
 import org.globe42.domain.TaskCategory
 import org.globe42.domain.User
-import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 
 /**
  * Unit tests for [TaskStatisticsController]
  * @author JB Nizet
  */
-@Mockito
 class TaskStatisticsControllerTest {
 
-    @Mock
-    private lateinit var mockSpentTimeDao: SpentTimeDao
+    private val mockSpentTimeDao = mockk<SpentTimeDao>()
 
-    @InjectMocks
-    private lateinit var controller: TaskStatisticsController
+    private val controller = TaskStatisticsController(mockSpentTimeDao)
 
     @Test
     fun `should get statistics`() {
@@ -30,8 +25,8 @@ class TaskStatisticsControllerTest {
 
         val meal = TaskCategory(6L, "Meal")
         val user = User(1L, "jb")
-        whenever(mockSpentTimeDao.findSpentTimeStatistics(criteria))
-            .thenReturn(listOf(SpentTimeStatistic(meal, user, 100)))
+        every { mockSpentTimeDao.findSpentTimeStatistics(criteria) } returns
+            listOf(SpentTimeStatistic(meal, user, 100))
 
         val result = controller.spentTimeStatistics(criteria)
 

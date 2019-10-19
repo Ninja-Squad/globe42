@@ -1,20 +1,18 @@
 package org.globe42.web.incomes
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.IncomeDao
 import org.globe42.dao.IncomeSourceDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.Income
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
-import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
@@ -32,13 +30,13 @@ class IncomeControllerMvcTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper
 ) {
-    @MockBean
+    @MockkBean
     private lateinit var mockPersonDao: PersonDao
 
-    @MockBean
+    @MockkBean(relaxUnitFun = true)
     private lateinit var mockIncomeDao: IncomeDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockIncomeSourceDao: IncomeSourceDao
 
     private lateinit var person: Person
@@ -46,7 +44,7 @@ class IncomeControllerMvcTest(
     @BeforeEach
     fun prepare() {
         person = Person(42L)
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
     }
 
     @Test
@@ -67,7 +65,7 @@ class IncomeControllerMvcTest(
         val income = createIncome(12L)
         person.addIncome(income)
 
-        whenever(mockIncomeDao.findById(income.id!!)).thenReturn(Optional.of(income))
+        every { mockIncomeDao.findById(income.id!!) } returns Optional.of(income)
 
         mvc.delete("/api/persons/{personId}/incomes/{incomeId}", person.id, income.id).andExpect {
             status { isNoContent }
@@ -78,9 +76,8 @@ class IncomeControllerMvcTest(
     fun `should create`() {
         val incomeSource = createIncomeSource(12L)
 
-        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
-        whenever(mockIncomeDao.save(any<Income>()))
-            .thenReturnModifiedFirstArgument<Income> { income -> income.id = 345L }
+        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
+        every { mockIncomeDao.save(any<Income>()) } answers { arg<Income>(0).apply { id = 345L } }
 
         val command = IncomeCommandDTO(incomeSource.id!!, BigDecimal.TEN)
         mvc.post("/api/persons/{personId}/incomes", person.id) {

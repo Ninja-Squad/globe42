@@ -1,6 +1,7 @@
 package org.globe42.web.tasks
 
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.SpentTimeDao
 import org.globe42.domain.SpentTimeStatistic
 import org.globe42.domain.TaskCategory
@@ -9,7 +10,6 @@ import org.globe42.test.GlobeMvcTest
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import java.time.LocalDate
@@ -21,7 +21,7 @@ import java.time.LocalDate
 @GlobeMvcTest(TaskStatisticsController::class)
 class TaskStatisticsControllerMvcTest(@Autowired private val mvc: MockMvc) {
 
-    @MockBean
+    @MockkBean
     private lateinit var mockSpentTimeDao: SpentTimeDao
 
     @Test
@@ -34,8 +34,8 @@ class TaskStatisticsControllerMvcTest(@Autowired private val mvc: MockMvc) {
         val meal = TaskCategory(6L, "Meal")
         val user = User(1L, "jb")
 
-        whenever(mockSpentTimeDao.findSpentTimeStatistics(criteria))
-            .thenReturn(listOf(SpentTimeStatistic(meal, user, 100)))
+        every { mockSpentTimeDao.findSpentTimeStatistics(criteria) } returns
+            listOf(SpentTimeStatistic(meal, user, 100))
 
         mvc.get("/api/task-statistics/spent-times") {
             param("from", criteria.from.toString())

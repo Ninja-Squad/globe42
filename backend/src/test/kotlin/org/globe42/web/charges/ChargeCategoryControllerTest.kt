@@ -1,47 +1,29 @@
 package org.globe42.web.charges
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.ChargeCategoryDao
 import org.globe42.domain.ChargeCategory
-import org.globe42.test.Mockito
-import org.globe42.test.thenReturnModifiedFirstArgument
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.util.*
 
 /**
  * Unit tests for [ChargeCategoryController]
  * @author JB Nizet
  */
-@Mockito
 class ChargeCategoryControllerTest {
 
-    @Mock
-    private lateinit var mockChargeCategoryDao: ChargeCategoryDao
+    private val mockChargeCategoryDao = mockk<ChargeCategoryDao>()
 
-    @InjectMocks
-    private lateinit var controller: ChargeCategoryController
+    private val controller = ChargeCategoryController(mockChargeCategoryDao)
 
-    @Captor
-    private lateinit var chargeCategoryArgumentCaptor: ArgumentCaptor<ChargeCategory>
-
-    private lateinit var chargeCategory: ChargeCategory
-
-    @BeforeEach
-    fun prepare() {
-        chargeCategory = ChargeCategory(1L, "rental")
-    }
+    private val chargeCategory = ChargeCategory(1L, "rental")
 
     @Test
     fun `should get`() {
-        whenever(mockChargeCategoryDao.findById(chargeCategory.id!!)).thenReturn(Optional.of(chargeCategory))
+        every { mockChargeCategoryDao.findById(chargeCategory.id!!) } returns Optional.of(chargeCategory)
 
         val result = controller.get(chargeCategory.id!!)
 
@@ -50,7 +32,7 @@ class ChargeCategoryControllerTest {
 
     @Test
     fun `should list`() {
-        whenever(mockChargeCategoryDao.findAll()).thenReturn(listOf<ChargeCategory>(chargeCategory))
+        every { mockChargeCategoryDao.findAll() } returns listOf(chargeCategory)
 
         val result = controller.list()
 
@@ -63,24 +45,26 @@ class ChargeCategoryControllerTest {
     fun `should create`() {
         val command = createCommand()
 
-        whenever(mockChargeCategoryDao.existsByName(command.name)).thenReturn(false)
-        whenever(mockChargeCategoryDao.save(any<ChargeCategory>()))
-            .thenReturnModifiedFirstArgument<ChargeCategory> { it.id = 42 }
+        every { mockChargeCategoryDao.existsByName(command.name) } returns false
+        every { mockChargeCategoryDao.save(any<ChargeCategory>()) } answers { arg<ChargeCategory>(0).apply { id = 42 } }
 
         val result = controller.create(command)
 
-        verify(mockChargeCategoryDao).save(chargeCategoryArgumentCaptor.capture())
+        verify {
+            mockChargeCategoryDao.save(withArg<ChargeCategory> {
+                assertChargeCategoryEqualsCommand(it, command)
+            })
+        }
 
         assertThat(result.id).isEqualTo(42L)
-        assertChargeCategoryEqualsCommand(chargeCategoryArgumentCaptor.value, command)
     }
 
     @Test
     fun `should update`() {
         val command = createCommand()
 
-        whenever(mockChargeCategoryDao.findById(chargeCategory.id!!)).thenReturn(Optional.of(chargeCategory))
-        whenever(mockChargeCategoryDao.findByName(command.name)).thenReturn(Optional.empty())
+        every { mockChargeCategoryDao.findById(chargeCategory.id!!) } returns Optional.of(chargeCategory)
+        every { mockChargeCategoryDao.findByName(command.name) } returns Optional.empty()
 
         controller.update(chargeCategory.id!!, command)
 

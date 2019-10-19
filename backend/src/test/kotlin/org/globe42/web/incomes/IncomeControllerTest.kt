@@ -1,9 +1,8 @@
 package org.globe42.web.incomes
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.IncomeDao
@@ -13,13 +12,9 @@ import org.globe42.domain.Income
 import org.globe42.domain.IncomeSource
 import org.globe42.domain.IncomeSourceType
 import org.globe42.domain.Person
-import org.globe42.test.Mockito
-import org.globe42.test.thenReturnModifiedFirstArgument
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.math.BigDecimal
 import java.util.*
 
@@ -27,20 +22,15 @@ import java.util.*
  * Unit tests for [IncomeController]
  * @author JB Nizet
  */
-@Mockito
 class IncomeControllerTest {
 
-    @Mock
-    private lateinit var mockPersonDao: PersonDao
+    private val mockPersonDao = mockk<PersonDao>()
 
-    @Mock
-    private lateinit var mockIncomeDao: IncomeDao
+    private val mockIncomeDao = mockk<IncomeDao>(relaxUnitFun = true)
 
-    @Mock
-    private lateinit var mockIncomeSourceDao: IncomeSourceDao
+    private val mockIncomeSourceDao = mockk<IncomeSourceDao>()
 
-    @InjectMocks
-    private lateinit var controller: IncomeController
+    private val controller = IncomeController(mockPersonDao, mockIncomeDao, mockIncomeSourceDao)
 
     @Test
     fun `should list`() {
@@ -48,7 +38,7 @@ class IncomeControllerTest {
         val person = Person(personId)
         val income = createIncome(12L)
         person.addIncome(income)
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
 
         val result = controller.list(personId)
 
@@ -61,7 +51,7 @@ class IncomeControllerTest {
     @Test
     fun `should throw if person not found`() {
         val personId = 42L
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(personId) } returns Optional.empty()
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(personId) }
     }
@@ -72,21 +62,21 @@ class IncomeControllerTest {
         val incomeId = 12L
         val income = Income(incomeId)
         income.person = Person(personId)
-        whenever(mockIncomeDao.findById(incomeId)).thenReturn(Optional.of(income))
+        every { mockIncomeDao.findById(incomeId) } returns Optional.of(income)
 
         controller.delete(personId, incomeId)
 
-        verify(mockIncomeDao).delete(income)
+        verify { mockIncomeDao.delete(income) }
     }
 
     @Test
     fun `should accept deletion if not found to be idempotent`() {
         val incomeId = 12L
-        whenever(mockIncomeDao.findById(incomeId)).thenReturn(Optional.empty())
+        every { mockIncomeDao.findById(incomeId) } returns Optional.empty()
 
         controller.delete(42L, incomeId)
 
-        verify(mockIncomeDao, never()).delete(any())
+        verify(inverse = true) { mockIncomeDao.delete(any()) }
     }
 
     @Test
@@ -96,7 +86,7 @@ class IncomeControllerTest {
         val income = Income(incomeId)
         income.person = Person(personId)
 
-        whenever(mockIncomeDao.findById(incomeId)).thenReturn(Optional.of(income))
+        every { mockIncomeDao.findById(incomeId) } returns Optional.of(income)
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(456L, incomeId) }
     }
@@ -109,9 +99,9 @@ class IncomeControllerTest {
         val person = Person(personId)
         val source = createIncomeSource(sourceId)
 
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
-        whenever(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.of(source))
-        whenever(mockIncomeDao.save(any<Income>())).thenReturnModifiedFirstArgument<Income> { it.id = 34L }
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockIncomeSourceDao.findById(sourceId) } returns Optional.of(source)
+        every { mockIncomeDao.save(any<Income>()) } answers { arg<Income>(0).apply { id = 34L } }
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
 
@@ -128,8 +118,8 @@ class IncomeControllerTest {
         val sourceId = 12L
 
         val person = Person(personId)
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
-        whenever(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockIncomeSourceDao.findById(sourceId) } returns Optional.empty()
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
 
@@ -144,8 +134,8 @@ class IncomeControllerTest {
         val person = Person(personId)
         val source = createIncomeSource(sourceId)
         source.maxMonthlyAmount = BigDecimal("9")
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.of(person))
-        whenever(mockIncomeSourceDao.findById(sourceId)).thenReturn(Optional.of(source))
+        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockIncomeSourceDao.findById(sourceId) } returns Optional.of(source)
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
@@ -156,7 +146,7 @@ class IncomeControllerTest {
         val personId = 42L
         val sourceId = 12L
 
-        whenever(mockPersonDao.findById(personId)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(personId) } returns Optional.empty()
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
 

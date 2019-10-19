@@ -1,13 +1,13 @@
 package org.globe42.web.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.UserDao
 import org.globe42.test.GlobeMvcTest
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
@@ -21,13 +21,13 @@ class AuthenticationControllerMvcTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper
 ) {
-    @MockBean
+    @MockkBean
     private lateinit var mockUserDao: UserDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockPasswordDigester: PasswordDigester
 
-    @MockBean
+    @MockkBean
     private lateinit var mockJwtHelper: JwtHelper
 
     @Test
@@ -35,10 +35,10 @@ class AuthenticationControllerMvcTest(
         val credentials = createCredentials()
 
         val user = createUser()
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(user)
-        whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(true)
+        every { mockUserDao.findNotDeletedByLogin(credentials.login) } returns user
+        every { mockPasswordDigester.match(credentials.password, user.password) } returns true
         val token = "token"
-        whenever(mockJwtHelper.buildToken(user.id)).thenReturn(token)
+        every { mockJwtHelper.buildToken(user.id) } returns token
 
         mvc.post("/api/authentication") {
             contentType = MediaType.APPLICATION_JSON

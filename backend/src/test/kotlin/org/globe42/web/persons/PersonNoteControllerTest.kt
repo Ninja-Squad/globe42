@@ -1,6 +1,7 @@
 package org.globe42.web.persons
 
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.PersonDao
@@ -9,13 +10,10 @@ import org.globe42.domain.Gender
 import org.globe42.domain.Note
 import org.globe42.domain.Person
 import org.globe42.domain.User
-import org.globe42.test.Mockito
 import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -24,19 +22,14 @@ import java.util.*
  * Unit tests for [PersonNoteController]
  * @author JB Nizet
  */
-@Mockito
 class PersonNoteControllerTest {
-    @Mock
-    private lateinit var mockPersonDao: PersonDao
+    private val mockPersonDao = mockk<PersonDao>()
 
-    @Mock
-    private lateinit var mockCurrentUser: CurrentUser
+    private val mockCurrentUser = mockk<CurrentUser>()
 
-    @Mock
-    private lateinit var mockUserDao: UserDao
+    private val mockUserDao = mockk<UserDao>()
 
-    @InjectMocks
-    private lateinit var controller: PersonNoteController
+    private val controller = PersonNoteController(mockPersonDao, mockCurrentUser, mockUserDao)
 
     private lateinit var person: Person
     private lateinit var note1: Note
@@ -61,13 +54,13 @@ class PersonNoteControllerTest {
         note2.creationInstant = Instant.now().minus(1, ChronoUnit.DAYS)
         person.addNote(note2)
 
-        whenever(mockCurrentUser.userId).thenReturn(creator.id)
-        whenever(mockUserDao.getOne(creator.id!!)).thenReturn(creator)
+        every { mockCurrentUser.userId } returns creator.id
+        every { mockUserDao.getOne(creator.id!!) } returns creator
     }
 
     @Test
     fun `should list`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
 
         val result = controller.list(person.id!!)
 
@@ -83,15 +76,15 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when listing for unknown person`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(person.id!!) }
     }
 
     @Test
     fun `should create`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
-        whenever(mockPersonDao.flush()).thenAnswer { _ ->
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.flush() } answers {
             val addedNote = person.getNotes().find { it.text == "test3" }
             addedNote?.let { it.id = 3L }
             Unit
@@ -108,7 +101,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when creating for unknown person`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
         val command = NoteCommandDTO("test3")
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -118,7 +111,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should update`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
 
         val command = NoteCommandDTO("test3")
         controller.update(person.id!!, note1.id!!, command)
@@ -128,7 +121,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when updating for unknown person`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
         val command = NoteCommandDTO("test3")
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -138,7 +131,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when updating unknown note`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
         val command = NoteCommandDTO("test3")
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -148,7 +141,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should delete`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
 
         controller.delete(person.id!!, note1.id!!)
 
@@ -157,7 +150,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when deleting for unknown person`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.empty())
+        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.delete(person.id!!, note1.id!!)
@@ -166,7 +159,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should note throw when deleting unknown note`() {
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
         controller.delete(person.id!!, 876543L)
         assertThat(person.getNotes()).containsOnly(note1, note2)
     }

@@ -23,16 +23,11 @@ private const val BEARER_PREFIX = "Bearer "
  *
  * @author JB Nizet
  */
-class AuthenticationFilter : Filter {
-
-    @Autowired
-    private lateinit var jwtHelper: JwtHelper
-
-    @Autowired
-    private lateinit var currentUser: CurrentUser
-
-    @Autowired
-    private lateinit var userDao: UserDao
+class AuthenticationFilter(
+    private val jwtHelper: JwtHelper,
+    private val currentUser: CurrentUser,
+    private val userDao: UserDao
+) : Filter {
 
     override fun doFilter(req: ServletRequest, resp: ServletResponse, chain: FilterChain) {
         val request = req as HttpServletRequest

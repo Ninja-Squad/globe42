@@ -1,7 +1,8 @@
 package org.globe42.web.persons
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.PersonDao
 import org.globe42.domain.ActivityType
 import org.globe42.domain.Gender
@@ -12,7 +13,6 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
@@ -29,7 +29,7 @@ class ParticipationControllerMvcTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper
 ) {
-    @MockBean
+    @MockkBean
     private lateinit var mockPersonDao: PersonDao
 
     private lateinit var person: Person
@@ -37,11 +37,11 @@ class ParticipationControllerMvcTest(
 
     @BeforeEach
     fun prepare() {
-        person = Person(42L, "John", "Doe", Gender.MALE)
         mealParticipation = Participation(34L)
         mealParticipation.activityType = ActivityType.MEAL
+        person = Person(42L, "John", "Doe", Gender.MALE)
         person.addParticipation(mealParticipation)
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
     }
 
     @Test
@@ -55,7 +55,7 @@ class ParticipationControllerMvcTest(
     @Test
     fun `should create`() {
         val command = ParticipationCommandDTO(ActivityType.SOCIAL_MEDIATION)
-        whenever(mockPersonDao.flush()).then {
+        every { mockPersonDao.flush() } answers {
             person.getParticipations().find { it.activityType == ActivityType.SOCIAL_MEDIATION }?.let { it.id = 345L }
             Unit
         }

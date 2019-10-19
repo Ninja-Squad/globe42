@@ -1,23 +1,18 @@
 package org.globe42.web.charges
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.ChargeCategoryDao
 import org.globe42.dao.ChargeTypeDao
 import org.globe42.domain.ChargeCategory
 import org.globe42.domain.ChargeType
-import org.globe42.test.Mockito
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.math.BigDecimal
 import java.util.*
 
@@ -25,33 +20,25 @@ import java.util.*
  * Unit tests for [ChargeTypeController]
  * @author JB Nizet
  */
-@Mockito
 class ChargeTypeControllerTest {
-    @Mock
-    private lateinit var mockChargeTypeDao: ChargeTypeDao
-
-    @Mock
-    private lateinit var mockChargeCategoryDao: ChargeCategoryDao
-
-    @InjectMocks
-    private lateinit var controller: ChargeTypeController
-
-    @Captor
-    private lateinit var chargeTypeArgumentCaptor: ArgumentCaptor<ChargeType>
+    private val mockChargeTypeDao = mockk<ChargeTypeDao>()
+    private val mockChargeCategoryDao = mockk<ChargeCategoryDao>()
+    private val controller = ChargeTypeController(mockChargeTypeDao, mockChargeCategoryDao)
 
     private lateinit var chargeType: ChargeType
 
     @BeforeEach
     fun prepare() {
-        chargeType = ChargeType(42L)
-        chargeType.name = "source 1"
-        chargeType.category = ChargeCategory(1L, "category 1")
-        chargeType.maxMonthlyAmount = BigDecimal("1234.56")
+        chargeType = ChargeType(42L).apply {
+            name = "source 1"
+            category = ChargeCategory(1L, "category 1")
+            maxMonthlyAmount = BigDecimal("1234.56")
+        }
     }
 
     @Test
     fun `should list`() {
-        whenever(mockChargeTypeDao.findAll()).thenReturn(listOf<ChargeType>(chargeType))
+        every { mockChargeTypeDao.findAll() } returns listOf(chargeType)
 
         val result = controller.list()
 
@@ -68,7 +55,7 @@ class ChargeTypeControllerTest {
     @Test
     fun `should get`() {
         val chargeTypeId = chargeType.id!!
-        whenever(mockChargeTypeDao.findById(chargeTypeId)).thenReturn(Optional.of(chargeType))
+        every { mockChargeTypeDao.findById(chargeTypeId) } returns Optional.of(chargeType)
 
         val result = controller.get(chargeTypeId)
 
@@ -77,7 +64,7 @@ class ChargeTypeControllerTest {
 
     @Test
     fun `should throw when getting with unknown id`() {
-        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.empty())
+        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.empty()
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(chargeType.id!!) }
     }
@@ -86,25 +73,30 @@ class ChargeTypeControllerTest {
     fun `should create`() {
         val command = createCommand()
 
-        whenever(mockChargeCategoryDao.findById(command.categoryId))
-            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
-        whenever(mockChargeTypeDao.save(any<ChargeType>())).thenReturn(chargeType)
+        every { mockChargeTypeDao.existsByName(command.name) } returns false
+        every { mockChargeCategoryDao.findById(command.categoryId) } returns
+            Optional.of(ChargeCategory(command.categoryId, "category 2"))
+        every { mockChargeTypeDao.save(any<ChargeType>()) } returns chargeType
 
         val result = controller.create(command)
 
-        verify(mockChargeTypeDao).save(chargeTypeArgumentCaptor.capture())
+        verify {
+            mockChargeTypeDao.save(withArg<ChargeType> {
+                assertChargeTypeEqualsCommand(it, command)
+            })
+        }
 
         assertThat(result).isNotNull
-        assertChargeTypeEqualsCommand(chargeTypeArgumentCaptor.value, command)
+
     }
 
     @Test
     fun `should throw when creating with unknown charge category`() {
         val command = createCommand()
 
-        whenever(mockChargeCategoryDao.findById(command.categoryId))
-            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
-        whenever(mockChargeTypeDao.existsByName(command.name)).thenReturn(true)
+        every { mockChargeCategoryDao.findById(command.categoryId) } returns
+            Optional.of(ChargeCategory(command.categoryId, "category 2"))
+        every { mockChargeTypeDao.existsByName(command.name) } returns true
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
     }
@@ -113,18 +105,19 @@ class ChargeTypeControllerTest {
     fun `should throw when creating with existing name`() {
         val command = createCommand()
 
-        whenever(mockChargeCategoryDao.findById(command.categoryId)).thenReturn(Optional.empty())
+        every { mockChargeTypeDao.existsByName(command.name) } returns true
 
-        assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.create(command) }
+        assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
     }
 
     @Test
     fun `should update`() {
         val command = createCommand()
 
-        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
-        whenever(mockChargeCategoryDao.findById(command.categoryId))
-            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
+        every { mockChargeTypeDao.findByName(command.name) } returns Optional.empty()
+        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.of(chargeType)
+        every { mockChargeCategoryDao.findById(command.categoryId) } returns
+            Optional.of(ChargeCategory(command.categoryId, "category 2"))
 
         controller.update(chargeType.id!!, command)
 
@@ -133,7 +126,7 @@ class ChargeTypeControllerTest {
 
     @Test
     fun `should throw if not found when updating`() {
-        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.empty())
+        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.empty()
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.update(
@@ -144,13 +137,13 @@ class ChargeTypeControllerTest {
     }
 
     @Test
-    fun `should throw when updating with already used nick name`() {
+    fun `should throw when updating with already used name`() {
         val command = createCommand()
 
-        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
-        whenever(mockChargeCategoryDao.findById(command.categoryId))
-            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
-        whenever(mockChargeTypeDao.findByName(command.name)).thenReturn(Optional.of(ChargeType(4567L)))
+        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.of(chargeType)
+        every { mockChargeCategoryDao.findById(command.categoryId) } returns
+            Optional.of(ChargeCategory(command.categoryId, "category 2"))
+        every { mockChargeTypeDao.findByName(command.name) } returns Optional.of(ChargeType(4567L))
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
             controller.update(chargeType.id!!, command)
@@ -158,13 +151,13 @@ class ChargeTypeControllerTest {
     }
 
     @Test
-    fun `should update if same surname is kept`() {
+    fun `should update if same name is kept`() {
         val command = createCommand()
 
-        whenever(mockChargeTypeDao.findById(chargeType.id!!)).thenReturn(Optional.of(chargeType))
-        whenever(mockChargeCategoryDao.findById(command.categoryId))
-            .thenReturn(Optional.of(ChargeCategory(command.categoryId, "category 2")))
-        whenever(mockChargeTypeDao.findByName(command.name)).thenReturn(Optional.of(chargeType))
+        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.of(chargeType)
+        every { mockChargeCategoryDao.findById(command.categoryId) } returns
+            Optional.of(ChargeCategory(command.categoryId, "category 2"))
+        every { mockChargeTypeDao.findByName(command.name) } returns Optional.of(chargeType)
 
         controller.update(chargeType.id!!, command)
 

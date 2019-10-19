@@ -1,7 +1,8 @@
 package org.globe42.web.persons
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
 import org.globe42.test.GlobeMvcTest
@@ -9,7 +10,6 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
@@ -27,7 +27,7 @@ class WeddingEventControllerMvcTest(
     @Autowired private val mvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper
 ) {
-    @MockBean
+    @MockkBean
     private lateinit var mockPersonDao: PersonDao
 
     private lateinit var person: Person
@@ -41,7 +41,7 @@ class WeddingEventControllerMvcTest(
         firstWedding.type = WeddingEventType.WEDDING
         firstWedding.location = Location.ABROAD
         person.addWeddingEvent(firstWedding)
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!)} returns Optional.of(person)
     }
 
     @Test
@@ -63,7 +63,7 @@ class WeddingEventControllerMvcTest(
             WeddingEventType.DIVORCE,
             Location.FRANCE
         )
-        whenever(mockPersonDao.flush()).then {
+        every { mockPersonDao.flush() } answers {
             person.getWeddingEvents().find { it.date == date }?.let { it.id = 876 }
             Unit
         }

@@ -124,13 +124,13 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit")
+        exclude(module = "mockito")
     }
+    testImplementation("com.ninja-squad:springmockk:1.1.3")
+    testImplementation("io.mockk:mockk:1.9.3")
+
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
-    testImplementation("org.mockito:mockito-junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("com.squareup.okhttp3:mockwebserver")
-
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }

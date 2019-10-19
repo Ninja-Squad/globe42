@@ -1,40 +1,32 @@
 package org.globe42.web.security
 
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.UserDao
 import org.globe42.domain.User
-import org.globe42.test.Mockito
 import org.globe42.web.exception.UnauthorizedException
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import java.util.*
 
 /**
  * Unit tests for AuthenticationController
  * @author JB Nizet
  */
-@Mockito
 class AuthenticationControllerTest {
-    @Mock
-    private lateinit var mockUserDao: UserDao
+    private val mockUserDao = mockk<UserDao>()
 
-    @Mock
-    private lateinit var mockPasswordDigester: PasswordDigester
+    private val mockPasswordDigester = mockk<PasswordDigester>()
 
-    @Mock
-    private lateinit var mockJwtHelper: JwtHelper
+    private val mockJwtHelper = mockk<JwtHelper>()
 
-    @InjectMocks
-    private lateinit var controller: AuthenticationController
+    private val controller = AuthenticationController(mockUserDao, mockPasswordDigester, mockJwtHelper)
 
     @Test
     fun `should throw when unknown user`() {
         val credentials = createCredentials()
 
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(null)
+        every { mockUserDao.findNotDeletedByLogin(credentials.login) } returns null
 
         assertThatExceptionOfType(UnauthorizedException::class.java).isThrownBy { controller.authenticate(credentials) }
     }
@@ -44,8 +36,8 @@ class AuthenticationControllerTest {
         val credentials = createCredentials()
 
         val user = createUser()
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(user)
-        whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(false)
+        every { mockUserDao.findNotDeletedByLogin(credentials.login) } returns user
+        every { mockPasswordDigester.match(credentials.password, user.password) } returns false
 
         assertThatExceptionOfType(UnauthorizedException::class.java).isThrownBy { controller.authenticate(credentials) }
     }
@@ -55,10 +47,10 @@ class AuthenticationControllerTest {
         val credentials = createCredentials()
 
         val user = createUser()
-        whenever(mockUserDao.findNotDeletedByLogin(credentials.login)).thenReturn(user)
-        whenever(mockPasswordDigester.match(credentials.password, user.password)).thenReturn(true)
+        every { mockUserDao.findNotDeletedByLogin(credentials.login) } returns user
+        every { mockPasswordDigester.match(credentials.password, user.password) } returns true
         val token = "token"
-        whenever(mockJwtHelper.buildToken(user.id)).thenReturn(token)
+        every { mockJwtHelper.buildToken(user.id) } returns token
         val result = controller.authenticate(credentials)
 
         assertThat(result.id).isEqualTo(user.id)

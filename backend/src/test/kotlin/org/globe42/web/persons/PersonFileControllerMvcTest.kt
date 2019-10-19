@@ -1,9 +1,8 @@
 package org.globe42.web.persons
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.mockk
 import org.globe42.dao.PersonDao
 import org.globe42.domain.Person
 import org.globe42.storage.FileDTO
@@ -15,7 +14,6 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
@@ -34,10 +32,10 @@ import java.util.*
 @GlobeMvcTest(PersonFileController::class)
 class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
 
-    @MockBean
+    @MockkBean
     private lateinit var mockStorageService: StorageService
 
-    @MockBean
+    @MockkBean
     private lateinit var mockPersonDao: PersonDao
 
     private lateinit var person: Person
@@ -46,7 +44,7 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
     @BeforeEach
     fun prepare() {
         person = Person(1000L)
-        whenever(mockPersonDao.findById(person.id!!)).thenReturn(Optional.of(person))
+        every { mockPersonDao.findById(person.id!!)} returns Optional.of(person)
         directory = java.lang.Long.toString(person.id!!)
     }
 
@@ -60,14 +58,14 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
             "new".toByteArray(StandardCharsets.UTF_8)
         )
 
-        whenever(
+        every {
             mockStorageService.create(
                 eq(directory),
                 eq(multipartFile.originalFilename),
-                eq(multipartFile.contentType),
+                eq(multipartFile.contentType!!),
                 any()
             )
-        ).thenReturn(file)
+        } returns file
 
         mvc.multipart("/api/persons/{personId}/files", person.id) {
             file(multipartFile)
@@ -79,13 +77,14 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
 
     @Test
     fun `should get`() {
-        val file = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
-        val readableFile = mock<ReadableFile>()
-        whenever(readableFile.file).thenReturn(file)
-        whenever(readableFile.inputStream).thenReturn(ByteArrayInputStream("hello".toByteArray(StandardCharsets.UTF_8)))
-        whenever(mockStorageService.get(directory, file.name)).thenReturn(readableFile)
+        val theFile = FileDTO("hello.txt", 5L, Instant.now(), "text/plain")
+        val readableFile = mockk<ReadableFile> {
+            every { file } returns theFile
+            every { inputStream } returns ByteArrayInputStream("hello".toByteArray(StandardCharsets.UTF_8))
+        }
+        every { mockStorageService.get(directory, theFile.name)} returns readableFile
 
-        mvc.get("/api/persons/{personId}/files/{name}", person.id, file.name).asyncDispatch(mvc).andExpect {
+        mvc.get("/api/persons/{personId}/files/{name}", person.id, theFile.name).asyncDispatch(mvc).andExpect {
             status { isOk }
             header { longValue(HttpHeaders.CONTENT_LENGTH, 5L) }
             content {

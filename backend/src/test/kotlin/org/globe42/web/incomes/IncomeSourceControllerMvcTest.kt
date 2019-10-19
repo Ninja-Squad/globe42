@@ -1,8 +1,8 @@
 package org.globe42.web.incomes
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.globe42.dao.IncomeSourceDao
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSource
@@ -12,7 +12,6 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -31,25 +30,26 @@ class IncomeSourceControllerMvcTest(
     @Autowired private val objectMapper: ObjectMapper
 ) {
 
-    @MockBean
+    @MockkBean
     private lateinit var mockIncomeSourceDao: IncomeSourceDao
 
-    @MockBean
+    @MockkBean
     private lateinit var mockIncomeSourceTypeDao: IncomeSourceTypeDao
 
     private lateinit var incomeSource: IncomeSource
 
     @BeforeEach
     fun prepare() {
-        incomeSource = IncomeSource(42L)
-        incomeSource.name = "source 1"
-        incomeSource.type = IncomeSourceType(1L, "type 1")
-        incomeSource.maxMonthlyAmount = BigDecimal("1234.56")
+        incomeSource = IncomeSource(42L).apply {
+            name = "source 1"
+            type = IncomeSourceType(1L, "type 1")
+            maxMonthlyAmount = BigDecimal("1234.56")
+        }
     }
 
     @Test
     fun `should list`() {
-        whenever(mockIncomeSourceDao.findAll()).thenReturn(listOf<IncomeSource>(incomeSource))
+        every { mockIncomeSourceDao.findAll() } returns listOf(incomeSource)
 
         mvc.get("/api/income-sources").andExpect {
             status { isOk }
@@ -63,7 +63,7 @@ class IncomeSourceControllerMvcTest(
 
     @Test
     fun `should get`() {
-        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
+        every { mockIncomeSourceDao.findById(incomeSource.id!!) }  returns Optional.of(incomeSource)
 
         mvc.get("/api/income-sources/{sourceId}", incomeSource.id).andExpect {
             status { isOk }
@@ -74,8 +74,9 @@ class IncomeSourceControllerMvcTest(
     @Test
     fun `should create`() {
         val command = createIncomeSourceCommand()
-        whenever(mockIncomeSourceDao.save(any<IncomeSource>())).thenReturn(incomeSource)
-        whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type))
+        every { mockIncomeSourceDao.existsByName(command.name) } returns false
+        every { mockIncomeSourceDao.save(any<IncomeSource>())} returns incomeSource
+        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns Optional.of(incomeSource.type)
 
         mvc.post("/api/income-sources") {
             contentType = MediaType.APPLICATION_JSON
@@ -90,8 +91,9 @@ class IncomeSourceControllerMvcTest(
     fun `should update`() {
         val command = createIncomeSourceCommand()
 
-        whenever(mockIncomeSourceDao.findById(incomeSource.id!!)).thenReturn(Optional.of(incomeSource))
-        whenever(mockIncomeSourceTypeDao.findById(command.typeId)).thenReturn(Optional.of(incomeSource.type))
+        every { mockIncomeSourceDao.findByName(command.name) } returns Optional.empty()
+        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
+        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns Optional.of(incomeSource.type)
 
         mvc.put("/api/income-sources/{sourceId}", incomeSource.id) {
             contentType = MediaType.APPLICATION_JSON

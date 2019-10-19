@@ -1,35 +1,29 @@
 package org.globe42.web.cities
 
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PostalCityDao
 import org.globe42.domain.PostalCity
-import org.globe42.test.Mockito
 import org.junit.jupiter.api.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import java.util.*
 
 /**
  * Unit tests for [PostalCityController]
  * @author JB Nizet
  */
-@Mockito
 class PostalCityControllerTest {
-    @Mock
-    private lateinit var mockPostalCityDao: PostalCityDao
+    private val mockPostalCityDao = mockk<PostalCityDao>(relaxUnitFun = true)
 
-    @Mock
-    private lateinit var mockUploadParser: PostalCityUploadParser
+    private val mockUploadParser = mockk<PostalCityUploadParser>()
 
-    @InjectMocks
-    private lateinit var controller: PostalCityController
+    private val controller = PostalCityController(mockPostalCityDao, mockUploadParser)
 
     @Test
     fun `should search by postal code when query is numeric`() {
         val postalCity = PostalCity("42000", "ST ETIENNE")
-        whenever(mockPostalCityDao.findByPostalCode("420", LIMIT)).thenReturn(listOf(postalCity))
+        every { mockPostalCityDao.findByPostalCode("420", LIMIT) } returns listOf(postalCity)
 
         val result = controller.search("420")
 
@@ -41,7 +35,7 @@ class PostalCityControllerTest {
     @Test
     fun `should search by city when query is not numeric`() {
         val postalCity = PostalCity("42000", "ST ETIENNE")
-        whenever(mockPostalCityDao.findByCity("ST ET", LIMIT)).thenReturn(listOf(postalCity))
+        every { mockPostalCityDao.findByCity("ST ET", LIMIT) } returns listOf(postalCity)
 
         val result = controller.search("ST ET")
 
@@ -54,10 +48,10 @@ class PostalCityControllerTest {
     fun `should upload`() {
         val body = "fake".toByteArray()
         val parsedCities = Arrays.asList(PostalCity("42000", "ST ETIENNE"))
-        whenever(mockUploadParser.parse(body)).thenReturn(parsedCities)
+        every { mockUploadParser.parse(body) } returns parsedCities
 
         controller.upload(body)
 
-        verify(mockPostalCityDao).saveAllEfficiently(parsedCities)
+        verify { mockPostalCityDao.saveAllEfficiently(parsedCities) }
     }
 }
