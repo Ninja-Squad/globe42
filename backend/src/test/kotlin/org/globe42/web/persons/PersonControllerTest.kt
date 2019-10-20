@@ -12,7 +12,6 @@ import org.globe42.domain.*
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
 
 /**
@@ -36,10 +35,11 @@ class PersonControllerTest {
         person = Person(1L, "John", "Doe", Gender.MALE)
         person.mediationCode = "A2"
 
-        every { mockCountryDao.findByIdOrNull("FRA") } answers {
+        every { mockCountryDao.findByIdOrNull(any()) } answers {
+            val id = arg<String>(0)
             Country(
-                "FRA",
-                "France"
+                id,
+                "Country $id"
             )
         }
 

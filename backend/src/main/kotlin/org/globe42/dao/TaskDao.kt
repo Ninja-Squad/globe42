@@ -5,7 +5,6 @@ import org.globe42.domain.Task
 import org.globe42.domain.User
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.time.LocalDate
@@ -14,7 +13,7 @@ import java.time.LocalDate
  * DAO for [org.globe42.domain.Task]
  * @author JB Nizet
  */
-interface TaskDao : JpaRepository<Task, Long> {
+interface TaskDao : GlobeRepository<Task, Long> {
     @Query(
         """select task from Task task
             where task.status = org.globe42.domain.TaskStatus.TODO

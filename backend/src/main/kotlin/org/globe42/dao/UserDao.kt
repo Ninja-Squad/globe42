@@ -1,16 +1,14 @@
 package org.globe42.dao
 
 import org.globe42.domain.User
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.data.repository.query.Param
 
 /**
  * DAO for the [org.globe42.domain.User] entity
  * @author JB Nizet
  */
-interface UserDao : JpaRepository<User, Long>, UserDaoCustom {
+interface UserDao : GlobeRepository<User, Long>, UserDaoCustom {
 
     @Query("select u from User u where u.deleted = false")
     fun findNotDeleted(): List<User>
