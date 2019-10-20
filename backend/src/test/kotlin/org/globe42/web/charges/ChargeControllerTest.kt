@@ -15,8 +15,8 @@ import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * Unit tests for [ChargeController]
@@ -38,7 +38,7 @@ class ChargeControllerTest {
         val person = Person(personId)
         val charge = createCharge(12L)
         person.addCharge(charge)
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
 
         val result = controller.list(personId)
 
@@ -51,7 +51,7 @@ class ChargeControllerTest {
     @Test
     fun `should throw if person not found`() {
         val personId = 42L
-        every { mockPersonDao.findById(personId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(personId) }
     }
@@ -62,7 +62,7 @@ class ChargeControllerTest {
         val chargeId = 12L
         val charge = Charge(chargeId)
         charge.person = Person(personId)
-        every { mockChargeDao.findById(chargeId) } returns Optional.of(charge)
+        every { mockChargeDao.findByIdOrNull(chargeId) } returns charge
 
         controller.delete(personId, chargeId)
 
@@ -72,7 +72,7 @@ class ChargeControllerTest {
     @Test
     fun `should accept deletion if not found to be idempotent`() {
         val chargeId = 12L
-        every { mockChargeDao.findById(chargeId) } returns Optional.empty()
+        every { mockChargeDao.findByIdOrNull(chargeId) } returns null
 
         controller.delete(42L, chargeId)
 
@@ -86,7 +86,7 @@ class ChargeControllerTest {
         val charge = Charge(chargeId)
         charge.person = Person(personId)
 
-        every { mockChargeDao.findById(chargeId) } returns Optional.of(charge)
+        every { mockChargeDao.findByIdOrNull(chargeId) } returns charge
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(456L, chargeId) }
     }
@@ -99,8 +99,8 @@ class ChargeControllerTest {
         val person = Person(personId)
         val type = createChargeType(typeId)
 
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
-        every { mockChargeTypeDao.findById(typeId) } returns Optional.of(type)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
+        every { mockChargeTypeDao.findByIdOrNull(typeId) } returns type
         every { mockChargeDao.save(any<Charge>()) } answers { arg<Charge>(0).apply { id = 34L } }
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
@@ -118,8 +118,8 @@ class ChargeControllerTest {
         val typeId = 12L
 
         val person = Person(personId)
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
-        every { mockChargeTypeDao.findById(typeId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
+        every { mockChargeTypeDao.findByIdOrNull(typeId) } returns null
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
@@ -133,8 +133,8 @@ class ChargeControllerTest {
         val person = Person(personId)
         val type = createChargeType(typeId)
         type.maxMonthlyAmount = BigDecimal("9")
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
-        every { mockChargeTypeDao.findById(typeId) } returns Optional.of(type)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
+        every { mockChargeTypeDao.findByIdOrNull(typeId) } returns type
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
@@ -145,7 +145,7 @@ class ChargeControllerTest {
         val personId = 42L
         val typeId = 12L
 
-        every { mockPersonDao.findById(personId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns null
 
         val command = ChargeCommandDTO(typeId, BigDecimal.TEN)
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.create(personId, command) }

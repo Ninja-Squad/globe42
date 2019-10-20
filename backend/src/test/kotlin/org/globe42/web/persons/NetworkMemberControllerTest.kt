@@ -11,6 +11,7 @@ import org.globe42.domain.NetworkMemberType
 import org.globe42.domain.Person
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 /**
@@ -29,7 +30,7 @@ class NetworkMemberControllerTest {
         val member = NetworkMember(NetworkMemberType.DOCTOR, "Dr. No").apply { id = 34L }
         person.addNetworkMember(member)
         val personId = person.id!!
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
 
         val result = controller.list(personId)
 
@@ -40,7 +41,7 @@ class NetworkMemberControllerTest {
     @Test
     fun `should throw if person doesn't exist`() {
         val personId = 2L
-        every { mockPersonDao.findById(personId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns null
 
         Assertions.assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.list(personId)
@@ -50,7 +51,7 @@ class NetworkMemberControllerTest {
     @Test
     fun `should create a network member for a person`() {
         val personId = person.id!!
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
         val command = NetworkMemberCommandDTO(NetworkMemberType.DOCTOR, "Dr. No")
 
         every { mockPersonDao.flush() } answers {
@@ -73,7 +74,7 @@ class NetworkMemberControllerTest {
         val member = NetworkMember(NetworkMemberType.DOCTOR, "Dr. No").apply { id = 34L }
         person.addNetworkMember(member)
         val personId = person.id!!
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
 
         val command = NetworkMemberCommandDTO(NetworkMemberType.LAWYER, "Dr Yes")
         controller.update(person.id!!, member.id!!, command)
@@ -84,7 +85,7 @@ class NetworkMemberControllerTest {
     @Test
     fun `should throw when updating a member that doesn't exist`() {
         val personId = person.id!!
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
 
         val command = NetworkMemberCommandDTO(NetworkMemberType.LAWYER, "Dr Yes")
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -97,7 +98,7 @@ class NetworkMemberControllerTest {
         val member = NetworkMember(NetworkMemberType.DOCTOR, "Dr. No").apply { id = 34L }
         person.addNetworkMember(member)
         val personId = person.id!!
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
 
         controller.delete(personId, member.id!!)
 
@@ -107,7 +108,7 @@ class NetworkMemberControllerTest {
     @Test
     fun `should throw when deleting a member of a person that doesn't exist`() {
         val personId = 2L
-        every { mockPersonDao.findById(personId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.delete(personId, 5678L)
@@ -117,7 +118,7 @@ class NetworkMemberControllerTest {
     @Test
     fun `should not throw when deleting a member that doesn't exist`() {
         val personId = person.id!!
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
 
         controller.delete(personId, 5678L)
     }

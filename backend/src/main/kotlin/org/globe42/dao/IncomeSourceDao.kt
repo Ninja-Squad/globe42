@@ -1,7 +1,5 @@
 package org.globe42.dao
 
-import java.util.Optional
-
 import org.globe42.domain.IncomeSource
 import org.springframework.data.jpa.repository.JpaRepository
 
@@ -11,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository
  */
 interface IncomeSourceDao : JpaRepository<IncomeSource, Long> {
     fun existsByName(name: String): Boolean
-    fun findByName(name: String): Optional<IncomeSource>
+    fun findByName(name: String): IncomeSource?
 }

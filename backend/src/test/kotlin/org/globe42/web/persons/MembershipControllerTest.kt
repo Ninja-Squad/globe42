@@ -11,9 +11,9 @@ import org.globe42.domain.*
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Unit tests for [MembershipController]
@@ -31,7 +31,7 @@ class MembershipControllerTest {
     @BeforeEach
     fun prepare() {
         person = Person(42L, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
     }
 
     @Test
@@ -57,7 +57,7 @@ class MembershipControllerTest {
 
     @Test
     fun `should throw when listing for person that does not exist`() {
-        every { mockPersonDao.findById(456L) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(456L) } returns null
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.list(456L)
         }
@@ -67,15 +67,13 @@ class MembershipControllerTest {
     fun `should get current membership`() {
         val currentYear = LocalDate.now(PARIS_TIME_ZONE).year
         every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns
-            Optional.of(
-                Membership(
-                    2L,
-                    person,
-                    currentYear,
-                    LocalDate.of(currentYear, 1, 31),
-                    PaymentMode.CASH,
-                    "002"
-                )
+            Membership(
+                id = 2L,
+                person = person,
+                year = currentYear,
+                paymentDate = LocalDate.of(currentYear, 1, 31),
+                paymentMode = PaymentMode.CASH,
+                cardNumber = "002"
             )
 
         val result = controller.getCurrentMembership(person.id!!)
@@ -94,7 +92,7 @@ class MembershipControllerTest {
 
     @Test
     fun `should throw when getting current membership of person that doesn't exist`() {
-        every { mockPersonDao.findById(345L) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(345L) } returns null
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.getCurrentMembership(345L)
         }
@@ -103,7 +101,7 @@ class MembershipControllerTest {
     @Test
     fun `should return empty content when getting current membership of person that doesn't have a current membership`() {
         val currentYear = LocalDate.now(PARIS_TIME_ZONE).year
-        every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns Optional.empty()
+        every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns null
 
         val result = controller.getCurrentMembership(person.id!!)
         assertThat(result.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
@@ -119,7 +117,7 @@ class MembershipControllerTest {
             "002"
         )
 
-        every { mockMembershipDao.findByPersonAndYear(person, command.year) } returns Optional.empty()
+        every { mockMembershipDao.findByPersonAndYear(person, command.year) } returns null
         every { mockMembershipDao.save(any<Membership>()) } answers { arg<Membership>(0).apply { id = 42L } }
 
         val result = controller.create(person.id!!, command)
@@ -141,7 +139,7 @@ class MembershipControllerTest {
     @Test
     fun `should update membership`() {
         val membership = Membership(42L, person, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, "0")
-        every { mockMembershipDao.findById(membership.id!!) } returns Optional.of(membership)
+        every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         val command = MembershipCommandDTO(
             2017, // should be ignored
@@ -166,7 +164,7 @@ class MembershipControllerTest {
             LocalDate.of(2018, 1, 31),
             "002"
         )
-        every { mockMembershipDao.findById(345L) } returns Optional.empty()
+        every { mockMembershipDao.findByIdOrNull(345L) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.update(person.id!!, 345L, command)
@@ -177,7 +175,7 @@ class MembershipControllerTest {
     fun `should throw when updating membership that doesn't belong to the given person`() {
         val otherPerson = Person(765L)
         val membership = Membership(42L, otherPerson, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, "0")
-        every { mockMembershipDao.findById(membership.id!!) } returns Optional.of(membership)
+        every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         val command = MembershipCommandDTO(
             2018,
@@ -194,7 +192,7 @@ class MembershipControllerTest {
     @Test
     fun `should delete membership`() {
         val membership = Membership(42L, person, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, "0")
-        every { mockMembershipDao.findById(membership.id!!) } returns Optional.of(membership)
+        every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         controller.delete(person.id!!, membership.id!!)
 
@@ -203,7 +201,7 @@ class MembershipControllerTest {
 
     @Test
     fun `should throw when deleting membership of person that doesn't exist`() {
-        every { mockPersonDao.findById(345L) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(345L) } returns null
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.delete(345L, 567L)
         }
@@ -211,7 +209,7 @@ class MembershipControllerTest {
 
     @Test
     fun `should do nothing when deleting membership that doesn't exist`() {
-        every { mockMembershipDao.findById(567L) } returns Optional.empty()
+        every { mockMembershipDao.findByIdOrNull(567L) } returns null
         controller.delete(person.id!!, 567L)
 
         verify(inverse = true) { mockMembershipDao.delete(any()) }

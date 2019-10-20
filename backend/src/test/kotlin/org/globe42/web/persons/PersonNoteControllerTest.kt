@@ -14,6 +14,7 @@ import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -60,7 +61,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should list`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         val result = controller.list(person.id!!)
 
@@ -76,14 +77,14 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when listing for unknown person`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(person.id!!) }
     }
 
     @Test
     fun `should create`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         every { mockPersonDao.flush() } answers {
             val addedNote = person.getNotes().find { it.text == "test3" }
             addedNote?.let { it.id = 3L }
@@ -101,7 +102,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when creating for unknown person`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
         val command = NoteCommandDTO("test3")
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -111,7 +112,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should update`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         val command = NoteCommandDTO("test3")
         controller.update(person.id!!, note1.id!!, command)
@@ -121,7 +122,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when updating for unknown person`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
         val command = NoteCommandDTO("test3")
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -131,7 +132,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when updating unknown note`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
         val command = NoteCommandDTO("test3")
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -141,7 +142,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should delete`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         controller.delete(person.id!!, note1.id!!)
 
@@ -150,7 +151,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should throw when deleting for unknown person`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.delete(person.id!!, note1.id!!)
@@ -159,7 +160,7 @@ class PersonNoteControllerTest {
 
     @Test
     fun `should note throw when deleting unknown note`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         controller.delete(person.id!!, 876543L)
         assertThat(person.getNotes()).containsOnly(note1, note2)
     }

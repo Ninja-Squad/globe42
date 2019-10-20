@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.ChargeCategoryDao
 import org.globe42.domain.ChargeCategory
 import org.junit.jupiter.api.Test
-import java.util.*
+import org.springframework.data.repository.findByIdOrNull
 
 /**
  * Unit tests for [ChargeCategoryController]
@@ -23,7 +23,7 @@ class ChargeCategoryControllerTest {
 
     @Test
     fun `should get`() {
-        every { mockChargeCategoryDao.findById(chargeCategory.id!!) } returns Optional.of(chargeCategory)
+        every { mockChargeCategoryDao.findByIdOrNull(chargeCategory.id!!) } returns chargeCategory
 
         val result = controller.get(chargeCategory.id!!)
 
@@ -63,8 +63,8 @@ class ChargeCategoryControllerTest {
     fun `should update`() {
         val command = createCommand()
 
-        every { mockChargeCategoryDao.findById(chargeCategory.id!!) } returns Optional.of(chargeCategory)
-        every { mockChargeCategoryDao.findByName(command.name) } returns Optional.empty()
+        every { mockChargeCategoryDao.findByIdOrNull(chargeCategory.id!!) } returns chargeCategory
+        every { mockChargeCategoryDao.findByName(command.name) } returns null
 
         controller.update(chargeCategory.id!!, command)
 

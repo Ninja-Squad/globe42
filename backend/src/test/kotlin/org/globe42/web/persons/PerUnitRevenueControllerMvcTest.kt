@@ -11,6 +11,7 @@ import org.globe42.test.GlobeMvcTest
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
@@ -35,7 +36,7 @@ class PerUnitRevenueControllerMvcTest(
     fun `should return information if present`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
         person.perUnitRevenueInformation = PerUnitRevenueInformation(2, 3, true)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         mvc.get("/api/persons/{personId}/per-unit-revenue", person.id!!).andExpect {
             status { isOk }
@@ -46,7 +47,7 @@ class PerUnitRevenueControllerMvcTest(
     @Test
     fun `should return null if absent`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         mvc.get("/api/persons/{personId}/per-unit-revenue", person.id!!).andExpect {
             status { isNoContent }
@@ -57,7 +58,7 @@ class PerUnitRevenueControllerMvcTest(
     @Test
     fun `should reset to null when deleting`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         mvc.delete("/api/persons/{personId}/per-unit-revenue", person.id!!).andExpect {
             status { isNoContent }
@@ -67,7 +68,7 @@ class PerUnitRevenueControllerMvcTest(
     @Test
     fun `should update`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         mvc.put("/api/persons/{personId}/per-unit-revenue", person.id!!) {
             contentType = MediaType.APPLICATION_JSON

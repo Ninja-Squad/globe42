@@ -14,13 +14,13 @@ import org.globe42.web.util.PageDTO
 import org.globe42.web.util.toDTO
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.time.Instant
 import java.time.LocalDate
-import java.util.*
 import javax.transaction.Transactional
 
 const val PAGE_SIZE = 20
@@ -42,23 +42,23 @@ class TaskController(
 ) {
 
     @GetMapping
-    fun listTodo(@RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
+    fun listTodo(@RequestParam page: Int?): PageDTO<TaskDTO> {
         return taskDao.findTodo(pageRequest(page)).toDTO(::TaskDTO)
     }
 
     @GetMapping(params = ["mine"])
-    fun listMine(@RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
+    fun listMine(@RequestParam page: Int?): PageDTO<TaskDTO> {
         val user = userDao.getOne(currentUser.userId!!)
         return taskDao.findTodoByAssignee(user, pageRequest(page)).toDTO(::TaskDTO)
     }
 
     @GetMapping(params = ["unassigned"])
-    fun listUnassigned(@RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
+    fun listUnassigned(@RequestParam page: Int?): PageDTO<TaskDTO> {
         return taskDao.findTodoUnassigned(pageRequest(page)).toDTO(::TaskDTO)
     }
 
     @GetMapping(params = ["person"])
-    fun listTodoForPerson(@RequestParam("person") personId: Long?, @RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
+    fun listTodoForPerson(@RequestParam("person") personId: Long?, @RequestParam page: Int?): PageDTO<TaskDTO> {
         val person = personDao.getOne(personId!!)
         return taskDao.findTodoByConcernedPerson(person, pageRequest(page)).toDTO(::TaskDTO)
     }
@@ -66,7 +66,7 @@ class TaskController(
     @GetMapping(params = ["person", "archived"])
     fun listArchivedForPerson(
         @RequestParam("person") personId: Long?,
-        @RequestParam page: Optional<Int>
+        @RequestParam page: Int?
     ): PageDTO<TaskDTO> {
         val person = personDao.getOne(personId!!)
         return taskDao.findArchivedByConcernedPerson(person, pageRequest(page)).toDTO(::TaskDTO)
@@ -75,25 +75,27 @@ class TaskController(
     @GetMapping(params = ["before"])
     fun listTodoBefore(
         @RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
-        @RequestParam page: Optional<Int>
+        @RequestParam page: Int?
     ): PageDTO<TaskDTO> {
         return taskDao.findTodoBefore(date, pageRequest(page)).toDTO(::TaskDTO)
     }
 
     @GetMapping(params = ["archived"])
-    fun listArchived(@RequestParam page: Optional<Int>): PageDTO<TaskDTO> {
+    fun listArchived(@RequestParam page: Int?): PageDTO<TaskDTO> {
         return taskDao.findArchived(pageRequest(page)).toDTO(::TaskDTO)
     }
 
     @GetMapping("/{taskId}")
     fun get(@PathVariable("taskId") taskId: Long): TaskDTO {
-        return TaskDTO(taskDao.findById(taskId).orElseThrow { NotFoundException() })
+        return taskDao.findByIdOrNull(taskId)
+            ?.let(::TaskDTO)
+            ?: throw NotFoundException()
     }
 
     @PostMapping("/{taskId}/assignments")
     @ResponseStatus(HttpStatus.CREATED)
     fun assign(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: TaskAssignmentCommandDTO) {
-        val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
+        val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException("no task with ID $taskId")
         val user = userDao.findNotDeletedById(command.userId)
             ?: throw BadRequestException("user ${command.userId} doesn't exist")
 
@@ -113,14 +115,14 @@ class TaskController(
     @DeleteMapping("/{taskId}/assignments")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun unassign(@PathVariable("taskId") taskId: Long) {
-        val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
+        val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException("no task with ID $taskId")
         task.assignee = null
     }
 
     @PostMapping("/{taskId}/status-changes")
     @ResponseStatus(HttpStatus.CREATED)
     fun changeStatus(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: TaskStatusChangeCommandDTO) {
-        val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
+        val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException("no task with ID $taskId")
         task.status = command.newStatus
         if (command.newStatus === TaskStatus.DONE || command.newStatus === TaskStatus.CANCELLED) {
             task.archivalInstant = Instant.now()
@@ -151,7 +153,7 @@ class TaskController(
     @PutMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: TaskCommandDTO) {
-        val task = taskDao.findById(taskId).orElseThrow { NotFoundException() }
+        val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException()
 
         val previousAssignee = task.assignee
         copyCommandToTask(command, task)
@@ -169,14 +171,14 @@ class TaskController(
 
     @GetMapping("/{taskId}/spent-times")
     fun listSpentTimes(@PathVariable("taskId") taskId: Long?): List<SpentTimeDTO> {
-        val task = taskDao.findById(taskId!!).orElseThrow { NotFoundException("no task with ID $taskId") }
+        val task = taskDao.findByIdOrNull(taskId!!) ?: throw NotFoundException("no task with ID $taskId")
         return task.getSpentTimes().map(::SpentTimeDTO)
     }
 
     @PostMapping("/{taskId}/spent-times")
     @ResponseStatus(HttpStatus.CREATED)
     fun addSpentTime(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: SpentTimeCommandDTO): SpentTimeDTO {
-        val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
+        val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException("no task with ID $taskId")
         val spentTime = SpentTime()
         spentTime.creator = userDao.getOne(currentUser.userId!!)
         spentTime.minutes = command.minutes
@@ -189,7 +191,7 @@ class TaskController(
     @DeleteMapping("/{taskId}/spent-times/{spentTimeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteSpentTime(@PathVariable("taskId") taskId: Long, @PathVariable("spentTimeId") spentTimeId: Long) {
-        val task = taskDao.findById(taskId).orElseThrow { NotFoundException("no task with ID $taskId") }
+        val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException("no task with ID $taskId")
         task.getSpentTimes()
             .stream()
             .filter { st -> st.id == spentTimeId }
@@ -201,15 +203,12 @@ class TaskController(
         with(task) {
             description = command.description?.trim()?.takeIf { it.isNotEmpty() }
             title = command.title
-            category = taskCategoryDao.findById(command.categoryId).orElseThrow {
-                BadRequestException("No category with ID ${command.categoryId}")
-            }
+            category = taskCategoryDao.findByIdOrNull(command.categoryId)
+                ?: throw BadRequestException("No category with ID ${command.categoryId}")
 
             dueDate = command.dueDate
             concernedPerson = command.concernedPersonId?.let {
-                personDao.findById(it).orElseThrow {
-                    BadRequestException("no person with id $it")
-                }
+                personDao.findByIdOrNull(it) ?: throw BadRequestException("no person with id $it")
             }
 
             assignee = command.assigneeId?.let {
@@ -218,7 +217,7 @@ class TaskController(
         }
     }
 
-    private fun pageRequest(@RequestParam page: Optional<Int>): PageRequest {
-        return PageRequest.of(page.orElse(0), PAGE_SIZE)
+    private fun pageRequest(@RequestParam page: Int?): PageRequest {
+        return PageRequest.of(page ?: 0, PAGE_SIZE)
     }
 }

@@ -3,6 +3,7 @@ package org.globe42.web.persons
 import org.globe42.dao.PersonDao
 import org.globe42.domain.PerUnitRevenueInformation
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -18,7 +19,7 @@ import javax.transaction.Transactional
 class PerUnitRevenueController(val personDao: PersonDao) {
     @GetMapping
     fun get(@PathVariable("personId") personId: Long): ResponseEntity<PerUnitRevenueInformationDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         return person.perUnitRevenueInformation?.let {
             ResponseEntity.ok(PerUnitRevenueInformationDTO(it))
         } ?: ResponseEntity.noContent().build()
@@ -27,14 +28,14 @@ class PerUnitRevenueController(val personDao: PersonDao) {
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable("personId") personId: Long) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         person.perUnitRevenueInformation = null
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("personId") personId: Long, @RequestBody info: PerUnitRevenueInformationDTO) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         person.perUnitRevenueInformation = PerUnitRevenueInformation(
             info.adultLikeCount,
             info.childCount,

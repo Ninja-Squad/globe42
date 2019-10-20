@@ -3,6 +3,7 @@ package org.globe42.web.persons
 import org.globe42.dao.PersonDao
 import org.globe42.domain.WeddingEvent
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -21,7 +22,7 @@ class WeddingEventController(private val personDao: PersonDao) {
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<WeddingEventDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         return person.getWeddingEvents()
             .stream()
             .sorted(Comparator.comparing(WeddingEvent::date))
@@ -35,7 +36,7 @@ class WeddingEventController(private val personDao: PersonDao) {
         @PathVariable("personId") personId: Long,
         @Validated @RequestBody command: WeddingEventCommandDTO
     ): WeddingEventDTO {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
 
         val event = WeddingEvent()
         event.date = command.date
@@ -54,7 +55,7 @@ class WeddingEventController(private val personDao: PersonDao) {
         @PathVariable("personId") personId: Long,
         @PathVariable("eventId") eventId: Long
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         person.getWeddingEvents()
             .stream()
             .filter { p -> p.id == eventId }

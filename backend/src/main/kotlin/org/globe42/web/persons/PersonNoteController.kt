@@ -5,6 +5,7 @@ import org.globe42.dao.UserDao
 import org.globe42.domain.Note
 import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -27,7 +28,7 @@ class PersonNoteController(
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<NoteDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         return person.getNotes()
             .stream()
             .sorted(Comparator.comparing(Note::creationInstant).reversed())
@@ -38,7 +39,7 @@ class PersonNoteController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@PathVariable("personId") personId: Long, @Validated @RequestBody command: NoteCommandDTO): NoteDTO {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
 
         val note = Note()
         note.creator = userDao.getOne(currentUser.userId!!)
@@ -57,7 +58,7 @@ class PersonNoteController(
         @PathVariable("noteId") noteId: Long,
         @Validated @RequestBody command: NoteCommandDTO
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val note = person.getNotes()
             .stream()
             .filter { n -> n.id == noteId }
@@ -72,7 +73,7 @@ class PersonNoteController(
         @PathVariable("personId") personId: Long,
         @PathVariable("noteId") noteId: Long
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         person.getNotes()
             .stream()
             .filter { n -> n.id == noteId }

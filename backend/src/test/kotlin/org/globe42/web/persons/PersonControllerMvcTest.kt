@@ -16,10 +16,10 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 import java.time.LocalDate
-import java.util.*
 
 /**
  * MVC test for [PersonController]
@@ -47,7 +47,7 @@ class PersonControllerMvcTest(
             mediationCode = "A2"
         }
 
-        every { mockCountryDao.findById(any()) } returns Optional.of(Country("FRA", "France"))
+        every { mockCountryDao.findByIdOrNull(any()) } returns Country("FRA", "France")
     }
 
     @Test
@@ -74,7 +74,7 @@ class PersonControllerMvcTest(
 
     @Test
     fun `should get`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         mvc.get("/api/persons/{personId}", person.id).andExpect {
             status { isOk }
@@ -86,7 +86,7 @@ class PersonControllerMvcTest(
 
     @Test
     fun `should 404 if person not found`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         mvc.get("/api/persons/{personId}", person.id).andExpect {
             status { isNotFound }
@@ -109,7 +109,7 @@ class PersonControllerMvcTest(
 
     @Test
     fun `should update`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         every { mockPersonDao.nextMediationCode(any()) } returns 1
         mvc.put("/api/persons/{personId}", person.id) {
             contentType = MediaType.APPLICATION_JSON
@@ -121,7 +121,7 @@ class PersonControllerMvcTest(
 
     @Test
     fun `should delete`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         mvc.delete("/api/persons/{personId}", person.id).andExpect {
             status { isNoContent }
@@ -130,7 +130,7 @@ class PersonControllerMvcTest(
 
     @Test
     fun `should resurrect`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         mvc.delete("/api/persons/{personId}/deletion", person.id).andExpect {
             status { isNoContent }
@@ -139,7 +139,7 @@ class PersonControllerMvcTest(
 
     @Test
     fun `should signal death`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         person.addParticipation(Participation(65L))
 
         val command = PersonDeathCommandDTO(LocalDate.now())

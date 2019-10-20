@@ -15,8 +15,8 @@ import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * Unit tests for [IncomeController]
@@ -38,7 +38,7 @@ class IncomeControllerTest {
         val person = Person(personId)
         val income = createIncome(12L)
         person.addIncome(income)
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
 
         val result = controller.list(personId)
 
@@ -51,7 +51,7 @@ class IncomeControllerTest {
     @Test
     fun `should throw if person not found`() {
         val personId = 42L
-        every { mockPersonDao.findById(personId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.list(personId) }
     }
@@ -62,7 +62,7 @@ class IncomeControllerTest {
         val incomeId = 12L
         val income = Income(incomeId)
         income.person = Person(personId)
-        every { mockIncomeDao.findById(incomeId) } returns Optional.of(income)
+        every { mockIncomeDao.findByIdOrNull(incomeId) } returns income
 
         controller.delete(personId, incomeId)
 
@@ -72,7 +72,7 @@ class IncomeControllerTest {
     @Test
     fun `should accept deletion if not found to be idempotent`() {
         val incomeId = 12L
-        every { mockIncomeDao.findById(incomeId) } returns Optional.empty()
+        every { mockIncomeDao.findByIdOrNull(incomeId) } returns null
 
         controller.delete(42L, incomeId)
 
@@ -86,7 +86,7 @@ class IncomeControllerTest {
         val income = Income(incomeId)
         income.person = Person(personId)
 
-        every { mockIncomeDao.findById(incomeId) } returns Optional.of(income)
+        every { mockIncomeDao.findByIdOrNull(incomeId) } returns income
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(456L, incomeId) }
     }
@@ -99,8 +99,8 @@ class IncomeControllerTest {
         val person = Person(personId)
         val source = createIncomeSource(sourceId)
 
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
-        every { mockIncomeSourceDao.findById(sourceId) } returns Optional.of(source)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
+        every { mockIncomeSourceDao.findByIdOrNull(sourceId) } returns source
         every { mockIncomeDao.save(any<Income>()) } answers { arg<Income>(0).apply { id = 34L } }
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
@@ -118,8 +118,8 @@ class IncomeControllerTest {
         val sourceId = 12L
 
         val person = Person(personId)
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
-        every { mockIncomeSourceDao.findById(sourceId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
+        every { mockIncomeSourceDao.findByIdOrNull(sourceId) } returns null
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
 
@@ -134,8 +134,8 @@ class IncomeControllerTest {
         val person = Person(personId)
         val source = createIncomeSource(sourceId)
         source.maxMonthlyAmount = BigDecimal("9")
-        every { mockPersonDao.findById(personId) } returns Optional.of(person)
-        every { mockIncomeSourceDao.findById(sourceId) } returns Optional.of(source)
+        every { mockPersonDao.findByIdOrNull(personId) } returns person
+        every { mockIncomeSourceDao.findByIdOrNull(sourceId) } returns source
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(personId, command) }
@@ -146,7 +146,7 @@ class IncomeControllerTest {
         val personId = 42L
         val sourceId = 12L
 
-        every { mockPersonDao.findById(personId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(personId) } returns null
 
         val command = IncomeCommandDTO(sourceId, BigDecimal.TEN)
 

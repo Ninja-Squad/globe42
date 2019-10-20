@@ -7,6 +7,7 @@ import org.globe42.domain.ChargeType
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.ErrorCode
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -31,9 +32,9 @@ class ChargeTypeController(
 
     @GetMapping("/{typeId}")
     operator fun get(@PathVariable("typeId") typeId: Long): ChargeTypeDTO {
-        return chargeTypeDao.findById(typeId)
-            .map(::ChargeTypeDTO)
-            .orElseThrow { NotFoundException("No charge type with ID $typeId") }
+        return chargeTypeDao.findByIdOrNull(typeId)
+            ?.let(::ChargeTypeDTO)
+            ?: throw NotFoundException("No charge type with ID $typeId")
     }
 
     @PostMapping
@@ -51,11 +52,11 @@ class ChargeTypeController(
     @PutMapping("/{typeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("typeId") typeId: Long, @Validated @RequestBody command: ChargeTypeCommandDTO) {
-        val source = chargeTypeDao.findById(typeId).orElseThrow { NotFoundException() }
+        val source = chargeTypeDao.findByIdOrNull(typeId) ?: throw NotFoundException()
 
         chargeTypeDao.findByName(command.name)
-            .filter { other -> other.id != typeId }
-            .ifPresent { _ -> throw BadRequestException(ErrorCode.CHARGE_TYPE_NAME_ALREADY_EXISTS) }
+            ?.takeIf { other -> other.id != typeId }
+            ?.let { throw BadRequestException(ErrorCode.CHARGE_TYPE_NAME_ALREADY_EXISTS) }
 
         copyCommandToSource(command, source)
     }
@@ -69,6 +70,6 @@ class ChargeTypeController(
     }
 
     private fun loadChargeCategory(categoryId: Long): ChargeCategory {
-        return chargeCategoryDao.findById(categoryId).orElseThrow { NotFoundException() }
+        return chargeCategoryDao.findByIdOrNull(categoryId) ?: throw NotFoundException()
     }
 }

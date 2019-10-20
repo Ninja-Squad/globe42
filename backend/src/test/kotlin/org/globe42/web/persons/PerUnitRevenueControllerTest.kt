@@ -10,8 +10,8 @@ import org.globe42.domain.PerUnitRevenueInformation
 import org.globe42.domain.Person
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
-import java.util.*
 
 /**
  * Unit tests for [PerUnitRevenueController]
@@ -25,7 +25,7 @@ class PerUnitRevenueControllerTest {
 
     @Test
     fun `should throw if no person`() {
-        every { mockPersonDao.findById( 42L) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull( 42L) } returns null
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(42L) }
     }
 
@@ -33,7 +33,7 @@ class PerUnitRevenueControllerTest {
     fun `should return information if present`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
         person.perUnitRevenueInformation = PerUnitRevenueInformation(2, 3, true)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         val result = controller.get(person.id!!).body
         assertThat(result).isEqualTo(PerUnitRevenueInformationDTO(2, 3, true))
@@ -42,7 +42,7 @@ class PerUnitRevenueControllerTest {
     @Test
     fun `should return null if absent`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         val result = controller.get(person.id!!)
         assertThat(result.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
@@ -53,7 +53,7 @@ class PerUnitRevenueControllerTest {
     fun `should reset to null when deleting`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
         person.perUnitRevenueInformation = PerUnitRevenueInformation(2, 3, true)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         controller.delete(person.id!!)
 
@@ -63,7 +63,7 @@ class PerUnitRevenueControllerTest {
     @Test
     fun `should update`() {
         val person = Person(42L, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(42L) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         controller.update(person.id!!, PerUnitRevenueInformationDTO(2, 3, true))
 

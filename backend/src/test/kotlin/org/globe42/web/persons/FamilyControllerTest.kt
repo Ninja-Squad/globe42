@@ -11,6 +11,7 @@ import org.globe42.domain.Location
 import org.globe42.domain.Person
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.*
@@ -23,7 +24,7 @@ class FamilyControllerTest {
     private val person = Person(42L)
 
     private val mockPersonDao = mockk<PersonDao> {
-        every {findById(person.id!!) } returns Optional.of(person)
+        every { findByIdOrNull(person.id!!) } returns person
     }
 
     private val controller = FamilyController(mockPersonDao)
@@ -61,7 +62,7 @@ class FamilyControllerTest {
     @Test
     fun `should throw if person does not exist`() {
         val nonExistingId = 8655L
-        every { mockPersonDao.findById(nonExistingId) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(nonExistingId) } returns null
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.get(nonExistingId)
         }

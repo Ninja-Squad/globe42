@@ -3,6 +3,7 @@ package org.globe42.web.persons
 import org.globe42.dao.PersonDao
 import org.globe42.domain.Participation
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -19,7 +20,7 @@ class ParticipationController(private val personDao: PersonDao) {
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<ParticipationDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         return person.getParticipations().map(::ParticipationDTO)
     }
 
@@ -29,7 +30,7 @@ class ParticipationController(private val personDao: PersonDao) {
         @PathVariable("personId") personId: Long,
         @Validated @RequestBody command: ParticipationCommandDTO
     ): ParticipationDTO {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
 
         val participation = Participation()
         participation.activityType = command.activityType
@@ -46,7 +47,7 @@ class ParticipationController(private val personDao: PersonDao) {
         @PathVariable("personId") personId: Long,
         @PathVariable("participationId") participationId: Long
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         person.getParticipations()
             .stream()
             .filter { p -> p.id == participationId }

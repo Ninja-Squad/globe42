@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSourceType
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 /**
@@ -23,7 +24,7 @@ class IncomeSourceTypeControllerTest {
 
     @Test
     fun `should get`() {
-        every { mockIncomeSourceTypeDao.findById(incomeSourceType.id!!) } returns Optional.of(incomeSourceType)
+        every { mockIncomeSourceTypeDao.findByIdOrNull(incomeSourceType.id!!) } returns incomeSourceType
 
         val result = controller.get(incomeSourceType.id!!)
 
@@ -63,8 +64,8 @@ class IncomeSourceTypeControllerTest {
     fun `should update`() {
         val command = createIncomeSourceTypeCommand()
 
-        every { mockIncomeSourceTypeDao.findById(incomeSourceType.id!!) } returns Optional.of(incomeSourceType)
-        every { mockIncomeSourceTypeDao.findByType(command.type) } returns Optional.empty()
+        every { mockIncomeSourceTypeDao.findByIdOrNull(incomeSourceType.id!!) } returns incomeSourceType
+        every { mockIncomeSourceTypeDao.findByType(command.type) } returns null
 
         controller.update(incomeSourceType.id!!, command)
 

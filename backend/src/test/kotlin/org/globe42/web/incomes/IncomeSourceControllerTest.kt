@@ -13,6 +13,7 @@ import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.math.BigDecimal
 import java.util.*
 
@@ -56,7 +57,7 @@ class IncomeSourceControllerTest {
 
     @Test
     fun `should get`() {
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns incomeSource
 
         val result = controller.get(incomeSource.id!!)
 
@@ -65,7 +66,7 @@ class IncomeSourceControllerTest {
 
     @Test
     fun `should throw when getting with unknown id`() {
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.empty()
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(incomeSource.id!!) }
     }
@@ -75,8 +76,8 @@ class IncomeSourceControllerTest {
         val command = createIncomeSourceCommand()
 
         every { mockIncomeSourceDao.existsByName(command.name) } returns false
-        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns
-            Optional.of(IncomeSourceType(command.typeId, "type 2"))
+        every { mockIncomeSourceTypeDao.findByIdOrNull(command.typeId) } returns
+            IncomeSourceType(command.typeId, "type 2")
         every { mockIncomeSourceDao.save(any<IncomeSource>()) } returns incomeSource
 
         val result = controller.create(command)
@@ -94,8 +95,8 @@ class IncomeSourceControllerTest {
     fun `should throw when creating with unknown income source type`() {
         val command = createIncomeSourceCommand()
 
-        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns
-            Optional.of(IncomeSourceType(command.typeId, "type 2"))
+        every { mockIncomeSourceTypeDao.findByIdOrNull(command.typeId) } returns
+            IncomeSourceType(command.typeId, "type 2")
         every { mockIncomeSourceDao.existsByName(command.name) } returns true
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy { controller.create(command) }
@@ -114,10 +115,10 @@ class IncomeSourceControllerTest {
     fun `should update`() {
         val command = createIncomeSourceCommand()
 
-        every { mockIncomeSourceDao.findByName(command.name) } returns Optional.empty()
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
-        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns
-            Optional.of(IncomeSourceType(command.typeId, "type 2"))
+        every { mockIncomeSourceDao.findByName(command.name) } returns null
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns incomeSource
+        every { mockIncomeSourceTypeDao.findByIdOrNull(command.typeId) } returns
+            IncomeSourceType(command.typeId, "type 2")
 
         controller.update(incomeSource.id!!, command)
 
@@ -126,7 +127,7 @@ class IncomeSourceControllerTest {
 
     @Test
     fun `should throw if not found when updating`() {
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.empty()
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.update(incomeSource.id!!, createIncomeSourceCommand())
@@ -137,10 +138,10 @@ class IncomeSourceControllerTest {
     fun `should throw when updating with already used nick name`() {
         val command = createIncomeSourceCommand()
 
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
-        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns
-            Optional.of(IncomeSourceType(command.typeId, "type 2"))
-        every { mockIncomeSourceDao.findByName(command.name) } returns Optional.of(IncomeSource(4567L))
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns incomeSource
+        every { mockIncomeSourceTypeDao.findByIdOrNull(command.typeId) } returns
+            IncomeSourceType(command.typeId, "type 2")
+        every { mockIncomeSourceDao.findByName(command.name) } returns IncomeSource(4567L)
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
             controller.update(incomeSource.id!!, command)
@@ -151,10 +152,10 @@ class IncomeSourceControllerTest {
     fun `should update if same surname is kept`() {
         val command = createIncomeSourceCommand()
 
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
-        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns
-            Optional.of(IncomeSourceType(command.typeId, "type 2"))
-        every { mockIncomeSourceDao.findByName(command.name) } returns Optional.of(incomeSource)
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns incomeSource
+        every { mockIncomeSourceTypeDao.findByIdOrNull(command.typeId) } returns
+            IncomeSourceType(command.typeId, "type 2")
+        every { mockIncomeSourceDao.findByName(command.name) } returns incomeSource
 
         controller.update(incomeSource.id!!, command)
 

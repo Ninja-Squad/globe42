@@ -6,6 +6,7 @@ import org.globe42.domain.Membership
 import org.globe42.domain.PARIS_TIME_ZONE
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -24,17 +25,17 @@ class MembershipController(val personDao: PersonDao, val membershipDao: Membersh
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<MembershipDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         return membershipDao.findByPerson(person).map(::MembershipDTO)
     }
 
     @GetMapping("/current")
     fun getCurrentMembership(@PathVariable("personId") personId: Long): ResponseEntity<MembershipDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val currentYear = LocalDate.now(PARIS_TIME_ZONE).year
         return membershipDao.findByPersonAndYear(person, currentYear)
-            .map { ResponseEntity.ok(MembershipDTO(it)) }
-            .orElseGet { ResponseEntity.noContent().build() }
+            ?.let { ResponseEntity.ok(MembershipDTO(it)) }
+            ?: ResponseEntity.noContent().build()
     }
 
     @PostMapping
@@ -43,9 +44,9 @@ class MembershipController(val personDao: PersonDao, val membershipDao: Membersh
         @PathVariable("personId") personId: Long,
         @Validated @RequestBody command: MembershipCommandDTO
     ): MembershipDTO {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val existing = membershipDao.findByPersonAndYear(person, command.year)
-        existing.ifPresent { throw BadRequestException("a membership already exists for this person on this year") }
+        existing?.let { throw BadRequestException("a membership already exists for this person on this year") }
 
         val membership = Membership(person, command.year)
         copyCommandToMembership(command, membership)
@@ -64,8 +65,8 @@ class MembershipController(val personDao: PersonDao, val membershipDao: Membersh
         @PathVariable("membershipId") membershipId: Long,
         @Validated @RequestBody command: MembershipCommandDTO
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
-        val membership = membershipDao.findById(membershipId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
+        val membership = membershipDao.findByIdOrNull(membershipId) ?: throw NotFoundException()
         if (membership.person != person) {
             throw NotFoundException()
         }
@@ -79,10 +80,9 @@ class MembershipController(val personDao: PersonDao, val membershipDao: Membersh
         @PathVariable("personId") personId: Long,
         @PathVariable("membershipId") membershipId: Long
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
 
-        val existing = membershipDao.findById(membershipId)
-        existing.ifPresent {
+        membershipDao.findByIdOrNull(membershipId)?.let {
             if (it.person == person) {
                 membershipDao.delete(it)
             }
