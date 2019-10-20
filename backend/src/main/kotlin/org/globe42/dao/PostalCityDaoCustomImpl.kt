@@ -1,13 +1,10 @@
 package org.globe42.dao
 
+import org.globe42.domain.PostalCity
 import java.text.Normalizer
-import java.util.ArrayList
 import java.util.stream.Collectors
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.TypedQuery
-
-import org.globe42.domain.PostalCity
 
 /**
  * Implementation of custom methods of [PostalCityDao]
