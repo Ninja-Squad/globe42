@@ -9,7 +9,6 @@ import org.globe42.domain.PassportStatus
 import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*

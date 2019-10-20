@@ -5,7 +5,6 @@ import org.globe42.dao.PersonDao
 import org.globe42.storage.FileDTO
 import org.globe42.storage.StorageService
 import org.globe42.web.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity

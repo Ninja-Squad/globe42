@@ -5,7 +5,6 @@ import org.globe42.dao.UserDao
 import org.globe42.domain.Note
 import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*

@@ -11,7 +11,6 @@ import org.globe42.domain.*
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 

@@ -6,7 +6,6 @@ import org.globe42.domain.Membership
 import org.globe42.domain.PARIS_TIME_ZONE
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated

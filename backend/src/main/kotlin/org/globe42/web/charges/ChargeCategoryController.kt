@@ -5,7 +5,6 @@ import org.globe42.domain.ChargeCategory
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.ErrorCode
 import org.globe42.web.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*

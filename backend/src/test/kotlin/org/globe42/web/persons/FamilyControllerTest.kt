@@ -11,10 +11,8 @@ import org.globe42.domain.Location
 import org.globe42.domain.Person
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Unit tests for [FamilyController]

@@ -14,10 +14,8 @@ import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
 
 /**
  * Unit tests for [PersonNoteController]

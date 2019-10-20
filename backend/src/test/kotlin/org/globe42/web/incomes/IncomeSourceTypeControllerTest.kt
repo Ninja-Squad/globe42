@@ -7,8 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.IncomeSourceTypeDao
 import org.globe42.domain.IncomeSourceType
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
-import java.util.*
 
 /**
  * Unit tests for [IncomeSourceTypeController]

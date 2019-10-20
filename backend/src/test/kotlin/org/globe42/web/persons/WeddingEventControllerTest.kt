@@ -7,7 +7,6 @@ import org.globe42.dao.PersonDao
 import org.globe42.domain.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
 
 /**
