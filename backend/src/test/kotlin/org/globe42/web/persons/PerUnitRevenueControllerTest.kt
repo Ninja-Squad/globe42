@@ -10,7 +10,6 @@ import org.globe42.domain.PerUnitRevenueInformation
 import org.globe42.domain.Person
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 
 /**

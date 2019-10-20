@@ -10,7 +10,6 @@ import org.globe42.domain.Participation
 import org.globe42.domain.Person
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 
 /**
  * Unit tests for [ParticipationController]

@@ -11,8 +11,6 @@ import org.globe42.domain.NetworkMemberType
 import org.globe42.domain.Person
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
-import java.util.*
 
 /**
  * Unit tests for [NetworkMemberController]

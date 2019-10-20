@@ -1,7 +1,6 @@
 package org.globe42.web.security
 
 import org.globe42.dao.UserDao
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import java.util.*

@@ -11,8 +11,6 @@ import org.globe42.domain.User
 import org.globe42.email.EmailSender
 import org.globe42.web.security.CurrentUser
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
-import java.util.*
 
 /**
  * Unit tests for [TaskAssignmentListener]

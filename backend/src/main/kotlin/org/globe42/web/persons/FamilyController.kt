@@ -4,7 +4,6 @@ import org.globe42.dao.PersonDao
 import org.globe42.domain.Child
 import org.globe42.domain.Family
 import org.globe42.web.exception.NotFoundException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated

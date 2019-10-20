@@ -7,7 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.ChargeCategoryDao
 import org.globe42.domain.ChargeCategory
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 
 /**
  * Unit tests for [ChargeCategoryController]

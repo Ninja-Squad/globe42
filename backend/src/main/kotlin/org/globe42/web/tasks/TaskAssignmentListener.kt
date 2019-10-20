@@ -4,7 +4,6 @@ import org.globe42.dao.TaskDao
 import org.globe42.dao.UserDao
 import org.globe42.email.EmailSender
 import org.globe42.web.security.CurrentUser
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.event.TransactionalEventListener

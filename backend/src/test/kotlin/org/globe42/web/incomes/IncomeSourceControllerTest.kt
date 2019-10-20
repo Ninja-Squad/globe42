@@ -13,9 +13,7 @@ import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.findByIdOrNull
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * Unit tests for [IncomeSourceController]

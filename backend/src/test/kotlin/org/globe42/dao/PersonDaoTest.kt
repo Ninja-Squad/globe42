@@ -5,7 +5,6 @@ import org.globe42.domain.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.repository.findByIdOrNull
 
 /**
  * Tests for [PersonDao]

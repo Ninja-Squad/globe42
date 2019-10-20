@@ -1,15 +1,12 @@
 package org.globe42.web.security
 
+import org.springframework.stereotype.Component
 import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import java.security.spec.InvalidKeySpecException
-import java.security.spec.KeySpec
-import java.util.Arrays
-import java.util.Base64
+import java.util.*
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
-
-import org.springframework.stereotype.Component
 
 /**
  * Component allowing to salt, hash and base64-encode passwords, as well as match passwords against encoded passwords
