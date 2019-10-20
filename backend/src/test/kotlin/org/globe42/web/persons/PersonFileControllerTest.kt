@@ -11,6 +11,7 @@ import org.globe42.storage.ReadableFile
 import org.globe42.storage.StorageService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
@@ -37,7 +38,7 @@ class PersonFileControllerTest {
     @BeforeEach
     fun prepare() {
         person = Person(1000L)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         directory = person.id.toString()
     }
 

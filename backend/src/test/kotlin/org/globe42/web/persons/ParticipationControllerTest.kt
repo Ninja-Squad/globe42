@@ -10,7 +10,7 @@ import org.globe42.domain.Participation
 import org.globe42.domain.Person
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import org.springframework.data.repository.findByIdOrNull
 
 /**
  * Unit tests for [ParticipationController]
@@ -30,7 +30,7 @@ class ParticipationControllerTest {
         mealParticipation.activityType = ActivityType.MEAL
         person = Person(42L, "John", "Doe", Gender.MALE)
         person.addParticipation(mealParticipation)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
     }
 
     @Test

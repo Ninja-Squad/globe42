@@ -12,6 +12,7 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -63,7 +64,7 @@ class IncomeSourceControllerMvcTest(
 
     @Test
     fun `should get`() {
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) }  returns Optional.of(incomeSource)
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) }  returns incomeSource
 
         mvc.get("/api/income-sources/{sourceId}", incomeSource.id).andExpect {
             status { isOk }
@@ -76,7 +77,7 @@ class IncomeSourceControllerMvcTest(
         val command = createIncomeSourceCommand()
         every { mockIncomeSourceDao.existsByName(command.name) } returns false
         every { mockIncomeSourceDao.save(any<IncomeSource>())} returns incomeSource
-        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns Optional.of(incomeSource.type)
+        every { mockIncomeSourceTypeDao.findByIdOrNull(command.typeId) } returns incomeSource.type
 
         mvc.post("/api/income-sources") {
             contentType = MediaType.APPLICATION_JSON
@@ -91,9 +92,9 @@ class IncomeSourceControllerMvcTest(
     fun `should update`() {
         val command = createIncomeSourceCommand()
 
-        every { mockIncomeSourceDao.findByName(command.name) } returns Optional.empty()
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
-        every { mockIncomeSourceTypeDao.findById(command.typeId) } returns Optional.of(incomeSource.type)
+        every { mockIncomeSourceDao.findByName(command.name) } returns null
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns incomeSource
+        every { mockIncomeSourceTypeDao.findByIdOrNull(command.typeId) } returns incomeSource.type
 
         mvc.put("/api/income-sources/{sourceId}", incomeSource.id) {
             contentType = MediaType.APPLICATION_JSON

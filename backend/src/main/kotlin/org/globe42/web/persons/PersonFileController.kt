@@ -5,6 +5,7 @@ import org.globe42.dao.PersonDao
 import org.globe42.storage.FileDTO
 import org.globe42.storage.StorageService
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -24,7 +25,7 @@ class PersonFileController(private val personDao: PersonDao, private val storage
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<FileDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val directory = person.id!!.toString()
         return storageService.list(directory)
     }
@@ -34,7 +35,7 @@ class PersonFileController(private val personDao: PersonDao, private val storage
         @PathVariable("personId") personId: Long,
         @PathVariable("fileName") fileName: String
     ): ResponseEntity<StreamingResponseBody> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val directory = person.id!!.toString()
         val readableFile = storageService.get(directory, fileName)
         val responseBody = StreamingResponseBody { outputStream ->
@@ -54,7 +55,7 @@ class PersonFileController(private val personDao: PersonDao, private val storage
         @PathVariable("personId") personId: Long,
         @RequestParam("file") multipartFile: MultipartFile
     ): FileDTO {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val directory = person.id.toString()
         return storageService.create(
             directory,
@@ -67,7 +68,7 @@ class PersonFileController(private val personDao: PersonDao, private val storage
     @DeleteMapping("/{fileName}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable("personId") personId: Long, @PathVariable("fileName") fileName: String) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val directory = person.id!!.toString()
         storageService.delete(directory, fileName)
     }

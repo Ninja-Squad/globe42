@@ -5,6 +5,7 @@ import org.globe42.domain.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 
 /**
  * Tests for [PersonDao]
@@ -58,7 +59,7 @@ class PersonDaoTest : BaseDaoTest() {
     @Test
     fun `should find by id`() {
         skipNextLaunch()
-        assertThat(personDao.findById(1L)).hasValueSatisfying { p -> assertThat(p.id).isEqualTo(1L) }
+        assertThat(personDao.findByIdOrNull(1L)?.id).isEqualTo(1L)
     }
 
     @Test

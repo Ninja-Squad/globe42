@@ -3,6 +3,7 @@ package org.globe42.web.persons
 import org.globe42.dao.PersonDao
 import org.globe42.domain.NetworkMember
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -21,7 +22,7 @@ class NetworkMemberController(private val personDao: PersonDao) {
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<NetworkMemberDTO> {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         return person.getNetworkMembers()
             .stream()
             .sorted(Comparator.comparing(NetworkMember::type))
@@ -35,7 +36,7 @@ class NetworkMemberController(private val personDao: PersonDao) {
         @PathVariable("personId") personId: Long,
         @Validated @RequestBody command: NetworkMemberCommandDTO
     ): NetworkMemberDTO {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
 
         val member = NetworkMember()
         copyCommandToMember(command, member)
@@ -53,7 +54,7 @@ class NetworkMemberController(private val personDao: PersonDao) {
         @PathVariable("networkMemberId") networkMemberId: Long,
         @Validated @RequestBody command: NetworkMemberCommandDTO
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         val member = person.getNetworkMembers()
             .stream()
             .filter { p -> p.id == networkMemberId }
@@ -69,7 +70,7 @@ class NetworkMemberController(private val personDao: PersonDao) {
         @PathVariable("personId") personId: Long,
         @PathVariable("networkMemberId") networkMemberId: Long
     ) {
-        val person = personDao.findById(personId).orElseThrow(::NotFoundException)
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
         person.getNetworkMembers()
             .stream()
             .filter { p -> p.id == networkMemberId }

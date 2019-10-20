@@ -11,6 +11,7 @@ import org.globe42.domain.User
 import org.globe42.email.EmailSender
 import org.globe42.web.security.CurrentUser
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 /**
@@ -90,9 +91,9 @@ class TaskAssignmentListenerTest {
         every { mockUserDao.findNotDeletedById(678L) } returns User(678L).apply {
             login = "jack"
         }
-        every { mockTaskDao.findById(1L) } returns Optional.of(Task(1L).apply {
+        every { mockTaskDao.findByIdOrNull(1L) } returns Task(1L).apply {
             title = "task title"
-        })
+        }
 
         listener.taskAssigned(
             TaskAssignmentEvent(

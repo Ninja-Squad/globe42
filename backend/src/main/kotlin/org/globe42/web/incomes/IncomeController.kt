@@ -6,6 +6,7 @@ import org.globe42.dao.PersonDao
 import org.globe42.domain.Income
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -35,13 +36,12 @@ class IncomeController(
     fun create(@PathVariable("personId") personId: Long, @Validated @RequestBody command: IncomeCommandDTO): IncomeDTO {
         val person = loadPerson(personId)
 
-        val source = incomeSourceDao.findById(command.sourceId).orElseThrow {
-            BadRequestException("No source with ID ${command.sourceId}")
-        }
+        val source = incomeSourceDao.findByIdOrNull(command.sourceId)
+            ?: throw BadRequestException("No source with ID ${command.sourceId}")
 
         source.maxMonthlyAmount?.let {
             if (command.monthlyAmount > it) {
-                throw BadRequestException("The monthly amount shouldn't be bigger than ${it}")
+                throw BadRequestException("The monthly amount shouldn't be bigger than ${source.maxMonthlyAmount}")
             }
         }
 
@@ -56,7 +56,7 @@ class IncomeController(
     @DeleteMapping("/{incomeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable("personId") personId: Long, @PathVariable("incomeId") incomeId: Long) {
-        incomeDao.findById(incomeId).ifPresent { income ->
+        incomeDao.findByIdOrNull(incomeId)?.let  { income ->
             if (income.person.id != personId) {
                 throw NotFoundException("Income with ID $incomeId does not belong to person $personId")
             }
@@ -64,5 +64,5 @@ class IncomeController(
         }
     }
 
-    private fun loadPerson(id: Long) = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+    private fun loadPerson(id: Long) = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
 }

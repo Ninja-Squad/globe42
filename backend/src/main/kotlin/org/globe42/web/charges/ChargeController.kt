@@ -7,6 +7,7 @@ import org.globe42.domain.Charge
 import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -36,8 +37,8 @@ class ChargeController(
     fun create(@PathVariable("personId") personId: Long?, @Validated @RequestBody command: ChargeCommandDTO): ChargeDTO {
         val person = loadPerson(personId)
 
-        val type = chargeTypeDao.findById(command.typeId)
-            .orElseThrow { BadRequestException("No charge type with ID ${command.typeId}") }
+        val type = chargeTypeDao.findByIdOrNull(command.typeId)
+            ?: throw BadRequestException("No charge type with ID ${command.typeId}")
 
         type.maxMonthlyAmount?.let {
             if (command.monthlyAmount > it) {
@@ -56,7 +57,7 @@ class ChargeController(
     @DeleteMapping("/{chargeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable("personId") personId: Long, @PathVariable("chargeId") chargeId: Long) {
-        chargeDao.findById(chargeId).ifPresent { charge ->
+        chargeDao.findByIdOrNull(chargeId)?.let { charge ->
             if (charge.person.id != personId) {
                 throw NotFoundException("Charge with ID $chargeId does not belong to person $personId")
             }
@@ -65,6 +66,6 @@ class ChargeController(
     }
 
     private fun loadPerson(id: Long?): Person {
-        return personDao.findById(id!!).orElseThrow { NotFoundException("No person with ID $id") }
+        return personDao.findByIdOrNull(id!!) ?: throw NotFoundException("No person with ID $id")
     }
 }

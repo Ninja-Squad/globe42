@@ -52,13 +52,13 @@ class MembershipDaoTest : BaseDaoTest() {
     @Test
     fun `should find by person and year`() {
         var result = dao.findByPersonAndYear(Person(1L), 2018)
-        assertThat(result).isNotEmpty
-        assertThat(result.get().id).isEqualTo(2L)
+        assertThat(result).isNotNull
+        assertThat(result?.id).isEqualTo(2L)
 
         result = dao.findByPersonAndYear(Person(1L), 2016)
-        assertThat(result).isEmpty
+        assertThat(result).isNull()
 
         result = dao.findByPersonAndYear(Person(3456L), 2018)
-        assertThat(result).isEmpty
+        assertThat(result).isNull()
     }
 }

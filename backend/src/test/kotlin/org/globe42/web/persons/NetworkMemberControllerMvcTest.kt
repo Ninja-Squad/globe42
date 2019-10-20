@@ -12,6 +12,7 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 import java.util.*
@@ -34,7 +35,7 @@ class NetworkMemberControllerMvcTest(
     fun prepare() {
         person = Person(42L)
         person.addNetworkMember(NetworkMember(NetworkMemberType.DOCTOR, "Dr. No").apply { id = 345L })
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
     }
 
     @Test

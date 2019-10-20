@@ -5,6 +5,7 @@ import org.globe42.domain.ChargeCategory
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.ErrorCode
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -26,9 +27,9 @@ class ChargeCategoryController(private val chargeCategoryDao: ChargeCategoryDao)
 
     @GetMapping("/{categoryId}")
     operator fun get(@PathVariable("categoryId") categoryId: Long): ChargeCategoryDTO {
-        return chargeCategoryDao.findById(categoryId)
-            .map(::ChargeCategoryDTO)
-            .orElseThrow { NotFoundException("No charge category with ID $categoryId") }
+        return chargeCategoryDao.findByIdOrNull(categoryId)
+            ?.let(::ChargeCategoryDTO)
+            ?: throw NotFoundException("No charge category with ID $categoryId")
     }
 
     @PostMapping
@@ -46,11 +47,11 @@ class ChargeCategoryController(private val chargeCategoryDao: ChargeCategoryDao)
     @PutMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("categoryId") categoryId: Long, @Validated @RequestBody command: ChargeCategoryCommandDTO) {
-        val type = chargeCategoryDao.findById(categoryId).orElseThrow { NotFoundException() }
+        val type = chargeCategoryDao.findByIdOrNull(categoryId) ?: throw NotFoundException()
 
         chargeCategoryDao.findByName(command.name)
-            .filter { other -> other.id != categoryId }
-            .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
+            ?.takeIf { other -> other.id != categoryId }
+            ?.let { throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
 
         copyCommandToType(command, type)
     }

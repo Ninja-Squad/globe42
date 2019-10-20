@@ -12,8 +12,8 @@ import org.globe42.domain.*
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Unit tests for PersonController
@@ -36,12 +36,10 @@ class PersonControllerTest {
         person = Person(1L, "John", "Doe", Gender.MALE)
         person.mediationCode = "A2"
 
-        every { mockCountryDao.findById(any()) } answers {
-            Optional.of(
-                Country(
-                    arg(0),
-                    "Country " + arg<Any>(0)
-                )
+        every { mockCountryDao.findByIdOrNull("FRA") } answers {
+            Country(
+                "FRA",
+                "France"
             )
         }
 
@@ -68,7 +66,7 @@ class PersonControllerTest {
 
     @Test
     fun `should get`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         val (identity) = controller.get(person.id!!)
 
@@ -77,7 +75,7 @@ class PersonControllerTest {
 
     @Test
     fun `should throw if not found when getting`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(person.id!!) }
     }
@@ -135,7 +133,7 @@ class PersonControllerTest {
         val command = createCommand(lastName = "Lacote", mediationEnabled = true, spouseId = spouseId)
 
         val agnes = Person(spouseId, "Agnes", "Crepet", Gender.FEMALE)
-        every { mockPersonDao.findById(spouseId) } returns Optional.of(agnes)
+        every { mockPersonDao.findByIdOrNull(spouseId) } returns agnes
         every { mockPersonDao.save(any<Person>()) } answers { arg<Person>(0).apply { id = 42L } }
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
@@ -185,7 +183,7 @@ class PersonControllerTest {
 
     @Test
     fun `should update`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         every { mockPersonDao.nextMediationCode('L') } returns 37
         val command = createCommand()
         controller.update(person.id!!, command)
@@ -196,7 +194,7 @@ class PersonControllerTest {
 
     @Test
     fun `should update when no nationality`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         every { mockPersonDao.nextMediationCode('L') } returns 37
         val command = createCommandWithNoNationality()
         controller.update(person.id!!, command)
@@ -207,7 +205,7 @@ class PersonControllerTest {
 
     @Test
     fun `should update when no passport`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         every { mockPersonDao.nextMediationCode('L') } returns 37
         val command = createCommand(passportStatus = PassportStatus.NO_PASSPORT)
         controller.update(person.id!!, command)
@@ -220,7 +218,7 @@ class PersonControllerTest {
     @Test
     fun `should not update mediation code if letter stays the same`() {
         person.mediationCode = "L42"
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         val command = createCommand()
 
@@ -235,7 +233,7 @@ class PersonControllerTest {
     fun `should create mediation code if mediation enabled and not before`() {
         person.mediationCode = null
         person.mediationEnabled = false
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
         val command = createCommand()
@@ -252,8 +250,8 @@ class PersonControllerTest {
         val command = createCommand("Lacote", true, spouseId)
 
         val agnes = Person(spouseId)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
-        every { mockPersonDao.findById(spouseId) } returns Optional.of(agnes)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
+        every { mockPersonDao.findByIdOrNull(spouseId) } returns agnes
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
         controller.update(person.id!!, command)
@@ -273,8 +271,8 @@ class PersonControllerTest {
         person.couple = previousCouple
 
         val agnes = Person(spouseId)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
-        every { mockPersonDao.findById(spouseId) } returns Optional.of(agnes)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
+        every { mockPersonDao.findByIdOrNull(spouseId) } returns agnes
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
         controller.update(person.id!!, command)
@@ -295,8 +293,8 @@ class PersonControllerTest {
         val command = createCommand("Lacote", true, spouseId)
 
         val agnes = Person(spouseId)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
-        every { mockPersonDao.findById(spouseId) } returns Optional.of(agnes)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
+        every { mockPersonDao.findByIdOrNull(spouseId) } returns agnes
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
         controller.update(person.id!!, command)
@@ -312,7 +310,7 @@ class PersonControllerTest {
         val previousCouple = Couple(person, previousSpouse)
         person.couple = previousCouple
 
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
         controller.update(person.id!!, command)
@@ -328,8 +326,8 @@ class PersonControllerTest {
         val command = createCommand("Lacote", true, spouseId)
 
         val agnes = Person(spouseId)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
-        every { mockPersonDao.findById(spouseId) } returns Optional.of(agnes)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
+        every { mockPersonDao.findByIdOrNull(spouseId) } returns agnes
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
         val previousSpouseOfAgnes = Person(100L)
@@ -352,8 +350,8 @@ class PersonControllerTest {
 
         val agnes = Person(spouseId).apply { partner = "old friend" }
 
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
-        every { mockPersonDao.findById(spouseId) } returns Optional.of(agnes)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
+        every { mockPersonDao.findByIdOrNull(spouseId) } returns agnes
         every { mockPersonDao.nextMediationCode('L') } returns 37
 
         controller.update(person.id!!, command)
@@ -366,7 +364,7 @@ class PersonControllerTest {
 
     @Test
     fun `should throw if not found when updating`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.update(
@@ -378,7 +376,7 @@ class PersonControllerTest {
 
     @Test
     fun `should delete`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         controller.delete(person.id!!)
 
@@ -387,7 +385,7 @@ class PersonControllerTest {
 
     @Test
     fun `should throw if not found when deleting`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.delete(person.id!!) }
     }
@@ -395,7 +393,7 @@ class PersonControllerTest {
     @Test
     fun `should resurrect`() {
         person.deleted = true
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         controller.resurrect(person.id!!)
 
@@ -404,7 +402,7 @@ class PersonControllerTest {
 
     @Test
     fun `should throw if not found when resurrecting`() {
-        every { mockPersonDao.findById(person.id!!) } returns Optional.empty()
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.resurrect(person.id!!) }
     }

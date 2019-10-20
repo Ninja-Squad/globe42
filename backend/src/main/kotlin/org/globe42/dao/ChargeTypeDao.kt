@@ -1,7 +1,5 @@
 package org.globe42.dao
 
-import java.util.Optional
-
 import org.globe42.domain.ChargeType
 import org.springframework.data.jpa.repository.JpaRepository
 
@@ -11,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository
  */
 interface ChargeTypeDao : JpaRepository<ChargeType, Long> {
     fun existsByName(name: String): Boolean
-    fun findByName(name: String): Optional<ChargeType>
+    fun findByName(name: String): ChargeType?
 }

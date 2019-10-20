@@ -7,6 +7,7 @@ import org.globe42.domain.IncomeSourceType
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.ErrorCode
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -29,9 +30,9 @@ class IncomeSourceController(
 
     @GetMapping("/{sourceId}")
     fun get(@PathVariable("sourceId") sourceId: Long): IncomeSourceDTO {
-        return incomeSourceDao.findById(sourceId)
-            .map(::IncomeSourceDTO)
-            .orElseThrow { NotFoundException("No income source with ID $sourceId") }
+        return incomeSourceDao.findByIdOrNull(sourceId)
+            ?.let(::IncomeSourceDTO)
+            ?: throw NotFoundException("No income source with ID $sourceId")
     }
 
     @PostMapping
@@ -49,11 +50,11 @@ class IncomeSourceController(
     @PutMapping("/{sourceId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("sourceId") sourceId: Long, @Validated @RequestBody command: IncomeSourceCommandDTO) {
-        val source = incomeSourceDao.findById(sourceId).orElseThrow(::NotFoundException)
+        val source = incomeSourceDao.findByIdOrNull(sourceId) ?: throw NotFoundException()
 
         incomeSourceDao.findByName(command.name)
-            .filter { other -> other.id != sourceId }
-            .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_NAME_ALREADY_EXISTS) }
+            ?.takeIf { other -> other.id != sourceId }
+            ?.let { throw BadRequestException(ErrorCode.INCOME_SOURCE_NAME_ALREADY_EXISTS) }
 
         copyCommandToSource(command, source)
     }
@@ -67,6 +68,6 @@ class IncomeSourceController(
     }
 
     private fun loadIncomeSourceType(typeId: Long): IncomeSourceType {
-        return incomeSourceTypeDao.findById(typeId).orElseThrow(::NotFoundException)
+        return incomeSourceTypeDao.findByIdOrNull(typeId) ?: throw NotFoundException()
     }
 }

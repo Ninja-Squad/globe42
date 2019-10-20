@@ -20,13 +20,13 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
 import java.time.LocalDate
-import java.util.*
 
 /**
  * MVC tests for [TaskController]
@@ -59,7 +59,7 @@ class TaskControllerMvcTest(
     @BeforeEach
     fun prepare() {
         val variousCategory = TaskCategory(VARIOUS_CATEGORY_ID, "Various")
-        every { mockTaskCategoryDao.findById(variousCategory.id!!) } returns Optional.of(variousCategory)
+        every { mockTaskCategoryDao.findByIdOrNull(variousCategory.id!!) } returns variousCategory
 
         user = createUser(2L)
         task = createTask(23L, user, Person(45L, "John", "Doe", Gender.MALE), variousCategory)
@@ -123,7 +123,7 @@ class TaskControllerMvcTest(
 
     @Test
     fun `should assign`() {
-        every { mockTaskDao.findById(task.id!!) } returns Optional.of(task)
+        every { mockTaskDao.findByIdOrNull(task.id!!) } returns task
         val otherUser = User(5433L)
         every { mockUserDao.findNotDeletedById(otherUser.id!!) } returns otherUser
 
@@ -138,7 +138,7 @@ class TaskControllerMvcTest(
 
     @Test
     fun `should change status`() {
-        every { mockTaskDao.findById(task.id!!) } returns Optional.of(task)
+        every { mockTaskDao.findByIdOrNull(task.id!!) } returns task
 
         mvc.post("/api/tasks/{taskId}/status-changes", task.id) {
             contentType = MediaType.APPLICATION_JSON
@@ -169,7 +169,7 @@ class TaskControllerMvcTest(
     @Test
     fun `should update`() {
         val command = createCommand(null, null)
-        every { mockTaskDao.findById(task.id!!) } returns Optional.of(task)
+        every { mockTaskDao.findByIdOrNull(task.id!!) } returns task
 
         mvc.put("/api/tasks/{id}", task.id) {
             contentType = MediaType.APPLICATION_JSON

@@ -7,8 +7,8 @@ import org.globe42.dao.PersonDao
 import org.globe42.domain.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Unit tests for [WeddingEventController]
@@ -42,7 +42,7 @@ class WeddingEventControllerTest {
             addWeddingEvent(firstDivorce)
         }
 
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
     }
 
     @Test

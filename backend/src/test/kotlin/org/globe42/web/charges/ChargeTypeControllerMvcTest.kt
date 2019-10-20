@@ -12,13 +12,13 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * MVC tests for [ChargeTypeController]
@@ -63,7 +63,7 @@ class ChargeTypeControllerMvcTest(
 
     @Test
     fun `should get`() {
-        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.of(chargeType)
+        every { mockChargeTypeDao.findByIdOrNull(chargeType.id!!) } returns chargeType
 
         mvc.get("/api/charge-types/{typeId}", chargeType.id).andExpect {
             status { isOk }
@@ -76,7 +76,7 @@ class ChargeTypeControllerMvcTest(
         val command = createCommand()
         every { mockChargeTypeDao.existsByName(command.name) } returns false
         every { mockChargeTypeDao.save(any<ChargeType>())} returns chargeType
-        every { mockChargeCategoryDao.findById(command.categoryId) } returns Optional.of(chargeType.category)
+        every { mockChargeCategoryDao.findByIdOrNull(command.categoryId) } returns chargeType.category
 
         mvc.post("/api/charge-types") {
             contentType = MediaType.APPLICATION_JSON
@@ -91,9 +91,9 @@ class ChargeTypeControllerMvcTest(
     fun `should update`() {
         val command = createCommand()
 
-        every { mockChargeTypeDao.findByName(command.name) } returns Optional.empty()
-        every { mockChargeTypeDao.findById(chargeType.id!!) } returns Optional.of(chargeType)
-        every { mockChargeCategoryDao.findById(command.categoryId) } returns Optional.of(chargeType.category)
+        every { mockChargeTypeDao.findByName(command.name) } returns null
+        every { mockChargeTypeDao.findByIdOrNull(chargeType.id!!) } returns chargeType
+        every { mockChargeCategoryDao.findByIdOrNull(command.categoryId) } returns chargeType.category
 
         mvc.put("/api/charge-types/{sourceId}", chargeType.id) {
             contentType = MediaType.APPLICATION_JSON

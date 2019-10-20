@@ -5,6 +5,7 @@ import org.globe42.domain.IncomeSourceType
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.ErrorCode
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -24,9 +25,9 @@ class IncomeSourceTypeController(private val incomeSourceTypeDao: IncomeSourceTy
 
     @GetMapping("/{typeId}")
     fun get(@PathVariable("typeId") typeId: Long): IncomeSourceTypeDTO {
-        return incomeSourceTypeDao.findById(typeId)
-            .map(::IncomeSourceTypeDTO)
-            .orElseThrow { NotFoundException("No income source type with ID $typeId") }
+        return incomeSourceTypeDao.findByIdOrNull(typeId)
+            ?.let(::IncomeSourceTypeDTO)
+            ?: throw NotFoundException("No income source type with ID $typeId")
     }
 
     @PostMapping
@@ -44,11 +45,11 @@ class IncomeSourceTypeController(private val incomeSourceTypeDao: IncomeSourceTy
     @PutMapping("/{typeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("typeId") typeId: Long, @Validated @RequestBody command: IncomeSourceTypeCommandDTO) {
-        val type = incomeSourceTypeDao.findById(typeId).orElseThrow(::NotFoundException)
+        val type = incomeSourceTypeDao.findByIdOrNull(typeId) ?: throw NotFoundException()
 
         incomeSourceTypeDao.findByType(command.type)
-            .filter { other -> other.id != typeId }
-            .ifPresent { _ -> throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
+            ?.takeIf { other -> other.id != typeId }
+            ?.let { throw BadRequestException(ErrorCode.INCOME_SOURCE_TYPE_NAME_ALREADY_EXISTS) }
 
         copyCommandToType(command, type)
     }

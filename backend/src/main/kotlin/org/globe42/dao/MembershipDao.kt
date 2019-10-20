@@ -17,5 +17,5 @@ interface MembershipDao : JpaRepository<Membership, Long> {
     fun findByPerson(@Param("person") person: Person): List<Membership>
 
     @Query("select m from Membership m where m.person = :person and m.year = :year")
-    fun findByPersonAndYear(@Param("person") person: Person, @Param("year") year: Int): Optional<Membership>
+    fun findByPersonAndYear(@Param("person") person: Person, @Param("year") year: Int): Membership?
 }

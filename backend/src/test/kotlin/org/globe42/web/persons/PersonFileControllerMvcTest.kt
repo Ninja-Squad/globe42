@@ -14,6 +14,7 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
@@ -44,7 +45,7 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
     @BeforeEach
     fun prepare() {
         person = Person(1000L)
-        every { mockPersonDao.findById(person.id!!)} returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!)} returns person
         directory = java.lang.Long.toString(person.id!!)
     }
 

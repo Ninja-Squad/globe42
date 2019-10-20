@@ -39,7 +39,7 @@ class IncomeSourceDaoTest : BaseDaoTest() {
     @Test
     fun `should find by name`() {
         skipNextLaunch()
-        assertThat(dao.findByName("hello")).isEmpty
-        assertThat(dao.findByName("agirc")).isNotEmpty
+        assertThat(dao.findByName("hello")).isNull()
+        assertThat(dao.findByName("agirc")).isNotNull
     }
 }

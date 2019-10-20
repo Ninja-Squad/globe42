@@ -11,6 +11,7 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 import java.time.LocalDate
@@ -37,7 +38,7 @@ class MembershipControllerMvcTest(
     @BeforeEach
     fun prepare() {
         person = Person(42L, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         membership = Membership(
             id = 2L,
@@ -63,7 +64,7 @@ class MembershipControllerMvcTest(
     @Test
     fun `should get current membership`() {
         val currentYear = LocalDate.now(PARIS_TIME_ZONE).year
-        every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns Optional.of(membership)
+        every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns membership
 
         mvc.get("/api/persons/{personId}/memberships/current", person.id!!).andExpect {
             status { isOk }
@@ -74,7 +75,7 @@ class MembershipControllerMvcTest(
     @Test
     fun `should return empty content when getting current membership of person that doesn't have a current membership`() {
         val currentYear = LocalDate.now(PARIS_TIME_ZONE).year
-        every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns Optional.empty()
+        every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns null
         mvc.get("/api/persons/{personId}/memberships/current", person.id!!).andExpect {
             status { isNoContent }
             content { string("") }
@@ -89,7 +90,7 @@ class MembershipControllerMvcTest(
             LocalDate.of(2018, 1, 31),
             "002"
         )
-        every { mockMembershipDao.findByPersonAndYear(person, command.year) } returns Optional.empty()
+        every { mockMembershipDao.findByPersonAndYear(person, command.year) } returns null
         every { mockMembershipDao.save(any<Membership>()) } answers {
             arg<Membership>(0).apply { id = 42L }
         }
@@ -105,7 +106,7 @@ class MembershipControllerMvcTest(
 
     @Test
     fun `should update membership`() {
-        every { mockMembershipDao.findById(membership.id!!) } returns Optional.of(membership)
+        every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
         val command = MembershipCommandDTO(
             2018,
             PaymentMode.CHECK,
@@ -122,7 +123,7 @@ class MembershipControllerMvcTest(
 
     @Test
     fun `should delete membership`() {
-        every { mockMembershipDao.findById(membership.id!!) } returns Optional.of(membership)
+        every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         mvc.delete("/api/persons/{personId}/memberships/{membershipId}", person.id!!, membership.id!!).andExpect {
             status { isNoContent }

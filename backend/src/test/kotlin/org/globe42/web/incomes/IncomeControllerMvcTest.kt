@@ -13,13 +13,13 @@ import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * MVC tests for [IncomeController]
@@ -44,7 +44,7 @@ class IncomeControllerMvcTest(
     @BeforeEach
     fun prepare() {
         person = Person(42L)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
     }
 
     @Test
@@ -65,7 +65,7 @@ class IncomeControllerMvcTest(
         val income = createIncome(12L)
         person.addIncome(income)
 
-        every { mockIncomeDao.findById(income.id!!) } returns Optional.of(income)
+        every { mockIncomeDao.findByIdOrNull(income.id!!) } returns income
 
         mvc.delete("/api/persons/{personId}/incomes/{incomeId}", person.id, income.id).andExpect {
             status { isNoContent }
@@ -76,7 +76,7 @@ class IncomeControllerMvcTest(
     fun `should create`() {
         val incomeSource = createIncomeSource(12L)
 
-        every { mockIncomeSourceDao.findById(incomeSource.id!!) } returns Optional.of(incomeSource)
+        every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) } returns incomeSource
         every { mockIncomeDao.save(any<Income>()) } answers { arg<Income>(0).apply { id = 345L } }
 
         val command = IncomeCommandDTO(incomeSource.id!!, BigDecimal.TEN)

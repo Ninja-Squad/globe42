@@ -9,6 +9,7 @@ import org.globe42.domain.PassportStatus
 import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -35,7 +36,9 @@ class PersonController(
 
     @GetMapping("/{personId}")
     fun get(@PathVariable("personId") id: Long): PersonDTO {
-        return personDao.findById(id).map(::PersonDTO).orElseThrow { NotFoundException("No person with ID $id") }
+        return personDao.findByIdOrNull(id)
+            ?.let(::PersonDTO)
+            ?: throw NotFoundException("No person with ID $id")
     }
 
     @PostMapping
@@ -55,7 +58,7 @@ class PersonController(
     @PutMapping("/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable("personId") id: Long, @Validated @RequestBody command: PersonCommandDTO) {
-        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+        val person = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
 
         val oldMediationCodeLetter = person.mediationCode.let {
             if (it != null) it[0] else 0.toChar()
@@ -82,21 +85,21 @@ class PersonController(
     @DeleteMapping("/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable("personId") id: Long) {
-        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+        val person = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
         person.deleted = true
     }
 
     @DeleteMapping("/{personId}/deletion")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun resurrect(@PathVariable("personId") id: Long) {
-        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+        val person = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
         person.deleted = false
     }
 
     @PutMapping("/{personId}/death")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun signalDeath(@PathVariable("personId") id: Long, @Validated @RequestBody command: PersonDeathCommandDTO) {
-        val person = personDao.findById(id).orElseThrow { NotFoundException("No person with ID $id") }
+        val person = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
         person.deathDate = command.deathDate
         person.clearParticipations()
     }
@@ -136,9 +139,8 @@ class PersonController(
                 socialSecurityNumber = command.socialSecurityNumber
                 cafNumber = command.cafNumber
                 nationality = command.nationalityId?.let {
-                    countryDao.findById(it).orElseThrow {
-                        BadRequestException("No nationality with ID ${command.nationalityId}")
-                    }
+                    countryDao.findByIdOrNull(it)
+                        ?: throw BadRequestException("No nationality with ID ${command.nationalityId}")
                 }
                 passportStatus = command.passportStatus
                 passportNumber = command.passportNumber?.takeIf { passportStatus == PassportStatus.PASSPORT }
@@ -174,7 +176,7 @@ class PersonController(
 
         if (spouseId != null && (currentSpouse == null || currentSpouse.id != spouseId)) {
             val newSpouse =
-                personDao.findById(spouseId).orElseThrow { BadRequestException("No person with ID $spouseId") }
+                personDao.findByIdOrNull(spouseId) ?: throw BadRequestException("No person with ID $spouseId")
 
             val newSpouseCurrentCouple = newSpouse.couple
             if (newSpouseCurrentCouple != null) {

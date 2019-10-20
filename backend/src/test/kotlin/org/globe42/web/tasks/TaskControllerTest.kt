@@ -20,8 +20,8 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDate
-import java.util.*
 
 /**
  * Unit tests for [TaskController]
@@ -62,9 +62,9 @@ class TaskControllerTest {
         val person = Person(2L, "Jane", "Dean", Gender.FEMALE)
 
         variousCategory = TaskCategory(VARIOUS_CATEGORY_ID, "Various")
-        every { mockTaskCategoryDao.findById(variousCategory.id!!) } returns Optional.of(variousCategory)
+        every { mockTaskCategoryDao.findByIdOrNull(variousCategory.id!!) } returns variousCategory
         mealCategory = TaskCategory(10L, "Meal")
-        every { mockTaskCategoryDao.findById(mealCategory.id!!) } returns Optional.of(mealCategory)
+        every { mockTaskCategoryDao.findByIdOrNull(mealCategory.id!!) } returns mealCategory
 
         task1 = createTask(23L, user, person, mealCategory)
 
@@ -81,7 +81,7 @@ class TaskControllerTest {
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         every { mockTaskDao.findTodo(pageRequest) } returns singlePage(listOf(task1, task2), pageRequest)
 
-        val result = controller.listTodo(Optional.empty())
+        val result = controller.listTodo(page = null)
 
         assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
         val dto = result.content[0]
@@ -102,7 +102,7 @@ class TaskControllerTest {
         every { mockTaskDao.findTodoUnassigned(pageRequest) } returns
             singlePage(listOf(task1, task2), pageRequest)
 
-        val result = controller.listUnassigned(Optional.empty())
+        val result = controller.listUnassigned(page = null)
 
         assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
@@ -116,7 +116,7 @@ class TaskControllerTest {
         every { mockTaskDao.findTodoByAssignee(user, pageRequest) } returns
             singlePage(listOf(task1, task2), pageRequest)
 
-        val result = controller.listMine(Optional.empty())
+        val result = controller.listMine(page = null)
 
         assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
@@ -128,7 +128,7 @@ class TaskControllerTest {
         every { mockTaskDao.findTodoBefore(maxDate, pageRequest) } returns
             singlePage(listOf(task1, task2), pageRequest)
 
-        val result = controller.listTodoBefore(maxDate, Optional.empty())
+        val result = controller.listTodoBefore(maxDate, page = null)
 
         assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
@@ -141,7 +141,7 @@ class TaskControllerTest {
         every { mockTaskDao.findTodoByConcernedPerson(person, pageRequest) } returns
             singlePage(listOf(task1, task2), pageRequest)
 
-        val result = controller.listTodoForPerson(person.id, Optional.empty())
+        val result = controller.listTodoForPerson(person.id, page = null)
 
         assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
@@ -154,7 +154,7 @@ class TaskControllerTest {
         every { mockTaskDao.findArchivedByConcernedPerson(person, pageRequest) } returns
             singlePage(listOf(task1, task2), pageRequest)
 
-        val result = controller.listArchivedForPerson(person.id, Optional.empty())
+        val result = controller.listArchivedForPerson(person.id, page = null)
 
         assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
     }
@@ -165,7 +165,7 @@ class TaskControllerTest {
         every { mockTaskDao.findArchived(pageRequest) } returns
             PageImpl(listOf(task1, task2), pageRequest, 42)
 
-        val result = controller.listArchived(Optional.of(2))
+        val result = controller.listArchived(2)
 
         assertThat(result.content).extracting<Long>(TaskDTO::id).containsExactly(task1.id, task2.id)
         assertThat(result.number).isEqualTo(2)
@@ -176,7 +176,7 @@ class TaskControllerTest {
 
     @Test
     fun `should assign`() {
-        every { mockTaskDao.findById(task2.id!!) } returns Optional.of(task2)
+        every { mockTaskDao.findByIdOrNull(task2.id!!) } returns task2
         every { mockUserDao.findNotDeletedById(user.id!!) } returns user
 
         controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
@@ -196,7 +196,7 @@ class TaskControllerTest {
     @Test
     fun `should assign without publishing event if new assignee is same as previous`() {
         task2.assignee = user
-        every { mockTaskDao.findById(task2.id!!) } returns Optional.of(task2)
+        every { mockTaskDao.findByIdOrNull(task2.id!!) } returns task2
         every { mockUserDao.findNotDeletedById(user.id!!) } returns user
 
         controller.assign(task2.id!!, TaskAssignmentCommandDTO(user.id!!))
@@ -208,7 +208,7 @@ class TaskControllerTest {
 
     @Test
     fun `should throw when assigning unexisting task`() {
-        every { mockTaskDao.findById(task2.id!!) } returns Optional.empty()
+        every { mockTaskDao.findByIdOrNull(task2.id!!) } returns null
         every { mockUserDao.findNotDeletedById(user.id!!) } returns user
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -218,7 +218,7 @@ class TaskControllerTest {
 
     @Test
     fun `should throw when assigning to unexisting user`() {
-        every { mockTaskDao.findById(task2.id!!) } returns Optional.of(task2)
+        every { mockTaskDao.findByIdOrNull(task2.id!!) } returns task2
         every { mockUserDao.findNotDeletedById(user.id!!) } returns null
 
         assertThatExceptionOfType(BadRequestException::class.java).isThrownBy {
@@ -228,7 +228,7 @@ class TaskControllerTest {
 
     @Test
     fun `should unassign`() {
-        every { mockTaskDao.findById(task2.id!!) } returns Optional.of(task2)
+        every { mockTaskDao.findByIdOrNull(task2.id!!) } returns task2
 
         controller.unassign(task2.id!!)
 
@@ -237,14 +237,14 @@ class TaskControllerTest {
 
     @Test
     fun `should throw when unassigning unexisting task`() {
-        every { mockTaskDao.findById(task2.id!!) } returns Optional.empty()
+        every { mockTaskDao.findByIdOrNull(task2.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.unassign(task2.id!!) }
     }
 
     @Test
     fun `should change status`() {
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.of(task1)
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
 
         controller.changeStatus(task1.id!!, TaskStatusChangeCommandDTO(TaskStatus.DONE))
 
@@ -254,7 +254,7 @@ class TaskControllerTest {
 
     @Test
     fun `should throw when changing status of unexisting task`() {
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.empty()
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.changeStatus(task1.id!!, TaskStatusChangeCommandDTO(TaskStatus.DONE))
@@ -263,7 +263,7 @@ class TaskControllerTest {
 
     @Test
     fun `should get`() {
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.of(task1)
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
 
         val (id) = controller.get(task1.id!!)
 
@@ -272,7 +272,7 @@ class TaskControllerTest {
 
     @Test
     fun `should throw when getting unexisting task`() {
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.empty()
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.get(task1.id!!) }
     }
@@ -282,7 +282,7 @@ class TaskControllerTest {
         val command = createCommand(12L, 13L)
 
         val person = Person(command.concernedPersonId!!, "John", "Doe", Gender.MALE)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         val user = User(command.assigneeId!!, "JB")
         every { mockUserDao.findNotDeletedById(user.id!!) } returns user
@@ -343,12 +343,12 @@ class TaskControllerTest {
         val command = createCommand(12L, 13L)
 
         val person = Person(command.concernedPersonId!!, "Jack", "Black", Gender.MALE)
-        every { mockPersonDao.findById(person.id!!) } returns Optional.of(person)
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         val user = User(command.assigneeId!!)
         every { mockUserDao.findNotDeletedById(user.id!!) } returns user
 
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.of(task1)
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
 
         controller.update(task1.id!!, command)
 
@@ -375,7 +375,7 @@ class TaskControllerTest {
 
         every { mockUserDao.findNotDeletedById(user.id!!) } returns task1.assignee
 
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.of(task1)
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
 
         controller.update(task1.id!!, command)
 
@@ -387,7 +387,7 @@ class TaskControllerTest {
         task1.addSpentTime(createSpentTime(1L, 10, user))
         task1.addSpentTime(createSpentTime(2L, 15, user))
 
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.of(task1)
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
 
         val result = controller.listSpentTimes(task1.id)
         assertThat(result).hasSize(2)
@@ -399,7 +399,7 @@ class TaskControllerTest {
 
     @Test
     fun `should add spent time`() {
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.of(task1)
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
         every { mockCurrentUser.userId } returns user.id
         every { mockUserDao.getOne(user.id!!) } returns user
         every { mockTaskDao.flush() } answers { task1.getSpentTimes().forEach { it.id = it.id ?: 76L } }
@@ -416,7 +416,7 @@ class TaskControllerTest {
     fun `should delete spent time`() {
         val spentTime = createSpentTime(1L, 10, user)
         task1.addSpentTime(spentTime)
-        every { mockTaskDao.findById(task1.id!!) } returns Optional.of(task1)
+        every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
         controller.deleteSpentTime(task1.id!!, spentTime.id!!)
         assertThat(task1.getSpentTimes().isEmpty())
 
