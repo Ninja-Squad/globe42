@@ -49,7 +49,7 @@ const NGB_MODULES = [
   declarations: [NonEditableTypeaheadDirective, DatepickerContainerComponent]
 })
 export class GlobeNgbModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<GlobeNgbModule> {
     return {
       ngModule: GlobeNgbModule,
       providers: [

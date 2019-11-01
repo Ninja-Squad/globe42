@@ -4,7 +4,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule()
 export class CurrentUserModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<CurrentUserModule> {
     return {
       ngModule: CurrentUserModule,
       providers: [
