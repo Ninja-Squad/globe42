@@ -9,7 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false, // https://github.com/angular/angular/issues/33528
     "strictNullChecks": false, // would be nice, but requires a big effort
     "strictFunctionTypes": true,
     "noImplicitThis": true,
