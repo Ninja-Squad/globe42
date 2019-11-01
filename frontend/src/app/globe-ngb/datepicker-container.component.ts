@@ -21,7 +21,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 })
 export class DatepickerContainerComponent {
 
-  @ContentChild(NgbInputDatepicker, { static: false })
+  @ContentChild(NgbInputDatepicker)
   datePicker: NgbInputDatepicker;
 
   toggle() {
