@@ -155,9 +155,9 @@ describe('PersonFamilyEditComponent', () => {
     const fixture = TestBed.createComponent(PersonFamilyEditComponent);
     fixture.detectChanges();
 
-    const familyService: FamilyService = TestBed.get(FamilyService);
+    const familyService: FamilyService = TestBed.inject(FamilyService);
     spyOn(familyService, 'save').and.returnValue(of(undefined));
-    const router: Router = TestBed.get(Router);
+    const router: Router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     const element: HTMLElement = fixture.nativeElement;

@@ -19,8 +19,8 @@ describe('TasksResolverService', () => {
       imports: [CurrentUserModule.forRoot(), HttpClientModule]
     });
 
-    resolver = TestBed.get(TasksResolverService);
-    taskService = TestBed.get(TaskService);
+    resolver = TestBed.inject(TasksResolverService);
+    taskService = TestBed.inject(TaskService);
   });
 
   function routeWithType(taskListType: string): ActivatedRouteSnapshot {
@@ -75,7 +75,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for person-todo list type', () => {
     const route: any = routeWithType('person-todo');
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
 
     const expected = of({} as Page<TaskModel>);
@@ -86,7 +86,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks for person-archived list type', () => {
     const route: any = routeWithType('person-archived');
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
 
     const expected = of({} as Page<TaskModel>);

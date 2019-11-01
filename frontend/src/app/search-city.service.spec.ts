@@ -15,8 +15,8 @@ describe('SearchCityService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    service = TestBed.get(SearchCityService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(SearchCityService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should return empty array for empty term', (done: DoneFn) => {

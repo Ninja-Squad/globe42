@@ -102,7 +102,7 @@ describe('ChargeTypeEditComponent', () => {
 
       tester.maxMonthlyAmount.fillWith('0');
 
-      const chargeTypeService: ChargeTypeService = TestBed.get(ChargeTypeService);
+      const chargeTypeService: ChargeTypeService = TestBed.inject(ChargeTypeService);
       spyOn(chargeTypeService, 'create');
 
       expect(tester.testElement).not.toContainText('Le nom est obligatoire');
@@ -119,8 +119,8 @@ describe('ChargeTypeEditComponent', () => {
     });
 
     it('should save the charge type and navigate to the list', () => {
-      const chargeTypeService: ChargeTypeService = TestBed.get(ChargeTypeService);
-      const router: Router = TestBed.get(Router);
+      const chargeTypeService: ChargeTypeService = TestBed.inject(ChargeTypeService);
+      const router: Router = TestBed.inject(Router);
       spyOn(chargeTypeService, 'create').and.returnValue(of({
         id: 42
       } as ChargeTypeModel));
@@ -177,8 +177,8 @@ describe('ChargeTypeEditComponent', () => {
     });
 
     it('should save the charge type and navigate to the charge types page', () => {
-      const chargeTypeService: ChargeTypeService = TestBed.get(ChargeTypeService);
-      const router: Router = TestBed.get(Router);
+      const chargeTypeService: ChargeTypeService = TestBed.inject(ChargeTypeService);
+      const router: Router = TestBed.inject(Router);
       spyOn(chargeTypeService, 'update').and.returnValue(of(null));
       spyOn(router, 'navigate');
 

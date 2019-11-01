@@ -12,11 +12,11 @@ describe('CountryService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    service = TestBed.get(CountryService);
+    service = TestBed.inject(CountryService);
   });
 
   it('should list countries by loading them from the backend first, then from a cache', () => {
-    const controller: HttpTestingController = TestBed.get(HttpTestingController);
+    const controller: HttpTestingController = TestBed.inject(HttpTestingController);
 
     const expectedCountries: Array<CountryModel> = [{ id: 'BEL', name: 'Belgique' }];
 

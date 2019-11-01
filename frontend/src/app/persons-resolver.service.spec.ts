@@ -24,12 +24,12 @@ describe('PersonsResolverService', () => {
 
   it('should retrieve the active persons', () => {
     const route = routeWithType('active');
-    const personService = TestBed.get(PersonService);
+    const personService = TestBed.inject(PersonService);
     const expectedResult = of([{ firstName: 'John', lastName: 'Doe' }] as Array<PersonModel>);
 
     spyOn(personService, 'list').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(PersonsResolverService);
+    const resolver = TestBed.inject(PersonsResolverService);
     const result = resolver.resolve(route);
 
     expect(result).toBe(expectedResult);
@@ -37,12 +37,12 @@ describe('PersonsResolverService', () => {
 
   it('should retrieve the active persons', () => {
     const route = routeWithType('deleted');
-    const personService = TestBed.get(PersonService);
+    const personService = TestBed.inject(PersonService);
     const expectedResult = of([{ firstName: 'John', lastName: 'Doe' }] as Array<PersonModel>);
 
     spyOn(personService, 'listDeleted').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(PersonsResolverService);
+    const resolver = TestBed.inject(PersonsResolverService);
     const result = resolver.resolve(route);
 
     expect(result).toBe(expectedResult);

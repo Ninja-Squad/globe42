@@ -119,7 +119,7 @@ describe('PersonParticipationsComponent', () => {
         ]
       });
 
-      currentPersonService = TestBed.get(CurrentPersonService);
+      currentPersonService = TestBed.inject(CurrentPersonService);
       spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
       fixture = TestBed.createComponent(PersonParticipationsComponent);

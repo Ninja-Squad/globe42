@@ -14,10 +14,10 @@ describe('ProfileResolverService', () => {
   it('should resolve profile', () => {
     const expectedResult = of({ email: 'joe@nowhere.com'} as ProfileModel);
 
-    const currentUserService = TestBed.get(CurrentUserService);
+    const currentUserService = TestBed.inject(CurrentUserService);
     spyOn(currentUserService, 'getProfile').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(ProfileResolverService);
+    const resolver = TestBed.inject(ProfileResolverService);
     const result = resolver.resolve();
 
     expect(result).toBe(expectedResult);

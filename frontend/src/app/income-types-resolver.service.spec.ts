@@ -11,13 +11,13 @@ describe('IncomeTypesResolverService', () => {
   }));
 
   it('should retrieve a type', () => {
-    const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
+    const incomeSourceTypeService = TestBed.inject(IncomeSourceTypeService);
     const expectedResults: Observable<Array<IncomeSourceTypeModel>> = of([{ id: 42, type: 'CAF' }]);
 
     spyOn(incomeSourceTypeService, 'list').and.returnValue(expectedResults);
 
-    const resolver = TestBed.get(IncomeTypesResolverService);
-    const result = resolver.resolve(null);
+    const resolver = TestBed.inject(IncomeTypesResolverService);
+    const result = resolver.resolve(null, null);
 
     expect(result).toBe(expectedResults);
     expect(incomeSourceTypeService.list).toHaveBeenCalled();

@@ -42,7 +42,7 @@ describe('ConfirmService and its modal component', () => {
   });
 
   function confirm(options: ConfirmOptions): Observable<void> {
-    const confirmService = TestBed.get(ConfirmService);
+    const confirmService = TestBed.inject(ConfirmService);
     const result = confirmService.confirm(options);
 
     fixture.detectChanges();

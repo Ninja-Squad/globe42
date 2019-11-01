@@ -16,8 +16,8 @@ describe('PerUnitRevenueInformationService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    service = TestBed.get(PerUnitRevenueInformationService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(PerUnitRevenueInformationService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should get', () => {
@@ -33,7 +33,7 @@ describe('PerUnitRevenueInformationService', () => {
     let actualBody: PerUnitRevenueInformationModel;
     service.get(42).subscribe(result => actualBody = result);
 
-    TestBed.get(HttpTestingController).expectOne({url, method: 'GET'}).flush(null, {status: 204, statusText: 'No content'});
+    TestBed.inject(HttpTestingController).expectOne({url, method: 'GET'}).flush(null, {status: 204, statusText: 'No content'});
 
     expect(actualBody).toBeNull();
   });

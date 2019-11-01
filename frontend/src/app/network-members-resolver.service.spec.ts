@@ -13,13 +13,13 @@ describe('NetworkMembersResolverService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
   });
 
   it('should resolve network members', () => {
-    const resolver: NetworkMembersResolverService = TestBed.get(NetworkMembersResolverService);
-    const service: NetworkMemberService = TestBed.get(NetworkMemberService);
+    const resolver: NetworkMembersResolverService = TestBed.inject(NetworkMembersResolverService);
+    const service: NetworkMemberService = TestBed.inject(NetworkMemberService);
 
     const members: Observable<Array<NetworkMemberModel>> = of([]);
     spyOn(service, 'list').and.returnValue(members);

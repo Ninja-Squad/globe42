@@ -32,10 +32,10 @@ describe('CurrentUserService', () => {
       imports: [CurrentUserModule.forRoot(), HttpClientTestingModule]
     });
 
-    service = TestBed.get(CurrentUserService);
-    http = TestBed.get(HttpTestingController);
+    service = TestBed.inject(CurrentUserService);
+    http = TestBed.inject(HttpTestingController);
     httpTester = new HttpTester(http);
-    jwtInterceptor = TestBed.get(JwtInterceptorService);
+    jwtInterceptor = TestBed.inject(JwtInterceptorService);
     // we use this instead of jasmine.spyOn to make it pass on Firefox
     // https://github.com/jasmine/jasmine/issues/299
     Object.defineProperty(window, 'localStorage', { value: mockLocalStorage });

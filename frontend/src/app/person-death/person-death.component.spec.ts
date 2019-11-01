@@ -54,13 +54,13 @@ describe('PersonDeathComponent', () => {
       ]
     });
 
-    personService = TestBed.get(PersonService);
-    currentPersonService = TestBed.get(CurrentPersonService);
+    personService = TestBed.inject(PersonService);
+    currentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({
       id: 42,
       nickName: 'john'
     } as PersonModel);
-    router = TestBed.get(Router);
+    router = TestBed.inject(Router);
 
     tester = new PersonDeathComponentTester();
 

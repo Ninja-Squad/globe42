@@ -12,12 +12,12 @@ describe('PersonResolverService', () => {
   }));
 
   it('should retrieve a person and refresh the current person', () => {
-    const currentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService = TestBed.inject(CurrentPersonService);
     const expectedResult = of({ firstName: 'John', lastName: 'Doe' } as PersonModel);
 
     spyOn(currentPersonService, 'refresh').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(PersonResolverService);
+    const resolver = TestBed.inject(PersonResolverService);
     const routeSnapshot = fakeSnapshot({ params: { id: '42' } });
     const result = resolver.resolve(routeSnapshot);
 

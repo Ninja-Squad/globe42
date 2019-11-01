@@ -12,12 +12,12 @@ describe('IncomeSourcesResolverService', () => {
   }));
 
   it('should retrieve sources', () => {
-    const incomeSourceService = TestBed.get(IncomeSourceService);
+    const incomeSourceService = TestBed.inject(IncomeSourceService);
     const expectedResults = of([{ id: 42, name: 'Allocations Familiales' }] as Array<IncomeSourceModel>);
 
     spyOn(incomeSourceService, 'list').and.returnValue(expectedResults);
 
-    const resolver = TestBed.get(IncomeSourcesResolverService);
+    const resolver = TestBed.inject(IncomeSourcesResolverService);
     const result = resolver.resolve();
 
     expect(result).toBe(expectedResults);

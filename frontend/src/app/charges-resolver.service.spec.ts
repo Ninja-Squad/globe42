@@ -13,17 +13,17 @@ describe('ChargesResolverService', () => {
       imports: [HttpClientModule]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
   });
 
   it('should retrieve the charges of the person stored in the data of the parent route', () => {
-    const chargeService = TestBed.get(ChargeService);
+    const chargeService = TestBed.inject(ChargeService);
     const expectedResults = of([{ id: 23 }] as Array<ChargeModel>);
 
     spyOn(chargeService, 'list').and.returnValue(expectedResults);
 
-    const resolver = TestBed.get(ChargesResolverService);
+    const resolver = TestBed.inject(ChargesResolverService);
     const result = resolver.resolve();
 
     expect(result).toBe(expectedResults);

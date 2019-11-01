@@ -246,7 +246,7 @@ describe('TasksComponent', () => {
 
       expect(tester.spentTimesLink).toBeTruthy();
 
-      const taskService = TestBed.get(TaskService);
+      const taskService = TestBed.inject(TaskService);
       spyOn(taskService, 'listSpentTimes').and.returnValue(of([]));
 
       tester.spentTimesLink.click();

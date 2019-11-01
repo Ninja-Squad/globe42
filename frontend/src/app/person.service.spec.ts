@@ -16,8 +16,8 @@ describe('PersonService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    service = TestBed.get(PersonService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(PersonService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should get a person', () => {

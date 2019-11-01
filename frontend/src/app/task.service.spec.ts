@@ -26,9 +26,9 @@ describe('TaskService', () => {
       imports: [CurrentUserModule.forRoot(), HttpClientTestingModule]
     });
 
-    service = TestBed.get(TaskService);
-    currentUserService = TestBed.get(CurrentUserService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(TaskService);
+    currentUserService = TestBed.inject(CurrentUserService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   afterEach(() => jasmine.clock().uninstall());
@@ -114,7 +114,7 @@ describe('TaskService', () => {
     let actualCategories: Array<TaskCategoryModel> = null;
     service.listCategories().subscribe(result => actualCategories = result);
 
-    TestBed.get(HttpTestingController).expectOne({url: '/api/task-categories', method: 'GET'}).flush(categories);
+    TestBed.inject(HttpTestingController).expectOne({url: '/api/task-categories', method: 'GET'}).flush(categories);
 
     expect(actualCategories).toEqual([{ id: 2, name: 'a' }, { id: 1, name: 'b' }]);
   });

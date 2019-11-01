@@ -272,7 +272,7 @@ describe('PersonEditComponent', () => {
     }
   ];
 
-  let personService: jasmine.SpyObj<PersonService>;
+  let personService: PersonService;
 
   @NgModule({
     imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), ValdemortModule],
@@ -366,7 +366,7 @@ describe('PersonEditComponent', () => {
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
-      personService = TestBed.get(PersonService);
+      personService = TestBed.inject(PersonService);
     }));
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -379,8 +379,8 @@ describe('PersonEditComponent', () => {
     });
 
     it('should edit and update an existing person', () => {
-      spyOn(personService, 'update').and.returnValue(of(undefined));
-      const router = TestBed.get(Router);
+      const spiedUpdate = spyOn(personService, 'update').and.returnValue(of(undefined));
+      const router = TestBed.inject(Router);
       spyOn(router, 'navigate');
 
       const tester = new PersonEditTester();
@@ -437,11 +437,11 @@ describe('PersonEditComponent', () => {
 
       tester.save.click();
 
-      expect(personService.update).toHaveBeenCalled();
+      expect(spiedUpdate).toHaveBeenCalled();
 
-      const idUpdated = personService.update.calls.argsFor(0)[0];
+      const idUpdated = spiedUpdate.calls.argsFor(0)[0];
       expect(idUpdated).toBe(42);
-      const personUpdated = personService.update.calls.argsFor(0)[1];
+      const personUpdated = spiedUpdate.calls.argsFor(0)[1];
       expect(personUpdated.lastName).toBe('Do');
       expect(personUpdated.firstName).toBe('John');
       expect(personUpdated.partner).toBeNull();
@@ -450,8 +450,8 @@ describe('PersonEditComponent', () => {
     });
 
     it('should save with a partner and ignore the spouse', () => {
-      spyOn(personService, 'update').and.returnValue(of(undefined));
-      const router = TestBed.get(Router);
+      const spiedUpdate = spyOn(personService, 'update').and.returnValue(of(undefined));
+      const router = TestBed.inject(Router);
       spyOn(router, 'navigate');
 
       const tester = new PersonEditTester();
@@ -465,16 +465,16 @@ describe('PersonEditComponent', () => {
 
       tester.save.click();
 
-      expect(personService.update).toHaveBeenCalled();
+      expect(spiedUpdate).toHaveBeenCalled();
 
-      const personUpdated = personService.update.calls.argsFor(0)[1];
+      const personUpdated = spiedUpdate.calls.argsFor(0)[1];
       expect(personUpdated.partner).toBe('Mary Doe');
       expect(personUpdated.spouseId).toBeNull();
     });
 
     it('should save with no spouse and no partner', () => {
-      spyOn(personService, 'update').and.returnValue(of(undefined));
-      const router = TestBed.get(Router);
+      const spiedUpdate = spyOn(personService, 'update').and.returnValue(of(undefined));
+      const router = TestBed.inject(Router);
       spyOn(router, 'navigate');
 
       const tester = new PersonEditTester();
@@ -490,9 +490,9 @@ describe('PersonEditComponent', () => {
 
       tester.save.click();
 
-      expect(personService.update).toHaveBeenCalled();
+      expect(spiedUpdate).toHaveBeenCalled();
 
-      const personUpdated = personService.update.calls.argsFor(0)[1];
+      const personUpdated = spiedUpdate.calls.argsFor(0)[1];
       expect(personUpdated.partner).toBeNull();
       expect(personUpdated.spouseId).toBeNull();
     });
@@ -603,15 +603,15 @@ describe('PersonEditComponent', () => {
 
       tester.passportStatus('NO_PASSPORT').check();
 
-      spyOn(personService, 'update').and.returnValue(of(undefined));
-      const router = TestBed.get(Router);
+      const spiedUpdate = spyOn(personService, 'update').and.returnValue(of(undefined));
+      const router = TestBed.inject(Router);
       spyOn(router, 'navigate');
 
       tester.save.click();
 
-      expect(personService.update).toHaveBeenCalled();
+      expect(spiedUpdate).toHaveBeenCalled();
 
-      const personUpdated: PersonCommand = personService.update.calls.argsFor(0)[1];
+      const personUpdated: PersonCommand = spiedUpdate.calls.argsFor(0)[1];
       expect(personUpdated.passportNumber).toBeNull();
       expect(personUpdated.passportValidityStartDate).toBeNull();
       expect(personUpdated.passportValidityEndDate).toBeNull();
@@ -656,7 +656,7 @@ describe('PersonEditComponent', () => {
         providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
       });
 
-      personService = TestBed.get(PersonService);
+      personService = TestBed.inject(PersonService);
     }));
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
@@ -669,8 +669,8 @@ describe('PersonEditComponent', () => {
     });
 
     it('should create and save a new person', fakeAsync(() => {
-      spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
-      const router = TestBed.get(Router);
+      const spiedCreate = spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
+      const router = TestBed.inject(Router);
       spyOn(router, 'navigate');
       const tester = new PersonEditTester();
 
@@ -830,9 +830,9 @@ describe('PersonEditComponent', () => {
 
       tester.save.click();
 
-      expect(personService.create).toHaveBeenCalled();
+      expect(spiedCreate).toHaveBeenCalled();
 
-      const createdPerson = personService.create.calls.argsFor(0)[0] as PersonCommand;
+      const createdPerson = spiedCreate.calls.argsFor(0)[0] as PersonCommand;
       expect(createdPerson.lastName).toBe('Doe');
       expect(createdPerson.firstName).toBe('Jane');
       expect(createdPerson.birthName).toBe('Jos');

@@ -13,17 +13,17 @@ describe('ChargeTypeResolverService', () => {
   }));
 
   it('should retrieve a type', () => {
-    const chargeTypeService = TestBed.get(ChargeTypeService);
+    const chargeTypeService = TestBed.inject(ChargeTypeService);
     const expectedResult: Observable<ChargeTypeModel> = of({ id: 42, name: 'Mortgage' } as ChargeTypeModel);
 
     spyOn(chargeTypeService, 'get').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(ChargeTypeResolverService);
+    const resolver = TestBed.inject(ChargeTypeResolverService);
     const params = { id: '42' } as Params;
     const paramMap = convertToParamMap(params);
 
     const routeSnapshot = { paramMap } as ActivatedRouteSnapshot;
-    const result = resolver.resolve(routeSnapshot);
+    const result = resolver.resolve(routeSnapshot, null);
 
     expect(result).toBe(expectedResult);
     expect(chargeTypeService.get).toHaveBeenCalledWith(42);

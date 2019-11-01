@@ -14,8 +14,8 @@ describe('PersonNoteService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    service = TestBed.get(PersonNoteService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(PersonNoteService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should list person notes', () => {

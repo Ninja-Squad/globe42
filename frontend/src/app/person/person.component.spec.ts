@@ -116,7 +116,7 @@ describe('PersonComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
 
-    currentPersonService = TestBed.get(CurrentPersonService);
+    currentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
   }));
 
@@ -244,11 +244,11 @@ describe('PersonComponent', () => {
     const fixture = TestBed.createComponent(PersonComponent);
     fixture.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const personService = TestBed.get(PersonService);
-    const router = TestBed.get(Router);
+    const confirmService = TestBed.inject(ConfirmService);
+    const personService = TestBed.inject(PersonService);
+    const router = TestBed.inject(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
@@ -265,9 +265,9 @@ describe('PersonComponent', () => {
     const fixture = TestBed.createComponent(PersonComponent);
     fixture.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const personService = TestBed.get(PersonService);
-    const router = TestBed.get(Router);
+    const confirmService = TestBed.inject(ConfirmService);
+    const personService = TestBed.inject(PersonService);
+    const router = TestBed.inject(Router);
 
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(personService, 'delete').and.returnValue(of(null));
@@ -286,11 +286,11 @@ describe('PersonComponent', () => {
     const fixture = TestBed.createComponent(PersonComponent);
     fixture.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const personService = TestBed.get(PersonService);
-    const router = TestBed.get(Router);
+    const confirmService = TestBed.inject(ConfirmService);
+    const personService = TestBed.inject(PersonService);
+    const router = TestBed.inject(Router);
 
-    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
@@ -308,9 +308,9 @@ describe('PersonComponent', () => {
     const fixture = TestBed.createComponent(PersonComponent);
     fixture.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const personService = TestBed.get(PersonService);
-    const router = TestBed.get(Router);
+    const confirmService = TestBed.inject(ConfirmService);
+    const personService = TestBed.inject(PersonService);
+    const router = TestBed.inject(Router);
 
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(personService, 'resurrect').and.returnValue(of(null));

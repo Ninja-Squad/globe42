@@ -14,12 +14,12 @@ describe('TaskResolverService', () => {
   }));
 
   it('should resolve a task', () => {
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     const expectedResult = of({ id: 42 } as TaskModel);
 
     spyOn(taskService, 'get').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(TaskResolverService);
+    const resolver = TestBed.inject(TaskResolverService);
     const params = { id: '42' } as Params;
     const paramMap = convertToParamMap(params);
 

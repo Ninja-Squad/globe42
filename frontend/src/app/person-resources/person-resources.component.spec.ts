@@ -132,7 +132,7 @@ describe('PersonResourcesComponent', () => {
       ]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({
       id: 42,
       nickName: 'JB'
@@ -171,8 +171,8 @@ describe('PersonResourcesComponent', () => {
   it('should ask for confirmation before deletion of income', () => {
     tester.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const incomeService = TestBed.get(IncomeService);
+    const confirmService = TestBed.inject(ConfirmService);
+    const incomeService = TestBed.inject(IncomeService);
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(incomeService, 'delete');
 
@@ -185,8 +185,8 @@ describe('PersonResourcesComponent', () => {
   it('should delete income once confirmed', () => {
     tester.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const incomeService = TestBed.get(IncomeService);
+    const confirmService = TestBed.inject(ConfirmService);
+    const incomeService = TestBed.inject(IncomeService);
     spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(incomeService, 'delete').and.returnValue(of(null));
 
@@ -237,8 +237,8 @@ describe('PersonResourcesComponent', () => {
   it('should ask for confirmation before deletion of charge', () => {
     tester.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const chargeService = TestBed.get(ChargeService);
+    const confirmService = TestBed.inject(ConfirmService);
+    const chargeService = TestBed.inject(ChargeService);
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(chargeService, 'delete');
 
@@ -251,8 +251,8 @@ describe('PersonResourcesComponent', () => {
   it('should delete charge once confirmed', () => {
     tester.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const chargeService = TestBed.get(ChargeService);
+    const confirmService = TestBed.inject(ConfirmService);
+    const chargeService = TestBed.inject(ChargeService);
     spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(chargeService, 'delete').and.returnValue(of(null));
 
@@ -318,8 +318,8 @@ describe('PersonResourcesComponent', () => {
   it('should ask for confirmation before deletion of info', () => {
     tester.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const infoService = TestBed.get(PerUnitRevenueInformationService);
+    const confirmService = TestBed.inject(ConfirmService);
+    const infoService = TestBed.inject(PerUnitRevenueInformationService);
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(infoService, 'delete');
 
@@ -332,8 +332,8 @@ describe('PersonResourcesComponent', () => {
   it('should delete info once confirmed', () => {
     tester.detectChanges();
 
-    const confirmService = TestBed.get(ConfirmService);
-    const infoService = TestBed.get(PerUnitRevenueInformationService);
+    const confirmService = TestBed.inject(ConfirmService);
+    const infoService = TestBed.inject(PerUnitRevenueInformationService);
     spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(infoService, 'delete').and.returnValue(of(undefined));
 

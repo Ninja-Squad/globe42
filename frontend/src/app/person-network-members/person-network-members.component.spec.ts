@@ -64,7 +64,7 @@ describe('PersonNetworkMembersComponent', () => {
       ]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 1 });
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -89,8 +89,8 @@ describe('PersonNetworkMembersComponent', () => {
   });
 
   it('should delete a member and reload list after confirmation', () => {
-    const confirmService: ConfirmService = TestBed.get(ConfirmService);
-    const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
+    const confirmService: ConfirmService = TestBed.inject(ConfirmService);
+    const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
 
     spyOn(confirmService, 'confirm').and.returnValue(of(undefined));
     spyOn(networkMemberService, 'delete').and.returnValue(of(undefined));
@@ -115,8 +115,8 @@ describe('PersonNetworkMembersComponent', () => {
   });
 
   it('should not delete a member and reload list if not confirmed', () => {
-    const confirmService: ConfirmService = TestBed.get(ConfirmService);
-    const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
+    const confirmService: ConfirmService = TestBed.inject(ConfirmService);
+    const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
 
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(networkMemberService, 'delete');
@@ -175,7 +175,7 @@ describe('PersonNetworkMembersComponent', () => {
     createButton.click();
     fixture.detectChanges();
 
-    const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
+    const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
     spyOn(networkMemberService, 'create');
 
     const form = element.querySelector('form');
@@ -194,7 +194,7 @@ describe('PersonNetworkMembersComponent', () => {
   });
 
   it('should create and reload the list', () => {
-    const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
+    const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
     spyOn(networkMemberService, 'create').and.returnValue(of({} as NetworkMemberModel));
     const members: Array<NetworkMemberModel> = [
       component.members[0],
@@ -256,7 +256,7 @@ describe('PersonNetworkMembersComponent', () => {
     const textArea = element.querySelector('#text') as HTMLTextAreaElement;
     expect(textArea.value).toBe('Dr. No');
 
-    const networkMemberService: NetworkMemberService = TestBed.get(NetworkMemberService);
+    const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
     spyOn(networkMemberService, 'update').and.returnValue(of(undefined));
     spyOn(networkMemberService, 'list').and.returnValue(of(component.members));
 

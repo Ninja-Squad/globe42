@@ -135,7 +135,7 @@ describe('TasksPageComponent', () => {
 
     const paginationFixture = fixture.debugElement.query(By.directive(NgbPagination));
 
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     const page2Link = paginationFixture.nativeElement.querySelectorAll('a.page-link')[2];
@@ -172,7 +172,7 @@ describe('TasksPageComponent', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     const task = page.content[0];
@@ -188,7 +188,7 @@ describe('TasksPageComponent', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     const task = page.content[0];
@@ -203,8 +203,8 @@ describe('TasksPageComponent', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
-    const taskService = TestBed.get(TaskService);
-    const tasksResolverService = TestBed.get(TasksResolverService);
+    const taskService = TestBed.inject(TaskService);
+    const tasksResolverService = TestBed.inject(TasksResolverService);
 
     spyOn(taskService, 'resurrect').and.returnValue(of(null));
     const newPage: Page<TaskModel> = {
@@ -216,7 +216,7 @@ describe('TasksPageComponent', () => {
     };
 
     spyOn(tasksResolverService, 'resolve').and.returnValue(of(newPage));
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     const task = page.content[0];
@@ -276,12 +276,12 @@ describe('TasksPageComponent', () => {
     expect(fixture.nativeElement.querySelector('#newTaskLink').getAttribute('href')).toBe('/tasks/create;concerned-person=42');
   });
 
-  function checkEventHandled(eventType: TaskEventType, taskServiceMethodName: string) {
+  function checkEventHandled(eventType: TaskEventType, taskServiceMethodName: 'assignToSelf' | 'unassign' | 'markAsDone' | 'cancel' | 'resurrect') {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
-    const taskService = TestBed.get(TaskService);
-    const tasksResolverService = TestBed.get(TasksResolverService);
+    const taskService = TestBed.inject(TaskService);
+    const tasksResolverService = TestBed.inject(TasksResolverService);
 
     spyOn(taskService, taskServiceMethodName).and.returnValue(of(null));
     const newPage: Page<TaskModel> = {

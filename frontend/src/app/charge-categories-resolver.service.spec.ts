@@ -12,13 +12,13 @@ describe('ChargeCategoriesResolverService', () => {
   }));
 
   it('should retrieve a category', () => {
-    const chargeCategoryService = TestBed.get(ChargeCategoryService);
+    const chargeCategoryService = TestBed.inject(ChargeCategoryService);
     const expectedResults: Observable<Array<ChargeCategoryModel>> = of([{ id: 42, name: 'rental' }]);
 
     spyOn(chargeCategoryService, 'list').and.returnValue(expectedResults);
 
-    const resolver = TestBed.get(ChargeCategoriesResolverService);
-    const result = resolver.resolve(null);
+    const resolver = TestBed.inject(ChargeCategoriesResolverService);
+    const result = resolver.resolve(null, null);
 
     expect(result).toBe(expectedResults);
     expect(chargeCategoryService.list).toHaveBeenCalled();

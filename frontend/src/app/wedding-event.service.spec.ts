@@ -15,8 +15,8 @@ describe('WeddingEventService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    service = TestBed.get(WeddingEventService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(WeddingEventService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should list wedding events of a person', () => {

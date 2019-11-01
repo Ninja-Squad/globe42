@@ -18,8 +18,8 @@ describe('NetworkMemberService', () => {
       ]
     });
 
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
-    service = TestBed.get(NetworkMemberService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
+    service = TestBed.inject(NetworkMemberService);
   });
 
   it('should list network members of a person', () => {

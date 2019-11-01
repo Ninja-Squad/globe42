@@ -32,8 +32,8 @@ describe('UsersComponent', () => {
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
 
-    userService = TestBed.get(UserService);
-    currentUserService = TestBed.get(CurrentUserService);
+    userService = TestBed.inject(UserService);
+    currentUserService = TestBed.inject(CurrentUserService);
     currentUserService.userEvents = new BehaviorSubject<UserModel>({ id: 42 } as UserModel);
   }));
 
@@ -65,7 +65,7 @@ describe('UsersComponent', () => {
   });
 
   it('should confirm before deleting a user', () => {
-    const confirmService = TestBed.get(ConfirmService);
+    const confirmService = TestBed.inject(ConfirmService);
 
     spyOn(userService, 'delete');
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
@@ -80,11 +80,11 @@ describe('UsersComponent', () => {
   });
 
   it('should delete after confirmation', () => {
-    const confirmService = TestBed.get(ConfirmService);
+    const confirmService = TestBed.inject(ConfirmService);
 
     spyOn(userService, 'delete').and.returnValue(of(null));
     spyOn(userService, 'list').and.returnValue(of(users));
-    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
 
     const fixture = TestBed.createComponent(UsersComponent);
     fixture.detectChanges();

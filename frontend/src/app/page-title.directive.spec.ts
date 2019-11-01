@@ -44,7 +44,7 @@ describe('PageTitleDirective', () => {
       ]
     });
 
-    titleService = TestBed.get(Title);
+    titleService = TestBed.inject(Title);
   });
 
   it('should set the page title', () => {

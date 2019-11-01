@@ -27,10 +27,10 @@ describe('PerUnitRevenueInformationResolverService', () => {
       ]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 });
 
-    resolver = TestBed.get(PerUnitRevenueInformationResolverService);
+    resolver = TestBed.inject(PerUnitRevenueInformationResolverService);
   });
 
   it('should load when person ID is set on the current route', () => {

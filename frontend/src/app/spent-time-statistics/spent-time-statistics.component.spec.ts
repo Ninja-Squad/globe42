@@ -46,7 +46,7 @@ describe('SpentTimeStatisticsComponent', () => {
       providers: [{ provide: ActivatedRoute, useFactory: () => route }]
     });
 
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     spyOn(taskService, 'spentTimeStatistics').and.returnValue(EMPTY);
   });
 
@@ -54,7 +54,7 @@ describe('SpentTimeStatisticsComponent', () => {
 
   it('should create form with current month and all users selected', () => {
     route = createRoute({});
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
@@ -92,11 +92,11 @@ describe('SpentTimeStatisticsComponent', () => {
 
   it('should load statistics', () => {
     route = createRoute({});
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     const statisticsModel: SpentTimeStatisticsModel = {
       statistics: []
     };
-    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
+    (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -109,7 +109,7 @@ describe('SpentTimeStatisticsComponent', () => {
 
   it('should initialize category statistics and chart configuration when all users selected', () => {
     route = createRoute({});
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     const statisticsModel: SpentTimeStatisticsModel = {
       statistics: [
         {
@@ -134,7 +134,7 @@ describe('SpentTimeStatisticsComponent', () => {
         }
       ]
     };
-    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
+    (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -159,7 +159,7 @@ describe('SpentTimeStatisticsComponent', () => {
 
   it('should reinitialize category statistics and chart configuration when user selection changes', () => {
     route = createRoute({});
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     const statisticsModel: SpentTimeStatisticsModel = {
       statistics: [
         {
@@ -184,7 +184,7 @@ describe('SpentTimeStatisticsComponent', () => {
         }
       ]
     };
-    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
+    (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -211,7 +211,7 @@ describe('SpentTimeStatisticsComponent', () => {
 
   it('should reload statistics and reset chart configuration when date changes', () => {
     route = createRoute({});
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     const statisticsModel1: SpentTimeStatisticsModel = {
       statistics: []
     };
@@ -230,7 +230,7 @@ describe('SpentTimeStatisticsComponent', () => {
       ]
     };
 
-    taskService.spentTimeStatistics.and.returnValues(of(statisticsModel1), of(statisticsModel2));
+    (taskService.spentTimeStatistics as jasmine.Spy).and.returnValues(of(statisticsModel1), of(statisticsModel2));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -254,7 +254,7 @@ describe('SpentTimeStatisticsComponent', () => {
 
   it('should have a view', () => {
     route = createRoute({});
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     const statisticsModel: SpentTimeStatisticsModel = {
       statistics: [
         {
@@ -269,7 +269,7 @@ describe('SpentTimeStatisticsComponent', () => {
         }
       ]
     };
-    taskService.spentTimeStatistics.and.returnValue(of(statisticsModel));
+    (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
 

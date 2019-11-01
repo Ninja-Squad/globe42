@@ -15,11 +15,11 @@ describe('UserResolverService', () => {
   });
 
   it('should resolve the user', () => {
-    const userService = TestBed.get(UserService);
+    const userService = TestBed.inject(UserService);
     const expectedResult = of({id: 42} as UserModel);
     spyOn(userService, 'get').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(UserResolverService);
+    const resolver = TestBed.inject(UserResolverService);
     const params = { id: '42' } as Params;
     const paramMap = convertToParamMap(params);
 

@@ -20,13 +20,13 @@ describe('FamilyResolverService', () => {
       ]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 });
 
-    familyService = TestBed.get(FamilyService);
+    familyService = TestBed.inject(FamilyService);
     family = of({} as FamilyModel);
     spyOn(familyService, 'get').and.returnValue(family);
-    resolver = TestBed.get(FamilyResolverService);
+    resolver = TestBed.inject(FamilyResolverService);
   });
 
   it('should resolve family when editing it', () => {

@@ -23,7 +23,7 @@ describe('ErrorComponent', () => {
     });
 
 
-    errorService = TestBed.get(ErrorService);
+    errorService = TestBed.inject(ErrorService);
   }));
 
   it('should react to technical errors', () => {

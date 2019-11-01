@@ -41,7 +41,7 @@ describe('PersonFamilyComponent', () => {
       ]
     });
 
-    currentPersonService = TestBed.get(CurrentPersonService);
+    currentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({
       id: 42,
       firstName: 'John',
@@ -126,8 +126,8 @@ describe('PersonFamilyComponent', () => {
     const fixture = TestBed.createComponent(PersonFamilyComponent);
     fixture.detectChanges();
 
-    const confirmService: ConfirmService = TestBed.get(ConfirmService);
-    const familyService: FamilyService = TestBed.get(FamilyService);
+    const confirmService: ConfirmService = TestBed.inject(ConfirmService);
+    const familyService: FamilyService = TestBed.inject(FamilyService);
 
     spyOn(confirmService, 'confirm').and.returnValue(of(undefined));
     spyOn(familyService, 'delete').and.returnValue(of(undefined));
@@ -157,8 +157,8 @@ describe('PersonFamilyComponent', () => {
     const fixture = TestBed.createComponent(PersonFamilyComponent);
     fixture.detectChanges();
 
-    const confirmService: ConfirmService = TestBed.get(ConfirmService);
-    const familyService: FamilyService = TestBed.get(FamilyService);
+    const confirmService: ConfirmService = TestBed.inject(ConfirmService);
+    const familyService: FamilyService = TestBed.inject(FamilyService);
 
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(familyService, 'delete').and.returnValue(of(undefined));

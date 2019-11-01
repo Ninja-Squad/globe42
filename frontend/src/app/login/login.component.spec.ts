@@ -66,8 +66,8 @@ describe('LoginComponent', () => {
   });
 
   it('should validate the form', () => {
-    const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
-    const router: Router = TestBed.get(Router);
+    const currentUserService: CurrentUserService = TestBed.inject(CurrentUserService);
+    const router: Router = TestBed.inject(Router);
     spyOn(currentUserService, 'authenticate');
     spyOn(router, 'navigate');
 
@@ -84,8 +84,8 @@ describe('LoginComponent', () => {
   });
 
   it('should call the user service and redirect if success', () => {
-    const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
-    const router: Router = TestBed.get(Router);
+    const currentUserService: CurrentUserService = TestBed.inject(CurrentUserService);
+    const router: Router = TestBed.inject(Router);
 
     const subject = new Subject<UserModel>();
     spyOn(currentUserService, 'authenticate').and.returnValue(subject);
@@ -110,8 +110,8 @@ describe('LoginComponent', () => {
   });
 
   it('should call the user service and display a message if failed', () => {
-    const currentUserService: CurrentUserService = TestBed.get(CurrentUserService);
-    const router: Router = TestBed.get(Router);
+    const currentUserService: CurrentUserService = TestBed.inject(CurrentUserService);
+    const router: Router = TestBed.inject(Router);
 
     const subject = new Subject<UserModel>();
     spyOn(currentUserService, 'authenticate').and.returnValue(subject);

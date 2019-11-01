@@ -17,8 +17,8 @@ describe('FamilyService', () => {
       ]
     });
 
-    service = TestBed.get(FamilyService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(FamilyService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should get family of person', () => {

@@ -19,7 +19,7 @@ describe('PersonNoteEditionGuard', () => {
       ]
     });
 
-    guard = TestBed.get(PersonNoteEditionGuard);
+    guard = TestBed.inject(PersonNoteEditionGuard);
     component = {
       noteEdited : false
     } as PersonComponent;

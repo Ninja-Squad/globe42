@@ -22,6 +22,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import Spy = jasmine.Spy;
 import { CurrentPersonService } from '../current-person.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { WeddingEventCommand } from '../models/wedding-event.command';
 
 class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEventsComponent> {
   constructor() {
@@ -117,7 +118,7 @@ describe('PersonWeddingEventsComponent', () => {
       ]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -140,8 +141,8 @@ describe('PersonWeddingEventsComponent', () => {
     });
 
     it('should delete an event after confirmation and reload the list', () => {
-      const confirmService = TestBed.get(ConfirmService);
-      const weddingEventService = TestBed.get(WeddingEventService);
+      const confirmService = TestBed.inject(ConfirmService);
+      const weddingEventService = TestBed.inject(WeddingEventService);
 
       (confirmService.confirm as Spy).and.returnValue(of(null));
       (weddingEventService.delete as Spy).and.returnValue(of(null));
@@ -165,8 +166,8 @@ describe('PersonWeddingEventsComponent', () => {
     });
 
     it('should not delete an event if not confirmed', () => {
-      const confirmService = TestBed.get(ConfirmService);
-      const weddingEventService = TestBed.get(WeddingEventService);
+      const confirmService = TestBed.inject(ConfirmService);
+      const weddingEventService = TestBed.inject(WeddingEventService);
 
       (confirmService.confirm as Spy).and.returnValue(EMPTY);
 
@@ -194,7 +195,7 @@ describe('PersonWeddingEventsComponent', () => {
       component.showEventCreation();
       component.create();
 
-      const weddingEventService = TestBed.get(WeddingEventService);
+      const weddingEventService = TestBed.inject(WeddingEventService);
       expect(weddingEventService.create).not.toHaveBeenCalled();
     });
 
@@ -215,13 +216,13 @@ describe('PersonWeddingEventsComponent', () => {
       };
       const newEvents: Array<WeddingEventModel> = [ newEvent ];
 
-      const weddingEventService = TestBed.get(WeddingEventService);
+      const weddingEventService = TestBed.inject(WeddingEventService);
       (weddingEventService.create as Spy).and.returnValue(of(newEvent));
       (weddingEventService.list as Spy).and.returnValue(of(newEvents));
 
       component.create();
 
-      expect(weddingEventService.create).toHaveBeenCalledWith(person.id, command);
+      expect(weddingEventService.create).toHaveBeenCalledWith(person.id, command as WeddingEventCommand);
       expect(component.events).toEqual(newEvents);
       expect(component.newEvent).toBeNull();
     });

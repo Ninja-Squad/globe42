@@ -22,7 +22,7 @@ describe('CitiesUploadComponent', () => {
   );
 
   it('should upload', fakeAsync(() => {
-      const cityService = TestBed.get(SearchCityService);
+      const cityService = TestBed.inject(SearchCityService);
       const component = new CitiesUploadComponent(cityService);
 
       expect(component.status).toBe('pending');
@@ -95,7 +95,7 @@ describe('CitiesUploadComponent', () => {
   );
 
   it('should finish if response comes back early', fakeAsync(() => {
-      const cityService = TestBed.get(SearchCityService);
+      const cityService = TestBed.inject(SearchCityService);
       const component = new CitiesUploadComponent(cityService);
 
       expect(component.status).toBe('pending');

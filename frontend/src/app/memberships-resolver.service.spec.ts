@@ -12,17 +12,17 @@ describe('MembershipsResolverService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
   });
 
   it('should resolve the list of memberships of a person', () => {
-    const membershipService = TestBed.get(MembershipService);
+    const membershipService = TestBed.inject(MembershipService);
     const memberships = of([{ id: 2 }] as Array<MembershipModel>);
 
     spyOn(membershipService, 'list').and.returnValue(memberships);
 
-    const resolver: MembershipsResolverService = TestBed.get(MembershipsResolverService);
+    const resolver: MembershipsResolverService = TestBed.inject(MembershipsResolverService);
     const result = resolver.resolve();
     expect(result).toBe(memberships);
     expect(membershipService.list).toHaveBeenCalledWith(42);

@@ -15,8 +15,8 @@ describe('PersonFileService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    service = TestBed.get(PersonFileService);
-    http = TestBed.get(HttpTestingController);
+    service = TestBed.inject(PersonFileService);
+    http = TestBed.inject(HttpTestingController);
     httpTester = new HttpTester(http);
   });
 

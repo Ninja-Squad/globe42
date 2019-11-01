@@ -14,6 +14,7 @@ import { ChargeTypeModel } from '../models/charge-type.model';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { ChargeModel } from '../models/charge.model';
 
 describe('PersonChargeEditComponent', () => {
   const chargeTypes = [
@@ -116,12 +117,12 @@ describe('PersonChargeEditComponent', () => {
     });
 
     it('should save the charge and navigate to the resource list', () => {
-      const incomeService = TestBed.get(ChargeService);
-      const router = TestBed.get(Router);
+      const chargeService = TestBed.inject(ChargeService);
+      const router = TestBed.inject(Router);
 
-      spyOn(incomeService, 'create').and.returnValue(of({
+      spyOn(chargeService, 'create').and.returnValue(of({
         id: 42
-      }));
+      } as ChargeModel));
       spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(PersonChargeEditComponent);
@@ -144,7 +145,7 @@ describe('PersonChargeEditComponent', () => {
 
       save.click();
 
-      expect(incomeService.create).toHaveBeenCalledWith(42, { typeId: 2, monthlyAmount: 12 });
+      expect(chargeService.create).toHaveBeenCalledWith(42, { typeId: 2, monthlyAmount: 12 });
 
       fixture.detectChanges();
 

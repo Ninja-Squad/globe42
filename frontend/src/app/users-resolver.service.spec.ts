@@ -10,13 +10,13 @@ describe('UsersResolverService', () => {
   }));
 
   it('should retrieve users', () => {
-    const userService = TestBed.get(UserService);
+    const userService = TestBed.inject(UserService);
     const expectedResult = of([
       { id: 42, login: 'ced', admin: true }
     ]);
     spyOn(userService, 'list').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(UsersResolverService);
+    const resolver = TestBed.inject(UsersResolverService);
     const result = resolver.resolve();
 
     expect(result).toBe(expectedResult);

@@ -16,9 +16,9 @@ describe('ChargeTypeService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    const http = TestBed.get(HttpTestingController);
+    const http = TestBed.inject(HttpTestingController);
     httpTester = new HttpTester(http);
-    service = TestBed.get(ChargeTypeService);
+    service = TestBed.inject(ChargeTypeService);
   });
 
   it('should get a charge type', () => {

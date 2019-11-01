@@ -13,12 +13,12 @@ describe('IncomeSourceResolverService', () => {
   }));
 
   it('should retrieve a source', () => {
-    const incomeSourceService = TestBed.get(IncomeSourceService);
+    const incomeSourceService = TestBed.inject(IncomeSourceService);
     const expectedResult: Observable<IncomeSourceModel> = of({ id: 42, name: 'Allocations Familiales' } as IncomeSourceModel);
 
     spyOn(incomeSourceService, 'get').and.returnValue(expectedResult);
 
-    const resolver = TestBed.get(IncomeSourceResolverService);
+    const resolver = TestBed.inject(IncomeSourceResolverService);
     const params = { id: '42' } as Params;
     const paramMap = convertToParamMap(params);
     const routeSnapshot = { paramMap } as ActivatedRouteSnapshot;

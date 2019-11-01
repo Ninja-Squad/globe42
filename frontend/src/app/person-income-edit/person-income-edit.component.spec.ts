@@ -14,6 +14,7 @@ import { IncomeService } from '../income.service';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { IncomeModel } from '../models/income.model';
 
 describe('PersonIncomeEditComponent', () => {
   const incomeSources = [
@@ -119,12 +120,12 @@ describe('PersonIncomeEditComponent', () => {
     });
 
     it('should save the income and navigate to the resource list', () => {
-      const incomeService = TestBed.get(IncomeService);
-      const router = TestBed.get(Router);
+      const incomeService = TestBed.inject(IncomeService);
+      const router = TestBed.inject(Router);
 
       spyOn(incomeService, 'create').and.returnValue(of({
         id: 42
-      }));
+      } as IncomeModel));
       spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(PersonIncomeEditComponent);

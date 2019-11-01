@@ -15,7 +15,7 @@ describe('CurrentPersonService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    service = TestBed.get(CurrentPersonService);
+    service = TestBed.inject(CurrentPersonService);
   });
 
   it('should have null initially', () => {
@@ -26,7 +26,7 @@ describe('CurrentPersonService', () => {
   });
 
   it('should refresh', () => {
-    const personService: PersonService = TestBed.get(PersonService);
+    const personService: PersonService = TestBed.inject(PersonService);
     const expectedPerson = { id: 42} as PersonModel;
     spyOn(personService, 'get').and.returnValue(of(expectedPerson));
 

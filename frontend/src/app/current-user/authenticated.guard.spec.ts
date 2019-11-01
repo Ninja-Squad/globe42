@@ -16,8 +16,8 @@ describe('AuthenticatedGuard', () => {
       imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientTestingModule]
     });
 
-    guard = TestBed.get(AuthenticatedGuard);
-    userService = TestBed.get(CurrentUserService);
+    guard = TestBed.inject(AuthenticatedGuard);
+    userService = TestBed.inject(CurrentUserService);
   });
 
   it('should not do anything if logged in', () => {
@@ -29,7 +29,7 @@ describe('AuthenticatedGuard', () => {
   it('should return th UrlTree to login if not logged in', () => {
     spyOn(userService, 'isLoggedIn').and.returnValue(false);
 
-    const router: Router = TestBed.get(Router);
+    const router: Router = TestBed.inject(Router);
     expect(guard.canActivate()).toEqual(router.parseUrl('/login'));
   });
 });

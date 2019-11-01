@@ -21,9 +21,9 @@ describe('JwtInterceptorService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    http = TestBed.get(HttpTestingController);
-    httpClient = TestBed.get(HttpClient);
-    service = TestBed.get(JwtInterceptorService);
+    http = TestBed.inject(HttpTestingController);
+    httpClient = TestBed.inject(HttpClient);
+    service = TestBed.inject(JwtInterceptorService);
   });
 
   it('should not add token if no token', () => {

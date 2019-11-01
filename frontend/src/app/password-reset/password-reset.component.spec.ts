@@ -39,7 +39,7 @@ describe('PasswordResetComponent', () => {
     expect(resetButton).not.toBeNull();
     expect(nativeElement.querySelector('#updated-user')).toBeNull();
 
-    const userService = TestBed.get(UserService);
+    const userService = TestBed.inject(UserService);
     const updatedUser = {id: 42, login: 'jb', generatedPassword: 'passw0rd'} as UserWithPasswordModel;
     spyOn(userService, 'resetPassword').and.returnValue(of(updatedUser));
     resetButton.click();

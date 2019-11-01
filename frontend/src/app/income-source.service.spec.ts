@@ -16,9 +16,9 @@ describe('IncomeSourceService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    const http = TestBed.get(HttpTestingController);
+    const http = TestBed.inject(HttpTestingController);
     httpTester = new HttpTester(http);
-    service = TestBed.get(IncomeSourceService);
+    service = TestBed.inject(IncomeSourceService);
   });
 
   it('should get an income source', () => {

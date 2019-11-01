@@ -28,7 +28,7 @@ describe('PersonFilesComponent', () => {
       declarations: [PersonFilesComponent, FileSizePipe, PageTitleDirective, FullnamePipe]
     });
 
-    currentPersonService = TestBed.get(CurrentPersonService);
+    currentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     files = [
@@ -46,7 +46,7 @@ describe('PersonFilesComponent', () => {
   }));
 
   it('should display files', () => {
-    const personFileService = TestBed.get(PersonFileService);
+    const personFileService = TestBed.inject(PersonFileService);
     spyOn(personFileService, 'list').and.returnValue(of(files));
 
     const fixture = TestBed.createComponent(PersonFilesComponent);
@@ -57,7 +57,7 @@ describe('PersonFilesComponent', () => {
   });
 
   it('should display no file message if no files', () => {
-    const personFileService = TestBed.get(PersonFileService);
+    const personFileService = TestBed.inject(PersonFileService);
     spyOn(personFileService, 'list').and.returnValue(of([]));
 
     const fixture = TestBed.createComponent(PersonFilesComponent);
@@ -67,7 +67,7 @@ describe('PersonFilesComponent', () => {
   });
 
   it('should display a spinner after 300 ms until files are available', fakeAsync(() => {
-    const personFileService = TestBed.get(PersonFileService);
+    const personFileService = TestBed.inject(PersonFileService);
     const subject = new Subject<Array<FileModel>>();
     spyOn(personFileService, 'list').and.returnValue(subject);
 
@@ -88,9 +88,9 @@ describe('PersonFilesComponent', () => {
 
   it('should delete file', () => {
     // create component with 2 files
-    const personFileService = TestBed.get(PersonFileService);
-    const confirmService = TestBed.get(ConfirmService);
-    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    const personFileService = TestBed.inject(PersonFileService);
+    const confirmService = TestBed.inject(ConfirmService);
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(personFileService, 'delete').and.returnValue(of(null));
     spyOn(personFileService, 'list').and.returnValues(of(files), of([files[1]]));
 
@@ -109,7 +109,7 @@ describe('PersonFilesComponent', () => {
 
   it('should upload a file', () => {
     // create component with 1 file
-    const personFileService = TestBed.get(PersonFileService);
+    const personFileService = TestBed.inject(PersonFileService);
     spyOn(personFileService, 'list').and.returnValues(of([files[0]]), of(files));
 
     const fakeEvents = new Subject<any>();
@@ -166,7 +166,7 @@ describe('PersonFilesComponent', () => {
   });
 
   it('should set the page title', () => {
-    const titleService: Title = TestBed.get(Title);
+    const titleService: Title = TestBed.inject(Title);
     const fixture = TestBed.createComponent(PersonFilesComponent);
     fixture.detectChanges();
 

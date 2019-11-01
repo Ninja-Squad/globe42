@@ -24,9 +24,9 @@ describe('ErrorService', () => {
       ]
     });
 
-    service = TestBed.get(ErrorService);
-    http = TestBed.get(HttpTestingController);
-    httpClient = TestBed.get(HttpClient);
+    service = TestBed.inject(ErrorService);
+    http = TestBed.inject(HttpTestingController);
+    httpClient = TestBed.inject(HttpClient);
   });
 
   it('should emit technical error when error is not an HTTP response', () => {

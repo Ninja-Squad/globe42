@@ -57,7 +57,7 @@ describe('PersonMembershipsComponent', () => {
       ]
     });
 
-    const currentPersonService: CurrentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -140,7 +140,7 @@ describe('PersonMembershipsComponent', () => {
     cardNumber.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    const membershipService: MembershipService = TestBed.get(MembershipService);
+    const membershipService: MembershipService = TestBed.inject(MembershipService);
     const newMembership: MembershipModel = {
       id: 56,
       year: 2018,
@@ -246,8 +246,8 @@ describe('PersonMembershipsComponent', () => {
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
 
-    const confirmService: ConfirmService = TestBed.get(ConfirmService);
-    const membershipService: MembershipService = TestBed.get(MembershipService);
+    const confirmService: ConfirmService = TestBed.inject(ConfirmService);
+    const membershipService: MembershipService = TestBed.inject(MembershipService);
 
     spyOn(confirmService, 'confirm').and.returnValue(of(undefined));
     spyOn(membershipService, 'deleteCurrent').and.returnValue(of(undefined));

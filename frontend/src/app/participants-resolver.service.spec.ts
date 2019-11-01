@@ -15,12 +15,12 @@ describe('ParticipantsResolverService', () => {
   });
 
   it('should resolve the list of participants of an activity type', () => {
-    const participationService = TestBed.get(ParticipationService);
+    const participationService = TestBed.inject(ParticipationService);
     const participants = of([{ id: 1 }] as Array<PersonIdentityModel>);
 
     spyOn(participationService, 'listParticipants').and.returnValue(participants);
 
-    const resolver: ParticipantsResolverService = TestBed.get(ParticipantsResolverService);
+    const resolver: ParticipantsResolverService = TestBed.inject(ParticipantsResolverService);
     const route: any = { paramMap: convertToParamMap({ activityType: 'MEAL' }) };
     const result = resolver.resolve(route, null);
     expect(result).toBe(participants);

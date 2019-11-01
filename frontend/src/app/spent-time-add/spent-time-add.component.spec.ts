@@ -90,7 +90,7 @@ describe('SpentTimeAddComponent', () => {
 
     tester.minutes.fillWith('10');
 
-    const taskService = TestBed.get(TaskService);
+    const taskService = TestBed.inject(TaskService);
     const spentTime = { id: 1 } as SpentTimeModel;
     spyOn(taskService, 'addSpentTime').and.returnValue(of(spentTime));
 

@@ -46,9 +46,9 @@ describe('IncomeTypeEditComponent', () => {
     });
 
     it('should edit and update an existing income type', () => {
-      const incomeSourceTypeService: IncomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
+      const incomeSourceTypeService: IncomeSourceTypeService = TestBed.inject(IncomeSourceTypeService);
       spyOn(incomeSourceTypeService, 'update').and.returnValue(of(undefined));
-      const router: Router = TestBed.get(Router);
+      const router: Router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
 
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
@@ -95,8 +95,8 @@ describe('IncomeTypeEditComponent', () => {
     });
 
     it('should create and save a new income type', () => {
-      const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
-      const router: Router = TestBed.get(Router);
+      const incomeSourceTypeService = TestBed.inject(IncomeSourceTypeService);
+      const router: Router = TestBed.inject(Router);
 
       spyOn(incomeSourceTypeService, 'create').and.returnValue(of(null));
       spyOn(router, 'navigateByUrl');
@@ -121,8 +121,8 @@ describe('IncomeTypeEditComponent', () => {
     });
 
     it('should display an error message if no type', () => {
-      const incomeSourceTypeService = TestBed.get(IncomeSourceTypeService);
-      const router: Router = TestBed.get(Router);
+      const incomeSourceTypeService = TestBed.inject(IncomeSourceTypeService);
+      const router: Router = TestBed.inject(Router);
 
       spyOn(incomeSourceTypeService, 'create').and.returnValue(of(null));
       spyOn(router, 'navigateByUrl');

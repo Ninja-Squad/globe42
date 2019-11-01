@@ -14,6 +14,7 @@ import { of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { UserWithPasswordModel } from '../models/user-with-password.model';
 
 describe('UserEditComponent', () => {
 
@@ -79,11 +80,11 @@ describe('UserEditComponent', () => {
     });
 
     it('should save the user and display the result', () => {
-      const userService = TestBed.get(UserService);
+      const userService = TestBed.inject(UserService);
       spyOn(userService, 'create').and.returnValue(of({
         login: 'foo',
         generatedPassword: 'passw0rd'
-      }));
+      } as UserWithPasswordModel));
 
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
@@ -162,8 +163,8 @@ describe('UserEditComponent', () => {
     });
 
     it('should save the user and navigate to the users page', () => {
-      const userService = TestBed.get(UserService);
-      const router = TestBed.get(Router);
+      const userService = TestBed.inject(UserService);
+      const router = TestBed.inject(Router);
 
       spyOn(userService, 'update').and.returnValue(of(null));
       spyOn(router, 'navigate');

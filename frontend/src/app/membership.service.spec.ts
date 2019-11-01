@@ -18,8 +18,8 @@ describe('MembershipService', () => {
       ]
     });
 
-    service = TestBed.get(MembershipService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(MembershipService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should list memberships', () => {

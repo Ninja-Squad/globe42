@@ -15,9 +15,9 @@ describe('ChargeService', () => {
       imports: [HttpClientTestingModule]
     });
 
-    const http = TestBed.get(HttpTestingController);
+    const http = TestBed.inject(HttpTestingController);
     httpTester = new HttpTester(http);
-    service = TestBed.get(ChargeService);
+    service = TestBed.inject(ChargeService);
   });
 
   it('should list charges of a person', () => {

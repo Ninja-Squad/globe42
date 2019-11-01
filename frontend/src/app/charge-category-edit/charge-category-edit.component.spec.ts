@@ -38,7 +38,7 @@ describe('ChargeCategoryEditComponent', () => {
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
-      router = TestBed.get(Router);
+      router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
     }));
 
@@ -50,8 +50,8 @@ describe('ChargeCategoryEditComponent', () => {
     });
 
     it('should edit and update an existing charge category', () => {
-      const chargeCategoryService = TestBed.get(ChargeCategoryService);
-      spyOn(chargeCategoryService, 'update').and.returnValue(of(chargeCategory));
+      const chargeCategoryService = TestBed.inject(ChargeCategoryService);
+      spyOn(chargeCategoryService, 'update').and.returnValue(of(null));
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
       fixture.detectChanges();
 
@@ -86,7 +86,7 @@ describe('ChargeCategoryEditComponent', () => {
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
-      router = TestBed.get(Router);
+      router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
     }));
 
@@ -98,7 +98,7 @@ describe('ChargeCategoryEditComponent', () => {
     });
 
     it('should create and save a new charge category', () => {
-      const chargeCategoryService = TestBed.get(ChargeCategoryService);
+      const chargeCategoryService = TestBed.inject(ChargeCategoryService);
       spyOn(chargeCategoryService, 'create').and.returnValue(of(null));
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
 
@@ -119,7 +119,7 @@ describe('ChargeCategoryEditComponent', () => {
     });
 
     it('should display an error message if no name', () => {
-      const chargeCategoryService = TestBed.get(ChargeCategoryService);
+      const chargeCategoryService = TestBed.inject(ChargeCategoryService);
       spyOn(chargeCategoryService, 'create').and.returnValue(of(null));
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
 

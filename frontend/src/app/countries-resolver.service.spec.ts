@@ -12,12 +12,12 @@ describe('CountriesResolverService', () => {
   }));
 
   it('should retrieve the countries', () => {
-    const countryService = TestBed.get(CountryService);
+    const countryService = TestBed.inject(CountryService);
     const expectedResults: Observable<Array<CountryModel>> = of([{ id: 'BEL', name: 'Belgique' }]);
 
     spyOn(countryService, 'list').and.returnValue(expectedResults);
 
-    const resolver = TestBed.get(CountriesResolverService);
+    const resolver = TestBed.inject(CountriesResolverService);
     const result = resolver.resolve();
 
     expect(result).toBe(expectedResults);

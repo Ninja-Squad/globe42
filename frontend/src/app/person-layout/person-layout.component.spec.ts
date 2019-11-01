@@ -58,7 +58,7 @@ describe('PersonLayoutComponent', () => {
       ]
     });
 
-    const currentPersonService = TestBed.get(CurrentPersonService);
+    const currentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
 
     tester = new PersonLayoutComponentTester();
@@ -96,7 +96,7 @@ describe('PersonLayoutComponent', () => {
   });
 
   it('should change the working status when the current membership is loaded or when it is created or deleted', () => {
-    const membershipService: MembershipService = TestBed.get(MembershipService);
+    const membershipService: MembershipService = TestBed.inject(MembershipService);
     spyOn(membershipService, 'getCurrent').and.returnValue(of({} as MembershipModel));
 
     tester.detectChanges();

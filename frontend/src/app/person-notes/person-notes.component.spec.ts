@@ -100,7 +100,7 @@ describe('PersonNotesComponent', () => {
       }
     ];
 
-    const userService = TestBed.get(CurrentUserService);
+    const userService = TestBed.inject(CurrentUserService);
     userService.userEvents.next({ login: 'admin' } as UserModel);
 
     tester = new TestComponentTester();
@@ -109,7 +109,7 @@ describe('PersonNotesComponent', () => {
   }));
 
   it('should display notes', () => {
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
     tester.componentInstance.person = person;
@@ -120,7 +120,7 @@ describe('PersonNotesComponent', () => {
   });
 
   it('should refetch notes when the person change', () => {
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     spyOn(personNoteService, 'list').and.returnValues(of([]), of(notes));
 
     tester.componentInstance.person = person;
@@ -136,7 +136,7 @@ describe('PersonNotesComponent', () => {
   });
 
   it('should display no note message if no notes', () => {
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     spyOn(personNoteService, 'list').and.returnValue(of([]));
 
     tester.componentInstance.person = person;
@@ -146,7 +146,7 @@ describe('PersonNotesComponent', () => {
   });
 
   it('should display a spinner after 300 ms until notes are available', fakeAsync(() => {
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     const subject = new Subject<Array<NoteModel>>();
     spyOn(personNoteService, 'list').and.returnValue(subject);
 
@@ -167,7 +167,7 @@ describe('PersonNotesComponent', () => {
 
   it('should disable other notes when editing one', () => {
     // create component with 2 notes
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
     tester.componentInstance.person = person;
@@ -192,9 +192,9 @@ describe('PersonNotesComponent', () => {
 
   it('should delete note', () => {
     // create component with 2 notes
-    const personNoteService = TestBed.get(PersonNoteService);
-    const confirmService = TestBed.get(ConfirmService);
-    spyOn(confirmService, 'confirm').and.returnValue(of('ok'));
+    const personNoteService = TestBed.inject(PersonNoteService);
+    const confirmService = TestBed.inject(ConfirmService);
+    spyOn(confirmService, 'confirm').and.returnValue(of(null));
     spyOn(personNoteService, 'delete').and.returnValue(of(null));
     spyOn(personNoteService, 'list').and.returnValues(of(notes), of([notes[1]]));
 
@@ -212,8 +212,8 @@ describe('PersonNotesComponent', () => {
 
   it('should not delete note if not confirmed', () => {
     // create component with 2 notes
-    const personNoteService = TestBed.get(PersonNoteService);
-    const confirmService = TestBed.get(ConfirmService);
+    const personNoteService = TestBed.inject(PersonNoteService);
+    const confirmService = TestBed.inject(ConfirmService);
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
     spyOn(personNoteService, 'delete').and.returnValue(of(null));
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
@@ -230,7 +230,7 @@ describe('PersonNotesComponent', () => {
 
   it('should update note', () => {
     // create component with 2 notes
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     spyOn(personNoteService, 'update').and.returnValue(of(null));
     spyOn(personNoteService, 'list').and.returnValues(of(notes), of(notes));
 
@@ -256,7 +256,7 @@ describe('PersonNotesComponent', () => {
 
   it('should add a note at the beginning when creating, and remove it when cancelling', () => {
     // create component with 2 notes
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     spyOn(personNoteService, 'update').and.returnValue(of(null));
     spyOn(personNoteService, 'list').and.returnValue(of(notes));
 
@@ -298,7 +298,7 @@ describe('PersonNotesComponent', () => {
       creationInstant: '2017-08-11T12:00:00.000Z'
     };
 
-    const personNoteService = TestBed.get(PersonNoteService);
+    const personNoteService = TestBed.inject(PersonNoteService);
     spyOn(personNoteService, 'create').and.returnValue(of(newNote));
     spyOn(personNoteService, 'list').and.returnValues(of(notes), of([newNote, notes[0], notes[1]]));
 

@@ -15,8 +15,8 @@ describe('ParticipationService', () => {
       imports: [ HttpClientTestingModule ]
     });
 
-    service = TestBed.get(ParticipationService);
-    httpTester = new HttpTester(TestBed.get(HttpTestingController));
+    service = TestBed.inject(ParticipationService);
+    httpTester = new HttpTester(TestBed.inject(HttpTestingController));
   });
 
   it('should list participations of a person', () => {

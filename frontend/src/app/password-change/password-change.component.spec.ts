@@ -72,11 +72,11 @@ describe('PasswordChangeComponent', () => {
   });
 
   it('should check the old password and change it via the user service and redirect if success', () => {
-    const userService = TestBed.get(CurrentUserService);
+    const userService = TestBed.inject(CurrentUserService);
     spyOn(userService, 'checkPassword').and.returnValue(of(null));
     spyOn(userService, 'changePassword').and.returnValue(of(null));
 
-    const router: Router = TestBed.get(Router);
+    const router: Router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     tester.oldPassword.fillWith('old');
@@ -92,11 +92,11 @@ describe('PasswordChangeComponent', () => {
   });
 
   it('should call the user service and display a message if check password fails', () => {
-    const userService = TestBed.get(CurrentUserService);
+    const userService = TestBed.inject(CurrentUserService);
     spyOn(userService, 'checkPassword').and.returnValue(throwError(null));
     spyOn(userService, 'changePassword');
 
-    const router: Router = TestBed.get(Router);
+    const router: Router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     tester.oldPassword.fillWith('old');
@@ -111,11 +111,11 @@ describe('PasswordChangeComponent', () => {
   });
 
   it('should call the user service and display a message if change password fails', () => {
-    const userService = TestBed.get(CurrentUserService);
+    const userService = TestBed.inject(CurrentUserService);
     spyOn(userService, 'checkPassword').and.returnValue(of(null));
     spyOn(userService, 'changePassword').and.returnValue(throwError(null));
 
-    const router: Router = TestBed.get(Router);
+    const router: Router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     tester.oldPassword.fillWith('old');

@@ -63,7 +63,7 @@ describe('ProfileComponent', () => {
       ]
     });
 
-    currentUserService = TestBed.get(CurrentUserService);
+    currentUserService = TestBed.inject(CurrentUserService);
 
     tester = new ProfileComponentTester();
 
@@ -108,7 +108,7 @@ describe('ProfileComponent', () => {
     tester.taskAssignmentEmailNotificationEnabled(false).click();
 
     spyOn(currentUserService, 'updateProfile').and.returnValue(of(undefined));
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
     tester.save.click();

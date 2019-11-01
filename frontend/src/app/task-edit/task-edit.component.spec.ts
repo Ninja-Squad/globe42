@@ -126,7 +126,7 @@ describe('TaskEditComponent', () => {
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
     // different object on purpose
-    TestBed.get(CurrentUserService).userEvents.next({id: 3, login: 'admin', admin: false});
+    TestBed.inject(CurrentUserService).userEvents.next({id: 3, login: 'admin', admin: false});
   }
 
   describe('creation mode', () => {
@@ -210,9 +210,9 @@ describe('TaskEditComponent', () => {
       tester.concernedPersonSuggestions[0].click();
       tester.assignee.selectIndex(1);
 
-      const taskService = TestBed.get(TaskService);
-      const router = TestBed.get(Router);
-      spyOn(taskService, 'create').and.returnValue(of({id: 42}));
+      const taskService = TestBed.inject(TaskService);
+      const router = TestBed.inject(Router);
+      spyOn(taskService, 'create').and.returnValue(of({id: 42} as TaskModel));
       spyOn(router, 'navigate');
 
       tester.save.click();
@@ -247,9 +247,9 @@ describe('TaskEditComponent', () => {
       tester.category.selectIndex(1);
       tester.description.fillWith('test description');
 
-      const taskService = TestBed.get(TaskService);
-      const router = TestBed.get(Router);
-      spyOn(taskService, 'create').and.returnValue(of({id: 42}));
+      const taskService = TestBed.inject(TaskService);
+      const router = TestBed.inject(Router);
+      spyOn(taskService, 'create').and.returnValue(of({id: 42} as TaskModel));
       spyOn(router, 'navigate');
 
       tester.save.click();
@@ -307,8 +307,8 @@ describe('TaskEditComponent', () => {
       const tester = new TaskEditTester();
       tester.detectChanges();
 
-      const taskService = TestBed.get(TaskService);
-      const router = TestBed.get(Router);
+      const taskService = TestBed.inject(TaskService);
+      const router = TestBed.inject(Router);
       spyOn(taskService, 'update').and.returnValue(of(null));
       spyOn(router, 'navigate');
 

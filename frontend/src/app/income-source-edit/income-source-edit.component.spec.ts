@@ -89,7 +89,7 @@ describe('IncomeSourceEditComponent', () => {
     });
 
     it('should display the income source in a form, and validate the form', () => {
-      const incomeSourceService: IncomeSourceService = TestBed.get(IncomeSourceService);
+      const incomeSourceService: IncomeSourceService = TestBed.inject(IncomeSourceService);
       spyOn(incomeSourceService, 'create');
 
       expect(tester.name).toHaveValue('');
@@ -113,8 +113,8 @@ describe('IncomeSourceEditComponent', () => {
     });
 
     it('should save the income source and navigate to the list', () => {
-      const incomeSourceService: IncomeSourceService = TestBed.get(IncomeSourceService);
-      const router: Router = TestBed.get(Router);
+      const incomeSourceService: IncomeSourceService = TestBed.inject(IncomeSourceService);
+      const router: Router = TestBed.inject(Router);
       spyOn(incomeSourceService, 'create').and.returnValue(of({
         id: 42
       } as IncomeSourceModel));
@@ -171,8 +171,8 @@ describe('IncomeSourceEditComponent', () => {
     });
 
     it('should save the income source and navigate to the income sources page', () => {
-      const incomeSourceService: IncomeSourceService = TestBed.get(IncomeSourceService);
-      const router: Router = TestBed.get(Router);
+      const incomeSourceService: IncomeSourceService = TestBed.inject(IncomeSourceService);
+      const router: Router = TestBed.inject(Router);
       spyOn(incomeSourceService, 'update').and.returnValue(of(null));
       spyOn(router, 'navigate');
 

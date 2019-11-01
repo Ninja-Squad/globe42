@@ -91,10 +91,10 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
     const fixture = TestBed.createComponent(PersonPerUnitRevenueInformationEditComponent);
     fixture.detectChanges();
 
-    const router: Router = TestBed.get(Router);
+    const router: Router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
-    const perUnitRevenueInformationService = TestBed.get(PerUnitRevenueInformationService);
+    const perUnitRevenueInformationService = TestBed.inject(PerUnitRevenueInformationService);
     (perUnitRevenueInformationService.update as jasmine.Spy).and.returnValue(of(undefined));
 
     const saveButton: HTMLButtonElement = fixture.nativeElement.querySelector('#save');
@@ -142,7 +142,7 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
     saveButton.click();
     fixture.detectChanges();
 
-    const perUnitRevenueInformationService = TestBed.get(PerUnitRevenueInformationService);
+    const perUnitRevenueInformationService = TestBed.inject(PerUnitRevenueInformationService);
     expect(perUnitRevenueInformationService.update).not.toHaveBeenCalled();
   });
 });
