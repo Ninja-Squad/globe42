@@ -4,6 +4,7 @@ import { FamilyService } from './family.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpTester } from './http-tester.spec';
 import { FamilyCommand } from './models/family.command';
+import { FamilyModel } from './models/family.model';
 
 describe('FamilyService', () => {
   let service: FamilyService;
@@ -21,7 +22,7 @@ describe('FamilyService', () => {
   });
 
   it('should get family of person', () => {
-    httpTester.testGet('/api/persons/42/family', {}, service.get(42));
+    httpTester.testGet('/api/persons/42/family', {} as FamilyModel, service.get(42));
   });
 
   it('should get save family of person', () => {

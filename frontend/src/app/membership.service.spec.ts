@@ -4,6 +4,7 @@ import { MembershipService } from './membership.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpTester } from './http-tester.spec';
 import { MembershipCommand } from './models/membership.command';
+import { MembershipModel } from './models/membership.model';
 
 describe('MembershipService', () => {
 
@@ -26,7 +27,7 @@ describe('MembershipService', () => {
   });
 
   it('should get current membership', () => {
-    httpTester.testGet('/api/persons/42/memberships/current', {}, service.getCurrent(42));
+    httpTester.testGet('/api/persons/42/memberships/current', {} as MembershipModel, service.getCurrent(42));
   });
 
   it('should create current membership', () => {
@@ -36,7 +37,7 @@ describe('MembershipService', () => {
       paymentDate: '2018-01-31',
       cardNumber: '002'
     };
-    httpTester.testPost('/api/persons/42/memberships', command, {}, service.createCurrent(42, command));
+    httpTester.testPost('/api/persons/42/memberships', command, {} as MembershipModel, service.createCurrent(42, command));
   });
 
   it('should delete current membership', () => {

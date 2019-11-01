@@ -183,7 +183,8 @@ describe('PersonWeddingEventsComponent', () => {
 
       expect(component.maxMonth).toEqual({
         year: 2018,
-        month: 4
+        month: 4,
+        day: 1
       });
 
       expect(component.newEvent).not.toBeNull();
