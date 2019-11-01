@@ -31,7 +31,7 @@
       <div class="col-sm-9">
         <gl-datepicker-container>
           <input class="form-control" id="paymentDate" formControlName="paymentDate" ngbDatepicker
-                 [minDate]="{year: currentYear, month: 1}">
+                 [minDate]="{year: currentYear, month: 1, day: 1}">
           <val-errors controlName="paymentDate" label="La date de paiement">
             <ng-template valError="min" let-label>{{ label }} doit être dans l'année en cours</ng-template>
           </val-errors>

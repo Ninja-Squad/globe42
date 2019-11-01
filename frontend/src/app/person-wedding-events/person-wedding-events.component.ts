@@ -11,6 +11,7 @@ import { WeddingEventModel } from '../models/wedding-event.model';
 import { pastDate } from '../globe-validators';
 import { LOCATION_TRANSLATIONS } from '../display-location.pipe';
 import { CurrentPersonService } from '../current-person.service';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'gl-person-wedding-events',
@@ -23,7 +24,7 @@ export class PersonWeddingEventsComponent {
   person: PersonModel;
 
   newEvent: FormGroup = null;
-  maxMonth: {year: number; month: number; };
+  maxMonth: NgbDateStruct;
   eventTypes = WEDDING_EVENT_TYPE_TRANSLATIONS;
   locations = LOCATION_TRANSLATIONS;
 
@@ -49,7 +50,8 @@ export class PersonWeddingEventsComponent {
     const nextMonth = DateTime.local().plus({ months: 1 });
     this.maxMonth = {
       year: nextMonth.year,
-      month: nextMonth.month
+      month: nextMonth.month,
+      day: 1
     };
     this.newEvent = this.formBuilder.group({
       date: [null, [Validators.required, pastDate]],

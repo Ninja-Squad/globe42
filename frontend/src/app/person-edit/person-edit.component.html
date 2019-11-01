@@ -51,7 +51,7 @@
     <label for="birthDate" class="col-sm-3 col-form-label">Date de naissance</label>
     <gl-datepicker-container class="col-sm-9">
       <input class="form-control" id="birthDate" placeholder="23/12/1970"
-             formControlName="birthDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+             formControlName="birthDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
     </gl-datepicker-container>
   </div>
 
@@ -117,7 +117,7 @@
       <label for="firstMediationAppointmentDate" class="col-sm-3 col-form-label">1<sup>er</sup> RDV médiation</label>
       <gl-datepicker-container class="col-sm-9">
         <input class="form-control" id="firstMediationAppointmentDate" placeholder="01/01/2017"
-               formControlName="firstMediationAppointmentDate" ngbDatepicker [minDate]="{year: 2012, month: 1}">
+               formControlName="firstMediationAppointmentDate" ngbDatepicker [minDate]="{year: 2012, month: 1, day: 1}">
       </gl-datepicker-container>
     </div>
 
@@ -205,7 +205,7 @@
           <label for="healthCareCoverageStartDate" class="col-sm-3 col-lg-6 col-form-label">Depuis le</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="healthCareCoverageStartDate" placeholder="15/11/2014"
-                   formControlName="healthCareCoverageStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1}" />
+                   formControlName="healthCareCoverageStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}" />
           </gl-datepicker-container>
         </div>
       </div>
@@ -229,7 +229,7 @@
           <label for="healthInsuranceStartDate" class="col-sm-3 col-lg-6 col-form-label">Depuis le</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="healthInsuranceStartDate" placeholder="15/11/2014"
-                   formControlName="healthInsuranceStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1}" />
+                   formControlName="healthInsuranceStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}" />
           </gl-datepicker-container>
         </div>
       </div>
@@ -264,7 +264,7 @@
           <label for="entryDate" class="col-sm-3 col-lg-6 col-form-label">Entrée en France le</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="entryDate" placeholder="01/01/2010"
-                   formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+                   formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
           </gl-datepicker-container>
         </div>
       </div>
@@ -302,7 +302,7 @@
           <label for="residencePermitDepositDate" class="col-sm-3 col-lg-6 col-form-label">Date de dépôt</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="residencePermitDepositDate" placeholder="01/01/2010"
-                   formControlName="residencePermitDepositDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+                   formControlName="residencePermitDepositDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
           </gl-datepicker-container>
         </div>
       </div>
@@ -311,7 +311,7 @@
           <label for="residencePermitRenewalDate" class="col-sm-3 col-lg-6 col-form-label">Date de renouvellement</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="residencePermitRenewalDate" placeholder="01/01/2010"
-                   formControlName="residencePermitRenewalDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+                   formControlName="residencePermitRenewalDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
           </gl-datepicker-container>
         </div>
       </div>
@@ -322,7 +322,7 @@
           <label for="residencePermitValidityStartDate" class="col-sm-3 col-lg-6 col-form-label">Valide du</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="residencePermitValidityStartDate" placeholder="01/01/2010"
-                   formControlName="residencePermitValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+                   formControlName="residencePermitValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
           </gl-datepicker-container>
         </div>
       </div>
@@ -331,7 +331,7 @@
           <label for="residencePermitValidityEndDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input class="form-control" id="residencePermitValidityEndDate" placeholder="01/01/2010"
-                   formControlName="residencePermitValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+                   formControlName="residencePermitValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
             <val-errors [control]="personForm">
               <ng-template valError="residencePermitValidity">
                 La date de fin de validité doit être ultérieure à la date de début de validité
@@ -406,7 +406,7 @@
             <label for="passportValidityStartDate" class="col-sm-3 col-lg-6 col-form-label">Valide du</label>
             <gl-datepicker-container class="col-sm-9 col-lg-6">
               <input class="form-control" id="passportValidityStartDate" placeholder="01/01/2010"
-                     formControlName="passportValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+                     formControlName="passportValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
             </gl-datepicker-container>
           </div>
         </div>
@@ -415,7 +415,7 @@
             <label for="passportValidityEndDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
             <gl-datepicker-container class="col-sm-9 col-lg-6">
               <input class="form-control" id="passportValidityEndDate" placeholder="01/01/2010"
-                     formControlName="passportValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1}">
+                     formControlName="passportValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
               <val-errors [control]="personForm">
                 <ng-template valError="passportValidity">
                   La date de fin de validité doit être ultérieure à la date de début de validité

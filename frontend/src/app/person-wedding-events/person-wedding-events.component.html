@@ -26,7 +26,7 @@
       <label for="date">Date</label>
       <gl-datepicker-container>
         <input class="form-control" id="date" formControlName="date"
-               ngbDatepicker [minDate]="{year: 1900, month: 1}" [maxDate]="maxMonth">
+               ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}" [maxDate]="maxMonth">
       </gl-datepicker-container>
       <val-errors controlName="date" label="La date"></val-errors>
     </div>
