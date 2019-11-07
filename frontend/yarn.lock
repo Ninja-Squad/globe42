@@ -883,10 +883,10 @@
     semver "6.3.0"
     semver-intersect "1.4.0"
 
-"@types/chart.js@2.8.9":
-  version "2.8.9"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.8.9.tgz#1ea37b2ad54917a4da09d40f50c2d39a2af3004d"
-  integrity sha512-IMXVwV3VClTMDWIbD8cddj2Hhb7SCkVs5iiZ21Qevt2zbftPTw3DFx3nDSzwQtPZuLq0Ez/BgyfgIxNfbNs6bg==
+"@types/chart.js@2.8.11":
+  version "2.8.11"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.8.11.tgz#acf52ec2a29b8fcb71e77d6fae54b89b77be9b22"
+  integrity sha512-ALmOqIBl6re4dFZbvd4OTCrZpCN1l3s6/Ool84JLowlychK0kJmNmcHGeVw4ol3KNme579tHCFEaNfTT/S3xmQ==
 
 "@types/events@*":
   version "3.0.0"
@@ -2065,10 +2065,10 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-chart.js@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.0.tgz#ebd700719922ba4963c84a4792f7af88e3a4840c"
-  integrity sha512-qgbY2tObinNst84qlWYiNTvszJSKoyoYiOjqOztUaW88N+Xk7QFJ9PasO+w0G1+NkxJzKzun7kUSZd7oWLCIDQ==
+chart.js@2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.2.tgz#5f7397f2fc33ca406836dbaed3cc39943bbb9f80"
+  integrity sha512-AagP9h27gU7hhx8F64BOFpNZGV0R1Pz1nhsi0M1+KLhtniX6ElqLl0z0obKSiuGMl9tcRe6ZhruCGCJWmH6snQ==
   dependencies:
     chartjs-color "^2.1.0"
     moment "^2.10.2"
