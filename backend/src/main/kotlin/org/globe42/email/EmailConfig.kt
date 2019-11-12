@@ -1,5 +1,6 @@
 package org.globe42.email
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders
@@ -10,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient
  * @author JB Nizet
  */
 @Configuration
+@EnableConfigurationProperties(SendgridProperties::class)
 class EmailConfig(
     private val webClientBuilder: WebClient.Builder,
     private val properties: SendgridProperties
