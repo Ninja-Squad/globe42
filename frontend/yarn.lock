@@ -883,10 +883,10 @@
     semver "6.3.0"
     semver-intersect "1.4.0"
 
-"@types/chart.js@2.8.11":
-  version "2.8.11"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.8.11.tgz#acf52ec2a29b8fcb71e77d6fae54b89b77be9b22"
-  integrity sha512-ALmOqIBl6re4dFZbvd4OTCrZpCN1l3s6/Ool84JLowlychK0kJmNmcHGeVw4ol3KNme579tHCFEaNfTT/S3xmQ==
+"@types/chart.js@2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.0.tgz#b8d292c1fdca71be8d80d97400759c3806cd5d28"
+  integrity sha512-AsojgiTzlfLmIAyzzN5KkNrlkg645bg6MRBjkFsPuFYff0toasck6Jx/W772kyrSPcO90bBGtExM8wrBn/niJA==
 
 "@types/events@*":
   version "3.0.0"
