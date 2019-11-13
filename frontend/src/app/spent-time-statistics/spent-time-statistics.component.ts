@@ -104,7 +104,11 @@ export class SpentTimeStatisticsComponent implements OnInit {
     this.criteriaForm.valueChanges.pipe(
       map(value => value.by),
       distinctUntilChanged()
-    ).subscribe(() => this.updateState(this.statisticsModel));
+    ).subscribe(() => {
+      if (this.statisticsModel) {
+        this.updateState(this.statisticsModel);
+      }
+    });
   }
 
   private updateState(statisticsModel: SpentTimeStatisticsModel) {
@@ -145,6 +149,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
 
   private createCategoryStatistics(): Array<CategoryStatistic> {
     const categoryStatisticsByCategoryId = new Map<number, CategoryStatistic>();
+
     this.statisticsModel.statistics
       .filter(stat => (this.criteriaForm.value.by === ALL_USERS) || (stat.user.id === this.criteriaForm.value.by))
       .forEach(stat => {
