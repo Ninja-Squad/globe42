@@ -26,7 +26,7 @@
     "@types/chart.js": "2.9.0",
     "@types/luxon": "1.15.2",
     "bootstrap": "4.3.1",
-    "chart.js": "2.9.2",
+    "chart.js": "2.9.3",
     "font-awesome": "4.7.0",
     "luxon": "1.21.1",
     "ngx-valdemort": "2.0.0",
