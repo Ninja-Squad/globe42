@@ -165,7 +165,7 @@ describe('PersonResourcesComponent', () => {
     tester.detectChanges();
 
     expect(tester.totalIncome.textContent).toContain('Total');
-    expect(tester.totalIncome.textContent).toContain('1\u00A0089,01 € / mois');
+    expect(tester.totalIncome.textContent).toContain('1\u202f089,01 € / mois');
   });
 
   it('should ask for confirmation before deletion of income', () => {
@@ -280,7 +280,7 @@ describe('PersonResourcesComponent', () => {
 
     tester.componentInstance.charges = [];
     tester.detectChanges();
-    expect(tester.total.textContent).toContain('1\u00A0089,01 € / mois');
+    expect(tester.total.textContent).toContain('1\u202f089,01 € / mois');
 
     tester.componentInstance.incomes = [];
     tester.componentInstance.charges = charges;

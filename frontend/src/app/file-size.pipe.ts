@@ -24,7 +24,7 @@ export class FileSizePipe implements PipeTransform {
       const limit = multiplicator * KILO;
       if (value < limit || i === UNITS.length - 1) {
         const displayedValue = value / multiplicator;
-        return `${this.decimalPipe.transform(displayedValue, '1.0-1')}\u00A0${UNITS[i]}`;
+        return `${this.decimalPipe.transform(displayedValue, '1.0-1')}\u202f${UNITS[i]}`;
       }
       multiplicator = limit;
     }
