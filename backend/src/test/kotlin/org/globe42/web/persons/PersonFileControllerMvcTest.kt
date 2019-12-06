@@ -9,7 +9,6 @@ import org.globe42.storage.FileDTO
 import org.globe42.storage.ReadableFile
 import org.globe42.storage.StorageService
 import org.globe42.test.GlobeMvcTest
-import org.globe42.web.test.asyncDispatch
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -83,7 +82,7 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
         }
         every { mockStorageService.get(directory, theFile.name)} returns readableFile
 
-        mvc.get("/api/persons/{personId}/files/{name}", person.id, theFile.name).asyncDispatch(mvc).andExpect {
+        mvc.get("/api/persons/{personId}/files/{name}", person.id, theFile.name).asyncDispatch().andExpect {
             status { isOk }
             header { longValue(HttpHeaders.CONTENT_LENGTH, 5L) }
             content {

@@ -11,11 +11,3 @@ fun MockMvcResultMatchersDsl.jsonValue(expression: String, value: Any?) {
         jsonPath(expression) { value(it) }
     } ?: jsonPath(expression, CoreMatchers.nullValue())
 }
-
-fun ResultActionsDsl.asyncDispatch(mockMvc: MockMvc): ResultActionsDsl {
-    return this.andExpect {
-        request { asyncStarted() }
-    }.andReturn().let {
-        ResultActionsDsl(mockMvc.perform(MockMvcRequestBuilders.asyncDispatch(it)))
-    }
-}
