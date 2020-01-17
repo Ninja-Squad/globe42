@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.5")
+        classpath("org.postgresql:postgresql:42.2.9")
     }
 }
 
@@ -22,11 +22,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.2.2.RELEASE"
+    id("org.springframework.boot") version "2.2.3.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
-    id("org.flywaydb.flyway") version "6.0.4"
-    id("com.gorylenko.gradle-git-properties") version "2.0.0"
-    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.flywaydb.flyway") version "6.1.4"
+    id("com.gorylenko.gradle-git-properties") version "2.2.0"
+    id("org.jetbrains.dokka") version "0.10.0"
 }
 
 java {
@@ -115,7 +115,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("com.google.cloud:google-cloud-storage:1.86.0")
+    implementation("com.google.cloud:google-cloud-storage:1.102.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
