@@ -6,10 +6,10 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "experimentalDecorators": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "noImplicitAny": false, // https://github.com/angular/angular/issues/33528
+    "noImplicitAny": true,
     "strictNullChecks": false, // would be nice, but requires a big effort
     "strictFunctionTypes": true,
     "noImplicitThis": true,
@@ -19,7 +19,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
-    "experimentalDecorators": true,
     "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
