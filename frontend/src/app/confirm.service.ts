@@ -17,10 +17,10 @@ export class ConfirmService {
 
   confirm(options: ConfirmOptions): Observable<void> {
     const modalRef = this.modalService.open(ConfirmModalContentComponent);
-    modalRef.componentInstance.title = options.title || 'Confirmation';
+    modalRef.componentInstance.title = options.title ?? 'Confirmation';
     modalRef.componentInstance.message = options.message;
     return from(modalRef.result).pipe(
-      catchError(err => options.errorOnClose ? throwError(err || 'not confirmed') : EMPTY)
+      catchError(err => options.errorOnClose ? throwError(err ?? 'not confirmed') : EMPTY)
     );
   }
 }

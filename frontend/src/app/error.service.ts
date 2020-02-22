@@ -69,7 +69,7 @@ export class ErrorService implements HttpInterceptor {
       if (!this.isFunctional(error) && !this.isExpectedAuthenticationError(error)) {
         const body = error.error;
 
-        if (body && body.message) {
+        if (body?.message) {
           // the error is a spring boot error
           this.technicalErrors.next({status: error.status, message: body.message});
         } else {
@@ -82,7 +82,7 @@ export class ErrorService implements HttpInterceptor {
 
   private isFunctional(error: HttpErrorResponse) {
     const body = error.error;
-    return error.status === 400 && body && body.functionalError;
+    return error.status === 400 && body?.functionalError;
   }
 
   private isExpectedAuthenticationError(error: HttpErrorResponse) {

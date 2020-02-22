@@ -6,7 +6,7 @@
     <label for="type" class="col-sm-3 col-form-label">Nature de la charge</label>
     <div class="col-sm-9">
       <select class="form-control" id="type" formControlName="type">
-        <option></option>
+        <option [ngValue]="null"></option>
         <option *ngFor="let type of chargeTypes" [ngValue]="type">{{ type.name }}</option>
       </select>
       <val-errors controlName="type" label="La nature de la charge"></val-errors>

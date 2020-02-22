@@ -16,12 +16,12 @@ class NavigationProgressComponentTester extends ComponentTester<NavigationProgre
   get progressBar(): NgbProgressbar | null {
 
     const debugElement = this.debugElement.query(By.directive(NgbProgressbar));
-    return debugElement && debugElement.componentInstance;
+    return debugElement?.componentInstance || null;
   }
 
   get progressValue() {
     const p = this.progressBar;
-    return p && p.value;
+    return p?.value ?? null;
   }
 
   adance(millis: number) {

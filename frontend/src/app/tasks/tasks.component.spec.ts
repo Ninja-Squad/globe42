@@ -53,13 +53,13 @@ class TasksComponentTester extends ComponentTester<TestComponent> {
 
   get addSpentTimeComponent(): SpentTimeAddComponent {
     const spentTimeAddDebugElement = this.debugElement.query(By.directive(SpentTimeAddComponent));
-    return spentTimeAddDebugElement && spentTimeAddDebugElement.componentInstance;
+    return spentTimeAddDebugElement?.componentInstance;
   }
 
   get spentTimesComponent(): SpentTimesComponent {
     const spentTimesDebugElement =
       this.debugElement.query(By.directive(SpentTimesComponent));
-    return spentTimesDebugElement && spentTimesDebugElement.componentInstance;
+    return spentTimesDebugElement?.componentInstance;
   }
 
   get title() {

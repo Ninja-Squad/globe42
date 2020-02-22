@@ -77,7 +77,7 @@ describe('PersonIncomeEditComponent', () => {
       const element: HTMLElement = fixture.nativeElement;
 
       const incomeSource: HTMLSelectElement = element.querySelector('#source');
-      expect(incomeSource.selectedIndex).toBeLessThan(1); // 0 on Safari, -1 on good browsers
+      expect(incomeSource.selectedIndex).toBe(0);
       expect(incomeSource.options.length).toBe(incomeSources.length + 1);
 
       const monthlyAmount: HTMLInputElement = element.querySelector('#monthlyAmount');

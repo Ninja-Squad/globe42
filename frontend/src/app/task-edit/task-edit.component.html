@@ -9,7 +9,7 @@
     <label for="category" class="col-sm-3 col-form-label">Catégorie</label>
     <div class="col-sm-9">
       <select class="form-control" id="category" formControlName="category">
-        <option></option>
+        <option [ngValue]="null"></option>
         <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
       </select>
       <val-errors controlName="category" label="La catégorie"></val-errors>
@@ -46,7 +46,7 @@
     <label for="assignee" class="col-sm-3 col-form-label">Assignée à</label>
     <div class="col-sm-9">
       <select class="form-control" id="assignee" formControlName="assignee">
-        <option></option>
+        <option [ngValue]="null"></option>
         <hr/>
         <ng-container *ngFor="let user of users; let index = index">
           <option [ngValue]="user">{{ formatUser(user) }}</option>

@@ -142,14 +142,12 @@ describe('TaskEditComponent', () => {
       expect(tester.pageTitle).toHaveText('Nouvelle tâche');
       expect(tester.title).toHaveValue('');
       expect(tester.description).toHaveValue('');
-      expect(tester.category.selectedValue).toBeFalsy(); // toHaveSelectedValue(null) fails on Safari because it
-                                                         // auto-selects the first opton
       expect(tester.category.optionLabels).toEqual(['', 'Various', 'Meal']);
+      expect(tester.category).toHaveSelectedLabel('');
       expect(tester.dueDate).toHaveValue('');
       expect(tester.concernedPerson).toHaveValue('');
       expect(tester.assignee.optionLabels).toEqual(['', 'Moi', 'agnes', 'cyril']);
-      expect(tester.assignee.selectedValue).toBeFalsy();  // toHaveSelectedValue(null) fails on Safari because it
-                                                          // auto-selects the first opton
+      expect(tester.assignee).toHaveSelectedLabel('');
 
       expect(tester.save.disabled).toBe(false);
       expect(tester.cancel.attr('href')).toBe('/tasks');

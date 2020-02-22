@@ -44,7 +44,7 @@ export class PersonChargeEditComponent implements OnInit {
   }
 
   get selectedChargeType(): ChargeTypeModel | null {
-    return this.chargeForm && this.chargeForm.get('type').value;
+    return this.chargeForm?.get('type').value ?? null;
   }
 
   get monthlyAmountCtrl(): FormControl {

@@ -14,7 +14,7 @@ export class FamilyResolverService implements Resolve<FamilyModel | null> {
               private familyService: FamilyService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<FamilyModel | null> {
-    const id = +(route.paramMap.get('id') || this.currentPersonService.snapshot.id);
+    const id = +(route.paramMap.get('id') ?? this.currentPersonService.snapshot.id);
     return this.familyService.get(id);
   }
 }

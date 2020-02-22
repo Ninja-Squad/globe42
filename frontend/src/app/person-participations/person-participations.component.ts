@@ -31,7 +31,7 @@ export class PersonParticipationsComponent {
     this.items = ACTIVITY_TYPE_TRANSLATIONS.map(t => {
       const participation = participations.filter(p => p.activityType === t.key)[0];
       return {
-        id: participation && participation.id,
+        id: participation?.id,
         activityType: t.key,
         selected: !!participation
       };
