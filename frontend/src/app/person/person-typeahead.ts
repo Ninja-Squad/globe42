@@ -16,8 +16,8 @@ export class PersonTypeahead extends ArrayBasedTypeahead<PersonIdentityModel> {
     const s = term.toLowerCase();
     return person.firstName.toLowerCase().includes(s)
       || person.lastName.toLowerCase().includes(s)
-      || (person.nickName && person.nickName.toLowerCase().includes(s))
-      || (person.mediationCode && person.mediationCode.toLowerCase().includes(s));
+      || person.nickName?.toLowerCase().includes(s)
+      || person.mediationCode?.toLowerCase().includes(s);
   }
 
   protected format(element: PersonIdentityModel): string {

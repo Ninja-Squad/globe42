@@ -40,6 +40,6 @@ export class PersonsComponent implements OnInit {
   }
 
   private includes(s: string, searchString: string): boolean {
-    return s && s.toLowerCase().includes(searchString);
+    return s?.toLowerCase().includes(searchString);
   }
 }

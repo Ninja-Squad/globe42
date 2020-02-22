@@ -18,7 +18,7 @@
     <label for="category" class="col-sm-3 col-form-label">Dépense</label>
     <div class="col-sm-9">
       <select class="form-control" id="category" formControlName="categoryId">
-        <option></option>
+        <option [ngValue]="null"></option>
         <option *ngFor="let category of chargeCategories" [ngValue]="category.id">{{ category.name }}</option>
       </select>
       <val-errors controlName="categoryId" label="La dépense"></val-errors>

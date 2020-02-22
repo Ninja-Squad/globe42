@@ -146,7 +146,7 @@ describe('PersonNetworkMembersComponent', () => {
     expect(component.memberForm).toBeTruthy();
 
     const typeSelect = element.querySelector('#type') as HTMLSelectElement;
-    expect(typeSelect.selectedIndex).toBeLessThan(1); // 0 on Safari, -1 on good browsers
+    expect(typeSelect.selectedIndex).toBe(0);
     expect(typeSelect.options[0].textContent).toBe('');
     expect(typeSelect.options[1].textContent).toBe('Médecin');
 

@@ -22,7 +22,7 @@ export class ErrorComponent implements OnInit {
 
   ngOnInit() {
     this.interceptor.functionalErrors.subscribe(
-      err => this.error = { message: this.toMessage(err) || err.code, technical: false });
+      err => this.error = { message: this.toMessage(err), technical: false });
     this.interceptor.technicalErrors.subscribe(
       err => this.error = { message: err.message, technical: true, status: err.status });
 

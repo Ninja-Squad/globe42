@@ -19,7 +19,7 @@ export class PersonIncomeEditComponent implements OnInit {
   incomeForm: FormGroup;
 
   private monthlyAmountValidator: ValidatorFn = (control: AbstractControl) => {
-    if (!this.selectedSource || !this.selectedSource.maxMonthlyAmount) {
+    if (!(this.selectedSource?.maxMonthlyAmount)) {
       return null;
     }
 
@@ -43,7 +43,7 @@ export class PersonIncomeEditComponent implements OnInit {
   }
 
   get selectedSource(): IncomeSourceModel | null {
-    return this.incomeForm && this.incomeForm.get('source').value;
+    return this.incomeForm?.get('source').value ?? null;
   }
 
   get monthlyAmountCtrl(): FormControl {

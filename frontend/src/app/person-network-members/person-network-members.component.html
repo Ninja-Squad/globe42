@@ -30,7 +30,7 @@
   <div class="form-group">
     <label for="type">Type</label>
     <select class="form-control" id="type" formControlName="type">
-      <option></option>
+      <option [ngValue]="null"></option>
       <option *ngFor="let memberType of memberTypes" [value]="memberType">{{ memberType | displayNetworkMemberType }}</option>
     </select>
     <val-errors controlName="type" label="Le type"></val-errors>

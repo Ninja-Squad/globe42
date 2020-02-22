@@ -201,7 +201,7 @@ export class PersonEditComponent {
     }
 
     let action;
-    if (this.editedPerson && this.editedPerson.id !== undefined) {
+    if (this.editedPerson?.id !== undefined) {
       action = this.personService.update(this.editedPerson.id, command).pipe(
         map(() => this.editedPerson.id)
       );
