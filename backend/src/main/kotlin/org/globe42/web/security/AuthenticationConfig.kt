@@ -14,9 +14,9 @@ class AuthenticationConfig {
 
     @Bean
     fun authenticationFilterRegistration(authenticationFilter: AuthenticationFilter): FilterRegistrationBean<AuthenticationFilter> {
-        val filterRegistrationBean = FilterRegistrationBean(authenticationFilter)
-        filterRegistrationBean.urlPatterns = listOf("/api/*", "/actuator", "/actuator/*")
-        return filterRegistrationBean
+        return FilterRegistrationBean(authenticationFilter).apply {
+            urlPatterns = listOf("/api/*", "/actuator", "/actuator/*")
+        }
     }
 
     @Bean

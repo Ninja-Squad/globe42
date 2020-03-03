@@ -21,8 +21,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Component
 @WebFilter(value = ["/*"])
-@Order(-2) // so that it's called before the authentication filter and after the filter from
-// HttpsActuatorConfig, which hides the header inspected here
+@Order(FilterOrdering.INDEX)
 class IndexFilter : Filter {
     override fun doFilter(
         request: ServletRequest,
