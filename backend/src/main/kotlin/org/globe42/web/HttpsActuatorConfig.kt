@@ -16,7 +16,7 @@ class HttpsActuatorConfig {
     @Bean
     fun forwardedHeaderFilterFilterRegistrationBean(): FilterRegistrationBean<ForwardedHeaderFilter>? {
         return FilterRegistrationBean(ForwardedHeaderFilter()).apply {
-            setOrder(Ordered.HIGHEST_PRECEDENCE)
+            setOrder(-1)
         }
     }
 }
