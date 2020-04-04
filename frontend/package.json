@@ -30,7 +30,7 @@
     "font-awesome": "4.7.0",
     "luxon": "1.23.0",
     "ngx-valdemort": "3.0.0",
-    "rxjs": "6.5.4",
+    "rxjs": "6.5.5",
     "tslib": "1.11.1",
     "zone.js": "0.10.3"
   },
