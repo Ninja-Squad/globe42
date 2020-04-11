@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.3.70"
+    val kotlinVersion = "1.3.71"
 
     java
     jacoco
@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.2.5.RELEASE"
+    id("org.springframework.boot") version "2.2.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("org.flywaydb.flyway") version "6.1.4"
     id("com.gorylenko.gradle-git-properties") version "2.2.0"
