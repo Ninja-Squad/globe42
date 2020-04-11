@@ -20,20 +20,22 @@ describe('IncomeSourcesComponent', () => {
       name: 'Salaire',
       type: { id: 43, type: 'travail' },
       maxMonthlyAmount: null
-    }];
+    }
+  ];
 
   const activatedRoute = {
     snapshot: { data: { incomeSources } }
   };
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [IncomeSourcesComponent, PageTitleDirective],
-    providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: LOCALE_ID, useValue: 'fr-FR'}
-    ]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [IncomeSourcesComponent, PageTitleDirective],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: LOCALE_ID, useValue: 'fr-FR' }
+      ]
+    })));
 
   it('should list income sources', () => {
     const fixture = TestBed.createComponent(IncomeSourcesComponent);

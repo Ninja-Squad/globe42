@@ -7,8 +7,7 @@ import { CurrentPersonService } from './current-person.service';
 
 @Injectable({ providedIn: 'root' })
 export class PersonResolverService implements Resolve<PersonModel> {
-
-  constructor(private personLayoutService: CurrentPersonService) { }
+  constructor(private personLayoutService: CurrentPersonService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<PersonModel> {
     const personId = +route.paramMap.get('id');

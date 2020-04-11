@@ -8,7 +8,6 @@ const KILO = 1000;
   name: 'fileSize'
 })
 export class FileSizePipe implements PipeTransform {
-
   private decimalPipe: DecimalPipe;
 
   constructor(@Inject(LOCALE_ID) locale: string) {

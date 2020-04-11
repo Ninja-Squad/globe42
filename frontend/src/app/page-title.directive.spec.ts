@@ -31,17 +31,11 @@ class TestComponent {
 }
 
 describe('PageTitleDirective', () => {
-
   let titleService: Title;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        Test1Component,
-        Test2Component,
-        TestComponent,
-        PageTitleDirective
-      ]
+      declarations: [Test1Component, Test2Component, TestComponent, PageTitleDirective]
     });
 
     titleService = TestBed.inject(Title);

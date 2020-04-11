@@ -40,7 +40,7 @@ describe('PersonDeathComponent', () => {
     route = fakeRoute({});
 
     TestBed.configureTestingModule({
-      declarations: [ PersonDeathComponent, FullnamePipe ],
+      declarations: [PersonDeathComponent, FullnamePipe],
       imports: [
         HttpClientTestingModule,
         GlobeNgbModule.forRoot(),
@@ -50,7 +50,7 @@ describe('PersonDeathComponent', () => {
       ],
       providers: [
         { provide: ActivatedRoute, useValue: route },
-        { provide: LOCALE_ID, useValue: 'fr-FR' },
+        { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
     });
 
@@ -81,7 +81,7 @@ describe('PersonDeathComponent', () => {
 
   it('should save if valid', () => {
     spyOn(personService, 'signalDeath').and.returnValue(of(undefined));
-    spyOn(currentPersonService, 'refresh').and.returnValue(of({id: 42} as PersonModel));
+    spyOn(currentPersonService, 'refresh').and.returnValue(of({ id: 42 } as PersonModel));
     spyOn(router, 'navigate');
 
     tester.deathDate.fillWith('25/07/2019');

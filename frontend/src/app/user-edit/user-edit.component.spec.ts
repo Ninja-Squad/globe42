@@ -17,9 +17,15 @@ import { PageTitleDirective } from '../page-title.directive';
 import { UserWithPasswordModel } from '../models/user-with-password.model';
 
 describe('UserEditComponent', () => {
-
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), ValdemortModule],
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      GlobeNgbModule.forRoot(),
+      ValdemortModule
+    ],
     declarations: [UserEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
@@ -81,10 +87,12 @@ describe('UserEditComponent', () => {
 
     it('should save the user and display the result', () => {
       const userService = TestBed.inject(UserService);
-      spyOn(userService, 'create').and.returnValue(of({
-        login: 'foo',
-        generatedPassword: 'passw0rd'
-      } as UserWithPasswordModel));
+      spyOn(userService, 'create').and.returnValue(
+        of({
+          login: 'foo',
+          generatedPassword: 'passw0rd'
+        } as UserWithPasswordModel)
+      );
 
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
@@ -122,16 +130,20 @@ describe('UserEditComponent', () => {
       snapshot: { data: { user } }
     };
 
-    beforeEach(() => TestBed.configureTestingModule({
-      imports: [TestModule],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    }));
+    beforeEach(() =>
+      TestBed.configureTestingModule({
+        imports: [TestModule],
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+      })
+    );
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de l\'utilisateur jb');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
+        "Modification de l'utilisateur jb"
+      );
     });
 
     it('should expose no created user, and the edited user info', () => {

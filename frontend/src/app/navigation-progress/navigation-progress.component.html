@@ -1,3 +1,7 @@
 <div class="navigation-progress-wrapper">
-  <ngb-progressbar *ngIf="progress$ | async as progress" [value]="progress.value" class="bg-light"></ngb-progressbar>
+  <ngb-progressbar
+    *ngIf="progress$ | async as progress"
+    [value]="progress.value"
+    class="bg-light"
+  ></ngb-progressbar>
 </div>

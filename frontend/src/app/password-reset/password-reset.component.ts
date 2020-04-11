@@ -10,17 +10,18 @@ import { UserService } from '../user.service';
   styleUrls: ['./password-reset.component.scss']
 })
 export class PasswordResetComponent implements OnInit {
-
   user: UserModel;
   updatedUser: UserWithPasswordModel;
 
-  constructor(private route: ActivatedRoute, private userService: UserService) { }
+  constructor(private route: ActivatedRoute, private userService: UserService) {}
 
   ngOnInit() {
     this.user = this.route.snapshot.data.user;
   }
 
   resetPassword() {
-    this.userService.resetPassword(this.user.id).subscribe(updatedUser => this.updatedUser = updatedUser);
+    this.userService
+      .resetPassword(this.user.id)
+      .subscribe(updatedUser => (this.updatedUser = updatedUser));
   }
 }

@@ -35,7 +35,7 @@ describe('PersonFilesComponent', () => {
       {
         name: 'file1.txt',
         creationInstant: '2017-08-09T12:00:00.000Z',
-        size: 1000,
+        size: 1000
       },
       {
         name: 'file2.txt',
@@ -53,7 +53,9 @@ describe('PersonFilesComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelectorAll('.file-item').length).toBe(2);
-    expect(fixture.nativeElement.querySelector('.file-item a').href).toContain('/api/persons/42/files/file2.txt');
+    expect(fixture.nativeElement.querySelector('.file-item a').href).toContain(
+      '/api/persons/42/files/file2.txt'
+    );
   });
 
   it('should display no file message if no files', () => {
@@ -121,9 +123,11 @@ describe('PersonFilesComponent', () => {
     // trigger change
     const fileChangeEvent = {
       target: {
-        files: [{
-          name: files[1].name
-        }]
+        files: [
+          {
+            name: files[1].name
+          }
+        ]
       }
     } as any;
 
@@ -140,7 +144,8 @@ describe('PersonFilesComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.uploadProgress).toBe(5 / 10);
-    const progressBar: NgbProgressbar = fixture.debugElement.query(By.directive(NgbProgressbar)).componentInstance;
+    const progressBar: NgbProgressbar = fixture.debugElement.query(By.directive(NgbProgressbar))
+      .componentInstance;
     expect(progressBar.value).toBe(5 / 10);
     expect(progressBar.max).toBe(1);
 
@@ -156,9 +161,11 @@ describe('PersonFilesComponent', () => {
     expect(progressBar.animated).toBeTruthy();
 
     // emit response and complete
-    fakeEvents.next(new HttpResponse({
-      body: files[1]
-    }));
+    fakeEvents.next(
+      new HttpResponse({
+        body: files[1]
+      })
+    );
     fakeEvents.complete();
     fixture.detectChanges();
 

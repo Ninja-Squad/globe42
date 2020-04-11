@@ -6,11 +6,11 @@ import { RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('PersonTasksComponent', () => {
-
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [PersonTasksComponent]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [PersonTasksComponent]
+    })));
 
   it('should have 2 tabs and a router outlet', () => {
     const fixture = TestBed.createComponent(PersonTasksComponent);

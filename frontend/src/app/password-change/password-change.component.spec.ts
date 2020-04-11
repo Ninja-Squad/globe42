@@ -13,7 +13,6 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 
 class PasswordChangeComponentTester extends ComponentTester<PasswordChangeComponent> {
-
   constructor() {
     super(PasswordChangeComponent);
   }
@@ -36,13 +35,18 @@ class PasswordChangeComponentTester extends ComponentTester<PasswordChangeCompon
 }
 
 describe('PasswordChangeComponent', () => {
-
   let tester: PasswordChangeComponentTester;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-      declarations: [PasswordChangeComponent, ValidationDefaultsComponent, PageTitleDirective],
+      imports: [
+        CurrentUserModule.forRoot(),
+        HttpClientModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        ValdemortModule
+      ],
+      declarations: [PasswordChangeComponent, ValidationDefaultsComponent, PageTitleDirective]
     });
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -54,7 +58,10 @@ describe('PasswordChangeComponent', () => {
   }));
 
   it('should have a form', () => {
-    expect(tester.componentInstance.passwordChangeForm.value).toEqual({oldPassword: '', newPassword: ''});
+    expect(tester.componentInstance.passwordChangeForm.value).toEqual({
+      oldPassword: '',
+      newPassword: ''
+    });
   });
 
   it('should have a title', () => {
@@ -107,7 +114,7 @@ describe('PasswordChangeComponent', () => {
     expect(userService.checkPassword).toHaveBeenCalledWith('old');
     expect(userService.changePassword).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
-    expect(tester.testElement).toContainText('Le mot de passe n\'a pas été modifié.');
+    expect(tester.testElement).toContainText("Le mot de passe n'a pas été modifié.");
   });
 
   it('should call the user service and display a message if change password fails', () => {
@@ -126,6 +133,6 @@ describe('PasswordChangeComponent', () => {
     expect(userService.checkPassword).toHaveBeenCalledWith('old');
     expect(userService.changePassword).toHaveBeenCalledWith('new');
     expect(router.navigate).not.toHaveBeenCalled();
-    expect(tester.testElement).toContainText('Le mot de passe n\'a pas été modifié.');
+    expect(tester.testElement).toContainText("Le mot de passe n'a pas été modifié.");
   });
 });

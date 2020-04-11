@@ -36,6 +36,7 @@ describe('ChargeService', () => {
       '/api/persons/42/charges',
       fakeChargeCommand,
       expectedCharge,
-      service.create(42, fakeChargeCommand));
+      service.create(42, fakeChargeCommand)
+    );
   });
 });

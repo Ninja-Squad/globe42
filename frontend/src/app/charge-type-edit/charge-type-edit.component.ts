@@ -15,28 +15,37 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./charge-type-edit.component.scss']
 })
 export class ChargeTypeEditComponent implements OnInit {
-
   editedChargeType: ChargeTypeModel;
 
   chargeCategories: Array<ChargeCategoryModel>;
   chargeTypeForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private chargeTypeService: ChargeTypeService,
-              private router: Router,
-              private fb: FormBuilder,
-              private errorService: ErrorService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private chargeTypeService: ChargeTypeService,
+    private router: Router,
+    private fb: FormBuilder,
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
-    this.chargeCategories =
-      sortBy<ChargeCategoryModel>(this.route.snapshot.data.chargeCategories, category => category.name);
+    this.chargeCategories = sortBy<ChargeCategoryModel>(
+      this.route.snapshot.data.chargeCategories,
+      category => category.name
+    );
 
     this.editedChargeType = this.route.snapshot.data.chargeType;
 
     this.chargeTypeForm = this.fb.group({
       name: [this.editedChargeType ? this.editedChargeType.name : '', Validators.required],
-      categoryId: [this.editedChargeType ? this.editedChargeType.category.id : null, Validators.required],
-      maxMonthlyAmount: [this.editedChargeType ? this.editedChargeType.maxMonthlyAmount : null, Validators.min(1)]
+      categoryId: [
+        this.editedChargeType ? this.editedChargeType.category.id : null,
+        Validators.required
+      ],
+      maxMonthlyAmount: [
+        this.editedChargeType ? this.editedChargeType.maxMonthlyAmount : null,
+        Validators.min(1)
+      ]
     });
   }
 
@@ -54,6 +63,7 @@ export class ChargeTypeEditComponent implements OnInit {
     }
     action.subscribe(
       () => this.router.navigate(['/charge-types']),
-      this.errorService.functionalErrorHandler());
+      this.errorService.functionalErrorHandler()
+    );
   }
 }

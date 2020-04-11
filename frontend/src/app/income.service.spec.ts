@@ -36,6 +36,7 @@ describe('IncomeService', () => {
       '/api/persons/42/incomes',
       fakeIncomeCommand,
       expectedIncome,
-      service.create(42, fakeIncomeCommand));
+      service.create(42, fakeIncomeCommand)
+    );
   });
 });

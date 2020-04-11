@@ -6,7 +6,6 @@ import { CountryModel } from './models/country.model';
 
 @Injectable({ providedIn: 'root' })
 export class CountryService {
-
   /**
    * The cached countries (no need to load them several times: they never change)
    */

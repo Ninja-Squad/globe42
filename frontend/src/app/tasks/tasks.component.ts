@@ -68,7 +68,6 @@ export interface SpentTimeEvent {
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent {
-
   tasks: Array<Task> = [];
 
   @Output()
@@ -152,6 +151,6 @@ export class TasksComponent {
   private handleEvent(type: TaskEventType, task: Task, event: Event) {
     event.stopPropagation();
     event.preventDefault();
-    this.taskClicked.emit({type, task: task.model});
+    this.taskClicked.emit({ type, task: task.model });
   }
 }

@@ -2,7 +2,6 @@ import { FullnamePipe } from './fullname.pipe';
 import { PersonIdentityModel } from './models/person.model';
 
 describe('FullnamePipe', () => {
-
   const pipe = new FullnamePipe();
 
   it('should not display anything if no first name or lastname of nickname', () => {

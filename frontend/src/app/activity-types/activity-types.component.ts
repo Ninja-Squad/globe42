@@ -8,7 +8,5 @@ import { ACTIVITY_TYPE_TRANSLATIONS } from '../display-activity-type.pipe';
   styleUrls: ['./activity-types.component.scss']
 })
 export class ActivityTypesComponent {
-
   activityTypes: Array<ActivityType> = ACTIVITY_TYPE_TRANSLATIONS.map(t => t.key);
-
 }

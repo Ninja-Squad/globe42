@@ -9,9 +9,10 @@ import { CurrentPersonService } from './current-person.service';
   providedIn: 'root'
 })
 export class NetworkMembersResolverService implements Resolve<Array<NetworkMemberModel>> {
-
-  constructor(private currentPersonService: CurrentPersonService,
-              private service: NetworkMemberService) { }
+  constructor(
+    private currentPersonService: CurrentPersonService,
+    private service: NetworkMemberService
+  ) {}
 
   resolve(): Observable<Array<NetworkMemberModel>> {
     return this.service.list(this.currentPersonService.snapshot.id);

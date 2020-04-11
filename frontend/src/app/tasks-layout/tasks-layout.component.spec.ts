@@ -6,11 +6,11 @@ import { By } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 
 describe('TasksLayoutComponent', () => {
-
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [TasksLayoutComponent]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [TasksLayoutComponent]
+    })));
 
   it('should have a title, pills and a router outlet', () => {
     const fixture = TestBed.createComponent(TasksLayoutComponent);

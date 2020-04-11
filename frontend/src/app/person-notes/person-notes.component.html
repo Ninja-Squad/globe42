@@ -6,20 +6,29 @@
 <ng-container *ngIf="notes">
   <div class="text-center" *ngIf="notes.length === 0">
     <span style="font-size: 60px;" class="fa fa-info text-info"></span>
-    <br/>
+    <br />
     <span class="lead">Aucune note</span>
   </div>
 
-  <button type="button" class="btn btn-outline-primary mb-2" [disabled]="editedNote" (click)="addNote()" id="addNote">
+  <button
+    type="button"
+    class="btn btn-outline-primary mb-2"
+    [disabled]="editedNote"
+    (click)="addNote()"
+    id="addNote"
+  >
     <span class="fa fa-plus"></span>
     Ajouter une note
   </button>
 
-  <gl-note *ngFor="let note of notes" [note]="note"
-           [edited]="editedNote === note"
-           [disabled]="!!editedNote && note !== editedNote"
-           (editionRequested)="editedNote = note"
-           (editionCancelled)="cancelNoteEdition($event)"
-           (editionDone)="saveNote($event)"
-           (deletionRequested)="deleteNote($event)"></gl-note>
+  <gl-note
+    *ngFor="let note of notes"
+    [note]="note"
+    [edited]="editedNote === note"
+    [disabled]="!!editedNote && note !== editedNote"
+    (editionRequested)="editedNote = note"
+    (editionCancelled)="cancelNoteEdition($event)"
+    (editionDone)="saveNote($event)"
+    (deletionRequested)="deleteNote($event)"
+  ></gl-note>
 </ng-container>

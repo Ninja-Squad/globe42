@@ -7,10 +7,11 @@ import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 
 describe('PersonsResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
-
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   function routeWithType(personListType: string): ActivatedRouteSnapshot {
     const result: any = {

@@ -6,8 +6,7 @@ import { IncomeSourceService } from './income-source.service';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeSourcesResolverService implements Resolve<Array<IncomeSourceModel>> {
-
-  constructor(private incomeService: IncomeSourceService) { }
+  constructor(private incomeService: IncomeSourceService) {}
 
   resolve(): Observable<Array<IncomeSourceModel>> {
     return this.incomeService.list();

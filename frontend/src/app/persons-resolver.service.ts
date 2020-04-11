@@ -7,11 +7,10 @@ import { PersonService } from './person.service';
 
 @Injectable({ providedIn: 'root' })
 export class PersonsResolverService implements Resolve<Array<PersonIdentityModel>> {
-
-  constructor(private personService: PersonService) { }
+  constructor(private personService: PersonService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Array<PersonIdentityModel>> {
     const listType = route.data.personListType;
-    return (listType === 'deleted') ? this.personService.listDeleted() : this.personService.list();
+    return listType === 'deleted' ? this.personService.listDeleted() : this.personService.list();
   }
 }

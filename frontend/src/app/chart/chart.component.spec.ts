@@ -39,7 +39,8 @@ describe('ChartComponent', () => {
 
     const canvas: HTMLCanvasElement = fixture.nativeElement.querySelector('canvas');
     expect(canvas.toDataURL().length).toBeGreaterThan(0);
-    const chartComponent: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent)).componentInstance;
+    const chartComponent: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent))
+      .componentInstance;
     expect(chartComponent.configuration).toBe(fixture.componentInstance.configuration);
   });
 
@@ -49,7 +50,8 @@ describe('ChartComponent', () => {
 
     const canvas: HTMLCanvasElement = fixture.nativeElement.querySelector('canvas');
     const firstImage = canvas.toDataURL();
-    const chartComponent: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent)).componentInstance;
+    const chartComponent: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent))
+      .componentInstance;
 
     const newConfiguration: ChartConfiguration = {
       type: 'doughnut',
@@ -73,4 +75,3 @@ describe('ChartComponent', () => {
     expect(chartComponent.configuration).toBe(newConfiguration);
   });
 });
-

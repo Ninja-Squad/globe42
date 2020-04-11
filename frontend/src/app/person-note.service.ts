@@ -5,8 +5,7 @@ import { NoteModel } from './models/note.model';
 
 @Injectable({ providedIn: 'root' })
 export class PersonNoteService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(personId: number): Observable<Array<NoteModel>> {
     return this.http.get<Array<NoteModel>>(`/api/persons/${personId}/notes`);

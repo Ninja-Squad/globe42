@@ -4,7 +4,6 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('JwtInterceptorService', () => {
-
   let http: HttpTestingController;
   let httpClient: HttpClient;
   let service: JwtInterceptorService;
@@ -18,7 +17,7 @@ describe('JwtInterceptorService', () => {
           multi: true
         }
       ],
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule]
     });
 
     http = TestBed.inject(HttpTestingController);

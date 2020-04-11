@@ -4,8 +4,13 @@
 
 <div *ngFor="let item of items" class="form-check ml-5">
   <label class="form-check-label">
-    <input id="activityType-{{ item.activityType }}" type="checkbox" class="form-check-input"
-           [checked]="item.selected" (change)="selectItem(item)" />
+    <input
+      id="activityType-{{ item.activityType }}"
+      type="checkbox"
+      class="form-check-input"
+      [checked]="item.selected"
+      (change)="selectItem(item)"
+    />
     {{ item.activityType | displayActivityType }}
   </label>
 </div>

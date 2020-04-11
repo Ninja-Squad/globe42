@@ -1,10 +1,20 @@
 <val-default-errors>
   <ng-template valError="required" let-label>{{ label }} est obligatoire</ng-template>
-  <ng-template valError="minlength" let-error="error" let-label>{{ label }} doit avoir au moins {{ error.requiredLength | number }} caractères</ng-template>
-  <ng-template valError="maxlength" let-error="error" let-label>{{ label }} doit avoir au plus {{ error.requiredLength | number }} caractères</ng-template>
+  <ng-template valError="minlength" let-error="error" let-label
+    >{{ label }} doit avoir au moins {{ error.requiredLength | number }} caractères</ng-template
+  >
+  <ng-template valError="maxlength" let-error="error" let-label
+    >{{ label }} doit avoir au plus {{ error.requiredLength | number }} caractères</ng-template
+  >
   <ng-template valError="pattern" let-label>{{ label }} n'a pas le format requis</ng-template>
-  <ng-template valError="email" let-label>{{ label }} doit être une adresse email valide</ng-template>
-  <ng-template valError="min" let-error="error" let-label>{{ label }} doit être supérieur ou égal à {{ error.min | number }}</ng-template>
-  <ng-template valError="max" let-error="error" let-label>{{ label }} doit être inférieur ou égal à {{ error.max | number }}</ng-template>
+  <ng-template valError="email" let-label
+    >{{ label }} doit être une adresse email valide</ng-template
+  >
+  <ng-template valError="min" let-error="error" let-label
+    >{{ label }} doit être supérieur ou égal à {{ error.min | number }}</ng-template
+  >
+  <ng-template valError="max" let-error="error" let-label
+    >{{ label }} doit être inférieur ou égal à {{ error.max | number }}</ng-template
+  >
   <ng-template valError="pastDate" let-label>{{ label }} doit être dans le passé</ng-template>
 </val-default-errors>

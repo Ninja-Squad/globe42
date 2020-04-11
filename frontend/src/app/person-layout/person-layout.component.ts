@@ -11,20 +11,21 @@ import { CurrentPersonService } from '../current-person.service';
   styleUrls: ['./person-layout.component.scss']
 })
 export class PersonLayoutComponent implements OnInit, OnDestroy {
-
   person: PersonModel;
   membershipStatus: 'OK' | 'KO' | 'OUT_OF_DATE' | 'loading' = 'loading';
   private membershipSubscription: Subscription;
 
-  constructor(private currentPersonService: CurrentPersonService,
-              private membershipService: MembershipService) {}
+  constructor(
+    private currentPersonService: CurrentPersonService,
+    private membershipService: MembershipService
+  ) {}
 
   ngOnInit() {
-    this.currentPersonService.personChanges$.subscribe(person => this.person = person);
+    this.currentPersonService.personChanges$.subscribe(person => (this.person = person));
 
     this.membershipSubscription = merge(
       this.currentPersonService.personChanges$.pipe(
-        tap(() => this.membershipStatus = 'loading'),
+        tap(() => (this.membershipStatus = 'loading')),
         switchMap(person => this.membershipService.getCurrent(person.id))
       ),
       this.membershipService.currentMembership$

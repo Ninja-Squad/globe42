@@ -9,21 +9,25 @@ import { CurrentPersonService } from './current-person.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PerUnitRevenueInformationResolverService', () => {
-
   let mockPerUnitRevenueInformationService: PerUnitRevenueInformationService;
   let info: Observable<PerUnitRevenueInformationModel>;
   let resolver: PerUnitRevenueInformationResolverService;
 
   beforeEach(() => {
-    mockPerUnitRevenueInformationService =
-      jasmine.createSpyObj('perUnitRevenueInformationService', ['get']);
+    mockPerUnitRevenueInformationService = jasmine.createSpyObj(
+      'perUnitRevenueInformationService',
+      ['get']
+    );
     info = of({} as PerUnitRevenueInformationModel);
     (mockPerUnitRevenueInformationService.get as jasmine.Spy).and.returnValue(info);
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        { provide: PerUnitRevenueInformationService, useValue: mockPerUnitRevenueInformationService }
+        {
+          provide: PerUnitRevenueInformationService,
+          useValue: mockPerUnitRevenueInformationService
+        }
       ]
     });
 
@@ -46,7 +50,7 @@ describe('PerUnitRevenueInformationResolverService', () => {
   });
 
   it('should load when person is in the currentPersonService', () => {
-    const routeSnapshot = fakeSnapshot({params: {}});
+    const routeSnapshot = fakeSnapshot({ params: {} });
 
     const result = resolver.resolve(routeSnapshot);
     expect(result).toBe(info);

@@ -14,15 +14,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./income-type-edit.component.scss']
 })
 export class IncomeTypeEditComponent implements OnInit {
-
   editedIncomeType: IncomeSourceTypeModel;
   incomeTypeForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private fb: FormBuilder,
-              private incomeSourceTypeService: IncomeSourceTypeService,
-              private errorService: ErrorService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private incomeSourceTypeService: IncomeSourceTypeService,
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
     this.editedIncomeType = this.route.snapshot.data.incomeType;
@@ -48,5 +49,4 @@ export class IncomeTypeEditComponent implements OnInit {
       this.errorService.functionalErrorHandler()
     );
   }
-
 }

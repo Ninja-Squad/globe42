@@ -13,17 +13,18 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./user-edit.component.scss']
 })
 export class UserEditComponent implements OnInit {
-
   editedUser: UserModel;
   createdUser: UserWithPasswordModel;
 
   userForm: FormGroup;
 
-  constructor(private userService: UserService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private errorService: ErrorService,
-              private fb: FormBuilder) { }
+  constructor(
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private errorService: ErrorService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.editedUser = this.route.snapshot.data.user;
@@ -40,13 +41,19 @@ export class UserEditComponent implements OnInit {
 
     const command: UserCommand = this.userForm.value;
     if (this.editedUser) {
-      this.userService.update(this.editedUser.id, command).subscribe(
-        () => this.router.navigate(['/users']),
-        this.errorService.functionalErrorHandler());
+      this.userService
+        .update(this.editedUser.id, command)
+        .subscribe(
+          () => this.router.navigate(['/users']),
+          this.errorService.functionalErrorHandler()
+        );
     } else {
-      this.userService.create(command).subscribe(
-        createdUser => this.createdUser = createdUser,
-        this.errorService.functionalErrorHandler());
+      this.userService
+        .create(command)
+        .subscribe(
+          createdUser => (this.createdUser = createdUser),
+          this.errorService.functionalErrorHandler()
+        );
     }
   }
 }

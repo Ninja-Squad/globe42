@@ -7,9 +7,11 @@ import { CurrentPersonService } from './current-person.service';
 import { fakeSnapshot } from 'ngx-speculoos';
 
 describe('PersonResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve a person and refresh the current person', () => {
     const currentPersonService = TestBed.inject(CurrentPersonService);

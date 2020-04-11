@@ -7,7 +7,6 @@ import { dateToIso, isoToDate } from '../utils';
  */
 @Injectable()
 export class DateStringAdapterService extends NgbDateAdapter<string> {
-
   fromModel(value: string): NgbDateStruct {
     return isoToDate(value);
   }

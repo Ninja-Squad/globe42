@@ -7,13 +7,17 @@ import { Observable, of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 
 describe('ChargeCategoriesResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve a category', () => {
     const chargeCategoryService = TestBed.inject(ChargeCategoryService);
-    const expectedResults: Observable<Array<ChargeCategoryModel>> = of([{ id: 42, name: 'rental' }]);
+    const expectedResults: Observable<Array<ChargeCategoryModel>> = of([
+      { id: 42, name: 'rental' }
+    ]);
 
     spyOn(chargeCategoryService, 'list').and.returnValue(expectedResults);
 

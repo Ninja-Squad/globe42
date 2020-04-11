@@ -6,8 +6,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class WeddingEventService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(personId: number): Observable<Array<WeddingEventModel>> {
     return this.http.get<Array<WeddingEventModel>>(`/api/persons/${personId}/wedding-events`);

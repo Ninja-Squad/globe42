@@ -1,10 +1,20 @@
 <gl-page-title title="Dépenses"></gl-page-title>
 <h1>Dépenses</h1>
 
-<div class="row mb-2 align-items-center charge-category-item" *ngFor="let chargeCategory of chargeCategories">
-  <div class="col-sm"><a [routerLink]="['/charge-categories', chargeCategory.id, 'edit']">{{ chargeCategory.name }}</a></div>
+<div
+  class="row mb-2 align-items-center charge-category-item"
+  *ngFor="let chargeCategory of chargeCategories"
+>
+  <div class="col-sm">
+    <a [routerLink]="['/charge-categories', chargeCategory.id, 'edit']">{{
+      chargeCategory.name
+    }}</a>
+  </div>
   <div class="col-sm text-right">
-    <a class="btn btn-secondary btn-sm" [routerLink]="['/charge-categories', chargeCategory.id, 'edit']">
+    <a
+      class="btn btn-secondary btn-sm"
+      [routerLink]="['/charge-categories', chargeCategory.id, 'edit']"
+    >
       <span class="fa fa-edit"></span>
       Éditer
     </a>

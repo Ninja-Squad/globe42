@@ -9,7 +9,7 @@ describe('CountryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(CountryService);
@@ -23,8 +23,8 @@ describe('CountryService', () => {
     let actualCountries1: Array<CountryModel>;
     let actualCountries2: Array<CountryModel>;
     let actualCountries3: Array<CountryModel>;
-    service.list().subscribe(result => actualCountries1 = result);
-    service.list().subscribe(result => actualCountries2 = result);
+    service.list().subscribe(result => (actualCountries1 = result));
+    service.list().subscribe(result => (actualCountries2 = result));
 
     controller.expectOne('/api/countries').flush(expectedCountries);
     controller.verify();
@@ -33,7 +33,7 @@ describe('CountryService', () => {
     expect(actualCountries2).toEqual(expectedCountries);
     expect(actualCountries2).not.toBe(actualCountries1);
 
-    service.list().subscribe(result => actualCountries3 = result);
+    service.list().subscribe(result => (actualCountries3 = result));
     expect(actualCountries3).toEqual(expectedCountries);
   });
 });

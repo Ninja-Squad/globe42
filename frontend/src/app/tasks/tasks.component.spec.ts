@@ -57,8 +57,7 @@ class TasksComponentTester extends ComponentTester<TestComponent> {
   }
 
   get spentTimesComponent(): SpentTimesComponent {
-    const spentTimesDebugElement =
-      this.debugElement.query(By.directive(SpentTimesComponent));
+    const spentTimesDebugElement = this.debugElement.query(By.directive(SpentTimesComponent));
     return spentTimesDebugElement?.componentInstance;
   }
 
@@ -109,14 +108,20 @@ describe('TasksComponent', () => {
     TestBed.overrideTemplate(SpentTimesComponent, '');
 
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, ReactiveFormsModule, GlobeNgbModule.forRoot()],
+      imports: [
+        CurrentUserModule.forRoot(),
+        RouterTestingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        GlobeNgbModule.forRoot()
+      ],
       declarations: [
         TestComponent,
         TasksComponent,
         FullnamePipe,
         SpentTimesComponent,
         SpentTimeAddComponent,
-        DurationPipe,
+        DurationPipe
       ]
     });
   }));
@@ -124,7 +129,6 @@ describe('TasksComponent', () => {
   afterEach(() => jasmine.clock().uninstall());
 
   describe('logic', () => {
-
     function createComponent() {
       const component = new TasksComponent();
       component.taskModels = tasks;
@@ -134,7 +138,7 @@ describe('TasksComponent', () => {
     it('should compute relative due date', () => {
       const model: TaskModel = tasks[0];
       model.dueDate = '2017-08-01';
-      expect(new Task(model).relativeDueDate).toBe('aujourd\'hui');
+      expect(new Task(model).relativeDueDate).toBe("aujourd'hui");
 
       model.dueDate = '2017-08-02';
       expect(new Task(model).relativeDueDate).toBe('dans 1 jour');
@@ -200,7 +204,7 @@ describe('TasksComponent', () => {
       expect(text).not.toContain('Rien à faire');
       expect(text).toContain('Some title');
       expect(text).toContain('#Various');
-      expect(text).toContain('aujourd\'hui');
+      expect(text).toContain("aujourd'hui");
       expect(text).not.toContain('Some description');
       expect(text).toContain('Assignée à admin');
       expect(text).toContain('Créée par user2');
@@ -269,7 +273,7 @@ describe('TasksComponent', () => {
       tester.detectChanges();
 
       expect(tester.text).toContain('Faite');
-      expect(tester.text).not.toContain('aujourd\'hui');
+      expect(tester.text).not.toContain("aujourd'hui");
     });
 
     it('should display status instead of due date when CANCELLED', () => {
@@ -277,7 +281,7 @@ describe('TasksComponent', () => {
       tester.detectChanges();
 
       expect(tester.text).toContain('Annulée');
-      expect(tester.text).not.toContain('aujourd\'hui');
+      expect(tester.text).not.toContain("aujourd'hui");
     });
 
     it('should display the description when opened', () => {
@@ -342,4 +346,3 @@ describe('TasksComponent', () => {
     });
   });
 });
-

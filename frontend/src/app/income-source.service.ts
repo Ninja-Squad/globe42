@@ -7,8 +7,7 @@ import { IncomeSourceModel } from './models/income-source.model';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeSourceService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(): Observable<Array<IncomeSourceModel>> {
     return this.http.get<Array<IncomeSourceModel>>('/api/income-sources');

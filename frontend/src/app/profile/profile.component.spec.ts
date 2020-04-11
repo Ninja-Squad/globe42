@@ -50,7 +50,7 @@ describe('ProfileComponent', () => {
     });
 
     TestBed.configureTestingModule({
-      declarations: [ ProfileComponent ],
+      declarations: [ProfileComponent],
       imports: [
         GlobeNgbModule.forRoot(),
         HttpClientTestingModule,
@@ -58,9 +58,7 @@ describe('ProfileComponent', () => {
         ReactiveFormsModule,
         ValdemortModule
       ],
-      providers: [
-        { provide: ActivatedRoute, useFactory: () => route }
-      ]
+      providers: [{ provide: ActivatedRoute, useFactory: () => route }]
     });
 
     currentUserService = TestBed.inject(CurrentUserService);

@@ -3,7 +3,8 @@
     <h1>Profil et préférences</h1>
 
     <p>
-      Votre identifiant est <code>{{ profile.login }}</code>.
+      Votre identifiant est <code>{{ profile.login }}</code
+      >.
       <ng-container *ngIf="profile.admin">Vous êtes administrateur/administratrice.</ng-container>
     </p>
 
@@ -12,10 +13,12 @@
         <label for="email">Adress email</label>
         <input formControlName="email" type="email" class="form-control" id="email" />
         <small class="form-text text-muted">
-          Choisissez l'adresse email à laquelle vous voulez recevoir les notifications.<br/>
+          Choisissez l'adresse email à laquelle vous voulez recevoir les notifications.<br />
           <span class="text-warning">
             <span class="fa fa-exclamation-triangle"></span>
-            Ne vous trompez pas&nbsp;! Des emails seront envoyés à cette adresse automatiquement&nbsp;!</span>
+            Ne vous trompez pas&nbsp;! Des emails seront envoyés à cette adresse
+            automatiquement&nbsp;!</span
+          >
         </small>
         <val-errors controlName="email" label="L'adresse email"></val-errors>
       </div>
@@ -23,9 +26,24 @@
       <div class="form-group">
         <label>Je veux être averti(e) par email lorsqu'une tâche m'est assignée</label>
         <div>
-          <div class="btn-group btn-group-toggle" ngbRadioGroup name="taskAssignmentEmailNotificationEnabled" formControlName="taskAssignmentEmailNotificationEnabled">
-            <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
-              <input ngbButton id="taskAssignmentEmailNotificationEnabled-{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
+          <div
+            class="btn-group btn-group-toggle"
+            ngbRadioGroup
+            name="taskAssignmentEmailNotificationEnabled"
+            formControlName="taskAssignmentEmailNotificationEnabled"
+          >
+            <label
+              ngbButtonLabel
+              class="btn btn-outline-secondary"
+              *ngFor="let value of [true, false]"
+            >
+              <input
+                ngbButton
+                id="taskAssignmentEmailNotificationEnabled-{{ value }}"
+                type="radio"
+                [value]="value"
+              />
+              {{ value ? 'Oui' : 'Non' }}
             </label>
           </div>
         </div>

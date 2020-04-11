@@ -17,18 +17,19 @@ import { CurrentPersonService } from '../current-person.service';
   styleUrls: ['./person-resources.component.scss']
 })
 export class PersonResourcesComponent {
-
   person: PersonModel;
   incomes: Array<IncomeModel>;
   charges: Array<ChargeModel>;
   perUnitRevenueInformation: PerUnitRevenueInformationModel | null;
 
-  constructor(currentPersonService: CurrentPersonService,
-              route: ActivatedRoute,
-              private incomeService: IncomeService,
-              private chargeService: ChargeService,
-              private perUnitRevenueInformationService: PerUnitRevenueInformationService,
-              private confirmService: ConfirmService) {
+  constructor(
+    currentPersonService: CurrentPersonService,
+    route: ActivatedRoute,
+    private incomeService: IncomeService,
+    private chargeService: ChargeService,
+    private perUnitRevenueInformationService: PerUnitRevenueInformationService,
+    private confirmService: ConfirmService
+  ) {
     this.person = currentPersonService.snapshot;
     this.incomes = route.snapshot.data.incomes;
     this.charges = route.snapshot.data.charges;
@@ -36,17 +37,23 @@ export class PersonResourcesComponent {
   }
 
   deleteIncome(income: IncomeModel) {
-    this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer le revenu ${income.source.name}\u00A0?`}).pipe(
-      switchMap(() => this.incomeService.delete(this.person.id, income.id)),
-      switchMap(() => this.incomeService.list(this.person.id))
-    ).subscribe(incomes => this.incomes = incomes);
+    this.confirmService
+      .confirm({ message: `Voulez-vous vraiment supprimer le revenu ${income.source.name}\u00A0?` })
+      .pipe(
+        switchMap(() => this.incomeService.delete(this.person.id, income.id)),
+        switchMap(() => this.incomeService.list(this.person.id))
+      )
+      .subscribe(incomes => (this.incomes = incomes));
   }
 
   deleteCharge(charge: ChargeModel) {
-    this.confirmService.confirm({ message: `Voulez-vous vraiment supprimer la charge ${charge.type.name}\u00A0?`}).pipe(
-      switchMap(() => this.chargeService.delete(this.person.id, charge.id)),
-      switchMap(() => this.chargeService.list(this.person.id))
-    ).subscribe(charges => this.charges = charges);
+    this.confirmService
+      .confirm({ message: `Voulez-vous vraiment supprimer la charge ${charge.type.name}\u00A0?` })
+      .pipe(
+        switchMap(() => this.chargeService.delete(this.person.id, charge.id)),
+        switchMap(() => this.chargeService.list(this.person.id))
+      )
+      .subscribe(charges => (this.charges = charges));
   }
 
   totalMonthlyIncomeAmount() {
@@ -66,7 +73,8 @@ export class PersonResourcesComponent {
       return null;
     }
 
-    const units = 1 + this.unitsForOtherAdultLike() + this.unitsForChildren() + this.unitsForMonoParental();
+    const units =
+      1 + this.unitsForOtherAdultLike() + this.unitsForChildren() + this.unitsForMonoParental();
     return this.totalMonthlyIncomeAmount() / units;
   }
 
@@ -79,14 +87,16 @@ export class PersonResourcesComponent {
   }
 
   unitsForMonoParental() {
-    return this.perUnitRevenueInformation.monoParental ? 0.2  : 0;
+    return this.perUnitRevenueInformation.monoParental ? 0.2 : 0;
   }
 
   deletePerUnitRevenueInformation() {
-    this.confirmService.confirm({
-      message: 'Voulez-vous vraiment supprimer les informations utilisées pour le calcul du revenu par unité de consommation\u00A0?'
-    }).pipe(
-      switchMap(() => this.perUnitRevenueInformationService.delete(this.person.id))
-    ).subscribe(() => this.perUnitRevenueInformation = null);
+    this.confirmService
+      .confirm({
+        message:
+          'Voulez-vous vraiment supprimer les informations utilisées pour le calcul du revenu par unité de consommation\u00A0?'
+      })
+      .pipe(switchMap(() => this.perUnitRevenueInformationService.delete(this.person.id)))
+      .subscribe(() => (this.perUnitRevenueInformation = null));
   }
 }

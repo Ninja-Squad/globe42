@@ -31,10 +31,7 @@ describe('PersonFamilyEditComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [PersonFamilyEditComponent, FullnamePipe, PageTitleDirective],
-      providers: [
-        FamilyService,
-        { provide: ActivatedRoute, useFactory: () => route },
-      ],
+      providers: [FamilyService, { provide: ActivatedRoute, useFactory: () => route }],
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -51,7 +48,9 @@ describe('PersonFamilyEditComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.person.id).toBe(42);
-    expect(fixture.nativeElement.querySelector('h1').textContent).toBe('Éditer la situation familiale de John Doe');
+    expect(fixture.nativeElement.querySelector('h1').textContent).toBe(
+      'Éditer la situation familiale de John Doe'
+    );
   });
 
   it('should have a form when no family', () => {
@@ -102,8 +101,12 @@ describe('PersonFamilyEditComponent', () => {
     expect((element.querySelector('#spouseAbroad') as HTMLInputElement).checked).toBe(false);
     expect((element.querySelector('#noSpouse') as HTMLInputElement).checked).toBe(false);
     expect((element.querySelector('#childFirstName0') as HTMLInputElement).value).toBe('John');
-    expect((element.querySelector('#childBirthDate0') as HTMLInputElement).value).toBe('30/11/2000');
-    expect((element.querySelector('#childLocationFrance0') as HTMLInputElement).checked).toBe(false);
+    expect((element.querySelector('#childBirthDate0') as HTMLInputElement).value).toBe(
+      '30/11/2000'
+    );
+    expect((element.querySelector('#childLocationFrance0') as HTMLInputElement).checked).toBe(
+      false
+    );
     expect((element.querySelector('#childLocationAbroad0') as HTMLInputElement).checked).toBe(true);
   });
 
@@ -129,7 +132,9 @@ describe('PersonFamilyEditComponent', () => {
     expect(fixture.componentInstance.children.length).toBe(2);
     expect((element.querySelector('#childBirthDate1') as HTMLInputElement).value).toBe('');
     expect((element.querySelector('#childLocationFrance1') as HTMLInputElement).checked).toBe(true);
-    expect((element.querySelector('#childLocationAbroad1') as HTMLInputElement).checked).toBe(false);
+    expect((element.querySelector('#childLocationAbroad1') as HTMLInputElement).checked).toBe(
+      false
+    );
 
     (element.querySelector('#removeChild0') as HTMLButtonElement).click();
     fixture.detectChanges();
@@ -137,7 +142,9 @@ describe('PersonFamilyEditComponent', () => {
     expect(fixture.componentInstance.children.length).toBe(1);
     expect((element.querySelector('#childBirthDate0') as HTMLInputElement).value).toBe('');
     expect((element.querySelector('#childLocationFrance0') as HTMLInputElement).checked).toBe(true);
-    expect((element.querySelector('#childLocationAbroad0') as HTMLInputElement).checked).toBe(false);
+    expect((element.querySelector('#childLocationAbroad0') as HTMLInputElement).checked).toBe(
+      false
+    );
   });
 
   it('should save the family is present', () => {

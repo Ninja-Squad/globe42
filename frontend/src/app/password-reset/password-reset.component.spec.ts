@@ -11,20 +11,21 @@ import { of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 
 describe('PasswordResetComponent', () => {
-  const user: UserModel = {id: 42, login: 'jb', admin: false};
+  const user: UserModel = { id: 42, login: 'jb', admin: false };
   const activatedRoute = {
-    snapshot: {data: {user}}
+    snapshot: { data: { user } }
   };
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [ HttpClientModule, GlobeNgbModule.forRoot() ],
-    declarations: [ PasswordResetComponent, PageTitleDirective ],
-    providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: Router, useValue: fakeRouter }
-    ]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule, GlobeNgbModule.forRoot()],
+      declarations: [PasswordResetComponent, PageTitleDirective],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: Router, useValue: fakeRouter }
+      ]
+    })));
 
   it('should reset password', () => {
     const fixture = TestBed.createComponent(PasswordResetComponent);
@@ -40,7 +41,11 @@ describe('PasswordResetComponent', () => {
     expect(nativeElement.querySelector('#updated-user')).toBeNull();
 
     const userService = TestBed.inject(UserService);
-    const updatedUser = {id: 42, login: 'jb', generatedPassword: 'passw0rd'} as UserWithPasswordModel;
+    const updatedUser = {
+      id: 42,
+      login: 'jb',
+      generatedPassword: 'passw0rd'
+    } as UserWithPasswordModel;
     spyOn(userService, 'resetPassword').and.returnValue(of(updatedUser));
     resetButton.click();
     fixture.detectChanges();

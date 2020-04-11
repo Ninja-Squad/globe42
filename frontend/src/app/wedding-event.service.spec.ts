@@ -12,7 +12,7 @@ describe('WeddingEventService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(WeddingEventService);
@@ -25,13 +25,23 @@ describe('WeddingEventService', () => {
   });
 
   it('should create wedding event', () => {
-    const expectedEvent: WeddingEventModel = { id: 42, date: '2018-03-20', type: 'DIVORCE', location: 'FRANCE' };
-    const command: WeddingEventCommand = { date: '2018-03-20', type: 'DIVORCE', location: 'FRANCE' };
+    const expectedEvent: WeddingEventModel = {
+      id: 42,
+      date: '2018-03-20',
+      type: 'DIVORCE',
+      location: 'FRANCE'
+    };
+    const command: WeddingEventCommand = {
+      date: '2018-03-20',
+      type: 'DIVORCE',
+      location: 'FRANCE'
+    };
     httpTester.testPost(
       '/api/persons/1/wedding-events',
       command,
       expectedEvent,
-      service.create(1, command));
+      service.create(1, command)
+    );
   });
 
   it('should delete wedding event', () => {

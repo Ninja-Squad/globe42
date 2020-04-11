@@ -14,9 +14,14 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 
 describe('IncomeTypeEditComponent', () => {
-
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      ValdemortModule
+    ],
     declarations: [IncomeTypeEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
@@ -30,9 +35,7 @@ describe('IncomeTypeEditComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute }
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -42,11 +45,15 @@ describe('IncomeTypeEditComponent', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de l\'organisme payeur CAF');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
+        "Modification de l'organisme payeur CAF"
+      );
     });
 
     it('should edit and update an existing income type', () => {
-      const incomeSourceTypeService: IncomeSourceTypeService = TestBed.inject(IncomeSourceTypeService);
+      const incomeSourceTypeService: IncomeSourceTypeService = TestBed.inject(
+        IncomeSourceTypeService
+      );
       spyOn(incomeSourceTypeService, 'update').and.returnValue(of(undefined));
       const router: Router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
@@ -66,11 +73,12 @@ describe('IncomeTypeEditComponent', () => {
       const saveButton: HTMLButtonElement = element.querySelector('#save');
       saveButton.click();
 
-      expect(incomeSourceTypeService.update).toHaveBeenCalledWith(42, { type: 'Caisse Allocations Familiales' });
+      expect(incomeSourceTypeService.update).toHaveBeenCalledWith(42, {
+        type: 'Caisse Allocations Familiales'
+      });
 
       expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');
     });
-
   });
 
   describe('in create mode', () => {
@@ -91,7 +99,9 @@ describe('IncomeTypeEditComponent', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvel organisme payeur');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
+        'Nouvel organisme payeur'
+      );
     });
 
     it('should create and save a new income type', () => {

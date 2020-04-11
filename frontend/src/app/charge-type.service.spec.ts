@@ -7,7 +7,6 @@ import { ChargeTypeCommand } from './models/charge-type.command';
 import { HttpTester } from './http-tester.spec';
 
 describe('ChargeTypeService', () => {
-
   let httpTester: HttpTester;
   let service: ChargeTypeService;
 
@@ -34,7 +33,12 @@ describe('ChargeTypeService', () => {
   it('should create a charge type', () => {
     const fakeChargeType = { name: 'foo' } as ChargeTypeCommand;
     const expectedChargeType = { id: 2 } as ChargeTypeModel;
-    httpTester.testPost('/api/charge-types', fakeChargeType, expectedChargeType, service.create(fakeChargeType));
+    httpTester.testPost(
+      '/api/charge-types',
+      fakeChargeType,
+      expectedChargeType,
+      service.create(fakeChargeType)
+    );
   });
 
   it('should list charge types', () => {

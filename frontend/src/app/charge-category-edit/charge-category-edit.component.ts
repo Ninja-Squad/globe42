@@ -16,11 +16,13 @@ export class ChargeCategoryEditComponent implements OnInit {
   editedChargeCategory: ChargeCategoryModel;
   chargeCategoryForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private fb: FormBuilder,
-              private chargeCategoryService: ChargeCategoryService,
-              private errorService: ErrorService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private chargeCategoryService: ChargeCategoryService,
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
     this.editedChargeCategory = this.route.snapshot.data.chargeCategory;
@@ -46,5 +48,4 @@ export class ChargeCategoryEditComponent implements OnInit {
       this.errorService.functionalErrorHandler()
     );
   }
-
 }

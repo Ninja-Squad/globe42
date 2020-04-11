@@ -10,14 +10,15 @@ import { ProfileCommand, ProfileModel } from '../models/user.model';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-
   form: FormGroup;
   profile: ProfileModel;
 
-  constructor(private route: ActivatedRoute,
-              fb: FormBuilder,
-              private currentUserService: CurrentUserService,
-              private router: Router) {
+  constructor(
+    private route: ActivatedRoute,
+    fb: FormBuilder,
+    private currentUserService: CurrentUserService,
+    private router: Router
+  ) {
     this.form = fb.group({
       email: ['', Validators.email],
       taskAssignmentEmailNotificationEnabled: [false]
@@ -34,8 +35,8 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.currentUserService.updateProfile(this.form.value).subscribe(() =>
-      this.router.navigate(['/'])
-    );
+    this.currentUserService
+      .updateProfile(this.form.value)
+      .subscribe(() => this.router.navigate(['/']));
   }
 }

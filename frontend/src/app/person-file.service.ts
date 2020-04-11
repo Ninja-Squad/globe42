@@ -5,8 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PersonFileService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(personId: number): Observable<Array<FileModel>> {
     return this.http.get<Array<FileModel>>(`/api/persons/${personId}/files`);
@@ -26,7 +25,7 @@ export class PersonFileService {
     formData.append('file', file);
 
     const req = new HttpRequest('POST', `/api/persons/${personId}/files`, formData, {
-      reportProgress: true,
+      reportProgress: true
     });
 
     return this.http.request(req);

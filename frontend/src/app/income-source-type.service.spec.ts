@@ -7,7 +7,6 @@ import { IncomeSourceTypeService } from './income-source-type.service';
 import { HttpTester } from './http-tester.spec';
 
 describe('IncomeSourceTypeService', () => {
-
   let httpTester: HttpTester;
   let service: IncomeSourceTypeService;
 
@@ -27,13 +26,22 @@ describe('IncomeSourceTypeService', () => {
 
   it('should update an income type', () => {
     const fakeIncomeType = { type: 'CAF' } as IncomeSourceTypeCommand;
-    httpTester.testPut('/api/income-source-types/2', fakeIncomeType, service.update(2, fakeIncomeType));
+    httpTester.testPut(
+      '/api/income-source-types/2',
+      fakeIncomeType,
+      service.update(2, fakeIncomeType)
+    );
   });
 
   it('should create a income type', () => {
     const fakeIncomeType = { type: 'foo' } as IncomeSourceTypeCommand;
     const expectedIncomeType = { id: 2 } as IncomeSourceTypeModel;
-    httpTester.testPost('/api/income-source-types', fakeIncomeType, expectedIncomeType, service.create(fakeIncomeType));
+    httpTester.testPost(
+      '/api/income-source-types',
+      fakeIncomeType,
+      expectedIncomeType,
+      service.create(fakeIncomeType)
+    );
   });
 
   it('should list income types', () => {

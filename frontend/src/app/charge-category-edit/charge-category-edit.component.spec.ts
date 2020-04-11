@@ -16,7 +16,13 @@ import { PageTitleDirective } from '../page-title.directive';
 
 describe('ChargeCategoryEditComponent', () => {
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      ValdemortModule
+    ],
     declarations: [ChargeCategoryEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
@@ -31,9 +37,7 @@ describe('ChargeCategoryEditComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute }
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -46,7 +50,9 @@ describe('ChargeCategoryEditComponent', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Modification de la dépense rental');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
+        'Modification de la dépense rental'
+      );
     });
 
     it('should edit and update an existing charge category', () => {
@@ -55,7 +61,7 @@ describe('ChargeCategoryEditComponent', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.componentInstance.chargeCategoryForm.value).toEqual({name: 'rental'});
+      expect(fixture.componentInstance.chargeCategoryForm.value).toEqual({ name: 'rental' });
 
       const nativeElement = fixture.nativeElement;
       const type = nativeElement.querySelector('#name');
@@ -69,7 +75,6 @@ describe('ChargeCategoryEditComponent', () => {
       expect(chargeCategoryService.update).toHaveBeenCalledWith(42, { name: 'Charges locatives' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');
     });
-
   });
 
   describe('in create mode', () => {

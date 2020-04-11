@@ -9,7 +9,6 @@ export function displayCity(city: CityModel) {
   name: 'displayCity'
 })
 export class DisplayCityPipe implements PipeTransform {
-
   transform(city: CityModel, args?: any): any {
     return city ? displayCity(city) : '';
   }

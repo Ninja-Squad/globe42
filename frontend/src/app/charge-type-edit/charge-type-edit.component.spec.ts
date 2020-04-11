@@ -43,19 +43,21 @@ class ChargeTypeEditComponentTester extends ComponentTester<ChargeTypeEditCompon
 }
 
 describe('ChargeTypeEditComponent', () => {
-
   const chargeCategories = [
     { id: 1, name: 'B' },
     { id: 2, name: 'A' }
   ];
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      ValdemortModule
+    ],
     declarations: [ChargeTypeEditComponent, ValidationDefaultsComponent, PageTitleDirective],
-    providers: [
-      ChargeTypeService,
-      ErrorService
-    ]
+    providers: [ChargeTypeService, ErrorService]
   })
   class TestModule {}
 
@@ -71,9 +73,7 @@ describe('ChargeTypeEditComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute }
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -91,7 +91,11 @@ describe('ChargeTypeEditComponent', () => {
     });
 
     it('should expose a default charge type', () => {
-      expect(tester.componentInstance.chargeTypeForm.value).toEqual({ name: '', categoryId: null, maxMonthlyAmount: null });
+      expect(tester.componentInstance.chargeTypeForm.value).toEqual({
+        name: '',
+        categoryId: null,
+        maxMonthlyAmount: null
+      });
     });
 
     it('should display the charge type in a form, and validate the form', () => {
@@ -121,9 +125,11 @@ describe('ChargeTypeEditComponent', () => {
     it('should save the charge type and navigate to the list', () => {
       const chargeTypeService: ChargeTypeService = TestBed.inject(ChargeTypeService);
       const router: Router = TestBed.inject(Router);
-      spyOn(chargeTypeService, 'create').and.returnValue(of({
-        id: 42
-      } as ChargeTypeModel));
+      spyOn(chargeTypeService, 'create').and.returnValue(
+        of({
+          id: 42
+        } as ChargeTypeModel)
+      );
       spyOn(router, 'navigate');
 
       tester.name.fillWith('foo');
@@ -131,7 +137,11 @@ describe('ChargeTypeEditComponent', () => {
       tester.maxMonthlyAmount.fillWith('123');
       tester.save.click();
 
-      expect(chargeTypeService.create).toHaveBeenCalledWith({ name: 'foo', categoryId: 2, maxMonthlyAmount: 123 });
+      expect(chargeTypeService.create).toHaveBeenCalledWith({
+        name: 'foo',
+        categoryId: 2,
+        maxMonthlyAmount: 123
+      });
       expect(router.navigate).toHaveBeenCalledWith(['/charge-types']);
     });
   });
@@ -151,9 +161,7 @@ describe('ChargeTypeEditComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute },
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -167,7 +175,11 @@ describe('ChargeTypeEditComponent', () => {
     });
 
     it('should expose the edited charge type info', () => {
-      expect(tester.componentInstance.chargeTypeForm.value).toEqual({ name: 'foo', categoryId: 2, maxMonthlyAmount: 123 });
+      expect(tester.componentInstance.chargeTypeForm.value).toEqual({
+        name: 'foo',
+        categoryId: 2,
+        maxMonthlyAmount: 123
+      });
     });
 
     it('should display the charge type in a form', () => {
@@ -184,7 +196,11 @@ describe('ChargeTypeEditComponent', () => {
 
       tester.save.click();
 
-      expect(chargeTypeService.update).toHaveBeenCalledWith(42, { name: 'foo', categoryId: 2, maxMonthlyAmount: 123 });
+      expect(chargeTypeService.update).toHaveBeenCalledWith(42, {
+        name: 'foo',
+        categoryId: 2,
+        maxMonthlyAmount: 123
+      });
       expect(router.navigate).toHaveBeenCalledWith(['/charge-types']);
     });
   });

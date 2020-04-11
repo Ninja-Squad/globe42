@@ -7,7 +7,6 @@ import { IncomeSourceService } from './income-source.service';
 import { HttpTester } from './http-tester.spec';
 
 describe('IncomeSourceService', () => {
-
   let httpTester: HttpTester;
   let service: IncomeSourceService;
 
@@ -28,13 +27,22 @@ describe('IncomeSourceService', () => {
 
   it('should update an income source', () => {
     const fakeIncomeSourceCommand = { name: 'foo' } as IncomeSourceCommand;
-    httpTester.testPut('/api/income-sources/2', fakeIncomeSourceCommand, service.update(2, fakeIncomeSourceCommand));
+    httpTester.testPut(
+      '/api/income-sources/2',
+      fakeIncomeSourceCommand,
+      service.update(2, fakeIncomeSourceCommand)
+    );
   });
 
   it('should create a income source', () => {
     const fakeIncomeSourceCommand = { name: 'foo' } as IncomeSourceCommand;
     const expectedIncomeSource = { id: 2 } as IncomeSourceModel;
-    httpTester.testPost('/api/income-sources', fakeIncomeSourceCommand, expectedIncomeSource, service.create(fakeIncomeSourceCommand));
+    httpTester.testPost(
+      '/api/income-sources',
+      fakeIncomeSourceCommand,
+      expectedIncomeSource,
+      service.create(fakeIncomeSourceCommand)
+    );
   });
 
   it('should list income sources', () => {

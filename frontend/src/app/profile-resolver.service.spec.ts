@@ -7,12 +7,14 @@ import { ProfileModel } from './models/user.model';
 import { CurrentUserService } from './current-user/current-user.service';
 
 describe('ProfileResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    })
+  );
 
   it('should resolve profile', () => {
-    const expectedResult = of({ email: 'joe@nowhere.com'} as ProfileModel);
+    const expectedResult = of({ email: 'joe@nowhere.com' } as ProfileModel);
 
     const currentUserService = TestBed.inject(CurrentUserService);
     spyOn(currentUserService, 'getProfile').and.returnValue(expectedResult);

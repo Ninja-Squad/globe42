@@ -13,10 +13,11 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
   selector: '[ngbTypeahead]'
 })
 export class NonEditableTypeaheadDirective {
-
-  constructor(private ngControl: NgControl,
-              private elementRef: ElementRef<HTMLInputElement>,
-              private typeahead: NgbTypeahead) { }
+  constructor(
+    private ngControl: NgControl,
+    private elementRef: ElementRef<HTMLInputElement>,
+    private typeahead: NgbTypeahead
+  ) {}
 
   @HostListener('blur')
   onBlur() {
@@ -27,6 +28,6 @@ export class NonEditableTypeaheadDirective {
 
   @HostBinding('class.is-warning')
   get isWarning() {
-    return !this.typeahead.editable  && this.elementRef.nativeElement.value && !this.ngControl.value;
+    return !this.typeahead.editable && this.elementRef.nativeElement.value && !this.ngControl.value;
   }
 }

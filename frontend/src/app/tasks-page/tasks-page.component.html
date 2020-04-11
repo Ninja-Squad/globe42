@@ -1,31 +1,40 @@
-<gl-page-title *ngIf="person" [title]="(person | fullname) + ': Tâches ' + titleSuffixes[taskListType]"></gl-page-title>
+<gl-page-title
+  *ngIf="person"
+  [title]="(person | fullname) + ': Tâches ' + titleSuffixes[taskListType]"
+></gl-page-title>
 <gl-page-title *ngIf="!person" [title]="'Tâches ' + titleSuffixes[taskListType]"></gl-page-title>
 
 <div class="text-center" *ngIf="page.totalElements === 0 && taskListType !== 'archived'">
   <span style="font-size: 60px;" class="fa fa-thumbs-up text-success"></span>
-  <br/>
+  <br />
   <span class="lead">Rien à faire&nbsp;! Elle est pas belle la vie&nbsp;?</span>
 </div>
 
 <div class="text-center" *ngIf="page.totalElements === 0 && taskListType === 'archived'">
   <span style="font-size: 60px;" class="fa fa-info text-info"></span>
-  <br/>
+  <br />
   <span class="lead">Aucune tâche archivée</span>
 </div>
 
 <gl-tasks [taskModels]="page.content" (taskClicked)="onTaskClicked($event)"></gl-tasks>
 
 <div class="d-flex justify-content-center mt-5" *ngIf="page.totalPages > 1">
-  <ngb-pagination [collectionSize]="page.totalElements"
-                  [page]="page.number + 1"
-                  (pageChange)="loadPage($event)"
-                  [maxSize]="5"
-                  [pageSize]="page.size"
-                  [rotate]="true"></ngb-pagination>
+  <ngb-pagination
+    [collectionSize]="page.totalElements"
+    [page]="page.number + 1"
+    (pageChange)="loadPage($event)"
+    [maxSize]="5"
+    [pageSize]="page.size"
+    [rotate]="true"
+  ></ngb-pagination>
 </div>
 
 <div class="mt-5" *ngIf="taskListType.startsWith('person-')">
-  <a id="newTaskLink" class="btn btn-outline-primary" [routerLink]="['/tasks/create', { 'concerned-person': person?.id }]">
+  <a
+    id="newTaskLink"
+    class="btn btn-outline-primary"
+    [routerLink]="['/tasks/create', { 'concerned-person': person?.id }]"
+  >
     <span class="fa fa-plus"></span>
     Nouvelle tâche
   </a>

@@ -7,15 +7,12 @@ import { NetworkMemberModel } from './models/network-member.model';
 import { NetworkMemberCommand } from './models/network-member.command';
 
 describe('NetworkMemberService', () => {
-
   let httpTester: HttpTester;
   let service: NetworkMemberService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule]
     });
 
     httpTester = new HttpTester(TestBed.inject(HttpTestingController));
@@ -23,17 +20,30 @@ describe('NetworkMemberService', () => {
   });
 
   it('should list network members of a person', () => {
-    httpTester.testGet('/api/persons/42/network-members', [] as Array<NetworkMemberModel>, service.list(42));
+    httpTester.testGet(
+      '/api/persons/42/network-members',
+      [] as Array<NetworkMemberModel>,
+      service.list(42)
+    );
   });
 
   it('should create a network member for a person', () => {
     const command = {} as NetworkMemberCommand;
-    httpTester.testPost('/api/persons/42/network-members', command, {} as NetworkMemberModel, service.create(42, command));
+    httpTester.testPost(
+      '/api/persons/42/network-members',
+      command,
+      {} as NetworkMemberModel,
+      service.create(42, command)
+    );
   });
 
   it('should update a network member of a person', () => {
     const command = {} as NetworkMemberCommand;
-    httpTester.testPut('/api/persons/42/network-members/56', command, service.update(42, 56, command));
+    httpTester.testPut(
+      '/api/persons/42/network-members/56',
+      command,
+      service.update(42, 56, command)
+    );
   });
 
   it('should delete a network member of a person', () => {

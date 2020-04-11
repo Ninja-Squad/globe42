@@ -8,20 +8,17 @@ import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-mo
 import { GlobeNgbModule } from './globe-ngb/globe-ngb.module';
 
 describe('ConfirmService and its modal component', () => {
-
   @Component({
     template: ''
   })
-  class TestComponent {
-  }
+  class TestComponent {}
 
   @NgModule({
     imports: [RouterTestingModule, GlobeNgbModule.forRoot()],
     declarations: [ConfirmModalContentComponent, TestComponent],
     entryComponents: [ConfirmModalContentComponent]
   })
-  class TestModule {
-  }
+  class TestModule {}
 
   let modalContent: HTMLElement;
   let fixture: ComponentFixture<any>;
@@ -52,19 +49,19 @@ describe('ConfirmService and its modal component', () => {
   }
 
   it('should display a modal dialog when confirming', () => {
-    confirm({message: 'Really?'});
+    confirm({ message: 'Really?' });
     expect(modalContent).toBeTruthy();
     expect(modalContent.querySelector('.modal-title').textContent).toBe('Confirmation');
     expect(modalContent.querySelector('.modal-body').textContent).toContain('Really?');
   });
 
   it('should honor the title option', () => {
-    confirm({message: 'Really?', title: 'foo'});
+    confirm({ message: 'Really?', title: 'foo' });
     expect(modalContent.querySelector('.modal-title').textContent).toBe('foo');
   });
 
   it('should emit when confirming', (done: DoneFn) => {
-    confirm({message: 'Really?'}).subscribe(() => done());
+    confirm({ message: 'Really?' }).subscribe(() => done());
     const yesButton = modalContent.querySelectorAll('button')[1];
     expect(yesButton.textContent).toBe('Oui');
     yesButton.click();
@@ -75,7 +72,7 @@ describe('ConfirmService and its modal component', () => {
   });
 
   it('should error when not confirming and errorOnClose is true', (done: DoneFn) => {
-    confirm({message: 'Really?', errorOnClose: true}).subscribe({ error: () => done() });
+    confirm({ message: 'Really?', errorOnClose: true }).subscribe({ error: () => done() });
     const noButton = modalContent.querySelectorAll('button')[2];
     expect(noButton.textContent).toBe('Non');
     noButton.click();
@@ -86,7 +83,7 @@ describe('ConfirmService and its modal component', () => {
   });
 
   it('should error when closing and errorOnClose is true', (done: DoneFn) => {
-    confirm({message: 'Really?', errorOnClose: true}).subscribe({ error: () => done() });
+    confirm({ message: 'Really?', errorOnClose: true }).subscribe({ error: () => done() });
     const closeButton = modalContent.querySelectorAll('button')[0];
     expect(closeButton.textContent).toContain('×');
     closeButton.click();
@@ -97,7 +94,7 @@ describe('ConfirmService and its modal component', () => {
   });
 
   it('should do nothing when not confirming and errorOnClose is not set', (done: DoneFn) => {
-    confirm({message: 'Really?'}).subscribe({
+    confirm({ message: 'Really?' }).subscribe({
       error: () => fail(),
       complete: () => done()
     });
@@ -109,5 +106,4 @@ describe('ConfirmService and its modal component', () => {
 
     expect(document.querySelector('.modal-content')).toBeFalsy();
   });
-
 });

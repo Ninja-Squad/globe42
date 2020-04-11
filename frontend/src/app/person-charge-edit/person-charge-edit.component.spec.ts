@@ -22,14 +22,23 @@ describe('PersonChargeEditComponent', () => {
     { id: 2, name: 'A', maxMonthlyAmount: 100 }
   ] as Array<ChargeTypeModel>;
 
-  const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: 'JB'};
+  const person = { id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: 'JB' };
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [PersonChargeEditComponent, FullnamePipe, ValidationDefaultsComponent, PageTitleDirective],
-    providers: [
-      { provide: LOCALE_ID, useValue: 'fr-FR' }
-    ]
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      ValdemortModule
+    ],
+    declarations: [
+      PersonChargeEditComponent,
+      FullnamePipe,
+      ValidationDefaultsComponent,
+      PageTitleDirective
+    ],
+    providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
   })
   class TestModule {}
 
@@ -51,7 +60,9 @@ describe('PersonChargeEditComponent', () => {
       const fixture = TestBed.createComponent(PersonChargeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Créer une nouvelle charge pour Jean-Baptiste Nizet (JB)');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
+        'Créer une nouvelle charge pour Jean-Baptiste Nizet (JB)'
+      );
     });
 
     it('should expose sorted charge types', () => {
@@ -107,22 +118,27 @@ describe('PersonChargeEditComponent', () => {
 
       expect(element.textContent).not.toContain('La nature de la charge est obligatoire');
       expect(element.textContent).toContain(
-        'Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge\u00a0: 100,00\u00a0€');
+        'Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge\u00a0: 100,00\u00a0€'
+      );
 
       chargeType.selectedIndex = 0;
       chargeType.dispatchEvent(new Event('change'));
       fixture.detectChanges();
 
-      expect(element.textContent).not.toContain('Le montant mensuel ne peut pas dépasser la valeur maximale');
+      expect(element.textContent).not.toContain(
+        'Le montant mensuel ne peut pas dépasser la valeur maximale'
+      );
     });
 
     it('should save the charge and navigate to the resource list', () => {
       const chargeService = TestBed.inject(ChargeService);
       const router = TestBed.inject(Router);
 
-      spyOn(chargeService, 'create').and.returnValue(of({
-        id: 42
-      } as ChargeModel));
+      spyOn(chargeService, 'create').and.returnValue(
+        of({
+          id: 42
+        } as ChargeModel)
+      );
       spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(PersonChargeEditComponent);

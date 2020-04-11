@@ -26,7 +26,6 @@ import { CurrentPersonService } from '../current-person.service';
 import { DisplayPassportStatusPipe } from '../display-passport-status.pipe';
 
 describe('PersonComponent', () => {
-
   let person: PersonModel;
   let currentPersonService: CurrentPersonService;
 
@@ -93,7 +92,7 @@ describe('PersonComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot() ],
+      imports: [RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot()],
       declarations: [
         PersonComponent,
         DisplayGenderPipe,
@@ -110,9 +109,7 @@ describe('PersonComponent', () => {
         FullnamePipe,
         PageTitleDirective
       ],
-      providers: [
-        { provide: LOCALE_ID, useValue: 'fr-FR'}
-      ],
+      providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
       schemas: [NO_ERRORS_SCHEMA]
     });
 
@@ -123,7 +120,9 @@ describe('PersonComponent', () => {
   it('should have a maps URL', () => {
     const component = new PersonComponent(null, null, currentPersonService, null);
     component.ngOnInit();
-    expect(component.mapsUrl).toBe('https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE');
+    expect(component.mapsUrl).toBe(
+      'https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE'
+    );
   });
 
   it('should display a person', () => {
@@ -145,13 +144,15 @@ describe('PersonComponent', () => {
     const entryDate = nativeElement.querySelector('#entryDate');
     expect(entryDate.textContent).toBe('1 déc. 2016');
     const entryType = nativeElement.querySelector('#entryType');
-    expect(entryType.textContent).toBe('Régulière');
+    expect(entryType.textContent).toContain('Régulière');
     const mediationCode = nativeElement.querySelector('#mediationCode');
     expect(mediationCode.textContent).toBe('D1');
-    const firstMediationAppointmentDate = nativeElement.querySelector('#firstMediationAppointmentDate');
-    expect(firstMediationAppointmentDate.textContent).toBe('1 déc. 2017');
+    const firstMediationAppointmentDate = nativeElement.querySelector(
+      '#firstMediationAppointmentDate'
+    );
+    expect(firstMediationAppointmentDate.textContent).toContain('1 déc. 2017');
     const maritalStatus = nativeElement.querySelector('#maritalStatus');
-    expect(maritalStatus.textContent).toBe('Marié(e)');
+    expect(maritalStatus.textContent).toContain('Marié(e)');
     const spouse = nativeElement.querySelector('#spouse');
     expect(spouse.textContent).toContain('Jane Doe');
     const partner = nativeElement.querySelector('#partner');
@@ -164,7 +165,7 @@ describe('PersonComponent', () => {
     expect(fiscalStatus.textContent).toContain('n° fiscal 0123456789012');
     expect(fiscalStatus.textContent).toContain('à jour');
     const healthCareCoverage = nativeElement.querySelector('#healthCareCoverage');
-    expect(healthCareCoverage.textContent).toContain('Aide médicale de l\'Etat');
+    expect(healthCareCoverage.textContent).toContain("Aide médicale de l'Etat");
     expect(healthCareCoverage.textContent).toContain('depuis le 1 janv. 2017');
     const healthInsurance = nativeElement.querySelector('#healthInsurance');
     expect(healthInsurance.textContent).toContain('CMU-C');
@@ -188,15 +189,19 @@ describe('PersonComponent', () => {
     const visa = nativeElement.querySelector('#visa');
     expect(visa.textContent).toBe('D (long séjour)');
     const residencePermit = nativeElement.querySelector('#residencePermit');
-    expect(residencePermit.textContent).toBe('Carte de résident de 10 ans');
+    expect(residencePermit.textContent).toContain('Carte de résident de 10 ans');
     const residencePermitDepositDate = nativeElement.querySelector('#residencePermitDepositDate');
-    expect(residencePermitDepositDate.textContent).toBe('2 févr. 2018');
+    expect(residencePermitDepositDate.textContent).toContain('2 févr. 2018');
     const residencePermitRenewalDate = nativeElement.querySelector('#residencePermitRenewalDate');
-    expect(residencePermitRenewalDate.textContent).toBe('2 oct. 2018');
-    const residencePermitValidityStartDate = nativeElement.querySelector('#residencePermitValidityStartDate');
-    expect(residencePermitValidityStartDate.textContent).toBe('2 mars 2019');
-    const residencePermitValidityEndDate = nativeElement.querySelector('#residencePermitValidityEndDate');
-    expect(residencePermitValidityEndDate.textContent).toBe('2 mars 2029');
+    expect(residencePermitRenewalDate.textContent).toContain('2 oct. 2018');
+    const residencePermitValidityStartDate = nativeElement.querySelector(
+      '#residencePermitValidityStartDate'
+    );
+    expect(residencePermitValidityStartDate.textContent).toContain('2 mars 2019');
+    const residencePermitValidityEndDate = nativeElement.querySelector(
+      '#residencePermitValidityEndDate'
+    );
+    expect(residencePermitValidityEndDate.textContent).toContain('2 mars 2029');
   });
 
   it('should display a person with no spouse but a partner', () => {
@@ -237,7 +242,8 @@ describe('PersonComponent', () => {
       'residencePermitRenewalDate'
     ];
     mediationDependantElementIds.forEach(id =>
-      expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`));
+      expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`)
+    );
   });
 
   it('should delete a person if confirmed', () => {
@@ -253,7 +259,9 @@ describe('PersonComponent', () => {
     spyOn(router, 'navigate');
 
     expect(fixture.nativeElement.querySelector('#resurrect-person-button')).toBeFalsy();
-    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector('#delete-person-button');
+    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '#delete-person-button'
+    );
     deleteButton.click();
 
     fixture.detectChanges();
@@ -273,7 +281,9 @@ describe('PersonComponent', () => {
     spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
-    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector('#delete-person-button');
+    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '#delete-person-button'
+    );
     deleteButton.click();
 
     fixture.detectChanges();
@@ -295,7 +305,9 @@ describe('PersonComponent', () => {
     spyOn(router, 'navigate');
 
     expect(fixture.nativeElement.querySelector('#delete-person-button')).toBeFalsy();
-    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector('#resurrect-person-button');
+    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '#resurrect-person-button'
+    );
     resurrectButton.click();
 
     fixture.detectChanges();
@@ -316,7 +328,9 @@ describe('PersonComponent', () => {
     spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
-    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector('#resurrect-person-button');
+    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '#resurrect-person-button'
+    );
     resurrectButton.click();
 
     fixture.detectChanges();

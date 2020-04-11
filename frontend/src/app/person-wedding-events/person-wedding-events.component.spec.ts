@@ -6,7 +6,10 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { PersonModel } from '../models/person.model';
 import { WeddingEventModel } from '../models/wedding-event.model';
 import { WeddingEventService } from '../wedding-event.service';
-import { DisplayWeddingEventTypePipe, WEDDING_EVENT_TYPE_TRANSLATIONS } from '../display-wedding-event-type.pipe';
+import {
+  DisplayWeddingEventTypePipe,
+  WEDDING_EVENT_TYPE_TRANSLATIONS
+} from '../display-wedding-event-type.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmService } from '../confirm.service';
 import { EMPTY, of } from 'rxjs';
@@ -15,7 +18,13 @@ import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.pipe';
-import { ComponentTester, fakeRoute, fakeSnapshot, speculoosMatchers, TestButton } from 'ngx-speculoos';
+import {
+  ComponentTester,
+  fakeRoute,
+  fakeSnapshot,
+  speculoosMatchers,
+  TestButton
+} from 'ngx-speculoos';
 import { Location } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
@@ -92,13 +101,15 @@ describe('PersonWeddingEventsComponent', () => {
     person = { id: 1, firstName: 'JB', lastName: 'Nizet' } as PersonModel;
 
     route = fakeRoute({
-      snapshot: fakeSnapshot({data: {events}})
+      snapshot: fakeSnapshot({ data: { events } })
     });
 
-    const weddingEventService: WeddingEventService =
-      jasmine.createSpyObj('weddingEventService', ['list', 'create', 'delete']);
-    const confirmService: ConfirmService =
-      jasmine.createSpyObj('confirmService', ['confirm']);
+    const weddingEventService: WeddingEventService = jasmine.createSpyObj('weddingEventService', [
+      'list',
+      'create',
+      'delete'
+    ]);
+    const confirmService: ConfirmService = jasmine.createSpyObj('confirmService', ['confirm']);
 
     TestBed.configureTestingModule({
       declarations: [
@@ -109,12 +120,17 @@ describe('PersonWeddingEventsComponent', () => {
         PageTitleDirective,
         FullnamePipe
       ],
-      imports: [ ReactiveFormsModule, GlobeNgbModule.forRoot(), ValdemortModule, HttpClientTestingModule ],
+      imports: [
+        ReactiveFormsModule,
+        GlobeNgbModule.forRoot(),
+        ValdemortModule,
+        HttpClientTestingModule
+      ],
       providers: [
         { provide: LOCALE_ID, useValue: 'fr-FR' },
         { provide: ActivatedRoute, useFactory: () => route },
         { provide: WeddingEventService, useValue: weddingEventService },
-        { provide: ConfirmService, useValue: confirmService },
+        { provide: ConfirmService, useValue: confirmService }
       ]
     });
 
@@ -214,7 +230,7 @@ describe('PersonWeddingEventsComponent', () => {
         type: 'WEDDING',
         location: 'FRANCE'
       };
-      const newEvents: Array<WeddingEventModel> = [ newEvent ];
+      const newEvents: Array<WeddingEventModel> = [newEvent];
 
       const weddingEventService = TestBed.inject(WeddingEventService);
       (weddingEventService.create as Spy).and.returnValue(of(newEvent));
@@ -222,7 +238,10 @@ describe('PersonWeddingEventsComponent', () => {
 
       component.create();
 
-      expect(weddingEventService.create).toHaveBeenCalledWith(person.id, command as WeddingEventCommand);
+      expect(weddingEventService.create).toHaveBeenCalledWith(
+        person.id,
+        command as WeddingEventCommand
+      );
       expect(component.events).toEqual(newEvents);
       expect(component.newEvent).toBeNull();
     });
@@ -249,7 +268,9 @@ describe('PersonWeddingEventsComponent', () => {
       spyOn(tester.componentInstance, 'deleteEvent');
       tester.deleteButtons[0].click();
 
-      expect(tester.componentInstance.deleteEvent).toHaveBeenCalledWith(tester.componentInstance.events[0]);
+      expect(tester.componentInstance.deleteEvent).toHaveBeenCalledWith(
+        tester.componentInstance.events[0]
+      );
     });
 
     it('should show creation form when clicking button, and hide it when cancelling', () => {
@@ -287,14 +308,14 @@ describe('PersonWeddingEventsComponent', () => {
       tester.newEventButton.click();
 
       expect(tester.testElement).not.toContainText('La date est obligatoire');
-      expect(tester.testElement).not.toContainText('Le type d\'événement est obligatoire');
+      expect(tester.testElement).not.toContainText("Le type d'événement est obligatoire");
       expect(tester.testElement).not.toContainText('La date doit être dans le passé');
       expect(tester.testElement).not.toContainText('Le lieu est obligatoire');
 
       tester.createButton.click();
 
       expect(tester.testElement).toContainText('La date est obligatoire');
-      expect(tester.testElement).toContainText('Le type d\'événement est obligatoire');
+      expect(tester.testElement).toContainText("Le type d'événement est obligatoire");
       expect(tester.testElement).not.toContainText('La date doit être dans le passé');
       expect(tester.testElement).toContainText('Le lieu est obligatoire');
 
@@ -303,7 +324,7 @@ describe('PersonWeddingEventsComponent', () => {
       tester.locationInput('FRANCE').check();
 
       expect(tester.testElement).not.toContainText('La date est obligatoire');
-      expect(tester.testElement).not.toContainText('Le type d\'événement est obligatoire');
+      expect(tester.testElement).not.toContainText("Le type d'événement est obligatoire");
       expect(tester.testElement).toContainText('La date doit être dans le passé');
       expect(tester.testElement).not.toContainText('Le lieu est obligatoire');
     });

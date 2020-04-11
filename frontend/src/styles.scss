@@ -1,6 +1,6 @@
-$fa-font-path: "../node_modules/font-awesome/fonts";
+$fa-font-path: '../node_modules/font-awesome/fonts';
 
-@import "../node_modules/font-awesome/scss/font-awesome";
+@import '../node_modules/font-awesome/scss/font-awesome';
 @import 'custom-bootstrap';
 
 h1 {
@@ -18,7 +18,7 @@ h1 {
 .form-control.is-warning {
   border-color: $yellow;
   &:focus {
-    box-shadow: 0 0 0 .2rem rgba($yellow,.25);
+    box-shadow: 0 0 0 0.2rem rgba($yellow, 0.25);
   }
 }
 
@@ -27,8 +27,8 @@ h1 {
 }
 
 .warning-feedback {
-  margin-top: .25rem;
-  font-size: .875rem;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
   color: $warning;
 }
 
@@ -40,7 +40,7 @@ h1 {
   label {
     border: 1px solid $red;
     &:focus {
-      box-shadow: 0 0 0 .2rem rgba($red,.25);
+      box-shadow: 0 0 0 0.2rem rgba($red, 0.25);
     }
   }
 
@@ -81,7 +81,8 @@ footer {
 }
 
 @media print {
-  gl-menu *, footer * {
+  gl-menu *,
+  footer * {
     visibility: hidden;
   }
 }

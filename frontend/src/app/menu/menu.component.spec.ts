@@ -7,20 +7,18 @@ import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('MenuComponent', () => {
-
   const fakeUserService = {
     userEvents: new BehaviorSubject<UserModel | null>(null),
     logout: () => {}
   } as CurrentUserService;
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule, GlobeNgbModule],
-    declarations: [MenuComponent],
-    providers: [
-      { provide: CurrentUserService, useValue: fakeUserService }
-    ]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, GlobeNgbModule],
+      declarations: [MenuComponent],
+      providers: [{ provide: CurrentUserService, useValue: fakeUserService }]
+    })));
 
   it('should have a `navbarCollapsed` field', () => {
     const menu: MenuComponent = new MenuComponent(fakeUserService, fakeRouter);

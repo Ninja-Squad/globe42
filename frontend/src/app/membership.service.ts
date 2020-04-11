@@ -11,10 +11,9 @@ function url(personId: number): string {
 
 @Injectable({ providedIn: 'root' })
 export class MembershipService {
-
   currentMembership$ = new Subject<MembershipModel>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(personId: number): Observable<Array<MembershipModel>> {
     return this.http.get<Array<MembershipModel>>(url(personId));
@@ -25,14 +24,14 @@ export class MembershipService {
   }
 
   createCurrent(personId: number, command: MembershipCommand): Observable<MembershipModel> {
-    return this.http.post<MembershipModel>(url(personId), command).pipe(
-      tap(membership => this.currentMembership$.next(membership))
-    );
+    return this.http
+      .post<MembershipModel>(url(personId), command)
+      .pipe(tap(membership => this.currentMembership$.next(membership)));
   }
 
   deleteCurrent(personId: number, membershipId: number): Observable<void> {
-    return this.http.delete<void>(url(personId) + '/' + membershipId).pipe(
-      tap(membership => this.currentMembership$.next(null))
-    );
+    return this.http
+      .delete<void>(url(personId) + '/' + membershipId)
+      .pipe(tap(membership => this.currentMembership$.next(null)));
   }
 }

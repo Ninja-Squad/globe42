@@ -7,21 +7,19 @@ import { Subject } from 'rxjs';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
 describe('ErrorComponent', () => {
-
   let errorService: ErrorService;
   let fakeRouter: {
-    events: Subject<any>
+    events: Subject<any>;
   };
 
   beforeEach(async(() => {
-    fakeRouter = {events: new Subject<any>()};
+    fakeRouter = { events: new Subject<any>() };
 
     TestBed.configureTestingModule({
       imports: [GlobeNgbModule.forRoot()],
       declarations: [ErrorComponent],
-      providers: [ {provide: Router, useValue: fakeRouter} ]
+      providers: [{ provide: Router, useValue: fakeRouter }]
     });
-
 
     errorService = TestBed.inject(ErrorService);
   }));
@@ -34,9 +32,9 @@ describe('ErrorComponent', () => {
 
     expect(component.error).toBeFalsy();
 
-    errorService.technicalErrors.next({status: 500, message: 'Server error'});
+    errorService.technicalErrors.next({ status: 500, message: 'Server error' });
 
-    expect(component.error).toEqual({status: 500, technical: true, message: 'Server error'});
+    expect(component.error).toEqual({ status: 500, technical: true, message: 'Server error' });
   });
 
   it('should react to functional errors without parameters', () => {
@@ -47,7 +45,7 @@ describe('ErrorComponent', () => {
 
     expect(component.error).toBeFalsy();
 
-    errorService.functionalErrors.next({code: 'USER_LOGIN_ALREADY_EXISTS'});
+    errorService.functionalErrors.next({ code: 'USER_LOGIN_ALREADY_EXISTS' });
 
     expect(component.error).toEqual({
       technical: false,
@@ -63,9 +61,9 @@ describe('ErrorComponent', () => {
 
     expect(component.error).toBeFalsy();
 
-    errorService.functionalErrors.next({code: '__TEST__', parameters: {login: 'JB'}});
+    errorService.functionalErrors.next({ code: '__TEST__', parameters: { login: 'JB' } });
 
-    expect(component.error).toEqual({technical: false, message: 'Hello JB'});
+    expect(component.error).toEqual({ technical: false, message: 'Hello JB' });
   });
 
   it('should react to functional errors with unknown code', () => {
@@ -76,16 +74,16 @@ describe('ErrorComponent', () => {
 
     expect(component.error).toBeFalsy();
 
-    errorService.functionalErrors.next({code: 'UNKNOWN'});
+    errorService.functionalErrors.next({ code: 'UNKNOWN' });
 
-    expect(component.error).toEqual({technical: false, message: 'UNKNOWN'});
+    expect(component.error).toEqual({ technical: false, message: 'UNKNOWN' });
   });
 
   it('should react to navigation end events', () => {
     const fixture = TestBed.createComponent(ErrorComponent);
     const component = fixture.componentInstance;
 
-    component.error = {technical: false, message: 'Hello JB'};
+    component.error = { technical: false, message: 'Hello JB' };
 
     fakeRouter.events.next(new NavigationStart(1, 'url'));
     fixture.detectChanges();
@@ -107,11 +105,12 @@ describe('ErrorComponent', () => {
 
     expect(element.querySelector('ngb-alert')).toBeNull();
 
-    component.error = {status: 500, technical: true, message: 'Server error'};
+    component.error = { status: 500, technical: true, message: 'Server error' };
     fixture.detectChanges();
 
     expect(element.querySelector('ngb-alert').textContent).toContain(
-      'Une erreur technique inattendue s\'est produite. Essayez de recharger la page.');
+      "Une erreur technique inattendue s'est produite. Essayez de recharger la page."
+    );
     expect(element.querySelector('ngb-alert small').textContent).toContain('500 - Server error');
 
     component.error = null;
@@ -125,7 +124,7 @@ describe('ErrorComponent', () => {
     const component = fixture.componentInstance;
     const element = fixture.nativeElement;
 
-    component.error = {technical: true, message: 'Server error'};
+    component.error = { technical: true, message: 'Server error' };
     fixture.detectChanges();
 
     expect(element.querySelector('ngb-alert small').textContent).toContain('Server error');
@@ -136,7 +135,7 @@ describe('ErrorComponent', () => {
     const component = fixture.componentInstance;
     const element = fixture.nativeElement;
 
-    component.error = {technical: false, message: 'Booo!'};
+    component.error = { technical: false, message: 'Booo!' };
     fixture.detectChanges();
 
     expect(element.querySelector('ngb-alert').textContent).toContain('Booo!');

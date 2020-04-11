@@ -10,7 +10,6 @@ import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from
   styleUrls: ['./spent-time-add.component.scss']
 })
 export class SpentTimeAddComponent {
-
   @Input() taskModel: TaskModel;
 
   @Output() readonly spentTimeAdded = new EventEmitter<SpentTimeEvent>();
@@ -20,16 +19,18 @@ export class SpentTimeAddComponent {
 
   private addableValidator: ValidatorFn = (form: AbstractControl) => {
     return form.get('hours').value > 0 || form.get('minutes').value > 0 ? null : { addable: false };
-  }
+  };
 
-  constructor(private taskService: TaskService,
-              fb: FormBuilder) {
-    this.addForm = fb.group({
-      hours: [0, Validators.compose([Validators.required, Validators.min(0)])],
-      minutes: [0, Validators.compose([Validators.required, Validators.min(0)])]
-    }, {
-      validator: this.addableValidator
-    });
+  constructor(private taskService: TaskService, fb: FormBuilder) {
+    this.addForm = fb.group(
+      {
+        hours: [0, Validators.compose([Validators.required, Validators.min(0)])],
+        minutes: [0, Validators.compose([Validators.required, Validators.min(0)])]
+      },
+      {
+        validator: this.addableValidator
+      }
+    );
   }
   add() {
     const minutes = this.addForm.value.minutes + this.addForm.value.hours * 60;

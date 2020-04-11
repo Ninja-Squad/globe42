@@ -5,15 +5,15 @@ import { UserService } from './user.service';
 import { of } from 'rxjs';
 
 describe('UsersResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve users', () => {
     const userService = TestBed.inject(UserService);
-    const expectedResult = of([
-      { id: 42, login: 'ced', admin: true }
-    ]);
+    const expectedResult = of([{ id: 42, login: 'ced', admin: true }]);
     spyOn(userService, 'list').and.returnValue(expectedResult);
 
     const resolver = TestBed.inject(UsersResolverService);

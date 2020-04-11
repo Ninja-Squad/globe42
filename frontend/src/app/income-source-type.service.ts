@@ -6,8 +6,7 @@ import { IncomeSourceTypeCommand } from './models/income-source-type.command';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeSourceTypeService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(): Observable<Array<IncomeSourceTypeModel>> {
     return this.http.get<Array<IncomeSourceTypeModel>>('/api/income-source-types');

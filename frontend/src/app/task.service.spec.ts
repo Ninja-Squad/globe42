@@ -35,7 +35,7 @@ describe('TaskService', () => {
 
   function checkPage(methodToTest: () => Observable<Page<TaskModel>>, expectedUrl: string) {
     const expectedPage = {
-      content: [{id: 1}, {id: 2}] as Array<TaskModel>,
+      content: [{ id: 1 }, { id: 2 }] as Array<TaskModel>,
       number: 2
     } as Page<TaskModel>;
     httpTester.testGet(expectedUrl, expectedPage, methodToTest());
@@ -70,7 +70,7 @@ describe('TaskService', () => {
   });
 
   it('should assign to current user', () => {
-    currentUserService.userEvents.next({ id : 42 } as UserModel);
+    currentUserService.userEvents.next({ id: 42 } as UserModel);
     httpTester.testPost('/api/tasks/1/assignments', { userId: 42 }, null, service.assignToSelf(1));
   });
 
@@ -79,15 +79,30 @@ describe('TaskService', () => {
   });
 
   it('should cancel a task', () => {
-    httpTester.testPost('/api/tasks/1/status-changes', { newStatus: 'CANCELLED' }, null, service.cancel(1));
+    httpTester.testPost(
+      '/api/tasks/1/status-changes',
+      { newStatus: 'CANCELLED' },
+      null,
+      service.cancel(1)
+    );
   });
 
   it('should mark a task as done', () => {
-    httpTester.testPost('/api/tasks/1/status-changes', { newStatus: 'DONE' }, null, service.markAsDone(1));
+    httpTester.testPost(
+      '/api/tasks/1/status-changes',
+      { newStatus: 'DONE' },
+      null,
+      service.markAsDone(1)
+    );
   });
 
   it('should resurrect a task', () => {
-    httpTester.testPost('/api/tasks/1/status-changes', { newStatus: 'TODO' }, null, service.resurrect(1));
+    httpTester.testPost(
+      '/api/tasks/1/status-changes',
+      { newStatus: 'TODO' },
+      null,
+      service.resurrect(1)
+    );
   });
 
   it('should list spent times', () => {
@@ -101,7 +116,8 @@ describe('TaskService', () => {
       '/api/tasks/42/spent-times',
       { minutes: 10 },
       expectedSpentTime,
-      service.addSpentTime(42, 10));
+      service.addSpentTime(42, 10)
+    );
   });
 
   it('should delete a spent time', () => {
@@ -109,14 +125,22 @@ describe('TaskService', () => {
   });
 
   it('should list and sort task categories', () => {
-    const categories = [{ id: 1, name: 'b' }, { id: 2, name: 'a' }] as Array<TaskCategoryModel>;
+    const categories = [
+      { id: 1, name: 'b' },
+      { id: 2, name: 'a' }
+    ] as Array<TaskCategoryModel>;
 
     let actualCategories: Array<TaskCategoryModel> = null;
-    service.listCategories().subscribe(result => actualCategories = result);
+    service.listCategories().subscribe(result => (actualCategories = result));
 
-    TestBed.inject(HttpTestingController).expectOne({url: '/api/task-categories', method: 'GET'}).flush(categories);
+    TestBed.inject(HttpTestingController)
+      .expectOne({ url: '/api/task-categories', method: 'GET' })
+      .flush(categories);
 
-    expect(actualCategories).toEqual([{ id: 2, name: 'a' }, { id: 1, name: 'b' }]);
+    expect(actualCategories).toEqual([
+      { id: 2, name: 'a' },
+      { id: 1, name: 'b' }
+    ]);
   });
 
   it('should get spent time statistics', () => {
@@ -124,21 +148,25 @@ describe('TaskService', () => {
     httpTester.testGet(
       '/api/task-statistics/spent-times',
       expectedSpentTimeStatistics,
-      service.spentTimeStatistics({ from: null, to: null }));
+      service.spentTimeStatistics({ from: null, to: null })
+    );
 
     httpTester.testGet(
       '/api/task-statistics/spent-times?from=2017-12-01',
       expectedSpentTimeStatistics,
-      service.spentTimeStatistics({ from: '2017-12-01', to: null }));
+      service.spentTimeStatistics({ from: '2017-12-01', to: null })
+    );
 
     httpTester.testGet(
       '/api/task-statistics/spent-times?to=2017-12-01',
       expectedSpentTimeStatistics,
-      service.spentTimeStatistics({ from: null, to: '2017-12-01' }));
+      service.spentTimeStatistics({ from: null, to: '2017-12-01' })
+    );
 
     httpTester.testGet(
       '/api/task-statistics/spent-times?from=2017-12-01&to=2017-12-31',
       expectedSpentTimeStatistics,
-      service.spentTimeStatistics({ from: '2017-12-01', to: '2017-12-31' }));
+      service.spentTimeStatistics({ from: '2017-12-01', to: '2017-12-31' })
+    );
   });
 });

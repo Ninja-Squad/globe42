@@ -10,15 +10,15 @@ import { CurrentUserService } from '../current-user/current-user.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
   user: UserModel;
   userEventsSubscription: Subscription;
 
-  constructor(private currentUserService: CurrentUserService) {
-  }
+  constructor(private currentUserService: CurrentUserService) {}
 
   ngOnInit() {
-    this.userEventsSubscription = this.currentUserService.userEvents.subscribe(user => this.user = user);
+    this.userEventsSubscription = this.currentUserService.userEvents.subscribe(
+      user => (this.user = user)
+    );
   }
 
   ngOnDestroy() {

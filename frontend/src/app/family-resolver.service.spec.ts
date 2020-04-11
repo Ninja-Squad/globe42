@@ -15,9 +15,7 @@ describe('FamilyResolverService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule]
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
@@ -40,7 +38,7 @@ describe('FamilyResolverService', () => {
   });
 
   it('should resolve family when displaying it', () => {
-    const route = fakeSnapshot({ params: {}});
+    const route = fakeSnapshot({ params: {} });
     expect(resolver.resolve(route)).toBe(family);
     expect(familyService.get).toHaveBeenCalledWith(54);
   });

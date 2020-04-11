@@ -2,7 +2,9 @@
 <h1>Organismes payeurs</h1>
 
 <div class="row mb-2 align-items-center income-type-item" *ngFor="let incomeType of incomeTypes">
-  <div class="col-sm"><a [routerLink]="['/income-types', incomeType.id, 'edit']">{{ incomeType.type }}</a></div>
+  <div class="col-sm">
+    <a [routerLink]="['/income-types', incomeType.id, 'edit']">{{ incomeType.type }}</a>
+  </div>
   <div class="col-sm text-right">
     <a class="btn btn-secondary btn-sm" [routerLink]="['/income-types', incomeType.id, 'edit']">
       <span class="fa fa-edit"></span>

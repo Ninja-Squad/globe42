@@ -53,7 +53,7 @@ class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
   }
 
   get deleteChargeButtons() {
-    return this.elements('.delete-charge-button') as Array<TestButton> ;
+    return this.elements('.delete-charge-button') as Array<TestButton>;
   }
 
   get total() {
@@ -81,12 +81,12 @@ describe('PersonResourcesComponent', () => {
   const incomes = [
     {
       id: 12,
-      source: { name: 'Allocations familiales'},
+      source: { name: 'Allocations familiales' },
       monthlyAmount: 789.01
     },
     {
       id: 13,
-      source: { name: 'Salaire'},
+      source: { name: 'Salaire' },
       monthlyAmount: 300
     }
   ] as Array<IncomeModel>;
@@ -94,12 +94,12 @@ describe('PersonResourcesComponent', () => {
   const charges = [
     {
       id: 14,
-      type: { name: 'Loyer'},
+      type: { name: 'Loyer' },
       monthlyAmount: 400
     },
     {
       id: 15,
-      type: { name: 'Electricité'},
+      type: { name: 'Electricité' },
       monthlyAmount: 50
     }
   ] as Array<ChargeModel>;
@@ -344,4 +344,3 @@ describe('PersonResourcesComponent', () => {
     expect(tester.componentInstance.perUnitRevenueInformation).toBeNull();
   });
 });
-

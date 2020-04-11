@@ -8,8 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProfileResolverService implements Resolve<ProfileModel> {
-
-  constructor(private currentUserService: CurrentUserService) { }
+  constructor(private currentUserService: CurrentUserService) {}
 
   resolve(): Observable<ProfileModel> {
     return this.currentUserService.getProfile();

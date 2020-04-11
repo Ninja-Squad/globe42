@@ -22,26 +22,35 @@ describe('PersonIncomeEditComponent', () => {
     { id: 2, name: 'A', maxMonthlyAmount: 100 }
   ] as Array<IncomeSourceModel>;
 
-  const person = {id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: 'JB'};
+  const person = { id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: 'JB' };
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
-    declarations: [PersonIncomeEditComponent, FullnamePipe, ValidationDefaultsComponent, PageTitleDirective],
-    providers: [
-      { provide: LOCALE_ID, useValue: 'fr-FR' }
-    ]
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      ValdemortModule
+    ],
+    declarations: [
+      PersonIncomeEditComponent,
+      FullnamePipe,
+      ValidationDefaultsComponent,
+      PageTitleDirective
+    ],
+    providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
   })
   class TestModule {}
 
   describe('in creation mode', () => {
     const activatedRoute = {
-      snapshot: {data: {person, incomeSources}}
+      snapshot: { data: { person, incomeSources } }
     };
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -51,7 +60,9 @@ describe('PersonIncomeEditComponent', () => {
       const fixture = TestBed.createComponent(PersonIncomeEditComponent);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Créer un nouveau revenu pour Jean-Baptiste Nizet (JB)');
+      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
+        'Créer un nouveau revenu pour Jean-Baptiste Nizet (JB)'
+      );
     });
 
     it('should expose sorted income sources', () => {
@@ -67,7 +78,7 @@ describe('PersonIncomeEditComponent', () => {
       fixture.detectChanges();
 
       const component = fixture.componentInstance;
-      expect(component.incomeForm.value).toEqual({source: null, monthlyAmount: null});
+      expect(component.incomeForm.value).toEqual({ source: null, monthlyAmount: null });
     });
 
     it('should display the income in a form, and validate the form', () => {
@@ -110,22 +121,27 @@ describe('PersonIncomeEditComponent', () => {
 
       expect(element.textContent).not.toContain('La nature de la prestation est obligatoire');
       expect(element.textContent).toContain(
-        'Le montant mensuel ne peut pas dépasser la valeur maximale pour cette nature de prestation\u00a0: 100,00\u00a0€');
+        'Le montant mensuel ne peut pas dépasser la valeur maximale pour cette nature de prestation\u00a0: 100,00\u00a0€'
+      );
 
       incomeSource.selectedIndex = 0;
       incomeSource.dispatchEvent(new Event('change'));
       fixture.detectChanges();
 
-      expect(element.textContent).not.toContain('Le montant mensuel ne peut pas dépasser la valeur maximale');
+      expect(element.textContent).not.toContain(
+        'Le montant mensuel ne peut pas dépasser la valeur maximale'
+      );
     });
 
     it('should save the income and navigate to the resource list', () => {
       const incomeService = TestBed.inject(IncomeService);
       const router = TestBed.inject(Router);
 
-      spyOn(incomeService, 'create').and.returnValue(of({
-        id: 42
-      } as IncomeModel));
+      spyOn(incomeService, 'create').and.returnValue(
+        of({
+          id: 42
+        } as IncomeModel)
+      );
       spyOn(router, 'navigate');
 
       const fixture = TestBed.createComponent(PersonIncomeEditComponent);
@@ -148,7 +164,7 @@ describe('PersonIncomeEditComponent', () => {
 
       save.click();
 
-      expect(incomeService.create).toHaveBeenCalledWith(42, {sourceId: 2, monthlyAmount: 12});
+      expect(incomeService.create).toHaveBeenCalledWith(42, { sourceId: 2, monthlyAmount: 12 });
 
       fixture.detectChanges();
 

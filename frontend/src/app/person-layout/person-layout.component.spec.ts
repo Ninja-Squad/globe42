@@ -53,9 +53,7 @@ describe('PersonLayoutComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule, GlobeNgbModule.forRoot()],
       declarations: [PersonLayoutComponent, FullnamePipe],
-      providers: [
-        { provide: LOCALE_ID, useValue: 'fr-FR' }
-      ]
+      providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });
 
     const currentPersonService = TestBed.inject(CurrentPersonService);

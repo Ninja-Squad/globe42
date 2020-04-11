@@ -1,8 +1,13 @@
-<gl-page-title *ngIf="editedIncomeType" [title]="'Modification de l\'organisme payeur ' + (editedIncomeType.type)"></gl-page-title>
+<gl-page-title
+  *ngIf="editedIncomeType"
+  [title]="'Modification de l\'organisme payeur ' + editedIncomeType.type"
+></gl-page-title>
 <gl-page-title *ngIf="!editedIncomeType" title="Nouvel organisme payeur"></gl-page-title>
 
 <h1>
-  <ng-container *ngIf="editedIncomeType">Modification de l'organisme payeur <em>{{ editedIncomeType.type }}</em></ng-container>
+  <ng-container *ngIf="editedIncomeType"
+    >Modification de l'organisme payeur <em>{{ editedIncomeType.type }}</em></ng-container
+  >
   <ng-container *ngIf="!editedIncomeType">Nouvel organisme payeur</ng-container>
 </h1>
 

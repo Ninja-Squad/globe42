@@ -7,9 +7,11 @@ import { ChargeTypeModel } from './models/charge-type.model';
 import { of } from 'rxjs';
 
 describe('ChargeTypesResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve a type', () => {
     const chargeTypeService = TestBed.inject(ChargeTypeService);

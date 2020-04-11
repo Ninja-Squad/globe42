@@ -7,8 +7,7 @@ import { PersonCommand, PersonDeathCommand } from './models/person.command';
 
 @Injectable({ providedIn: 'root' })
 export class PersonService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   get(id: number): Observable<PersonModel> {
     return this.http.get<PersonModel>(`/api/persons/${id}`);

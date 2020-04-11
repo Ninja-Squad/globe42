@@ -8,13 +8,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChargeTypeService } from './charge-type.service';
 
 describe('ChargeTypeResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve a type', () => {
     const chargeTypeService = TestBed.inject(ChargeTypeService);
-    const expectedResult: Observable<ChargeTypeModel> = of({ id: 42, name: 'Mortgage' } as ChargeTypeModel);
+    const expectedResult: Observable<ChargeTypeModel> = of({
+      id: 42,
+      name: 'Mortgage'
+    } as ChargeTypeModel);
 
     spyOn(chargeTypeService, 'get').and.returnValue(expectedResult);
 

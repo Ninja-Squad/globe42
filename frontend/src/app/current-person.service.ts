@@ -12,19 +12,16 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CurrentPersonService {
-
   private personSubject = new BehaviorSubject<PersonModel>(null);
 
-  constructor(private personService: PersonService) { }
+  constructor(private personService: PersonService) {}
 
   /**
    * Reloads the person, emits once loaded, then completes. And of course causes a new person
    * to be emitted by the personChanges$ observable.
    */
   refresh(personId: number): Observable<PersonModel> {
-    return this.personService.get(personId).pipe(
-      tap(person => this.personSubject.next(person))
-    );
+    return this.personService.get(personId).pipe(tap(person => this.personSubject.next(person)));
   }
 
   /**

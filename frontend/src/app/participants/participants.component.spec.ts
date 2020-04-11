@@ -25,11 +25,14 @@ describe('ParticipantsComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [ ParticipantsComponent, FullnamePipe, DisplayActivityTypePipe, PageTitleDirective ],
-      imports: [ RouterTestingModule ],
-      providers: [
-        { provide: ActivatedRoute, useValue: route }
-      ]
+      declarations: [
+        ParticipantsComponent,
+        FullnamePipe,
+        DisplayActivityTypePipe,
+        PageTitleDirective
+      ],
+      imports: [RouterTestingModule],
+      providers: [{ provide: ActivatedRoute, useValue: route }]
     });
 
     fixture = TestBed.createComponent(ParticipantsComponent);
@@ -39,12 +42,12 @@ describe('ParticipantsComponent', () => {
 
   it('should expose activity type and sorted participants', () => {
     const participants = [
-      { id: 42, firstName: 'JB', lastName: 'Nizet'},
+      { id: 42, firstName: 'JB', lastName: 'Nizet' },
       { id: 43, firstName: 'Agnès', lastName: 'Crepet' }
     ] as Array<ParticipantModel>;
 
     dataSubject.next({ participants });
-    paramMapSubject.next(convertToParamMap({ activityType : 'MEAL' }));
+    paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
     expect(component.participants.map(p => p.firstName)).toEqual(['Agnès', 'JB']);
     expect(component.activityType).toBe('MEAL');
@@ -53,20 +56,29 @@ describe('ParticipantsComponent', () => {
   it('should have a title', () => {
     const participants = [] as Array<ParticipantModel>;
     dataSubject.next({ participants });
-    paramMapSubject.next(convertToParamMap({ activityType : 'MEAL' }));
+    paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('h2').textContent).toBe('Participants aux activités de type Repas');
+    expect(fixture.nativeElement.querySelector('h2').textContent).toContain(
+      'Participants aux activités de type Repas'
+    );
   });
 
   it('should display links, mediation code, email and phone', () => {
     const participants = [
-      { id: 42, firstName: 'JB', lastName: 'Nizet'},
-      { id: 43, firstName: 'Agnès', lastName: 'Crepet', mediationCode: 'C1', email: 'agnes@mail.com', phoneNumber: '0987654321' }
+      { id: 42, firstName: 'JB', lastName: 'Nizet' },
+      {
+        id: 43,
+        firstName: 'Agnès',
+        lastName: 'Crepet',
+        mediationCode: 'C1',
+        email: 'agnes@mail.com',
+        phoneNumber: '0987654321'
+      }
     ] as Array<ParticipantModel>;
 
     dataSubject.next({ participants });
-    paramMapSubject.next(convertToParamMap({ activityType : 'MEAL' }));
+    paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
     fixture.detectChanges();
     const divs = fixture.nativeElement.querySelectorAll('.person-item');

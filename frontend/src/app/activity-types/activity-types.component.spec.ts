@@ -12,8 +12,8 @@ describe('ActivityTypesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActivityTypesComponent, DisplayActivityTypePipe ],
-      imports: [ RouterTestingModule ]
+      declarations: [ActivityTypesComponent, DisplayActivityTypePipe],
+      imports: [RouterTestingModule]
     });
 
     fixture = TestBed.createComponent(ActivityTypesComponent);

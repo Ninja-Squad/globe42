@@ -5,7 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeService } from '../charge.service';
 import { sortBy } from '../utils';
 import { ChargeCommand } from '../models/charge.command';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 
 @Component({
   selector: 'gl-person-charge-edit',
@@ -13,7 +20,6 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Vali
   styleUrls: ['./person-charge-edit.component.scss']
 })
 export class PersonChargeEditComponent implements OnInit {
-
   person: PersonModel;
   chargeTypes: Array<ChargeTypeModel>;
 
@@ -25,22 +31,32 @@ export class PersonChargeEditComponent implements OnInit {
     }
 
     return Validators.max(this.selectedChargeType.maxMonthlyAmount)(control);
-  }
+  };
 
-  constructor(private route: ActivatedRoute,
-              private chargeService: ChargeService,
-              private router: Router,
-              private fb: FormBuilder) { }
+  constructor(
+    private route: ActivatedRoute,
+    private chargeService: ChargeService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.person = this.route.snapshot.data.person;
-    this.chargeTypes = sortBy<ChargeTypeModel>(this.route.snapshot.data.chargeTypes, type => type.name);
+    this.chargeTypes = sortBy<ChargeTypeModel>(
+      this.route.snapshot.data.chargeTypes,
+      type => type.name
+    );
     this.chargeForm = this.fb.group({
       type: [null, Validators.required],
-      monthlyAmount: [null, Validators.compose([Validators.required, this.monthlyAmountValidator, Validators.min(1)])]
+      monthlyAmount: [
+        null,
+        Validators.compose([Validators.required, this.monthlyAmountValidator, Validators.min(1)])
+      ]
     });
 
-    this.chargeForm.get('type').valueChanges.subscribe(() => this.monthlyAmountCtrl.updateValueAndValidity());
+    this.chargeForm
+      .get('type')
+      .valueChanges.subscribe(() => this.monthlyAmountCtrl.updateValueAndValidity());
   }
 
   get selectedChargeType(): ChargeTypeModel | null {
@@ -62,7 +78,8 @@ export class PersonChargeEditComponent implements OnInit {
       monthlyAmount: formValue.monthlyAmount
     };
 
-    this.chargeService.create(this.person.id, command)
+    this.chargeService
+      .create(this.person.id, command)
       .subscribe(() => this.router.navigate(['persons', this.person.id, 'resources']));
   }
 }

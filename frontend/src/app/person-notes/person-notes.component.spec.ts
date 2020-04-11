@@ -54,7 +54,7 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   }
 
   cancelNoteEdition(index: number) {
-    return this.notes[index].elements('form button')[1] as TestButton ;
+    return this.notes[index].elements('form button')[1] as TestButton;
   }
 
   get addNote() {
@@ -67,7 +67,6 @@ class TestComponentTester extends ComponentTester<TestComponent> {
 }
 
 describe('PersonNotesComponent', () => {
-
   const person = { id: 42 } as PersonModel;
   let notes: Array<NoteModel>;
 
@@ -75,7 +74,12 @@ describe('PersonNotesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), ReactiveFormsModule, HttpClientModule, GlobeNgbModule.forRoot()],
+      imports: [
+        CurrentUserModule.forRoot(),
+        ReactiveFormsModule,
+        HttpClientModule,
+        GlobeNgbModule.forRoot()
+      ],
       declarations: [PersonNotesComponent, NoteComponent, TestComponent]
     });
 

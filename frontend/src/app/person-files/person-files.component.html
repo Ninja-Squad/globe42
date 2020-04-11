@@ -8,16 +8,22 @@
 <ng-container *ngIf="files">
   <div class="text-center" *ngIf="files.length === 0">
     <span style="font-size: 60px;" class="fa fa-info text-info"></span>
-    <br/>
+    <br />
     <span class="lead">Aucun document</span>
   </div>
 
   <div class="row mb-2 align-items-center file-item" *ngFor="let file of files">
-    <div class="col-12 col-lg-6"><a target="_blank" [href]="url(file)">{{ file.name }}</a></div>
+    <div class="col-12 col-lg-6">
+      <a target="_blank" [href]="url(file)">{{ file.name }}</a>
+    </div>
     <div class="col-4 col-lg-2 text-muted">{{ file.creationInstant | date }}</div>
     <div class="col-4 col-lg-2 text-muted text-right">{{ file.size | fileSize }}</div>
     <div class="col-4 col-lg-2 text-right">
-      <button class="btn btn-danger btn-sm" (click)="delete(file)" [disabled]="loading || uploading">
+      <button
+        class="btn btn-danger btn-sm"
+        (click)="delete(file)"
+        [disabled]="loading || uploading"
+      >
         <span class="fa fa-trash"></span>
       </button>
     </div>
@@ -27,13 +33,25 @@
 <div class="row mt-5 align-items-center">
   <div class="col">
     <div class="custom-file" id="file-input">
-      <input [disabled]="loading || uploading" type="file" class="custom-file-input" (change)="upload($event)" />
+      <input
+        [disabled]="loading || uploading"
+        type="file"
+        class="custom-file-input"
+        (change)="upload($event)"
+      />
       <label class="custom-file-label">Choisir un fichier...</label>
     </div>
   </div>
   <div class="col">
-    <ngb-progressbar *ngIf="uploading" type="success" [max]="1" [value]="uploadProgress" [striped]="uploadProgress >= 1" [animated]="uploadProgress >= 1">
-      {{ uploadProgress | percent:'1.0-0' }}
+    <ngb-progressbar
+      *ngIf="uploading"
+      type="success"
+      [max]="1"
+      [value]="uploadProgress"
+      [striped]="uploadProgress >= 1"
+      [animated]="uploadProgress >= 1"
+    >
+      {{ uploadProgress | percent: '1.0-0' }}
     </ngb-progressbar>
   </div>
 </div>

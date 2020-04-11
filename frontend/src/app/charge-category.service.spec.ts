@@ -7,7 +7,6 @@ import { ChargeCategoryCommand } from './models/charge-category.command';
 import { HttpTester } from './http-tester.spec';
 
 describe('ChargeCategoryService', () => {
-
   let httpTester: HttpTester;
   let service: ChargeCategoryService;
 
@@ -31,7 +30,8 @@ describe('ChargeCategoryService', () => {
     httpTester.testPut(
       '/api/charge-categories/2',
       fakeChargeCategory,
-      service.update(2, fakeChargeCategory));
+      service.update(2, fakeChargeCategory)
+    );
   });
 
   it('should create a charge category', () => {
@@ -41,7 +41,8 @@ describe('ChargeCategoryService', () => {
       '/api/charge-categories',
       fakeChargeCategory,
       expectedChargeCategory,
-      service.create(fakeChargeCategory));
+      service.create(fakeChargeCategory)
+    );
   });
 
   it('should list charge categories', () => {

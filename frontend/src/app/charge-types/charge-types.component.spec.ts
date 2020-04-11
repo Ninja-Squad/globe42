@@ -20,20 +20,22 @@ describe('ChargeTypesComponent', () => {
       name: 'Nourriture',
       category: { id: 43, name: 'Vie quotidienne' },
       maxMonthlyAmount: null
-    }];
+    }
+  ];
 
   const activatedRoute = {
     snapshot: { data: { chargeTypes } }
   };
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [ChargeTypesComponent, PageTitleDirective],
-    providers: [
-      { provide: ActivatedRoute, useValue: activatedRoute },
-      { provide: LOCALE_ID, useValue: 'fr-FR'}
-    ]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [ChargeTypesComponent, PageTitleDirective],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: LOCALE_ID, useValue: 'fr-FR' }
+      ]
+    })));
 
   it('should list charge types', () => {
     const fixture = TestBed.createComponent(ChargeTypesComponent);

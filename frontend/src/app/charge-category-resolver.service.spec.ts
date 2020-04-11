@@ -7,9 +7,11 @@ import { ChargeCategoryModel } from './models/charge-category.model';
 import { ActivatedRouteSnapshot, convertToParamMap, Params } from '@angular/router';
 
 describe('ChargeCategoryResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve a type', () => {
     const chargeCategoryService = TestBed.inject(ChargeCategoryService);

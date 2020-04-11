@@ -4,7 +4,6 @@ import { CurrentUserService } from './current-user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticatedGuard implements CanActivate {
-
   constructor(private currentUserService: CurrentUserService, private router: Router) {}
 
   canActivate(): boolean | UrlTree {

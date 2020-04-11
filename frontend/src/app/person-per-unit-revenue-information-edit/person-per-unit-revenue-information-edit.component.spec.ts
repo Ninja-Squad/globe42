@@ -17,8 +17,10 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let route: ActivatedRoute;
 
   beforeEach(async(() => {
-    const mockPerUnitRevenueInformationService =
-      jasmine.createSpyObj('perUnitRevenueInformationService', ['update']);
+    const mockPerUnitRevenueInformationService = jasmine.createSpyObj(
+      'perUnitRevenueInformationService',
+      ['update']
+    );
     route = {
       snapshot: {
         data: {
@@ -44,12 +46,14 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
         PageTitleDirective
       ],
       providers: [
-        { provide: PerUnitRevenueInformationService, useValue: mockPerUnitRevenueInformationService },
+        {
+          provide: PerUnitRevenueInformationService,
+          useValue: mockPerUnitRevenueInformationService
+        },
         { provide: ActivatedRoute, useFactory: () => route }
       ],
-      imports: [ ReactiveFormsModule, RouterTestingModule, ValdemortModule ]
-    })
-    .compileComponents();
+      imports: [ReactiveFormsModule, RouterTestingModule, ValdemortModule]
+    }).compileComponents();
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
   }));
@@ -119,24 +123,30 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
     adultLikeCount.dispatchEvent(new Event('input'));
     adultLikeCount.dispatchEvent(new Event('blur'));
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'adultes ou équivalent doit être supérieur ou égal à 1');
+    expect(fixture.nativeElement.textContent).toContain(
+      "Le nombre d'adultes ou équivalent doit être supérieur ou égal à 1"
+    );
 
     adultLikeCount.value = '';
     adultLikeCount.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'adultes ou équivalent est obligatoire');
+    expect(fixture.nativeElement.textContent).toContain(
+      "Le nombre d'adultes ou équivalent est obligatoire"
+    );
 
     const childCount: HTMLInputElement = fixture.nativeElement.querySelector('#childCount');
     childCount.value = '-1';
     childCount.dispatchEvent(new Event('input'));
     childCount.dispatchEvent(new Event('blur'));
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'enfants doit être supérieur ou égal à 0');
+    expect(fixture.nativeElement.textContent).toContain(
+      "Le nombre d'enfants doit être supérieur ou égal à 0"
+    );
 
     childCount.value = '';
     childCount.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Le nombre d\'enfants est obligatoire');
+    expect(fixture.nativeElement.textContent).toContain("Le nombre d'enfants est obligatoire");
 
     const saveButton: HTMLButtonElement = fixture.nativeElement.querySelector('#save');
     saveButton.click();

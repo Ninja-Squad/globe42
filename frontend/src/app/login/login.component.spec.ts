@@ -14,7 +14,6 @@ import { PageTitleDirective } from '../page-title.directive';
 import { UserModel } from '../models/user.model';
 
 class LoginComponentTester extends ComponentTester<LoginComponent> {
-
   constructor() {
     super(LoginComponent);
   }
@@ -37,13 +36,12 @@ class LoginComponentTester extends ComponentTester<LoginComponent> {
 }
 
 describe('LoginComponent', () => {
-
   let tester: LoginComponentTester;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule, ValdemortModule],
-      declarations: [LoginComponent, ValidationDefaultsComponent, PageTitleDirective],
+      declarations: [LoginComponent, ValidationDefaultsComponent, PageTitleDirective]
     });
 
     jasmine.addMatchers(speculoosMatchers);

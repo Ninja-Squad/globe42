@@ -5,19 +5,40 @@
   <ng-container *ngIf="!edited">
     <div style="white-space: pre-line;">{{ note.text }}</div>
     <div class="text-right">
-      <button type="button" class="btn btn-sm btn-outline-secondary mr-1" [disabled]="disabled" (click)="edit()">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-secondary mr-1"
+        [disabled]="disabled"
+        (click)="edit()"
+      >
         <span class="fa fa-edit"></span>
       </button>
-      <button type="button" class="btn btn-sm btn-outline-danger" [disabled]="disabled" (click)="delete()">
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger"
+        [disabled]="disabled"
+        (click)="delete()"
+      >
         <span class="fa fa-trash"></span>
       </button>
     </div>
   </ng-container>
   <ng-container *ngIf="edited">
     <form [formGroup]="noteForm">
-      <textarea #textArea class="form-control" formControlName="text" style="width: 100%;" [rows]="rowCount"></textarea>
+      <textarea
+        #textArea
+        class="form-control"
+        formControlName="text"
+        style="width: 100%;"
+        [rows]="rowCount"
+      ></textarea>
       <div class="text-right mt-2">
-        <button type="submit" class="btn btn-sm btn-primary mr-2" [disabled]="noteForm.invalid" (click)="save()">
+        <button
+          type="submit"
+          class="btn btn-sm btn-primary mr-2"
+          [disabled]="noteForm.invalid"
+          (click)="save()"
+        >
           <span class="fa fa-check"></span>
           Enregistrer
         </button>

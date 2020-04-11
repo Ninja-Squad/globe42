@@ -5,7 +5,9 @@
     <h1>Connexion</h1>
 
     <div class="alert alert-danger" *ngIf="authenticationFailed">
-      <button type="button" class="close" aria-label="Close" (click)="authenticationFailed = false;"><span aria-hidden="true">&#215;</span></button>
+      <button type="button" class="close" aria-label="Close" (click)="authenticationFailed = false">
+        <span aria-hidden="true">&#215;</span>
+      </button>
       Erreur d'authentification, essayez encore.
     </div>
 
@@ -18,7 +20,7 @@
 
       <div class="form-group">
         <label class="from-control-label" for="password">Mot de passe</label>
-        <input id="password" class="form-control" type="password" formControlName="password" >
+        <input id="password" class="form-control" type="password" formControlName="password" />
         <val-errors controlName="password" label="Le mot de passe"></val-errors>
       </div>
 

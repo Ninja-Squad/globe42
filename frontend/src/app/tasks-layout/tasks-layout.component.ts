@@ -5,5 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './tasks-layout.component.html',
   styleUrls: ['./tasks-layout.component.scss']
 })
-export class TasksLayoutComponent {
-}
+export class TasksLayoutComponent {}

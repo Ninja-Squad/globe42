@@ -42,14 +42,19 @@ class IncomeSourceEditComponentTester extends ComponentTester<IncomeSourceEditCo
 }
 
 describe('IncomeSourceEditComponent', () => {
-
   const incomeSourceTypes = [
     { id: 1, type: 'B' },
     { id: 2, type: 'A' }
   ];
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, ValdemortModule],
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      ValdemortModule
+    ],
     declarations: [IncomeSourceEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
@@ -65,9 +70,7 @@ describe('IncomeSourceEditComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute }
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -85,7 +88,11 @@ describe('IncomeSourceEditComponent', () => {
     });
 
     it('should expose a default income source', () => {
-      expect(tester.componentInstance.incomeSourceForm.value).toEqual({ name: '', typeId: null, maxMonthlyAmount: null });
+      expect(tester.componentInstance.incomeSourceForm.value).toEqual({
+        name: '',
+        typeId: null,
+        maxMonthlyAmount: null
+      });
     });
 
     it('should display the income source in a form, and validate the form', () => {
@@ -115,9 +122,11 @@ describe('IncomeSourceEditComponent', () => {
     it('should save the income source and navigate to the list', () => {
       const incomeSourceService: IncomeSourceService = TestBed.inject(IncomeSourceService);
       const router: Router = TestBed.inject(Router);
-      spyOn(incomeSourceService, 'create').and.returnValue(of({
-        id: 42
-      } as IncomeSourceModel));
+      spyOn(incomeSourceService, 'create').and.returnValue(
+        of({
+          id: 42
+        } as IncomeSourceModel)
+      );
       spyOn(router, 'navigate');
 
       tester.name.fillWith('foo');
@@ -125,7 +134,11 @@ describe('IncomeSourceEditComponent', () => {
       tester.maxMonthlyAmount.fillWith('123');
       tester.save.click();
 
-      expect(incomeSourceService.create).toHaveBeenCalledWith({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+      expect(incomeSourceService.create).toHaveBeenCalledWith({
+        name: 'foo',
+        typeId: 2,
+        maxMonthlyAmount: 123
+      });
       expect(router.navigate).toHaveBeenCalledWith(['/income-sources']);
     });
   });
@@ -145,9 +158,7 @@ describe('IncomeSourceEditComponent', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [
-          { provide: ActivatedRoute, useValue: activatedRoute },
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -161,7 +172,11 @@ describe('IncomeSourceEditComponent', () => {
     });
 
     it('should expose the edited income source info', () => {
-      expect(tester.componentInstance.incomeSourceForm.value).toEqual({ name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+      expect(tester.componentInstance.incomeSourceForm.value).toEqual({
+        name: 'foo',
+        typeId: 2,
+        maxMonthlyAmount: 123
+      });
     });
 
     it('should display the income source in a form, and have the save button enabled', () => {
@@ -178,9 +193,12 @@ describe('IncomeSourceEditComponent', () => {
 
       tester.save.click();
 
-      expect(incomeSourceService.update).toHaveBeenCalledWith(42, { name: 'foo', typeId: 2, maxMonthlyAmount: 123 });
+      expect(incomeSourceService.update).toHaveBeenCalledWith(42, {
+        name: 'foo',
+        typeId: 2,
+        maxMonthlyAmount: 123
+      });
       expect(router.navigate).toHaveBeenCalledWith(['/income-sources']);
     });
   });
 });
-

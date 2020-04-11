@@ -6,14 +6,13 @@ import { TaskService } from './task.service';
 import { TaskCategoryModel } from './models/task-category.model';
 
 describe('TaskCategoriesResolverService', () => {
-
   const fakeTaskService = jasmine.createSpyObj('TaskService', ['listCategories']);
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      { provide: TaskService, useValue: fakeTaskService }
-    ],
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [{ provide: TaskService, useValue: fakeTaskService }],
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve task categories', () => {
     const expectedResults: Observable<Array<TaskCategoryModel>> = of([{ id: 42, name: 'Divers' }]);

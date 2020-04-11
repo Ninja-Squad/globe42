@@ -9,9 +9,10 @@ import { CurrentPersonService } from './current-person.service';
   providedIn: 'root'
 })
 export class FamilyResolverService implements Resolve<FamilyModel | null> {
-
-  constructor(private currentPersonService: CurrentPersonService,
-              private familyService: FamilyService) { }
+  constructor(
+    private currentPersonService: CurrentPersonService,
+    private familyService: FamilyService
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<FamilyModel | null> {
     const id = +(route.paramMap.get('id') ?? this.currentPersonService.snapshot.id);

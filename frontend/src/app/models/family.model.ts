@@ -10,4 +10,3 @@ export interface FamilyModel {
   spouseLocation: Location;
   children: Array<ChildModel>;
 }
-

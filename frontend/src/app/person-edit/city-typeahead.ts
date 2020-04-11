@@ -2,10 +2,16 @@ import { SearchCityService } from '../search-city.service';
 import { CityModel } from '../models/person.model';
 import { Observable, of } from 'rxjs';
 import { displayCity } from '../display-city.pipe';
-import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  switchMap,
+  tap
+} from 'rxjs/operators';
 
 export class CityTypeahead {
-
   searchFailed = false;
   searcher: (text$: Observable<string>) => Observable<Array<CityModel>>;
   formatter: (result: CityModel) => string;
@@ -18,7 +24,7 @@ export class CityTypeahead {
         distinctUntilChanged(),
         switchMap(term =>
           this.searchCityService.search(term).pipe(
-            tap(() => this.searchFailed = false),
+            tap(() => (this.searchFailed = false)),
             catchError(() => {
               this.searchFailed = true;
               return of([]);

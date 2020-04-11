@@ -17,11 +17,14 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 
-function createRoute(queryParams: {[key: string]: string}): ActivatedRoute {
+function createRoute(queryParams: { [key: string]: string }): ActivatedRoute {
   return {
     snapshot: {
       data: {
-        users: [ { id: 1, login: 'jb' }, { id: 2, login: 'ced' } ]
+        users: [
+          { id: 1, login: 'jb' },
+          { id: 2, login: 'ced' }
+        ]
       },
       queryParamMap: convertToParamMap(queryParams)
     }
@@ -29,7 +32,6 @@ function createRoute(queryParams: {[key: string]: string}): ActivatedRoute {
 }
 
 describe('SpentTimeStatisticsComponent', () => {
-
   let route: ActivatedRoute;
 
   beforeEach(() => {
@@ -37,12 +39,24 @@ describe('SpentTimeStatisticsComponent', () => {
 
     TestBed.overrideTemplate(ChartComponent, '');
     TestBed.configureTestingModule({
-      declarations: [SpentTimeStatisticsComponent, ChartComponent, DurationPipe, PageTitleDirective],
-      imports: [RouterTestingModule.withRoutes([
-        {
-          path: 'tasks/statistics', component: SpentTimeStatisticsComponent
-        }
-      ]), ReactiveFormsModule, GlobeNgbModule.forRoot(), CurrentUserModule.forRoot(), HttpClientModule],
+      declarations: [
+        SpentTimeStatisticsComponent,
+        ChartComponent,
+        DurationPipe,
+        PageTitleDirective
+      ],
+      imports: [
+        RouterTestingModule.withRoutes([
+          {
+            path: 'tasks/statistics',
+            component: SpentTimeStatisticsComponent
+          }
+        ]),
+        ReactiveFormsModule,
+        GlobeNgbModule.forRoot(),
+        CurrentUserModule.forRoot(),
+        HttpClientModule
+      ],
       providers: [{ provide: ActivatedRoute, useFactory: () => route }]
     });
 
@@ -68,7 +82,10 @@ describe('SpentTimeStatisticsComponent', () => {
       by: 0
     });
 
-    expect(router.navigate).toHaveBeenCalledWith(['tasks/statistics'], { queryParams: component.criteriaForm.value, replaceUrl: true });
+    expect(router.navigate).toHaveBeenCalledWith(['tasks/statistics'], {
+      queryParams: component.criteriaForm.value,
+      replaceUrl: true
+    });
   });
 
   it('should create form based on query params', () => {
@@ -104,7 +121,10 @@ describe('SpentTimeStatisticsComponent', () => {
     fixture.detectChanges();
 
     expect(component.statisticsModel).toEqual(statisticsModel);
-    expect(taskService.spentTimeStatistics).toHaveBeenCalledWith({ from: '2017-12-01', to: '2017-12-31' });
+    expect(taskService.spentTimeStatistics).toHaveBeenCalledWith({
+      from: '2017-12-01',
+      to: '2017-12-31'
+    });
   });
 
   it('should initialize category statistics and chart configuration when all users selected', () => {
@@ -152,9 +172,11 @@ describe('SpentTimeStatisticsComponent', () => {
       }
     ]);
 
-    expect(component.chartConfiguration.data.labels).toEqual([ 'Administration', 'Meal' ]);
-    expect(component.chartConfiguration.data.datasets[0].data).toEqual([ 70, 30 ]);
-    expect((component.chartConfiguration.data.datasets[0].backgroundColor as Array<ChartColor>).length).toBe(2);
+    expect(component.chartConfiguration.data.labels).toEqual(['Administration', 'Meal']);
+    expect(component.chartConfiguration.data.datasets[0].data).toEqual([70, 30]);
+    expect(
+      (component.chartConfiguration.data.datasets[0].backgroundColor as Array<ChartColor>).length
+    ).toBe(2);
   });
 
   it('should reinitialize category statistics and chart configuration when user selection changes', () => {
@@ -205,8 +227,8 @@ describe('SpentTimeStatisticsComponent', () => {
       }
     ]);
 
-    expect(component.chartConfiguration.data.labels).toEqual([ 'Administration', 'Meal' ]);
-    expect(component.chartConfiguration.data.datasets[0].data).toEqual([ 30, 10 ]);
+    expect(component.chartConfiguration.data.labels).toEqual(['Administration', 'Meal']);
+    expect(component.chartConfiguration.data.datasets[0].data).toEqual([30, 10]);
   });
 
   it('should reload statistics and reset chart configuration when date changes', () => {
@@ -230,7 +252,10 @@ describe('SpentTimeStatisticsComponent', () => {
       ]
     };
 
-    (taskService.spentTimeStatistics as jasmine.Spy).and.returnValues(of(statisticsModel1), of(statisticsModel2));
+    (taskService.spentTimeStatistics as jasmine.Spy).and.returnValues(
+      of(statisticsModel1),
+      of(statisticsModel2)
+    );
 
     const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
     const component = fixture.componentInstance;
@@ -248,8 +273,8 @@ describe('SpentTimeStatisticsComponent', () => {
       }
     ]);
 
-    expect(component.chartConfiguration.data.labels).toEqual([ 'Meal' ]);
-    expect(component.chartConfiguration.data.datasets[0].data).toEqual([ 30 ]);
+    expect(component.chartConfiguration.data.labels).toEqual(['Meal']);
+    expect(component.chartConfiguration.data.datasets[0].data).toEqual([30]);
   });
 
   it('should have a view', () => {
@@ -289,8 +314,8 @@ describe('SpentTimeStatisticsComponent', () => {
     expect(table.rows.item(2).textContent).toContain('Meal');
     expect(table.rows.item(2).textContent).toContain('0h10m');
 
-
-    const chart: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent)).componentInstance;
+    const chart: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent))
+      .componentInstance;
     expect(chart.configuration).toBe(fixture.componentInstance.chartConfiguration);
   });
 });

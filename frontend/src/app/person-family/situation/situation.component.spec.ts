@@ -5,7 +5,9 @@ import { Situation } from '../person-family.component';
 import { DateTime } from 'luxon';
 
 @Component({
-  template: `<gl-situation [situation]="situation"></gl-situation>`
+  template: `
+    <gl-situation [situation]="situation"></gl-situation>
+  `
 })
 class TestComponent {
   situation: Situation;
@@ -15,9 +17,7 @@ describe('SituationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SituationComponent, TestComponent],
-      providers: [
-        { provide: LOCALE_ID, useValue: 'fr-FR' }
-      ]
+      providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });
 
     jasmine.clock().mockDate(DateTime.fromISO('2018-05-01').toJSDate());
@@ -87,8 +87,9 @@ describe('SituationComponent', () => {
     };
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('li').textContent.trim())
-      .toMatch(/30 nov\. 2000\s+\–\s+17 ans/);
+    expect(fixture.nativeElement.querySelector('li').textContent.trim()).toMatch(
+      /30 nov\. 2000\s+\–\s+17 ans/
+    );
   });
 
   it('should display child with first name and birth date', () => {
@@ -105,7 +106,8 @@ describe('SituationComponent', () => {
     };
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('li').textContent.trim())
-      .toMatch(/John\s+\–\s+30 nov\. 2000\s+\–\s+17 ans/);
+    expect(fixture.nativeElement.querySelector('li').textContent.trim()).toMatch(
+      /John\s+\–\s+30 nov\. 2000\s+\–\s+17 ans/
+    );
   });
 });

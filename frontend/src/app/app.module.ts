@@ -67,8 +67,8 @@ import { ChartComponent } from './chart/chart.component';
 import { PersonTasksComponent } from './person-tasks/person-tasks.component';
 import { PersonWeddingEventsComponent } from './person-wedding-events/person-wedding-events.component';
 import { DisplayWeddingEventTypePipe } from './display-wedding-event-type.pipe';
-import { DisplayVisaPipe} from './display-visa.pipe';
-import { DisplayResidencePermitPipe} from './display-residence-permit.pipe';
+import { DisplayVisaPipe } from './display-visa.pipe';
+import { DisplayResidencePermitPipe } from './display-residence-permit.pipe';
 // tslint:disable-next-line:max-line-length
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
 import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
@@ -170,9 +170,7 @@ registerLocaleData(localeFr);
     ProfileComponent,
     DisplayPassportStatusPipe
   ],
-  entryComponents: [
-    ConfirmModalContentComponent
-  ],
+  entryComponents: [ConfirmModalContentComponent],
   imports: [
     BrowserModule,
     ReactiveFormsModule,

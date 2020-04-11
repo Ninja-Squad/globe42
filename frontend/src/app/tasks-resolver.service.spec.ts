@@ -97,7 +97,7 @@ describe('TasksResolverService', () => {
 
   it('should resolve tasks when page is present', () => {
     const route = routeWithType('archived');
-    (route as any).queryParamMap = convertToParamMap({page: '2'});
+    (route as any).queryParamMap = convertToParamMap({ page: '2' });
     const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listArchived').and.returnValue(expected);
     expect(resolver.resolve(route)).toBe(expected);

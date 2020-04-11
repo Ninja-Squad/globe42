@@ -15,28 +15,37 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./income-source-edit.component.scss']
 })
 export class IncomeSourceEditComponent implements OnInit {
-
   editedIncomeSource: IncomeSourceModel;
 
   incomeSourceTypes: Array<IncomeSourceTypeModel>;
   incomeSourceForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private incomeSourceService: IncomeSourceService,
-              private fb: FormBuilder,
-              private router: Router,
-              private errorService: ErrorService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private incomeSourceService: IncomeSourceService,
+    private fb: FormBuilder,
+    private router: Router,
+    private errorService: ErrorService
+  ) {}
 
   ngOnInit() {
-    this.incomeSourceTypes =
-      sortBy<IncomeSourceTypeModel>(this.route.snapshot.data.incomeSourceTypes, type => type.type);
+    this.incomeSourceTypes = sortBy<IncomeSourceTypeModel>(
+      this.route.snapshot.data.incomeSourceTypes,
+      type => type.type
+    );
 
     this.editedIncomeSource = this.route.snapshot.data.incomeSource;
 
     this.incomeSourceForm = this.fb.group({
       name: [this.editedIncomeSource ? this.editedIncomeSource.name : '', Validators.required],
-      typeId: [this.editedIncomeSource ? this.editedIncomeSource.type.id : null, Validators.required],
-      maxMonthlyAmount: [this.editedIncomeSource ? this.editedIncomeSource.maxMonthlyAmount : null, Validators.min(1)]
+      typeId: [
+        this.editedIncomeSource ? this.editedIncomeSource.type.id : null,
+        Validators.required
+      ],
+      maxMonthlyAmount: [
+        this.editedIncomeSource ? this.editedIncomeSource.maxMonthlyAmount : null,
+        Validators.min(1)
+      ]
     });
   }
 
@@ -55,6 +64,7 @@ export class IncomeSourceEditComponent implements OnInit {
     }
     action.subscribe(
       () => this.router.navigate(['/income-sources']),
-      this.errorService.functionalErrorHandler());
+      this.errorService.functionalErrorHandler()
+    );
   }
 }

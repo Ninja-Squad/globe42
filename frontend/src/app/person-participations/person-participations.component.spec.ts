@@ -1,4 +1,7 @@
-import { ParticipationItem, PersonParticipationsComponent } from './person-participations.component';
+import {
+  ParticipationItem,
+  PersonParticipationsComponent
+} from './person-participations.component';
 import { ParticipationModel } from '../models/participation.model';
 import { ACTIVITY_TYPE_TRANSLATIONS, DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { PersonModel } from '../models/person.model';
@@ -14,7 +17,6 @@ import { CurrentPersonService } from '../current-person.service';
 import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 
 describe('PersonParticipationsComponent', () => {
-
   let participations: Array<ParticipationModel>;
   let person: PersonModel;
   let route: ActivatedRoute;
@@ -30,7 +32,7 @@ describe('PersonParticipationsComponent', () => {
     person = { id: 1, firstName: 'JB', lastName: 'Nizet' } as PersonModel;
 
     route = fakeRoute({
-      snapshot: fakeSnapshot({data: {participations}})
+      snapshot: fakeSnapshot({ data: { participations } })
     });
     currentPersonService = { snapshot: person } as CurrentPersonService;
   });
@@ -39,7 +41,11 @@ describe('PersonParticipationsComponent', () => {
     let component: PersonParticipationsComponent;
     const participationService = new ParticipationService(null);
     beforeEach(() => {
-      component = new PersonParticipationsComponent(currentPersonService, route, participationService);
+      component = new PersonParticipationsComponent(
+        currentPersonService,
+        route,
+        participationService
+      );
     });
 
     it('should initialize person and items', () => {
@@ -59,7 +65,9 @@ describe('PersonParticipationsComponent', () => {
     });
 
     it('should create a participation when item is selected', () => {
-      const socialMediationItem: ParticipationItem = component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0];
+      const socialMediationItem: ParticipationItem = component.items.filter(
+        item => item.activityType === 'SOCIAL_MEDIATION'
+      )[0];
 
       const participation = { id: 22 } as ParticipationModel;
       spyOn(participationService, 'create').and.returnValue(of(participation));
@@ -68,11 +76,16 @@ describe('PersonParticipationsComponent', () => {
 
       expect(socialMediationItem.id).toBe(participation.id);
       expect(socialMediationItem.selected).toBe(true);
-      expect(participationService.create).toHaveBeenCalledWith(person.id, socialMediationItem.activityType);
+      expect(participationService.create).toHaveBeenCalledWith(
+        person.id,
+        socialMediationItem.activityType
+      );
     });
 
     it('should switch back to unselected if creation fails', () => {
-      const socialMediationItem: ParticipationItem = component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0];
+      const socialMediationItem: ParticipationItem = component.items.filter(
+        item => item.activityType === 'SOCIAL_MEDIATION'
+      )[0];
 
       spyOn(participationService, 'create').and.returnValue(throwError('error'));
 
@@ -80,11 +93,16 @@ describe('PersonParticipationsComponent', () => {
 
       expect(socialMediationItem.id).toBeFalsy();
       expect(socialMediationItem.selected).toBe(false);
-      expect(participationService.create).toHaveBeenCalledWith(person.id, socialMediationItem.activityType);
+      expect(participationService.create).toHaveBeenCalledWith(
+        person.id,
+        socialMediationItem.activityType
+      );
     });
 
     it('should delete a participation when item is unselected', () => {
-      const mealItem: ParticipationItem = component.items.filter(item => item.activityType === 'MEAL')[0];
+      const mealItem: ParticipationItem = component.items.filter(
+        item => item.activityType === 'MEAL'
+      )[0];
       const participationId = mealItem.id;
       spyOn(participationService, 'delete').and.returnValue(of(null));
 
@@ -96,7 +114,9 @@ describe('PersonParticipationsComponent', () => {
     });
 
     it('should switch back to selected if deletion fails', () => {
-      const mealItem: ParticipationItem = component.items.filter(item => item.activityType === 'MEAL')[0];
+      const mealItem: ParticipationItem = component.items.filter(
+        item => item.activityType === 'MEAL'
+      )[0];
       const participationId = mealItem.id;
       spyOn(participationService, 'delete').and.returnValue(throwError('error'));
 
@@ -112,11 +132,14 @@ describe('PersonParticipationsComponent', () => {
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
-        declarations: [PersonParticipationsComponent, FullnamePipe, DisplayActivityTypePipe, PageTitleDirective],
+        declarations: [
+          PersonParticipationsComponent,
+          FullnamePipe,
+          DisplayActivityTypePipe,
+          PageTitleDirective
+        ],
         imports: [HttpClientModule, RouterTestingModule],
-        providers: [
-          { provide: ActivatedRoute, useValue: route }
-        ]
+        providers: [{ provide: ActivatedRoute, useValue: route }]
       });
 
       currentPersonService = TestBed.inject(CurrentPersonService);
@@ -127,15 +150,19 @@ describe('PersonParticipationsComponent', () => {
     }));
 
     it('should have a message', () => {
-      expect(fixture.nativeElement.querySelector('#message').textContent)
-        .toBe('JB Nizet participe aux types d\'activités suivants :');
+      expect(fixture.nativeElement.querySelector('#message').textContent).toBe(
+        "JB Nizet participe aux types d'activités suivants :"
+      );
     });
 
     it('should have checkboxes', () => {
-      expect(fixture.nativeElement.querySelectorAll('input').length)
-        .toBe(fixture.componentInstance.items.length);
+      expect(fixture.nativeElement.querySelectorAll('input').length).toBe(
+        fixture.componentInstance.items.length
+      );
       expect(fixture.nativeElement.querySelector('#activityType-MEAL').checked).toBe(true);
-      expect(fixture.nativeElement.querySelector('#activityType-HEALTH_WORKSHOP').checked).toBe(false);
+      expect(fixture.nativeElement.querySelector('#activityType-HEALTH_WORKSHOP').checked).toBe(
+        false
+      );
     });
 
     it('should trigger selection change', () => {

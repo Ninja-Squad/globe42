@@ -8,10 +8,9 @@ import { PersonModel } from '../models/person.model';
   styleUrls: ['./person-membership-print.component.scss']
 })
 export class PersonMembershipPrintComponent implements OnInit {
-
   person: PersonModel;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.person = this.route.snapshot.data.person;

@@ -1,8 +1,13 @@
-<gl-page-title *ngIf="editedUser" [title]="'Modification de l\'utilisateur ' + editedUser.login"></gl-page-title>
+<gl-page-title
+  *ngIf="editedUser"
+  [title]="'Modification de l\'utilisateur ' + editedUser.login"
+></gl-page-title>
 <gl-page-title *ngIf="!editedUser" title="Nouvel utilisateur"></gl-page-title>
 
 <h1>
-  <ng-container *ngIf="editedUser">Modification de l'utilisateur <em>{{ editedUser.login }}</em></ng-container>
+  <ng-container *ngIf="editedUser"
+    >Modification de l'utilisateur <em>{{ editedUser.login }}</em></ng-container
+  >
   <ng-container *ngIf="!editedUser">Nouvel utilisateur</ng-container>
 </h1>
 
@@ -22,11 +27,23 @@
     <label class="col-sm-2 col-form-label">Rôle</label>
     <div class="col-sm-10">
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" formControlName="admin" id="role-no-admin" [value]="false">
+        <input
+          class="form-check-input"
+          type="radio"
+          formControlName="admin"
+          id="role-no-admin"
+          [value]="false"
+        />
         <label class="form-check-label" for="role-no-admin">Simple utilisateur</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" formControlName="admin" id="role-admin" [value]="true">
+        <input
+          class="form-check-input"
+          type="radio"
+          formControlName="admin"
+          id="role-admin"
+          [value]="true"
+        />
         <label class="form-check-label" for="role-admin">Administrateur</label>
       </div>
     </div>
@@ -41,13 +58,14 @@
 
 <ngb-alert type="success" [dismissible]="false" *ngIf="createdUser" id="created-user">
   L'utilisateur a été créé. Voici son identifiant et son mot de passe, à lui transmettre.
-  <br/>
+  <br />
   Attention&nbsp;: l'identifiant et le mot de passe sont sensibles à la casse&nbsp;!
-  <br/>
+  <br />
   Une fois identifié(e), il(elle) pourra changer son mot de passe.
   <p>
     <strong>
-      Identifiant&nbsp;: <code>{{ createdUser.login }}</code><br/>
+      Identifiant&nbsp;: <code>{{ createdUser.login }}</code
+      ><br />
       Mot de passe&nbsp;: <code>{{ createdUser.generatedPassword }}</code>
     </strong>
   </p>

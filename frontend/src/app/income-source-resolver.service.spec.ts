@@ -8,13 +8,18 @@ import { IncomeSourceModel } from './models/income-source.model';
 import { IncomeSourceService } from './income-source.service';
 
 describe('IncomeSourceResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve a source', () => {
     const incomeSourceService = TestBed.inject(IncomeSourceService);
-    const expectedResult: Observable<IncomeSourceModel> = of({ id: 42, name: 'Allocations Familiales' } as IncomeSourceModel);
+    const expectedResult: Observable<IncomeSourceModel> = of({
+      id: 42,
+      name: 'Allocations Familiales'
+    } as IncomeSourceModel);
 
     spyOn(incomeSourceService, 'get').and.returnValue(expectedResult);
 

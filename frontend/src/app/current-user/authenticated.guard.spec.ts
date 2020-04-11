@@ -7,7 +7,6 @@ import { CurrentUserModule } from './current-user.module';
 import { CurrentUserService } from './current-user.service';
 
 describe('AuthenticatedGuard', () => {
-
   let guard: AuthenticatedGuard;
   let userService: CurrentUserService;
 

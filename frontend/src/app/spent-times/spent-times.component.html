@@ -1,7 +1,7 @@
 <ul>
   <li *ngFor="let spentTime of spentTimes">
-    {{ spentTime.creationInstant | date:'medium' }}: {{ spentTime.minutes | duration }}
-    par {{ spentTime.creator.login }}
+    {{ spentTime.creationInstant | date: 'medium' }}: {{ spentTime.minutes | duration }} par
+    {{ spentTime.creator.login }}
     <a href="#" (click)="delete(spentTime, $event)"><span class="fa fa-trash"></span> Supprimer</a>
   </li>
 </ul>

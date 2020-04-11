@@ -35,26 +35,24 @@ describe('TasksPageComponent', () => {
 
     const tasks: Array<TaskModel> = [];
     for (let i = 0; i < 3; i++) {
-      tasks.push(
-        {
-          id: i,
-          description: 'Some description',
-          title: 'Some title',
-          category: {
-            id: 6,
-            name: 'Various'
-          },
-          dueDate: '2017-08-01',
-          status: 'DONE',
-          totalSpentTimeInMinutes: 0,
-          assignee: null,
-          creator: {
-            id: 1,
-            login: 'admin'
-          } as UserModel,
-          concernedPerson: null
-        }
-      );
+      tasks.push({
+        id: i,
+        description: 'Some description',
+        title: 'Some title',
+        category: {
+          id: 6,
+          name: 'Various'
+        },
+        dueDate: '2017-08-01',
+        status: 'DONE',
+        totalSpentTimeInMinutes: 0,
+        assignee: null,
+        creator: {
+          id: 1,
+          login: 'admin'
+        } as UserModel,
+        concernedPerson: null
+      });
     }
 
     page = {
@@ -62,7 +60,7 @@ describe('TasksPageComponent', () => {
       number: 0,
       size: 3,
       totalElements: 8,
-      totalPages: 3,
+      totalPages: 3
     };
 
     data = {
@@ -85,7 +83,12 @@ describe('TasksPageComponent', () => {
     TestBed.overrideTemplate(SpentTimesComponent, '');
 
     TestBed.configureTestingModule({
-      imports: [CurrentUserModule.forRoot(), RouterTestingModule, GlobeNgbModule.forRoot(), HttpClientModule],
+      imports: [
+        CurrentUserModule.forRoot(),
+        RouterTestingModule,
+        GlobeNgbModule.forRoot(),
+        HttpClientModule
+      ],
       declarations: [
         TasksPageComponent,
         TasksComponent,
@@ -106,20 +109,25 @@ describe('TasksPageComponent', () => {
     fixture.detectChanges();
 
     const tasksPageComponent = fixture.componentInstance;
-    const tasksComponent: TasksComponent = fixture.debugElement.query(By.directive(TasksComponent)).componentInstance;
+    const tasksComponent: TasksComponent = fixture.debugElement.query(By.directive(TasksComponent))
+      .componentInstance;
     expect(tasksComponent.tasks.map(task => task.model)).toEqual(page.content);
 
     spyOn(tasksPageComponent, 'onTaskClicked');
     fixture.nativeElement.querySelector('.resurrect-button').click();
     fixture.detectChanges();
-    expect(tasksPageComponent.onTaskClicked).toHaveBeenCalledWith({type: 'resurrect', task: page.content[0]});
+    expect(tasksPageComponent.onTaskClicked).toHaveBeenCalledWith({
+      type: 'resurrect',
+      task: page.content[0]
+    });
   });
 
   it('should display a pagination component, and no new task link by default', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
-    const pagination: NgbPagination = fixture.debugElement.query(By.directive(NgbPagination)).componentInstance;
+    const pagination: NgbPagination = fixture.debugElement.query(By.directive(NgbPagination))
+      .componentInstance;
 
     expect(pagination.page).toBe(1);
     expect(pagination.pageSize).toBe(3);
@@ -145,7 +153,10 @@ describe('TasksPageComponent', () => {
     tick();
     fixture.detectChanges();
 
-    expect(router.navigate).toHaveBeenCalledWith(['.'], {relativeTo: activatedRoute, queryParams: {page: '1'}});
+    expect(router.navigate).toHaveBeenCalledWith(['.'], {
+      relativeTo: activatedRoute,
+      queryParams: { page: '1' }
+    });
   }));
 
   it('should assign a task and refresh', () => {
@@ -176,7 +187,7 @@ describe('TasksPageComponent', () => {
     spyOn(router, 'navigate');
 
     const task = page.content[0];
-    fixture.componentInstance.onTaskClicked({task, type: 'edit'});
+    fixture.componentInstance.onTaskClicked({ task, type: 'edit' });
 
     expect(router.navigate).toHaveBeenCalledWith(['/tasks', task.id, 'edit']);
   });
@@ -192,9 +203,14 @@ describe('TasksPageComponent', () => {
     spyOn(router, 'navigate');
 
     const task = page.content[0];
-    fixture.componentInstance.onTaskClicked({task, type: 'edit'});
+    fixture.componentInstance.onTaskClicked({ task, type: 'edit' });
 
-    expect(router.navigate).toHaveBeenCalledWith(['/tasks', task.id, 'edit', { 'concerned-person': 42 }]);
+    expect(router.navigate).toHaveBeenCalledWith([
+      '/tasks',
+      task.id,
+      'edit',
+      { 'concerned-person': 42 }
+    ]);
   });
 
   it('should navigate to previous page after task action if current page is obsolete', () => {
@@ -221,9 +237,12 @@ describe('TasksPageComponent', () => {
 
     const task = page.content[0];
 
-    fixture.componentInstance.onTaskClicked({task, type: 'resurrect'});
+    fixture.componentInstance.onTaskClicked({ task, type: 'resurrect' });
 
-    expect(router.navigate).toHaveBeenCalledWith(['.'], {relativeTo: activatedRoute, queryParams: {page: '1'}});
+    expect(router.navigate).toHaveBeenCalledWith(['.'], {
+      relativeTo: activatedRoute,
+      queryParams: { page: '1' }
+    });
   });
 
   it('should display a success message when list type is not archived and no task', () => {
@@ -273,10 +292,15 @@ describe('TasksPageComponent', () => {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('#newTaskLink').getAttribute('href')).toBe('/tasks/create;concerned-person=42');
+    expect(fixture.nativeElement.querySelector('#newTaskLink').getAttribute('href')).toBe(
+      '/tasks/create;concerned-person=42'
+    );
   });
 
-  function checkEventHandled(eventType: TaskEventType, taskServiceMethodName: 'assignToSelf' | 'unassign' | 'markAsDone' | 'cancel' | 'resurrect') {
+  function checkEventHandled(
+    eventType: TaskEventType,
+    taskServiceMethodName: 'assignToSelf' | 'unassign' | 'markAsDone' | 'cancel' | 'resurrect'
+  ) {
     const fixture = TestBed.createComponent(TasksPageComponent);
     fixture.detectChanges();
 
@@ -296,7 +320,7 @@ describe('TasksPageComponent', () => {
 
     const task = page.content[0];
 
-    fixture.componentInstance.onTaskClicked({task, type: eventType});
+    fixture.componentInstance.onTaskClicked({ task, type: eventType });
 
     expect(taskService[taskServiceMethodName]).toHaveBeenCalledWith(task.id);
     expect(tasksResolverService.resolve).toHaveBeenCalledWith(activatedRoute.snapshot);

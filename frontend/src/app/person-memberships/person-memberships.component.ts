@@ -18,7 +18,6 @@ import { CurrentPersonService } from '../current-person.service';
   styleUrls: ['./person-memberships.component.scss']
 })
 export class PersonMembershipsComponent implements OnInit {
-
   currentMembership: MembershipModel | null = null;
   oldMemberships: Array<MembershipModel>;
   currentYear: number;
@@ -28,11 +27,13 @@ export class PersonMembershipsComponent implements OnInit {
 
   paymentModes = PAYMENT_MODE_TRANSLATIONS.map(t => t.key).filter(key => key !== 'UNKNOWN');
 
-  constructor(private currentPersonService: CurrentPersonService,
-              private route: ActivatedRoute,
-              private fb: FormBuilder,
-              private membershipService: MembershipService,
-              private confirmService: ConfirmService) { }
+  constructor(
+    private currentPersonService: CurrentPersonService,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private membershipService: MembershipService,
+    private confirmService: ConfirmService
+  ) {}
 
   ngOnInit() {
     const memberships = this.route.snapshot.data.memberships;
@@ -48,11 +49,10 @@ export class PersonMembershipsComponent implements OnInit {
 
     this.membershipForm = this.fb.group({
       paymentMode: [null, Validators.required],
-      paymentDate: [DateTime.local().toISODate(), [
-        Validators.required,
-        min(DateTime.local(this.currentYear, 1, 1).toISODate()),
-        pastDate
-      ]],
+      paymentDate: [
+        DateTime.local().toISODate(),
+        [Validators.required, min(DateTime.local(this.currentYear, 1, 1).toISODate()), pastDate]
+      ],
       cardNumber: [null, Validators.required]
     });
   }
@@ -61,16 +61,21 @@ export class PersonMembershipsComponent implements OnInit {
     const command = this.membershipForm.value as MembershipCommand;
     command.year = this.currentYear;
 
-    this.membershipService.createCurrent(this.person.id, command).subscribe(
-      membership => this.currentMembership = membership
-    );
+    this.membershipService
+      .createCurrent(this.person.id, command)
+      .subscribe(membership => (this.currentMembership = membership));
   }
 
   deleteCurrentMembership() {
-    this.confirmService.confirm({
-      message: `Voulez-vous vraiment supprimer l'adhésion\u00a0?`
-    }).pipe(
-      switchMap(() => this.membershipService.deleteCurrent(this.person.id, this.currentMembership.id))
-    ).subscribe(() => this.currentMembership = null);
+    this.confirmService
+      .confirm({
+        message: `Voulez-vous vraiment supprimer l'adhésion\u00a0?`
+      })
+      .pipe(
+        switchMap(() =>
+          this.membershipService.deleteCurrent(this.person.id, this.currentMembership.id)
+        )
+      )
+      .subscribe(() => (this.currentMembership = null));
   }
 }

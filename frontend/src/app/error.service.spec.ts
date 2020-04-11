@@ -6,7 +6,6 @@ import { FunctionalErrorModel, TechnicalErrorModel } from './models/error.model'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('ErrorService', () => {
-
   let service: ErrorService;
   let http: HttpTestingController;
   let httpClient: HttpClient;
@@ -49,7 +48,7 @@ describe('ErrorService', () => {
     });
 
     httpClient.get('/test').subscribe({ error: noop });
-    http.expectOne('/test').flush(null, {status: 500, statusText: 'Server Error'});
+    http.expectOne('/test').flush(null, { status: 500, statusText: 'Server Error' });
 
     expect(error.status).toBe(500);
     expect(error.message).toBe('Http failure response for /test: 500 Server Error');
@@ -62,7 +61,9 @@ describe('ErrorService', () => {
     });
 
     httpClient.get('/test').subscribe({ error: noop });
-    http.expectOne('/test').flush({message: 'Not good'}, {status: 500, statusText: 'Server Error'});
+    http
+      .expectOne('/test')
+      .flush({ message: 'Not good' }, { status: 500, statusText: 'Server Error' });
 
     expect(error.status).toBe(500);
     expect(error.message).toBe('Not good');
@@ -85,10 +86,10 @@ describe('ErrorService', () => {
       message: 'Not good',
       functionalError: {
         code: 'ERROR_CODE',
-        parameters: {foo: 'bar'}
+        parameters: { foo: 'bar' }
       }
     };
-    http.expectOne('/test').flush(functionalErrorBody, {status: 400, statusText: 'Bad Request'});
+    http.expectOne('/test').flush(functionalErrorBody, { status: 400, statusText: 'Bad Request' });
 
     expect(functionalError).toBeUndefined();
     expect(technicalError).toBeUndefined();
@@ -106,7 +107,7 @@ describe('ErrorService', () => {
     });
 
     httpClient.get('/api/authentication').subscribe({ error: noop });
-    http.expectOne('/api/authentication').flush(null, {status: 401, statusText: 'Unauthorized'});
+    http.expectOne('/api/authentication').flush(null, { status: 401, statusText: 'Unauthorized' });
 
     expect(functionalError).toBeUndefined();
     expect(technicalError).toBeUndefined();
@@ -119,19 +120,21 @@ describe('ErrorService', () => {
       error = err;
     });
 
-    service.functionalErrorHandler()(new HttpErrorResponse({
-      status: 400,
-      statusText: 'Server Error',
-      error: {
-        message: 'Not good',
-        functionalError: {
-          code: 'ERROR_CODE',
-          parameters: {foo: 'bar'}
+    service.functionalErrorHandler()(
+      new HttpErrorResponse({
+        status: 400,
+        statusText: 'Server Error',
+        error: {
+          message: 'Not good',
+          functionalError: {
+            code: 'ERROR_CODE',
+            parameters: { foo: 'bar' }
+          }
         }
-      }
-    }));
+      })
+    );
 
     expect(error.code).toBe('ERROR_CODE');
-    expect(error.parameters).toEqual({foo: 'bar'});
+    expect(error.parameters).toEqual({ foo: 'bar' });
   });
 });

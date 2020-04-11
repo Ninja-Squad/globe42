@@ -2,12 +2,15 @@
 <h1>Natures des charges</h1>
 
 <div class="row mb-2 align-items-center charge-type-item" *ngFor="let chargeType of chargeTypes">
-  <div class="col-sm"><a [routerLink]="['/charge-types', chargeType.id, 'edit']">{{ chargeType.name }}</a></div>
+  <div class="col-sm">
+    <a [routerLink]="['/charge-types', chargeType.id, 'edit']">{{ chargeType.name }}</a>
+  </div>
   <div class="col-sm text-muted">{{ chargeType.category.name }}</div>
   <div class="col-sm text-muted">
     <ng-container *ngIf="chargeType.maxMonthlyAmount">
-      max. {{ chargeType.maxMonthlyAmount | currency:'EUR' }} / mois
-    </ng-container></div>
+      max. {{ chargeType.maxMonthlyAmount | currency: 'EUR' }} / mois
+    </ng-container>
+  </div>
   <div class="col-sm text-right">
     <a class="btn btn-secondary btn-sm" [routerLink]="['/charge-types', chargeType.id, 'edit']">
       <span class="fa fa-edit"></span>

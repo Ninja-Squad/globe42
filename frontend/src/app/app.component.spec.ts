@@ -8,10 +8,10 @@ import { MenuComponent } from './menu/menu.component';
 import { RouterOutlet } from '@angular/router';
 
 describe('AppComponent', () => {
-
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [AppModule, RouterTestingModule]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [AppModule, RouterTestingModule]
+    })));
 
   it('should create a menu and a router-outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);

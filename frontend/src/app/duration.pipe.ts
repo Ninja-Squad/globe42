@@ -5,7 +5,6 @@ import { minutesToDuration } from './utils';
   name: 'duration'
 })
 export class DurationPipe implements PipeTransform {
-
   transform(minutes: number): string {
     return minutesToDuration(minutes);
   }

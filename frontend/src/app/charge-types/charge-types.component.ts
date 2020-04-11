@@ -8,13 +8,11 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./charge-types.component.scss']
 })
 export class ChargeTypesComponent implements OnInit {
-
   chargeTypes: Array<ChargeTypeModel>;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.chargeTypes = this.route.snapshot.data.chargeTypes;
   }
-
 }

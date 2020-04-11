@@ -7,13 +7,13 @@ import { ValdemortConfig } from 'ngx-valdemort';
   selector: '.form-control:not([glFormControlValidation]),[glFormControlValidation],[ngbRadioGroup]'
 })
 export class FormControlValidationDirective {
-
-  constructor(@Optional() private ngControl: NgControl,
-              private config: ValdemortConfig) { }
+  constructor(@Optional() private ngControl: NgControl, private config: ValdemortConfig) {}
 
   @HostBinding('class.is-invalid') get isInvalid() {
-    return this.ngControl
-      && this.ngControl.invalid
-      && this.config.shouldDisplayErrors(this.ngControl.control, (this.ngControl as any).formDirective);
+    return (
+      this.ngControl &&
+      this.ngControl.invalid &&
+      this.config.shouldDisplayErrors(this.ngControl.control, (this.ngControl as any).formDirective)
+    );
   }
 }

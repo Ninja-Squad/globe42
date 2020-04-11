@@ -10,13 +10,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./password-change.component.scss']
 })
 export class PasswordChangeComponent {
-
   passwordChangeForm: FormGroup;
   passwordChangeFailed = false;
 
-  constructor(private currentUserService: CurrentUserService,
-              private router: Router,
-              fb: FormBuilder) {
+  constructor(
+    private currentUserService: CurrentUserService,
+    private router: Router,
+    fb: FormBuilder
+  ) {
     this.passwordChangeForm = fb.group({
       oldPassword: ['', Validators.required],
       newPassword: ['', Validators.required]
@@ -30,11 +31,16 @@ export class PasswordChangeComponent {
       return;
     }
 
-    this.currentUserService.checkPassword(this.passwordChangeForm.value.oldPassword).pipe(
-      switchMap(() => this.currentUserService.changePassword(this.passwordChangeForm.value.newPassword))
-    ).subscribe(
-      () => this.router.navigate(['/']),
-      () => this.passwordChangeFailed = true
-    );
+    this.currentUserService
+      .checkPassword(this.passwordChangeForm.value.oldPassword)
+      .pipe(
+        switchMap(() =>
+          this.currentUserService.changePassword(this.passwordChangeForm.value.newPassword)
+        )
+      )
+      .subscribe(
+        () => this.router.navigate(['/']),
+        () => (this.passwordChangeFailed = true)
+      );
   }
 }

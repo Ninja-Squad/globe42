@@ -2,7 +2,7 @@
 
 .navigation-progress-wrapper {
   background-color: $light;
-  height: .1rem;
+  height: 0.1rem;
 
   .progress {
     background-color: $light;
@@ -10,8 +10,6 @@
   }
 
   .progress-bar {
-    @include transition(width .5s ease);
+    @include transition(width 0.5s ease);
   }
 }
-
-

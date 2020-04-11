@@ -5,8 +5,7 @@ import { CityModel } from './models/person.model';
 
 @Injectable({ providedIn: 'root' })
 export class SearchCityService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Returns the first 10 cities matching a request
@@ -16,12 +15,14 @@ export class SearchCityService {
       return of([]);
     }
 
-    return this.http.get<Array<CityModel>>('/api/cities', { params : new HttpParams().set('query', term) });
+    return this.http.get<Array<CityModel>>('/api/cities', {
+      params: new HttpParams().set('query', term)
+    });
   }
 
   uploadCities(data: string): Observable<HttpEvent<any>> {
     const req = new HttpRequest('POST', '/api/cities/uploads', data, {
-      reportProgress: true,
+      reportProgress: true
     });
 
     return this.http.request(req);

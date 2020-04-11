@@ -13,9 +13,13 @@ import { of } from 'rxjs';
 import { ComponentTester, speculoosMatchers, TestButton, TestInput } from 'ngx-speculoos';
 
 @Component({
-  template: `<gl-spent-time-add [taskModel]="task"
-                                (cancelled)="onCancelled()"
-                                (spentTimeAdded)="onSpentTimeAdded($event)"></gl-spent-time-add>`
+  template: `
+    <gl-spent-time-add
+      [taskModel]="task"
+      (cancelled)="onCancelled()"
+      (spentTimeAdded)="onSpentTimeAdded($event)"
+    ></gl-spent-time-add>
+  `
 })
 class TestComponent {
   task = {
@@ -35,7 +39,6 @@ class TestComponent {
 }
 
 class SpentTimeAddComponentTester extends ComponentTester<TestComponent> {
-
   constructor() {
     super(TestComponent);
   }

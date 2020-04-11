@@ -11,17 +11,16 @@ import { CurrentUserService } from '../current-user/current-user.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit, OnDestroy {
-
   navbarCollapsed = true;
   user: UserModel | null;
   userEventsSubscription: Subscription;
 
-  constructor(private currentUserService: CurrentUserService, private router: Router) {
-  }
+  constructor(private currentUserService: CurrentUserService, private router: Router) {}
 
   ngOnInit() {
-    this.userEventsSubscription = this.currentUserService.userEvents
-      .subscribe(user => this.user = user);
+    this.userEventsSubscription = this.currentUserService.userEvents.subscribe(
+      user => (this.user = user)
+    );
   }
 
   ngOnDestroy() {

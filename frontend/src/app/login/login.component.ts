@@ -11,13 +11,14 @@ import { CredentialsCommand } from '../models/credentials.command';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
   authenticationFailed = false;
 
-  constructor(private router: Router,
-              private currentUserService: CurrentUserService,
-              private fb: FormBuilder) { }
+  constructor(
+    private router: Router,
+    private currentUserService: CurrentUserService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -33,11 +34,9 @@ export class LoginComponent implements OnInit {
 
     const command: CredentialsCommand = this.loginForm.value;
     this.authenticationFailed = false;
-    this.currentUserService.authenticate(command)
-      .subscribe(
-        () => this.router.navigate(['/']),
-        () => this.authenticationFailed = true
-      );
+    this.currentUserService.authenticate(command).subscribe(
+      () => this.router.navigate(['/']),
+      () => (this.authenticationFailed = true)
+    );
   }
-
 }

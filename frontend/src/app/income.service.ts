@@ -6,8 +6,7 @@ import { IncomeCommand } from './models/income.command';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(personId: number): Observable<Array<IncomeModel>> {
     return this.http.get<Array<IncomeModel>>(`/api/persons/${personId}/incomes`);

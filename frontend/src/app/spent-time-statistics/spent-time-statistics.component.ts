@@ -47,7 +47,6 @@ const ALL_USERS = 0;
   styleUrls: ['./spent-time-statistics.component.scss']
 })
 export class SpentTimeStatisticsComponent implements OnInit {
-
   criteriaForm: FormGroup;
 
   statisticsModel: SpentTimeStatisticsModel;
@@ -56,14 +55,16 @@ export class SpentTimeStatisticsComponent implements OnInit {
 
   users: Array<UserModel>;
 
-  constructor(fb: FormBuilder,
-              private taskService: TaskService,
-              private router: Router,
-              private route: ActivatedRoute) {
+  constructor(
+    fb: FormBuilder,
+    private taskService: TaskService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.criteriaForm = fb.group({
       from: null as string,
       to: null as string,
-      by: ALL_USERS,
+      by: ALL_USERS
     });
   }
 
@@ -74,13 +75,13 @@ export class SpentTimeStatisticsComponent implements OnInit {
     const paramMap = this.route.snapshot.queryParamMap;
     if (!paramMap.get('from') && !paramMap.get('to') && !paramMap.get('by')) {
       const now = DateTime.local();
-      this.criteriaForm.setValue( {
+      this.criteriaForm.setValue({
         from: now.startOf('month').toISODate(),
         to: now.endOf('month').toISODate(),
         by: ALL_USERS
       });
     } else {
-      this.criteriaForm.setValue( {
+      this.criteriaForm.setValue({
         from: paramMap.get('from'),
         to: paramMap.get('to'),
         by: +paramMap.get('by')
@@ -89,26 +90,33 @@ export class SpentTimeStatisticsComponent implements OnInit {
 
     // when criteria change, we update the URL
     // when from or to changes, we reload the statistics
-    concat(of(this.criteriaForm.value), this.criteriaForm.valueChanges).pipe(
-      filter(() => this.criteriaForm.valid),
-      tap(value => this.router.navigate(['tasks/statistics'], { queryParams: value, replaceUrl: true })),
-      map(value => ({ from: value.from, to: value.to })),
-      distinctUntilChanged((v1, v2) => v1.from === v2.from && v1.to === v2.to),
-      switchMap(value => this.taskService.spentTimeStatistics(value)
-        .pipe(catchError(() => EMPTY)))
-    ).subscribe(stats => this.updateState(stats));
+    concat(of(this.criteriaForm.value), this.criteriaForm.valueChanges)
+      .pipe(
+        filter(() => this.criteriaForm.valid),
+        tap(value =>
+          this.router.navigate(['tasks/statistics'], { queryParams: value, replaceUrl: true })
+        ),
+        map(value => ({ from: value.from, to: value.to })),
+        distinctUntilChanged((v1, v2) => v1.from === v2.from && v1.to === v2.to),
+        switchMap(value =>
+          this.taskService.spentTimeStatistics(value).pipe(catchError(() => EMPTY))
+        )
+      )
+      .subscribe(stats => this.updateState(stats));
 
     // when by changes, no need to reload the statistics, but the chart must be updated
     // note: using the valueChanges on the "by" form control doesn't change because the event is emitted before
     // the value of the form group is updated
-    this.criteriaForm.valueChanges.pipe(
-      map(value => value.by),
-      distinctUntilChanged()
-    ).subscribe(() => {
-      if (this.statisticsModel) {
-        this.updateState(this.statisticsModel);
-      }
-    });
+    this.criteriaForm.valueChanges
+      .pipe(
+        map(value => value.by),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
+        if (this.statisticsModel) {
+          this.updateState(this.statisticsModel);
+        }
+      });
   }
 
   private updateState(statisticsModel: SpentTimeStatisticsModel) {
@@ -130,14 +138,16 @@ export class SpentTimeStatisticsComponent implements OnInit {
 
     return {
       type: 'doughnut',
-      data: {labels, datasets: [{data, backgroundColor}]},
+      data: { labels, datasets: [{ data, backgroundColor }] },
       options: {
         cutoutPercentage: 70,
         tooltips: {
           callbacks: {
             label: (tooltipItem, chart) => {
               const categoryName = chart.labels[tooltipItem.index];
-              const duration = minutesToDuration(chart.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] as number);
+              const duration = minutesToDuration(
+                chart.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] as number
+              );
               return `${categoryName}: ${duration}`;
             }
           }
@@ -151,7 +161,10 @@ export class SpentTimeStatisticsComponent implements OnInit {
     const categoryStatisticsByCategoryId = new Map<number, CategoryStatistic>();
 
     this.statisticsModel.statistics
-      .filter(stat => (this.criteriaForm.value.by === ALL_USERS) || (stat.user.id === this.criteriaForm.value.by))
+      .filter(
+        stat =>
+          this.criteriaForm.value.by === ALL_USERS || stat.user.id === this.criteriaForm.value.by
+      )
       .forEach(stat => {
         const categoryId = stat.category.id;
         let categoryStatistic = categoryStatisticsByCategoryId.get(categoryId);

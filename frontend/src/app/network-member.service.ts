@@ -12,8 +12,7 @@ function url(personId: number): string {
   providedIn: 'root'
 })
 export class NetworkMemberService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(personId: number): Observable<Array<NetworkMemberModel>> {
     return this.http.get<Array<NetworkMemberModel>>(url(personId));

@@ -11,14 +11,15 @@ import { FamilyService } from '../family.service';
   styleUrls: ['./person-family-edit.component.scss']
 })
 export class PersonFamilyEditComponent implements OnInit {
-
   person: PersonModel;
   familyForm: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private fb: FormBuilder,
-              private familyService: FamilyService,
-              private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private familyService: FamilyService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.person = this.route.snapshot.data.person;
@@ -27,12 +28,15 @@ export class PersonFamilyEditComponent implements OnInit {
     this.familyForm = this.fb.group({
       spouseLocation: family ? family.spouseLocation : null,
       children: this.fb.array(
-        family ? family.children.map(child => this.fb.group({
-          firstName: child.firstName,
-          birthDate: child.birthDate,
-          location: child.location
-          })
-        ) : []
+        family
+          ? family.children.map(child =>
+              this.fb.group({
+                firstName: child.firstName,
+                birthDate: child.birthDate,
+                location: child.location
+              })
+            )
+          : []
       )
     });
   }
@@ -42,11 +46,13 @@ export class PersonFamilyEditComponent implements OnInit {
   }
 
   addChild() {
-    this.children.push(this.fb.group({
-      firstName: null,
-      birthDate: null,
-      location: 'FRANCE'
-    }));
+    this.children.push(
+      this.fb.group({
+        firstName: null,
+        birthDate: null,
+        location: 'FRANCE'
+      })
+    );
   }
 
   removeChild(index: number) {
@@ -54,8 +60,8 @@ export class PersonFamilyEditComponent implements OnInit {
   }
 
   save() {
-    this.familyService.save(this.person.id, this.familyForm.value).subscribe(() =>
-      this.router.navigate(['/persons', this.person.id, 'family'])
-    );
+    this.familyService
+      .save(this.person.id, this.familyForm.value)
+      .subscribe(() => this.router.navigate(['/persons', this.person.id, 'family']));
   }
 }

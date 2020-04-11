@@ -8,10 +8,9 @@ import { IncomeSourceModel } from '../models/income-source.model';
   styleUrls: ['./income-sources.component.scss']
 })
 export class IncomeSourcesComponent implements OnInit {
-
   incomeSources: Array<IncomeSourceModel>;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.incomeSources = this.route.snapshot.data.incomeSources;

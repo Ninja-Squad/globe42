@@ -9,9 +9,7 @@ function buildUrl(personId: number) {
 
 @Injectable({ providedIn: 'root' })
 export class PerUnitRevenueInformationService {
-
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   get(personId: number): Observable<PerUnitRevenueInformationModel | null> {
     return this.http.get<PerUnitRevenueInformationModel | null>(buildUrl(personId));

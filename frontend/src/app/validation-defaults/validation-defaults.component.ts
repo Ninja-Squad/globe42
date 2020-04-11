@@ -6,7 +6,6 @@ import { ValdemortConfig } from 'ngx-valdemort';
   templateUrl: './validation-defaults.component.html'
 })
 export class ValidationDefaultsComponent {
-
   constructor(config: ValdemortConfig) {
     config.errorsClasses = 'invalid-feedback';
   }

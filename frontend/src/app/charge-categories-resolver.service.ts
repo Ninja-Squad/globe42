@@ -6,10 +6,12 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ChargeCategoriesResolverService implements Resolve<Array<ChargeCategoryModel>> {
+  constructor(private chargeCategoryService: ChargeCategoryService) {}
 
-  constructor(private chargeCategoryService: ChargeCategoryService) { }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Array<ChargeCategoryModel>> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<Array<ChargeCategoryModel>> {
     return this.chargeCategoryService.list();
   }
 }

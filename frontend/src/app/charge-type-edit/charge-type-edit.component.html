@@ -1,8 +1,13 @@
-<gl-page-title *ngIf="editedChargeType" [title]="'Modification de la nature des charges ' + editedChargeType.name"></gl-page-title>
+<gl-page-title
+  *ngIf="editedChargeType"
+  [title]="'Modification de la nature des charges ' + editedChargeType.name"
+></gl-page-title>
 <gl-page-title *ngIf="!editedChargeType" title="Nouvelle nature des charges"></gl-page-title>
 
 <h1>
-  <ng-container *ngIf="editedChargeType">Modification de la nature des charges <em>{{ editedChargeType.name }}</em></ng-container>
+  <ng-container *ngIf="editedChargeType"
+    >Modification de la nature des charges <em>{{ editedChargeType.name }}</em></ng-container
+  >
   <ng-container *ngIf="!editedChargeType">Nouvelle nature des charges</ng-container>
 </h1>
 
@@ -19,7 +24,9 @@
     <div class="col-sm-9">
       <select class="form-control" id="category" formControlName="categoryId">
         <option [ngValue]="null"></option>
-        <option *ngFor="let category of chargeCategories" [ngValue]="category.id">{{ category.name }}</option>
+        <option *ngFor="let category of chargeCategories" [ngValue]="category.id">{{
+          category.name
+        }}</option>
       </select>
       <val-errors controlName="categoryId" label="La dépense"></val-errors>
     </div>
@@ -27,7 +34,13 @@
   <div class="form-group row">
     <label for="maxMonthlyAmount" class="col-sm-3 col-form-label">Montant mensuel maximum</label>
     <div class="col-sm-9">
-      <input type="number" class="form-control" id="maxMonthlyAmount" formControlName="maxMonthlyAmount" min="1"/>
+      <input
+        type="number"
+        class="form-control"
+        id="maxMonthlyAmount"
+        formControlName="maxMonthlyAmount"
+        min="1"
+      />
       <val-errors controlName="maxMonthlyAmount" label="Le montant mensuel maximum">
         <ng-template valError="min" let-label>{{ label }} doit être positif</ng-template>
       </val-errors>

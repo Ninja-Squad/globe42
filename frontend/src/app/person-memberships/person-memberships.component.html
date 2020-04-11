@@ -6,7 +6,11 @@
     Pas d'adhésion pour l'année en cours.
   </ngb-alert>
   <div class="text-right">
-    <a class="btn btn-outline-primary" target="membershipprint" href="/persons/{{ person.id }}/membership-print">
+    <a
+      class="btn btn-outline-primary"
+      target="membershipprint"
+      href="/persons/{{ person.id }}/membership-print"
+    >
       Imprimer une fiche d'adhésion
       <sup class="fa fa-external-link small"></sup>
     </a>
@@ -20,7 +24,9 @@
       <div class="col-sm-9">
         <select class="form-control" id="paymentMode" formControlName="paymentMode">
           <option [value]="null"></option>
-          <option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{ paymentMode | displayPaymentMode }}</option>
+          <option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
+            paymentMode | displayPaymentMode
+          }}</option>
         </select>
         <val-errors controlName="paymentMode" label="Le mode de paiement"></val-errors>
       </div>
@@ -30,10 +36,17 @@
       <label for="paymentDate" class="col-form-label col-sm-3">le</label>
       <div class="col-sm-9">
         <gl-datepicker-container>
-          <input class="form-control" id="paymentDate" formControlName="paymentDate" ngbDatepicker
-                 [minDate]="{year: currentYear, month: 1, day: 1}">
+          <input
+            class="form-control"
+            id="paymentDate"
+            formControlName="paymentDate"
+            ngbDatepicker
+            [minDate]="{ year: currentYear, month: 1, day: 1 }"
+          />
           <val-errors controlName="paymentDate" label="La date de paiement">
-            <ng-template valError="min" let-label>{{ label }} doit être dans l'année en cours</ng-template>
+            <ng-template valError="min" let-label
+              >{{ label }} doit être dans l'année en cours</ng-template
+            >
           </val-errors>
         </gl-datepicker-container>
       </div>
@@ -42,7 +55,7 @@
     <div class="row form-group">
       <label for="cardNumber" class="col-form-label col-sm-3">Carte n°</label>
       <div class="col-sm-9">
-        <input class="form-control" id="cardNumber" formControlName="cardNumber">
+        <input class="form-control" id="cardNumber" formControlName="cardNumber" />
         <val-errors controlName="cardNumber" label="Le n° de carte"></val-errors>
       </div>
     </div>
@@ -52,19 +65,26 @@
         <button type="submit" class="btn btn-primary" id="save">Enregistrer</button>
       </div>
     </div>
-
   </form>
 </div>
 
 <div *ngIf="currentMembership" id="current-membership">
   <ngb-alert [dismissible]="false" type="info">
-    Payée ({{ currentMembership.paymentMode | displayPaymentMode }}) le {{ currentMembership.paymentDate | date }}.
-    <br/>
-    <ng-container *ngIf="currentMembership.cardNumber">Carte n° {{ currentMembership.cardNumber }}.</ng-container>
+    Payée ({{ currentMembership.paymentMode | displayPaymentMode }}) le
+    {{ currentMembership.paymentDate | date }}.
+    <br />
+    <ng-container *ngIf="currentMembership.cardNumber"
+      >Carte n° {{ currentMembership.cardNumber }}.</ng-container
+    >
     <ng-container *ngIf="!currentMembership.cardNumber">N° de carte inconnu.</ng-container>
   </ngb-alert>
   <div class="text-right">
-    <button type="button" class="btn btn-danger" id="delete-button" (click)="deleteCurrentMembership()">
+    <button
+      type="button"
+      class="btn btn-danger"
+      id="delete-button"
+      (click)="deleteCurrentMembership()"
+    >
       <span class="fa fa-trash"></span>
       Supprimer l'adhésion en cours
     </button>

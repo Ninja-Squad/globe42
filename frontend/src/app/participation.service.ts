@@ -6,8 +6,7 @@ import { PersonIdentityModel } from './models/person.model';
 
 @Injectable({ providedIn: 'root' })
 export class ParticipationService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(personId: number): Observable<Array<ParticipationModel>> {
     return this.http.get<Array<ParticipationModel>>(`/api/persons/${personId}/participations`);
@@ -23,6 +22,8 @@ export class ParticipationService {
   }
 
   listParticipants(activityType: ActivityType): Observable<Array<PersonIdentityModel>> {
-    return this.http.get<Array<PersonIdentityModel>>(`/api/activity-types/${activityType}/participants`);
+    return this.http.get<Array<PersonIdentityModel>>(
+      `/api/activity-types/${activityType}/participants`
+    );
   }
 }

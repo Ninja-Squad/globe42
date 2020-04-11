@@ -72,7 +72,6 @@ class TaskEditTester extends ComponentTester<TaskEditComponent> {
 }
 
 describe('TaskEditComponent', () => {
-
   let persons: Array<PersonIdentityModel>;
   let users: Array<UserModel>;
   let categories: Array<TaskCategoryModel>;
@@ -80,7 +79,7 @@ describe('TaskEditComponent', () => {
   beforeEach(() => {
     persons = [
       { id: 1, firstName: 'Cedric', lastName: 'Exbrayat', nickName: 'Hype', mediationCode: 'C1' },
-      { id: 2, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: null, mediationCode: null },
+      { id: 2, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: null, mediationCode: null }
     ];
 
     users = [
@@ -91,7 +90,7 @@ describe('TaskEditComponent', () => {
 
     categories = [
       { id: 6, name: 'Various' },
-      { id: 7, name: 'Meal' },
+      { id: 7, name: 'Meal' }
     ];
 
     jasmine.addMatchers(speculoosMatchers);
@@ -106,7 +105,9 @@ describe('TaskEditComponent', () => {
           categories,
           task
         },
-        paramMap: convertToParamMap(concernedPersonId ? {'concerned-person': concernedPersonId.toString()} : {})
+        paramMap: convertToParamMap(
+          concernedPersonId ? { 'concerned-person': concernedPersonId.toString() } : {}
+        )
       }
     } as any;
 
@@ -126,11 +127,10 @@ describe('TaskEditComponent', () => {
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
     // different object on purpose
-    TestBed.inject(CurrentUserService).userEvents.next({id: 3, login: 'admin', admin: false});
+    TestBed.inject(CurrentUserService).userEvents.next({ id: 3, login: 'admin', admin: false });
   }
 
   describe('creation mode', () => {
-
     beforeEach(() => {
       prepareModule(null, null);
     });
@@ -210,7 +210,7 @@ describe('TaskEditComponent', () => {
 
       const taskService = TestBed.inject(TaskService);
       const router = TestBed.inject(Router);
-      spyOn(taskService, 'create').and.returnValue(of({id: 42} as TaskModel));
+      spyOn(taskService, 'create').and.returnValue(of({ id: 42 } as TaskModel));
       spyOn(router, 'navigate');
 
       tester.save.click();
@@ -228,7 +228,6 @@ describe('TaskEditComponent', () => {
   });
 
   describe('creation mode with concerned person', () => {
-
     beforeEach(() => {
       prepareModule(null, 1);
     });
@@ -247,7 +246,7 @@ describe('TaskEditComponent', () => {
 
       const taskService = TestBed.inject(TaskService);
       const router = TestBed.inject(Router);
-      spyOn(taskService, 'create').and.returnValue(of({id: 42} as TaskModel));
+      spyOn(taskService, 'create').and.returnValue(of({ id: 42 } as TaskModel));
       spyOn(router, 'navigate');
 
       tester.save.click();
@@ -265,7 +264,6 @@ describe('TaskEditComponent', () => {
   });
 
   describe('edition mode', () => {
-
     beforeEach(() => {
       const task = {
         id: 42,
@@ -276,8 +274,8 @@ describe('TaskEditComponent', () => {
         },
         description: 'test description',
         dueDate: '2018-01-02',
-        concernedPerson: {id: 1} as PersonIdentityModel,
-        assignee: {id: 3} as UserModel,
+        concernedPerson: { id: 1 } as PersonIdentityModel,
+        assignee: { id: 3 } as UserModel
       } as TaskModel;
 
       prepareModule(task, null);
@@ -287,7 +285,7 @@ describe('TaskEditComponent', () => {
       const tester = new TaskEditTester();
       tester.detectChanges();
 
-      expect(tester.pageTitle).toHaveText('Modification de la tâche test title');
+      expect(tester.pageTitle).toContainText('Modification de la tâche test title');
       expect(tester.title).toHaveValue('test title');
       expect(tester.description).toHaveValue('test description');
       expect(tester.category).toHaveSelectedLabel('Meal');
@@ -324,4 +322,3 @@ describe('TaskEditComponent', () => {
     });
   });
 });
-

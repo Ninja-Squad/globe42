@@ -12,7 +12,7 @@ describe('PersonFileService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(PersonFileService);
@@ -38,7 +38,7 @@ describe('PersonFileService', () => {
     } as File;
 
     let actual: HttpEvent<any> = null;
-    service.create(1, file).subscribe(event => actual = event);
+    service.create(1, file).subscribe(event => (actual = event));
 
     const testRequest = http.expectOne({ url: '/api/persons/1/files', method: 'POST' });
     const body: FormData = testRequest.request.body;

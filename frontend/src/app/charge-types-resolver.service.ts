@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ChargeTypesResolverService implements Resolve<Array<ChargeTypeModel>> {
-
-  constructor(private chargeTypeService: ChargeTypeService) { }
+  constructor(private chargeTypeService: ChargeTypeService) {}
 
   resolve(): Observable<Array<ChargeTypeModel>> {
     return this.chargeTypeService.list();

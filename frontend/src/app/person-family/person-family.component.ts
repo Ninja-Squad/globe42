@@ -18,16 +18,17 @@ export interface Situation {
   styleUrls: ['./person-family.component.scss']
 })
 export class PersonFamilyComponent implements OnInit {
-
   person: PersonModel;
   family: FamilyModel;
   france: Situation;
   abroad: Situation;
 
-  constructor(private currentPersonService: CurrentPersonService,
-              private route: ActivatedRoute,
-              private familyService: FamilyService,
-              private confirmService: ConfirmService) { }
+  constructor(
+    private currentPersonService: CurrentPersonService,
+    private route: ActivatedRoute,
+    private familyService: FamilyService,
+    private confirmService: ConfirmService
+  ) {}
 
   ngOnInit() {
     this.person = this.currentPersonService.snapshot;
@@ -46,14 +47,15 @@ export class PersonFamilyComponent implements OnInit {
   }
 
   delete() {
-    this.confirmService.confirm({
-      message: 'Voulez-vous vraiment supprimer la situation familiale\u00a0?'
-    }).pipe(
-      switchMap(() => this.familyService.delete(this.person.id))
-    ).subscribe(() => {
-      this.family = null;
-      this.france = null;
-      this.abroad = null;
-    });
+    this.confirmService
+      .confirm({
+        message: 'Voulez-vous vraiment supprimer la situation familiale\u00a0?'
+      })
+      .pipe(switchMap(() => this.familyService.delete(this.person.id)))
+      .subscribe(() => {
+        this.family = null;
+        this.france = null;
+        this.abroad = null;
+      });
   }
 }

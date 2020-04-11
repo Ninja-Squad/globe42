@@ -18,7 +18,6 @@ import { CurrentPersonService } from '../current-person.service';
 import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 
 describe('PersonNetworkMembersComponent', () => {
-
   let component: PersonNetworkMembersComponent;
   let element: HTMLElement;
   let fixture: ComponentFixture<PersonNetworkMembersComponent>;
@@ -40,7 +39,7 @@ describe('PersonNetworkMembersComponent', () => {
     route = fakeRoute({
       snapshot: fakeSnapshot({
         data: {
-          members: [ member1, member2 ]
+          members: [member1, member2]
         }
       })
     });
@@ -53,9 +52,7 @@ describe('PersonNetworkMembersComponent', () => {
         PageTitleDirective,
         FullnamePipe
       ],
-      providers: [
-        { provide: ActivatedRoute, useValue: route },
-      ],
+      providers: [{ provide: ActivatedRoute, useValue: route }],
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
@@ -104,7 +101,9 @@ describe('PersonNetworkMembersComponent', () => {
     ];
     spyOn(networkMemberService, 'list').and.returnValue(of(members));
 
-    const secondDeleteButton = element.querySelectorAll('.member-item .delete')[1] as HTMLButtonElement;
+    const secondDeleteButton = element.querySelectorAll(
+      '.member-item .delete'
+    )[1] as HTMLButtonElement;
     secondDeleteButton.click();
 
     fixture.detectChanges();
@@ -122,7 +121,9 @@ describe('PersonNetworkMembersComponent', () => {
     spyOn(networkMemberService, 'delete');
     spyOn(networkMemberService, 'list');
 
-    const secondDeleteButton = element.querySelectorAll('.member-item .delete')[1] as HTMLButtonElement;
+    const secondDeleteButton = element.querySelectorAll(
+      '.member-item .delete'
+    )[1] as HTMLButtonElement;
     secondDeleteButton.click();
 
     fixture.detectChanges();

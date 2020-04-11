@@ -15,7 +15,6 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./person-notes.component.scss']
 })
 export class PersonNotesComponent implements OnChanges {
-
   notes: Array<NoteModel>;
 
   @Input()
@@ -28,14 +27,16 @@ export class PersonNotesComponent implements OnChanges {
 
   private _editedNote: NoteModel;
 
-  constructor(private personNoteService: PersonNoteService,
-              private currentUserService: CurrentUserService,
-              private confirmService: ConfirmService) { }
+  constructor(
+    private personNoteService: PersonNoteService,
+    private currentUserService: CurrentUserService,
+    private confirmService: ConfirmService
+  ) {}
 
   ngOnChanges(): void {
     // display the spinner after 300ms, unless the notes have loaded before. Note: delay() is untestable,
     // see https://github.com/angular/angular/issues/10127
-    window.setTimeout(() => this.spinnerDisplayed = !this.notes, 300);
+    window.setTimeout(() => (this.spinnerDisplayed = !this.notes), 300);
 
     this.personNoteService.list(this.person.id).subscribe(notes => {
       this.notes = notes;
@@ -70,27 +71,26 @@ export class PersonNotesComponent implements OnChanges {
   }
 
   saveNote(event: NoteEditionEvent) {
-    const action =
-      event.id
-        ? this.personNoteService.update(this.person.id, event.id, event.text)
-        : this.personNoteService.create(this.person.id, event.text);
+    const action = event.id
+      ? this.personNoteService.update(this.person.id, event.id, event.text)
+      : this.personNoteService.create(this.person.id, event.text);
     this.reloadAfterAction(action);
   }
 
   deleteNote(note: NoteModel) {
-    this.confirmService.confirm({
-      message: 'Voulez-vous vraiment supprimer définitivement cette note\u00a0?',
-      errorOnClose: true
-    }).subscribe(() => {
-      const action = this.personNoteService.delete(this.person.id, note.id);
-      this.reloadAfterAction(action);
-    });
+    this.confirmService
+      .confirm({
+        message: 'Voulez-vous vraiment supprimer définitivement cette note\u00a0?',
+        errorOnClose: true
+      })
+      .subscribe(() => {
+        const action = this.personNoteService.delete(this.person.id, note.id);
+        this.reloadAfterAction(action);
+      });
   }
 
   private reloadAfterAction(action: Observable<any>) {
-    action.pipe(
-      switchMap(() => this.personNoteService.list(this.person.id))
-    ).subscribe(notes => {
+    action.pipe(switchMap(() => this.personNoteService.list(this.person.id))).subscribe(notes => {
       this.editedNote = null;
       this.notes = notes;
     });

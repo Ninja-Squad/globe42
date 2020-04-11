@@ -10,7 +10,6 @@ import { SpentTimeEvent } from '../tasks/tasks.component';
   styleUrls: ['./spent-times.component.scss']
 })
 export class SpentTimesComponent implements OnInit {
-
   @Input()
   taskModel: TaskModel;
 
@@ -19,10 +18,10 @@ export class SpentTimesComponent implements OnInit {
 
   spentTimes: Array<SpentTimeModel>;
 
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService) {}
 
   ngOnInit() {
-    this.taskService.listSpentTimes(this.taskModel.id).subscribe(list => this.spentTimes = list);
+    this.taskService.listSpentTimes(this.taskModel.id).subscribe(list => (this.spentTimes = list));
   }
 
   delete(spentTime: SpentTimeModel, event: Event) {

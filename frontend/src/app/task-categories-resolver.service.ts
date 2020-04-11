@@ -6,11 +6,12 @@ import { TaskService } from './task.service';
 
 @Injectable({ providedIn: 'root' })
 export class TaskCategoriesResolverService implements Resolve<Array<TaskCategoryModel>> {
+  constructor(private taskService: TaskService) {}
 
-  constructor(private taskService: TaskService) { }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Array<TaskCategoryModel>> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<Array<TaskCategoryModel>> {
     return this.taskService.listCategories();
   }
-
 }

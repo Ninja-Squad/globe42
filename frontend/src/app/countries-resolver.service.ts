@@ -6,8 +6,7 @@ import { CountryModel } from './models/country.model';
 
 @Injectable({ providedIn: 'root' })
 export class CountriesResolverService implements Resolve<Array<CountryModel>> {
-
-  constructor(private countryService: CountryService) { }
+  constructor(private countryService: CountryService) {}
 
   resolve(): Observable<Array<CountryModel>> {
     return this.countryService.list();

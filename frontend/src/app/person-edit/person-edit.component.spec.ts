@@ -13,7 +13,10 @@ import {
   PersonModel
 } from '../models/person.model';
 import { displayCity, DisplayCityPipe } from '../display-city.pipe';
-import { DisplayMaritalStatusPipe, MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
+import {
+  DisplayMaritalStatusPipe,
+  MARITAL_STATUS_TRANSLATIONS
+} from '../display-marital-status.pipe';
 import { PersonCommand } from '../models/person.command';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -275,7 +278,14 @@ describe('PersonEditComponent', () => {
   let personService: PersonService;
 
   @NgModule({
-    imports: [CommonModule, HttpClientModule, ReactiveFormsModule, RouterTestingModule, GlobeNgbModule.forRoot(), ValdemortModule],
+    imports: [
+      CommonModule,
+      HttpClientModule,
+      ReactiveFormsModule,
+      RouterTestingModule,
+      GlobeNgbModule.forRoot(),
+      ValdemortModule
+    ],
     declarations: [
       PersonEditComponent,
       DisplayMaritalStatusPipe,
@@ -294,8 +304,7 @@ describe('PersonEditComponent', () => {
       PageTitleDirective
     ]
   })
-  class TestModule {
-  }
+  class TestModule {}
 
   describe('in edit mode', () => {
     const person: PersonModel = {
@@ -356,13 +365,13 @@ describe('PersonEditComponent', () => {
     };
 
     const activatedRoute = {
-      snapshot: {data: {person, persons, countries}}
+      snapshot: { data: { person, persons, countries } }
     };
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
@@ -375,7 +384,7 @@ describe('PersonEditComponent', () => {
       const tester = new PersonEditTester();
       tester.detectChanges();
 
-      expect(tester.title).toHaveText('Modification de l\'adhérent John Doe (john)');
+      expect(tester.title).toHaveText("Modification de l'adhérent John Doe (john)");
     });
 
     it('should edit and update an existing person', () => {
@@ -497,11 +506,12 @@ describe('PersonEditComponent', () => {
       expect(personUpdated.spouseId).toBeNull();
     });
 
-    it('should clear the city input on blur if not valid anymore', () =>  {
+    it('should clear the city input on blur if not valid anymore', () => {
       const tester = new PersonEditTester();
 
       // fake typeahead results
-      tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
+      tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) =>
+        text.pipe(map(() => []));
 
       tester.detectChanges();
 
@@ -519,11 +529,12 @@ describe('PersonEditComponent', () => {
       expect(tester.city.value).toBeFalsy();
     });
 
-    it('should clear the spouse input on blur if not valid anymore', () =>  {
+    it('should clear the spouse input on blur if not valid anymore', () => {
       const tester = new PersonEditTester();
 
       // fake typeahead results
-      tester.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) => text.pipe(map(() => []));
+      tester.componentInstance.spouseTypeahead.searcher = (text: Observable<string>) =>
+        text.pipe(map(() => []));
 
       tester.detectChanges();
 
@@ -552,7 +563,9 @@ describe('PersonEditComponent', () => {
       tester.detectChanges();
 
       expect(component.spouseIsInCouple).toBe(true);
-      expect(tester.nativeElement.textContent).toContain(`Jackie Doe est déjà en couple avec quelqu'un d'autre`);
+      expect(tester.nativeElement.textContent).toContain(
+        `Jackie Doe est déjà en couple avec quelqu'un d'autre`
+      );
     });
 
     it('should not warn if selecting a spouse not already in couple with someone else', () => {
@@ -567,7 +580,9 @@ describe('PersonEditComponent', () => {
       tester.detectChanges();
 
       expect(component.spouseIsInCouple).toBe(false);
-      expect(nativeElement.textContent).not.toContain(`Jackie Doe est déjà en couple avec quelqu'un d'autre`);
+      expect(nativeElement.textContent).not.toContain(
+        `Jackie Doe est déjà en couple avec quelqu'un d'autre`
+      );
     });
 
     it('should not warn if selecting the current spouse of the edited person', () => {
@@ -582,7 +597,9 @@ describe('PersonEditComponent', () => {
       tester.detectChanges();
 
       expect(component.spouseIsInCouple).toBe(false);
-      expect(nativeElement.textContent).not.toContain(`Jane Doe est déjà en couple avec quelqu'un d'autre`);
+      expect(nativeElement.textContent).not.toContain(
+        `Jane Doe est déjà en couple avec quelqu'un d'autre`
+      );
     });
 
     it('should set the fiscal number to null if invalid when setting the fiscal status to UNKNONW', () => {
@@ -623,7 +640,8 @@ describe('PersonEditComponent', () => {
 
       tester.residencePermitValidityEndDate.fillWith(tester.residencePermitValidityStartDate.value);
       tester.save.click();
-      const error = 'La date de fin de validité doit être ultérieure à la date de début de validité';
+      const error =
+        'La date de fin de validité doit être ultérieure à la date de début de validité';
       expect(tester.testElement).toContainText(error);
 
       tester.residencePermitValidityStartDate.fillWith('');
@@ -636,7 +654,8 @@ describe('PersonEditComponent', () => {
 
       tester.passportValidityEndDate.fillWith(tester.passportValidityStartDate.value);
       tester.save.click();
-      const error = 'La date de fin de validité doit être ultérieure à la date de début de validité';
+      const error =
+        'La date de fin de validité doit être ultérieure à la date de début de validité';
       expect(tester.testElement).toContainText(error);
 
       tester.passportStatus('NO_PASSPORT').check();
@@ -647,13 +666,13 @@ describe('PersonEditComponent', () => {
 
   describe('in create mode', () => {
     const activatedRoute = {
-      snapshot: {data: {person: null as PersonModel, persons, countries}}
+      snapshot: { data: { person: null as PersonModel, persons, countries } }
     };
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
-        providers: [{provide: ActivatedRoute, useValue: activatedRoute}]
+        providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       personService = TestBed.inject(PersonService);
@@ -669,14 +688,16 @@ describe('PersonEditComponent', () => {
     });
 
     it('should create and save a new person', fakeAsync(() => {
-      const spiedCreate = spyOn(personService, 'create').and.returnValue(of({id: 43} as PersonModel));
+      const spiedCreate = spyOn(personService, 'create').and.returnValue(
+        of({ id: 43 } as PersonModel)
+      );
       const router = TestBed.inject(Router);
       spyOn(router, 'navigate');
       const tester = new PersonEditTester();
 
       // fake typeahead results
-      tester.componentInstance.cityTypeahead.searcher =
-        (text: Observable<string>) => text.pipe(
+      tester.componentInstance.cityTypeahead.searcher = (text: Observable<string>) =>
+        text.pipe(
           filter(v => !!v),
           map(() => [cityModel])
         );

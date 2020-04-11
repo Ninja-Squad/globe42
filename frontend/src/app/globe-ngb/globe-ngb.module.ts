@@ -41,11 +41,7 @@ const NGB_MODULES = [
 
 @NgModule({
   imports: NGB_MODULES,
-  exports: [
-    ...NGB_MODULES,
-    NonEditableTypeaheadDirective,
-    DatepickerContainerComponent
-  ],
+  exports: [...NGB_MODULES, NonEditableTypeaheadDirective, DatepickerContainerComponent],
   declarations: [NonEditableTypeaheadDirective, DatepickerContainerComponent]
 })
 export class GlobeNgbModule {
@@ -60,4 +56,3 @@ export class GlobeNgbModule {
     };
   }
 }
-

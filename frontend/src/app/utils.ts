@@ -37,7 +37,9 @@ export class Comparator<T> {
 
   thenComparing(comparatorOrExtractor: Comparator<T> | ((t: T) => any)): Comparator<T> {
     const otherComparator: Comparator<T> =
-      (comparatorOrExtractor instanceof Comparator) ? comparatorOrExtractor : Comparator.comparing<T>(comparatorOrExtractor);
+      comparatorOrExtractor instanceof Comparator
+        ? comparatorOrExtractor
+        : Comparator.comparing<T>(comparatorOrExtractor);
     const fn = (a: T, b: T) => {
       const r = this.fn(a, b);
       if (r === 0) {
@@ -57,10 +59,15 @@ export class Comparator<T> {
   }
 }
 
-export function sortBy<T>(array: Array<T>, comparatorOrExtractor: Comparator<T> | ((t: T) => any)): Array<T> {
+export function sortBy<T>(
+  array: Array<T>,
+  comparatorOrExtractor: Comparator<T> | ((t: T) => any)
+): Array<T> {
   const result = array.slice();
   const comparator: Comparator<T> =
-    (comparatorOrExtractor instanceof Comparator) ? comparatorOrExtractor : Comparator.comparing(comparatorOrExtractor);
+    comparatorOrExtractor instanceof Comparator
+      ? comparatorOrExtractor
+      : Comparator.comparing(comparatorOrExtractor);
   comparator.sort(result);
   return result;
 }
@@ -74,7 +81,7 @@ export function sortBy<T>(array: Array<T>, comparatorOrExtractor: Comparator<T> 
  * This function is only used (currently) to generate functional error messages from code and parameters
  * coming from the backend.
  */
-export function interpolate(template: string, parameters: {[key: string]: any}): string {
+export function interpolate(template: string, parameters: { [key: string]: any }): string {
   // ugly loop because JS doesn't have a Regexp.quote() method, nor a replaceAll method. replace is supposed to replace
   // all, but it does not.
   let result = template;
@@ -83,8 +90,7 @@ export function interpolate(template: string, parameters: {[key: string]: any}):
     const replaceValue = `${parameters[key]}`;
     do {
       result = result.replace(searchValue, replaceValue);
-    }
-    while (result.indexOf(searchValue) >= 0);
+    } while (result.indexOf(searchValue) >= 0);
   });
   return result;
 }
@@ -104,7 +110,11 @@ export function dateToIso(date: NgbDateStruct): string {
 export function isoToDate(value: string): NgbDateStruct {
   if (value) {
     const dateParts = value.trim().split('-');
-    return {year: toInteger(dateParts[0]), month: toInteger(dateParts[1]), day: toInteger(dateParts[2])};
+    return {
+      year: toInteger(dateParts[0]),
+      month: toInteger(dateParts[1]),
+      day: toInteger(dateParts[2])
+    };
   }
   return null;
 }

@@ -9,13 +9,16 @@ import { CurrentUserService } from '../current-user/current-user.service';
 import { PageTitleDirective } from '../page-title.directive';
 
 describe('HomeComponent', () => {
+  const fakeUserService = {
+    userEvents: new BehaviorSubject<UserModel>(undefined)
+  } as CurrentUserService;
 
-  const fakeUserService = { userEvents: new BehaviorSubject<UserModel>(undefined) } as CurrentUserService;
-
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule],
-    declarations: [HomeComponent, PageTitleDirective]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule],
+      declarations: [HomeComponent, PageTitleDirective]
+    })
+  );
 
   it('display a link to go the login', () => {
     const fixture = TestBed.createComponent(HomeComponent);
@@ -73,6 +76,6 @@ describe('HomeComponent', () => {
     const element = fixture.nativeElement;
     const button = element.querySelector('a[href="/users"]');
     expect(button).not.toBeNull();
-    expect(button.textContent).toContain('Gestion des utilisateurs de l\'application');
+    expect(button.textContent).toContain("Gestion des utilisateurs de l'application");
   });
 });

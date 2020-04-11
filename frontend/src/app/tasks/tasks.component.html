@@ -7,43 +7,100 @@
           &ngsp;
           <small class="text-muted">#{{ task.model.category.name }}</small>
         </div>
-        <small *ngIf="task.model.status === 'TODO' && task.model.dueDate" [class]="task.dueDateClass">{{ task.relativeDueDate }}</small>
-        <small *ngIf="task.model.status === 'DONE'" class="text-success"><span class="fa fa-check"></span> Faite</small>
-        <small *ngIf="task.model.status === 'CANCELLED'" class="text-danger"><span class="fa fa-times"></span> Annulée</small>
+        <small
+          *ngIf="task.model.status === 'TODO' && task.model.dueDate"
+          [class]="task.dueDateClass"
+          >{{ task.relativeDueDate }}</small
+        >
+        <small *ngIf="task.model.status === 'DONE'" class="text-success"
+          ><span class="fa fa-check"></span> Faite</small
+        >
+        <small *ngIf="task.model.status === 'CANCELLED'" class="text-danger"
+          ><span class="fa fa-times"></span> Annulée</small
+        >
       </div>
       <div *ngIf="task.opened" class="task-description">{{ task.model.description }}</div>
     </a>
     <div class="d-flex w-100 justify-content-between align-items-start">
       <div class="small text-muted">
         <div>
-          Créée par {{ task.model.creator.login }}.
-          &ngsp;
+          Créée par {{ task.model.creator.login }}. &ngsp;
           <span *ngIf="task.model.assignee">Assignée à {{ task.model.assignee.login }}.</span>
           &ngsp;
-          <span *ngIf="task.model.concernedPerson">Concerne <a [routerLink]="['/persons', task.model.concernedPerson.id]">{{ task.model.concernedPerson | fullname }}</a>.</span>
+          <span *ngIf="task.model.concernedPerson"
+            >Concerne
+            <a [routerLink]="['/persons', task.model.concernedPerson.id]">{{
+              task.model.concernedPerson | fullname
+            }}</a
+            >.</span
+          >
         </div>
         <div>
-          Temps passé&nbsp;:
+          Temps passé&nbsp;: &ngsp;
+          <span *ngIf="task.model.totalSpentTimeInMinutes === 0">{{
+            task.model.totalSpentTimeInMinutes | duration
+          }}</span>
           &ngsp;
-          <span *ngIf="task.model.totalSpentTimeInMinutes === 0">{{ task.model.totalSpentTimeInMinutes | duration }}</span>
-          &ngsp;
-          <a href="#" class="spent-times-link" (click)="toggleSpentTimes(task, $event)" *ngIf="task.model.totalSpentTimeInMinutes > 0">{{ task.model.totalSpentTimeInMinutes | duration }}</a>
-          &ndash;
-          &ngsp;
-          <a href="#" class="add-spent-time-link" (click)="toggleAddSpentTime(task, $event)">Ajouter</a>
-          <gl-spent-times *ngIf="task.spentTimesOpened && task.model.totalSpentTimeInMinutes > 0" [taskModel]="task.model" (spentTimeDeleted)="onSpentTimeDeleted($event)"></gl-spent-times>
-          <gl-spent-time-add class="d-block mt-2" *ngIf="task.addSpentTimeOpened" [taskModel]="task.model" (spentTimeAdded)="onSpentTimeAdded($event)" (cancelled)="toggleAddSpentTime(task)"></gl-spent-time-add>
+          <a
+            href="#"
+            class="spent-times-link"
+            (click)="toggleSpentTimes(task, $event)"
+            *ngIf="task.model.totalSpentTimeInMinutes > 0"
+            >{{ task.model.totalSpentTimeInMinutes | duration }}</a
+          >
+          &ndash; &ngsp;
+          <a href="#" class="add-spent-time-link" (click)="toggleAddSpentTime(task, $event)"
+            >Ajouter</a
+          >
+          <gl-spent-times
+            *ngIf="task.spentTimesOpened && task.model.totalSpentTimeInMinutes > 0"
+            [taskModel]="task.model"
+            (spentTimeDeleted)="onSpentTimeDeleted($event)"
+          ></gl-spent-times>
+          <gl-spent-time-add
+            class="d-block mt-2"
+            *ngIf="task.addSpentTimeOpened"
+            [taskModel]="task.model"
+            (spentTimeAdded)="onSpentTimeAdded($event)"
+            (cancelled)="toggleAddSpentTime(task)"
+          ></gl-spent-time-add>
         </div>
       </div>
       <div class="task-buttons" *ngIf="task.model.status === 'TODO'">
-        <button (click)="edit(task, $event)" class="btn btn-secondary btn-sm edit-button"><span class="fa fa-edit"></span></button>
-        <button (click)="assign(task, $event)" class="btn btn-outline-primary btn-sm assign-button" *ngIf="!task.model.assignee"><span class="fa fa-hand-o-right"></span></button>
-        <button (click)="unassign(task, $event)" class="btn btn-outline-secondary btn-sm unassign-button" *ngIf="task.model.assignee"><span class="fa fa-hand-paper-o"></span></button>
-        <button (click)="cancel(task, $event)" class="btn btn-outline-danger btn-sm cancel-button"><span class="fa fa-trash"></span></button>
-        <button (click)="markAsDone(task, $event)" class="btn btn-outline-success btn-sm done-button"><span class="fa fa-check"></span></button>
+        <button (click)="edit(task, $event)" class="btn btn-secondary btn-sm edit-button">
+          <span class="fa fa-edit"></span>
+        </button>
+        <button
+          (click)="assign(task, $event)"
+          class="btn btn-outline-primary btn-sm assign-button"
+          *ngIf="!task.model.assignee"
+        >
+          <span class="fa fa-hand-o-right"></span>
+        </button>
+        <button
+          (click)="unassign(task, $event)"
+          class="btn btn-outline-secondary btn-sm unassign-button"
+          *ngIf="task.model.assignee"
+        >
+          <span class="fa fa-hand-paper-o"></span>
+        </button>
+        <button (click)="cancel(task, $event)" class="btn btn-outline-danger btn-sm cancel-button">
+          <span class="fa fa-trash"></span>
+        </button>
+        <button
+          (click)="markAsDone(task, $event)"
+          class="btn btn-outline-success btn-sm done-button"
+        >
+          <span class="fa fa-check"></span>
+        </button>
       </div>
       <div class="task-buttons" *ngIf="task.model.status !== 'TODO'">
-        <button (click)="resurrect(task, $event)" class="btn btn-outline-info btn-sm resurrect-button"><span class="fa fa-undo"></span></button>
+        <button
+          (click)="resurrect(task, $event)"
+          class="btn btn-outline-info btn-sm resurrect-button"
+        >
+          <span class="fa fa-undo"></span>
+        </button>
       </div>
     </div>
   </div>

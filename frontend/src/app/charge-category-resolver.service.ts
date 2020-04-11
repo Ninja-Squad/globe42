@@ -6,12 +6,13 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ChargeCategoryResolverService implements Resolve<ChargeCategoryModel> {
+  constructor(private chargeCategoryService: ChargeCategoryService) {}
 
-  constructor(private chargeCategoryService: ChargeCategoryService) { }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ChargeCategoryModel> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<ChargeCategoryModel> {
     const typeId = +route.paramMap.get('id');
     return this.chargeCategoryService.get(typeId);
   }
-
 }

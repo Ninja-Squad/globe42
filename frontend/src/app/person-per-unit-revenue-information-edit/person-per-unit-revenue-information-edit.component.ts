@@ -10,18 +10,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./person-per-unit-revenue-information-edit.component.scss']
 })
 export class PersonPerUnitRevenueInformationEditComponent implements OnInit {
-
   person: PersonModel;
   infoGroup: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private perUnitRevenueInformationService: PerUnitRevenueInformationService,
-              private router: Router,
-              fb: FormBuilder) {
+  constructor(
+    private route: ActivatedRoute,
+    private perUnitRevenueInformationService: PerUnitRevenueInformationService,
+    private router: Router,
+    fb: FormBuilder
+  ) {
     this.infoGroup = fb.group({
       adultLikeCount: [1, [Validators.required, Validators.min(1)]],
       childCount: [0, [Validators.required, Validators.min(0)]],
-      monoParental: [false],
+      monoParental: [false]
     });
   }
 
@@ -35,10 +36,8 @@ export class PersonPerUnitRevenueInformationEditComponent implements OnInit {
 
   save() {
     const info = this.infoGroup.value;
-    this.perUnitRevenueInformationService.update(this.person.id, info)
-      .subscribe(() => {
-        this.router.navigate(['/persons', this.person.id, 'resources']);
-      });
+    this.perUnitRevenueInformationService.update(this.person.id, info).subscribe(() => {
+      this.router.navigate(['/persons', this.person.id, 'resources']);
+    });
   }
-
 }

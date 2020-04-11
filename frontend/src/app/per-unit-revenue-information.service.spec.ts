@@ -31,9 +31,11 @@ describe('PerUnitRevenueInformationService', () => {
 
   it('should get when no info', () => {
     let actualBody: PerUnitRevenueInformationModel;
-    service.get(42).subscribe(result => actualBody = result);
+    service.get(42).subscribe(result => (actualBody = result));
 
-    TestBed.inject(HttpTestingController).expectOne({url, method: 'GET'}).flush(null, {status: 204, statusText: 'No content'});
+    TestBed.inject(HttpTestingController)
+      .expectOne({ url, method: 'GET' })
+      .flush(null, { status: 204, statusText: 'No content' });
 
     expect(actualBody).toBeNull();
   });

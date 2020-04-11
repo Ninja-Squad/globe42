@@ -5,7 +5,6 @@ import { CountryModel } from '../models/country.model';
  * Class used to help implementing a country typeahead
  */
 export class CountryTypeahead extends ArrayBasedTypeahead<CountryModel> {
-
   constructor(countries: Array<CountryModel>) {
     super(countries);
   }

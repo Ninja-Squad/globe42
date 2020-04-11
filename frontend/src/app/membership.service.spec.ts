@@ -7,15 +7,12 @@ import { MembershipCommand } from './models/membership.command';
 import { MembershipModel } from './models/membership.model';
 
 describe('MembershipService', () => {
-
   let service: MembershipService;
   let httpTester: HttpTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(MembershipService);
@@ -27,7 +24,11 @@ describe('MembershipService', () => {
   });
 
   it('should get current membership', () => {
-    httpTester.testGet('/api/persons/42/memberships/current', {} as MembershipModel, service.getCurrent(42));
+    httpTester.testGet(
+      '/api/persons/42/memberships/current',
+      {} as MembershipModel,
+      service.getCurrent(42)
+    );
   });
 
   it('should create current membership', () => {
@@ -37,7 +38,12 @@ describe('MembershipService', () => {
       paymentDate: '2018-01-31',
       cardNumber: '002'
     };
-    httpTester.testPost('/api/persons/42/memberships', command, {} as MembershipModel, service.createCurrent(42, command));
+    httpTester.testPost(
+      '/api/persons/42/memberships',
+      command,
+      {} as MembershipModel,
+      service.createCurrent(42, command)
+    );
   });
 
   it('should delete current membership', () => {

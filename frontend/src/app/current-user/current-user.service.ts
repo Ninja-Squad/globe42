@@ -18,9 +18,9 @@ export class CurrentUserService {
   }
 
   authenticate(credentials: CredentialsCommand): Observable<UserModel> {
-    return this.http.post<UserModel>('/api/authentication', credentials).pipe(
-      tap(user => this.storeLoggedInUser(user))
-    );
+    return this.http
+      .post<UserModel>('/api/authentication', credentials)
+      .pipe(tap(user => this.storeLoggedInUser(user)));
   }
 
   storeLoggedInUser(user: UserModel) {
@@ -58,11 +58,14 @@ export class CurrentUserService {
   }
 
   checkPassword(password: string): Observable<void> {
-    return this.http.post<void>('/api/authentication', {login: this.userEvents.getValue().login, password});
+    return this.http.post<void>('/api/authentication', {
+      login: this.userEvents.getValue().login,
+      password
+    });
   }
 
   changePassword(newPassword: string): Observable<void> {
-    return this.http.put<void>('/api/users/me/passwords', {newPassword});
+    return this.http.put<void>('/api/users/me/passwords', { newPassword });
   }
 
   getProfile(): Observable<ProfileModel> {

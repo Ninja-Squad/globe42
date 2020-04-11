@@ -11,16 +11,18 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./persons.component.scss']
 })
 export class PersonsComponent implements OnInit {
-
   persons: Array<PersonIdentityModel> = [];
   filterCtrl = new FormControl('');
 
   private allPersons: Array<PersonIdentityModel> = [];
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.allPersons = sortBy<PersonIdentityModel>(this.route.snapshot.data.persons, displayFullname);
+    this.allPersons = sortBy<PersonIdentityModel>(
+      this.route.snapshot.data.persons,
+      displayFullname
+    );
     this.filterCtrl.valueChanges.subscribe(text => this.filter(text));
     this.filter('');
   }
@@ -32,11 +34,13 @@ export class PersonsComponent implements OnInit {
       return;
     }
 
-    this.persons = this.allPersons.filter(p =>
-      this.includes(p.firstName, value) ||
-      this.includes(p.lastName, value) ||
-      this.includes(p.nickName, value) ||
-      this.includes(p.mediationCode, value));
+    this.persons = this.allPersons.filter(
+      p =>
+        this.includes(p.firstName, value) ||
+        this.includes(p.lastName, value) ||
+        this.includes(p.nickName, value) ||
+        this.includes(p.mediationCode, value)
+    );
   }
 
   private includes(s: string, searchString: string): boolean {

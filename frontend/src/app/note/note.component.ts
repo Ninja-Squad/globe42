@@ -24,7 +24,6 @@ export interface NoteEditionEvent {
   styleUrls: ['./note.component.scss']
 })
 export class NoteComponent implements AfterViewInit {
-
   @Input()
   note: NoteModel;
 
@@ -51,7 +50,7 @@ export class NoteComponent implements AfterViewInit {
 
   private _edited = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   get edited() {
     return this._edited;
@@ -60,7 +59,7 @@ export class NoteComponent implements AfterViewInit {
   @Input()
   set edited(value) {
     if (value) {
-      this.noteForm = this.fb.group({ text: [ this.note.text, Validators.required ] });
+      this.noteForm = this.fb.group({ text: [this.note.text, Validators.required] });
       this.rowCount = this.note.text.split('\n').length;
       if (this.rowCount < 2) {
         this.rowCount = 2;
@@ -80,18 +79,16 @@ export class NoteComponent implements AfterViewInit {
   }
 
   cancel() {
-    this.editionCancelled.emit({id: this.note.id, text: this.noteForm.value.text});
+    this.editionCancelled.emit({ id: this.note.id, text: this.noteForm.value.text });
   }
 
   save() {
-    this.editionDone.emit({id: this.note.id, text: this.noteForm.value.text});
+    this.editionDone.emit({ id: this.note.id, text: this.noteForm.value.text });
   }
 
   ngAfterViewInit() {
-    concat(of(this.textAreaQuery), this.textAreaQuery.changes).pipe(
-      filter(() => this.textAreaQuery.length === 1)
-    ).subscribe(
-      () => this.textAreaQuery.first.nativeElement.focus()
-    );
+    concat(of(this.textAreaQuery), this.textAreaQuery.changes)
+      .pipe(filter(() => this.textAreaQuery.length === 1))
+      .subscribe(() => this.textAreaQuery.first.nativeElement.focus());
   }
 }

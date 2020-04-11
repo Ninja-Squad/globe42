@@ -17,7 +17,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./task-edit.component.scss']
 })
 export class TaskEditComponent implements OnInit {
-
   editedTask: TaskModel;
   taskForm: FormGroup;
   users: Array<UserModel>;
@@ -26,11 +25,13 @@ export class TaskEditComponent implements OnInit {
   cancelOrRedirectDestination = ['/tasks'];
   personTypeahead: PersonTypeahead;
 
-  constructor(private route: ActivatedRoute,
-              private taskService: TaskService,
-              private router: Router,
-              private currentUserService: CurrentUserService,
-              private fb: FormBuilder) { }
+  constructor(
+    private route: ActivatedRoute,
+    private taskService: TaskService,
+    private router: Router,
+    private currentUserService: CurrentUserService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.editedTask = this.route.snapshot.data.task;
@@ -45,7 +46,10 @@ export class TaskEditComponent implements OnInit {
 
     let concernedPerson: PersonIdentityModel = null;
     if (this.editedTask?.concernedPerson) {
-      concernedPerson = this.findWithId(this.personTypeahead.elements, this.editedTask.concernedPerson.id);
+      concernedPerson = this.findWithId(
+        this.personTypeahead.elements,
+        this.editedTask.concernedPerson.id
+      );
     } else if (concernedPersonId) {
       concernedPerson = this.findWithId(this.personTypeahead.elements, +concernedPersonId);
     }
@@ -53,10 +57,15 @@ export class TaskEditComponent implements OnInit {
     this.taskForm = this.fb.group({
       title: [this.editedTask ? this.editedTask.title : '', Validators.required],
       description: this.editedTask ? this.editedTask.description : '',
-      category: [this.editedTask ? this.findWithId(this.categories, this.editedTask.category.id) : null, Validators.required],
+      category: [
+        this.editedTask ? this.findWithId(this.categories, this.editedTask.category.id) : null,
+        Validators.required
+      ],
       dueDate: this.editedTask ? this.editedTask.dueDate : null,
       concernedPerson,
-      assignee: this.editedTask?.assignee ? this.findWithId(this.users, this.editedTask.assignee.id) : null
+      assignee: this.editedTask?.assignee
+        ? this.findWithId(this.users, this.editedTask.assignee.id)
+        : null
     });
   }
 
@@ -76,10 +85,12 @@ export class TaskEditComponent implements OnInit {
     };
 
     if (this.editedTask) {
-      this.taskService.update(this.editedTask.id, command)
+      this.taskService
+        .update(this.editedTask.id, command)
         .subscribe(() => this.router.navigate(this.cancelOrRedirectDestination));
     } else {
-      this.taskService.create(command)
+      this.taskService
+        .create(command)
         .subscribe(() => this.router.navigate(this.cancelOrRedirectDestination));
     }
   }
@@ -93,7 +104,10 @@ export class TaskEditComponent implements OnInit {
 
   private sortUsers(users: Array<UserModel>): Array<UserModel> {
     const me = users.filter(u => u.id === this.currentUserService.userEvents.getValue().id)[0];
-    const result = sortBy(users.filter(u => u !== me), u => u.login);
+    const result = sortBy(
+      users.filter(u => u !== me),
+      u => u.login
+    );
     result.unshift(me);
     return result;
   }

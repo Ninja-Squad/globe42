@@ -44,12 +44,17 @@ describe('CurrentUserService', () => {
   afterEach(() => Object.defineProperty(window, 'localStorage', { value: originalLocalStorage }));
 
   it('should authenticate a user', () => {
-    const credentials = {login: 'cedric', password: 'hello'};
+    const credentials = { login: 'cedric', password: 'hello' };
 
     // spy on the store method
     spyOn(service, 'storeLoggedInUser');
 
-    httpTester.testPost('/api/authentication', credentials, globeUser, service.authenticate(credentials));
+    httpTester.testPost(
+      '/api/authentication',
+      credentials,
+      globeUser,
+      service.authenticate(credentials)
+    );
 
     expect(service.storeLoggedInUser).toHaveBeenCalledWith(globeUser);
   });
@@ -103,27 +108,32 @@ describe('CurrentUserService', () => {
   });
 
   it('should check the current user password', () => {
-    service.userEvents.next({login: 'jb'} as UserModel);
+    service.userEvents.next({ login: 'jb' } as UserModel);
 
     httpTester.testPost(
       '/api/authentication',
-      {login: 'jb', password: 'secret'},
+      { login: 'jb', password: 'secret' },
       null,
-      service.checkPassword('secret'));
+      service.checkPassword('secret')
+    );
   });
 
   it('should change the current user password', () => {
-    httpTester.testPut('/api/users/me/passwords', { newPassword: 'secret' }, service.changePassword('secret'));
+    httpTester.testPut(
+      '/api/users/me/passwords',
+      { newPassword: 'secret' },
+      service.changePassword('secret')
+    );
   });
 
   it('should check the current user password with failure', () => {
-    service.userEvents.next({login: 'jb'} as UserModel);
+    service.userEvents.next({ login: 'jb' } as UserModel);
 
     let ok = false;
-    service.checkPassword('secret').subscribe({ error: () => ok = true });
+    service.checkPassword('secret').subscribe({ error: () => (ok = true) });
 
     const testRequest = http.expectOne({ url: '/api/authentication', method: 'POST' });
-    expect(testRequest.request.body).toEqual({login: 'jb', password: 'secret'});
+    expect(testRequest.request.body).toEqual({ login: 'jb', password: 'secret' });
     testRequest.flush(null, { status: 401, statusText: 'Unauthorized' });
 
     expect(ok).toBe(true);

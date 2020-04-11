@@ -14,16 +14,17 @@ import { CurrentPersonService } from '../current-person.service';
   styleUrls: ['./person.component.scss']
 })
 export class PersonComponent implements OnInit {
-
   person: PersonModel;
   mapsUrl: string;
 
   noteEdited = false;
 
-  constructor(private confirmService: ConfirmService,
-              private personService: PersonService,
-              private currentPersonService: CurrentPersonService,
-              private router: Router) { }
+  constructor(
+    private confirmService: ConfirmService,
+    private personService: PersonService,
+    private currentPersonService: CurrentPersonService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.currentPersonService.personChanges$.subscribe(person => {
@@ -33,17 +34,21 @@ export class PersonComponent implements OnInit {
   }
 
   delete() {
-    this.confirmService.confirm(
-      { message: `Voulez-vous vraiment supprimer ${displayFullname(this.person)}\u00a0?`}).pipe(
-      switchMap(() => this.personService.delete(this.person.id))
-    ).subscribe(() => this.router.navigate(['/persons']));
+    this.confirmService
+      .confirm({ message: `Voulez-vous vraiment supprimer ${displayFullname(this.person)}\u00a0?` })
+      .pipe(switchMap(() => this.personService.delete(this.person.id)))
+      .subscribe(() => this.router.navigate(['/persons']));
   }
 
   resurrect() {
-    this.confirmService.confirm(
-      { message: `Voulez-vous vraiment annuler la suppression de ${displayFullname(this.person)}\u00a0?`}).pipe(
-      switchMap(() => this.personService.resurrect(this.person.id))
-    ).subscribe(() => this.router.navigate(['/persons']));
+    this.confirmService
+      .confirm({
+        message: `Voulez-vous vraiment annuler la suppression de ${displayFullname(
+          this.person
+        )}\u00a0?`
+      })
+      .pipe(switchMap(() => this.personService.resurrect(this.person.id)))
+      .subscribe(() => this.router.navigate(['/persons']));
   }
 
   private createMapsUrl() {

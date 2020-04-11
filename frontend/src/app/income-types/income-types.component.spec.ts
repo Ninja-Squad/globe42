@@ -12,11 +12,12 @@ describe('IncomeTypesComponent', () => {
     snapshot: { data: { incomeTypes } }
   };
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [IncomeTypesComponent, PageTitleDirective],
-    providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [IncomeTypesComponent, PageTitleDirective],
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+    })));
 
   it('should list types', () => {
     const fixture = TestBed.createComponent(IncomeTypesComponent);

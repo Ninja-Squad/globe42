@@ -13,7 +13,12 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import Spy = jasmine.Spy;
 
 @Component({
-  template: `<gl-spent-times [taskModel]="taskModel" (spentTimeDeleted)="storeDeletedSpentTime($event)"></gl-spent-times>`
+  template: `
+    <gl-spent-times
+      [taskModel]="taskModel"
+      (spentTimeDeleted)="storeDeletedSpentTime($event)"
+    ></gl-spent-times>
+  `
 })
 class TestComponent {
   taskModel = {
@@ -59,10 +64,10 @@ describe('SpentTimesComponent', () => {
       const component = new SpentTimesComponent(taskService);
       component.spentTimes = [
         {
-          id: 1,
+          id: 1
         },
         {
-          id: 2,
+          id: 2
         }
       ] as Array<SpentTimeModel>;
 
@@ -96,20 +101,22 @@ describe('SpentTimesComponent', () => {
       });
 
       const taskService = TestBed.inject(TaskService);
-      spyOn(taskService, 'listSpentTimes').and.returnValue(of([
-        {
-          id: 2,
-          minutes: 12,
-          creator: { login: 'Ced' },
-          creationInstant: '2018-11-03T14:13:00.000Z'
-        } as SpentTimeModel,
-        {
-          id: 1,
-          minutes: 100,
-          creator: { login: 'JB' },
-          creationInstant: '2018-11-03T12:13:00.000Z'
-        } as SpentTimeModel
-      ]));
+      spyOn(taskService, 'listSpentTimes').and.returnValue(
+        of([
+          {
+            id: 2,
+            minutes: 12,
+            creator: { login: 'Ced' },
+            creationInstant: '2018-11-03T14:13:00.000Z'
+          } as SpentTimeModel,
+          {
+            id: 1,
+            minutes: 100,
+            creator: { login: 'JB' },
+            creationInstant: '2018-11-03T12:13:00.000Z'
+          } as SpentTimeModel
+        ])
+      );
 
       spyOn(taskService, 'deleteSpentTime').and.returnValue(of(null));
 

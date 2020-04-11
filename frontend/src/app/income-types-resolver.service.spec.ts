@@ -6,9 +6,11 @@ import { IncomeSourceTypeModel } from './models/income-source-type.model';
 import { IncomeSourceTypeService } from './income-source-type.service';
 
 describe('IncomeTypesResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve a type', () => {
     const incomeSourceTypeService = TestBed.inject(IncomeSourceTypeService);

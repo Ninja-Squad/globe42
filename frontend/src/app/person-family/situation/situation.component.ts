@@ -10,7 +10,6 @@ import { DateTime } from 'luxon';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SituationComponent {
-
   @Input()
   situation: Situation;
 

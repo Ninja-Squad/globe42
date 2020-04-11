@@ -11,10 +11,14 @@ describe('PersonsComponent', () => {
 
   beforeEach(async(() => {
     activatedRoute = {
-      snapshot: { data: { persons: [
-        { firstName: 'John', lastName: 'Doe', nickName: 'JD', mediationCode: 'D1' },
-        { firstName: 'Abe', lastName: 'Dean', nickName: 'AD', mediationCode: 'D2' },
-      ] } }
+      snapshot: {
+        data: {
+          persons: [
+            { firstName: 'John', lastName: 'Doe', nickName: 'JD', mediationCode: 'D1' },
+            { firstName: 'Abe', lastName: 'Dean', nickName: 'AD', mediationCode: 'D2' }
+          ]
+        }
+      }
     };
 
     TestBed.configureTestingModule({

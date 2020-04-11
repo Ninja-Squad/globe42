@@ -14,14 +14,12 @@ describe('PersonNoteEditionGuard', () => {
     confirmService = jasmine.createSpyObj('confirmService', ['confirm']);
 
     TestBed.configureTestingModule({
-      providers: [
-        { provide: ConfirmService, useValue: confirmService }
-      ]
+      providers: [{ provide: ConfirmService, useValue: confirmService }]
     });
 
     guard = TestBed.inject(PersonNoteEditionGuard);
     component = {
-      noteEdited : false
+      noteEdited: false
     } as PersonComponent;
   });
 
@@ -36,7 +34,7 @@ describe('PersonNoteEditionGuard', () => {
     (confirmService.confirm as jasmine.Spy).and.returnValue(of(undefined));
 
     let result: boolean = null;
-    (guard.canDeactivate(component) as Observable<boolean>).subscribe(r => result = r);
+    (guard.canDeactivate(component) as Observable<boolean>).subscribe(r => (result = r));
 
     expect(result).toBe(true);
     expect(confirmService.confirm).toHaveBeenCalled();
@@ -47,7 +45,7 @@ describe('PersonNoteEditionGuard', () => {
     (confirmService.confirm as jasmine.Spy).and.returnValue(throwError(undefined));
 
     let result: boolean = null;
-    (guard.canDeactivate(component) as Observable<boolean>).subscribe(r => result = r);
+    (guard.canDeactivate(component) as Observable<boolean>).subscribe(r => (result = r));
 
     expect(result).toBe(false);
     expect(confirmService.confirm).toHaveBeenCalledWith({

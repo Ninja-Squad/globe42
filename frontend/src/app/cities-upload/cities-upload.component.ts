@@ -13,7 +13,6 @@ const ESTIMATED_PROCESSING_TIME_IN_MILLIS = 20000;
   styleUrls: ['./cities-upload.component.scss']
 })
 export class CitiesUploadComponent {
-
   status: 'pending' | 'uploading' | 'processing' | 'done' | 'failed' = 'pending';
 
   /**
@@ -21,7 +20,7 @@ export class CitiesUploadComponent {
    */
   progress: number;
 
-  constructor(private cityService: SearchCityService) { }
+  constructor(private cityService: SearchCityService) {}
 
   upload(fileChangeEvent: Event) {
     const file = (fileChangeEvent.target as HTMLInputElement).files[0];
@@ -31,8 +30,8 @@ export class CitiesUploadComponent {
       this.status = 'uploading';
       const startTime = this.now();
 
-      this.cityService.uploadCities((fileLoadedEvent.target as any).result)
-        .subscribe(progressEvent => {
+      this.cityService.uploadCities((fileLoadedEvent.target as any).result).subscribe(
+        progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
             const elapsedTime = this.now() - startTime;
             const estimatedUploadTime = (progressEvent.total / progressEvent.loaded) * elapsedTime;
@@ -47,18 +46,23 @@ export class CitiesUploadComponent {
               // generate fake progress every half-second but
               // - stop before the end, in case the processing time is longer then estimated
               // - stop if we received the response, in case the processing time is shorted than estimated
-              interval(500).pipe(
-                takeWhile(() => (this.now() - startTime) < estimatedTotalTime && this.progress < 1)
-              ).subscribe(() => this.progress = (this.now() - startTime) / estimatedTotalTime);
+              interval(500)
+                .pipe(
+                  takeWhile(() => this.now() - startTime < estimatedTotalTime && this.progress < 1)
+                )
+                .subscribe(() => (this.progress = (this.now() - startTime) / estimatedTotalTime));
             }
           }
-        }, () => {
+        },
+        () => {
           this.progress = 1;
           this.status = 'failed';
-        }, () => {
+        },
+        () => {
           this.progress = 1;
           this.status = 'done';
-        });
+        }
+      );
     };
 
     reader.readAsText(file, 'UTF8');

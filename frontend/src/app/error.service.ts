@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { FunctionalErrorModel, TechnicalErrorModel } from './models/error.model';
 import { tap } from 'rxjs/operators';
@@ -26,7 +32,6 @@ import { tap } from 'rxjs/operators';
  */
 @Injectable({ providedIn: 'root' })
 export class ErrorService implements HttpInterceptor {
-
   /**
    * Observable that the error component subscribes to in order to receive functional errors emitted by the
    * functionalErrorHandler callback functions returned by this service, and used by the components.
@@ -38,12 +43,10 @@ export class ErrorService implements HttpInterceptor {
    */
   technicalErrors = new Subject<TechnicalErrorModel>();
 
-  constructor() { }
+  constructor() {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).pipe(
-      tap({ error: error => this.handleError(error) })
-    );
+    return next.handle(req).pipe(tap({ error: error => this.handleError(error) }));
   }
 
   /**
@@ -71,10 +74,10 @@ export class ErrorService implements HttpInterceptor {
 
         if (body?.message) {
           // the error is a spring boot error
-          this.technicalErrors.next({status: error.status, message: body.message});
+          this.technicalErrors.next({ status: error.status, message: body.message });
         } else {
           // the error is a an HTTP response, but which doesn't contain a spring boot payload
-          this.technicalErrors.next({status: error.status, message: error.message});
+          this.technicalErrors.next({ status: error.status, message: error.message });
         }
       }
     }

@@ -9,11 +9,12 @@ import { TestBed } from '@angular/core/testing';
       <div class="form-group row">
         <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
         <div class="col-sm-10">
-          <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
+          <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName" />
         </div>
       </div>
       <button id="save">Save</button>
-    </form>`
+    </form>
+  `
 })
 class FormComponent {
   personForm = new FormGroup({
@@ -23,11 +24,12 @@ class FormComponent {
 }
 
 describe('FormControlValidationDirective', () => {
-
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [ReactiveFormsModule],
-    declarations: [FormComponent, FormControlValidationDirective]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule],
+      declarations: [FormComponent, FormControlValidationDirective]
+    })
+  );
 
   it('should add the is-invalid CSS class when touched', () => {
     const fixture = TestBed.createComponent(FormComponent);

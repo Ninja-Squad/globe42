@@ -12,8 +12,7 @@ function url(personId: number) {
   providedIn: 'root'
 })
 export class FamilyService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   get(personId: number): Observable<FamilyModel | null> {
     return this.http.get<FamilyModel>(url(personId));

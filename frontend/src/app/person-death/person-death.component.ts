@@ -13,15 +13,16 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./person-death.component.scss']
 })
 export class PersonDeathComponent {
-
   person: PersonModel;
   form: FormGroup;
 
-  constructor(private route: ActivatedRoute,
-              private currentPersonService: CurrentPersonService,
-              fb: FormBuilder,
-              private personService: PersonService,
-              private router: Router) {
+  constructor(
+    private route: ActivatedRoute,
+    private currentPersonService: CurrentPersonService,
+    fb: FormBuilder,
+    private personService: PersonService,
+    private router: Router
+  ) {
     this.person = currentPersonService.snapshot;
     this.form = fb.group({
       deathDate: [null, [Validators.required, pastDate]]
@@ -32,10 +33,9 @@ export class PersonDeathComponent {
     if (this.form.invalid) {
       return;
     }
-    this.personService.signalDeath(this.person.id, this.form.value).pipe(
-      switchMap(() => this.currentPersonService.refresh(this.person.id))
-    ).subscribe(
-      () => this.router.navigate(['..', 'info'], { relativeTo: this.route })
-    );
+    this.personService
+      .signalDeath(this.person.id, this.form.value)
+      .pipe(switchMap(() => this.currentPersonService.refresh(this.person.id)))
+      .subscribe(() => this.router.navigate(['..', 'info'], { relativeTo: this.route }));
   }
 }

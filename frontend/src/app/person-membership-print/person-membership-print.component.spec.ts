@@ -23,9 +23,7 @@ describe('PersonMembershipPrintComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [PersonMembershipPrintComponent, PageTitleDirective, FullnamePipe],
-      providers: [
-        { provide: ActivatedRoute, useFactory: () => route }
-      ]
+      providers: [{ provide: ActivatedRoute, useFactory: () => route }]
     });
   }));
 

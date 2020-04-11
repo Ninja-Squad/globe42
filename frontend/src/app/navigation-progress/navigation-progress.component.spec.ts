@@ -4,7 +4,13 @@ import { NavigationProgressComponent } from './navigation-progress.component';
 import { ComponentTester } from 'ngx-speculoos';
 import { By } from '@angular/platform-browser';
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap';
-import { NavigationCancel, NavigationEnd, NavigationStart, Router, RouterEvent } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+  RouterEvent
+} from '@angular/router';
 import { Subject } from 'rxjs';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 
@@ -14,7 +20,6 @@ class NavigationProgressComponentTester extends ComponentTester<NavigationProgre
   }
 
   get progressBar(): NgbProgressbar | null {
-
     const debugElement = this.debugElement.query(By.directive(NgbProgressbar));
     return debugElement?.componentInstance || null;
   }
@@ -42,11 +47,9 @@ describe('NavigationProgressComponent', () => {
     } as Router;
 
     TestBed.configureTestingModule({
-      declarations: [ NavigationProgressComponent ],
-      imports: [ GlobeNgbModule.forRoot() ],
-      providers: [
-        { provide: Router, useValue: fakeRouter }
-      ]
+      declarations: [NavigationProgressComponent],
+      imports: [GlobeNgbModule.forRoot()],
+      providers: [{ provide: Router, useValue: fakeRouter }]
     });
 
     tester = new NavigationProgressComponentTester();

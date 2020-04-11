@@ -6,8 +6,7 @@ import { ChargeTypeCommand } from './models/charge-type.command';
 
 @Injectable({ providedIn: 'root' })
 export class ChargeTypeService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   list(): Observable<Array<ChargeTypeModel>> {
     return this.http.get<Array<ChargeTypeModel>>('/api/charge-types');

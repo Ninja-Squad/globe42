@@ -8,14 +8,13 @@ import { UserWithPasswordModel } from './models/user-with-password.model';
 import { HttpTester } from './http-tester.spec';
 
 describe('UserService', () => {
-
   let service: UserService;
   let http: HttpTestingController;
   let httpTester: HttpTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(UserService);
@@ -50,6 +49,11 @@ describe('UserService', () => {
 
   it('should reset a user password', () => {
     const expectedUser = { id: 2 } as UserWithPasswordModel;
-    httpTester.testPost('/api/users/2/password-resets', null, expectedUser, service.resetPassword(2));
+    httpTester.testPost(
+      '/api/users/2/password-resets',
+      null,
+      expectedUser,
+      service.resetPassword(2)
+    );
   });
 });

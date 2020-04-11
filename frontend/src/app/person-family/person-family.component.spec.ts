@@ -22,8 +22,7 @@ describe('PersonFamilyComponent', () => {
   beforeEach(async(() => {
     route = fakeRoute({
       snapshot: fakeSnapshot({
-        data: {
-        }
+        data: {}
       })
     });
 
@@ -34,11 +33,7 @@ describe('PersonFamilyComponent', () => {
         ConfirmService,
         { provide: ActivatedRoute, useFactory: () => route }
       ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        GlobeNgbModule.forRoot()
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, GlobeNgbModule.forRoot()]
     });
 
     currentPersonService = TestBed.inject(CurrentPersonService);
@@ -60,7 +55,9 @@ describe('PersonFamilyComponent', () => {
     expect(component.abroad).toBeFalsy();
     expect(component.person.id).toBe(42);
 
-    expect(fixture.nativeElement.querySelector('#no-family').textContent).toContain(`Pas d'information`);
+    expect(fixture.nativeElement.querySelector('#no-family').textContent).toContain(
+      `Pas d'information`
+    );
     expect(fixture.nativeElement.querySelector('#family')).toBeFalsy();
   });
 

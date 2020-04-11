@@ -1,8 +1,13 @@
-<gl-page-title *ngIf="editedIncomeSource" [title]="'Modification de la nature de prestation ' + editedIncomeSource.name"></gl-page-title>
+<gl-page-title
+  *ngIf="editedIncomeSource"
+  [title]="'Modification de la nature de prestation ' + editedIncomeSource.name"
+></gl-page-title>
 <gl-page-title *ngIf="!editedIncomeSource" title="Nouvelle nature de prestation"></gl-page-title>
 
 <h1>
-  <ng-container *ngIf="editedIncomeSource">Modification de la nature de prestation <em>{{ editedIncomeSource.name }}</em></ng-container>
+  <ng-container *ngIf="editedIncomeSource"
+    >Modification de la nature de prestation <em>{{ editedIncomeSource.name }}</em></ng-container
+  >
   <ng-container *ngIf="!editedIncomeSource">Nouvelle nature de prestation</ng-container>
 </h1>
 
@@ -10,7 +15,7 @@
   <div class="form-group row">
     <label for="name" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
-      <input class="form-control" id="name" formControlName="name"/>
+      <input class="form-control" id="name" formControlName="name" />
       <val-errors controlName="name" label="Le nom"></val-errors>
     </div>
   </div>
@@ -27,7 +32,13 @@
   <div class="form-group row">
     <label for="maxMonthlyAmount" class="col-sm-3 col-form-label">Montant mensuel maximum</label>
     <div class="col-sm-9">
-      <input type="number" class="form-control" id="maxMonthlyAmount" formControlName="maxMonthlyAmount" min="1" />
+      <input
+        type="number"
+        class="form-control"
+        id="maxMonthlyAmount"
+        formControlName="maxMonthlyAmount"
+        min="1"
+      />
       <val-errors controlName="maxMonthlyAmount" label="Le montant mensuel maximum">
         <ng-template valError="min" let-label>{{ label }} doit être positif</ng-template>
       </val-errors>

@@ -19,7 +19,6 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./person-wedding-events.component.scss']
 })
 export class PersonWeddingEventsComponent {
-
   events: Array<WeddingEventModel>;
   person: PersonModel;
 
@@ -28,22 +27,27 @@ export class PersonWeddingEventsComponent {
   eventTypes = WEDDING_EVENT_TYPE_TRANSLATIONS;
   locations = LOCATION_TRANSLATIONS;
 
-  constructor(route: ActivatedRoute,
-              currentPersonService: CurrentPersonService,
-              private weddingEventService: WeddingEventService,
-              private formBuilder: FormBuilder,
-              private confirmService: ConfirmService) {
+  constructor(
+    route: ActivatedRoute,
+    currentPersonService: CurrentPersonService,
+    private weddingEventService: WeddingEventService,
+    private formBuilder: FormBuilder,
+    private confirmService: ConfirmService
+  ) {
     this.person = currentPersonService.snapshot;
     this.events = route.snapshot.data.events;
   }
 
   deleteEvent(event: WeddingEventModel) {
-    this.confirmService.confirm({
-      message: 'Voulez-vous vraiment supprimer cet événement\u00a0?'
-    }).pipe(
-      switchMap(() => this.weddingEventService.delete(this.person.id, event.id)),
-      switchMap(() => this.weddingEventService.list(this.person.id))
-    ).subscribe(events => this.events = events);
+    this.confirmService
+      .confirm({
+        message: 'Voulez-vous vraiment supprimer cet événement\u00a0?'
+      })
+      .pipe(
+        switchMap(() => this.weddingEventService.delete(this.person.id, event.id)),
+        switchMap(() => this.weddingEventService.list(this.person.id))
+      )
+      .subscribe(events => (this.events = events));
   }
 
   showEventCreation() {
@@ -65,9 +69,12 @@ export class PersonWeddingEventsComponent {
       return;
     }
 
-    this.weddingEventService.create(this.person.id, this.newEvent.value).pipe(
-      tap(() => this.newEvent = null),
-      switchMap(() => this.weddingEventService.list(this.person.id))
-    ).subscribe(events => this.events = events);
+    this.weddingEventService
+      .create(this.person.id, this.newEvent.value)
+      .pipe(
+        tap(() => (this.newEvent = null)),
+        switchMap(() => this.weddingEventService.list(this.person.id))
+      )
+      .subscribe(events => (this.events = events));
   }
 }

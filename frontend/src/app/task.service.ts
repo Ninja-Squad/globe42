@@ -19,57 +19,70 @@ function pageParams(pageNumber: number): HttpParams {
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-
-  constructor(private http: HttpClient,
-              private currentUserService: CurrentUserService) { }
+  constructor(private http: HttpClient, private currentUserService: CurrentUserService) {}
 
   listTodo(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber)});
+    return this.http.get<Page<TaskModel>>('/api/tasks', { params: pageParams(pageNumber) });
   }
 
   listUrgent(pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get<Page<TaskModel>>('/api/tasks', {
-      params: pageParams(pageNumber).set('before', DateTime.local().plus({ days: 7 }).toISODate())
+      params: pageParams(pageNumber).set(
+        'before',
+        DateTime.local()
+          .plus({ days: 7 })
+          .toISODate()
+      )
     });
   }
 
   listMine(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber).set('mine', '')});
+    return this.http.get<Page<TaskModel>>('/api/tasks', {
+      params: pageParams(pageNumber).set('mine', '')
+    });
   }
 
   listTodoForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get<Page<TaskModel>>(`/api/tasks`, {params: pageParams(pageNumber).set('person', personId.toString())});
+    return this.http.get<Page<TaskModel>>(`/api/tasks`, {
+      params: pageParams(pageNumber).set('person', personId.toString())
+    });
   }
 
   listArchivedForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get<Page<TaskModel>>(
-      `/api/tasks`,
-      {params: pageParams(pageNumber).set('person', personId.toString()).set('archived', '')});
+    return this.http.get<Page<TaskModel>>(`/api/tasks`, {
+      params: pageParams(pageNumber)
+        .set('person', personId.toString())
+        .set('archived', '')
+    });
   }
 
   listUnassigned(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get<Page<TaskModel>>(`/api/tasks`, {params: pageParams(pageNumber).set('unassigned', '')});
+    return this.http.get<Page<TaskModel>>(`/api/tasks`, {
+      params: pageParams(pageNumber).set('unassigned', '')
+    });
   }
 
   listArchived(pageNumber: number): Observable<Page<TaskModel>> {
-    return this.http.get<Page<TaskModel>>('/api/tasks', {params: pageParams(pageNumber).set('archived', '')});
+    return this.http.get<Page<TaskModel>>('/api/tasks', {
+      params: pageParams(pageNumber).set('archived', '')
+    });
   }
 
   assignToSelf(taskId: number): Observable<void> {
     const userId = this.currentUserService.userEvents.getValue().id;
-    return this.http.post<void>(`/api/tasks/${taskId}/assignments`, {userId});
+    return this.http.post<void>(`/api/tasks/${taskId}/assignments`, { userId });
   }
 
   markAsDone(taskId: number): Observable<void> {
-    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, {newStatus: 'DONE'});
+    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, { newStatus: 'DONE' });
   }
 
   cancel(taskId: number): Observable<void> {
-    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, {newStatus: 'CANCELLED'});
+    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, { newStatus: 'CANCELLED' });
   }
 
   resurrect(taskId: number): Observable<void> {
-    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, {newStatus: 'TODO'});
+    return this.http.post<void>(`/api/tasks/${taskId}/status-changes`, { newStatus: 'TODO' });
   }
 
   unassign(taskId: number): Observable<void> {
@@ -89,9 +102,16 @@ export class TaskService {
   }
 
   listSpentTimes(taskId: number): Observable<Array<SpentTimeModel>> {
-    return this.http.get<Array<SpentTimeModel>>(`/api/tasks/${taskId}/spent-times`).pipe(
-      map(list => sortBy(list, Comparator.comparing<SpentTimeModel>(spentTime => spentTime.creationInstant).reversed()))
-    );
+    return this.http
+      .get<Array<SpentTimeModel>>(`/api/tasks/${taskId}/spent-times`)
+      .pipe(
+        map(list =>
+          sortBy(
+            list,
+            Comparator.comparing<SpentTimeModel>(spentTime => spentTime.creationInstant).reversed()
+          )
+        )
+      );
   }
 
   deleteSpentTime(taskId: number, spentTimeId: number): Observable<void> {
@@ -103,9 +123,9 @@ export class TaskService {
   }
 
   listCategories(): Observable<Array<TaskCategoryModel>> {
-    return this.http.get<Array<TaskCategoryModel>>('/api/task-categories').pipe(
-      map(categories => sortBy(categories, c => c.name))
-    );
+    return this.http
+      .get<Array<TaskCategoryModel>>('/api/task-categories')
+      .pipe(map(categories => sortBy(categories, c => c.name)));
   }
 
   spentTimeStatistics(criteria: SpentTimeStatisticsCriteria): Observable<SpentTimeStatisticsModel> {

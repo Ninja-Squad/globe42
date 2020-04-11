@@ -11,11 +11,10 @@ import { displayFullname } from '../fullname.pipe';
   styleUrls: ['./participants.component.scss']
 })
 export class ParticipantsComponent implements OnInit {
-
   participants: Array<ParticipantModel>;
   activityType: ActivityType;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {

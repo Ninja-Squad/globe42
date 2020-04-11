@@ -27,7 +27,6 @@ class TestComponent {
 }
 
 class NoteComponentTester extends ComponentTester<TestComponent> {
-
   constructor() {
     super(TestComponent);
   }
@@ -62,9 +61,7 @@ describe('NoteComponent', () => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [NoteComponent, TestComponent],
-      providers: [
-        { provide: LOCALE_ID, useValue: 'fr-FR' }
-      ]
+      providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });
 
     jasmine.addMatchers(speculoosMatchers);
@@ -108,10 +105,7 @@ describe('NoteComponent', () => {
   });
 
   it('should be disabled', () => {
-    TestBed.overrideTemplate(
-      TestComponent,
-      '<gl-note [note]="note" [disabled]="true"></gl-note>'
-    );
+    TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note" [disabled]="true"></gl-note>');
     const tester = new NoteComponentTester();
     tester.detectChanges();
 
@@ -120,10 +114,7 @@ describe('NoteComponent', () => {
   });
 
   it('should switch to edit mode and give the focus to the text area', async(() => {
-    TestBed.overrideTemplate(
-      TestComponent,
-      '<gl-note [note]="note" [edited]="edited"></gl-note>'
-    );
+    TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note" [edited]="edited"></gl-note>');
 
     const tester = new NoteComponentTester();
     tester.componentInstance.edited = true;
@@ -140,10 +131,7 @@ describe('NoteComponent', () => {
   }));
 
   it('should display a textarea with the right number of rows', () => {
-    TestBed.overrideTemplate(
-      TestComponent,
-      '<gl-note [note]="note" [edited]="true"></gl-note>'
-    );
+    TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note" [edited]="true"></gl-note>');
 
     const tester = new NoteComponentTester();
     tester.componentInstance.note.text = 'a\nb\nc\nd';

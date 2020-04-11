@@ -75,7 +75,10 @@ import { ProfileResolverService } from './profile-resolver.service';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: '', canActivate: [AuthenticatedGuard], children: [
+  {
+    path: '',
+    canActivate: [AuthenticatedGuard],
+    children: [
       {
         path: 'persons',
         children: [
@@ -83,9 +86,9 @@ export const routes: Routes = [
             path: '',
             component: PersonsLayoutComponent,
             children: [
-              {path: '', pathMatch: 'full', redirectTo: 'active'},
+              { path: '', pathMatch: 'full', redirectTo: 'active' },
               personsRoute('active'),
-              personsRoute('deleted'),
+              personsRoute('deleted')
             ]
           },
           {
@@ -103,8 +106,8 @@ export const routes: Routes = [
               person: PersonResolverService
             },
             children: [
-              {path: '', pathMatch: 'full', redirectTo: 'info'},
-              {path: 'info', component: PersonComponent, canDeactivate: [PersonNoteEditionGuard]},
+              { path: '', pathMatch: 'full', redirectTo: 'info' },
+              { path: 'info', component: PersonComponent, canDeactivate: [PersonNoteEditionGuard] },
               {
                 path: 'resources',
                 component: PersonResourcesComponent,
@@ -147,7 +150,7 @@ export const routes: Routes = [
                   {
                     path: 'todo',
                     component: TasksPageComponent,
-                    data: {taskListType: 'person-todo'},
+                    data: { taskListType: 'person-todo' },
                     resolve: {
                       tasks: TasksResolverService
                     },
@@ -156,7 +159,7 @@ export const routes: Routes = [
                   {
                     path: 'archived',
                     component: TasksPageComponent,
-                    data: {taskListType: 'person-archived'},
+                    data: { taskListType: 'person-archived' },
                     resolve: {
                       tasks: TasksResolverService
                     },
@@ -164,7 +167,7 @@ export const routes: Routes = [
                   }
                 ]
               },
-              {path: 'files', component: PersonFilesComponent},
+              { path: 'files', component: PersonFilesComponent },
               {
                 path: 'participations',
                 component: PersonParticipationsComponent,
@@ -374,7 +377,11 @@ export const routes: Routes = [
           taskRoute('mine'),
           taskRoute('unassigned'),
           taskRoute('archived'),
-          { path: 'statistics', component: SpentTimeStatisticsComponent, resolve: { users : UsersResolverService } }
+          {
+            path: 'statistics',
+            component: SpentTimeStatisticsComponent,
+            resolve: { users: UsersResolverService }
+          }
         ]
       },
       {

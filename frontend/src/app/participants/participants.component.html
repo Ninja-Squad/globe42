@@ -1,6 +1,10 @@
-<gl-page-title [title]="'Participants aux activités de type ' + (activityType | displayActivityType)"></gl-page-title>
+<gl-page-title
+  [title]="'Participants aux activités de type ' + (activityType | displayActivityType)"
+></gl-page-title>
 
-<h2>Participants aux activités de type <em>{{ activityType | displayActivityType }}</em></h2>
+<h2>
+  Participants aux activités de type <em>{{ activityType | displayActivityType }}</em>
+</h2>
 
 <div class="row mb-2 person-item" *ngFor="let person of participants">
   <div class="col-sm-8 col-lg-3">

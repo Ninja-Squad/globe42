@@ -8,7 +8,10 @@
     </div>
     <div class="col-md-9 col-lg-5" style="white-space: pre-line;">{{ member.text }}</div>
     <div class="col-lg-4 text-right">
-      <button class="btn btn-outline-secondary btn-sm mr-1 edit" (click)="showMemberEdition(member)">
+      <button
+        class="btn btn-outline-secondary btn-sm mr-1 edit"
+        (click)="showMemberEdition(member)"
+      >
         <span class="fa fa-edit"></span>
         Éditer
       </button>
@@ -19,7 +22,12 @@
     </div>
   </div>
   <div class="mt-4">
-    <button type="button" id="newMemberButton" class="btn btn-outline-primary" (click)="showMemberEdition(null)">
+    <button
+      type="button"
+      id="newMemberButton"
+      class="btn btn-outline-primary"
+      (click)="showMemberEdition(null)"
+    >
       <span class="fa fa-plus"></span>
       Ajouter un membre au réseau
     </button>
@@ -31,7 +39,9 @@
     <label for="type">Type</label>
     <select class="form-control" id="type" formControlName="type">
       <option [ngValue]="null"></option>
-      <option *ngFor="let memberType of memberTypes" [value]="memberType">{{ memberType | displayNetworkMemberType }}</option>
+      <option *ngFor="let memberType of memberTypes" [value]="memberType">{{
+        memberType | displayNetworkMemberType
+      }}</option>
     </select>
     <val-errors controlName="type" label="Le type"></val-errors>
   </div>
@@ -43,5 +53,12 @@
   </div>
 
   <button id="saveButton" class="btn btn-primary mr-2">Enregistrer</button>
-  <button id="cancelEditionButton" type="button" class="btn btn-secondary" (click)="cancelMemberEdition()">Annuler</button>
+  <button
+    id="cancelEditionButton"
+    type="button"
+    class="btn btn-secondary"
+    (click)="cancelMemberEdition()"
+  >
+    Annuler
+  </button>
 </form>

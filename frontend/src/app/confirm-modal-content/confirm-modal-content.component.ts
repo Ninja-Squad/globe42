@@ -7,7 +7,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./confirm-modal-content.component.scss']
 })
 export class ConfirmModalContentComponent {
-
   @Input() message: string;
   @Input() title: string;
 

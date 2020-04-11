@@ -7,9 +7,10 @@ import { NgbDatepicker, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerContainerComponent } from './datepicker-container.component';
 
 @Component({
-  template: `<gl-datepicker-container class="foo">
-    <input class="form-control" [formControl]="dateCtrl" ngbDatepicker />
-  </gl-datepicker-container>
+  template: `
+    <gl-datepicker-container class="foo">
+      <input class="form-control" [formControl]="dateCtrl" ngbDatepicker />
+    </gl-datepicker-container>
   `
 })
 class TestComponent {
@@ -17,10 +18,11 @@ class TestComponent {
 }
 
 describe('DatepickerContainerComponent', () => {
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [GlobeNgbModule.forRoot(), ReactiveFormsModule],
-    declarations: [TestComponent]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [GlobeNgbModule.forRoot(), ReactiveFormsModule],
+      declarations: [TestComponent]
+    })));
 
   it('should display a toggle button, an input, and toggle the datepicker', () => {
     const fixture = TestBed.createComponent(TestComponent);
@@ -52,10 +54,10 @@ describe('DatepickerContainerComponent', () => {
     const fixture = TestBed.createComponent(TestComponent);
     fixture.detectChanges();
 
-    const container = fixture.debugElement.query(By.directive(DatepickerContainerComponent)).nativeElement;
+    const container = fixture.debugElement.query(By.directive(DatepickerContainerComponent))
+      .nativeElement;
 
     expect(container.classList.contains('input-group')).toBe(true);
     expect(container.classList.contains('foo')).toBe(true);
   });
 });
-

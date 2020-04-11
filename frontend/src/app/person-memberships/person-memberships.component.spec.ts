@@ -53,7 +53,10 @@ describe('PersonMembershipsComponent', () => {
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ],
       imports: [
-        HttpClientTestingModule, GlobeNgbModule.forRoot(), ReactiveFormsModule, ValdemortModule
+        HttpClientTestingModule,
+        GlobeNgbModule.forRoot(),
+        ReactiveFormsModule,
+        ValdemortModule
       ]
     });
 
@@ -87,7 +90,9 @@ describe('PersonMembershipsComponent', () => {
     expect(element.querySelector('#current-membership')).toBeFalsy();
     expect(element.querySelector('#old-memberships')).toBeFalsy();
 
-    expect(element.querySelector('ngb-alert').textContent).toContain(`Pas d'adhésion pour l'année en cours.`);
+    expect(element.querySelector('ngb-alert').textContent).toContain(
+      `Pas d'adhésion pour l'année en cours.`
+    );
   });
 
   it('should validate and create new membership', () => {
@@ -166,15 +171,13 @@ describe('PersonMembershipsComponent', () => {
   });
 
   it('should only display missing current membership and old memberships when no current membership', () => {
-    memberships.push(
-      {
-        id: 42,
-        year: 2017,
-        paymentMode: 'CHECK',
-        paymentDate: '2017-01-31',
-        cardNumber: '002'
-      }
-    );
+    memberships.push({
+      id: 42,
+      year: 2017,
+      paymentMode: 'CHECK',
+      paymentDate: '2017-01-31',
+      cardNumber: '002'
+    });
 
     const fixture = TestBed.createComponent(PersonMembershipsComponent);
     const component = fixture.componentInstance;
@@ -195,7 +198,9 @@ describe('PersonMembershipsComponent', () => {
     expect(element.querySelector('#current-membership')).toBeFalsy();
     expect(element.querySelector('#old-memberships')).toBeTruthy();
 
-    expect(element.querySelector('ngb-alert').textContent).toContain(`Pas d'adhésion pour l'année en cours.`);
+    expect(element.querySelector('ngb-alert').textContent).toContain(
+      `Pas d'adhésion pour l'année en cours.`
+    );
     const oldMembershipsText = element.querySelector('#old-memberships').textContent;
     expect(oldMembershipsText).toContain('2017');
     expect(oldMembershipsText).toContain('31 janv. 2017');
@@ -204,15 +209,13 @@ describe('PersonMembershipsComponent', () => {
   });
 
   it('should display current membership when current membership exists', () => {
-    memberships.push(
-      {
-        id: 42,
-        year: 2018,
-        paymentMode: 'CHECK',
-        paymentDate: '2018-01-31',
-        cardNumber: '002'
-      }
-    );
+    memberships.push({
+      id: 42,
+      year: 2018,
+      paymentMode: 'CHECK',
+      paymentDate: '2018-01-31',
+      cardNumber: '002'
+    });
 
     const fixture = TestBed.createComponent(PersonMembershipsComponent);
     const component = fixture.componentInstance;
@@ -227,20 +230,20 @@ describe('PersonMembershipsComponent', () => {
     expect(element.querySelector('#current-membership')).toBeTruthy();
     expect(element.querySelector('#old-memberships')).toBeFalsy();
 
-    expect(element.querySelector('ngb-alert').textContent).toContain(`Payée (Chèque) le 31 janv. 2018.`);
+    expect(element.querySelector('ngb-alert').textContent).toContain(
+      `Payée (Chèque) le 31 janv. 2018.`
+    );
     expect(element.querySelector('ngb-alert').textContent).toContain(`Carte n° 002`);
   });
 
   it('should delete current membership if confirmed', () => {
-    memberships.push(
-      {
-        id: 42,
-        year: 2018,
-        paymentMode: 'CHECK',
-        paymentDate: '2018-01-31',
-        cardNumber: '002'
-      }
-    );
+    memberships.push({
+      id: 42,
+      year: 2018,
+      paymentMode: 'CHECK',
+      paymentDate: '2018-01-31',
+      cardNumber: '002'
+    });
 
     const fixture = TestBed.createComponent(PersonMembershipsComponent);
     fixture.detectChanges();

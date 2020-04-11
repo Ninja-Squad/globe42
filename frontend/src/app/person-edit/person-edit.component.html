@@ -1,39 +1,49 @@
-<gl-page-title *ngIf="editedPerson" [title]="'Modification de l\'adhérent ' + (editedPerson | fullname)"></gl-page-title>
+<gl-page-title
+  *ngIf="editedPerson"
+  [title]="'Modification de l\'adhérent ' + (editedPerson | fullname)"
+></gl-page-title>
 <gl-page-title title="Nouvel adhérent"></gl-page-title>
 
 <h1>
-  <ng-container *ngIf="editedPerson">Modification de l'adhérent <span [class.deleted]="editedPerson.deleted">{{ editedPerson | fullname }}</span></ng-container>
+  <ng-container *ngIf="editedPerson"
+    >Modification de l'adhérent
+    <span [class.deleted]="editedPerson.deleted">{{ editedPerson | fullname }}</span></ng-container
+  >
   <ng-container *ngIf="!editedPerson">Nouvel adhérent</ng-container>
 </h1>
 
 <form [formGroup]="personForm" #formDirective="ngForm" (ngSubmit)="formDirective.valid && save()">
-
   <h2>Identité</h2>
 
   <div class="form-group row">
     <label for="firstName" class="col-sm-3 col-form-label">Prénom</label>
     <div class="col-sm-9">
-      <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName">
+      <input class="form-control" id="firstName" placeholder="Prénom" formControlName="firstName" />
       <val-errors controlName="firstName" label="Le prénom"></val-errors>
     </div>
   </div>
   <div class="form-group row">
     <label for="lastName" class="col-sm-3 col-form-label">Nom</label>
     <div class="col-sm-9">
-      <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName">
+      <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName" />
       <val-errors controlName="lastName" label="Le nom"></val-errors>
     </div>
   </div>
   <div class="form-group row">
     <label for="birthName" class="col-sm-3 col-form-label">Nom de naissance</label>
     <div class="col-sm-9">
-      <input class="form-control" id="birthName" placeholder="Nom de jeune fille" formControlName="birthName">
+      <input
+        class="form-control"
+        id="birthName"
+        placeholder="Nom de jeune fille"
+        formControlName="birthName"
+      />
     </div>
   </div>
   <div class="form-group row">
     <label for="nickName" class="col-sm-3 col-form-label">Pseudo</label>
     <div class="col-sm-9">
-      <input class="form-control" id="nickName" placeholder="Pseudo" formControlName="nickName">
+      <input class="form-control" id="nickName" placeholder="Pseudo" formControlName="nickName" />
     </div>
   </div>
   <div class="form-group row">
@@ -41,7 +51,8 @@
     <div class="col-sm-9">
       <div class="btn-group btn-group-toggle" ngbRadioGroup name="gender" formControlName="gender">
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let gender of genders">
-          <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender"> {{ gender | displayGender }}
+          <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender" />
+          {{ gender | displayGender }}
         </label>
       </div>
       <val-errors controlName="gender" label="Le genre"></val-errors>
@@ -50,8 +61,14 @@
   <div class="form-group row">
     <label for="birthDate" class="col-sm-3 col-form-label">Date de naissance</label>
     <gl-datepicker-container class="col-sm-9">
-      <input class="form-control" id="birthDate" placeholder="23/12/1970"
-             formControlName="birthDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+      <input
+        class="form-control"
+        id="birthDate"
+        placeholder="23/12/1970"
+        formControlName="birthDate"
+        ngbDatepicker
+        [minDate]="{ year: 1900, month: 1, day: 1 }"
+      />
     </gl-datepicker-container>
   </div>
 
@@ -59,29 +76,52 @@
   <div class="form-group row">
     <label for="address" class="col-sm-3 col-form-label">Adresse</label>
     <div class="col-sm-9">
-      <input class="form-control" id="address" placeholder="Avenue de la République" formControlName="address">
+      <input
+        class="form-control"
+        id="address"
+        placeholder="Avenue de la République"
+        formControlName="address"
+      />
     </div>
   </div>
   <div class="form-group row">
     <label for="city" class="col-sm-3 col-form-label">Ville</label>
     <div class="col-sm-9">
-      <input class="form-control" id="city" placeholder="42000 SAINT ETIENNE" formControlName="city"
-             [ngbTypeahead]="cityTypeahead.searcher" [resultFormatter]="cityTypeahead.formatter"
-             [inputFormatter]="cityTypeahead.formatter" [editable]="false"
-             [class.is-invalid]="cityTypeahead.searchFailed">
+      <input
+        class="form-control"
+        id="city"
+        placeholder="42000 SAINT ETIENNE"
+        formControlName="city"
+        [ngbTypeahead]="cityTypeahead.searcher"
+        [resultFormatter]="cityTypeahead.formatter"
+        [inputFormatter]="cityTypeahead.formatter"
+        [editable]="false"
+        [class.is-invalid]="cityTypeahead.searchFailed"
+      />
     </div>
   </div>
   <div class="form-group row">
     <label for="email" class="col-sm-3 col-form-label">Email</label>
     <div class="col-sm-9">
-      <input class="form-control" type="email" id="email" placeholder="john@mail.com" formControlName="email">
+      <input
+        class="form-control"
+        type="email"
+        id="email"
+        placeholder="john@mail.com"
+        formControlName="email"
+      />
       <val-errors controlName="email" label="L'email"></val-errors>
     </div>
   </div>
   <div class="form-group row">
     <label for="phoneNumber" class="col-sm-3 col-form-label">Téléphone</label>
     <div class="col-sm-9">
-      <input class="form-control" id="phoneNumber" placeholder="06 00 00 00 00" formControlName="phoneNumber">
+      <input
+        class="form-control"
+        id="phoneNumber"
+        placeholder="06 00 00 00 00"
+        formControlName="phoneNumber"
+      />
     </div>
   </div>
 
@@ -90,9 +130,21 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Médiation activée pour cet adhérent</label>
     <div class="col-sm-9">
-      <div class="btn-group btn-group-toggle" ngbRadioGroup name="mediationEnabled" formControlName="mediationEnabled">
+      <div
+        class="btn-group btn-group-toggle"
+        ngbRadioGroup
+        name="mediationEnabled"
+        formControlName="mediationEnabled"
+      >
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
-          <input ngbButton name="mediationEnabled" id="mediationEnabled{{ value }}" type="radio" [value]="value"> {{ value ? 'Oui' : 'Non' }}
+          <input
+            ngbButton
+            name="mediationEnabled"
+            id="mediationEnabled{{ value }}"
+            type="radio"
+            [value]="value"
+          />
+          {{ value ? 'Oui' : 'Non' }}
         </label>
       </div>
     </div>
@@ -109,15 +161,28 @@
     <div class="form-group row">
       <label for="accompanying" class="col-sm-3 col-form-label">Accompagnant</label>
       <div class="col-sm-9">
-        <input class="form-control" id="accompanying" placeholder="Accompagnant" formControlName="accompanying">
+        <input
+          class="form-control"
+          id="accompanying"
+          placeholder="Accompagnant"
+          formControlName="accompanying"
+        />
       </div>
     </div>
 
     <div class="form-group row">
-      <label for="firstMediationAppointmentDate" class="col-sm-3 col-form-label">1<sup>er</sup> RDV médiation</label>
+      <label for="firstMediationAppointmentDate" class="col-sm-3 col-form-label"
+        >1<sup>er</sup> RDV médiation</label
+      >
       <gl-datepicker-container class="col-sm-9">
-        <input class="form-control" id="firstMediationAppointmentDate" placeholder="01/01/2017"
-               formControlName="firstMediationAppointmentDate" ngbDatepicker [minDate]="{year: 2012, month: 1, day: 1}">
+        <input
+          class="form-control"
+          id="firstMediationAppointmentDate"
+          placeholder="01/01/2017"
+          formControlName="firstMediationAppointmentDate"
+          ngbDatepicker
+          [minDate]="{ year: 2012, month: 1, day: 1 }"
+        />
       </gl-datepicker-container>
     </div>
 
@@ -125,7 +190,9 @@
       <label class="col-sm-3 col-form-label">Statut marital</label>
       <div class="col-sm-9">
         <select class="form-control" formControlName="maritalStatus" id="maritalStatus">
-          <option *ngFor="let ms of maritalStatuses" [value]="ms">{{ ms | displayMaritalStatus }}</option>
+          <option *ngFor="let ms of maritalStatuses" [value]="ms">{{
+            ms | displayMaritalStatus
+          }}</option>
         </select>
       </div>
     </div>
@@ -136,7 +203,14 @@
         <div class="form-row">
           <div class="col-md-4">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="spouseType" value="none" [formControl]="spouseTypeCtrl" id="spouse-type-none">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="spouseType"
+                value="none"
+                [formControl]="spouseTypeCtrl"
+                id="spouse-type-none"
+              />
               <label class="form-check-label" for="spouse-type-none">Personne / Inconnu</label>
             </div>
           </div>
@@ -144,14 +218,27 @@
         <div class="form-row">
           <div class="col-md-4 d-flex align-items-center">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="spouseType" value="spouse" [formControl]="spouseTypeCtrl" id="spouse-type-spouse">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="spouseType"
+                value="spouse"
+                [formControl]="spouseTypeCtrl"
+                id="spouse-type-spouse"
+              />
               <label class="form-check-label" for="spouse-type-spouse">Un autre membre</label>
             </div>
           </div>
           <div class="col-md-8" *ngIf="spouseTypeCtrl.value === 'spouse'">
-            <input class="form-control" formControlName="spouse" id="spouse"
-                   [ngbTypeahead]="spouseTypeahead.searcher" [resultFormatter]="spouseTypeahead.formatter"
-                   [inputFormatter]="spouseTypeahead.formatter" [editable]="false" />
+            <input
+              class="form-control"
+              formControlName="spouse"
+              id="spouse"
+              [ngbTypeahead]="spouseTypeahead.searcher"
+              [resultFormatter]="spouseTypeahead.formatter"
+              [inputFormatter]="spouseTypeahead.formatter"
+              [editable]="false"
+            />
             <div class="warning-feedback" *ngIf="spouseIsInCouple">
               <span class="fa fa-warning"></span>
               {{ personForm.value.spouse | fullname }} est déjà en couple avec quelqu'un d'autre
@@ -161,8 +248,17 @@
         <div class="form-row">
           <div class="col-md-4 d-flex align-items-center">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="spouseType" value="partner" [formControl]="spouseTypeCtrl" id="spouse-type-partner">
-              <label class="form-check-label" for="spouse-type-partner">Une persone non-membre</label>
+              <input
+                class="form-check-input"
+                type="radio"
+                name="spouseType"
+                value="partner"
+                [formControl]="spouseTypeCtrl"
+                id="spouse-type-partner"
+              />
+              <label class="form-check-label" for="spouse-type-partner"
+                >Une persone non-membre</label
+              >
             </div>
           </div>
           <div class="col-md-8" *ngIf="spouseTypeCtrl.value === 'partner'">
@@ -175,37 +271,68 @@
     <h3>Santé</h3>
 
     <div class="form-group row">
-      <label for="socialSecurityNumber" class="col-sm-3 col-form-label">N° de Sécurité Sociale</label>
+      <label for="socialSecurityNumber" class="col-sm-3 col-form-label"
+        >N° de Sécurité Sociale</label
+      >
       <div class="col-sm-9">
-        <input class="form-control" id="socialSecurityNumber" placeholder="275122184454143" formControlName="socialSecurityNumber">
+        <input
+          class="form-control"
+          id="socialSecurityNumber"
+          placeholder="275122184454143"
+          formControlName="socialSecurityNumber"
+        />
       </div>
     </div>
 
     <div class="form-group row">
       <label for="cafNumber" class="col-sm-3 col-form-label">N° CAF</label>
       <div class="col-sm-9">
-        <input class="form-control" id="cafNumber" placeholder="153214" formControlName="cafNumber">
+        <input
+          class="form-control"
+          id="cafNumber"
+          placeholder="153214"
+          formControlName="cafNumber"
+        />
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="healthCareCoverage" class="col-sm-3 col-lg-6 col-form-label">Couverture médicale de base</label>
+          <label for="healthCareCoverage" class="col-sm-3 col-lg-6 col-form-label"
+            >Couverture médicale de base</label
+          >
           <div class="col-sm-9 col-lg-6">
-            <select class="form-control" formControlName="healthCareCoverage" id="healthCareCoverage">
-              <option *ngFor="let hc of healthCareCoverages" [value]="hc">{{ hc | displayHealthCareCoverage }}</option>
+            <select
+              class="form-control"
+              formControlName="healthCareCoverage"
+              id="healthCareCoverage"
+            >
+              <option *ngFor="let hc of healthCareCoverages" [value]="hc">{{
+                hc | displayHealthCareCoverage
+              }}</option>
             </select>
           </div>
         </div>
       </div>
 
-      <div class="form-group col-lg-6" *ngIf="personForm.get('healthCareCoverage').value !== 'UNKNOWN'">
+      <div
+        class="form-group col-lg-6"
+        *ngIf="personForm.get('healthCareCoverage').value !== 'UNKNOWN'"
+      >
         <div class="row">
-          <label for="healthCareCoverageStartDate" class="col-sm-3 col-lg-6 col-form-label">Depuis le</label>
+          <label for="healthCareCoverageStartDate" class="col-sm-3 col-lg-6 col-form-label"
+            >Depuis le</label
+          >
           <gl-datepicker-container class="col-sm-9 col-lg-6">
-            <input class="form-control" id="healthCareCoverageStartDate" placeholder="15/11/2014"
-                   formControlName="healthCareCoverageStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}" />
+            <input
+              class="form-control"
+              id="healthCareCoverageStartDate"
+              placeholder="15/11/2014"
+              formControlName="healthCareCoverageStartDate"
+              ngbDatepicker
+              [minDate]="{ year: 1900, month: 1, day: 1 }"
+            />
           </gl-datepicker-container>
         </div>
       </div>
@@ -214,22 +341,37 @@
     <div class="row">
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="healthInsurance" class="col-sm-3 col-lg-6 col-form-label">Couverture médicale complémentaire</label>
+          <label for="healthInsurance" class="col-sm-3 col-lg-6 col-form-label"
+            >Couverture médicale complémentaire</label
+          >
 
-            <div class="col-sm-9 col-lg-6">
+          <div class="col-sm-9 col-lg-6">
             <select class="form-control" formControlName="healthInsurance" id="healthInsurance">
-              <option *ngFor="let hi of healthInsurances" [value]="hi">{{ hi | displayHealthInsurance }}</option>
+              <option *ngFor="let hi of healthInsurances" [value]="hi">{{
+                hi | displayHealthInsurance
+              }}</option>
             </select>
           </div>
         </div>
       </div>
 
-      <div class="form-group col-lg-6" *ngIf="personForm.get('healthInsurance').value !== 'UNKNOWN'">
+      <div
+        class="form-group col-lg-6"
+        *ngIf="personForm.get('healthInsurance').value !== 'UNKNOWN'"
+      >
         <div class="row">
-          <label for="healthInsuranceStartDate" class="col-sm-3 col-lg-6 col-form-label">Depuis le</label>
+          <label for="healthInsuranceStartDate" class="col-sm-3 col-lg-6 col-form-label"
+            >Depuis le</label
+          >
           <gl-datepicker-container class="col-sm-9 col-lg-6">
-            <input class="form-control" id="healthInsuranceStartDate" placeholder="15/11/2014"
-                   formControlName="healthInsuranceStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}" />
+            <input
+              class="form-control"
+              id="healthInsuranceStartDate"
+              placeholder="15/11/2014"
+              formControlName="healthInsuranceStartDate"
+              ngbDatepicker
+              [minDate]="{ year: 1900, month: 1, day: 1 }"
+            />
           </gl-datepicker-container>
         </div>
       </div>
@@ -240,20 +382,38 @@
       <label class="col-sm-3 col-form-label" for="housing">Classe de logement</label>
       <div class="col-sm-9">
         <select id="housing" class="form-control" formControlName="housing">
-          <option *ngFor="let housing of housings" [value]="housing">{{ housing | displayHousing }}</option>
+          <option *ngFor="let housing of housings" [value]="housing">{{
+            housing | displayHousing
+          }}</option>
         </select>
       </div>
     </div>
-    <div *ngIf="!['UNKNOWN', 'NONE', 'EMERGENCY'].includes(personForm.value.housing)" class="form-group row">
-      <label for="housingSpace" class="col-sm-3 col-form-label">Surface du logement (m<sup>2</sup>)</label>
+    <div
+      *ngIf="!['UNKNOWN', 'NONE', 'EMERGENCY'].includes(personForm.value.housing)"
+      class="form-group row"
+    >
+      <label for="housingSpace" class="col-sm-3 col-form-label"
+        >Surface du logement (m<sup>2</sup>)</label
+      >
       <div class="col-sm-9">
-        <input type="number" class="form-control" id="housingSpace" formControlName="housingSpace" min="1" />
+        <input
+          type="number"
+          class="form-control"
+          id="housingSpace"
+          formControlName="housingSpace"
+          min="1"
+        />
       </div>
     </div>
     <div class="form-group row">
       <label for="hostName" class="col-sm-3 col-form-label">Hébergé(e) par</label>
       <div class="col-sm-9">
-        <input class="form-control" id="hostName" placeholder="Nom de la personne qui héberge" formControlName="hostName">
+        <input
+          class="form-control"
+          id="hostName"
+          placeholder="Nom de la personne qui héberge"
+          formControlName="hostName"
+        />
       </div>
     </div>
 
@@ -261,10 +421,18 @@
     <div class="row">
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="entryDate" class="col-sm-3 col-lg-6 col-form-label">Entrée en France le</label>
+          <label for="entryDate" class="col-sm-3 col-lg-6 col-form-label"
+            >Entrée en France le</label
+          >
           <gl-datepicker-container class="col-sm-9 col-lg-6">
-            <input class="form-control" id="entryDate" placeholder="01/01/2010"
-                   formControlName="entryDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+            <input
+              class="form-control"
+              id="entryDate"
+              placeholder="01/01/2010"
+              formControlName="entryDate"
+              ngbDatepicker
+              [minDate]="{ year: 1900, month: 1, day: 1 }"
+            />
           </gl-datepicker-container>
         </div>
       </div>
@@ -273,7 +441,9 @@
           <label for="entryType" class="col-sm-3 col-lg-6 col-form-label">de manière</label>
           <div class="col-sm-9 col-lg-6">
             <select id="entryType" class="form-control" formControlName="entryType">
-              <option *ngFor="let entryType of entryTypes" [value]="entryType">{{ entryType | displayEntryType }}</option>
+              <option *ngFor="let entryType of entryTypes" [value]="entryType">{{
+                entryType | displayEntryType
+              }}</option>
             </select>
           </div>
         </div>
@@ -292,26 +462,44 @@
       <label class="col-sm-3 col-form-label" for="visa">Type de carte de séjour</label>
       <div class="col-sm-9">
         <select id="residencePermit" class="form-control" formControlName="residencePermit">
-          <option *ngFor="let rp of residencePermits" [value]="rp">{{ rp | displayResidencePermit }}</option>
+          <option *ngFor="let rp of residencePermits" [value]="rp">{{
+            rp | displayResidencePermit
+          }}</option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="residencePermitDepositDate" class="col-sm-3 col-lg-6 col-form-label">Date de dépôt</label>
+          <label for="residencePermitDepositDate" class="col-sm-3 col-lg-6 col-form-label"
+            >Date de dépôt</label
+          >
           <gl-datepicker-container class="col-sm-9 col-lg-6">
-            <input class="form-control" id="residencePermitDepositDate" placeholder="01/01/2010"
-                   formControlName="residencePermitDepositDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+            <input
+              class="form-control"
+              id="residencePermitDepositDate"
+              placeholder="01/01/2010"
+              formControlName="residencePermitDepositDate"
+              ngbDatepicker
+              [minDate]="{ year: 1900, month: 1, day: 1 }"
+            />
           </gl-datepicker-container>
         </div>
       </div>
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="residencePermitRenewalDate" class="col-sm-3 col-lg-6 col-form-label">Date de renouvellement</label>
+          <label for="residencePermitRenewalDate" class="col-sm-3 col-lg-6 col-form-label"
+            >Date de renouvellement</label
+          >
           <gl-datepicker-container class="col-sm-9 col-lg-6">
-            <input class="form-control" id="residencePermitRenewalDate" placeholder="01/01/2010"
-                   formControlName="residencePermitRenewalDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+            <input
+              class="form-control"
+              id="residencePermitRenewalDate"
+              placeholder="01/01/2010"
+              formControlName="residencePermitRenewalDate"
+              ngbDatepicker
+              [minDate]="{ year: 1900, month: 1, day: 1 }"
+            />
           </gl-datepicker-container>
         </div>
       </div>
@@ -319,19 +507,35 @@
     <div class="row">
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="residencePermitValidityStartDate" class="col-sm-3 col-lg-6 col-form-label">Valide du</label>
+          <label for="residencePermitValidityStartDate" class="col-sm-3 col-lg-6 col-form-label"
+            >Valide du</label
+          >
           <gl-datepicker-container class="col-sm-9 col-lg-6">
-            <input class="form-control" id="residencePermitValidityStartDate" placeholder="01/01/2010"
-                   formControlName="residencePermitValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+            <input
+              class="form-control"
+              id="residencePermitValidityStartDate"
+              placeholder="01/01/2010"
+              formControlName="residencePermitValidityStartDate"
+              ngbDatepicker
+              [minDate]="{ year: 1900, month: 1, day: 1 }"
+            />
           </gl-datepicker-container>
         </div>
       </div>
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="residencePermitValidityEndDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
+          <label for="residencePermitValidityEndDate" class="col-sm-3 col-lg-6 col-form-label"
+            >Valide jusqu'au</label
+          >
           <gl-datepicker-container class="col-sm-9 col-lg-6">
-            <input class="form-control" id="residencePermitValidityEndDate" placeholder="01/01/2010"
-                   formControlName="residencePermitValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+            <input
+              class="form-control"
+              id="residencePermitValidityEndDate"
+              placeholder="01/01/2010"
+              formControlName="residencePermitValidityEndDate"
+              ngbDatepicker
+              [minDate]="{ year: 1900, month: 1, day: 1 }"
+            />
             <val-errors [control]="personForm">
               <ng-template valError="residencePermitValidity">
                 La date de fin de validité doit être ultérieure à la date de début de validité
@@ -346,9 +550,25 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">Situation fiscale</label>
       <div class="col-sm-9">
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
-          <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let fiscalStatus of fiscalStatuses">
-            <input ngbButton name="fiscalStatus" id="fiscalStatus{{ fiscalStatus }}" type="radio" [value]="fiscalStatus"> {{ fiscalStatus | displayFiscalStatus }}
+        <div
+          class="btn-group btn-group-toggle"
+          ngbRadioGroup
+          name="fiscalStatus"
+          formControlName="fiscalStatus"
+        >
+          <label
+            ngbButtonLabel
+            class="btn btn-outline-secondary"
+            *ngFor="let fiscalStatus of fiscalStatuses"
+          >
+            <input
+              ngbButton
+              name="fiscalStatus"
+              id="fiscalStatus{{ fiscalStatus }}"
+              type="radio"
+              [value]="fiscalStatus"
+            />
+            {{ fiscalStatus | displayFiscalStatus }}
           </label>
         </div>
       </div>
@@ -356,16 +576,28 @@
     <div class="form-group row" *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'">
       <label for="fiscalNumber" class="col-sm-3 col-form-label">N° fiscal</label>
       <div class="col-sm-9">
-        <input class="form-control" id="fiscalNumber" placeholder="13 chiffres" formControlName="fiscalNumber">
+        <input
+          class="form-control"
+          id="fiscalNumber"
+          placeholder="13 chiffres"
+          formControlName="fiscalNumber"
+        />
         <val-errors controlName="fiscalNumber" label="Le n° fiscal">
-          <ng-template valError="pattern" let-label>{{ label }} doit être composé de 13 chiffres</ng-template>
+          <ng-template valError="pattern" let-label
+            >{{ label }} doit être composé de 13 chiffres</ng-template
+          >
         </val-errors>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-9 offset-sm-3">
         <div *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'" class="form-check">
-          <input type="checkbox" class="form-check-input" id="fiscalStatusUpToDate" formControlName="fiscalStatusUpToDate" />
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="fiscalStatusUpToDate"
+            formControlName="fiscalStatusUpToDate"
+          />
           <label class="form-check-label" for="fiscalStatusUpToDate">A jour</label>
         </div>
       </div>
@@ -375,18 +607,41 @@
     <div class="form-group row">
       <label for="nationality" class="col-sm-3 col-form-label">Nationalité</label>
       <div class="col-sm-9">
-        <input class="form-control" id="nationality" placeholder="Pays" formControlName="nationality"
-               [ngbTypeahead]="countryTypeahead.searcher" [resultFormatter]="countryTypeahead.formatter"
-               [inputFormatter]="countryTypeahead.formatter" [editable]="false">
+        <input
+          class="form-control"
+          id="nationality"
+          placeholder="Pays"
+          formControlName="nationality"
+          [ngbTypeahead]="countryTypeahead.searcher"
+          [resultFormatter]="countryTypeahead.formatter"
+          [inputFormatter]="countryTypeahead.formatter"
+          [editable]="false"
+        />
       </div>
     </div>
 
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">Possède un passeport</label>
       <div class="col-sm-9">
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="passportStatus" formControlName="passportStatus">
-          <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let passportStatus of passportStatuses">
-            <input ngbButton name="passportStatus" id="passportStatus{{ passportStatus }}" type="radio" [value]="passportStatus"> {{ passportStatus | displayPassportStatus }}
+        <div
+          class="btn-group btn-group-toggle"
+          ngbRadioGroup
+          name="passportStatus"
+          formControlName="passportStatus"
+        >
+          <label
+            ngbButtonLabel
+            class="btn btn-outline-secondary"
+            *ngFor="let passportStatus of passportStatuses"
+          >
+            <input
+              ngbButton
+              name="passportStatus"
+              id="passportStatus{{ passportStatus }}"
+              type="radio"
+              [value]="passportStatus"
+            />
+            {{ passportStatus | displayPassportStatus }}
           </label>
         </div>
       </div>
@@ -403,19 +658,35 @@
       <div class="row">
         <div class="form-group col-lg-6">
           <div class="row">
-            <label for="passportValidityStartDate" class="col-sm-3 col-lg-6 col-form-label">Valide du</label>
+            <label for="passportValidityStartDate" class="col-sm-3 col-lg-6 col-form-label"
+              >Valide du</label
+            >
             <gl-datepicker-container class="col-sm-9 col-lg-6">
-              <input class="form-control" id="passportValidityStartDate" placeholder="01/01/2010"
-                     formControlName="passportValidityStartDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+              <input
+                class="form-control"
+                id="passportValidityStartDate"
+                placeholder="01/01/2010"
+                formControlName="passportValidityStartDate"
+                ngbDatepicker
+                [minDate]="{ year: 1900, month: 1, day: 1 }"
+              />
             </gl-datepicker-container>
           </div>
         </div>
         <div class="form-group col-lg-6">
           <div class="row">
-            <label for="passportValidityEndDate" class="col-sm-3 col-lg-6 col-form-label">Valide jusqu'au</label>
+            <label for="passportValidityEndDate" class="col-sm-3 col-lg-6 col-form-label"
+              >Valide jusqu'au</label
+            >
             <gl-datepicker-container class="col-sm-9 col-lg-6">
-              <input class="form-control" id="passportValidityEndDate" placeholder="01/01/2010"
-                     formControlName="passportValidityEndDate" ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}">
+              <input
+                class="form-control"
+                id="passportValidityEndDate"
+                placeholder="01/01/2010"
+                formControlName="passportValidityEndDate"
+                ngbDatepicker
+                [minDate]="{ year: 1900, month: 1, day: 1 }"
+              />
               <val-errors [control]="personForm">
                 <ng-template valError="passportValidity">
                   La date de fin de validité doit être ultérieure à la date de début de validité
@@ -426,14 +697,16 @@
         </div>
       </div>
     </ng-container>
-
   </div>
 
   <div class="row mt-5">
     <div class="col-sm-9 offset-sm-3">
       <button class="btn btn-primary mr-2" id="save" type="submit">Enregistrer</button>
-      <a class="btn btn-secondary" [routerLink]="editedPerson ? ['/persons', editedPerson.id] : '/persons'">Annuler</a>
+      <a
+        class="btn btn-secondary"
+        [routerLink]="editedPerson ? ['/persons', editedPerson.id] : '/persons'"
+        >Annuler</a
+      >
     </div>
   </div>
-
 </form>

@@ -15,39 +15,44 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./tasks-page.component.scss']
 })
 export class TasksPageComponent implements OnInit {
-
   taskListType: string;
   page: Page<TaskModel>;
 
   // the person, in case the task list type is 'person-xxx'. null otherwise
   person: PersonModel = null;
 
-  titleSuffixes: {[key: string]: string} = {
+  titleSuffixes: { [key: string]: string } = {
     todo: 'à faire',
     urgent: 'urgentes',
     mine: 'dans ma liste',
     unassigned: 'non assignées',
     archived: 'archivées',
     'person-todo': 'à faire',
-    'person-archived': 'archivées',
+    'person-archived': 'archivées'
   };
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private taskService: TaskService,
-              private tasksResolverService: TasksResolverService) {
-  }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private taskService: TaskService,
+    private tasksResolverService: TasksResolverService
+  ) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
       this.page = data.tasks;
       this.taskListType = data.taskListType;
-      this.person = this.taskListType.startsWith('person-') ? this.route.parent.parent.snapshot.data.person : null;
+      this.person = this.taskListType.startsWith('person-')
+        ? this.route.parent.parent.snapshot.data.person
+        : null;
     });
   }
 
   loadPage(viewPageNumber: number) {
-    this.router.navigate(['.'], {relativeTo: this.route, queryParams: {page: (viewPageNumber - 1).toString()}});
+    this.router.navigate(['.'], {
+      relativeTo: this.route,
+      queryParams: { page: (viewPageNumber - 1).toString() }
+    });
   }
 
   onTaskClicked(event: TaskEvent) {
@@ -70,7 +75,7 @@ export class TasksPageComponent implements OnInit {
       case 'edit':
         const destination: Array<any> = ['/tasks', event.task.id, 'edit'];
         if (this.person) {
-          destination.push({'concerned-person': this.person.id});
+          destination.push({ 'concerned-person': this.person.id });
         }
         this.router.navigate(destination);
         break;
@@ -79,17 +84,17 @@ export class TasksPageComponent implements OnInit {
 
   private handleEvent(action: Observable<void>) {
     const currentPageNumber = this.page.number;
-    action.pipe(
-      switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))
-    ).subscribe(page => {
-      // maybe we are displaying a page that doesn't exist anymore
-      // so we check and reload with the last page if needed
-      if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
-        this.loadPage(page.totalPages);
-      } else {
-        this.page = page;
-      }
-    },
-    () => {});
+    action.pipe(switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))).subscribe(
+      page => {
+        // maybe we are displaying a page that doesn't exist anymore
+        // so we check and reload with the last page if needed
+        if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
+          this.loadPage(page.totalPages);
+        } else {
+          this.page = page;
+        }
+      },
+      () => {}
+    );
   }
 }

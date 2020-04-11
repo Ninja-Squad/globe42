@@ -7,13 +7,17 @@ import { IncomeSourceService } from './income-source.service';
 import { of } from 'rxjs';
 
 describe('IncomeSourcesResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve sources', () => {
     const incomeSourceService = TestBed.inject(IncomeSourceService);
-    const expectedResults = of([{ id: 42, name: 'Allocations Familiales' }] as Array<IncomeSourceModel>);
+    const expectedResults = of([{ id: 42, name: 'Allocations Familiales' }] as Array<
+      IncomeSourceModel
+    >);
 
     spyOn(incomeSourceService, 'list').and.returnValue(expectedResults);
 

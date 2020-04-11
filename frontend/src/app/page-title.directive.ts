@@ -6,8 +6,7 @@ import { Title } from '@angular/platform-browser';
   selector: 'gl-page-title'
 })
 export class PageTitleDirective implements OnDestroy {
-
-  constructor(private titleService: Title) { }
+  constructor(private titleService: Title) {}
 
   @Input() set title(title: string) {
     this.titleService.setTitle(`Globe42 - ${title}`);

@@ -6,13 +6,12 @@ import { CityModel } from './models/person.model';
 import { HttpTester } from './http-tester.spec';
 
 describe('SearchCityService', () => {
-
   let service: SearchCityService;
   let httpTester: HttpTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(SearchCityService);
@@ -30,5 +29,4 @@ describe('SearchCityService', () => {
     const expectedResult = [{ city: 'SAINT-ETIENNE', code: 42000 }] as Array<CityModel>;
     httpTester.testGet('/api/cities?query=SAINT', expectedResult, service.search('SAINT'));
   });
-
 });

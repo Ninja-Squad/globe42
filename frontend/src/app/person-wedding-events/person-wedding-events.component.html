@@ -16,7 +16,12 @@
 </div>
 
 <div class="mt-4">
-  <button *ngIf="!newEvent" id="newEventButton" class="btn btn-outline-primary" (click)="showEventCreation()">
+  <button
+    *ngIf="!newEvent"
+    id="newEventButton"
+    class="btn btn-outline-primary"
+    (click)="showEventCreation()"
+  >
     <span class="fa fa-plus"></span>
     Ajouter un événement
   </button>
@@ -25,8 +30,14 @@
     <div class="form-group">
       <label for="date">Date</label>
       <gl-datepicker-container>
-        <input class="form-control" id="date" formControlName="date"
-               ngbDatepicker [minDate]="{year: 1900, month: 1, day: 1}" [maxDate]="maxMonth">
+        <input
+          class="form-control"
+          id="date"
+          formControlName="date"
+          ngbDatepicker
+          [minDate]="{ year: 1900, month: 1, day: 1 }"
+          [maxDate]="maxMonth"
+        />
       </gl-datepicker-container>
       <val-errors controlName="date" label="La date"></val-errors>
     </div>
@@ -35,7 +46,9 @@
       <label for="type">Type d'événement</label>
       <select id="type" formControlName="type" class="form-control">
         <option value=""></option>
-        <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{ eventType.translation }}</option>
+        <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{
+          eventType.translation
+        }}</option>
       </select>
       <val-errors controlName="type" label="Le type d'événement"></val-errors>
     </div>
@@ -43,9 +56,25 @@
     <div class="form-group">
       <label>Lieu</label>
       <div>
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="location" formControlName="location">
-          <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let location of locations">
-            <input ngbButton name="location" id="location{{ location.key }}" type="radio" [value]="location.key"> {{ location.translation }}
+        <div
+          class="btn-group btn-group-toggle"
+          ngbRadioGroup
+          name="location"
+          formControlName="location"
+        >
+          <label
+            ngbButtonLabel
+            class="btn btn-outline-secondary"
+            *ngFor="let location of locations"
+          >
+            <input
+              ngbButton
+              name="location"
+              id="location{{ location.key }}"
+              type="radio"
+              [value]="location.key"
+            />
+            {{ location.translation }}
           </label>
         </div>
       </div>
@@ -53,6 +82,13 @@
     </div>
 
     <button id="createButton" class="btn btn-primary mr-2">Ajouter</button>
-    <button id="cancelCreationButton" type="button" class="btn btn-secondary" (click)="newEvent = null">Annuler</button>
+    <button
+      id="cancelCreationButton"
+      type="button"
+      class="btn btn-secondary"
+      (click)="newEvent = null"
+    >
+      Annuler
+    </button>
   </form>
 </div>

@@ -12,11 +12,12 @@ describe('ChargeCategoriesComponent', () => {
     snapshot: { data: { chargeCategories } }
   };
 
-  beforeEach(async(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [ChargeCategoriesComponent, PageTitleDirective],
-    providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-  })));
+  beforeEach(async(() =>
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [ChargeCategoriesComponent, PageTitleDirective],
+      providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
+    })));
 
   it('should list categories', () => {
     const fixture = TestBed.createComponent(ChargeCategoriesComponent);

@@ -1,7 +1,6 @@
 import { DisplayCityPipe } from './display-city.pipe';
 
 describe('DisplayCityPipe', () => {
-
   it('should display a city', () => {
     const pipe = new DisplayCityPipe();
     const city = { city: 'SAINT-ETIENNE', code: 42000 };

@@ -6,8 +6,7 @@ import { IncomeSourceService } from './income-source.service';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeSourceResolverService implements Resolve<IncomeSourceModel> {
-
-  constructor(private incomeService: IncomeSourceService) { }
+  constructor(private incomeService: IncomeSourceService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IncomeSourceModel> {
     return this.incomeService.get(+route.paramMap.get('id'));

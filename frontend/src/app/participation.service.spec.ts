@@ -12,7 +12,7 @@ describe('ParticipationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(ParticipationService);
@@ -30,7 +30,8 @@ describe('ParticipationService', () => {
       '/api/persons/1/participations',
       { activityType: 'MEAL' },
       expectedParticipation,
-      service.create(1, 'MEAL'));
+      service.create(1, 'MEAL')
+    );
   });
 
   it('should delete participation', () => {
@@ -42,6 +43,7 @@ describe('ParticipationService', () => {
     httpTester.testGet(
       '/api/activity-types/MEAL/participants',
       expectedParticipants,
-      service.listParticipants('MEAL'));
+      service.listParticipants('MEAL')
+    );
   });
 });

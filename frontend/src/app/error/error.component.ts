@@ -11,24 +11,25 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./error.component.scss']
 })
 export class ErrorComponent implements OnInit {
-
   error: {
-    message: string,
-    technical: boolean,
-    status?: number
+    message: string;
+    technical: boolean;
+    status?: number;
   };
 
-  constructor(private interceptor: ErrorService, private router: Router) { }
+  constructor(private interceptor: ErrorService, private router: Router) {}
 
   ngOnInit() {
     this.interceptor.functionalErrors.subscribe(
-      err => this.error = { message: this.toMessage(err), technical: false });
+      err => (this.error = { message: this.toMessage(err), technical: false })
+    );
     this.interceptor.technicalErrors.subscribe(
-      err => this.error = { message: err.message, technical: true, status: err.status });
+      err => (this.error = { message: err.message, technical: true, status: err.status })
+    );
 
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => this.error = null);
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => (this.error = null));
   }
 
   private toMessage(error: FunctionalErrorModel) {

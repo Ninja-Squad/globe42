@@ -13,7 +13,9 @@ export abstract class ArrayBasedTypeahead<T> {
       text$.pipe(
         debounceTime(200),
         distinctUntilChanged(),
-        map(term => term === '' ? [] : elements.filter(element => this.isAccepted(element, term)).slice(0, 10))
+        map(term =>
+          term === '' ? [] : elements.filter(element => this.isAccepted(element, term)).slice(0, 10)
+        )
       );
 
     this.formatter = (result: T) => this.format(result);

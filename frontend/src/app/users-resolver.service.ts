@@ -6,8 +6,7 @@ import { UserService } from './user.service';
 
 @Injectable({ providedIn: 'root' })
 export class UsersResolverService implements Resolve<Array<UserModel>> {
-
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   resolve(): Observable<Array<UserModel>> {
     return this.userService.list();

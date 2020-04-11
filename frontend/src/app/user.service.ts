@@ -7,7 +7,6 @@ import { UserWithPasswordModel } from './models/user-with-password.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-
   constructor(private http: HttpClient) {}
 
   list(): Observable<Array<UserModel>> {

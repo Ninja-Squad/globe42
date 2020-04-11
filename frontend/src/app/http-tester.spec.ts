@@ -2,31 +2,25 @@ import { Observable } from 'rxjs';
 import { HttpTestingController } from '@angular/common/http/testing';
 
 export class HttpTester {
-  constructor(private http: HttpTestingController) {
-  }
+  constructor(private http: HttpTestingController) {}
 
-  testGet<T>(url: string,
-             body: T,
-             observable: Observable<T>) {
+  testGet<T>(url: string, body: T, observable: Observable<T>) {
     let actualBody: T;
-    observable.subscribe(result => actualBody = result);
+    observable.subscribe(result => (actualBody = result));
 
-    this.http.expectOne({url, method: 'GET'}).flush(body);
+    this.http.expectOne({ url, method: 'GET' }).flush(body);
 
     expect(actualBody).toEqual(body);
   }
 
   testDelete(url: string, observable: Observable<void>) {
     let ok = false;
-    observable.subscribe(() => ok = true);
-    this.http.expectOne({url, method: 'DELETE'}).flush(null);
+    observable.subscribe(() => (ok = true));
+    this.http.expectOne({ url, method: 'DELETE' }).flush(null);
     expect(ok).toBe(true);
   }
 
-  testPost<T>(url: string,
-              command: any,
-              body: T,
-              observable: Observable<T>) {
+  testPost<T>(url: string, command: any, body: T, observable: Observable<T>) {
     let actualBody: T;
     let ok = false;
     observable.subscribe(result => {
@@ -44,11 +38,9 @@ export class HttpTester {
     }
   }
 
-  testPut(url: string,
-          command: any,
-          observable: Observable<void>) {
+  testPut(url: string, command: any, observable: Observable<void>) {
     let ok = false;
-    observable.subscribe(() => ok = true);
+    observable.subscribe(() => (ok = true));
 
     const testRequest = this.http.expectOne({ url, method: 'PUT' });
     expect(testRequest.request.body).toEqual(command);

@@ -7,12 +7,13 @@ import { IncomeSourceTypeService } from './income-source-type.service';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeTypeResolverService implements Resolve<IncomeSourceTypeModel> {
+  constructor(private incomeService: IncomeSourceTypeService) {}
 
-  constructor(private incomeService: IncomeSourceTypeService) { }
-
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IncomeSourceTypeModel> {
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<IncomeSourceTypeModel> {
     const typeId = +route.paramMap.get('id');
     return this.incomeService.get(typeId);
   }
-
 }

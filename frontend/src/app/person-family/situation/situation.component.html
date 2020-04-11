@@ -12,7 +12,9 @@
         {{ child.firstName }}
         <ng-container *ngIf="child.firstName && child.birthDate">&ndash;</ng-container>
         {{ child.birthDate | date }}
-        <ng-container *ngIf="child.birthDate"> &ndash; {{ age(child) | number:'.0-0' }} ans</ng-container>
+        <ng-container *ngIf="child.birthDate">
+          &ndash; {{ age(child) | number: '.0-0' }} ans</ng-container
+        >
         <ng-container *ngIf="!child.firstName && !child.birthDate">aucune information</ng-container>
       </li>
     </ul>

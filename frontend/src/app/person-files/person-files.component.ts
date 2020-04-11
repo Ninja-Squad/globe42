@@ -14,16 +14,17 @@ import { CurrentPersonService } from '../current-person.service';
   styleUrls: ['./person-files.component.scss']
 })
 export class PersonFilesComponent implements OnInit {
-
   person: PersonModel;
   loading = false;
   uploading = false;
   uploadProgress: number;
   files: Array<FileModel>;
 
-  constructor(currentPersonService: CurrentPersonService,
-              private personFileService: PersonFileService,
-              private confirmService: ConfirmService) {
+  constructor(
+    currentPersonService: CurrentPersonService,
+    private personFileService: PersonFileService,
+    private confirmService: ConfirmService
+  ) {
     this.person = currentPersonService.snapshot;
   }
 
@@ -36,11 +37,12 @@ export class PersonFilesComponent implements OnInit {
   }
 
   delete(file: FileModel) {
-    this.confirmService.confirm({
-      message: 'Voulez-vous vraiment supprimer ce document\u00A0?'
-    }).pipe(
-      switchMap(() => this.personFileService.delete(this.person.id, file.name))
-    ).subscribe(() => this.loadFiles());
+    this.confirmService
+      .confirm({
+        message: 'Voulez-vous vraiment supprimer ce document\u00A0?'
+      })
+      .pipe(switchMap(() => this.personFileService.delete(this.person.id, file.name)))
+      .subscribe(() => this.loadFiles());
   }
 
   upload(fileChangeEvent: Event) {
@@ -48,28 +50,31 @@ export class PersonFilesComponent implements OnInit {
 
     const file = (fileChangeEvent.target as HTMLInputElement).files[0];
 
-    this.personFileService.create(this.person.id, file)
-      .pipe(
-        finalize(() => this.uploading = false)
-      ).subscribe(
+    this.personFileService
+      .create(this.person.id, file)
+      .pipe(finalize(() => (this.uploading = false)))
+      .subscribe(
         progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
             this.uploadProgress = progressEvent.loaded / progressEvent.total;
           }
         },
         () => {},
-        () => this.loadFiles());
+        () => this.loadFiles()
+      );
   }
 
   private loadFiles() {
     // display the spinner after 300ms, unless the notes have loaded before. Note: delay() is untestable,
     // see https://github.com/angular/angular/issues/10127
-    window.setTimeout(() => this.loading = !this.files, 300);
+    window.setTimeout(() => (this.loading = !this.files), 300);
 
-    this.personFileService.list(this.person.id)
-      .subscribe(files => {
-        this.loading = false;
-        this.files = sortBy(files, Comparator.comparing<FileModel>(file => file.creationInstant).reversed());
-      });
+    this.personFileService.list(this.person.id).subscribe(files => {
+      this.loading = false;
+      this.files = sortBy(
+        files,
+        Comparator.comparing<FileModel>(file => file.creationInstant).reversed()
+      );
+    });
   }
 }

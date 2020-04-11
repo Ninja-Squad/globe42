@@ -7,7 +7,6 @@ import { catchError, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PersonNoteEditionGuard implements CanDeactivate<PersonComponent> {
-
   constructor(private confirmService: ConfirmService) {}
 
   canDeactivate(component: PersonComponent): Observable<boolean> | boolean {
@@ -15,12 +14,14 @@ export class PersonNoteEditionGuard implements CanDeactivate<PersonComponent> {
       return true;
     }
 
-    return this.confirmService.confirm({
-      message: `Vous avez une note en cours d'édition. Voulez-vous vraiment quitter la page\u00a0?`,
-      errorOnClose: true
-    }).pipe(
-      map(() => true),
-      catchError(() => of(false))
-    );
+    return this.confirmService
+      .confirm({
+        message: `Vous avez une note en cours d'édition. Voulez-vous vraiment quitter la page\u00a0?`,
+        errorOnClose: true
+      })
+      .pipe(
+        map(() => true),
+        catchError(() => of(false))
+      );
   }
 }

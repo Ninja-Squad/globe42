@@ -7,9 +7,10 @@ import { CurrentPersonService } from './current-person.service';
 
 @Injectable({ providedIn: 'root' })
 export class ChargesResolverService implements Resolve<Array<ChargeModel>> {
-
-  constructor(private currentPersonService: CurrentPersonService,
-              private chargeService: ChargeService) { }
+  constructor(
+    private currentPersonService: CurrentPersonService,
+    private chargeService: ChargeService
+  ) {}
 
   resolve(): Observable<Array<ChargeModel>> {
     return this.chargeService.list(this.currentPersonService.snapshot.id);

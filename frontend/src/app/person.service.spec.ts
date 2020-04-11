@@ -7,13 +7,12 @@ import { PersonCommand } from './models/person.command';
 import { HttpTester } from './http-tester.spec';
 
 describe('PersonService', () => {
-
   let service: PersonService;
   let httpTester: HttpTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule]
     });
 
     service = TestBed.inject(PersonService);

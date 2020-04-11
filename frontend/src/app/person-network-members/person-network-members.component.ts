@@ -17,7 +17,6 @@ import { CurrentPersonService } from '../current-person.service';
   styleUrls: ['./person-network-members.component.scss']
 })
 export class PersonNetworkMembersComponent implements OnInit {
-
   members: Array<NetworkMemberModel>;
   person: PersonModel;
   memberTypes = NETWORK_MEMBER_TYPE_TRANSLATIONS.map(t => t.key);
@@ -25,11 +24,13 @@ export class PersonNetworkMembersComponent implements OnInit {
   editedMember: NetworkMemberModel;
   memberForm: FormGroup;
 
-  constructor(private currentPersonService: CurrentPersonService,
-              private route: ActivatedRoute,
-              private confirmService: ConfirmService,
-              private networkMemberService: NetworkMemberService,
-              private fb: FormBuilder) { }
+  constructor(
+    private currentPersonService: CurrentPersonService,
+    private route: ActivatedRoute,
+    private confirmService: ConfirmService,
+    private networkMemberService: NetworkMemberService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.members = this.route.snapshot.data.members;
@@ -37,12 +38,15 @@ export class PersonNetworkMembersComponent implements OnInit {
   }
 
   delete(member: NetworkMemberModel) {
-    this.confirmService.confirm({
-      message: 'Voulez-vous vraiment supprimer ce membre de réseau\u00a0?'
-    }).pipe(
-      switchMap(() => this.networkMemberService.delete(this.person.id, member.id)),
-      switchMap(() => this.networkMemberService.list(this.person.id)),
-    ).subscribe(members => this.members = members);
+    this.confirmService
+      .confirm({
+        message: 'Voulez-vous vraiment supprimer ce membre de réseau\u00a0?'
+      })
+      .pipe(
+        switchMap(() => this.networkMemberService.delete(this.person.id, member.id)),
+        switchMap(() => this.networkMemberService.list(this.person.id))
+      )
+      .subscribe(members => (this.members = members));
   }
 
   showMemberEdition(member: NetworkMemberModel | null) {
@@ -68,9 +72,11 @@ export class PersonNetworkMembersComponent implements OnInit {
       ? this.networkMemberService.update(this.person.id, this.editedMember.id, command)
       : this.networkMemberService.create(this.person.id, command);
 
-    observable.pipe(
-      tap(() => this.cancelMemberEdition()),
-      switchMap(() => this.networkMemberService.list(this.person.id)),
-    ).subscribe(members => this.members = members);
+    observable
+      .pipe(
+        tap(() => this.cancelMemberEdition()),
+        switchMap(() => this.networkMemberService.list(this.person.id))
+      )
+      .subscribe(members => (this.members = members));
   }
 }

@@ -18,13 +18,14 @@ export interface ParticipationItem {
   styleUrls: ['./person-participations.component.scss']
 })
 export class PersonParticipationsComponent {
-
   items: Array<ParticipationItem>;
   person: PersonModel;
 
-  constructor(currentPersonService: CurrentPersonService,
-              route: ActivatedRoute,
-              private participationService: ParticipationService) {
+  constructor(
+    currentPersonService: CurrentPersonService,
+    route: ActivatedRoute,
+    private participationService: ParticipationService
+  ) {
     this.person = currentPersonService.snapshot;
 
     const participations: Array<ParticipationModel> = route.snapshot.data.participations;
@@ -41,19 +42,23 @@ export class PersonParticipationsComponent {
   selectItem(item: ParticipationItem) {
     item.selected = !item.selected;
     if (item.selected) {
-      this.participationService.create(this.person.id, item.activityType)
-        .subscribe(participation => {
+      this.participationService.create(this.person.id, item.activityType).subscribe(
+        participation => {
           item.id = participation.id;
-        }, () => {
+        },
+        () => {
           item.selected = false;
-        });
+        }
+      );
     } else {
-      this.participationService.delete(this.person.id, item.id)
-        .subscribe(() => {
+      this.participationService.delete(this.person.id, item.id).subscribe(
+        () => {
           item.id = null;
-        }, () => {
+        },
+        () => {
           item.selected = true;
-        });
+        }
+      );
     }
   }
 }

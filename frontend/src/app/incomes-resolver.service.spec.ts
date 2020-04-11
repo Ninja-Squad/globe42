@@ -10,7 +10,7 @@ import { CurrentPersonService } from './current-person.service';
 describe('IncomesResolverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
+      imports: [HttpClientModule]
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);

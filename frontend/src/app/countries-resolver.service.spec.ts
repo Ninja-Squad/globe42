@@ -7,9 +7,11 @@ import { CountryService } from './country.service';
 import { CountryModel } from './models/country.model';
 
 describe('CountriesResolverService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [HttpClientModule]
-  }));
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientModule]
+    })
+  );
 
   it('should retrieve the countries', () => {
     const countryService = TestBed.inject(CountryService);
