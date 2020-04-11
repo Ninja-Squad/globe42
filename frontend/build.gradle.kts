@@ -1,6 +1,8 @@
+import com.moowork.gradle.node.yarn.YarnTask
+
 plugins {
     base
-    id("com.github.node-gradle.node") version "2.2.1"
+    id("com.github.node-gradle.node") version "2.2.3"
 }
 
 node {
@@ -59,7 +61,26 @@ tasks {
         }
     }
 
+    // This is not a yarn_format task because the task to run is `yarn format:check`
+    // and tasks with colons are not supported
+    val checkFormat by registering(YarnTask::class) {
+        args = listOf("run", "format:check")
+        execRunner.ignoreExitValue = true
+        dependsOn(prepare)
+        inputs.dir("src")
+        inputs.file(".prettierrc")
+        outputs.file("prettier-result.txt")
+        doLast {
+            file("prettier-result.txt").useLines { sequence ->
+                if (sequence.any { it.contains("src") }) {
+                    throw GradleException ("Formatting warning found. Check prettier-result.txt")
+                }
+            }
+        }
+    }
+
     check {
+        dependsOn(checkFormat)
         dependsOn(lint)
         dependsOn(test)
     }
@@ -72,5 +93,6 @@ tasks {
         dependsOn("cleanYarn_build")
         dependsOn("cleanYarn_test")
         dependsOn("cleanYarn_lint")
+        dependsOn("cleanCheckFormat")
     }
 }

@@ -10,6 +10,8 @@
     "bundlesize": "bundlesize",
     "codecov": "codecov",
     "lint": "ng lint > tslint-result.txt",
+    "format": "prettier --write \"src/**/*.+(ts|js|json|html|scss)\"",
+    "format:check": "prettier --check \"src/**/*.+(ts|js|json|html|scss)\" > prettier-result.txt",
     "postinstall": "echo 'Replacing moment.js by empty file since it is optional and not used'; echo '' > node_modules/moment/moment.js"
   },
   "private": true,
@@ -53,7 +55,7 @@
     "karma-jasmine": "3.1.1",
     "karma-jasmine-html-reporter": "1.5.3",
     "ngx-speculoos": "3.0.0",
-    "protractor": "6.0.0",
+    "prettier": "1.19.1",
     "ts-node": "8.8.2",
     "tslint": "6.1.1",
     "typescript": "3.8.3"
