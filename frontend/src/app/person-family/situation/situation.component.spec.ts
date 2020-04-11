@@ -5,9 +5,7 @@ import { Situation } from '../person-family.component';
 import { DateTime } from 'luxon';
 
 @Component({
-  template: `
-    <gl-situation [situation]="situation"></gl-situation>
-  `
+  template: `<gl-situation [situation]="situation"></gl-situation>`
 })
 class TestComponent {
   situation: Situation;

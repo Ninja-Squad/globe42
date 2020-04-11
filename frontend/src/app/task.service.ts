@@ -27,12 +27,7 @@ export class TaskService {
 
   listUrgent(pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get<Page<TaskModel>>('/api/tasks', {
-      params: pageParams(pageNumber).set(
-        'before',
-        DateTime.local()
-          .plus({ days: 7 })
-          .toISODate()
-      )
+      params: pageParams(pageNumber).set('before', DateTime.local().plus({ days: 7 }).toISODate())
     });
   }
 
@@ -50,9 +45,7 @@ export class TaskService {
 
   listArchivedForPerson(personId: number, pageNumber: number): Observable<Page<TaskModel>> {
     return this.http.get<Page<TaskModel>>(`/api/tasks`, {
-      params: pageParams(pageNumber)
-        .set('person', personId.toString())
-        .set('archived', '')
+      params: pageParams(pageNumber).set('person', personId.toString()).set('archived', '')
     });
   }
 
