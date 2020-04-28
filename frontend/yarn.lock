@@ -1041,10 +1041,10 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.0.0.tgz#9c13c2574c92d4503b005feca8f2e16cc1611506"
   integrity sha512-KYyTT/T6ALPkIRd2Ge080X/BsXvy9O0hcWTtMWkPvwAwF99+vn6Dv4GzrFT/Nn1LePr+FFDbRXXlqmsy9lw2zA==
 
-"@types/chart.js@2.9.19":
-  version "2.9.19"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.19.tgz#b112e2c2daad9f76afc32b4c099c56ccdf34040c"
-  integrity sha512-sFxlMb+ElfJelXh0Z8spmiLRrnXCd7CaT6WGQtckhjETK1H5i1nYKN4TOExhqPeDZ6u+w4bJ20UYqELWOEfAKQ==
+"@types/chart.js@2.9.20":
+  version "2.9.20"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.20.tgz#db503fc0d478d1d2a99eb0099d5c2b9c77599931"
+  integrity sha512-Xv4dd+DYqtTdUWbDIwaDEFtUIFwoQN44wiDDrWXdJtfGtOFlFIxXrsu8D+XJCS9o7mZbW29X8vPptwVrduz4JA==
   dependencies:
     moment "^2.10.2"
 
