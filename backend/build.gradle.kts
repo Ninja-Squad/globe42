@@ -9,12 +9,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.9")
+        classpath("org.postgresql:postgresql:42.2.11")
     }
 }
 
 plugins {
-    val kotlinVersion = "1.3.71"
+    val kotlinVersion = "1.3.72"
 
     java
     jacoco
@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.2.6.RELEASE"
+    id("org.springframework.boot") version "2.2.7.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("org.flywaydb.flyway") version "6.1.4"
     id("com.gorylenko.gradle-git-properties") version "2.2.0"
@@ -36,7 +36,6 @@ java {
 repositories {
     mavenCentral()
     jcenter() // necessary for dokka
-    google() // necessary for google cloud storage
 }
 
 tasks {
@@ -109,18 +108,21 @@ tasks {
 }
 
 ext["okhttp3.version"] = "4.2.1"
+val jwtVersion = "0.11.1"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
-    implementation("com.google.cloud:google-cloud-storage:1.104.0")
+    implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
+    implementation("com.google.cloud:google-cloud-storage:1.108.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwtVersion")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.flywaydb:flyway-core")
 
@@ -128,8 +130,8 @@ dependencies {
         exclude(module = "junit")
         exclude(module = "mockito")
     }
-    testImplementation("com.ninja-squad:springmockk:2.0.0")
-    testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("com.ninja-squad:springmockk:2.0.1")
+    testImplementation("io.mockk:mockk:1.10.0")
 
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
