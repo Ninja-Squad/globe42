@@ -1,8 +1,10 @@
 package org.globe42.web.security
 
+import io.jsonwebtoken.security.Keys
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.*
 
 /**
  * Unit tests for JwtHelper
@@ -13,7 +15,7 @@ class JwtHelperTest {
 
     @BeforeEach
     fun prepare() {
-        jwtHelper = JwtHelper("someSecretKey")
+        jwtHelper = JwtHelper(Base64.getEncoder().encodeToString(Keys.secretKeyFor(SIGNATURE_ALGORITHM).encoded))
     }
 
     @Test

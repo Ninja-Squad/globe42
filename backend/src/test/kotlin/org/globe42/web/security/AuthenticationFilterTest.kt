@@ -1,7 +1,7 @@
 package org.globe42.web.security
 
 import io.jsonwebtoken.JwtException
-import io.jsonwebtoken.impl.DefaultClaims
+import io.jsonwebtoken.Jwts
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -91,7 +91,7 @@ class AuthenticationFilterTest {
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        val claims = DefaultClaims()
+        val claims = Jwts.claims()
         claims.subject = "abcd"
         every { mockJwtHelper.extractClaims("hello") } returns claims
 
@@ -104,7 +104,7 @@ class AuthenticationFilterTest {
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        val claims = DefaultClaims()
+        val claims = Jwts.claims()
         claims.subject = "1234"
         every { mockJwtHelper.extractClaims("hello") } returns claims
         every { mockUserDao.existsNotDeletedById(1234L) } returns false
@@ -118,7 +118,7 @@ class AuthenticationFilterTest {
         request.requestURI = "/api/persons"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        val claims = DefaultClaims()
+        val claims = Jwts.claims()
         claims.subject = "1234"
         every { mockJwtHelper.extractClaims("hello") } returns claims
         every { mockUserDao.existsNotDeletedById(1234L) } returns true
@@ -133,7 +133,7 @@ class AuthenticationFilterTest {
         request.requestURI = "/api/persons"
         request.setCookies(Cookie("globe42_token", "hello"))
 
-        val claims = DefaultClaims()
+        val claims = Jwts.claims()
         claims.subject = "1234"
         every { mockJwtHelper.extractClaims("hello") } returns claims
         every { mockUserDao.existsNotDeletedById(1234L) } returns true
@@ -148,7 +148,7 @@ class AuthenticationFilterTest {
         request.requestURI = "/actuator/foo"
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer hello")
 
-        val claims = DefaultClaims()
+        val claims = Jwts.claims()
         claims.subject = "1234"
         every { mockJwtHelper.extractClaims("hello") } returns claims
         every { mockUserDao.existsNotDeletedById(1234L) } returns true
