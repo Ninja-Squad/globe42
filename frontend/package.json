@@ -12,7 +12,8 @@
     "lint": "ng lint > tslint-result.txt",
     "format": "prettier --write \"src/**/*.+(ts|js|json|html|scss)\"",
     "format:check": "prettier --check \"src/**/*.+(ts|js|json|html|scss)\" > prettier-result.txt",
-    "postinstall": "echo 'Replacing moment.js by empty file since it is optional and not used'; echo '' > node_modules/moment/moment.js"
+    "postinstall": "echo 'Replacing moment.js by empty file since it is optional and not used'; echo '' > node_modules/moment/moment.js",
+    "ngcc": "ngcc --properties es2015 browser module main --async false"
   },
   "private": true,
   "dependencies": {
