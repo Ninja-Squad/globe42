@@ -27,6 +27,10 @@ tasks {
         dependsOn(yarn_install)
     }
 
+    val yarn_ngcc by getting {
+        dependsOn(prepare)
+    }
+
     val yarn_build by getting {
         dependsOn(prepare)
         inputs.dir("src")
