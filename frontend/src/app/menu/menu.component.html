@@ -22,7 +22,7 @@
           </a>
         </li>
         <li class="nav-item" ngbDropdown>
-          <a class="nav-link" ngbDropdownToggle id="resourcesDropDown">
+          <a class="nav-link" ngbDropdownToggle id="resourcesDropDown" role="button">
             <span class="fa fa-money"></span>
             Ressources
           </a>
@@ -43,7 +43,7 @@
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item mr-2" ngbDropdown>
-          <a class="nav-link" ngbDropdownToggle id="userDropDown">
+          <a class="nav-link" ngbDropdownToggle id="userDropDown" role="button">
             <span class="fa fa-user-circle fa-fw"></span> {{ user.login }}
           </a>
           <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu-right">
@@ -51,7 +51,7 @@
               <span class="fa fa-power-off fa-fw"></span> Déconnexion
             </a>
             <a class="dropdown-item" routerLink="/profile">
-              <span class="fa fa-address-card"></span> Profil et préférences
+              <span class="fa fa-address-card fa-fw"></span> Profil et préférences
             </a>
             <a class="dropdown-item" routerLink="/password-changes">
               <span class="fa fa-lock fa-fw"></span> Changer de mot de passe
