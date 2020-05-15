@@ -26,6 +26,11 @@ spring:
     open-in-view: false
   flyway:
     table: schema_version
+  mvc:
+    format:
+      date: iso
+      time: iso
+      date-time: iso
 management:
   endpoint:
     health:

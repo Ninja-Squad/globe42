@@ -73,7 +73,7 @@ class TaskController(
 
     @GetMapping(params = ["before"])
     fun listTodoBefore(
-        @RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
+        @RequestParam("before") date: LocalDate,
         @RequestParam page: Int?
     ): PageDTO<TaskDTO> {
         return taskDao.findTodoBefore(date, pageRequest(page)).toDTO(::TaskDTO)

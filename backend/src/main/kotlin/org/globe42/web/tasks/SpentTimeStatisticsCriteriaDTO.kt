@@ -9,6 +9,6 @@ import java.time.LocalDate
  * @author JB Nizet
  */
 data class SpentTimeStatisticsCriteriaDTO(
-    @param:DateTimeFormat(iso = ISO.DATE) val from: LocalDate?,
-    @param:DateTimeFormat(iso = ISO.DATE) val to: LocalDate?
+    val from: LocalDate?,
+    val to: LocalDate?
 )

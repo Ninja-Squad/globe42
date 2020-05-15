@@ -1,5 +1,6 @@
 package org.globe42.web.exception
 
+import org.springframework.boot.web.error.ErrorAttributeOptions
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes
 import org.springframework.boot.web.servlet.error.ErrorAttributes
 import org.springframework.context.annotation.Bean
@@ -19,19 +20,14 @@ class ExceptionConfig {
         return CustomErrorAttributes()
     }
 
-    open class CustomErrorAttributes : DefaultErrorAttributes {
-        constructor()
-
-        constructor(includeException: Boolean) : super(includeException)
-
-        override fun getErrorAttributes(webRequest: WebRequest, includeStackTrace: Boolean): Map<String, Any> {
-            val result = super.getErrorAttributes(webRequest, includeStackTrace)
+    open class CustomErrorAttributes : DefaultErrorAttributes() {
+        override fun getErrorAttributes(webRequest: WebRequest, options: ErrorAttributeOptions): Map<String, Any> {
+            val result = super.getErrorAttributes(webRequest, options)
 
             val error = getError(webRequest)
             if (error is BadRequestException) {
-                val exception = error
-                if (exception.error != null) {
-                    result["functionalError"] = exception.error
+                error.error?.let {
+                    result["functionalError"] = it
                 }
             }
             return result

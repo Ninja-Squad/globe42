@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.spyk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.springframework.boot.web.error.ErrorAttributeOptions
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.web.context.request.ServletWebRequest
 
@@ -22,7 +23,7 @@ class ExceptionConfigTest {
         val exception = BadRequestException(ErrorCode.USER_LOGIN_ALREADY_EXISTS)
         every { result.getError(webRequest) } returns exception
 
-        val errorAttributes = result.getErrorAttributes(webRequest, false)
+        val errorAttributes = result.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults())
 
         assertThat(errorAttributes["functionalError"]).isEqualTo(exception.error)
     }

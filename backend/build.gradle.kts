@@ -22,8 +22,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.2.7.RELEASE"
-    id("io.spring.dependency-management") version "1.0.8.RELEASE"
+    id("org.springframework.boot") version "2.3.0.RELEASE"
+    id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("org.flywaydb.flyway") version "6.1.4"
     id("com.gorylenko.gradle-git-properties") version "2.2.0"
     id("org.jetbrains.dokka") version "0.10.0"
@@ -113,6 +113,7 @@ val jwtVersion = "0.11.1"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
