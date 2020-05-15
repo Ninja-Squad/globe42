@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.11")
+        classpath("org.postgresql:postgresql:42.2.12")
     }
 }
 
@@ -24,7 +24,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
     id("org.springframework.boot") version "2.3.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("org.flywaydb.flyway") version "6.1.4"
+    id("org.flywaydb.flyway") version "6.4.1"
     id("com.gorylenko.gradle-git-properties") version "2.2.0"
     id("org.jetbrains.dokka") version "0.10.0"
 }
@@ -107,7 +107,7 @@ tasks {
     }
 }
 
-ext["okhttp3.version"] = "4.2.1"
+ext["okhttp3.version"] = "4.6.0"
 val jwtVersion = "0.11.1"
 
 dependencies {

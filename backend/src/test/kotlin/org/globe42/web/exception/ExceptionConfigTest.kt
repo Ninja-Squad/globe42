@@ -38,7 +38,7 @@ class ExceptionConfigTest {
         val exception = BadRequestException("foo")
         every { result.getError(webRequest) } returns exception
 
-        val errorAttributes = result.getErrorAttributes(webRequest, false)
+        val errorAttributes = result.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults())
 
         assertThat(errorAttributes.containsKey("functionalError")).isFalse()
     }
@@ -53,7 +53,7 @@ class ExceptionConfigTest {
         val exception = IllegalStateException("foo")
         every { result.getError(webRequest) } returns exception
 
-        val errorAttributes = result.getErrorAttributes(webRequest, false)
+        val errorAttributes = result.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults())
 
         assertThat(errorAttributes.containsKey("functionalError")).isFalse()
     }
