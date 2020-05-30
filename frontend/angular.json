@@ -5,7 +5,11 @@
   "projects": {
     "globe42": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "gl",
@@ -118,14 +122,5 @@
       }
     }
   },
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "gl",
-      "styleext": "scss"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "gl"
-    },
-    "defaultProject": "globe42"
-  }
+  "defaultProject": "globe42"
 }
