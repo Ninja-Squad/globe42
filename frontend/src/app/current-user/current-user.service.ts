@@ -77,10 +77,10 @@ export class CurrentUserService {
   }
 
   private storeCookie(token: string) {
-    document.cookie = `globe42_token=${token};path=/`;
+    document.cookie = `globe42_token=${token};path=/;samesite=lax`;
   }
 
   private deleteCookie() {
-    document.cookie = `globe42_token=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    document.cookie = `globe42_token=;path=/;samesite=lax;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   }
 }
