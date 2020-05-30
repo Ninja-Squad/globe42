@@ -31,6 +31,7 @@ class PersonDaoTest : BaseDaoTest() {
                 columns("id", "first_name", "last_name", "mediation_enabled", "gender", "deleted")
                 values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false)
                 values(2L, "Old", "Oldie", false, Gender.MALE, true)
+                values(3L, "JB", "Nizet", true, Gender.MALE, false)
             }
 
             insertInto("participation") {
@@ -80,11 +81,17 @@ class PersonDaoTest : BaseDaoTest() {
 
     @Test
     fun `should find not deleted`() {
-        assertThat(personDao.findNotDeleted()).extracting<Long>(Person::id).containsOnly(1L)
+        assertThat(personDao.findNotDeleted()).extracting<Long>(Person::id).containsOnly(1L, 3L)
     }
 
     @Test
     fun `should find deleted`() {
         assertThat(personDao.findDeleted()).extracting<Long>(Person::id).containsOnly(2L)
+    }
+
+    @Test
+    fun `should find health care coverage`() {
+        assertThat(personDao.findHealthCareCoverage())
+            .containsOnly(HealthCareCoverageEntry(HealthCareCoverage.UNKNOWN, 1L))
     }
 }

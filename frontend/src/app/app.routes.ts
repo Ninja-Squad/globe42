@@ -71,6 +71,8 @@ import { NetworkMembersResolverService } from './network-members-resolver.servic
 import { PersonDeathComponent } from './person-death/person-death.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ProfileResolverService } from './profile-resolver.service';
+import { HealthCareCoverageComponent } from './health-care-coverage/health-care-coverage.component';
+import { HealthCareCoverageResolverService } from './health-care-coverage-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -88,7 +90,14 @@ export const routes: Routes = [
             children: [
               { path: '', pathMatch: 'full', redirectTo: 'active' },
               personsRoute('active'),
-              personsRoute('deleted')
+              personsRoute('deleted'),
+              {
+                path: 'healthcare',
+                component: HealthCareCoverageComponent,
+                resolve: {
+                  coverage: HealthCareCoverageResolverService
+                }
+              }
             ]
           },
           {

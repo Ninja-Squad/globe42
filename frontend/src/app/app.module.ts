@@ -88,6 +88,7 @@ import { DisplayEntryTypePipe } from './display-entry-type.pipe';
 import { PersonDeathComponent } from './person-death/person-death.component';
 import { ProfileComponent } from './profile/profile.component';
 import { DisplayPassportStatusPipe } from './display-passport-status.pipe';
+import { HealthCareCoverageComponent } from './health-care-coverage/health-care-coverage.component';
 
 registerLocaleData(localeFr);
 
@@ -168,7 +169,8 @@ registerLocaleData(localeFr);
     DisplayEntryTypePipe,
     PersonDeathComponent,
     ProfileComponent,
-    DisplayPassportStatusPipe
+    DisplayPassportStatusPipe,
+    HealthCareCoverageComponent
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [
