@@ -73,6 +73,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ProfileResolverService } from './profile-resolver.service';
 import { HealthCareCoverageComponent } from './health-care-coverage/health-care-coverage.component';
 import { HealthCareCoverageResolverService } from './health-care-coverage-resolver.service';
+import { PersonsReportsComponent } from './persons-reports/persons-reports.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -97,6 +98,10 @@ export const routes: Routes = [
                 resolve: {
                   coverage: HealthCareCoverageResolverService
                 }
+              },
+              {
+                path: 'reports',
+                component: PersonsReportsComponent
               }
             ]
           },

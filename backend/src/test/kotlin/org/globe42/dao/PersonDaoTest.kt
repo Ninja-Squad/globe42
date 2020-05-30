@@ -90,6 +90,11 @@ class PersonDaoTest : BaseDaoTest() {
     }
 
     @Test
+    fun `should find not deleted with mediation`() {
+        assertThat(personDao.findNotDeletedWithMediation()).extracting<Long>(Person::id).containsOnly(3L)
+    }
+
+    @Test
     fun `should find health care coverage`() {
         assertThat(personDao.findHealthCareCoverage())
             .containsOnly(HealthCareCoverageEntry(HealthCareCoverage.UNKNOWN, 1L))

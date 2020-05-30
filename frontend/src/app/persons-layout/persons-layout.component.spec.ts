@@ -19,7 +19,7 @@ describe('PersonsLayoutComponent', () => {
 
     expect(fixture.nativeElement.querySelector('h1').textContent).toBe('Adhérents');
     const links = fixture.nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(4);
+    expect(links.length).toBe(5);
 
     const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
     expect(outlet).toBeTruthy();
