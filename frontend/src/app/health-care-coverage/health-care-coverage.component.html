@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-md-8 col-lg-6">
+    <gl-chart [configuration]="chartConfiguration"></gl-chart>
+  </div>
+  <div class="col-md-4 mt-4 mt-md-0">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Couverture maladie</th>
+          <th class="text-right">Nombre</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of coverage.entries">
+          <td>{{ entry.coverage | displayHealthCareCoverage }}</td>
+          <td class="text-right">{{ entry.count | number }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Total</th>
+          <td class="text-right">{{ totalCount | number }}</td>
+        </tr>
+        <tr>
+          <th>Personnes couvertes</th>
+          <td class="text-right">{{ coveredCount | number }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

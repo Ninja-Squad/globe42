@@ -8,7 +8,7 @@ export class BaseEnumPipe implements PipeTransform {
       return '';
     }
 
-    const element = this.translations.filter(t => t.key === key)[0];
+    const element = this.translations.find(t => t.key === key);
     return element ? element.translation : `???${key}???`;
   }
 }
