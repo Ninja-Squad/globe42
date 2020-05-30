@@ -25,7 +25,10 @@ interface PersonDao : GlobeRepository<Person, Long>, PersonDaoCustom {
     @Query("select person from Person person where person.deleted = true")
     fun findDeleted(): List<Person>
 
-    @Query("select person from Person person where person.deleted = false and person.mediationEnabled = true")
+    @Query("""select person from Person person 
+            where person.deleted = false 
+            and person.mediationEnabled = true 
+            order by person.firstName, person.lastName""")
     fun findNotDeletedWithMediation(): List<Person>
 
     @Query(

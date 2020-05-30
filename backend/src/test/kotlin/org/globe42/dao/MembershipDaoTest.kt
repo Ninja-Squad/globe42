@@ -61,4 +61,9 @@ class MembershipDaoTest : BaseDaoTest() {
         result = dao.findByPersonAndYear(Person(3456L), 2018)
         assertThat(result).isNull()
     }
+
+    @Test
+    fun `should list`() {
+        assertThat(dao.list().map(Membership::id)).containsExactly(1L, 2L)
+    }
 }

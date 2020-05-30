@@ -4,10 +4,10 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.assertj.core.api.Assertions.assertThat
+import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
 import org.globe42.test.GlobeMvcTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.servlet.MockMvc
@@ -23,6 +23,9 @@ import java.time.LocalDate
 class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
     @MockkBean
     lateinit var personDao: PersonDao
+
+    @MockkBean
+    lateinit var membershipDao: MembershipDao
 
     @Test
     fun `should create appointments report`() {
@@ -92,6 +95,53 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
             assertThat(jbRow.getCell(7).booleanCellValue).isFalse() // french
             assertThat(jbRow.getCell(8).numericCellValue).isEqualTo(2.0) // alix
             assertThat(jbRow.getCell(9).numericCellValue).isEqualTo(0.0) // malika
+        }
+    }
+
+    @Test
+    fun `should create memberships report`() {
+        every { membershipDao.list() } returns listOf(
+            Membership(
+                id = 1L,
+                person = Person().apply {
+                    firstName = "Agnès"
+                    lastName = "Crepet"
+                    birthDate = LocalDate.of(1980, 2, 1)
+                    gender = Gender.FEMALE
+                    email = "agnes@mail.com"
+                },
+                year = 2020,
+                paymentMode = PaymentMode.CHECK,
+                cardNumber = "12",
+                paymentDate = LocalDate.of(2020, 1, 2)
+            )
+        )
+
+        val result = mockMvc.get("/api/reports/memberships").andExpect {
+            status { isOk }
+        }.andReturn()
+
+        val bytes = result.response.contentAsByteArray
+
+        XSSFWorkbook(ByteArrayInputStream(bytes)).use { workbook ->
+            assertThat(workbook.numberOfSheets).isEqualTo(1)
+            val sheet = workbook.getSheetAt(0)
+
+            assertThat(sheet.lastRowNum).isEqualTo(1)
+            sheet.rowIterator().forEach { row ->
+                assertThat(row.lastCellNum).isEqualTo(9) // last cell num is the last cell num + 1
+            }
+
+            val row = sheet.getRow(1)
+            assertThat(row.getCell(0).stringCellValue).isEqualTo("Agnès")
+            assertThat(row.getCell(1).stringCellValue).isEqualTo("Crepet")
+            assertThat(row.getCell(2).stringCellValue).isEqualTo("01/02/1980")
+            assertThat(row.getCell(3).stringCellValue).isEqualTo("F")
+            assertThat(row.getCell(4).stringCellValue).isEqualTo("agnes@mail.com")
+            assertThat(row.getCell(5).stringCellValue).isEqualTo("02/01/2020")
+            assertThat(row.getCell(6).stringCellValue).isEqualTo("Chèque")
+            assertThat(row.getCell(7).numericCellValue).isEqualTo(2020.0)
+            assertThat(row.getCell(8).stringCellValue).isEqualTo("12")
         }
     }
 }
