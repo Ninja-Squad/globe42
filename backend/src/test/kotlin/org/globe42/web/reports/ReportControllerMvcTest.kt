@@ -39,7 +39,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                 birthDate = LocalDate.of(1980, 2, 1)
                 nationality = Country("FR", "France")
                 gender = Gender.FEMALE
-                maritalStatus = MaritalStatus.CONCUBINAGE
+                accompanying = "someone"
                 addParticipation(Participation().apply { activityType = ActivityType.FRENCH_AND_COMPUTER_LESSON })
                 addParticipation(Participation().apply { activityType = ActivityType.MEAL })
                 addNote(Note().apply {
@@ -52,7 +52,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                 birthDate = LocalDate.of(1975, 7, 19)
                 nationality = Country("BE", "Belgique")
                 gender = Gender.MALE
-                maritalStatus = MaritalStatus.UNKNOWN
+                accompanying = " "
                 addNote(Note().apply {
                     creator = alix
                 })

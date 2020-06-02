@@ -60,7 +60,6 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             }
             sheet.createFreezePane(0, 1)
 
-            val accompaniedStatuses = setOf(MaritalStatus.MARRIED, MaritalStatus.CONCUBINAGE)
             persons.forEachIndexed { index, person ->
                 val row = sheet.createRow(index + 1)
                 var col = 0
@@ -69,7 +68,7 @@ class ReportController(private val personDao: PersonDao, private val membershipD
                 row.createCell(col++, CellType.STRING).setCellValue(person.birthDate?.toReportString())
                 row.createCell(col++, CellType.STRING).setCellValue(person.nationality?.name)
                 row.createCell(col++, CellType.STRING).setCellValue(person.gender.reportValue)
-                row.createCell(col++, CellType.BOOLEAN).setCellValue(person.maritalStatus in accompaniedStatuses)
+                row.createCell(col++, CellType.BOOLEAN).setCellValue(!person.accompanying.isNullOrBlank())
                 row.createCell(col++, CellType.BOOLEAN)
                     .setCellValue(person.getParticipations().any { it.activityType == ActivityType.MEAL })
                 row.createCell(col++, CellType.BOOLEAN).setCellValue(
