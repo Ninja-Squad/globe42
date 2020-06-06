@@ -40,6 +40,21 @@ interface PersonDao : GlobeRepository<Person, Long>, PersonDaoCustom {
         """
     )
     fun findHealthCareCoverage(): List<HealthCareCoverageEntry>
+
+    @Query(
+        """select person
+            from Person person
+            where person.deleted = false
+            and person.id not in (
+                select payingPerson
+                from Membership membership
+                join membership.person payingPerson
+                where membership.year = :year
+            )
+            order by person.firstName, person.lastName
+        """
+    )
+    fun findMissingMembershipsForYear(@Param("year") year: Int): List<Person>
 }
 
 data class HealthCareCoverageEntry(val coverage: HealthCareCoverage, val count: Long)
