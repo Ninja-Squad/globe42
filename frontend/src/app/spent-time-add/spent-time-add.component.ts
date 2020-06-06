@@ -34,9 +34,9 @@ export class SpentTimeAddComponent {
   }
   add() {
     const minutes = this.addForm.value.minutes + this.addForm.value.hours * 60;
-    this.taskService.addSpentTime(this.taskModel.id, minutes).subscribe(spentTime => {
-      this.spentTimeAdded.emit({ task: this.taskModel, spentTime });
-    });
+    this.taskService
+      .addSpentTime(this.taskModel.id, minutes)
+      .subscribe(spentTime => this.spentTimeAdded.emit({ task: this.taskModel, spentTime }));
   }
 
   cancel() {

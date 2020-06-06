@@ -44,9 +44,9 @@ export class IncomeTypeEditComponent implements OnInit {
     } else {
       action = this.incomeSourceTypeService.create(command);
     }
-    action.subscribe(
-      () => this.router.navigateByUrl('/income-types'),
-      this.errorService.functionalErrorHandler()
-    );
+    action.subscribe({
+      next: () => this.router.navigateByUrl('/income-types'),
+      error: this.errorService.functionalErrorHandler()
+    });
   }
 }

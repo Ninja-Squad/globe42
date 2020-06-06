@@ -84,8 +84,8 @@ export class TasksPageComponent implements OnInit {
 
   private handleEvent(action: Observable<void>) {
     const currentPageNumber = this.page.number;
-    action.pipe(switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))).subscribe(
-      page => {
+    action.pipe(switchMap(() => this.tasksResolverService.resolve(this.route.snapshot))).subscribe({
+      next: page => {
         // maybe we are displaying a page that doesn't exist anymore
         // so we check and reload with the last page if needed
         if (currentPageNumber >= page.totalPages && page.totalPages > 0) {
@@ -94,7 +94,7 @@ export class TasksPageComponent implements OnInit {
           this.page = page;
         }
       },
-      () => {}
-    );
+      error: () => {}
+    });
   }
 }

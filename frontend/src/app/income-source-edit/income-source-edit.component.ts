@@ -62,9 +62,9 @@ export class IncomeSourceEditComponent implements OnInit {
     } else {
       action = this.incomeSourceService.create(command);
     }
-    action.subscribe(
-      () => this.router.navigate(['/income-sources']),
-      this.errorService.functionalErrorHandler()
-    );
+    action.subscribe({
+      next: () => this.router.navigate(['/income-sources']),
+      error: this.errorService.functionalErrorHandler()
+    });
   }
 }

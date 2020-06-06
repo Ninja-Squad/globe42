@@ -34,9 +34,9 @@ export class LoginComponent implements OnInit {
 
     const command: CredentialsCommand = this.loginForm.value;
     this.authenticationFailed = false;
-    this.currentUserService.authenticate(command).subscribe(
-      () => this.router.navigate(['/']),
-      () => (this.authenticationFailed = true)
-    );
+    this.currentUserService.authenticate(command).subscribe({
+      next: () => this.router.navigate(['/']),
+      error: () => (this.authenticationFailed = true)
+    });
   }
 }

@@ -43,9 +43,9 @@ export class ChargeCategoryEditComponent implements OnInit {
     } else {
       action = this.chargeCategoryService.create(command);
     }
-    action.subscribe(
-      () => this.router.navigateByUrl('/charge-categories'),
-      this.errorService.functionalErrorHandler()
-    );
+    action.subscribe({
+      next: () => this.router.navigateByUrl('/charge-categories'),
+      error: this.errorService.functionalErrorHandler()
+    });
   }
 }
