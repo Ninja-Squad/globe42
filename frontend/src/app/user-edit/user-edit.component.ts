@@ -41,19 +41,15 @@ export class UserEditComponent implements OnInit {
 
     const command: UserCommand = this.userForm.value;
     if (this.editedUser) {
-      this.userService
-        .update(this.editedUser.id, command)
-        .subscribe(
-          () => this.router.navigate(['/users']),
-          this.errorService.functionalErrorHandler()
-        );
+      this.userService.update(this.editedUser.id, command).subscribe({
+        next: () => this.router.navigate(['/users']),
+        error: this.errorService.functionalErrorHandler()
+      });
     } else {
-      this.userService
-        .create(command)
-        .subscribe(
-          createdUser => (this.createdUser = createdUser),
-          this.errorService.functionalErrorHandler()
-        );
+      this.userService.create(command).subscribe({
+        next: createdUser => (this.createdUser = createdUser),
+        error: this.errorService.functionalErrorHandler()
+      });
     }
   }
 }

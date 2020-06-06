@@ -30,8 +30,8 @@ export class CitiesUploadComponent {
       this.status = 'uploading';
       const startTime = this.now();
 
-      this.cityService.uploadCities((fileLoadedEvent.target as any).result).subscribe(
-        progressEvent => {
+      this.cityService.uploadCities((fileLoadedEvent.target as any).result).subscribe({
+        next: progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
             const elapsedTime = this.now() - startTime;
             const estimatedUploadTime = (progressEvent.total / progressEvent.loaded) * elapsedTime;
@@ -54,15 +54,15 @@ export class CitiesUploadComponent {
             }
           }
         },
-        () => {
+        error: () => {
           this.progress = 1;
           this.status = 'failed';
         },
-        () => {
+        complete: () => {
           this.progress = 1;
           this.status = 'done';
         }
-      );
+      });
     };
 
     reader.readAsText(file, 'UTF8');

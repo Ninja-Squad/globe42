@@ -36,8 +36,8 @@ export class PersonPerUnitRevenueInformationEditComponent implements OnInit {
 
   save() {
     const info = this.infoGroup.value;
-    this.perUnitRevenueInformationService.update(this.person.id, info).subscribe(() => {
-      this.router.navigate(['/persons', this.person.id, 'resources']);
-    });
+    this.perUnitRevenueInformationService
+      .update(this.person.id, info)
+      .subscribe(() => this.router.navigate(['/persons', this.person.id, 'resources']));
   }
 }

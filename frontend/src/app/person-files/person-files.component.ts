@@ -53,15 +53,14 @@ export class PersonFilesComponent implements OnInit {
     this.personFileService
       .create(this.person.id, file)
       .pipe(finalize(() => (this.uploading = false)))
-      .subscribe(
-        progressEvent => {
+      .subscribe({
+        next: progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
             this.uploadProgress = progressEvent.loaded / progressEvent.total;
           }
         },
-        () => {},
-        () => this.loadFiles()
-      );
+        complete: () => this.loadFiles()
+      });
   }
 
   private loadFiles() {

@@ -42,23 +42,15 @@ export class PersonParticipationsComponent {
   selectItem(item: ParticipationItem) {
     item.selected = !item.selected;
     if (item.selected) {
-      this.participationService.create(this.person.id, item.activityType).subscribe(
-        participation => {
-          item.id = participation.id;
-        },
-        () => {
-          item.selected = false;
-        }
-      );
+      this.participationService.create(this.person.id, item.activityType).subscribe({
+        next: participation => (item.id = participation.id),
+        error: () => (item.selected = false)
+      });
     } else {
-      this.participationService.delete(this.person.id, item.id).subscribe(
-        () => {
-          item.id = null;
-        },
-        () => {
-          item.selected = true;
-        }
-      );
+      this.participationService.delete(this.person.id, item.id).subscribe({
+        next: () => (item.id = null),
+        error: () => (item.selected = true)
+      });
     }
   }
 }

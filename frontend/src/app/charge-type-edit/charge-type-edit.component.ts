@@ -61,9 +61,9 @@ export class ChargeTypeEditComponent implements OnInit {
     } else {
       action = this.chargeTypeService.create(command);
     }
-    action.subscribe(
-      () => this.router.navigate(['/charge-types']),
-      this.errorService.functionalErrorHandler()
-    );
+    action.subscribe({
+      next: () => this.router.navigate(['/charge-types']),
+      error: this.errorService.functionalErrorHandler()
+    });
   }
 }

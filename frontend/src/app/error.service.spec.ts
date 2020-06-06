@@ -30,9 +30,7 @@ describe('ErrorService', () => {
 
   it('should emit technical error when error is not an HTTP response', () => {
     let error: TechnicalErrorModel;
-    service.technicalErrors.subscribe(err => {
-      error = err;
-    });
+    service.technicalErrors.subscribe(err => (error = err));
 
     httpClient.get('/test').subscribe({ error: noop });
     http.expectOne('/test').error({ message: 'not good' } as ErrorEvent);
@@ -43,9 +41,7 @@ describe('ErrorService', () => {
 
   it('should emit technical error when error is an HTTP response with no JSON body', () => {
     let error: TechnicalErrorModel;
-    service.technicalErrors.subscribe(err => {
-      error = err;
-    });
+    service.technicalErrors.subscribe(err => (error = err));
 
     httpClient.get('/test').subscribe({ error: noop });
     http.expectOne('/test').flush(null, { status: 500, statusText: 'Server Error' });
@@ -56,9 +52,7 @@ describe('ErrorService', () => {
 
   it('should emit technical error when error is an HTTP response with a spring boot json body', () => {
     let error: TechnicalErrorModel;
-    service.technicalErrors.subscribe(err => {
-      error = err;
-    });
+    service.technicalErrors.subscribe(err => (error = err));
 
     httpClient.get('/test').subscribe({ error: noop });
     http
@@ -73,12 +67,8 @@ describe('ErrorService', () => {
     let functionalError: FunctionalErrorModel;
     let technicalError: TechnicalErrorModel;
 
-    service.functionalErrors.subscribe(err => {
-      functionalError = err;
-    });
-    service.technicalErrors.subscribe(err => {
-      technicalError = err;
-    });
+    service.functionalErrors.subscribe(err => (functionalError = err));
+    service.technicalErrors.subscribe(err => (technicalError = err));
 
     httpClient.get('/test').subscribe({ error: noop });
 
@@ -99,12 +89,8 @@ describe('ErrorService', () => {
     let functionalError: FunctionalErrorModel;
     let technicalError: TechnicalErrorModel;
 
-    service.functionalErrors.subscribe(err => {
-      functionalError = err;
-    });
-    service.technicalErrors.subscribe(err => {
-      technicalError = err;
-    });
+    service.functionalErrors.subscribe(err => (functionalError = err));
+    service.technicalErrors.subscribe(err => (technicalError = err));
 
     httpClient.get('/api/authentication').subscribe({ error: noop });
     http.expectOne('/api/authentication').flush(null, { status: 401, statusText: 'Unauthorized' });
@@ -116,9 +102,7 @@ describe('ErrorService', () => {
   it('should emit a functional error when the handler is invoked with a functional error response', () => {
     let error: FunctionalErrorModel;
 
-    service.functionalErrors.subscribe(err => {
-      error = err;
-    });
+    service.functionalErrors.subscribe(err => (error = err));
 
     service.functionalErrorHandler()(
       new HttpErrorResponse({

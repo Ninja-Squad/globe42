@@ -38,9 +38,9 @@ export class PasswordChangeComponent {
           this.currentUserService.changePassword(this.passwordChangeForm.value.newPassword)
         )
       )
-      .subscribe(
-        () => this.router.navigate(['/']),
-        () => (this.passwordChangeFailed = true)
-      );
+      .subscribe({
+        next: () => this.router.navigate(['/']),
+        error: () => (this.passwordChangeFailed = true)
+      });
   }
 }

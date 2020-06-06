@@ -25,7 +25,10 @@ import { tap } from 'rxjs/operators';
  * the way they want to. If the components just want to display the error in the error component, they can simply pass
  * the function returned by the functionalErrorHandler method in their subscribe/catch operator:
  *
- *   someService.subscribe(..., this.errorService.functionalErrorHandler()
+ *   someService.subscribe({
+ *     next: ...,
+ *     error: this.errorService.functionalErrorHandler()
+ *   })
  *
  * This functional error handler will check that the error is indeed functional, and if it is, it will emit it
  * so that the error component can display it in the generic error location.
