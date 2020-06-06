@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.transaction.Transactional
 
@@ -135,6 +136,51 @@ class ReportController(private val personDao: PersonDao, private val membershipD
         }
 
         return out.toExcelResponse("adhesions")
+    }
+
+    @GetMapping("/missing-memberships")
+    fun missingPaymentsReport(): ResponseEntity<ByteArray> {
+        val persons = personDao.findMissingMembershipsForYear(LocalDate.now(ZoneId.of("Europe/Paris")).year)
+
+        val out = ByteArrayOutputStream()
+        XSSFWorkbook().use { workbook ->
+            val sheet = workbook.createSheet("Personnes sans adhésion")
+
+            val headers = listOf(
+                "Prénom",
+                "Nom",
+                "Date de naissance",
+                "Sexe",
+                "En médiation",
+                "Email",
+                "Téléphone"
+            )
+
+            val headerRow = sheet.createRow(0)
+            headerRow.rowStyle = workbook.headerStyle
+            headers.forEachIndexed { index, header ->
+                headerRow.createCell(index, CellType.STRING).setCellValue(header)
+            }
+            sheet.createFreezePane(0, 1)
+
+            persons.forEachIndexed { index, person ->
+                val row = sheet.createRow(index + 1)
+                var col = 0
+                row.createCell(col++, CellType.STRING).setCellValue(person.firstName)
+                row.createCell(col++, CellType.STRING).setCellValue(person.lastName)
+                row.createCell(col++, CellType.STRING).setCellValue(person.birthDate?.toReportString())
+                row.createCell(col++, CellType.STRING).setCellValue(person.gender.reportValue)
+                row.createCell(col++, CellType.BOOLEAN).setCellValue(person.mediationEnabled)
+                row.createCell(col++, CellType.STRING).setCellValue(person.email)
+                row.createCell(col, CellType.STRING).setCellValue(person.phoneNumber)
+            }
+
+            headers.indices.forEach { sheet.autoSizeColumn(it) }
+
+            workbook.write(out)
+        }
+
+        return out.toExcelResponse("adhesions-manquantes")
     }
 
     private fun LocalDate.toReportString() = format(DATE_FORMAT)

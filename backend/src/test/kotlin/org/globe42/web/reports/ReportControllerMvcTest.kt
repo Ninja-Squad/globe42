@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import java.io.ByteArrayInputStream
 import java.time.LocalDate
+import java.time.ZoneId
 
 /**
  * MVC tests for [ReportController]
@@ -142,6 +143,46 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
             assertThat(row.getCell(6).stringCellValue).isEqualTo("Chèque")
             assertThat(row.getCell(7).numericCellValue).isEqualTo(2020.0)
             assertThat(row.getCell(8).stringCellValue).isEqualTo("12")
+        }
+    }
+
+    @Test
+    fun `should create missing payments report`() {
+        every { personDao.findMissingMembershipsForYear(LocalDate.now(ZoneId.of("Europe/Paris")).year) } returns listOf(
+            Person().apply {
+                firstName = "Agnès"
+                lastName = "Crepet"
+                birthDate = LocalDate.of(1980, 2, 1)
+                gender = Gender.FEMALE
+                mediationEnabled = true
+                email = "agnes@mail.com"
+                phoneNumber = "0987654321"
+            }
+        )
+
+        val result = mockMvc.get("/api/reports/missing-memberships").andExpect {
+            status { isOk }
+        }.andReturn()
+
+        val bytes = result.response.contentAsByteArray
+
+        XSSFWorkbook(ByteArrayInputStream(bytes)).use { workbook ->
+            assertThat(workbook.numberOfSheets).isEqualTo(1)
+            val sheet = workbook.getSheetAt(0)
+
+            assertThat(sheet.lastRowNum).isEqualTo(1)
+            sheet.rowIterator().forEach { row ->
+                assertThat(row.lastCellNum).isEqualTo(7) // last cell num is the last cell num + 1
+            }
+
+            val row = sheet.getRow(1)
+            assertThat(row.getCell(0).stringCellValue).isEqualTo("Agnès")
+            assertThat(row.getCell(1).stringCellValue).isEqualTo("Crepet")
+            assertThat(row.getCell(2).stringCellValue).isEqualTo("01/02/1980")
+            assertThat(row.getCell(3).stringCellValue).isEqualTo("F")
+            assertThat(row.getCell(4).booleanCellValue).isEqualTo(true)
+            assertThat(row.getCell(5).stringCellValue).isEqualTo("agnes@mail.com")
+            assertThat(row.getCell(6).stringCellValue).isEqualTo("0987654321")
         }
     }
 }

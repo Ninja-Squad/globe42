@@ -1,10 +1,12 @@
 package org.globe42.dao
 
+import com.ninja_squad.dbsetup.generator.ValueGenerators
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.domain.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.Instant
 
 /**
  * Tests for [PersonDao]
@@ -38,6 +40,19 @@ class PersonDaoTest : BaseDaoTest() {
                 columns("id", "activity_type", "person_id")
                 values(1L, ActivityType.MEAL, 1L)
                 values(2L, ActivityType.MEAL, 2L)
+            }
+
+            insertInto("membership") {
+                withDefaultValue("payment_date", Instant.parse("2020-05-01T00:00:00Z"))
+                withDefaultValue("payment_mode", PaymentMode.CASH)
+                withGeneratedValue("card_number", ValueGenerators.stringSequence("C"))
+                withGeneratedValue("id", ValueGenerators.sequence())
+                columns("year", "person_id")
+                values(2019, 1L)
+                values(2019, 2L)
+                values(2019, 3L)
+                values(2020, 1L)
+                values(2020, 2L)
             }
         }
     }
@@ -98,5 +113,12 @@ class PersonDaoTest : BaseDaoTest() {
     fun `should find health care coverage`() {
         assertThat(personDao.findHealthCareCoverage())
             .containsOnly(HealthCareCoverageEntry(HealthCareCoverage.UNKNOWN, 1L))
+    }
+
+    @Test
+    fun `should find persons without membership for year`() {
+        assertThat(personDao.findMissingMembershipsForYear(2019)).isEmpty()
+        assertThat(personDao.findMissingMembershipsForYear(2020).map(Person::id)).containsOnly(3L)
+        assertThat(personDao.findMissingMembershipsForYear(2021).map(Person::id)).containsExactly(1L, 3L)
     }
 }
