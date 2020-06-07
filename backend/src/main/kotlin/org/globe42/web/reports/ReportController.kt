@@ -2,6 +2,7 @@ package org.globe42.web.reports
 
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
+import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
@@ -31,130 +32,123 @@ class ReportController(private val personDao: PersonDao, private val membershipD
     fun appointmentReport(): ResponseEntity<ByteArray> {
         val persons = personDao.findNotDeletedWithMediation()
 
-        val out = ByteArrayOutputStream()
-        XSSFWorkbook().use { workbook ->
-            val sheet = workbook.createSheet("Adhérents en médiation")
+        val noteCreators =
+            persons.asSequence()
+                .flatMap { it.getNotes().asSequence() }
+                .map(Note::creator)
+                .distinct()
+                .sortedBy(User::login)
+                .toList()
 
-            val noteCreators =
-                persons.asSequence()
-                    .flatMap { it.getNotes().asSequence() }
-                    .map(Note::creator)
-                    .distinct()
-                    .sortedBy(User::login)
-                    .toList()
+        val headers = listOf(
+            "Prénom",
+            "Nom",
+            "Date de naissance",
+            "Nationalité",
+            "Sexe",
+            "Accompagné",
+            "Inscrit aux repas",
+            "Inscrit aux cours de français"
+        ) + noteCreators.map { "Nb. de RDV par ${it.login}" }
 
-            val headers = listOf(
-                "Prénom",
-                "Nom",
-                "Date de naissance",
-                "Nationalité",
-                "Sexe",
-                "Accompagné",
-                "Inscrit aux repas",
-                "Inscrit aux cours de français"
-            ) + noteCreators.map { "Nb. de RDV par ${it.login}" }
+        return createReport(
+            fileNameWithoutExtension = "rendez-vous",
+            sheetName = "Adhérents en médiation",
+            headers = headers,
+            elements = persons
+        ) { row, person ->
+            var col = 0
+            row.createCell(col++, CellType.STRING).setCellValue(person.firstName)
+            row.createCell(col++, CellType.STRING).setCellValue(person.lastName)
+            row.createCell(col++, CellType.STRING).setCellValue(person.birthDate?.toReportString())
+            row.createCell(col++, CellType.STRING).setCellValue(person.nationality?.name)
+            row.createCell(col++, CellType.STRING).setCellValue(person.gender.reportValue)
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(!person.accompanying.isNullOrBlank())
+            row.createCell(col++, CellType.BOOLEAN)
+                .setCellValue(person.getParticipations().any { it.activityType == ActivityType.MEAL })
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(
+                person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON })
 
-            val headerRow = sheet.createRow(0)
-            headerRow.rowStyle = workbook.headerStyle
-            headers.forEachIndexed { index, header ->
-                headerRow.createCell(index, CellType.STRING).setCellValue(header)
+            noteCreators.forEach { noteCreator ->
+                row.createCell(col++, CellType.NUMERIC)
+                    .setCellValue(person.getNotes().count { it.creator == noteCreator }.toDouble())
             }
-            sheet.createFreezePane(0, 1)
-
-            persons.forEachIndexed { index, person ->
-                val row = sheet.createRow(index + 1)
-                var col = 0
-                row.createCell(col++, CellType.STRING).setCellValue(person.firstName)
-                row.createCell(col++, CellType.STRING).setCellValue(person.lastName)
-                row.createCell(col++, CellType.STRING).setCellValue(person.birthDate?.toReportString())
-                row.createCell(col++, CellType.STRING).setCellValue(person.nationality?.name)
-                row.createCell(col++, CellType.STRING).setCellValue(person.gender.reportValue)
-                row.createCell(col++, CellType.BOOLEAN).setCellValue(!person.accompanying.isNullOrBlank())
-                row.createCell(col++, CellType.BOOLEAN)
-                    .setCellValue(person.getParticipations().any { it.activityType == ActivityType.MEAL })
-                row.createCell(col++, CellType.BOOLEAN).setCellValue(
-                    person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON })
-
-                noteCreators.forEach { noteCreator ->
-                    row.createCell(col++, CellType.NUMERIC)
-                        .setCellValue(person.getNotes().count { it.creator == noteCreator }.toDouble())
-                }
-            }
-
-            headers.indices.forEach { sheet.autoSizeColumn(it) }
-
-            workbook.write(out)
         }
-
-        return out.toExcelResponse("rendez-vous")
     }
 
     @GetMapping("/memberships")
     fun membershipReport(): ResponseEntity<ByteArray> {
         val memberships = membershipDao.list()
-
-        val out = ByteArrayOutputStream()
-        XSSFWorkbook().use { workbook ->
-            val sheet = workbook.createSheet("Adhésions")
-
-            val headers = listOf(
-                "Prénom",
-                "Nom",
-                "Date de naissance",
-                "Sexe",
-                "Email",
-                "Date de paiement",
-                "Mode de paiement",
-                "Année d'adhésion",
-                "N° de carte"
-            )
-
-            val headerRow = sheet.createRow(0)
-            headerRow.rowStyle = workbook.headerStyle
-            headers.forEachIndexed { index, header ->
-                headerRow.createCell(index, CellType.STRING).setCellValue(header)
-            }
-            sheet.createFreezePane(0, 1)
-
-            memberships.forEachIndexed { index, membership ->
-                val row = sheet.createRow(index + 1)
-                var col = 0
-                row.createCell(col++, CellType.STRING).setCellValue(membership.person.firstName)
-                row.createCell(col++, CellType.STRING).setCellValue(membership.person.lastName)
-                row.createCell(col++, CellType.STRING).setCellValue(membership.person.birthDate?.toReportString())
-                row.createCell(col++, CellType.STRING).setCellValue(membership.person.gender.reportValue)
-                row.createCell(col++, CellType.STRING).setCellValue(membership.person.email)
-                row.createCell(col++, CellType.STRING).setCellValue(membership.paymentDate.toReportString())
-                row.createCell(col++, CellType.STRING).setCellValue(membership.paymentMode.reportValue)
-                row.createCell(col++, CellType.NUMERIC).setCellValue(membership.year.toDouble())
-                row.createCell(col, CellType.STRING).setCellValue(membership.cardNumber)
-            }
-
-            headers.indices.forEach { sheet.autoSizeColumn(it) }
-
-            workbook.write(out)
+        val headers = listOf(
+            "Prénom",
+            "Nom",
+            "Date de naissance",
+            "Sexe",
+            "Email",
+            "Date de paiement",
+            "Mode de paiement",
+            "Année d'adhésion",
+            "N° de carte"
+        )
+        return createReport(
+            fileNameWithoutExtension = "adhesions",
+            sheetName = "Adhésions",
+            headers = headers,
+            elements = memberships
+        ) { row, membership ->
+            var col = 0
+            row.createCell(col++, CellType.STRING).setCellValue(membership.person.firstName)
+            row.createCell(col++, CellType.STRING).setCellValue(membership.person.lastName)
+            row.createCell(col++, CellType.STRING).setCellValue(membership.person.birthDate?.toReportString())
+            row.createCell(col++, CellType.STRING).setCellValue(membership.person.gender.reportValue)
+            row.createCell(col++, CellType.STRING).setCellValue(membership.person.email)
+            row.createCell(col++, CellType.STRING).setCellValue(membership.paymentDate.toReportString())
+            row.createCell(col++, CellType.STRING).setCellValue(membership.paymentMode.reportValue)
+            row.createCell(col++, CellType.NUMERIC).setCellValue(membership.year.toDouble())
+            row.createCell(col, CellType.STRING).setCellValue(membership.cardNumber)
         }
-
-        return out.toExcelResponse("adhesions")
     }
 
     @GetMapping("/missing-memberships")
     fun missingPaymentsReport(): ResponseEntity<ByteArray> {
         val persons = personDao.findMissingMembershipsForYear(LocalDate.now(ZoneId.of("Europe/Paris")).year)
+        val headers = listOf(
+            "Prénom",
+            "Nom",
+            "Date de naissance",
+            "Sexe",
+            "En médiation",
+            "Email",
+            "Téléphone"
+        )
 
+        return createReport(
+            fileNameWithoutExtension = "adhesions-manquantes",
+            sheetName = "Personnes sans adhésion",
+            headers = headers,
+            elements = persons
+        ) { row, person ->
+            var col = 0
+            row.createCell(col++, CellType.STRING).setCellValue(person.firstName)
+            row.createCell(col++, CellType.STRING).setCellValue(person.lastName)
+            row.createCell(col++, CellType.STRING).setCellValue(person.birthDate?.toReportString())
+            row.createCell(col++, CellType.STRING).setCellValue(person.gender.reportValue)
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(person.mediationEnabled)
+            row.createCell(col++, CellType.STRING).setCellValue(person.email)
+            row.createCell(col, CellType.STRING).setCellValue(person.phoneNumber)
+        }
+    }
+
+    private fun <T> createReport(
+        fileNameWithoutExtension: String,
+        sheetName: String,
+        headers: List<String>,
+        elements: List<T>,
+        rowPopulator: (XSSFRow, T) -> Unit
+    ): ResponseEntity<ByteArray> {
         val out = ByteArrayOutputStream()
         XSSFWorkbook().use { workbook ->
-            val sheet = workbook.createSheet("Personnes sans adhésion")
-
-            val headers = listOf(
-                "Prénom",
-                "Nom",
-                "Date de naissance",
-                "Sexe",
-                "En médiation",
-                "Email",
-                "Téléphone"
-            )
+            val sheet = workbook.createSheet(sheetName)
 
             val headerRow = sheet.createRow(0)
             headerRow.rowStyle = workbook.headerStyle
@@ -163,16 +157,9 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             }
             sheet.createFreezePane(0, 1)
 
-            persons.forEachIndexed { index, person ->
+            elements.forEachIndexed { index, element ->
                 val row = sheet.createRow(index + 1)
-                var col = 0
-                row.createCell(col++, CellType.STRING).setCellValue(person.firstName)
-                row.createCell(col++, CellType.STRING).setCellValue(person.lastName)
-                row.createCell(col++, CellType.STRING).setCellValue(person.birthDate?.toReportString())
-                row.createCell(col++, CellType.STRING).setCellValue(person.gender.reportValue)
-                row.createCell(col++, CellType.BOOLEAN).setCellValue(person.mediationEnabled)
-                row.createCell(col++, CellType.STRING).setCellValue(person.email)
-                row.createCell(col, CellType.STRING).setCellValue(person.phoneNumber)
+                rowPopulator(row, element)
             }
 
             headers.indices.forEach { sheet.autoSizeColumn(it) }
@@ -180,12 +167,12 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             workbook.write(out)
         }
 
-        return out.toExcelResponse("adhesions-manquantes")
+        return out.toExcelResponse(fileNameWithoutExtension)
     }
 
     private fun LocalDate.toReportString() = format(DATE_FORMAT)
 
-    private fun ByteArrayOutputStream.toExcelResponse(filenameWithoutExtension: String): ResponseEntity<ByteArray> {
+    private fun ByteArrayOutputStream.toExcelResponse(fileNameWithoutExtension: String): ResponseEntity<ByteArray> {
         val bytes = toByteArray()
         return ResponseEntity.status(HttpStatus.OK)
             .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
@@ -194,7 +181,7 @@ class ReportController(private val personDao: PersonDao, private val membershipD
                 HttpHeaders.CONTENT_DISPOSITION,
                 ContentDisposition
                     .builder("attachment")
-                    .filename("$filenameWithoutExtension.xlsx")
+                    .filename("$fileNameWithoutExtension.xlsx")
                     .build()
                     .toString()
             )
@@ -211,14 +198,14 @@ class ReportController(private val personDao: PersonDao, private val membershipD
         }
 
     private val Gender.reportValue: String
-        get() = when(this) {
+        get() = when (this) {
             Gender.MALE -> "M"
             Gender.FEMALE -> "F"
             Gender.OTHER -> "A"
         }
 
     private val PaymentMode.reportValue: String
-        get() = when(this) {
+        get() = when (this) {
             PaymentMode.CASH -> "Espèces"
             PaymentMode.CHECK -> "Chèque"
             PaymentMode.FREE -> "Gratuité"
