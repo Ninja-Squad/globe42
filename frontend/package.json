@@ -36,8 +36,8 @@
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "9.1.0",
-    "@angular-devkit/build-angular": "0.901.7",
-    "@angular/cli": "9.1.7",
+    "@angular-devkit/build-angular": "0.901.8",
+    "@angular/cli": "9.1.8",
     "@angular/compiler-cli": "9.1.11",
     "@types/chart.js": "2.9.21",
     "@types/jasmine": "3.5.10",
