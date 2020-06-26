@@ -31,7 +31,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { filter, map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
-import { ComponentTester, speculoosMatchers, TestButton, TestInput } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers, TestInput } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayResidencePermitPipe } from '../display-residence-permit.pipe';
@@ -225,7 +225,7 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.button('ngb-typeahead-window button');
   }
 
-  get save(): TestButton {
+  get save() {
     return this.button('#save');
   }
 

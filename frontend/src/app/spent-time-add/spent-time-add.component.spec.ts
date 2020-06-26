@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { of } from 'rxjs';
-import { ComponentTester, speculoosMatchers, TestButton, TestInput } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 
 @Component({
   template: `
@@ -44,11 +44,11 @@ class SpentTimeAddComponentTester extends ComponentTester<TestComponent> {
   }
 
   get hours() {
-    return this.elements('input')[0] as TestInput;
+    return this.elements<HTMLInputElement>('input')[0];
   }
 
   get minutes() {
-    return this.elements('input')[1] as TestInput;
+    return this.elements<HTMLInputElement>('input')[1];
   }
 
   get add() {
@@ -56,7 +56,7 @@ class SpentTimeAddComponentTester extends ComponentTester<TestComponent> {
   }
 
   get cancel() {
-    return this.elements('button')[1] as TestButton;
+    return this.elements<HTMLButtonElement>('button')[1];
   }
 }
 

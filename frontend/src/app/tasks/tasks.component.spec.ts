@@ -19,7 +19,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ComponentTester, TestHtmlElement } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -44,11 +44,11 @@ class TasksComponentTester extends ComponentTester<TestComponent> {
   }
 
   get addSpentTimeLink() {
-    return this.element('.add-spent-time-link') as TestHtmlElement<HTMLElement>;
+    return this.element<HTMLElement>('.add-spent-time-link');
   }
 
   get spentTimesLink() {
-    return this.element('.spent-times-link') as TestHtmlElement<HTMLElement>;
+    return this.element<HTMLElement>('.spent-times-link');
   }
 
   get addSpentTimeComponent(): SpentTimeAddComponent {
@@ -62,7 +62,7 @@ class TasksComponentTester extends ComponentTester<TestComponent> {
   }
 
   get title() {
-    return this.element('.task-title') as TestHtmlElement<any>;
+    return this.element<HTMLElement>('.task-title');
   }
 
   actionButton(type: 'edit' | 'unassign' | 'assign' | 'cancel' | 'done' | 'resurrect') {
