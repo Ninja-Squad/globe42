@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, LOCALE_ID } from '@angular/core';
 import { NoteModel } from '../models/note.model';
 import { UserModel } from '../models/user.model';
-import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 
 @Component({
   template: ''
@@ -40,7 +40,7 @@ class NoteComponentTester extends ComponentTester<TestComponent> {
   }
 
   get delete() {
-    return this.elements('button')[1] as TestButton;
+    return this.elements<HTMLButtonElement>('button')[1];
   }
 
   get textArea() {
@@ -52,7 +52,7 @@ class NoteComponentTester extends ComponentTester<TestComponent> {
   }
 
   get cancel() {
-    return this.elements('form button')[1] as TestButton;
+    return this.elements<HTMLButtonElement>('form button')[1];
   }
 }
 

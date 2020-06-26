@@ -18,20 +18,14 @@ import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.pipe';
-import {
-  ComponentTester,
-  fakeRoute,
-  fakeSnapshot,
-  speculoosMatchers,
-  TestButton
-} from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot, speculoosMatchers } from 'ngx-speculoos';
 import { Location } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
-import Spy = jasmine.Spy;
 import { CurrentPersonService } from '../current-person.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { WeddingEventCommand } from '../models/wedding-event.command';
+import Spy = jasmine.Spy;
 
 class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEventsComponent> {
   constructor() {
@@ -43,7 +37,7 @@ class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEv
   }
 
   get deleteButtons() {
-    return this.elements('.event-item button') as Array<TestButton>;
+    return this.elements<HTMLButtonElement>('.event-item button');
   }
 
   get newEventButton() {

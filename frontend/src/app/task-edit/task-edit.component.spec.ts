@@ -14,7 +14,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
-import { ComponentTester, speculoosMatchers, TestButton } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
@@ -55,7 +55,7 @@ class TaskEditTester extends ComponentTester<TaskEditComponent> {
   }
 
   get concernedPersonSuggestions() {
-    return this.elements('button.dropdown-item') as Array<TestButton>;
+    return this.elements<HTMLButtonElement>('button.dropdown-item');
   }
 
   get assignee() {

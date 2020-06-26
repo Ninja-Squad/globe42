@@ -13,7 +13,7 @@ import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { ComponentTester, speculoosMatchers, TestButton, TestHtmlElement } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -34,7 +34,7 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   }
 
   get notes() {
-    return this.elements('gl-note') as Array<TestHtmlElement<HTMLElement>>;
+    return this.elements<HTMLElement>('gl-note');
   }
 
   get noteComponents() {
@@ -46,7 +46,7 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   }
 
   deleteNote(index: number) {
-    return this.notes[index].elements('button')[1] as TestButton;
+    return this.notes[index].elements<HTMLButtonElement>('button')[1];
   }
 
   saveNote(index: number) {
@@ -54,7 +54,7 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   }
 
   cancelNoteEdition(index: number) {
-    return this.notes[index].elements('form button')[1] as TestButton;
+    return this.notes[index].elements<HTMLButtonElement>('form button')[1];
   }
 
   get addNote() {
