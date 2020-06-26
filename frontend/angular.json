@@ -36,7 +36,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": ["chart.js", "@angular/common/locales/fr"]
           },
           "configurations": {
             "production": {
