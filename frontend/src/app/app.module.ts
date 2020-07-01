@@ -53,8 +53,7 @@ import { PersonParticipationsComponent } from './person-participations/person-pa
 import { DisplayActivityTypePipe } from './display-activity-type.pipe';
 import { ActivityTypesComponent } from './activity-types/activity-types.component';
 import { ParticipantsComponent } from './participants/participants.component';
-import { registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
+import '@angular/common/locales/global/fr';
 import { Settings } from 'luxon';
 import { DurationPipe } from './duration.pipe';
 import { SpentTimesComponent } from './spent-times/spent-times.component';
@@ -90,8 +89,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { DisplayPassportStatusPipe } from './display-passport-status.pipe';
 import { HealthCareCoverageComponent } from './health-care-coverage/health-care-coverage.component';
 import { PersonsReportsComponent } from './persons-reports/persons-reports.component';
-
-registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
