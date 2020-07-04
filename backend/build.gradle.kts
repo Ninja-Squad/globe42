@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.12")
+        classpath("org.postgresql:postgresql:42.2.14")
     }
 }
 
@@ -22,11 +22,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.3.0.RELEASE"
+    id("org.springframework.boot") version "2.3.1.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("org.flywaydb.flyway") version "6.4.1"
-    id("com.gorylenko.gradle-git-properties") version "2.2.0"
-    id("org.jetbrains.dokka") version "0.10.0"
+    id("org.flywaydb.flyway") version "6.4.4"
+    id("com.gorylenko.gradle-git-properties") version "2.2.2"
+    id("org.jetbrains.dokka") version "0.10.1"
 }
 
 java {
@@ -108,7 +108,7 @@ tasks {
 }
 
 ext["okhttp3.version"] = "4.6.0"
-val jwtVersion = "0.11.1"
+val jwtVersion = "0.11.2"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -133,7 +133,7 @@ dependencies {
         exclude(module = "junit")
         exclude(module = "mockito")
     }
-    testImplementation("com.ninja-squad:springmockk:2.0.1")
+    testImplementation("com.ninja-squad:springmockk:2.0.2")
     testImplementation("io.mockk:mockk:1.10.0")
 
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
