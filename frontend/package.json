@@ -39,7 +39,7 @@
     "@angular-devkit/build-angular": "0.1000.2",
     "@angular/cli": "10.0.2",
     "@angular/compiler-cli": "10.0.3",
-    "@types/chart.js": "2.9.22",
+    "@types/chart.js": "2.9.23",
     "@types/jasmine": "3.5.11",
     "@types/jasminewd2": "2.0.8",
     "@types/luxon": "1.24.1",
