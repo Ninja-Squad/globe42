@@ -1318,10 +1318,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.5.tgz#dcce4430e64b443ba8945f0290fb564ad5bac6dd"
   integrity sha512-7+2BITlgjgDhH0vvwZU/HZJVyk+2XUlvxXe8dFMedNX/aMkaOq++rMAFXc0tM7ij15QaWlbdQASBR9dihi+bDQ==
 
-"@types/luxon@1.24.2":
-  version "1.24.2"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.24.2.tgz#6484fc3bba33a01a0f32d3ae2065acf96fbe878a"
-  integrity sha512-FvWo7lgOM/uv59enGfh9YeaeuLfUCE1FVRUEbloJjVsKPSoWolUGsbeJn+DvtDyxzq3Ej04p1cKJgZ5Z5IyDlA==
+"@types/luxon@1.24.3":
+  version "1.24.3"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-1.24.3.tgz#2e360e02b081898f993c52901192224e1f3d6daa"
+  integrity sha512-8lkeHb0Hkpyqmj0lYrZItakKM73jaKTUe4/PMl2e8o96oxTUzagbbz2DUOMn0NpjSovmZQTJvoCheFeI2bwS4g==
 
 "@types/minimatch@*":
   version "3.0.3"
