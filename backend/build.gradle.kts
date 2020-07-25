@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.3.1.RELEASE"
+    id("org.springframework.boot") version "2.3.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("org.flywaydb.flyway") version "6.4.4"
     id("com.gorylenko.gradle-git-properties") version "2.2.2"
@@ -107,7 +107,7 @@ tasks {
     }
 }
 
-ext["okhttp3.version"] = "4.6.0"
+ext["okhttp3.version"] = "4.8.0"
 val jwtVersion = "0.11.2"
 
 dependencies {
@@ -117,7 +117,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
-    implementation("com.google.cloud:google-cloud-storage:1.108.0")
+    implementation("com.google.cloud:google-cloud-storage:1.111.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
