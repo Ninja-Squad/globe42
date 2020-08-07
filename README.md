@@ -15,6 +15,10 @@ When this is done, run the database creation script:
 
     psql -h localhost -U postgres -f backend/database/database.sql
 
+Or, if you have Docker on your machine, you can run:
+
+    docker-compose up
+
 Clever Cloud produces backups twice a day. You can import a backend locally to test with the real production data
 by executing the script `backend/scripts/importBackupLocally.sh`. (Read the instructions inside the script).
     
