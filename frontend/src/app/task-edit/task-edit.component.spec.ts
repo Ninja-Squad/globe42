@@ -12,7 +12,7 @@ import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { of } from 'rxjs';
 import { ComponentTester } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
@@ -114,7 +114,7 @@ describe('TaskEditComponent', () => {
         CurrentUserModule.forRoot(),
         ReactiveFormsModule,
         RouterTestingModule,
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
         HttpClientModule,
         ValdemortModule
       ],

@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MembershipModel } from '../models/membership.model';
 import { MembershipService } from '../membership.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { ComponentTester } from 'ngx-speculoos';
 import { LOCALE_ID } from '@angular/core';
 import { CurrentPersonService } from '../current-person.service';
@@ -51,7 +51,7 @@ describe('PersonLayoutComponent', () => {
     } as PersonModel;
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule, GlobeNgbModule.forRoot()],
+      imports: [RouterTestingModule, HttpClientTestingModule, GlobeNgbTestingModule],
       declarations: [PersonLayoutComponent, FullnamePipe],
       providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });

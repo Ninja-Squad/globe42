@@ -2,6 +2,7 @@ import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   NgbAlertModule,
   NgbButtonsModule,
+  NgbCollapseModule,
   NgbDateAdapter,
   NgbDateParserFormatter,
   NgbDatepickerConfig,
@@ -28,6 +29,7 @@ export class GlobeNgbDatepickerConfig extends NgbDatepickerConfig {
 }
 
 const NGB_MODULES = [
+  NgbCollapseModule,
   NgbModalModule,
   NgbDatepickerModule,
   NgbDropdownModule,

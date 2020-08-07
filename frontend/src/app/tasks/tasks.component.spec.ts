@@ -16,10 +16,10 @@ import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.componen
 import { DurationPipe } from '../duration.pipe';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ComponentTester } from 'ngx-speculoos';
+import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 
 @Component({
   template: '<gl-tasks [taskModels]="tasks" (taskClicked)="onTaskClicked($event)"></gl-tasks>'
@@ -43,12 +43,20 @@ class TasksComponentTester extends ComponentTester<TestComponent> {
     return this.element('.task-item').textContent;
   }
 
+  get description() {
+    return this.element('.task-description');
+  }
+
   get addSpentTimeLink() {
     return this.element<HTMLElement>('.add-spent-time-link');
   }
 
   get spentTimesLink() {
     return this.element<HTMLElement>('.spent-times-link');
+  }
+
+  get addSpentTime() {
+    return this.element('gl-spent-time-add');
   }
 
   get addSpentTimeComponent(): SpentTimeAddComponent {
@@ -113,7 +121,7 @@ describe('TasksComponent', () => {
         RouterTestingModule,
         HttpClientModule,
         ReactiveFormsModule,
-        GlobeNgbModule.forRoot()
+        GlobeNgbTestingModule
       ],
       declarations: [
         TestComponent,
@@ -197,6 +205,7 @@ describe('TasksComponent', () => {
       tester = new TasksComponentTester();
       tester.componentInstance.tasks = tasks;
       tester.detectChanges();
+      jasmine.addMatchers(speculoosMatchers);
     });
 
     it('should display everything but the description and the no task message when not opened', () => {
@@ -205,7 +214,8 @@ describe('TasksComponent', () => {
       expect(text).toContain('Some title');
       expect(text).toContain('#Various');
       expect(text).toContain("aujourd'hui");
-      expect(text).not.toContain('Some description');
+      expect(tester.description).toContainText('Some description');
+      expect(tester.description).not.toHaveClass('show');
       expect(text).toContain('Assignée à admin');
       expect(text).toContain('Créée par user2');
       expect(text).toContain('Concerne JB Nizet');
@@ -213,14 +223,15 @@ describe('TasksComponent', () => {
     });
 
     it('should add a spent time, and close on cancel', () => {
+      expect(tester.addSpentTime).toHaveClass('collapse');
+      expect(tester.addSpentTime).not.toHaveClass('show');
       tester.addSpentTimeLink.click();
 
-      const spentTimeAddComponent = tester.addSpentTimeComponent;
-
-      spentTimeAddComponent.cancel();
+      expect(tester.addSpentTime).toHaveClass('show');
+      tester.addSpentTimeComponent.cancel();
       tester.detectChanges();
 
-      expect(tester.addSpentTimeComponent).toBeFalsy();
+      expect(tester.addSpentTime).not.toHaveClass('show');
     });
 
     it('should add a spent time, recompute total spent time and close when added', () => {
@@ -228,9 +239,7 @@ describe('TasksComponent', () => {
 
       tester.addSpentTimeLink.click();
 
-      const spentTimeAddComponent = tester.addSpentTimeComponent;
-
-      spentTimeAddComponent.spentTimeAdded.emit({
+      tester.addSpentTimeComponent.spentTimeAdded.emit({
         task: tasks[0],
         spentTime: {
           id: 1,
@@ -239,7 +248,7 @@ describe('TasksComponent', () => {
       });
       tester.detectChanges();
 
-      expect(tester.addSpentTimeComponent).toBeFalsy();
+      expect(tester.addSpentTime).not.toHaveClass('show');
       expect(tester.spentTimesLink).toBeTruthy();
       expect(tester.spentTimesLink.textContent).toContain('1h40m');
     });

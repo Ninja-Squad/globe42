@@ -19,7 +19,7 @@
           ><span class="fa fa-times"></span> Annulée</small
         >
       </div>
-      <div *ngIf="task.opened" class="task-description">{{ task.model.description }}</div>
+      <div [ngbCollapse]="!task.opened" class="task-description">{{ task.model.description }}</div>
     </a>
     <div class="d-flex w-100 justify-content-between align-items-start">
       <div class="small text-muted">
@@ -58,8 +58,8 @@
             (spentTimeDeleted)="onSpentTimeDeleted($event)"
           ></gl-spent-times>
           <gl-spent-time-add
-            class="d-block mt-2"
-            *ngIf="task.addSpentTimeOpened"
+            class="mt-2"
+            [ngbCollapse]="!task.addSpentTimeOpened"
             [taskModel]="task.model"
             (spentTimeAdded)="onSpentTimeAdded($event)"
             (cancelled)="toggleAddSpentTime(task)"

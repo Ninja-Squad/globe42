@@ -12,7 +12,7 @@ import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model'
 import { UserModel } from '../models/user.model';
 import { ChartColor } from 'chart.js';
 import { By } from '@angular/platform-browser';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
@@ -81,7 +81,7 @@ describe('SpentTimeStatisticsComponent', () => {
           }
         ]),
         ReactiveFormsModule,
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
         CurrentUserModule.forRoot(),
         HttpClientModule
       ],

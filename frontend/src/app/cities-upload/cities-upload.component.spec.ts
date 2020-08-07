@@ -4,7 +4,7 @@ import { CitiesUploadComponent } from './cities-upload.component';
 import { SearchCityService } from '../search-city.service';
 import { Subject } from 'rxjs';
 import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { PageTitleDirective } from '../page-title.directive';
 import { ComponentTester } from 'ngx-speculoos';
 
@@ -35,7 +35,7 @@ describe('CitiesUploadComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [GlobeNgbModule.forRoot(), HttpClientModule],
+      imports: [GlobeNgbTestingModule, HttpClientModule],
       declarations: [CitiesUploadComponent, PageTitleDirective]
     });
 

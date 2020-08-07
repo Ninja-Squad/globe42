@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PersonWeddingEventsComponent } from './person-wedding-events.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { PersonModel } from '../models/person.model';
 import { WeddingEventModel } from '../models/wedding-event.model';
 import { WeddingEventService } from '../wedding-event.service';
@@ -118,7 +118,7 @@ describe('PersonWeddingEventsComponent', () => {
       ],
       imports: [
         ReactiveFormsModule,
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
         ValdemortModule,
         HttpClientTestingModule
       ],

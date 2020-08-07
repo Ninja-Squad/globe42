@@ -12,7 +12,7 @@ import { EMPTY, of, Subject } from 'rxjs';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { ComponentTester } from 'ngx-speculoos';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -78,7 +78,7 @@ describe('PersonNotesComponent', () => {
         CurrentUserModule.forRoot(),
         ReactiveFormsModule,
         HttpClientModule,
-        GlobeNgbModule.forRoot()
+        GlobeNgbTestingModule
       ],
       declarations: [PersonNotesComponent, NoteComponent, TestComponent]
     });

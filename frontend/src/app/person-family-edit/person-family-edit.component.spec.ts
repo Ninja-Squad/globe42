@@ -7,7 +7,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { FamilyService } from '../family.service';
 import { PersonFamilyEditComponent } from './person-family-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { FamilyCommand } from '../models/family.command';
 import { FamilyModel } from '../models/family.model';
 import { of } from 'rxjs';
@@ -88,7 +88,7 @@ describe('PersonFamilyEditComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        GlobeNgbModule.forRoot()
+        GlobeNgbTestingModule
       ]
     });
 

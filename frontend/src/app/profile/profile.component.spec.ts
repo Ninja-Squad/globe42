@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ProfileComponent } from './profile.component';
 import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -52,7 +52,7 @@ describe('ProfileComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ProfileComponent],
       imports: [
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,

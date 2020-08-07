@@ -12,7 +12,7 @@ import {
   RouterEvent
 } from '@angular/router';
 import { Subject } from 'rxjs';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 
 class NavigationProgressComponentTester extends ComponentTester<NavigationProgressComponent> {
   constructor() {
@@ -48,7 +48,7 @@ describe('NavigationProgressComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [NavigationProgressComponent],
-      imports: [GlobeNgbModule.forRoot()],
+      imports: [GlobeNgbTestingModule],
       providers: [{ provide: Router, useValue: fakeRouter }]
     });
 

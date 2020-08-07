@@ -18,10 +18,11 @@ import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.componen
 import { DurationPipe } from '../duration.pipe';
 import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { ComponentTester } from 'ngx-speculoos';
+import { ReactiveFormsModule } from '@angular/forms';
 
 class TasksPageComponentTester extends ComponentTester<TasksPageComponent> {
   constructor() {
@@ -115,7 +116,8 @@ describe('TasksPageComponent', () => {
       imports: [
         CurrentUserModule.forRoot(),
         RouterTestingModule,
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
+        ReactiveFormsModule,
         HttpClientModule
       ],
       declarations: [

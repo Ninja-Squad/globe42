@@ -28,7 +28,7 @@ import { DisplayFiscalStatusPipe } from '../display-fiscal-status.pipe';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
 import { DisplayHealthInsurancePipe } from '../display-health-insurance.pipe';
 import { FullnamePipe } from '../fullname.pipe';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { filter, map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
 import { ComponentTester, speculoosMatchers, TestInput } from 'ngx-speculoos';
@@ -77,8 +77,12 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.input(`#mediationEnabled${yesOrNo}`);
   }
 
+  get mediationSection() {
+    return this.element('#mediation-section');
+  }
+
   get mediationCode() {
-    return this.element('#mediationCode');
+    return this.mediationSection.element('#mediationCode');
   }
 
   get address() {
@@ -98,11 +102,11 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
   }
 
   get firstMediationAppointmentDate() {
-    return this.input('#firstMediationAppointmentDate');
+    return this.mediationSection.input('#firstMediationAppointmentDate');
   }
 
   get maritalStatus() {
-    return this.select('#maritalStatus');
+    return this.mediationSection.select('#maritalStatus');
   }
 
   spouseType(type: 'none' | 'spouse' | 'partner') {
@@ -118,107 +122,119 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
   }
 
   get entryDate() {
-    return this.input('#entryDate');
+    return this.mediationSection.input('#entryDate');
   }
 
   get entryType() {
-    return this.select('#entryType');
+    return this.mediationSection.select('#entryType');
   }
 
   get housing() {
-    return this.select('#housing');
+    return this.mediationSection.select('#housing');
+  }
+
+  get housingSpaceSection() {
+    return this.mediationSection.element('#housingSpace-section');
   }
 
   get housingSpace() {
-    return this.input('#housingSpace');
+    return this.housingSpaceSection.input('#housingSpace');
   }
 
   get hostName() {
-    return this.input('#hostName');
+    return this.mediationSection.input('#hostName');
   }
 
   fiscalStatus(status: FiscalStatus) {
-    return this.input(`#fiscalStatus${status}`);
+    return this.mediationSection.input(`#fiscalStatus${status}`);
+  }
+
+  get fiscalSection() {
+    return this.mediationSection.element('#fiscal-section');
   }
 
   get fiscalNumber() {
-    return this.input('#fiscalNumber');
+    return this.fiscalSection.input('#fiscalNumber');
   }
 
   get fiscalStatusUpToDate() {
-    return this.input('#fiscalStatusUpToDate');
+    return this.fiscalSection.input('#fiscalStatusUpToDate');
   }
 
   get healthCareCoverage() {
-    return this.select('#healthCareCoverage');
+    return this.mediationSection.select('#healthCareCoverage');
   }
 
   get healthCareCoverageStartDate() {
-    return this.input('#healthCareCoverageStartDate');
+    return this.mediationSection.input('#healthCareCoverageStartDate');
   }
 
   get healthInsurance() {
-    return this.select('#healthInsurance');
+    return this.mediationSection.select('#healthInsurance');
   }
 
   get healthInsuranceStartDate() {
-    return this.input('#healthInsuranceStartDate');
+    return this.mediationSection.input('#healthInsuranceStartDate');
   }
 
   get accompanying() {
-    return this.input('#accompanying');
+    return this.mediationSection.input('#accompanying');
   }
 
   get socialSecurityNumber() {
-    return this.input('#socialSecurityNumber');
+    return this.mediationSection.input('#socialSecurityNumber');
   }
 
   get cafNumber() {
-    return this.input('#cafNumber');
+    return this.mediationSection.input('#cafNumber');
   }
 
   get nationality() {
-    return this.input('#nationality');
+    return this.mediationSection.input('#nationality');
   }
 
   passportStatus(status: PassportStatus) {
-    return this.input(`#passportStatus${status}`);
+    return this.mediationSection.input(`#passportStatus${status}`);
+  }
+
+  get passportSection() {
+    return this.mediationSection.element('#passport-section');
   }
 
   get passportNumber() {
-    return this.input('#passportNumber');
+    return this.passportSection.input('#passportNumber');
   }
 
   get passportValidityStartDate() {
-    return this.input('#passportValidityStartDate');
+    return this.passportSection.input('#passportValidityStartDate');
   }
 
   get passportValidityEndDate() {
-    return this.input('#passportValidityEndDate');
+    return this.passportSection.input('#passportValidityEndDate');
   }
 
   get visa() {
-    return this.select('#visa');
+    return this.mediationSection.select('#visa');
   }
 
   get residencePermit() {
-    return this.select('#residencePermit');
+    return this.mediationSection.select('#residencePermit');
   }
 
   get residencePermitDepositDate() {
-    return this.input('#residencePermitDepositDate');
+    return this.mediationSection.input('#residencePermitDepositDate');
   }
 
   get residencePermitRenewalDate() {
-    return this.input('#residencePermitRenewalDate');
+    return this.mediationSection.input('#residencePermitRenewalDate');
   }
 
   get residencePermitValidityStartDate() {
-    return this.input('#residencePermitValidityStartDate');
+    return this.mediationSection.input('#residencePermitValidityStartDate');
   }
 
   get residencePermitValidityEndDate() {
-    return this.input('#residencePermitValidityEndDate');
+    return this.mediationSection.input('#residencePermitValidityEndDate');
   }
 
   get firstTypeaheadOption() {
@@ -287,7 +303,7 @@ describe('PersonEditComponent', () => {
       HttpClientModule,
       ReactiveFormsModule,
       RouterTestingModule,
-      GlobeNgbModule.forRoot(),
+      GlobeNgbTestingModule,
       ValdemortModule
     ],
     declarations: [
@@ -607,13 +623,12 @@ describe('PersonEditComponent', () => {
     it('should set the fiscal number to null if invalid when setting the fiscal status to UNKNONW', () => {
       const tester = new PersonEditTester();
       tester.detectChanges();
-      const component = tester.componentInstance;
 
       tester.fiscalNumber.fillWith('INVALID');
       tester.fiscalStatus('UNKNOWN').check();
 
-      expect(tester.fiscalNumber).toBeNull();
-      expect(component.personForm.get('fiscalNumber').value).toBeNull();
+      expect(tester.fiscalSection).not.toHaveClass('show');
+      expect(tester.fiscalNumber).toHaveValue('');
     });
 
     it('should set the passport fields to null if passport status is not PASSPORT', () => {
@@ -720,31 +735,12 @@ describe('PersonEditComponent', () => {
 
       expect(tester.mediationEnabled(true)).not.toBeChecked();
       expect(tester.mediationEnabled(false)).toBeChecked();
-
-      const mediationDependantIds = [
-        'mediationCode',
-        'firstMediationAppointmentDate',
-        'maritalStatus',
-        'entryDate',
-        'entryType',
-        'housing',
-        'hostName',
-        'fiscalStatusUNKNOWN',
-        'socialSecurityNumber',
-        'accompanying',
-        'cafNumber',
-        'nationality'
-      ];
-
-      mediationDependantIds.forEach(id => {
-        expect(tester.element(`#${id}`)).toBeNull(`#${id} should be absent`);
-      });
+      expect(tester.mediationSection).toHaveClass('collapse');
+      expect(tester.mediationSection).not.toHaveClass('show');
 
       tester.mediationEnabled(true).check();
 
-      mediationDependantIds.forEach(id => {
-        expect(tester.element(`#${id}`)).not.toBeNull(`#${id} should be present`);
-      });
+      expect(tester.mediationSection).toHaveClass('show');
 
       expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
       expect(tester.firstMediationAppointmentDate).toHaveValue('');
@@ -755,11 +751,14 @@ describe('PersonEditComponent', () => {
       expect(tester.entryDate).toHaveValue('');
       expect(tester.entryType).toHaveSelectedValue('UNKNOWN');
       expect(tester.housing).toHaveSelectedValue('UNKNOWN');
-      expect(tester.housingSpace).toBeFalsy();
+      expect(tester.housingSpaceSection).not.toHaveClass('show');
+      expect(tester.housingSpace).toHaveValue('');
       expect(tester.hostName).toHaveValue('');
       expect(tester.fiscalStatus('UNKNOWN')).toBeChecked();
-      expect(tester.fiscalNumber).toBeFalsy();
-      expect(tester.fiscalStatusUpToDate).toBeFalsy();
+      expect(tester.fiscalSection).toHaveClass('collapse');
+      expect(tester.fiscalSection).not.toHaveClass('show');
+      expect(tester.fiscalNumber).toHaveValue('');
+      expect(tester.fiscalStatusUpToDate).not.toBeChecked();
       expect(tester.accompanying).toHaveValue('');
       expect(tester.socialSecurityNumber).toHaveValue('');
       expect(tester.cafNumber).toHaveValue('');
@@ -769,9 +768,8 @@ describe('PersonEditComponent', () => {
       expect(tester.healthInsuranceStartDate).toBeFalsy();
       expect(tester.nationality).toHaveValue('');
       expect(tester.passportStatus('UNKNOWN')).toBeChecked();
-      expect(tester.passportNumber).toBeNull();
-      expect(tester.passportValidityStartDate).toBeNull();
-      expect(tester.passportValidityEndDate).toBeNull();
+      expect(tester.passportSection).toHaveClass('collapse');
+      expect(tester.passportSection).not.toHaveClass('show');
       expect(tester.visa).toHaveSelectedValue('UNKNOWN');
       expect(tester.residencePermit).toHaveSelectedValue('UNKNOWN');
       expect(tester.residencePermitDepositDate).toHaveValue('');
@@ -812,11 +810,12 @@ describe('PersonEditComponent', () => {
       tester.entryType.selectLabel('Irrégulière');
       tester.firstMediationAppointmentDate.fillWith('02/02/2017');
       tester.housing.selectLabel('Aucun');
-      expect(tester.housingSpace).toBeFalsy();
+      expect(tester.housingSpaceSection).toHaveClass('collapse');
+      expect(tester.housingSpaceSection).not.toHaveClass('show');
       tester.housing.selectLabel('115');
-      expect(tester.housingSpace).toBeFalsy();
+      expect(tester.housingSpaceSection).not.toHaveClass('show');
       tester.housing.selectLabel('F0');
-      expect(tester.housingSpace).toBeTruthy();
+      expect(tester.housingSpaceSection).toHaveClass('show');
       tester.housingSpace.fillWith('30');
       tester.hostName.fillWith('Bruno');
       tester.accompanying.fillWith('Paulette');
@@ -844,6 +843,7 @@ describe('PersonEditComponent', () => {
       tester.firstTypeaheadOption.click();
 
       tester.passportStatus('PASSPORT').check();
+      expect(tester.passportSection).toHaveClass('show');
       tester.passportNumber.fillWith('P1');
       tester.passportValidityStartDate.fillWith('01/09/2019');
       tester.passportValidityEndDate.fillWith('01/09/2024');

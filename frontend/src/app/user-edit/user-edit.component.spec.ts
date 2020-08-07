@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../user.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
@@ -54,7 +54,7 @@ describe('UserEditComponent', () => {
       HttpClientModule,
       ReactiveFormsModule,
       RouterTestingModule,
-      GlobeNgbModule.forRoot(),
+      GlobeNgbTestingModule,
       ValdemortModule
     ],
     declarations: [UserEditComponent, ValidationDefaultsComponent, PageTitleDirective]

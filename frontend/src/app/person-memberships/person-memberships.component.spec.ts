@@ -6,7 +6,7 @@ import { MembershipService } from '../membership.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PersonMembershipsComponent } from './person-memberships.component';
 import { DateTime } from 'luxon';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { DisplayPaymentModePipe, PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConfirmService } from '../confirm.service';
@@ -101,7 +101,7 @@ describe('PersonMembershipsComponent', () => {
       ],
       imports: [
         HttpClientTestingModule,
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
         ReactiveFormsModule,
         ValdemortModule
       ]

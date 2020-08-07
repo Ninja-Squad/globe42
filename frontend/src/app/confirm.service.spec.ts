@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
-import { GlobeNgbModule } from './globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from './globe-ngb/globe-ngb-testing.module';
 import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
@@ -56,7 +56,7 @@ describe('ConfirmService and its modal component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, GlobeNgbModule.forRoot()],
+      imports: [RouterTestingModule, GlobeNgbTestingModule],
       declarations: [ConfirmModalContentComponent, TestComponent]
     });
 

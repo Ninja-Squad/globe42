@@ -155,7 +155,7 @@
     </div>
   </div>
 
-  <div *ngIf="personForm.value.mediationEnabled">
+  <div [ngbCollapse]="!personForm.value.mediationEnabled" id="mediation-section">
     <div class="form-group row">
       <label for="mediationCode" class="col-sm-3 col-form-label">Code de médiation</label>
       <div class="col-sm-9 text-muted form-control-static" id="mediationCode">
@@ -394,7 +394,8 @@
       </div>
     </div>
     <div
-      *ngIf="!['UNKNOWN', 'NONE', 'EMERGENCY'].includes(personForm.value.housing)"
+      id="housingSpace-section"
+      [ngbCollapse]="['UNKNOWN', 'NONE', 'EMERGENCY'].includes(personForm.value.housing)"
       class="form-group row"
     >
       <label for="housingSpace" class="col-sm-3 col-form-label"
@@ -578,32 +579,34 @@
         </div>
       </div>
     </div>
-    <div class="form-group row" *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'">
-      <label for="fiscalNumber" class="col-sm-3 col-form-label">N° fiscal</label>
-      <div class="col-sm-9">
-        <input
-          class="form-control"
-          id="fiscalNumber"
-          placeholder="13 chiffres"
-          formControlName="fiscalNumber"
-        />
-        <val-errors controlName="fiscalNumber" label="Le n° fiscal">
-          <ng-template valError="pattern" let-label
-            >{{ label }} doit être composé de 13 chiffres</ng-template
-          >
-        </val-errors>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-9 offset-sm-3">
-        <div *ngIf="personForm.value.fiscalStatus !== 'UNKNOWN'" class="form-check">
+    <div id="fiscal-section" [ngbCollapse]="personForm.value.fiscalStatus === 'UNKNOWN'">
+      <div class="form-group row">
+        <label for="fiscalNumber" class="col-sm-3 col-form-label">N° fiscal</label>
+        <div class="col-sm-9">
           <input
-            type="checkbox"
-            class="form-check-input"
-            id="fiscalStatusUpToDate"
-            formControlName="fiscalStatusUpToDate"
+            class="form-control"
+            id="fiscalNumber"
+            placeholder="13 chiffres"
+            formControlName="fiscalNumber"
           />
-          <label class="form-check-label" for="fiscalStatusUpToDate">A jour</label>
+          <val-errors controlName="fiscalNumber" label="Le n° fiscal">
+            <ng-template valError="pattern" let-label
+              >{{ label }} doit être composé de 13 chiffres</ng-template
+            >
+          </val-errors>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-9 offset-sm-3">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="fiscalStatusUpToDate"
+              formControlName="fiscalStatusUpToDate"
+            />
+            <label class="form-check-label" for="fiscalStatusUpToDate">A jour</label>
+          </div>
         </div>
       </div>
     </div>
@@ -652,7 +655,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="personForm.value.passportStatus === 'PASSPORT'">
+    <div id="passport-section" [ngbCollapse]="personForm.value.passportStatus !== 'PASSPORT'">
       <div class="form-group row">
         <label for="passportNumber" class="col-sm-3 col-form-label">N° de passeport</label>
         <div class="col-sm-9">
@@ -701,7 +704,7 @@
           </div>
         </div>
       </div>
-    </ng-container>
+    </div>
   </div>
 
   <div class="row mt-5">

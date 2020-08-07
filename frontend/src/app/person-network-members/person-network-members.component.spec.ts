@@ -4,7 +4,7 @@ import { PersonNetworkMembersComponent } from './person-network-members.componen
 import { ActivatedRoute } from '@angular/router';
 import { NetworkMemberModel } from '../models/network-member.model';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DisplayNetworkMemberTypePipe } from '../display-network-member-type.pipe';
 import { ConfirmService } from '../confirm.service';
@@ -96,7 +96,7 @@ describe('PersonNetworkMembersComponent', () => {
       imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
         ValdemortModule
       ]
     });

@@ -18,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfirmService } from '../confirm.service';
 import { PersonService } from '../person.service';
 import { FullnamePipe } from '../fullname.pipe';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
@@ -198,7 +198,7 @@ describe('PersonComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientModule, GlobeNgbModule.forRoot()],
+      imports: [RouterTestingModule, HttpClientModule, GlobeNgbTestingModule],
       declarations: [
         PersonComponent,
         DisplayGenderPipe,

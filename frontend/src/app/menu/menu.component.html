@@ -6,7 +6,7 @@
   <button type="button" class="navbar-toggler" (click)="toggleNavbar()">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div id="navbar" class="navbar-collapse" [class.collapse]="navbarCollapsed">
+  <div id="navbar" class="collapse navbar-collapse" [ngbCollapse]="navbarCollapsed">
     <ng-container *ngIf="user">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">

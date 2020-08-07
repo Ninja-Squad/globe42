@@ -10,7 +10,7 @@ import { FileSizePipe } from '../file-size.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject } from 'rxjs';
 import { By, Title } from '@angular/platform-browser';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -52,7 +52,7 @@ describe('PersonFilesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, GlobeNgbModule.forRoot()],
+      imports: [HttpClientTestingModule, RouterTestingModule, GlobeNgbTestingModule],
       declarations: [PersonFilesComponent, FileSizePipe, PageTitleDirective, FullnamePipe]
     });
 

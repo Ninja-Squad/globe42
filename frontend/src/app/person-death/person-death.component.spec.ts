@@ -11,7 +11,7 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
 
@@ -43,7 +43,7 @@ describe('PersonDeathComponent', () => {
       declarations: [PersonDeathComponent, FullnamePipe],
       imports: [
         HttpClientTestingModule,
-        GlobeNgbModule.forRoot(),
+        GlobeNgbTestingModule,
         ValdemortModule,
         RouterTestingModule,
         ReactiveFormsModule

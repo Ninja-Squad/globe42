@@ -1,4 +1,4 @@
-<ul>
+<ul class="mb-0">
   <li *ngFor="let spentTime of spentTimes">
     {{ spentTime.creationInstant | date: 'medium' }}: {{ spentTime.minutes | duration }} par
     {{ spentTime.creator.login }}

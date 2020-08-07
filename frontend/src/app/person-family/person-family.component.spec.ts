@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfirmService } from '../confirm.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { FamilyModel } from '../models/family.model';
 import { By } from '@angular/platform-browser';
 import { EMPTY, of } from 'rxjs';
@@ -58,7 +58,7 @@ describe('PersonFamilyComponent', () => {
         ConfirmService,
         { provide: ActivatedRoute, useFactory: () => route }
       ],
-      imports: [HttpClientTestingModule, RouterTestingModule, GlobeNgbModule.forRoot()]
+      imports: [HttpClientTestingModule, RouterTestingModule, GlobeNgbTestingModule]
     });
 
     currentPersonService = TestBed.inject(CurrentPersonService);

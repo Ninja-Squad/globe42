@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MenuComponent } from './menu.component';
 import { UserModel } from '../models/user.model';
 import { CurrentUserService } from '../current-user/current-user.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { ComponentTester } from 'ngx-speculoos';
 import { Router } from '@angular/router';
 
@@ -51,7 +51,7 @@ describe('MenuComponent', () => {
     fakeRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, GlobeNgbModule],
+      imports: [RouterTestingModule, GlobeNgbTestingModule],
       declarations: [MenuComponent],
       providers: [{ provide: CurrentUserService, useValue: fakeUserService }]
     });
@@ -82,12 +82,12 @@ describe('MenuComponent', () => {
     tester.detectChanges();
 
     expect(tester.navbar).not.toBeNull();
-    expect(tester.navbar).toHaveClass('collapse');
+    expect(tester.navbar).not.toHaveClass('show');
 
     expect(tester.toggler).not.toBeNull();
     tester.toggler.click();
 
-    expect(tester.navbar).not.toHaveClass('collapse');
+    expect(tester.navbar).toHaveClass('show');
   });
 
   it('should listen to userEvents in ngOnInit', fakeAsync(() => {

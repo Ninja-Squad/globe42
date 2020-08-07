@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserWithPasswordModel } from '../models/user-with-password.model';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../user.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { ComponentTester } from 'ngx-speculoos';
@@ -42,7 +42,7 @@ describe('PasswordResetComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, GlobeNgbModule.forRoot()],
+      imports: [HttpClientModule, GlobeNgbTestingModule],
       declarations: [PasswordResetComponent, PageTitleDirective],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },

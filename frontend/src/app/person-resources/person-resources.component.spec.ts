@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID } from '@angular/core';
 import { ChargeModel } from '../models/charge.model';
 import { ChargeService } from '../charge.service';
-import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { EMPTY, of } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
@@ -124,7 +124,7 @@ describe('PersonResourcesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
+      imports: [HttpClientModule, RouterTestingModule, GlobeNgbTestingModule],
       declarations: [PersonResourcesComponent, PageTitleDirective, FullnamePipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
