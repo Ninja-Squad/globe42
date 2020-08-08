@@ -31,7 +31,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { filter, map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
-import { ComponentTester, speculoosMatchers, TestInput } from 'ngx-speculoos';
+import { ComponentTester, TestInput } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayResidencePermitPipe } from '../display-residence-permit.pipe';
@@ -627,7 +627,7 @@ describe('PersonEditComponent', () => {
       tester.fiscalNumber.fillWith('INVALID');
       tester.fiscalStatus('UNKNOWN').check();
 
-      expect(tester.fiscalSection).not.toHaveClass('show');
+      expect(tester.fiscalSection).not.toBeVisible();
       expect(tester.fiscalNumber).toHaveValue('');
     });
 
@@ -695,8 +695,6 @@ describe('PersonEditComponent', () => {
       personService = TestBed.inject(PersonService);
     });
 
-    beforeEach(() => jasmine.addMatchers(speculoosMatchers));
-
     it('should have a title', () => {
       const tester = new PersonEditTester();
       tester.detectChanges();
@@ -735,12 +733,11 @@ describe('PersonEditComponent', () => {
 
       expect(tester.mediationEnabled(true)).not.toBeChecked();
       expect(tester.mediationEnabled(false)).toBeChecked();
-      expect(tester.mediationSection).toHaveClass('collapse');
-      expect(tester.mediationSection).not.toHaveClass('show');
+      expect(tester.mediationSection).not.toBeVisible();
 
       tester.mediationEnabled(true).check();
 
-      expect(tester.mediationSection).toHaveClass('show');
+      expect(tester.mediationSection).toBeVisible();
 
       expect(tester.mediationCode).toHaveText(' Généré automatiquement ');
       expect(tester.firstMediationAppointmentDate).toHaveValue('');
@@ -751,12 +748,11 @@ describe('PersonEditComponent', () => {
       expect(tester.entryDate).toHaveValue('');
       expect(tester.entryType).toHaveSelectedValue('UNKNOWN');
       expect(tester.housing).toHaveSelectedValue('UNKNOWN');
-      expect(tester.housingSpaceSection).not.toHaveClass('show');
+      expect(tester.housingSpaceSection).not.toBeVisible();
       expect(tester.housingSpace).toHaveValue('');
       expect(tester.hostName).toHaveValue('');
       expect(tester.fiscalStatus('UNKNOWN')).toBeChecked();
-      expect(tester.fiscalSection).toHaveClass('collapse');
-      expect(tester.fiscalSection).not.toHaveClass('show');
+      expect(tester.fiscalSection).not.toBeVisible();
       expect(tester.fiscalNumber).toHaveValue('');
       expect(tester.fiscalStatusUpToDate).not.toBeChecked();
       expect(tester.accompanying).toHaveValue('');
@@ -768,8 +764,7 @@ describe('PersonEditComponent', () => {
       expect(tester.healthInsuranceStartDate).toBeFalsy();
       expect(tester.nationality).toHaveValue('');
       expect(tester.passportStatus('UNKNOWN')).toBeChecked();
-      expect(tester.passportSection).toHaveClass('collapse');
-      expect(tester.passportSection).not.toHaveClass('show');
+      expect(tester.passportSection).not.toBeVisible();
       expect(tester.visa).toHaveSelectedValue('UNKNOWN');
       expect(tester.residencePermit).toHaveSelectedValue('UNKNOWN');
       expect(tester.residencePermitDepositDate).toHaveValue('');
@@ -810,12 +805,11 @@ describe('PersonEditComponent', () => {
       tester.entryType.selectLabel('Irrégulière');
       tester.firstMediationAppointmentDate.fillWith('02/02/2017');
       tester.housing.selectLabel('Aucun');
-      expect(tester.housingSpaceSection).toHaveClass('collapse');
-      expect(tester.housingSpaceSection).not.toHaveClass('show');
+      expect(tester.housingSpaceSection).not.toBeVisible();
       tester.housing.selectLabel('115');
-      expect(tester.housingSpaceSection).not.toHaveClass('show');
+      expect(tester.housingSpaceSection).not.toBeVisible();
       tester.housing.selectLabel('F0');
-      expect(tester.housingSpaceSection).toHaveClass('show');
+      expect(tester.housingSpaceSection).toBeVisible();
       tester.housingSpace.fillWith('30');
       tester.hostName.fillWith('Bruno');
       tester.accompanying.fillWith('Paulette');
@@ -843,7 +837,7 @@ describe('PersonEditComponent', () => {
       tester.firstTypeaheadOption.click();
 
       tester.passportStatus('PASSPORT').check();
-      expect(tester.passportSection).toHaveClass('show');
+      expect(tester.passportSection).toBeVisible();
       tester.passportNumber.fillWith('P1');
       tester.passportValidityStartDate.fillWith('01/09/2019');
       tester.passportValidityEndDate.fillWith('01/09/2024');

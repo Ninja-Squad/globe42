@@ -11,7 +11,7 @@ import { NgModule } from '@angular/core';
 import { ChargeTypeModel } from '../models/charge-type.model';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
@@ -60,8 +60,6 @@ describe('ChargeTypeEditComponent', () => {
     providers: [ChargeTypeService, ErrorService]
   })
   class TestModule {}
-
-  beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 
   describe('in creation mode', () => {
     const activatedRoute = {

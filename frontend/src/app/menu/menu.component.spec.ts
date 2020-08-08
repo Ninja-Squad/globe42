@@ -129,7 +129,7 @@ describe('MenuComponent', () => {
 
     tester.userDropDown.click();
 
-    expect(tester.changePasswordLink).not.toBeNull();
+    expect(tester.changePasswordLink).toBeVisible();
   });
 
   it('should navigate to the users page if admin', () => {
@@ -139,7 +139,9 @@ describe('MenuComponent', () => {
 
     tester.detectChanges();
 
-    expect(tester.usersLink).not.toBeNull();
+    tester.userDropDown.click();
+
+    expect(tester.usersLink).toBeVisible();
   });
 
   it('should unsubscribe on destroy', () => {
@@ -158,7 +160,7 @@ describe('MenuComponent', () => {
     spyOn(tester.componentInstance, 'logout').and.callFake(event => event.preventDefault());
 
     tester.userDropDown.click();
-    expect(tester.logout).not.toBeNull();
+    expect(tester.logout).toBeVisible();
     tester.logout.click();
 
     expect(tester.componentInstance.logout).toHaveBeenCalled();

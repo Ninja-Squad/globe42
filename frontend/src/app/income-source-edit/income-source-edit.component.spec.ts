@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
@@ -58,8 +58,6 @@ describe('IncomeSourceEditComponent', () => {
     declarations: [IncomeSourceEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
-
-  beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 
   describe('in creation mode', () => {
     const activatedRoute = {
