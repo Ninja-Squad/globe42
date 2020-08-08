@@ -14,7 +14,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
@@ -92,8 +92,6 @@ describe('TaskEditComponent', () => {
       { id: 6, name: 'Various' },
       { id: 7, name: 'Meal' }
     ];
-
-    jasmine.addMatchers(speculoosMatchers);
   });
 
   function prepareModule(task: TaskModel, concernedPersonId: number) {

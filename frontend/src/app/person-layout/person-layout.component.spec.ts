@@ -11,7 +11,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MembershipModel } from '../models/membership.model';
 import { MembershipService } from '../membership.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 import { LOCALE_ID } from '@angular/core';
 import { CurrentPersonService } from '../current-person.service';
 
@@ -60,8 +60,6 @@ describe('PersonLayoutComponent', () => {
     spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
 
     tester = new PersonLayoutComponentTester();
-
-    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should display the person full name as title', () => {

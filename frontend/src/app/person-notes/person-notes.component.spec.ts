@@ -13,7 +13,7 @@ import { UserModel } from '../models/user.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -108,8 +108,6 @@ describe('PersonNotesComponent', () => {
     userService.userEvents.next({ login: 'admin' } as UserModel);
 
     tester = new TestComponentTester();
-
-    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should display notes', () => {

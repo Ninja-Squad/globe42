@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { HealthCareCoverageComponent } from './health-care-coverage.component';
-import { ComponentTester, fakeRoute, fakeSnapshot, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { ChartComponent } from '../chart/chart.component';
 import { By } from '@angular/platform-browser';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
@@ -70,8 +70,6 @@ describe('HealthcareCoverageComponent', () => {
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: route }]
     });
-
-    jasmine.addMatchers(speculoosMatchers);
 
     tester = new HealthCareCoverageComponentTester();
     tester.detectChanges();

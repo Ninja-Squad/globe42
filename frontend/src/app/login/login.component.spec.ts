@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
@@ -43,8 +43,6 @@ describe('LoginComponent', () => {
       imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule, ValdemortModule],
       declarations: [LoginComponent, ValidationDefaultsComponent, PageTitleDirective]
     });
-
-    jasmine.addMatchers(speculoosMatchers);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 

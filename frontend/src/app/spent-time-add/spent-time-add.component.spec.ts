@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SpentTimeModel } from '../models/spent-time.model';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { of } from 'rxjs';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   template: `
@@ -71,8 +71,6 @@ describe('SpentTimeAddComponent', () => {
 
     tester = new SpentTimeAddComponentTester();
     tester.detectChanges();
-
-    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should have 0h0m as default inputs, and not allow to subit', () => {
