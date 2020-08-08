@@ -18,7 +18,7 @@ import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.pipe';
-import { ComponentTester, fakeRoute, fakeSnapshot, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { Location } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
@@ -247,8 +247,6 @@ describe('PersonWeddingEventsComponent', () => {
     beforeEach(() => {
       tester = new PersonWeddingEventsComponentTester();
       tester.detectChanges();
-
-      jasmine.addMatchers(speculoosMatchers);
     });
 
     it('should list events', () => {

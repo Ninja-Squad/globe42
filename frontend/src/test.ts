@@ -5,6 +5,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+import './test/jasmine.config';
 
 declare const require: {
   context(

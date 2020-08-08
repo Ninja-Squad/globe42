@@ -1,7 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
 
 import { ProfileComponent } from './profile.component';
-import { ComponentTester, fakeRoute, fakeSnapshot, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -64,8 +64,6 @@ describe('ProfileComponent', () => {
     currentUserService = TestBed.inject(CurrentUserService);
 
     tester = new ProfileComponentTester();
-
-    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should display a message with login and admin', () => {

@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, LOCALE_ID } from '@angular/core';
 import { NoteModel } from '../models/note.model';
 import { UserModel } from '../models/user.model';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   template: ''
@@ -63,8 +63,6 @@ describe('NoteComponent', () => {
       declarations: [NoteComponent, TestComponent],
       providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });
-
-    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should display a note, with its creator and its date', () => {

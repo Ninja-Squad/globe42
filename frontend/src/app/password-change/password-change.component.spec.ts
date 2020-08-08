@@ -7,7 +7,7 @@ import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { of, throwError } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
+import { ComponentTester } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
@@ -53,8 +53,6 @@ describe('PasswordChangeComponent', () => {
 
     tester = new PasswordChangeComponentTester();
     tester.detectChanges();
-
-    jasmine.addMatchers(speculoosMatchers);
   }));
 
   it('should have a form', () => {
