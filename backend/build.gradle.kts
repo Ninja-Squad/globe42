@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.3.2.RELEASE"
+    id("org.springframework.boot") version "2.3.3.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("org.flywaydb.flyway") version "6.4.4"
     id("com.gorylenko.gradle-git-properties") version "2.2.2"
@@ -133,7 +133,7 @@ dependencies {
         exclude(module = "junit")
         exclude(module = "mockito")
     }
-    testImplementation("com.ninja-squad:springmockk:2.0.2")
+    testImplementation("com.ninja-squad:springmockk:2.0.3")
     testImplementation("io.mockk:mockk:1.10.0")
 
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
