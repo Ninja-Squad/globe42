@@ -22,7 +22,7 @@ class Membership {
     @GeneratedValue(generator = MEMBERSHIP_GENERATOR)
     var id: Long? = null
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     lateinit var person: Person
 

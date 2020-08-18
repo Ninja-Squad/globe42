@@ -26,14 +26,14 @@ class Income {
     /**
      * The person which benefits from this income
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     lateinit var person: Person
 
     /**
      * The source of the income
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     lateinit var source: IncomeSource
 

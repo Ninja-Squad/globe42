@@ -15,13 +15,11 @@ class Country {
      */
     @Id
     lateinit var id: String
-        private set
 
     /**
      * The French name of the country
      */
     lateinit var name: String
-        private set
 
     constructor()
 

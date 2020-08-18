@@ -244,7 +244,7 @@ class Person {
     /**
      * The nationality of the person. Only requested to mediation-enabled persons, and not mandatory
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     var nationality: Country? = null
 
     /**

@@ -33,7 +33,7 @@ class Task {
     lateinit var title: String
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     lateinit var category: TaskCategory
 
     /**
@@ -78,7 +78,6 @@ class Task {
      * delete for the task
      */
     var totalSpentTimeInMinutes: Int = 0
-        private set
 
     /**
      * The list of time pieces spent on the task
