@@ -36,7 +36,7 @@ class WeddingEvent {
     @Enumerated(EnumType.STRING)
     lateinit var location: Location
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     lateinit var person: Person
 

@@ -21,14 +21,14 @@ class Charge {
     /**
      * The person which benefits from this income
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     lateinit var person: Person
 
     /**
      * The type of the charge
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     lateinit var type: ChargeType
 

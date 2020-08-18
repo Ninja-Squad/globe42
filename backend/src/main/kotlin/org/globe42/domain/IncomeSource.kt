@@ -33,7 +33,7 @@ class IncomeSource {
     /**
      * The type of the income source
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     lateinit var type: IncomeSourceType
 

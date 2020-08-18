@@ -29,13 +29,14 @@ plugins {
     id("org.jetbrains.dokka") version "0.10.1"
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-}
-
 repositories {
     mavenCentral()
     jcenter() // necessary for dokka
+}
+
+// otherwise lazy ToOne assiciations are not lazy
+allOpen {
+    annotation("javax.persistence.Entity")
 }
 
 tasks {
@@ -119,7 +120,6 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
     implementation("com.google.cloud:google-cloud-storage:1.111.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.poi:poi:4.1.2")
     implementation("org.apache.poi:poi-ooxml:4.1.2")
