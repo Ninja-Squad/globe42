@@ -48,11 +48,20 @@ export class PersonFilesComponent implements OnInit {
   upload(fileChangeEvent: Event) {
     this.uploading = true;
 
-    const file = (fileChangeEvent.target as HTMLInputElement).files[0];
+    const fileInput = fileChangeEvent.target as HTMLInputElement;
+    const file = fileInput.files[0];
+
+    // so that selecting the same file a second time triggers an event
+    fileInput.value = '';
 
     this.personFileService
       .create(this.person.id, file)
-      .pipe(finalize(() => (this.uploading = false)))
+      .pipe(
+        finalize(() => {
+          this.uploading = false;
+          this.uploadProgress = 0;
+        })
+      )
       .subscribe({
         next: progressEvent => {
           if (progressEvent.type === HttpEventType.UploadProgress) {
