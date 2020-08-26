@@ -42,7 +42,7 @@
     "@types/chart.js": "2.9.24",
     "@types/jasmine": "3.5.14",
     "@types/jasminewd2": "2.0.8",
-    "@types/luxon": "1.24.3",
+    "@types/luxon": "1.24.4",
     "@types/node": "12.12.54",
     "bundlesize": "0.18.0",
     "codecov": "3.7.2",
