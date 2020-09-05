@@ -41,6 +41,14 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   get noButton() {
     return this.modalContent.querySelectorAll('button')[2];
   }
+
+  get modalWindow() {
+    return document.querySelector('ngb-modal-window');
+  }
+
+  get modalBackdrop() {
+    return document.querySelector('ngb-modal-backdrop');
+  }
 }
 
 describe('ConfirmService and its modal component', () => {
@@ -57,8 +65,11 @@ describe('ConfirmService and its modal component', () => {
   });
 
   afterEach(() => {
-    if (tester.modalContent) {
-      tester.modalContent.parentElement.removeChild(tester.modalContent);
+    if (tester.modalWindow) {
+      tester.modalWindow.parentElement.removeChild(tester.modalWindow);
+    }
+    if (tester.modalBackdrop) {
+      tester.modalBackdrop.parentElement.removeChild(tester.modalBackdrop);
     }
   });
 
