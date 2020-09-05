@@ -1,5 +1,5 @@
 import { PersonModel } from '../models/person.model';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { PersonMembershipPrintComponent } from './person-membership-print.component';
 import { ActivatedRoute } from '@angular/router';
 import { PageTitleDirective } from '../page-title.directive';
@@ -8,7 +8,7 @@ import { FullnamePipe } from '../fullname.pipe';
 describe('PersonMembershipPrintComponent', () => {
   let person: PersonModel;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     person = {
       id: 42
     } as PersonModel;
@@ -25,7 +25,7 @@ describe('PersonMembershipPrintComponent', () => {
       declarations: [PersonMembershipPrintComponent, PageTitleDirective, FullnamePipe],
       providers: [{ provide: ActivatedRoute, useFactory: () => route }]
     });
-  }));
+  });
 
   it('should display all the fields with a non-breaking space to make sure borders display correctly', () => {
     const fixture = TestBed.createComponent(PersonMembershipPrintComponent);

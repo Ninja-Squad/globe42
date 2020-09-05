@@ -1,4 +1,4 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { CitiesUploadComponent } from './cities-upload.component';
 import { SearchCityService } from '../search-city.service';
@@ -12,12 +12,12 @@ function tickSeconds(seconds: number) {
 }
 
 describe('CitiesUploadComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [GlobeNgbModule.forRoot(), HttpClientModule],
       declarations: [CitiesUploadComponent, PageTitleDirective]
     });
-  }));
+  });
 
   it('should upload', fakeAsync(() => {
     const cityService = TestBed.inject(SearchCityService);

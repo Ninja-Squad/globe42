@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonWeddingEventsComponent } from './person-wedding-events.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -74,7 +74,7 @@ describe('PersonWeddingEventsComponent', () => {
   let person: PersonModel;
   let route: ActivatedRoute;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2018-03-25T15:30:00').toJSDate());
 
     events = [
@@ -132,7 +132,7 @@ describe('PersonWeddingEventsComponent', () => {
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
-  }));
+  });
 
   afterEach(() => jasmine.clock().uninstall());
 

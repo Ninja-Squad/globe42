@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit.component';
 import { FullnamePipe } from '../fullname.pipe';
@@ -16,7 +16,7 @@ import { PageTitleDirective } from '../page-title.directive';
 describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let route: ActivatedRoute;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     const mockPerUnitRevenueInformationService = jasmine.createSpyObj(
       'perUnitRevenueInformationService',
       ['update']
@@ -56,7 +56,7 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
     }).compileComponents();
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
-  }));
+  });
 
   it('should contain a filled form when person has info', () => {
     const fixture = TestBed.createComponent(PersonPerUnitRevenueInformationEditComponent);

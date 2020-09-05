@@ -1,5 +1,5 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { GlobeNgbModule } from './globe-ngb.module';
 import { By } from '@angular/platform-browser';
@@ -18,11 +18,12 @@ class TestComponent {
 }
 
 describe('DatepickerContainerComponent', () => {
-  beforeEach(async(() =>
+  beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [GlobeNgbModule.forRoot(), ReactiveFormsModule],
       declarations: [TestComponent]
-    })));
+    })
+  );
 
   it('should display a toggle button, an input, and toggle the datepicker', () => {
     const fixture = TestBed.createComponent(TestComponent);

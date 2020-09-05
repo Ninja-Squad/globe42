@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PasswordResetComponent } from './password-reset.component';
 import { UserModel } from '../models/user.model';
@@ -17,7 +17,7 @@ describe('PasswordResetComponent', () => {
   };
   const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
 
-  beforeEach(async(() =>
+  beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [HttpClientModule, GlobeNgbModule.forRoot()],
       declarations: [PasswordResetComponent, PageTitleDirective],
@@ -25,7 +25,8 @@ describe('PasswordResetComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: Router, useValue: fakeRouter }
       ]
-    })));
+    })
+  );
 
   it('should reset password', () => {
     const fixture = TestBed.createComponent(PasswordResetComponent);

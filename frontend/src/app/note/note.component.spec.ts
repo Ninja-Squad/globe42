@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { NoteComponent, NoteEditionEvent } from './note.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -57,13 +57,13 @@ class NoteComponentTester extends ComponentTester<TestComponent> {
 }
 
 describe('NoteComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [NoteComponent, TestComponent],
       providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });
-  }));
+  });
 
   it('should display a note, with its creator and its date', () => {
     TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note"></gl-note>');
@@ -111,22 +111,18 @@ describe('NoteComponent', () => {
     expect(tester.delete.disabled).toBe(true);
   });
 
-  it('should switch to edit mode and give the focus to the text area', async(() => {
+  it('should switch to edit mode and give the focus to the text area', () => {
     TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note" [edited]="edited"></gl-note>');
 
     const tester = new NoteComponentTester();
     tester.componentInstance.edited = true;
     tester.detectChanges();
 
-    tester.fixture.whenStable().then(() => {
-      tester.detectChanges();
-
-      expect(tester.form).toBeTruthy();
-      expect(tester.textArea).toHaveValue('hello world');
-      expect(tester.textArea.nativeElement.rows).toBe(2);
-      expect(document.activeElement).toBe(tester.textArea.nativeElement);
-    });
-  }));
+    expect(tester.form).toBeTruthy();
+    expect(tester.textArea).toHaveValue('hello world');
+    expect(tester.textArea.nativeElement.rows).toBe(2);
+    expect(document.activeElement).toBe(tester.textArea.nativeElement);
+  });
 
   it('should display a textarea with the right number of rows', () => {
     TestBed.overrideTemplate(TestComponent, '<gl-note [note]="note" [edited]="true"></gl-note>');

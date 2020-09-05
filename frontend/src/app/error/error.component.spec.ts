@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ErrorComponent } from './error.component';
 import { ErrorService } from '../error.service';
@@ -12,7 +12,7 @@ describe('ErrorComponent', () => {
     events: Subject<any>;
   };
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     fakeRouter = { events: new Subject<any>() };
 
     TestBed.configureTestingModule({
@@ -22,7 +22,7 @@ describe('ErrorComponent', () => {
     });
 
     errorService = TestBed.inject(ErrorService);
-  }));
+  });
 
   it('should react to technical errors', () => {
     const fixture = TestBed.createComponent(ErrorComponent);

@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { Task, TaskEvent, TasksComponent } from './tasks.component';
 import { TaskModel } from '../models/task.model';
@@ -73,7 +73,7 @@ class TasksComponentTester extends ComponentTester<TestComponent> {
 describe('TasksComponent', () => {
   let tasks: Array<TaskModel>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2017-08-01T12:30:00').toJSDate());
 
     tasks = [
@@ -124,7 +124,7 @@ describe('TasksComponent', () => {
         DurationPipe
       ]
     });
-  }));
+  });
 
   afterEach(() => jasmine.clock().uninstall());
 

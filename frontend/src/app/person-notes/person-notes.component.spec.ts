@@ -1,4 +1,4 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { PersonNotesComponent } from './person-notes.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -72,7 +72,7 @@ describe('PersonNotesComponent', () => {
 
   let tester: TestComponentTester;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         CurrentUserModule.forRoot(),
@@ -108,7 +108,7 @@ describe('PersonNotesComponent', () => {
     userService.userEvents.next({ login: 'admin' } as UserModel);
 
     tester = new TestComponentTester();
-  }));
+  });
 
   it('should display notes', () => {
     const personNoteService = TestBed.inject(PersonNoteService);

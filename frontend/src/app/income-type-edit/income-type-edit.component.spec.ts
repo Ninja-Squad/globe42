@@ -1,9 +1,8 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncomeTypeEditComponent } from './income-type-edit.component';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceTypeService } from '../income-source-type.service';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
@@ -12,12 +11,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('IncomeTypeEditComponent', () => {
   @NgModule({
     imports: [
       CommonModule,
-      HttpClientModule,
+      HttpClientTestingModule,
       ReactiveFormsModule,
       RouterTestingModule,
       ValdemortModule
@@ -32,14 +32,14 @@ describe('IncomeTypeEditComponent', () => {
       snapshot: { data: { incomeType } }
     };
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
-    }));
+    });
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);
@@ -86,14 +86,14 @@ describe('IncomeTypeEditComponent', () => {
       snapshot: { data: {} }
     };
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
-    }));
+    });
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(IncomeTypeEditComponent);

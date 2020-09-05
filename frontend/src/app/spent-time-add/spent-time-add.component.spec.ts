@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { SpentTimeAddComponent } from './spent-time-add.component';
 import { Component } from '@angular/core';
@@ -63,7 +63,7 @@ class SpentTimeAddComponentTester extends ComponentTester<TestComponent> {
 describe('SpentTimeAddComponent', () => {
   let tester: SpentTimeAddComponentTester;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SpentTimeAddComponent, TestComponent],
       imports: [CurrentUserModule.forRoot(), HttpClientModule, ReactiveFormsModule]
@@ -71,7 +71,7 @@ describe('SpentTimeAddComponent', () => {
 
     tester = new SpentTimeAddComponentTester();
     tester.detectChanges();
-  }));
+  });
 
   it('should have 0h0m as default inputs, and not allow to subit', () => {
     expect(tester.hours).toHaveValue('0');

@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ChargeTypesComponent } from './charge-types.component';
 import { ChargeTypeModel } from '../models/charge-type.model';
@@ -27,7 +27,7 @@ describe('ChargeTypesComponent', () => {
     snapshot: { data: { chargeTypes } }
   };
 
-  beforeEach(async(() =>
+  beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [ChargeTypesComponent, PageTitleDirective],
@@ -35,7 +35,8 @@ describe('ChargeTypesComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
-    })));
+    })
+  );
 
   it('should list charge types', () => {
     const fixture = TestBed.createComponent(ChargeTypesComponent);

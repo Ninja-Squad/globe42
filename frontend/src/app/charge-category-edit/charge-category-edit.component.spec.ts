@@ -1,9 +1,8 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ChargeCategoryEditComponent } from './charge-category-edit.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
@@ -13,12 +12,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ChargeCategoryEditComponent', () => {
   @NgModule({
     imports: [
       CommonModule,
-      HttpClientModule,
+      HttpClientTestingModule,
       ReactiveFormsModule,
       RouterTestingModule,
       ValdemortModule
@@ -34,7 +34,7 @@ describe('ChargeCategoryEditComponent', () => {
     };
     let router: Router;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
@@ -44,7 +44,7 @@ describe('ChargeCategoryEditComponent', () => {
 
       router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
-    }));
+    });
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
@@ -83,7 +83,7 @@ describe('ChargeCategoryEditComponent', () => {
     };
     let router: Router;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
@@ -93,7 +93,7 @@ describe('ChargeCategoryEditComponent', () => {
 
       router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
-    }));
+    });
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(ChargeCategoryEditComponent);

@@ -1,4 +1,4 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { TasksPageComponent } from './tasks-page.component';
 import { TaskModel } from '../models/task.model';
@@ -30,7 +30,7 @@ describe('TasksPageComponent', () => {
   };
   let activatedRoute: ActivatedRoute;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2017-08-01T12:30:00').toJSDate());
 
     const tasks: Array<TaskModel> = [];
@@ -100,7 +100,7 @@ describe('TasksPageComponent', () => {
       ],
       providers: [{ provide: ActivatedRoute, useFactory: () => activatedRoute }]
     });
-  }));
+  });
 
   afterEach(() => jasmine.clock().uninstall());
 

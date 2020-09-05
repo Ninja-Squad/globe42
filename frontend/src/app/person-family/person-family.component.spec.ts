@@ -1,5 +1,5 @@
 import { SituationComponent } from './situation/situation.component';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { PersonFamilyComponent, Situation } from './person-family.component';
 import { FamilyService } from '../family.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -19,7 +19,7 @@ describe('PersonFamilyComponent', () => {
   let route: ActivatedRoute;
   let currentPersonService: CurrentPersonService;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     route = fakeRoute({
       snapshot: fakeSnapshot({
         data: {}
@@ -42,7 +42,7 @@ describe('PersonFamilyComponent', () => {
       firstName: 'John',
       lastName: 'Doe'
     });
-  }));
+  });
 
   it('should display no family message if no family', () => {
     route.snapshot.data.family = null;

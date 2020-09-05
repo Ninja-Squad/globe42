@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { IncomeSourcesComponent } from './income-sources.component';
 import { ActivatedRoute } from '@angular/router';
@@ -27,7 +27,7 @@ describe('IncomeSourcesComponent', () => {
     snapshot: { data: { incomeSources } }
   };
 
-  beforeEach(async(() =>
+  beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [IncomeSourcesComponent, PageTitleDirective],
@@ -35,7 +35,8 @@ describe('IncomeSourcesComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
-    })));
+    })
+  );
 
   it('should list income sources', () => {
     const fixture = TestBed.createComponent(IncomeSourcesComponent);

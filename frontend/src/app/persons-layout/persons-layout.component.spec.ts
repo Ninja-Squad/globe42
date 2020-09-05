@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonsLayoutComponent } from './persons-layout.component';
 import { By } from '@angular/platform-browser';
@@ -7,11 +7,12 @@ import { RouterOutlet } from '@angular/router';
 import { PageTitleDirective } from '../page-title.directive';
 
 describe('PersonsLayoutComponent', () => {
-  beforeEach(async(() =>
+  beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [PersonsLayoutComponent, PageTitleDirective]
-    })));
+    })
+  );
 
   it('should have a title, pills and a router outlet', () => {
     const fixture = TestBed.createComponent(PersonsLayoutComponent);

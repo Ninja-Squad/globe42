@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SpentTimesComponent } from './spent-times.component';
 import { Component, LOCALE_ID } from '@angular/core';
@@ -6,7 +6,7 @@ import { TaskModel } from '../models/task.model';
 import { SpentTimeEvent } from '../tasks/tasks.component';
 import { TaskService } from '../task.service';
 import { SpentTimeModel } from '../models/spent-time.model';
-import { Subject, of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { DurationPipe } from '../duration.pipe';
 import { CurrentUserModule } from '../current-user/current-user.module';
@@ -93,7 +93,7 @@ describe('SpentTimesComponent', () => {
   describe('UI', () => {
     let fixture: ComponentFixture<TestComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [SpentTimesComponent, TestComponent, DurationPipe],
         providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
@@ -122,7 +122,7 @@ describe('SpentTimesComponent', () => {
 
       fixture = TestBed.createComponent(TestComponent);
       fixture.detectChanges();
-    }));
+    });
 
     it('should list spent times', () => {
       const itemElements = fixture.nativeElement.querySelectorAll('li');

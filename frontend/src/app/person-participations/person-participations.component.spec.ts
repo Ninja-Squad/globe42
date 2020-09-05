@@ -7,7 +7,7 @@ import { ACTIVITY_TYPE_TRANSLATIONS, DisplayActivityTypePipe } from '../display-
 import { PersonModel } from '../models/person.model';
 import { ParticipationService } from '../participation.service';
 import { ActivatedRoute } from '@angular/router';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { FullnamePipe } from '../fullname.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -130,7 +130,7 @@ describe('PersonParticipationsComponent', () => {
   describe('UI', () => {
     let fixture: ComponentFixture<PersonParticipationsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [
           PersonParticipationsComponent,
@@ -147,7 +147,7 @@ describe('PersonParticipationsComponent', () => {
 
       fixture = TestBed.createComponent(PersonParticipationsComponent);
       fixture.detectChanges();
-    }));
+    });
 
     it('should have a message', () => {
       expect(fixture.nativeElement.querySelector('#message').textContent).toBe(

@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonDeathComponent } from './person-death.component';
 import { ComponentTester, fakeRoute } from 'ngx-speculoos';
@@ -36,7 +36,7 @@ describe('PersonDeathComponent', () => {
   let route: ActivatedRoute;
   let router: Router;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     route = fakeRoute({});
 
     TestBed.configureTestingModule({
@@ -65,7 +65,7 @@ describe('PersonDeathComponent', () => {
     tester = new PersonDeathComponentTester();
 
     tester.detectChanges();
-  }));
+  });
 
   it('should display an empy form', () => {
     expect(tester.deathDate).toHaveValue('');

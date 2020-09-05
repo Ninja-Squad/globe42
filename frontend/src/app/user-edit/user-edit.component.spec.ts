@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { UserEditComponent } from './user-edit.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -35,14 +35,14 @@ describe('UserEditComponent', () => {
       snapshot: { data: {} }
     };
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
-    }));
+    });
 
     it('should have a title', () => {
       const fixture = TestBed.createComponent(UserEditComponent);
