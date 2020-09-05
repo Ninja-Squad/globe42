@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 import { PersonNetworkMembersComponent } from './person-network-members.component';
 import { ActivatedRoute } from '@angular/router';
@@ -15,12 +15,52 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { CurrentPersonService } from '../current-person.service';
-import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+
+class PersonNetworlMembersComponentTester extends ComponentTester<PersonNetworkMembersComponent> {
+  constructor() {
+    super(PersonNetworkMembersComponent);
+  }
+
+  get form() {
+    return this.element('form');
+  }
+
+  get memberItems() {
+    return this.elements('.member-item');
+  }
+
+  get deleteButtons() {
+    return this.elements<HTMLButtonElement>('.member-item .delete');
+  }
+
+  get newMemberButton() {
+    return this.button('#newMemberButton');
+  }
+
+  get type() {
+    return this.select('#type');
+  }
+
+  get text() {
+    return this.textarea('#text');
+  }
+
+  get cancelEditionButton() {
+    return this.button('#cancelEditionButton');
+  }
+
+  get saveButton() {
+    return this.button('#saveButton');
+  }
+
+  get editButtons() {
+    return this.elements<HTMLButtonElement>('.edit');
+  }
+}
 
 describe('PersonNetworkMembersComponent', () => {
-  let component: PersonNetworkMembersComponent;
-  let element: HTMLElement;
-  let fixture: ComponentFixture<PersonNetworkMembersComponent>;
+  let tester: PersonNetworlMembersComponentTester;
   let route: ActivatedRoute;
 
   beforeEach(async(() => {
@@ -66,23 +106,20 @@ describe('PersonNetworkMembersComponent', () => {
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
-    fixture = TestBed.createComponent(PersonNetworkMembersComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    element = fixture.nativeElement;
+    tester = new PersonNetworlMembersComponentTester();
+    tester.detectChanges();
   }));
 
   it('should display a list of members, and no form', () => {
-    expect(component.editedMember).toBeFalsy();
-    expect(component.memberForm).toBeFalsy();
-    expect(component.members.length).toBe(2);
-    expect(component.person.id).toBe(1);
+    expect(tester.componentInstance.editedMember).toBeFalsy();
+    expect(tester.componentInstance.memberForm).toBeFalsy();
+    expect(tester.componentInstance.members.length).toBe(2);
+    expect(tester.componentInstance.person.id).toBe(1);
 
-    expect(element.querySelector('form')).toBeFalsy();
-    const memberItems = element.querySelectorAll('.member-item');
-    expect(memberItems.length).toBe(2);
-    expect(memberItems[0].textContent).toContain('Médecin');
-    expect(memberItems[0].textContent).toContain('Dr. No');
+    expect(tester.form).toBeNull();
+    expect(tester.memberItems.length).toBe(2);
+    expect(tester.memberItems[0]).toContainText('Médecin');
+    expect(tester.memberItems[0]).toContainText('Dr. No');
   });
 
   it('should delete a member and reload list after confirmation', () => {
@@ -101,16 +138,10 @@ describe('PersonNetworkMembersComponent', () => {
     ];
     spyOn(networkMemberService, 'list').and.returnValue(of(members));
 
-    const secondDeleteButton = element.querySelectorAll(
-      '.member-item .delete'
-    )[1] as HTMLButtonElement;
-    secondDeleteButton.click();
+    tester.deleteButtons[1].click();
 
-    fixture.detectChanges();
-
-    const memberItems = element.querySelectorAll('.member-item');
-    expect(memberItems.length).toBe(1);
-    expect(memberItems[0].textContent).toContain('Dr. No no no');
+    expect(tester.memberItems.length).toBe(1);
+    expect(tester.memberItems[0]).toContainText('Dr. No no no');
   });
 
   it('should not delete a member and reload list if not confirmed', () => {
@@ -121,85 +152,62 @@ describe('PersonNetworkMembersComponent', () => {
     spyOn(networkMemberService, 'delete');
     spyOn(networkMemberService, 'list');
 
-    const secondDeleteButton = element.querySelectorAll(
-      '.member-item .delete'
-    )[1] as HTMLButtonElement;
-    secondDeleteButton.click();
+    tester.deleteButtons[1].click();
 
-    fixture.detectChanges();
-
-    const memberItems = element.querySelectorAll('.member-item');
-    expect(memberItems.length).toBe(2);
+    expect(tester.memberItems.length).toBe(2);
 
     expect(networkMemberService.delete).not.toHaveBeenCalled();
     expect(networkMemberService.list).not.toHaveBeenCalled();
   });
 
   it('should create an empty form when asking to create a new network member', () => {
-    const createButton = element.querySelector('#newMemberButton') as HTMLButtonElement;
-    createButton.click();
-    fixture.detectChanges();
+    tester.newMemberButton.click();
 
-    const memberItems = element.querySelectorAll('.member-item');
-    expect(memberItems.length).toBe(0); // hide the list while creating
+    expect(tester.memberItems.length).toBe(0); // hide the list while creating
 
-    expect(component.editedMember).toBeFalsy();
-    expect(component.memberForm).toBeTruthy();
+    expect(tester.componentInstance.editedMember).toBeFalsy();
+    expect(tester.componentInstance.memberForm).toBeTruthy();
 
-    const typeSelect = element.querySelector('#type') as HTMLSelectElement;
-    expect(typeSelect.selectedIndex).toBe(0);
-    expect(typeSelect.options[0].textContent).toBe('');
-    expect(typeSelect.options[1].textContent).toBe('Médecin');
+    expect(tester.type).toHaveSelectedLabel('');
+    expect(tester.type.optionLabels[1]).toContain('Médecin');
 
-    const textArea = element.querySelector('#text') as HTMLTextAreaElement;
-    expect(textArea.value).toBe('');
+    expect(tester.text).toHaveValue('');
   });
 
   it('should hide the form and re-display the list when cancelling', () => {
-    const createButton = element.querySelector('#newMemberButton') as HTMLButtonElement;
-    createButton.click();
-    fixture.detectChanges();
+    tester.newMemberButton.click();
 
-    const cancelButton = element.querySelector('#cancelEditionButton') as HTMLButtonElement;
-    cancelButton.click();
-    fixture.detectChanges();
+    tester.cancelEditionButton.click();
 
-    expect(component.editedMember).toBeFalsy();
-    expect(component.memberForm).toBeFalsy();
+    expect(tester.componentInstance.editedMember).toBeFalsy();
+    expect(tester.componentInstance.memberForm).toBeFalsy();
 
-    const memberItems = element.querySelectorAll('.member-item');
-    expect(memberItems.length).toBe(2);
+    expect(tester.memberItems.length).toBe(2);
   });
 
   it('should validate the form', () => {
-    const createButton = element.querySelector('#newMemberButton') as HTMLButtonElement;
-    createButton.click();
-    fixture.detectChanges();
+    tester.newMemberButton.click();
 
     const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
     spyOn(networkMemberService, 'create');
 
-    const form = element.querySelector('form');
+    expect(tester.form).not.toContainText('Le type est obligatoire');
+    expect(tester.form).not.toContainText('Le texte est obligatoire');
 
-    expect(form.textContent).not.toContain('Le type est obligatoire');
-    expect(form.textContent).not.toContain('Le texte est obligatoire');
-
-    const saveButton = element.querySelector('#saveButton') as HTMLButtonElement;
-    saveButton.click();
-    fixture.detectChanges();
+    tester.saveButton.click();
 
     expect(networkMemberService.create).not.toHaveBeenCalled();
 
-    expect(form.textContent).toContain('Le type est obligatoire');
-    expect(form.textContent).toContain('Le texte est obligatoire');
+    expect(tester.form).toContainText('Le type est obligatoire');
+    expect(tester.form).toContainText('Le texte est obligatoire');
   });
 
   it('should create and reload the list', () => {
     const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
     spyOn(networkMemberService, 'create').and.returnValue(of({} as NetworkMemberModel));
     const members: Array<NetworkMemberModel> = [
-      component.members[0],
-      component.members[1],
+      tester.componentInstance.members[0],
+      tester.componentInstance.members[1],
       {
         id: 44,
         type: 'PERSON_TO_WARN',
@@ -208,29 +216,16 @@ describe('PersonNetworkMembersComponent', () => {
     ];
     spyOn(networkMemberService, 'list').and.returnValue(of(members));
 
-    const createButton = element.querySelector('#newMemberButton') as HTMLButtonElement;
-    createButton.click();
-    fixture.detectChanges();
+    tester.newMemberButton.click();
 
-    const typeSelect = element.querySelector('#type') as HTMLSelectElement;
-    typeSelect.selectedIndex = 3;
-    typeSelect.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
+    tester.type.selectIndex(3);
+    tester.text.fillWith('Mummy');
+    tester.saveButton.click();
 
-    const textArea = element.querySelector('#text') as HTMLTextAreaElement;
-    textArea.value = 'Mummy';
-    textArea.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    expect(tester.componentInstance.editedMember).toBeFalsy();
+    expect(tester.componentInstance.memberForm).toBeFalsy();
 
-    const saveButton = element.querySelector('#saveButton') as HTMLButtonElement;
-    saveButton.click();
-    fixture.detectChanges();
-
-    expect(component.editedMember).toBeFalsy();
-    expect(component.memberForm).toBeFalsy();
-
-    const memberItems = element.querySelectorAll('.member-item');
-    expect(memberItems.length).toBe(3);
+    expect(tester.memberItems.length).toBe(3);
     expect(networkMemberService.create).toHaveBeenCalledWith(1, {
       type: 'PERSON_TO_WARN',
       text: 'Mummy'
@@ -238,44 +233,32 @@ describe('PersonNetworkMembersComponent', () => {
   });
 
   it('should create a populated form when asking to edit a network member, and save', () => {
-    const firstEditButton = element.querySelector('.edit') as HTMLButtonElement;
-    firstEditButton.click();
-    fixture.detectChanges();
+    tester.editButtons[0].click();
 
-    const memberItems = element.querySelectorAll('.member-item');
-    expect(memberItems.length).toBe(0); // hide the list while updating
+    expect(tester.memberItems.length).toBe(0); // hide the list while updating
 
-    expect(component.editedMember).toBe(component.members[0]);
-    expect(component.memberForm).toBeTruthy();
+    expect(tester.componentInstance.editedMember).toBe(tester.componentInstance.members[0]);
+    expect(tester.componentInstance.memberForm).toBeTruthy();
 
-    const typeSelect = element.querySelector('#type') as HTMLSelectElement;
-    expect(typeSelect.selectedIndex).toBe(1);
-    typeSelect.selectedIndex = 0;
-    typeSelect.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
+    expect(tester.type).toHaveSelectedIndex(1);
+    tester.type.selectIndex(0);
 
-    const textArea = element.querySelector('#text') as HTMLTextAreaElement;
-    expect(textArea.value).toBe('Dr. No');
+    expect(tester.text).toHaveValue('Dr. No');
 
     const networkMemberService: NetworkMemberService = TestBed.inject(NetworkMemberService);
     spyOn(networkMemberService, 'update').and.returnValue(of(undefined));
-    spyOn(networkMemberService, 'list').and.returnValue(of(component.members));
+    spyOn(networkMemberService, 'list').and.returnValue(of(tester.componentInstance.members));
 
-    const saveButton = element.querySelector('#saveButton') as HTMLButtonElement;
-    saveButton.click();
-    fixture.detectChanges();
+    tester.saveButton.click();
 
-    expect(element.textContent).toContain('Le type est obligatoire');
-    typeSelect.selectedIndex = 2;
-    typeSelect.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
-    expect(element.textContent).not.toContain('Le type est obligatoire');
+    expect(tester.testElement).toContainText('Le type est obligatoire');
+    tester.type.selectIndex(2);
+    expect(tester.testElement).not.toContainText('Le type est obligatoire');
 
-    saveButton.click();
-    fixture.detectChanges();
+    tester.saveButton.click();
 
-    expect(component.editedMember).toBeFalsy();
-    expect(component.memberForm).toBeFalsy();
+    expect(tester.componentInstance.editedMember).toBeFalsy();
+    expect(tester.componentInstance.memberForm).toBeFalsy();
     expect(networkMemberService.update).toHaveBeenCalledWith(1, 42, {
       type: 'LAWYER',
       text: 'Dr. No'

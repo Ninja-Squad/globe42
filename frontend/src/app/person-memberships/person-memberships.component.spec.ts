@@ -16,12 +16,59 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
-import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
+
+class PersonMembershipsComponentTester extends ComponentTester<PersonMembershipsComponent> {
+  constructor() {
+    super(PersonMembershipsComponent);
+  }
+
+  get title() {
+    return this.element('h2');
+  }
+
+  get noCurrentMembership() {
+    return this.element('#no-current-membership');
+  }
+
+  get currentMembership() {
+    return this.element('#current-membership');
+  }
+
+  get oldMemberships() {
+    return this.element('#old-memberships');
+  }
+
+  get alert() {
+    return this.element('ngb-alert');
+  }
+
+  get paymentMode() {
+    return this.select('#paymentMode');
+  }
+
+  get paymentDate() {
+    return this.input('#paymentDate');
+  }
+
+  get cardNumber() {
+    return this.input('#cardNumber');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+
+  get delete() {
+    return this.button('#delete-button');
+  }
+}
 
 describe('PersonMembershipsComponent', () => {
   let person: PersonModel;
   let memberships: Array<MembershipModel>;
+  let tester: PersonMembershipsComponentTester;
 
   beforeEach(async(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2018-04-30T15:30:00').toJSDate());
@@ -64,15 +111,15 @@ describe('PersonMembershipsComponent', () => {
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+
+    tester = new PersonMembershipsComponentTester();
   }));
 
   afterEach(() => jasmine.clock().uninstall());
 
   it('should only display missing current membership when no membership', () => {
-    const fixture = TestBed.createComponent(PersonMembershipsComponent);
-    const component = fixture.componentInstance;
-
-    fixture.detectChanges();
+    tester.detectChanges();
+    const component = tester.componentInstance;
 
     expect(component.person).toBe(person);
     expect(component.currentYear).toBe(2018);
@@ -84,66 +131,44 @@ describe('PersonMembershipsComponent', () => {
       cardNumber: null
     });
 
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector('h2').textContent).toBe(`Adhésion de l'année en cours (2018)`);
-    expect(element.querySelector('#no-current-membership')).toBeTruthy();
-    expect(element.querySelector('#current-membership')).toBeFalsy();
-    expect(element.querySelector('#old-memberships')).toBeFalsy();
+    expect(tester.title).toHaveText(`Adhésion de l'année en cours (2018)`);
+    expect(tester.noCurrentMembership).not.toBeNull();
+    expect(tester.currentMembership).toBeNull();
+    expect(tester.oldMemberships).toBeNull();
 
-    expect(element.querySelector('ngb-alert').textContent).toContain(
-      `Pas d'adhésion pour l'année en cours.`
-    );
+    expect(tester.alert).toContainText(`Pas d'adhésion pour l'année en cours.`);
   });
 
   it('should validate and create new membership', () => {
-    const fixture = TestBed.createComponent(PersonMembershipsComponent);
+    tester.detectChanges();
 
-    fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
+    expect(tester.paymentMode).toHaveSelectedLabel('');
+    expect(tester.paymentMode.optionLabels.length).toBe(PAYMENT_MODE_TRANSLATIONS.length);
+    expect(tester.paymentMode.optionLabels[0]).toBe('');
+    expect(tester.paymentMode.optionLabels[1]).toBe('Chèque');
+    expect(tester.paymentMode.optionLabels[2]).toBe('Espèces');
+    expect(tester.paymentDate).toHaveValue('30/04/2018');
+    expect(tester.cardNumber).toHaveValue('');
 
-    const paymentMode: HTMLSelectElement = element.querySelector('#paymentMode');
-    const paymentDate: HTMLInputElement = element.querySelector('#paymentDate');
-    const cardNumber: HTMLInputElement = element.querySelector('#cardNumber');
+    tester.paymentMode.dispatchEventOfType('blur');
+    expect(tester.testElement).toContainText('Le mode de paiement est obligatoire');
 
-    expect(paymentMode.selectedIndex).toBe(0);
-    expect(paymentMode.options.length).toBe(PAYMENT_MODE_TRANSLATIONS.length);
-    expect(paymentMode.options[0].textContent).toBe('');
-    expect(paymentMode.options[1].textContent).toBe('Chèque');
-    expect(paymentMode.options[2].textContent).toBe('Espèces');
-    expect(paymentDate.value).toBe('30/04/2018');
-    expect(cardNumber.value).toBe('');
+    tester.paymentDate.fillWith('');
+    tester.paymentDate.dispatchEventOfType('blur');
+    expect(tester.testElement).toContainText('La date de paiement est obligatoire');
 
-    paymentMode.dispatchEvent(new Event('blur'));
-    fixture.detectChanges();
-    expect(element.textContent).toContain('Le mode de paiement est obligatoire');
+    tester.paymentDate.fillWith('01/05/2018');
+    expect(tester.testElement).toContainText('La date de paiement doit être dans le passé');
 
-    paymentDate.value = '';
-    paymentDate.dispatchEvent(new Event('input'));
-    paymentDate.dispatchEvent(new Event('blur'));
-    fixture.detectChanges();
-    expect(element.textContent).toContain('La date de paiement est obligatoire');
+    tester.paymentDate.fillWith('31/12/2017');
+    expect(tester.testElement).toContainText(`La date de paiement doit être dans l'année en cours`);
 
-    paymentDate.value = '01/05/2018';
-    paymentDate.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    expect(element.textContent).toContain('La date de paiement doit être dans le passé');
+    tester.cardNumber.dispatchEventOfType('blur');
+    expect(tester.testElement).toContainText('Le n° de carte est obligatoire');
 
-    paymentDate.value = '31/12/2017';
-    paymentDate.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    expect(element.textContent).toContain(`La date de paiement doit être dans l'année en cours`);
-
-    cardNumber.dispatchEvent(new Event('blur'));
-    fixture.detectChanges();
-    expect(element.textContent).toContain('Le n° de carte est obligatoire');
-
-    paymentMode.selectedIndex = 1;
-    paymentMode.dispatchEvent(new Event('change'));
-    paymentDate.value = '30/04/2018';
-    paymentDate.dispatchEvent(new Event('input'));
-    cardNumber.value = '002';
-    cardNumber.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
+    tester.paymentMode.selectIndex(1);
+    tester.paymentDate.fillWith('30/04/2018');
+    tester.cardNumber.fillWith('002');
 
     const membershipService: MembershipService = TestBed.inject(MembershipService);
     const newMembership: MembershipModel = {
@@ -155,9 +180,7 @@ describe('PersonMembershipsComponent', () => {
     };
     spyOn(membershipService, 'createCurrent').and.returnValue(of(newMembership));
 
-    const saveButton = element.querySelector('#save') as HTMLButtonElement;
-    saveButton.click();
-    fixture.detectChanges();
+    tester.save.click();
 
     expect(membershipService.createCurrent).toHaveBeenCalledWith(person.id, {
       year: 2018,
@@ -165,9 +188,9 @@ describe('PersonMembershipsComponent', () => {
       paymentDate: '2018-04-30',
       cardNumber: '002'
     });
-    expect(fixture.componentInstance.currentMembership).toEqual(newMembership);
-    expect(element.querySelector('#no-current-membership')).toBeFalsy();
-    expect(element.querySelector('#current-membership')).toBeTruthy();
+    expect(tester.componentInstance.currentMembership).toEqual(newMembership);
+    expect(tester.noCurrentMembership).toBeNull();
+    expect(tester.currentMembership).not.toBeNull();
   });
 
   it('should only display missing current membership and old memberships when no current membership', () => {
@@ -179,10 +202,9 @@ describe('PersonMembershipsComponent', () => {
       cardNumber: '002'
     });
 
-    const fixture = TestBed.createComponent(PersonMembershipsComponent);
-    const component = fixture.componentInstance;
+    const component = tester.componentInstance;
 
-    fixture.detectChanges();
+    tester.detectChanges();
 
     expect(component.currentMembership).toBeNull();
     expect(component.oldMemberships).toEqual(memberships);
@@ -193,19 +215,15 @@ describe('PersonMembershipsComponent', () => {
       cardNumber: null
     });
 
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector('#no-current-membership')).toBeTruthy();
-    expect(element.querySelector('#current-membership')).toBeFalsy();
-    expect(element.querySelector('#old-memberships')).toBeTruthy();
+    expect(tester.noCurrentMembership).not.toBeNull();
+    expect(tester.currentMembership).toBeNull();
+    expect(tester.oldMemberships).not.toBeNull();
 
-    expect(element.querySelector('ngb-alert').textContent).toContain(
-      `Pas d'adhésion pour l'année en cours.`
-    );
-    const oldMembershipsText = element.querySelector('#old-memberships').textContent;
-    expect(oldMembershipsText).toContain('2017');
-    expect(oldMembershipsText).toContain('31 janv. 2017');
-    expect(oldMembershipsText).toContain('Chèque');
-    expect(oldMembershipsText).toContain('002');
+    expect(tester.alert).toContainText(`Pas d'adhésion pour l'année en cours.`);
+    expect(tester.oldMemberships).toContainText('2017');
+    expect(tester.oldMemberships).toContainText('31 janv. 2017');
+    expect(tester.oldMemberships).toContainText('Chèque');
+    expect(tester.oldMemberships).toContainText('002');
   });
 
   it('should display current membership when current membership exists', () => {
@@ -217,23 +235,19 @@ describe('PersonMembershipsComponent', () => {
       cardNumber: '002'
     });
 
-    const fixture = TestBed.createComponent(PersonMembershipsComponent);
-    const component = fixture.componentInstance;
+    const component = tester.componentInstance;
 
-    fixture.detectChanges();
+    tester.detectChanges();
 
     expect(component.currentMembership).toEqual(memberships[0]);
     expect(component.oldMemberships).toEqual([]);
 
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector('#no-current-membership')).toBeFalsy();
-    expect(element.querySelector('#current-membership')).toBeTruthy();
-    expect(element.querySelector('#old-memberships')).toBeFalsy();
+    expect(tester.noCurrentMembership).toBeNull();
+    expect(tester.currentMembership).not.toBeNull();
+    expect(tester.oldMemberships).toBeNull();
 
-    expect(element.querySelector('ngb-alert').textContent).toContain(
-      `Payée (Chèque) le 31 janv. 2018.`
-    );
-    expect(element.querySelector('ngb-alert').textContent).toContain(`Carte n° 002`);
+    expect(tester.alert).toContainText(`Payée (Chèque) le 31 janv. 2018.`);
+    expect(tester.alert).toContainText(`Carte n° 002`);
   });
 
   it('should delete current membership if confirmed', () => {
@@ -245,9 +259,7 @@ describe('PersonMembershipsComponent', () => {
       cardNumber: '002'
     });
 
-    const fixture = TestBed.createComponent(PersonMembershipsComponent);
-    fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
+    tester.detectChanges();
 
     const confirmService: ConfirmService = TestBed.inject(ConfirmService);
     const membershipService: MembershipService = TestBed.inject(MembershipService);
@@ -255,12 +267,11 @@ describe('PersonMembershipsComponent', () => {
     spyOn(confirmService, 'confirm').and.returnValue(of(undefined));
     spyOn(membershipService, 'deleteCurrent').and.returnValue(of(undefined));
 
-    (element.querySelector('#delete-button') as HTMLButtonElement).click();
-    fixture.detectChanges();
+    tester.delete.click();
 
     expect(membershipService.deleteCurrent).toHaveBeenCalledWith(person.id, 42);
-    expect(element.querySelector('#no-current-membership')).toBeTruthy();
-    expect(element.querySelector('#current-membership')).toBeFalsy();
-    expect(element.querySelector('#old-memberships')).toBeFalsy();
+    expect(tester.noCurrentMembership).not.toBeNull();
+    expect(tester.currentMembership).toBeNull();
+    expect(tester.oldMemberships).toBeNull();
   });
 });
