@@ -2,25 +2,44 @@ import {
   ParticipationItem,
   PersonParticipationsComponent
 } from './person-participations.component';
-import { ParticipationModel } from '../models/participation.model';
+import { ActivityType, ParticipationModel } from '../models/participation.model';
 import { ACTIVITY_TYPE_TRANSLATIONS, DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { PersonModel } from '../models/person.model';
 import { ParticipationService } from '../participation.service';
 import { ActivatedRoute } from '@angular/router';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { FullnamePipe } from '../fullname.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { CurrentPersonService } from '../current-person.service';
-import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+
+class PersonParticipationsComponentTester extends ComponentTester<PersonParticipationsComponent> {
+  constructor() {
+    super(PersonParticipationsComponent);
+  }
+
+  get message() {
+    return this.element('#message');
+  }
+
+  get checkboxes() {
+    return this.elements('input');
+  }
+
+  checkboxForActivityType(type: ActivityType) {
+    return this.input(`#activityType-${type}`);
+  }
+}
 
 describe('PersonParticipationsComponent', () => {
   let participations: Array<ParticipationModel>;
   let person: PersonModel;
   let route: ActivatedRoute;
   let currentPersonService: CurrentPersonService;
+
   beforeEach(() => {
     participations = [
       {
@@ -128,7 +147,7 @@ describe('PersonParticipationsComponent', () => {
   });
 
   describe('UI', () => {
-    let fixture: ComponentFixture<PersonParticipationsComponent>;
+    let tester: PersonParticipationsComponentTester;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -145,36 +164,27 @@ describe('PersonParticipationsComponent', () => {
       currentPersonService = TestBed.inject(CurrentPersonService);
       spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
-      fixture = TestBed.createComponent(PersonParticipationsComponent);
-      fixture.detectChanges();
+      tester = new PersonParticipationsComponentTester();
+      tester.detectChanges();
     });
 
     it('should have a message', () => {
-      expect(fixture.nativeElement.querySelector('#message').textContent).toBe(
-        "JB Nizet participe aux types d'activités suivants :"
-      );
+      expect(tester.message).toHaveText(`JB Nizet participe aux types d'activités suivants :`);
     });
 
     it('should have checkboxes', () => {
-      expect(fixture.nativeElement.querySelectorAll('input').length).toBe(
-        fixture.componentInstance.items.length
-      );
-      expect(fixture.nativeElement.querySelector('#activityType-MEAL').checked).toBe(true);
-      expect(fixture.nativeElement.querySelector('#activityType-HEALTH_WORKSHOP').checked).toBe(
-        false
-      );
+      expect(tester.checkboxes.length).toBe(tester.componentInstance.items.length);
+      expect(tester.checkboxForActivityType('MEAL')).toBeChecked();
+      expect(tester.checkboxForActivityType('HEALTH_WORKSHOP')).not.toBeChecked();
     });
 
     it('should trigger selection change', () => {
-      const component = fixture.componentInstance;
-      spyOn(component, 'selectItem');
+      spyOn(tester.componentInstance, 'selectItem');
 
-      fixture.nativeElement.querySelector('#activityType-MEAL').click();
-      fixture.detectChanges();
+      tester.checkboxForActivityType('MEAL').uncheck();
 
-      expect(fixture.nativeElement.querySelector('#activityType-MEAL').checked).toBe(false);
-      const mealItem = component.items.filter(item => item.activityType === 'MEAL')[0];
-      expect(component.selectItem).toHaveBeenCalledWith(mealItem);
+      const mealItem = tester.componentInstance.items.find(item => item.activityType === 'MEAL');
+      expect(tester.componentInstance.selectItem).toHaveBeenCalledWith(mealItem);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ParticipantsComponent } from './participants.component';
 import { FullnamePipe } from '../fullname.pipe';
@@ -8,10 +8,24 @@ import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
 import { Subject } from 'rxjs';
 import { ParticipantModel } from '../models/participant.model';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class ParticipantsComponentTester extends ComponentTester<ParticipantsComponent> {
+  constructor() {
+    super(ParticipantsComponent);
+  }
+
+  get title() {
+    return this.element('h2');
+  }
+
+  get personItems() {
+    return this.elements('.person-item');
+  }
+}
 
 describe('ParticipantsComponent', () => {
-  let component: ParticipantsComponent;
-  let fixture: ComponentFixture<ParticipantsComponent>;
+  let tester: ParticipantsComponentTester;
   let dataSubject: Subject<any>;
   let paramMapSubject: Subject<ParamMap>;
 
@@ -35,9 +49,8 @@ describe('ParticipantsComponent', () => {
       providers: [{ provide: ActivatedRoute, useValue: route }]
     });
 
-    fixture = TestBed.createComponent(ParticipantsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    tester = new ParticipantsComponentTester();
+    tester.detectChanges();
   });
 
   it('should expose activity type and sorted participants', () => {
@@ -49,8 +62,8 @@ describe('ParticipantsComponent', () => {
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
-    expect(component.participants.map(p => p.firstName)).toEqual(['Agnès', 'JB']);
-    expect(component.activityType).toBe('MEAL');
+    expect(tester.componentInstance.participants.map(p => p.firstName)).toEqual(['Agnès', 'JB']);
+    expect(tester.componentInstance.activityType).toBe('MEAL');
   });
 
   it('should have a title', () => {
@@ -58,10 +71,8 @@ describe('ParticipantsComponent', () => {
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('h2').textContent).toContain(
-      'Participants aux activités de type Repas'
-    );
+    tester.detectChanges();
+    expect(tester.title).toContainText('Participants aux activités de type Repas');
   });
 
   it('should display links, mediation code, email and phone', () => {
@@ -80,13 +91,12 @@ describe('ParticipantsComponent', () => {
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
-    fixture.detectChanges();
-    const divs = fixture.nativeElement.querySelectorAll('.person-item');
+    tester.detectChanges();
 
-    expect(divs.length).toBe(2);
-    expect(divs[0].querySelector('a').textContent).toBe('Agnès Crepet');
-    expect(divs[0].textContent).toContain('C1');
-    expect(divs[0].textContent).toContain('agnes@mail.com');
-    expect(divs[0].textContent).toContain('0987654321');
+    expect(tester.personItems.length).toBe(2);
+    expect(tester.personItems[0].element('a')).toHaveText('Agnès Crepet');
+    expect(tester.personItems[0]).toContainText('C1');
+    expect(tester.personItems[0]).toContainText('agnes@mail.com');
+    expect(tester.personItems[0]).toContainText('0987654321');
   });
 });

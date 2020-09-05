@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { SpentTimesComponent } from './spent-times.component';
 import { Component, LOCALE_ID } from '@angular/core';
@@ -10,6 +10,8 @@ import { of, Subject } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { DurationPipe } from '../duration.pipe';
 import { CurrentUserModule } from '../current-user/current-user.module';
+import { ComponentTester } from 'ngx-speculoos';
+import { DateTime } from 'luxon';
 import Spy = jasmine.Spy;
 
 @Component({
@@ -29,6 +31,20 @@ class TestComponent {
 
   storeDeletedSpentTime(event: SpentTimeEvent) {
     this.deletedSpentTimeEvent = event;
+  }
+}
+
+class TestComponentTester extends ComponentTester<TestComponent> {
+  constructor() {
+    super(TestComponent);
+  }
+
+  get spentTimeItems() {
+    return this.elements('li');
+  }
+
+  get deleteLinks() {
+    return this.elements('a');
   }
 }
 
@@ -91,7 +107,7 @@ describe('SpentTimesComponent', () => {
   });
 
   describe('UI', () => {
-    let fixture: ComponentFixture<TestComponent>;
+    let tester: TestComponentTester;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -107,42 +123,38 @@ describe('SpentTimesComponent', () => {
             id: 2,
             minutes: 12,
             creator: { login: 'Ced' },
-            creationInstant: '2018-11-03T14:13:00.000Z'
+            creationInstant: DateTime.fromISO('2018-11-03T14:13:00.000').setZone('UTC').toISO()
           } as SpentTimeModel,
           {
             id: 1,
             minutes: 100,
             creator: { login: 'JB' },
-            creationInstant: '2018-11-03T12:13:00.000Z'
+            creationInstant: DateTime.fromISO('2018-11-03T12:13:00.000').setZone('UTC').toISO()
           } as SpentTimeModel
         ])
       );
 
       spyOn(taskService, 'deleteSpentTime').and.returnValue(of(null));
 
-      fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
+      tester = new TestComponentTester();
+      tester.detectChanges();
     });
 
     it('should list spent times', () => {
-      const itemElements = fixture.nativeElement.querySelectorAll('li');
-      expect(itemElements.length).toBe(2);
+      expect(tester.spentTimeItems.length).toBe(2);
 
       // avoid using contains because the exact value depends on the browser timezone
-      expect(itemElements[0].textContent).toMatch(/\d nov. 2018 à \d\d:13:00: 0h12m/);
-      expect(itemElements[0].textContent).toContain('par Ced');
-      expect(itemElements[1].textContent).toMatch(/\d nov. 2018 à \d\d:13:00: 1h40m/);
-      expect(itemElements[1].textContent).toContain('par JB');
+      expect(tester.spentTimeItems[0]).toContainText('3 nov. 2018 à 14:13:00: 0h12m');
+      expect(tester.spentTimeItems[0]).toContainText('par Ced');
+      expect(tester.spentTimeItems[1]).toContainText('3 nov. 2018 à 12:13:00: 1h40m');
+      expect(tester.spentTimeItems[1]).toContainText('par JB');
     });
 
     it('should delete', () => {
-      const deleteLink: HTMLAnchorElement = fixture.nativeElement.querySelector('a');
-      deleteLink.click();
-      fixture.detectChanges();
+      tester.deleteLinks[0].click();
 
-      const itemElements = fixture.nativeElement.querySelectorAll('li');
-      expect(itemElements.length).toBe(1);
-      expect(fixture.componentInstance.deletedSpentTimeEvent.spentTime.id).toBe(2);
+      expect(tester.spentTimeItems.length).toBe(1);
+      expect(tester.componentInstance.deletedSpentTimeEvent.spentTime.id).toBe(2);
     });
   });
 });
