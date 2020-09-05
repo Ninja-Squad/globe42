@@ -123,13 +123,13 @@ describe('SpentTimesComponent', () => {
             id: 2,
             minutes: 12,
             creator: { login: 'Ced' },
-            creationInstant: DateTime.fromISO('2018-11-03T14:13:00.000').setZone('UTC').toISO()
+            creationInstant: DateTime.local(2018, 11, 3, 14, 13).setZone('UTC').toISO()
           } as SpentTimeModel,
           {
             id: 1,
             minutes: 100,
             creator: { login: 'JB' },
-            creationInstant: DateTime.fromISO('2018-11-03T12:13:00.000').setZone('UTC').toISO()
+            creationInstant: DateTime.local(2018, 11, 3, 12, 13).setZone('UTC').toISO()
           } as SpentTimeModel
         ])
       );
