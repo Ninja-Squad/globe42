@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonLayoutComponent } from './person-layout.component';
 import { PersonModel } from '../models/person.model';
@@ -41,7 +41,7 @@ describe('PersonLayoutComponent', () => {
   let person: PersonModel;
   let tester: PersonLayoutComponentTester;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     person = {
       id: 42,
       firstName: 'John',
@@ -60,7 +60,7 @@ describe('PersonLayoutComponent', () => {
     spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
 
     tester = new PersonLayoutComponentTester();
-  }));
+  });
 
   it('should display the person full name as title', () => {
     tester.detectChanges();

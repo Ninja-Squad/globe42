@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmOptions, ConfirmService } from './confirm.service';
 import { Observable } from 'rxjs';
@@ -23,14 +23,14 @@ describe('ConfirmService and its modal component', () => {
   let modalContent: HTMLElement;
   let fixture: ComponentFixture<any>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
     });
 
     fixture = TestBed.createComponent(TestComponent);
     fixture.detectChanges();
-  }));
+  });
 
   afterEach(() => {
     if (modalContent) {

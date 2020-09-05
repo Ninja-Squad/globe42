@@ -1,4 +1,4 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -368,7 +368,7 @@ describe('PersonEditComponent', () => {
       snapshot: { data: { person, persons, countries } }
     };
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
@@ -376,9 +376,7 @@ describe('PersonEditComponent', () => {
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
       personService = TestBed.inject(PersonService);
-    }));
-
-    beforeEach(() => jasmine.addMatchers(speculoosMatchers));
+    });
 
     it('should have a title', () => {
       const tester = new PersonEditTester();
@@ -669,14 +667,14 @@ describe('PersonEditComponent', () => {
       snapshot: { data: { person: null as PersonModel, persons, countries } }
     };
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       personService = TestBed.inject(PersonService);
-    }));
+    });
 
     beforeEach(() => jasmine.addMatchers(speculoosMatchers));
 

@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Component, LOCALE_ID } from '@angular/core';
 import { SituationComponent } from './situation.component';
 import { Situation } from '../person-family.component';
@@ -12,14 +12,14 @@ class TestComponent {
 }
 
 describe('SituationComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SituationComponent, TestComponent],
       providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });
 
     jasmine.clock().mockDate(DateTime.fromISO('2018-05-01').toJSDate());
-  }));
+  });
 
   afterEach(() => jasmine.clock().uninstall());
 

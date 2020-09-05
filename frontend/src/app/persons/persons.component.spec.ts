@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 describe('PersonsComponent', () => {
   let activatedRoute: any;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     activatedRoute = {
       snapshot: {
         data: {
@@ -26,7 +26,7 @@ describe('PersonsComponent', () => {
       declarations: [PersonsComponent, FullnamePipe],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
     });
-  }));
+  });
 
   it('should expose persons sorted by full name', () => {
     const component = new PersonsComponent(activatedRoute);

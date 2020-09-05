@@ -1,7 +1,7 @@
 import { PersonModel } from '../models/person.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FullnamePipe } from '../fullname.pipe';
 import { FamilyService } from '../family.service';
@@ -16,7 +16,7 @@ import { PageTitleDirective } from '../page-title.directive';
 describe('PersonFamilyEditComponent', () => {
   let route: ActivatedRoute;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     route = {
       snapshot: {
         data: {
@@ -39,7 +39,7 @@ describe('PersonFamilyEditComponent', () => {
         GlobeNgbModule.forRoot()
       ]
     });
-  }));
+  });
 
   it('should display person full name in title', () => {
     route.snapshot.data.family = null;

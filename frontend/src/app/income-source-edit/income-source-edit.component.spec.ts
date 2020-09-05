@@ -1,11 +1,10 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { IncomeSourceEditComponent } from './income-source-edit.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IncomeSourceModel } from '../models/income-source.model';
 import { IncomeSourceService } from '../income-source.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
@@ -14,6 +13,7 @@ import { ComponentTester, speculoosMatchers } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class IncomeSourceEditComponentTester extends ComponentTester<IncomeSourceEditComponent> {
   constructor() {
@@ -50,7 +50,7 @@ describe('IncomeSourceEditComponent', () => {
   @NgModule({
     imports: [
       CommonModule,
-      HttpClientModule,
+      HttpClientTestingModule,
       ReactiveFormsModule,
       RouterTestingModule,
       ValdemortModule
@@ -67,7 +67,7 @@ describe('IncomeSourceEditComponent', () => {
     };
     let tester: IncomeSourceEditComponentTester;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
@@ -77,7 +77,7 @@ describe('IncomeSourceEditComponent', () => {
 
       tester = new IncomeSourceEditComponentTester();
       tester.detectChanges();
-    }));
+    });
 
     it('should have a title', () => {
       expect(tester.title).toContainText('Nouvelle nature de prestation');
@@ -155,7 +155,7 @@ describe('IncomeSourceEditComponent', () => {
     };
     let tester: IncomeSourceEditComponentTester;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
@@ -165,7 +165,7 @@ describe('IncomeSourceEditComponent', () => {
 
       tester = new IncomeSourceEditComponentTester();
       tester.detectChanges();
-    }));
+    });
 
     it('should have a title', () => {
       expect(tester.title).toContainText('Modification de la nature de prestation foo');

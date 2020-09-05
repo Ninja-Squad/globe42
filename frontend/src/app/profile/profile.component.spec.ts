@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ProfileComponent } from './profile.component';
 import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
@@ -35,7 +35,7 @@ describe('ProfileComponent', () => {
   let profile: ProfileModel;
   let currentUserService: CurrentUserService;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     profile = {
       login: 'joe',
       admin: true,
@@ -64,7 +64,7 @@ describe('ProfileComponent', () => {
     currentUserService = TestBed.inject(CurrentUserService);
 
     tester = new ProfileComponentTester();
-  }));
+  });
 
   it('should display a message with login and admin', () => {
     tester.detectChanges();

@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ChargeCategoriesComponent } from './charge-categories.component';
 import { ChargeCategoryModel } from '../models/charge-category.model';
@@ -12,12 +12,13 @@ describe('ChargeCategoriesComponent', () => {
     snapshot: { data: { chargeCategories } }
   };
 
-  beforeEach(async(() =>
+  beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [ChargeCategoriesComponent, PageTitleDirective],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })));
+    })
+  );
 
   it('should list categories', () => {
     const fixture = TestBed.createComponent(ChargeCategoriesComponent);

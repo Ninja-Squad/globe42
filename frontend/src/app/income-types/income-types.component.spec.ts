@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -12,12 +12,13 @@ describe('IncomeTypesComponent', () => {
     snapshot: { data: { incomeTypes } }
   };
 
-  beforeEach(async(() =>
+  beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [IncomeTypesComponent, PageTitleDirective],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })));
+    })
+  );
 
   it('should list types', () => {
     const fixture = TestBed.createComponent(IncomeTypesComponent);

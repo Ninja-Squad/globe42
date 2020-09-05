@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 
 import { LoginComponent } from './login.component';
@@ -38,7 +38,7 @@ class LoginComponentTester extends ComponentTester<LoginComponent> {
 describe('LoginComponent', () => {
   let tester: LoginComponentTester;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule, ValdemortModule],
       declarations: [LoginComponent, ValidationDefaultsComponent, PageTitleDirective]
@@ -48,7 +48,7 @@ describe('LoginComponent', () => {
 
     tester = new LoginComponentTester();
     tester.detectChanges();
-  }));
+  });
 
   it('should have a login form', () => {
     expect(tester.componentInstance.loginForm.value).toEqual({

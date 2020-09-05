@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { UsersComponent } from './users.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -25,7 +25,7 @@ describe('UsersComponent', () => {
   let currentUserService: CurrentUserService;
   let userService: UserService;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule, NgbModalModule],
       declarations: [UsersComponent, PageTitleDirective],
@@ -35,7 +35,7 @@ describe('UsersComponent', () => {
     userService = TestBed.inject(UserService);
     currentUserService = TestBed.inject(CurrentUserService);
     currentUserService.userEvents = new BehaviorSubject<UserModel>({ id: 42 } as UserModel);
-  }));
+  });
 
   it('should expose sorted users', () => {
     const fixture = TestBed.createComponent(UsersComponent);

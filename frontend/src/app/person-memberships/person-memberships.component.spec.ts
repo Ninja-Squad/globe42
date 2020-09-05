@@ -1,6 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { PersonModel } from '../models/person.model';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { MembershipModel } from '../models/membership.model';
 import { MembershipService } from '../membership.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -70,7 +70,7 @@ describe('PersonMembershipsComponent', () => {
   let memberships: Array<MembershipModel>;
   let tester: PersonMembershipsComponentTester;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2018-04-30T15:30:00').toJSDate());
 
     person = {
@@ -113,7 +113,7 @@ describe('PersonMembershipsComponent', () => {
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
     tester = new PersonMembershipsComponentTester();
-  }));
+  });
 
   afterEach(() => jasmine.clock().uninstall());
 

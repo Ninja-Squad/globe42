@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonNetworkMembersComponent } from './person-network-members.component';
 import { ActivatedRoute } from '@angular/router';
@@ -63,7 +63,7 @@ describe('PersonNetworkMembersComponent', () => {
   let tester: PersonNetworlMembersComponentTester;
   let route: ActivatedRoute;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     const member1: NetworkMemberModel = {
       id: 42,
       type: 'DOCTOR',
@@ -108,7 +108,7 @@ describe('PersonNetworkMembersComponent', () => {
 
     tester = new PersonNetworlMembersComponentTester();
     tester.detectChanges();
-  }));
+  });
 
   it('should display a list of members, and no form', () => {
     expect(tester.componentInstance.editedMember).toBeFalsy();

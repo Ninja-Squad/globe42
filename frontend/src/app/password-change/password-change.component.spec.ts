@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { PasswordChangeComponent } from './password-change.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -37,7 +37,7 @@ class PasswordChangeComponentTester extends ComponentTester<PasswordChangeCompon
 describe('PasswordChangeComponent', () => {
   let tester: PasswordChangeComponentTester;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         CurrentUserModule.forRoot(),
@@ -53,7 +53,7 @@ describe('PasswordChangeComponent', () => {
 
     tester = new PasswordChangeComponentTester();
     tester.detectChanges();
-  }));
+  });
 
   it('should have a form', () => {
     expect(tester.componentInstance.passwordChangeForm.value).toEqual({

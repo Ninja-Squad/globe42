@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { PersonResourcesComponent } from './person-resources.component';
 import { IncomeModel } from '../models/income.model';
@@ -122,7 +122,7 @@ describe('PersonResourcesComponent', () => {
 
   let tester: PersonResourcesTester;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, RouterTestingModule, GlobeNgbModule.forRoot()],
       declarations: [PersonResourcesComponent, PageTitleDirective, FullnamePipe],
@@ -139,7 +139,7 @@ describe('PersonResourcesComponent', () => {
     });
 
     tester = new PersonResourcesTester();
-  }));
+  });
 
   it('should list incomes', () => {
     tester.detectChanges();

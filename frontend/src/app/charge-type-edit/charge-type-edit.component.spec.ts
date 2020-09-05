@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ChargeTypeEditComponent } from './charge-type-edit.component';
 import { CommonModule } from '@angular/common';
@@ -70,7 +70,7 @@ describe('ChargeTypeEditComponent', () => {
 
     let tester: ChargeTypeEditComponentTester;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
@@ -80,7 +80,7 @@ describe('ChargeTypeEditComponent', () => {
 
       tester = new ChargeTypeEditComponentTester();
       tester.detectChanges();
-    }));
+    });
 
     it('should have a title', () => {
       expect(tester.title).toContainText('Nouvelle nature des charges');
@@ -158,7 +158,7 @@ describe('ChargeTypeEditComponent', () => {
     };
     let tester: ChargeTypeEditComponentTester;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
@@ -168,7 +168,7 @@ describe('ChargeTypeEditComponent', () => {
 
       tester = new ChargeTypeEditComponentTester();
       tester.detectChanges();
-    }));
+    });
 
     it('should have a title', () => {
       expect(tester.title).toContainText('Modification de la nature des charges foo');

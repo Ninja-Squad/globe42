@@ -1,4 +1,4 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { NavigationProgressComponent } from './navigation-progress.component';
 import { ComponentTester } from 'ngx-speculoos';
@@ -39,7 +39,7 @@ describe('NavigationProgressComponent', () => {
   let tester: NavigationProgressComponentTester;
   let events$: Subject<RouterEvent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     events$ = new Subject<RouterEvent>();
 
     const fakeRouter = {
@@ -54,7 +54,7 @@ describe('NavigationProgressComponent', () => {
 
     tester = new NavigationProgressComponentTester();
     tester.detectChanges();
-  }));
+  });
 
   it('should not display any progress bar initially', () => {
     expect(tester.progressBar).toBeNull();
