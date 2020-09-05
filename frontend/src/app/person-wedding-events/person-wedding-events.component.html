@@ -46,9 +46,9 @@
       <label for="type">Type d'événement</label>
       <select id="type" formControlName="type" class="form-control">
         <option value=""></option>
-        <option *ngFor="let eventType of eventTypes" [value]="eventType.key">{{
-          eventType.translation
-        }}</option>
+        <option *ngFor="let eventType of eventTypes" [value]="eventType.key">
+          {{ eventType.translation }}
+        </option>
       </select>
       <val-errors controlName="type" label="Le type d'événement"></val-errors>
     </div>

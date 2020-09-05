@@ -20,11 +20,11 @@ export class Task {
     const dueDateTime = DateTime.fromISO(this.model.dueDate);
     const today = DateTime.local().startOf('day');
     if (today.equals(dueDateTime)) {
-      return 'aujourd\'hui';
+      return `aujourd'hui`;
     }
     const days = dueDateTime.diff(today, ['days']).days;
     if (days === 0) {
-      return 'aujourd\'hui';
+      return `aujourd'hui`;
     }
     if (days > 0) {
       return `dans ${days} jour${days > 1 ? 's' : ''}`;

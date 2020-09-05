@@ -15,9 +15,9 @@
     <div class="col-sm-9">
       <select class="form-control" id="category" formControlName="category">
         <option [ngValue]="null"></option>
-        <option *ngFor="let category of categories" [ngValue]="category">{{
-          category.name
-        }}</option>
+        <option *ngFor="let category of categories" [ngValue]="category">
+          {{ category.name }}
+        </option>
       </select>
       <val-errors controlName="category" label="La catégorie"></val-errors>
     </div>
@@ -36,7 +36,7 @@
         class="form-control"
         id="description"
         formControlName="description"
-        style="height: 12rem;"
+        style="height: 12rem"
       ></textarea>
     </div>
   </div>

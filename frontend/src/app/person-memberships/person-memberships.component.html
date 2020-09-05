@@ -24,9 +24,9 @@
       <div class="col-sm-9">
         <select class="form-control" id="paymentMode" formControlName="paymentMode">
           <option [value]="null"></option>
-          <option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">{{
-            paymentMode | displayPaymentMode
-          }}</option>
+          <option *ngFor="let paymentMode of paymentModes" [value]="paymentMode">
+            {{ paymentMode | displayPaymentMode }}
+          </option>
         </select>
         <val-errors controlName="paymentMode" label="Le mode de paiement"></val-errors>
       </div>

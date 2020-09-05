@@ -24,9 +24,9 @@
     <div class="col-sm-9">
       <select class="form-control" id="category" formControlName="categoryId">
         <option [ngValue]="null"></option>
-        <option *ngFor="let category of chargeCategories" [ngValue]="category.id">{{
-          category.name
-        }}</option>
+        <option *ngFor="let category of chargeCategories" [ngValue]="category.id">
+          {{ category.name }}
+        </option>
       </select>
       <val-errors controlName="categoryId" label="La dépense"></val-errors>
     </div>

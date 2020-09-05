@@ -190,9 +190,9 @@
       <label class="col-sm-3 col-form-label">Statut marital</label>
       <div class="col-sm-9">
         <select class="form-control" formControlName="maritalStatus" id="maritalStatus">
-          <option *ngFor="let ms of maritalStatuses" [value]="ms">{{
-            ms | displayMaritalStatus
-          }}</option>
+          <option *ngFor="let ms of maritalStatuses" [value]="ms">
+            {{ ms | displayMaritalStatus }}
+          </option>
         </select>
       </div>
     </div>
@@ -308,9 +308,9 @@
               formControlName="healthCareCoverage"
               id="healthCareCoverage"
             >
-              <option *ngFor="let hc of healthCareCoverages" [value]="hc">{{
-                hc | displayHealthCareCoverage
-              }}</option>
+              <option *ngFor="let hc of healthCareCoverages" [value]="hc">
+                {{ hc | displayHealthCareCoverage }}
+              </option>
             </select>
           </div>
         </div>
@@ -347,9 +347,9 @@
 
           <div class="col-sm-9 col-lg-6">
             <select class="form-control" formControlName="healthInsurance" id="healthInsurance">
-              <option *ngFor="let hi of healthInsurances" [value]="hi">{{
-                hi | displayHealthInsurance
-              }}</option>
+              <option *ngFor="let hi of healthInsurances" [value]="hi">
+                {{ hi | displayHealthInsurance }}
+              </option>
             </select>
           </div>
         </div>
@@ -382,9 +382,9 @@
       <label class="col-sm-3 col-form-label" for="housing">Classe de logement</label>
       <div class="col-sm-9">
         <select id="housing" class="form-control" formControlName="housing">
-          <option *ngFor="let housing of housings" [value]="housing">{{
-            housing | displayHousing
-          }}</option>
+          <option *ngFor="let housing of housings" [value]="housing">
+            {{ housing | displayHousing }}
+          </option>
         </select>
       </div>
     </div>
@@ -441,9 +441,9 @@
           <label for="entryType" class="col-sm-3 col-lg-6 col-form-label">de manière</label>
           <div class="col-sm-9 col-lg-6">
             <select id="entryType" class="form-control" formControlName="entryType">
-              <option *ngFor="let entryType of entryTypes" [value]="entryType">{{
-                entryType | displayEntryType
-              }}</option>
+              <option *ngFor="let entryType of entryTypes" [value]="entryType">
+                {{ entryType | displayEntryType }}
+              </option>
             </select>
           </div>
         </div>
@@ -462,9 +462,9 @@
       <label class="col-sm-3 col-form-label" for="visa">Type de carte de séjour</label>
       <div class="col-sm-9">
         <select id="residencePermit" class="form-control" formControlName="residencePermit">
-          <option *ngFor="let rp of residencePermits" [value]="rp">{{
-            rp | displayResidencePermit
-          }}</option>
+          <option *ngFor="let rp of residencePermits" [value]="rp">
+            {{ rp | displayResidencePermit }}
+          </option>
         </select>
       </div>
     </div>

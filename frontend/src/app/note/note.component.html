@@ -3,7 +3,7 @@
 </div>
 <div class="bubble text-muted">
   <ng-container *ngIf="!edited">
-    <div style="white-space: pre-line;">{{ note.text }}</div>
+    <div style="white-space: pre-line">{{ note.text }}</div>
     <div class="text-right">
       <button
         type="button"
@@ -29,7 +29,7 @@
         #textArea
         class="form-control"
         formControlName="text"
-        style="width: 100%;"
+        style="width: 100%"
         [rows]="rowCount"
       ></textarea>
       <div class="text-right mt-2">

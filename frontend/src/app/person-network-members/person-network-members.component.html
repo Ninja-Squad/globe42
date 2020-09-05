@@ -6,7 +6,7 @@
     <div class="col-md-3">
       <strong>{{ member.type | displayNetworkMemberType }}</strong>
     </div>
-    <div class="col-md-9 col-lg-5" style="white-space: pre-line;">{{ member.text }}</div>
+    <div class="col-md-9 col-lg-5" style="white-space: pre-line">{{ member.text }}</div>
     <div class="col-lg-4 text-right">
       <button
         class="btn btn-outline-secondary btn-sm mr-1 edit"
@@ -39,9 +39,9 @@
     <label for="type">Type</label>
     <select class="form-control" id="type" formControlName="type">
       <option [ngValue]="null"></option>
-      <option *ngFor="let memberType of memberTypes" [value]="memberType">{{
-        memberType | displayNetworkMemberType
-      }}</option>
+      <option *ngFor="let memberType of memberTypes" [value]="memberType">
+        {{ memberType | displayNetworkMemberType }}
+      </option>
     </select>
     <val-errors controlName="type" label="Le type"></val-errors>
   </div>
