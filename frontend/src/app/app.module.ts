@@ -197,6 +197,5 @@ import { PersonsReportsComponent } from './persons-reports/persons-reports.compo
 export class AppModule {
   constructor() {
     Settings.defaultLocale = 'fr';
-    Settings.defaultZoneName = 'Europe/Paris';
   }
 }
