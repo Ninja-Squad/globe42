@@ -24,10 +24,116 @@ import { PageTitleDirective } from '../page-title.directive';
 import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
 import { CurrentPersonService } from '../current-person.service';
 import { DisplayPassportStatusPipe } from '../display-passport-status.pipe';
+import { ComponentTester } from 'ngx-speculoos';
+
+class PersonComponentTester extends ComponentTester<PersonComponent> {
+  constructor() {
+    super(PersonComponent);
+  }
+
+  get gender() {
+    return this.element('#gender');
+  }
+  get address() {
+    return this.element('#fullAddress');
+  }
+  get birthDate() {
+    return this.element('#birthDate');
+  }
+  get email() {
+    return this.element('#email');
+  }
+  get phoneNumber() {
+    return this.element('#phoneNumber');
+  }
+  get entryDate() {
+    return this.element('#entryDate');
+  }
+  get entryType() {
+    return this.element('#entryType');
+  }
+  get mediationCode() {
+    return this.element('#mediationCode');
+  }
+  get firstMediationAppointmentDate() {
+    return this.element('#firstMediationAppointmentDate');
+  }
+  get maritalStatus() {
+    return this.element('#maritalStatus');
+  }
+  get spouse() {
+    return this.element('#spouse');
+  }
+  get partner() {
+    return this.element('#partner');
+  }
+  get housing() {
+    return this.element('#housing');
+  }
+  get fiscalStatus() {
+    return this.element('#fiscalStatus');
+  }
+  get healthCareCoverage() {
+    return this.element('#healthCareCoverage');
+  }
+  get healthInsurance() {
+    return this.element('#healthInsurance');
+  }
+  get accompanying() {
+    return this.element('#accompanying');
+  }
+  get socialSecurityNumber() {
+    return this.element('#socialSecurityNumber');
+  }
+  get cafNumber() {
+    return this.element('#cafNumber');
+  }
+  get nationality() {
+    return this.element('#nationality');
+  }
+  get passportStatus() {
+    return this.element('#passportStatus');
+  }
+  get passportNumber() {
+    return this.element('#passportNumber');
+  }
+  get passportValidityStartDate() {
+    return this.element('#passportValidityStartDate');
+  }
+  get passportValidityEndDate() {
+    return this.element('#passportValidityEndDate');
+  }
+  get visa() {
+    return this.element('#visa');
+  }
+  get residencePermit() {
+    return this.element('#residencePermit');
+  }
+  get residencePermitDepositDate() {
+    return this.element('#residencePermitDepositDate');
+  }
+  get residencePermitRenewalDate() {
+    return this.element('#residencePermitRenewalDate');
+  }
+  get residencePermitValidityStartDate() {
+    return this.element('#residencePermitValidityStartDate');
+  }
+  get residencePermitValidityEndDate() {
+    return this.element('#residencePermitValidityEndDate');
+  }
+
+  get resurrectButton() {
+    return this.button('#resurrect-person-button');
+  }
+  get deleteButton() {
+    return this.button('#delete-person-button');
+  }
+}
 
 describe('PersonComponent', () => {
   let person: PersonModel;
   let currentPersonService: CurrentPersonService;
+  let tester: PersonComponentTester;
 
   beforeEach(() => {
     const cityModel: CityModel = {
@@ -115,112 +221,68 @@ describe('PersonComponent', () => {
 
     currentPersonService = TestBed.inject(CurrentPersonService);
     spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
+
+    tester = new PersonComponentTester();
+    tester.detectChanges();
   });
 
   it('should have a maps URL', () => {
-    const component = new PersonComponent(null, null, currentPersonService, null);
-    component.ngOnInit();
-    expect(component.mapsUrl).toBe(
+    expect(tester.componentInstance.mapsUrl).toBe(
       'https://www.google.fr/maps/place/Chemin%20de%20la%20gare%2042000%20SAINT-ETIENNE'
     );
   });
 
   it('should display a person', () => {
-    const fixture = TestBed.createComponent(PersonComponent);
-    fixture.detectChanges();
-
-    const nativeElement = fixture.nativeElement;
-    const gender = nativeElement.querySelector('#gender');
-    expect(gender.textContent).toBe('Homme');
-    const address = nativeElement.querySelector('#fullAddress');
-    expect(address.textContent).toContain('Chemin de la gare');
-    expect(address.textContent).toContain('42000 SAINT-ETIENNE');
-    const birthDate = nativeElement.querySelector('#birthDate');
-    expect(birthDate.textContent).toBe('1 janv. 1980');
-    const email = nativeElement.querySelector('#email');
-    expect(email.textContent).toContain('john@mail.com');
-    const phoneNumber = nativeElement.querySelector('#phoneNumber');
-    expect(phoneNumber.textContent).toContain('06 12 34 56 78');
-    const entryDate = nativeElement.querySelector('#entryDate');
-    expect(entryDate.textContent).toBe('1 déc. 2016');
-    const entryType = nativeElement.querySelector('#entryType');
-    expect(entryType.textContent).toContain('Régulière');
-    const mediationCode = nativeElement.querySelector('#mediationCode');
-    expect(mediationCode.textContent).toBe('D1');
-    const firstMediationAppointmentDate = nativeElement.querySelector(
-      '#firstMediationAppointmentDate'
-    );
-    expect(firstMediationAppointmentDate.textContent).toContain('1 déc. 2017');
-    const maritalStatus = nativeElement.querySelector('#maritalStatus');
-    expect(maritalStatus.textContent).toContain('Marié(e)');
-    const spouse = nativeElement.querySelector('#spouse');
-    expect(spouse.textContent).toContain('Jane Doe');
-    const partner = nativeElement.querySelector('#partner');
-    expect(partner).toBeFalsy();
-    const housing = nativeElement.querySelector('#housing');
-    expect(housing.textContent).toContain('F6 ou plus');
-    expect(housing.textContent).toContain('80 m2');
-    const fiscalStatus = nativeElement.querySelector('#fiscalStatus');
-    expect(fiscalStatus.textContent).toContain('Imposable');
-    expect(fiscalStatus.textContent).toContain('n° fiscal 0123456789012');
-    expect(fiscalStatus.textContent).toContain('à jour');
-    const healthCareCoverage = nativeElement.querySelector('#healthCareCoverage');
-    expect(healthCareCoverage.textContent).toContain("Aide médicale de l'Etat");
-    expect(healthCareCoverage.textContent).toContain('depuis le 1 janv. 2017');
-    const healthInsurance = nativeElement.querySelector('#healthInsurance');
-    expect(healthInsurance.textContent).toContain('CMU-C');
-    expect(healthInsurance.textContent).toContain('depuis le 2 févr. 2017');
-    const accompanying = nativeElement.querySelector('#accompanying');
-    expect(accompanying.textContent).toContain('Paul');
-    const socialSecurityNumber = nativeElement.querySelector('#socialSecurityNumber');
-    expect(socialSecurityNumber.textContent).toContain('277126912340454');
-    const cafNumber = nativeElement.querySelector('#cafNumber');
-    expect(cafNumber.textContent).toContain('123765');
-    const nationality = nativeElement.querySelector('#nationality');
-    expect(nationality.textContent).toContain('France');
-    const passportStatus = nativeElement.querySelector('#passportStatus');
-    expect(passportStatus.textContent).toContain('Oui');
-    const passportNumber = nativeElement.querySelector('#passportNumber');
-    expect(passportNumber.textContent).toContain('P1');
-    const passportValidityStartDate = nativeElement.querySelector('#passportValidityStartDate');
-    expect(passportValidityStartDate.textContent).toContain('1 sept. 2019');
-    const passportValidityEndDate = nativeElement.querySelector('#passportValidityEndDate');
-    expect(passportValidityEndDate.textContent).toContain('1 sept. 2024');
-    const visa = nativeElement.querySelector('#visa');
-    expect(visa.textContent).toBe('D (long séjour)');
-    const residencePermit = nativeElement.querySelector('#residencePermit');
-    expect(residencePermit.textContent).toContain('Carte de résident de 10 ans');
-    const residencePermitDepositDate = nativeElement.querySelector('#residencePermitDepositDate');
-    expect(residencePermitDepositDate.textContent).toContain('2 févr. 2018');
-    const residencePermitRenewalDate = nativeElement.querySelector('#residencePermitRenewalDate');
-    expect(residencePermitRenewalDate.textContent).toContain('2 oct. 2018');
-    const residencePermitValidityStartDate = nativeElement.querySelector(
-      '#residencePermitValidityStartDate'
-    );
-    expect(residencePermitValidityStartDate.textContent).toContain('2 mars 2019');
-    const residencePermitValidityEndDate = nativeElement.querySelector(
-      '#residencePermitValidityEndDate'
-    );
-    expect(residencePermitValidityEndDate.textContent).toContain('2 mars 2029');
+    expect(tester.gender).toHaveText('Homme');
+    expect(tester.address).toContainText('Chemin de la gare');
+    expect(tester.address).toContainText('42000 SAINT-ETIENNE');
+    expect(tester.birthDate).toHaveText('1 janv. 1980');
+    expect(tester.email).toContainText('john@mail.com');
+    expect(tester.phoneNumber).toContainText('06 12 34 56 78');
+    expect(tester.entryDate).toHaveText('1 déc. 2016');
+    expect(tester.entryType).toContainText('Régulière');
+    expect(tester.mediationCode).toHaveText('D1');
+    expect(tester.firstMediationAppointmentDate).toContainText('1 déc. 2017');
+    expect(tester.maritalStatus).toContainText('Marié(e)');
+    expect(tester.spouse).toContainText('Jane Doe');
+    expect(tester.partner).toBeFalsy();
+    expect(tester.housing).toContainText('F6 ou plus');
+    expect(tester.housing).toContainText('80 m2');
+    expect(tester.fiscalStatus).toContainText('Imposable');
+    expect(tester.fiscalStatus).toContainText('n° fiscal 0123456789012');
+    expect(tester.fiscalStatus).toContainText('à jour');
+    expect(tester.healthCareCoverage).toContainText("Aide médicale de l'Etat");
+    expect(tester.healthCareCoverage).toContainText('depuis le 1 janv. 2017');
+    expect(tester.healthInsurance).toContainText('CMU-C');
+    expect(tester.healthInsurance).toContainText('depuis le 2 févr. 2017');
+    expect(tester.accompanying).toContainText('Paul');
+    expect(tester.socialSecurityNumber).toContainText('277126912340454');
+    expect(tester.cafNumber).toContainText('123765');
+    expect(tester.nationality).toContainText('France');
+    expect(tester.passportStatus).toContainText('Oui');
+    expect(tester.passportNumber).toContainText('P1');
+    expect(tester.passportValidityStartDate).toContainText('1 sept. 2019');
+    expect(tester.passportValidityEndDate).toContainText('1 sept. 2024');
+    expect(tester.visa).toHaveText('D (long séjour)');
+    expect(tester.residencePermit).toContainText('Carte de résident de 10 ans');
+    expect(tester.residencePermitDepositDate).toContainText('2 févr. 2018');
+    expect(tester.residencePermitRenewalDate).toContainText('2 oct. 2018');
+    expect(tester.residencePermitValidityStartDate).toContainText('2 mars 2019');
+    expect(tester.residencePermitValidityEndDate).toContainText('2 mars 2029');
   });
 
   it('should display a person with no spouse but a partner', () => {
     person.spouse = null;
     person.partner = 'old friend';
-    const fixture = TestBed.createComponent(PersonComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
-    const partner = nativeElement.querySelector('#partner');
-    expect(partner.textContent).toBe('old friend');
+    expect(tester.partner).toHaveText('old friend');
   });
 
   it('should display a person with mediation disabled', () => {
     person.mediationEnabled = false;
-    const fixture = TestBed.createComponent(PersonComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const nativeElement = fixture.nativeElement;
     const mediationDependantElementIds = [
       'entryDate',
       'entryType',
@@ -242,14 +304,11 @@ describe('PersonComponent', () => {
       'residencePermitRenewalDate'
     ];
     mediationDependantElementIds.forEach(id =>
-      expect(nativeElement.querySelector(`#${id}`)).toBeFalsy(`#${id} should be absent`)
+      expect(tester.element(`#${id}`)).toBeFalsy(`#${id} should be absent`)
     );
   });
 
   it('should delete a person if confirmed', () => {
-    const fixture = TestBed.createComponent(PersonComponent);
-    fixture.detectChanges();
-
     const confirmService = TestBed.inject(ConfirmService);
     const personService = TestBed.inject(PersonService);
     const router = TestBed.inject(Router);
@@ -258,21 +317,15 @@ describe('PersonComponent', () => {
     spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
-    expect(fixture.nativeElement.querySelector('#resurrect-person-button')).toBeFalsy();
-    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#delete-person-button'
-    );
-    deleteButton.click();
+    expect(tester.resurrectButton).toBeFalsy();
+    tester.deleteButton.click();
 
-    fixture.detectChanges();
+    tester.detectChanges();
     expect(router.navigate).toHaveBeenCalledWith(['/persons']);
     expect(personService.delete).toHaveBeenCalledWith(person.id);
   });
 
   it('should not delete a person if not confirmed', () => {
-    const fixture = TestBed.createComponent(PersonComponent);
-    fixture.detectChanges();
-
     const confirmService = TestBed.inject(ConfirmService);
     const personService = TestBed.inject(PersonService);
     const router = TestBed.inject(Router);
@@ -281,20 +334,15 @@ describe('PersonComponent', () => {
     spyOn(personService, 'delete').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
-    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#delete-person-button'
-    );
-    deleteButton.click();
+    tester.deleteButton.click();
 
-    fixture.detectChanges();
     expect(router.navigate).not.toHaveBeenCalled();
     expect(personService.delete).not.toHaveBeenCalled();
   });
 
   it('should resurrect a person if confirmed', () => {
     person.deleted = true;
-    const fixture = TestBed.createComponent(PersonComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     const confirmService = TestBed.inject(ConfirmService);
     const personService = TestBed.inject(PersonService);
@@ -304,21 +352,16 @@ describe('PersonComponent', () => {
     spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
-    expect(fixture.nativeElement.querySelector('#delete-person-button')).toBeFalsy();
-    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#resurrect-person-button'
-    );
-    resurrectButton.click();
+    expect(tester.deleteButton).toBeFalsy();
+    tester.resurrectButton.click();
 
-    fixture.detectChanges();
     expect(router.navigate).toHaveBeenCalledWith(['/persons']);
     expect(personService.resurrect).toHaveBeenCalledWith(person.id);
   });
 
   it('should not resurrect a person if not confirmed', () => {
     person.deleted = true;
-    const fixture = TestBed.createComponent(PersonComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     const confirmService = TestBed.inject(ConfirmService);
     const personService = TestBed.inject(PersonService);
@@ -328,12 +371,8 @@ describe('PersonComponent', () => {
     spyOn(personService, 'resurrect').and.returnValue(of(null));
     spyOn(router, 'navigate');
 
-    const resurrectButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#resurrect-person-button'
-    );
-    resurrectButton.click();
+    tester.resurrectButton.click();
 
-    fixture.detectChanges();
     expect(router.navigate).not.toHaveBeenCalled();
     expect(personService.resurrect).not.toHaveBeenCalled();
   });

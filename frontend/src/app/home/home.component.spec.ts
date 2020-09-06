@@ -7,30 +7,51 @@ import { HttpClientModule } from '@angular/common/http';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class HomeComponentTester extends ComponentTester<HomeComponent> {
+  constructor() {
+    super(HomeComponent);
+  }
+
+  get login() {
+    return this.element<HTMLAnchorElement>('#login-link');
+  }
+
+  get personsLink() {
+    return this.element<HTMLAnchorElement>('#persons-link');
+  }
+
+  get usersLink() {
+    return this.element<HTMLAnchorElement>('#users-link');
+  }
+}
 
 describe('HomeComponent', () => {
-  const fakeUserService = {
-    userEvents: new BehaviorSubject<UserModel>(undefined)
-  } as CurrentUserService;
+  let fakeUserService: CurrentUserService;
+  let tester: HomeComponentTester;
 
-  beforeEach(() =>
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CurrentUserModule.forRoot(), RouterTestingModule, HttpClientModule],
       declarations: [HomeComponent, PageTitleDirective]
-    })
-  );
+    });
+
+    fakeUserService = {
+      userEvents: new BehaviorSubject<UserModel>(undefined)
+    } as CurrentUserService;
+    tester = new HomeComponentTester();
+  });
 
   it('display a link to go the login', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const element = fixture.nativeElement;
-    fixture.detectChanges();
+    tester.detectChanges();
+    tester.componentInstance.user = null;
+    tester.detectChanges();
 
-    fixture.componentInstance.user = null;
-    fixture.detectChanges();
-
-    const button = element.querySelector('a[href="/login"]');
-    expect(button).not.toBeNull();
-    expect(button.textContent).toContain('Connexion');
+    expect(tester.login).not.toBeNull();
+    expect(tester.login).toContainText('Connexion');
+    expect(tester.personsLink).toBeNull();
+    expect(tester.usersLink).toBeNull();
   });
 
   it('should listen to userEvents in ngOnInit', () => {
@@ -54,28 +75,22 @@ describe('HomeComponent', () => {
   });
 
   it('should display link to go the persons page if logged in', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
+    tester.componentInstance.user = { login: 'cedric' } as UserModel;
+    tester.detectChanges();
 
-    fixture.componentInstance.user = { login: 'cedric' } as UserModel;
-    fixture.detectChanges();
-
-    const element = fixture.nativeElement;
-    const button = element.querySelector('a[href="/persons"]');
-    expect(button).not.toBeNull();
-    expect(button.textContent).toContain('Gestion des adhérents');
+    expect(tester.login).toBeNull();
+    expect(tester.personsLink).not.toBeNull();
+    expect(tester.personsLink).toContainText('Gestion des adhérents');
+    expect(tester.usersLink).toBeNull();
   });
 
   it('should display link to go the users page if admin', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
+    tester.componentInstance.user = { login: 'cedric', admin: true } as UserModel;
+    tester.detectChanges();
 
-    fixture.componentInstance.user = { login: 'cedric', admin: true } as UserModel;
-    fixture.detectChanges();
-
-    const element = fixture.nativeElement;
-    const button = element.querySelector('a[href="/users"]');
-    expect(button).not.toBeNull();
-    expect(button.textContent).toContain("Gestion des utilisateurs de l'application");
+    expect(tester.usersLink).not.toBeNull();
+    expect(tester.usersLink).toContainText("Gestion des utilisateurs de l'application");
   });
 });

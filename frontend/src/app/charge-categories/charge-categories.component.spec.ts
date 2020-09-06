@@ -5,27 +5,38 @@ import { ChargeCategoryModel } from '../models/charge-category.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class ChargeCategoriesComponentTester extends ComponentTester<ChargeCategoriesComponent> {
+  constructor() {
+    super(ChargeCategoriesComponent);
+  }
+
+  get categories() {
+    return this.elements('.charge-category-item');
+  }
+}
 
 describe('ChargeCategoriesComponent', () => {
-  const chargeCategories: Array<ChargeCategoryModel> = [{ id: 42, name: 'rental' }];
-  const activatedRoute = {
-    snapshot: { data: { chargeCategories } }
-  };
+  let tester: ChargeCategoriesComponentTester;
 
-  beforeEach(() =>
+  beforeEach(() => {
+    const chargeCategories: Array<ChargeCategoryModel> = [{ id: 42, name: 'rental' }];
+    const activatedRoute = {
+      snapshot: { data: { chargeCategories } }
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [ChargeCategoriesComponent, PageTitleDirective],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })
-  );
+    });
+
+    tester = new ChargeCategoriesComponentTester();
+    tester.detectChanges();
+  });
 
   it('should list categories', () => {
-    const fixture = TestBed.createComponent(ChargeCategoriesComponent);
-    fixture.detectChanges();
-
-    const nativeElement = fixture.nativeElement;
-    const types = nativeElement.querySelectorAll('div.charge-category-item');
-    expect(types.length).toBe(1);
+    expect(tester.categories.length).toBe(1);
   });
 });

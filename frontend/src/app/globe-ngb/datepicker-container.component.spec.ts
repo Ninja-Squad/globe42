@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { GlobeNgbModule } from './globe-ngb.module';
 import { By } from '@angular/platform-browser';
 import { NgbDatepicker, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
-import { DatepickerContainerComponent } from './datepicker-container.component';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   template: `
@@ -17,48 +17,57 @@ class TestComponent {
   dateCtrl = new FormControl();
 }
 
+class TestComponentTester extends ComponentTester<TestComponent> {
+  constructor() {
+    super(TestComponent);
+  }
+
+  get toggler() {
+    return this.element<HTMLElement>('.input-group-prepend .fa-calendar');
+  }
+
+  get inputDatepicker() {
+    return this.debugElement.query(By.directive(NgbInputDatepicker));
+  }
+
+  get datepicker() {
+    return this.debugElement.query(By.directive(NgbDatepicker));
+  }
+
+  get container() {
+    return this.element('gl-datepicker-container');
+  }
+}
+
 describe('DatepickerContainerComponent', () => {
-  beforeEach(() =>
+  let tester: TestComponentTester;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [GlobeNgbModule.forRoot(), ReactiveFormsModule],
       declarations: [TestComponent]
-    })
-  );
+    });
+
+    tester = new TestComponentTester();
+    tester.detectChanges();
+  });
 
   it('should display a toggle button, an input, and toggle the datepicker', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
+    expect(tester.toggler).not.toBeNull();
+    expect(tester.inputDatepicker).toBeTruthy();
+    expect(tester.datepicker).toBeFalsy();
 
-    const toggler = fixture.nativeElement.querySelector('.input-group-prepend .fa-calendar');
-    expect(toggler).toBeTruthy();
+    tester.toggler.click();
 
-    const inputDatepicker = fixture.debugElement.query(By.directive(NgbInputDatepicker));
-    expect(inputDatepicker).toBeTruthy();
+    expect(tester.datepicker).toBeTruthy();
 
-    let datepicker = fixture.debugElement.query(By.directive(NgbDatepicker));
-    expect(datepicker).toBeFalsy();
+    tester.toggler.click();
 
-    toggler.click();
-    fixture.detectChanges();
-
-    datepicker = fixture.debugElement.query(By.directive(NgbDatepicker));
-    expect(datepicker).toBeTruthy();
-
-    toggler.click();
-    fixture.detectChanges();
-
-    datepicker = fixture.debugElement.query(By.directive(NgbDatepicker));
-    expect(datepicker).toBeFalsy();
+    expect(tester.datepicker).toBeFalsy();
   });
 
   it('should have the input-group class in addition to its original class', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
-    const container = fixture.debugElement.query(By.directive(DatepickerContainerComponent))
-      .nativeElement;
-
-    expect(container.classList.contains('input-group')).toBe(true);
-    expect(container.classList.contains('foo')).toBe(true);
+    expect(tester.container).toHaveClass('input-group');
+    expect(tester.container).toHaveClass('foo');
   });
 });

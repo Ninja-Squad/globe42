@@ -7,7 +7,7 @@
   </div>
   <div class="col-sm">
     <div *ngIf="!user; else loggedIn" class="text-center">
-      <a class="btn btn-primary btn-lg" routerLink="/login">
+      <a class="btn btn-primary btn-lg" routerLink="/login" id="login-link">
         <span class="fa fa-sign-in"></span>
         Connexion
       </a>
@@ -15,7 +15,9 @@
     <ng-template #loggedIn>
       <ul class="list-unstyled lead ml-sm-5">
         <li>
-          <a routerLink="/persons"><span class="fa fa-caret-right"></span> Gestion des adhérents</a>
+          <a routerLink="/persons" id="persons-link"
+            ><span class="fa fa-caret-right"></span> Gestion des adhérents</a
+          >
         </li>
         <li>
           <a routerLink="/tasks"><span class="fa fa-caret-right"></span> Tâches à réaliser</a>
@@ -49,7 +51,7 @@
           <a routerLink="/activity-types"><span class="fa fa-caret-right"></span> Activités</a>
         </li>
         <li *ngIf="user?.admin">
-          <a routerLink="/users"
+          <a routerLink="/users" id="users-link"
             ><span class="fa fa-caret-right"></span> Gestion des utilisateurs de l'application</a
           >
         </li>

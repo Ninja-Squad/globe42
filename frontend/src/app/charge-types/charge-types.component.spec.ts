@@ -6,28 +6,41 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { LOCALE_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class ChargeTypesComponentTester extends ComponentTester<ChargeTypesComponent> {
+  constructor() {
+    super(ChargeTypesComponent);
+  }
+
+  get chargeTypes() {
+    return this.elements('.charge-type-item');
+  }
+}
 
 describe('ChargeTypesComponent', () => {
-  const chargeTypes: Array<ChargeTypeModel> = [
-    {
-      id: 12,
-      name: 'Loyer',
-      category: { id: 42, name: 'Charges locatives' },
-      maxMonthlyAmount: 789.01
-    },
-    {
-      id: 13,
-      name: 'Nourriture',
-      category: { id: 43, name: 'Vie quotidienne' },
-      maxMonthlyAmount: null
-    }
-  ];
+  let tester: ChargeTypesComponentTester;
 
-  const activatedRoute = {
-    snapshot: { data: { chargeTypes } }
-  };
+  beforeEach(() => {
+    const chargeTypes: Array<ChargeTypeModel> = [
+      {
+        id: 12,
+        name: 'Loyer',
+        category: { id: 42, name: 'Charges locatives' },
+        maxMonthlyAmount: 789.01
+      },
+      {
+        id: 13,
+        name: 'Nourriture',
+        category: { id: 43, name: 'Vie quotidienne' },
+        maxMonthlyAmount: null
+      }
+    ];
 
-  beforeEach(() =>
+    const activatedRoute = {
+      snapshot: { data: { chargeTypes } }
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [ChargeTypesComponent, PageTitleDirective],
@@ -35,23 +48,21 @@ describe('ChargeTypesComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
-    })
-  );
+    });
+
+    tester = new ChargeTypesComponentTester();
+    tester.detectChanges();
+  });
 
   it('should list charge types', () => {
-    const fixture = TestBed.createComponent(ChargeTypesComponent);
-    fixture.detectChanges();
+    expect(tester.chargeTypes.length).toBe(2);
 
-    const nativeElement = fixture.nativeElement;
-    const sources = nativeElement.querySelectorAll('div.charge-type-item');
-    expect(sources.length).toBe(2);
+    const chargeType1 = tester.chargeTypes[0];
+    expect(chargeType1).toContainText('Charges locatives');
+    expect(chargeType1).toContainText('Loyer');
+    expect(chargeType1).toContainText('max. 789,01 € / mois');
 
-    const source1 = sources[0];
-    expect(source1.textContent).toContain('Charges locatives');
-    expect(source1.textContent).toContain('Loyer');
-    expect(source1.textContent).toContain('max. 789,01 € / mois');
-
-    const source2 = sources[1];
-    expect(source2.textContent).not.toContain('max.');
+    const chargeType2 = tester.chargeTypes[1];
+    expect(chargeType2).not.toContainText('max.');
   });
 });

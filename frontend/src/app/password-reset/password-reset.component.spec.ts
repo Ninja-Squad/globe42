@@ -9,15 +9,38 @@ import { UserService } from '../user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class PasswordResetComponentTester extends ComponentTester<PasswordResetComponent> {
+  constructor() {
+    super(PasswordResetComponent);
+  }
+
+  get form() {
+    return this.element('#password-reset-form');
+  }
+
+  get resetButton() {
+    return this.button('#password-reset-button');
+  }
+
+  get updatedUserAlert() {
+    return this.element('#updated-user');
+  }
+}
 
 describe('PasswordResetComponent', () => {
-  const user: UserModel = { id: 42, login: 'jb', admin: false };
-  const activatedRoute = {
-    snapshot: { data: { user } }
-  };
-  const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
+  let fakeRouter: jasmine.SpyObj<Router>;
+  let user: UserModel;
+  let tester: PasswordResetComponentTester;
 
-  beforeEach(() =>
+  beforeEach(() => {
+    fakeRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    user = { id: 42, login: 'jb', admin: false };
+    const activatedRoute = {
+      snapshot: { data: { user } }
+    };
+
     TestBed.configureTestingModule({
       imports: [HttpClientModule, GlobeNgbModule.forRoot()],
       declarations: [PasswordResetComponent, PageTitleDirective],
@@ -25,21 +48,19 @@ describe('PasswordResetComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: Router, useValue: fakeRouter }
       ]
-    })
-  );
+    });
+
+    tester = new PasswordResetComponentTester();
+    tester.detectChanges();
+  });
 
   it('should reset password', () => {
-    const fixture = TestBed.createComponent(PasswordResetComponent);
-    fixture.detectChanges();
+    expect(tester.componentInstance.user).toEqual(user);
+    expect(tester.componentInstance.updatedUser).toBeUndefined();
 
-    expect(fixture.componentInstance.user).toEqual(user);
-    expect(fixture.componentInstance.updatedUser).toBeUndefined();
-
-    const nativeElement = fixture.nativeElement;
-    expect(nativeElement.querySelector('#password-reset-form')).not.toBeNull();
-    const resetButton = nativeElement.querySelector('#password-reset-button');
-    expect(resetButton).not.toBeNull();
-    expect(nativeElement.querySelector('#updated-user')).toBeNull();
+    expect(tester.form).not.toBeNull();
+    expect(tester.resetButton).not.toBeNull();
+    expect(tester.updatedUserAlert).toBeNull();
 
     const userService = TestBed.inject(UserService);
     const updatedUser = {
@@ -48,14 +69,13 @@ describe('PasswordResetComponent', () => {
       generatedPassword: 'passw0rd'
     } as UserWithPasswordModel;
     spyOn(userService, 'resetPassword').and.returnValue(of(updatedUser));
-    resetButton.click();
-    fixture.detectChanges();
 
-    expect(fixture.componentInstance.updatedUser).toBe(updatedUser);
-    expect(nativeElement.querySelector('#password-reset-form')).toBeNull();
-    const updatedUserAlert = nativeElement.querySelector('#updated-user');
-    expect(updatedUserAlert).not.toBeNull();
-    expect(updatedUserAlert.textContent).toContain('jb');
-    expect(updatedUserAlert.textContent).toContain('passw0rd');
+    tester.resetButton.click();
+
+    expect(tester.componentInstance.updatedUser).toBe(updatedUser);
+    expect(tester.form).toBeNull();
+    expect(tester.updatedUserAlert).not.toBeNull();
+    expect(tester.updatedUserAlert).toContainText('jb');
+    expect(tester.updatedUserAlert).toContainText('passw0rd');
   });
 });

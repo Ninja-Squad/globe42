@@ -5,27 +5,38 @@ import { ActivatedRoute } from '@angular/router';
 import { IncomeTypesComponent } from './income-types.component';
 import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class IncomeTypesComponentTester extends ComponentTester<IncomeTypesComponent> {
+  constructor() {
+    super(IncomeTypesComponent);
+  }
+
+  get incomeTypes() {
+    return this.elements('.income-type-item');
+  }
+}
 
 describe('IncomeTypesComponent', () => {
-  const incomeTypes: Array<IncomeSourceTypeModel> = [{ id: 42, type: 'CAF' }];
-  const activatedRoute = {
-    snapshot: { data: { incomeTypes } }
-  };
+  let tester: IncomeTypesComponentTester;
 
-  beforeEach(() =>
+  beforeEach(() => {
+    const incomeTypes: Array<IncomeSourceTypeModel> = [{ id: 42, type: 'CAF' }];
+    const activatedRoute = {
+      snapshot: { data: { incomeTypes } }
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [IncomeTypesComponent, PageTitleDirective],
       providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-    })
-  );
+    });
+
+    tester = new IncomeTypesComponentTester();
+    tester.detectChanges();
+  });
 
   it('should list types', () => {
-    const fixture = TestBed.createComponent(IncomeTypesComponent);
-    fixture.detectChanges();
-
-    const nativeElement = fixture.nativeElement;
-    const types = nativeElement.querySelectorAll('div.income-type-item');
-    expect(types.length).toBe(1);
+    expect(tester.incomeTypes.length).toBe(1);
   });
 });

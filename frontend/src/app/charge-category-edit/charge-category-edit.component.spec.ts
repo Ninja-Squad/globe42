@@ -13,6 +13,25 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentTester } from 'ngx-speculoos';
+
+class ChargeCategoryEditComponentTester extends ComponentTester<ChargeCategoryEditComponent> {
+  constructor() {
+    super(ChargeCategoryEditComponent);
+  }
+
+  get title() {
+    return this.element('h1');
+  }
+
+  get name() {
+    return this.input('#name');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+}
 
 describe('ChargeCategoryEditComponent', () => {
   @NgModule({
@@ -26,6 +45,8 @@ describe('ChargeCategoryEditComponent', () => {
     declarations: [ChargeCategoryEditComponent, ValidationDefaultsComponent, PageTitleDirective]
   })
   class TestModule {}
+
+  let tester: ChargeCategoryEditComponentTester;
 
   describe('in edit mode', () => {
     const chargeCategory: ChargeCategoryModel = { id: 42, name: 'rental' };
@@ -44,33 +65,27 @@ describe('ChargeCategoryEditComponent', () => {
 
       router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
+
+      tester = new ChargeCategoryEditComponentTester();
     });
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
-        'Modification de la dépense rental'
-      );
+      expect(tester.title).toContainText('Modification de la dépense rental');
     });
 
     it('should edit and update an existing charge category', () => {
       const chargeCategoryService = TestBed.inject(ChargeCategoryService);
       spyOn(chargeCategoryService, 'update').and.returnValue(of(null));
-      const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.componentInstance.chargeCategoryForm.value).toEqual({ name: 'rental' });
+      expect(tester.componentInstance.chargeCategoryForm.value).toEqual({ name: 'rental' });
 
-      const nativeElement = fixture.nativeElement;
-      const type = nativeElement.querySelector('#name');
-      expect(type.value).toBe('rental');
+      expect(tester.name).toHaveValue('rental');
 
-      type.value = 'Charges locatives';
-      type.dispatchEvent(new Event('input'));
-
-      nativeElement.querySelector('#save').click();
+      tester.name.fillWith('Charges locatives');
+      tester.save.click();
 
       expect(chargeCategoryService.update).toHaveBeenCalledWith(42, { name: 'Charges locatives' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');
@@ -93,31 +108,26 @@ describe('ChargeCategoryEditComponent', () => {
 
       router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
+      tester = new ChargeCategoryEditComponentTester();
     });
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvelle dépense');
+      expect(tester.title).toContainText('Nouvelle dépense');
     });
 
     it('should create and save a new charge category', () => {
       const chargeCategoryService = TestBed.inject(ChargeCategoryService);
       spyOn(chargeCategoryService, 'create').and.returnValue(of(null));
-      const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
 
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.componentInstance.chargeCategoryForm.value).toEqual({ name: '' });
-      const nativeElement = fixture.nativeElement;
+      expect(tester.componentInstance.chargeCategoryForm.value).toEqual({ name: '' });
 
-      const type = nativeElement.querySelector('#name');
-      expect(type.value).toBe('');
-      type.value = 'Charges locatives';
-
-      type.dispatchEvent(new Event('input'));
-      nativeElement.querySelector('#save').click();
+      expect(tester.name).toHaveValue('');
+      tester.name.fillWith('Charges locatives');
+      tester.save.click();
 
       expect(chargeCategoryService.create).toHaveBeenCalledWith({ name: 'Charges locatives' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/charge-categories');
@@ -126,18 +136,14 @@ describe('ChargeCategoryEditComponent', () => {
     it('should display an error message if no name', () => {
       const chargeCategoryService = TestBed.inject(ChargeCategoryService);
       spyOn(chargeCategoryService, 'create').and.returnValue(of(null));
-      const fixture = TestBed.createComponent(ChargeCategoryEditComponent);
 
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const element: HTMLElement = fixture.nativeElement;
-      expect(element.textContent).not.toContain('Le nom est obligatoire');
+      expect(tester.testElement).not.toContainText('Le nom est obligatoire');
 
-      const saveButton: HTMLButtonElement = element.querySelector('#save');
-      saveButton.click();
-      fixture.detectChanges();
+      tester.save.click();
 
-      expect(element.textContent).toContain('Le nom est obligatoire');
+      expect(tester.testElement).toContainText('Le nom est obligatoire');
 
       expect(chargeCategoryService.create).not.toHaveBeenCalled();
       expect(router.navigateByUrl).not.toHaveBeenCalled();

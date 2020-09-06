@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   selector: 'gl-test',
@@ -26,32 +27,39 @@ class TestComponent {
   };
 }
 
+class TestComponentTester extends ComponentTester<TestComponent> {
+  constructor() {
+    super(TestComponent);
+  }
+
+  get canvas() {
+    return this.element('canvas');
+  }
+
+  get chartComponent(): ChartComponent {
+    return this.debugElement.query(By.directive(ChartComponent)).componentInstance;
+  }
+}
+
 describe('ChartComponent', () => {
+  let tester: TestComponentTester;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ChartComponent, TestComponent]
     });
+
+    tester = new TestComponentTester();
+    tester.detectChanges();
   });
 
   it('should display a chart', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
-    const canvas: HTMLCanvasElement = fixture.nativeElement.querySelector('canvas');
-    expect(canvas.toDataURL().length).toBeGreaterThan(0);
-    const chartComponent: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent))
-      .componentInstance;
-    expect(chartComponent.configuration).toBe(fixture.componentInstance.configuration);
+    expect(tester.canvas.nativeElement.toDataURL().length).toBeGreaterThan(0);
+    expect(tester.chartComponent.configuration).toBe(tester.componentInstance.configuration);
   });
 
   it('should display a different chart when input changes', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
-    const canvas: HTMLCanvasElement = fixture.nativeElement.querySelector('canvas');
-    const firstImage = canvas.toDataURL();
-    const chartComponent: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent))
-      .componentInstance;
+    const firstImage = tester.canvas.nativeElement.toDataURL();
 
     const newConfiguration: ChartConfiguration = {
       type: 'doughnut',
@@ -68,10 +76,10 @@ describe('ChartComponent', () => {
         }
       }
     };
-    fixture.componentInstance.configuration = newConfiguration;
-    fixture.detectChanges();
+    tester.componentInstance.configuration = newConfiguration;
+    tester.detectChanges();
 
-    expect(canvas.toDataURL()).not.toBe(firstImage);
-    expect(chartComponent.configuration).toBe(newConfiguration);
+    expect(tester.canvas.nativeElement.toDataURL()).not.toBe(firstImage);
+    expect(tester.chartComponent.configuration).toBe(newConfiguration);
   });
 });
