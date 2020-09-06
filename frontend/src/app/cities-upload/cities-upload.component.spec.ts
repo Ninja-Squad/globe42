@@ -6,22 +6,45 @@ import { Subject } from 'rxjs';
 import { HttpClientModule, HttpEventType, HttpResponse } from '@angular/common/http';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
 
 function tickSeconds(seconds: number) {
   tick(seconds * 1000);
 }
 
+class CitiesUploadComponentTester extends ComponentTester<CitiesUploadComponent> {
+  constructor() {
+    super(CitiesUploadComponent);
+  }
+
+  get infoMessage() {
+    return this.element('#info-message');
+  }
+
+  get progress() {
+    return this.element('#progress');
+  }
+
+  get fileInput() {
+    return this.element('#file-input');
+  }
+}
+
 describe('CitiesUploadComponent', () => {
+  let tester: CitiesUploadComponentTester;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [GlobeNgbModule.forRoot(), HttpClientModule],
       declarations: [CitiesUploadComponent, PageTitleDirective]
     });
+
+    tester = new CitiesUploadComponentTester();
   });
 
   it('should upload', fakeAsync(() => {
     const cityService = TestBed.inject(SearchCityService);
-    const component = new CitiesUploadComponent(cityService);
+    const component = tester.componentInstance;
 
     expect(component.status).toBe('pending');
 
@@ -93,7 +116,7 @@ describe('CitiesUploadComponent', () => {
 
   it('should finish if response comes back early', fakeAsync(() => {
     const cityService = TestBed.inject(SearchCityService);
-    const component = new CitiesUploadComponent(cityService);
+    const component = tester.componentInstance;
 
     expect(component.status).toBe('pending');
 
@@ -149,40 +172,35 @@ describe('CitiesUploadComponent', () => {
   }));
 
   it('should display an info message and a file upload control, and no progress', () => {
-    const fixture = TestBed.createComponent(CitiesUploadComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('#info-message')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#file-input')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#progress')).toBeFalsy();
+    expect(tester.infoMessage).not.toBeNull();
+    expect(tester.fileInput).not.toBeNull();
+    expect(tester.progress).toBeNull();
   });
 
   it('should hide the file upload control, and display the progress', () => {
-    const fixture = TestBed.createComponent(CitiesUploadComponent);
-    const component = fixture.componentInstance;
+    tester.componentInstance.status = 'uploading';
+    tester.componentInstance.progress = 0.5;
 
-    component.status = 'uploading';
-    component.progress = 0.5;
+    tester.detectChanges();
 
-    fixture.detectChanges();
+    expect(tester.fileInput).toBeNull();
+    expect(tester.progress).toContainText('Téléchargement en cours');
+    expect(tester.progress).toContainText('50%');
 
-    expect(fixture.nativeElement.querySelector('#file-input')).toBeFalsy();
-    const progres = fixture.nativeElement.querySelector('#progress');
-    expect(progres.textContent).toContain('Téléchargement en cours');
-    expect(progres.textContent).toContain('50%');
+    tester.componentInstance.status = 'processing';
+    tester.componentInstance.progress = 0.9;
+    tester.detectChanges();
 
-    component.status = 'processing';
-    component.progress = 0.9;
+    expect(tester.progress).toContainText('Traitement en cours');
+    expect(tester.progress).toContainText('90%');
 
-    fixture.detectChanges();
-    expect(progres.textContent).toContain('Traitement en cours');
-    expect(progres.textContent).toContain('90%');
+    tester.componentInstance.status = 'done';
+    tester.componentInstance.progress = 1;
+    tester.detectChanges();
 
-    component.status = 'done';
-    component.progress = 1;
-
-    fixture.detectChanges();
-    expect(progres.textContent).toContain('Terminé');
-    expect(progres.textContent).toContain('100%');
+    expect(tester.progress).toContainText('Terminé');
+    expect(tester.progress).toContainText('100%');
   });
 });

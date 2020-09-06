@@ -2,6 +2,7 @@ import { PageTitleDirective } from './page-title.directive';
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TestBed } from '@angular/core/testing';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   selector: 'gl-test1',
@@ -30,8 +31,15 @@ class TestComponent {
   page = 1;
 }
 
+class TestComponentTester extends ComponentTester<TestComponent> {
+  constructor() {
+    super(TestComponent);
+  }
+}
+
 describe('PageTitleDirective', () => {
   let titleService: Title;
+  let tester: TestComponentTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,31 +47,24 @@ describe('PageTitleDirective', () => {
     });
 
     titleService = TestBed.inject(Title);
+    tester = new TestComponentTester();
+    tester.detectChanges();
   });
 
   it('should set the page title', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
     expect(titleService.getTitle()).toBe('Globe42 - hello');
   });
 
   it('should reset the page title to default when it disappears', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
-    fixture.componentInstance.page = 3;
-    fixture.detectChanges();
+    tester.componentInstance.page = 3;
+    tester.detectChanges();
 
     expect(titleService.getTitle()).toBe('Globe42');
   });
 
   it('should change the page title when the page changes', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
-    fixture.componentInstance.page = 2;
-    fixture.detectChanges();
+    tester.componentInstance.page = 2;
+    tester.detectChanges();
 
     expect(titleService.getTitle()).toBe('Globe42 - world');
   });

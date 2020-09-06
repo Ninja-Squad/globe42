@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
 import { MenuComponent } from './menu/menu.component';
 import { RouterOutlet } from '@angular/router';
+import { ComponentTester } from 'ngx-speculoos';
 
 describe('AppComponent', () => {
   beforeEach(() =>
@@ -15,10 +16,8 @@ describe('AppComponent', () => {
   );
 
   it('should create a menu and a router-outlet', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const menuFixture = fixture.debugElement.query(By.directive(MenuComponent));
-    expect(menuFixture).not.toBeNull();
-    const routerOutletFixture = fixture.debugElement.query(By.directive(RouterOutlet));
-    expect(routerOutletFixture).not.toBeNull();
+    const tester = ComponentTester.create(AppComponent);
+    expect(tester.debugElement.query(By.directive(MenuComponent))).not.toBeNull();
+    expect(tester.debugElement.query(By.directive(RouterOutlet))).not.toBeNull();
   });
 });

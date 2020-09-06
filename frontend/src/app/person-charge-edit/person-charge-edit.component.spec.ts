@@ -15,14 +15,35 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { ChargeModel } from '../models/charge.model';
+import { ComponentTester } from 'ngx-speculoos';
+import { PersonModel } from '../models/person.model';
+
+class PersonChargeEditComponentTester extends ComponentTester<PersonChargeEditComponent> {
+  constructor() {
+    super(PersonChargeEditComponent);
+  }
+
+  get title() {
+    return this.element('h1');
+  }
+
+  get chargeType() {
+    return this.select('#type');
+  }
+
+  get monthlyAmount() {
+    return this.input('#monthlyAmount');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+}
 
 describe('PersonChargeEditComponent', () => {
-  const chargeTypes = [
-    { id: 1, name: 'B' },
-    { id: 2, name: 'A', maxMonthlyAmount: 100 }
-  ] as Array<ChargeTypeModel>;
-
-  const person = { id: 42, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: 'JB' };
+  let chargeTypes: Array<ChargeTypeModel>;
+  let person: PersonModel;
+  let tester: PersonChargeEditComponentTester;
 
   @NgModule({
     imports: [
@@ -42,90 +63,84 @@ describe('PersonChargeEditComponent', () => {
   })
   class TestModule {}
 
-  describe('in creation mode', () => {
-    const activatedRoute = {
-      snapshot: { data: { person, chargeTypes } }
-    };
+  beforeEach(() => {
+    chargeTypes = [
+      { id: 1, name: 'B' },
+      { id: 2, name: 'A', maxMonthlyAmount: 100 }
+    ] as Array<ChargeTypeModel>;
+    person = {
+      id: 42,
+      firstName: 'Jean-Baptiste',
+      lastName: 'Nizet',
+      nickName: 'JB'
+    } as PersonModel;
+  });
 
+  describe('in creation mode', () => {
     beforeEach(() => {
+      const activatedRoute = {
+        snapshot: { data: { person, chargeTypes } }
+      };
+
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+      tester = new PersonChargeEditComponentTester();
     });
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(PersonChargeEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
-        'Créer une nouvelle charge pour Jean-Baptiste Nizet (JB)'
-      );
+      expect(tester.title).toContainText('Créer une nouvelle charge pour Jean-Baptiste Nizet (JB)');
     });
 
     it('should expose sorted charge types', () => {
-      const fixture = TestBed.createComponent(PersonChargeEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const component = fixture.componentInstance;
-      expect(component.chargeTypes.map(t => t.name)).toEqual(['A', 'B']);
+      expect(tester.componentInstance.chargeTypes.map(t => t.name)).toEqual(['A', 'B']);
     });
 
     it('should expose a default charge', () => {
-      const fixture = TestBed.createComponent(PersonChargeEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const component = fixture.componentInstance;
-      expect(component.chargeForm.value).toEqual({ type: null, monthlyAmount: null });
+      expect(tester.componentInstance.chargeForm.value).toEqual({
+        type: null,
+        monthlyAmount: null
+      });
     });
 
     it('should display the charge in a form, and validate the form', () => {
-      const fixture = TestBed.createComponent(PersonChargeEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const element: HTMLElement = fixture.nativeElement;
+      expect(tester.chargeType.selectedIndex).toBeLessThan(1); // 0 on Safari, -1 on good browsers
+      expect(tester.chargeType.optionLabels.length).toBe(chargeTypes.length + 1);
 
-      const chargeType: HTMLSelectElement = element.querySelector('#type');
-      expect(chargeType.selectedIndex).toBeLessThan(1); // 0 on Safari, -1 on good browsers
-      expect(chargeType.options.length).toBe(chargeTypes.length + 1);
+      expect(tester.monthlyAmount).toHaveValue('');
 
-      const monthlyAmount: HTMLInputElement = element.querySelector('#monthlyAmount');
-      expect(monthlyAmount.value).toBe('');
+      tester.save.click();
 
-      const save: HTMLButtonElement = element.querySelector('#save');
-      save.click();
-      fixture.detectChanges();
+      expect(tester.testElement).toContainText('La nature de la charge est obligatoire');
+      expect(tester.testElement).toContainText('Le montant mensuel est obligatoire');
 
-      expect(element.textContent).toContain('La nature de la charge est obligatoire');
-      expect(element.textContent).toContain('Le montant mensuel est obligatoire');
+      tester.monthlyAmount.fillWith('0');
 
-      monthlyAmount.value = '0';
-      monthlyAmount.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
+      expect(tester.testElement).toContainText('La nature de la charge est obligatoire');
+      expect(tester.testElement).toContainText('Le montant mensuel doit être positif');
 
-      expect(element.textContent).toContain('La nature de la charge est obligatoire');
-      expect(element.textContent).toContain('Le montant mensuel doit être positif');
+      tester.chargeType.selectIndex(1);
+      tester.monthlyAmount.fillWith('101');
 
-      chargeType.selectedIndex = 1;
-      chargeType.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-
-      monthlyAmount.value = '101';
-      monthlyAmount.dispatchEvent(new Event('input'));
-      fixture.detectChanges();
-
-      expect(element.textContent).not.toContain('La nature de la charge est obligatoire');
-      expect(element.textContent).toContain(
+      expect(tester.testElement).not.toContainText('La nature de la charge est obligatoire');
+      expect(tester.testElement).toContainText(
         'Le montant mensuel ne peut pas dépasser la valeur maximale pour ce type de charge\u00a0: 100,00\u00a0€'
       );
 
-      chargeType.selectedIndex = 0;
-      chargeType.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
+      tester.chargeType.selectIndex(0);
 
-      expect(element.textContent).not.toContain(
+      expect(tester.testElement).not.toContainText(
         'Le montant mensuel ne peut pas dépasser la valeur maximale'
       );
     });
@@ -141,29 +156,18 @@ describe('PersonChargeEditComponent', () => {
       );
       spyOn(router, 'navigate');
 
-      const fixture = TestBed.createComponent(PersonChargeEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      const nativeElement = fixture.nativeElement;
+      tester.chargeType.selectIndex(1);
+      tester.monthlyAmount.fillWith('12');
 
-      const type: HTMLSelectElement = nativeElement.querySelector('#type');
-      type.selectedIndex = 1;
-      type.dispatchEvent(new Event('change'));
+      expect(tester.save.disabled).toBe(false);
 
-      const monthlyAmount = nativeElement.querySelector('#monthlyAmount');
-      monthlyAmount.value = '12';
-      monthlyAmount.dispatchEvent(new Event('input'));
-
-      const save = nativeElement.querySelector('#save');
-      fixture.detectChanges();
-
-      expect(save.disabled).toBe(false);
-
-      save.click();
+      tester.save.click();
 
       expect(chargeService.create).toHaveBeenCalledWith(42, { typeId: 2, monthlyAmount: 12 });
 
-      fixture.detectChanges();
+      tester.detectChanges();
 
       expect(router.navigate).toHaveBeenCalledWith(['persons', person.id, 'resources']);
     });

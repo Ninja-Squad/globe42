@@ -47,7 +47,7 @@
             <span class="fa fa-user-circle fa-fw"></span> {{ user.login }}
           </a>
           <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu-right">
-            <a class="dropdown-item" (click)="logout($event)" href="#">
+            <a class="dropdown-item" (click)="logout($event)" href="#" id="menu-logout">
               <span class="fa fa-power-off fa-fw"></span> Déconnexion
             </a>
             <a class="dropdown-item" routerLink="/profile">

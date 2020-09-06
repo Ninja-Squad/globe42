@@ -6,28 +6,41 @@ import { IncomeSourceModel } from '../models/income-source.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LOCALE_ID } from '@angular/core';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class IncomeSourcesComponentTester extends ComponentTester<IncomeSourcesComponent> {
+  constructor() {
+    super(IncomeSourcesComponent);
+  }
+
+  get incomeSources() {
+    return this.elements('.income-source-item');
+  }
+}
 
 describe('IncomeSourcesComponent', () => {
-  const incomeSources: Array<IncomeSourceModel> = [
-    {
-      id: 12,
-      name: 'Allocations familiales',
-      type: { id: 42, type: 'CAF' },
-      maxMonthlyAmount: 789.01
-    },
-    {
-      id: 13,
-      name: 'Salaire',
-      type: { id: 43, type: 'travail' },
-      maxMonthlyAmount: null
-    }
-  ];
+  let tester: IncomeSourcesComponentTester;
 
-  const activatedRoute = {
-    snapshot: { data: { incomeSources } }
-  };
+  beforeEach(() => {
+    const incomeSources: Array<IncomeSourceModel> = [
+      {
+        id: 12,
+        name: 'Allocations familiales',
+        type: { id: 42, type: 'CAF' },
+        maxMonthlyAmount: 789.01
+      },
+      {
+        id: 13,
+        name: 'Salaire',
+        type: { id: 43, type: 'travail' },
+        maxMonthlyAmount: null
+      }
+    ];
 
-  beforeEach(() =>
+    const activatedRoute = {
+      snapshot: { data: { incomeSources } }
+    };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [IncomeSourcesComponent, PageTitleDirective],
@@ -35,23 +48,21 @@ describe('IncomeSourcesComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ]
-    })
-  );
+    });
+
+    tester = new IncomeSourcesComponentTester();
+    tester.detectChanges();
+  });
 
   it('should list income sources', () => {
-    const fixture = TestBed.createComponent(IncomeSourcesComponent);
-    fixture.detectChanges();
+    expect(tester.incomeSources.length).toBe(2);
 
-    const nativeElement = fixture.nativeElement;
-    const sources = nativeElement.querySelectorAll('div.income-source-item');
-    expect(sources.length).toBe(2);
+    const source1 = tester.incomeSources[0];
+    expect(source1).toContainText('Allocations familiales');
+    expect(source1).toContainText('CAF');
+    expect(source1).toContainText('max. 789,01 € / mois');
 
-    const source1 = sources[0];
-    expect(source1.textContent).toContain('Allocations familiales');
-    expect(source1.textContent).toContain('CAF');
-    expect(source1.textContent).toContain('max. 789,01 € / mois');
-
-    const source2 = sources[1];
-    expect(source2.textContent).not.toContain('max.');
+    const source2 = tester.incomeSources[1];
+    expect(source2).not.toContainText('max.');
   });
 });

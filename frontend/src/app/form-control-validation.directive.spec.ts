@@ -2,6 +2,7 @@ import { FormControlValidationDirective } from './form-control-validation.direct
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   template: `
@@ -23,39 +24,46 @@ class FormComponent {
   submit() {}
 }
 
+class FormComponentTester extends ComponentTester<FormComponent> {
+  constructor() {
+    super(FormComponent);
+  }
+
+  get lastName() {
+    return this.input('#lastName');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+}
+
 describe('FormControlValidationDirective', () => {
-  beforeEach(() =>
+  let tester: FormComponentTester;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [FormComponent, FormControlValidationDirective]
-    })
-  );
+    });
+
+    tester = new FormComponentTester();
+    tester.detectChanges();
+  });
 
   it('should add the is-invalid CSS class when touched', () => {
-    const fixture = TestBed.createComponent(FormComponent);
-    fixture.detectChanges();
+    expect(tester.lastName).not.toHaveClass('is-invalid');
 
-    const lastName = fixture.nativeElement.querySelector('#lastName');
-    expect(lastName.classList).not.toContain('is-invalid');
+    tester.lastName.dispatchEventOfType('blur');
 
-    lastName.dispatchEvent(new Event('blur'));
-
-    fixture.detectChanges();
-
-    expect(lastName.classList).toContain('is-invalid');
+    expect(tester.lastName).toHaveClass('is-invalid');
   });
 
   it('should add the is-invalid CSS class when enclosing form is submitted', () => {
-    const fixture = TestBed.createComponent(FormComponent);
-    fixture.detectChanges();
+    expect(tester.lastName).not.toHaveClass('is-invalid');
 
-    const lastName = fixture.nativeElement.querySelector('#lastName');
-    expect(lastName.classList).not.toContain('is-invalid');
+    tester.save.click();
 
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('#save');
-    button.click();
-    fixture.detectChanges();
-
-    expect(lastName.classList).toContain('is-invalid');
+    expect(tester.lastName).toHaveClass('is-invalid');
   });
 });

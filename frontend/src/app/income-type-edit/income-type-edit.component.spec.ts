@@ -12,6 +12,25 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentTester } from 'ngx-speculoos';
+
+class IncomeTypeEditComponentTester extends ComponentTester<IncomeTypeEditComponent> {
+  constructor() {
+    super(IncomeTypeEditComponent);
+  }
+
+  get title() {
+    return this.element('h1');
+  }
+
+  get type() {
+    return this.input('#type');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+}
 
 describe('IncomeTypeEditComponent', () => {
   @NgModule({
@@ -26,6 +45,8 @@ describe('IncomeTypeEditComponent', () => {
   })
   class TestModule {}
 
+  let tester: IncomeTypeEditComponentTester;
+
   describe('in edit mode', () => {
     const incomeType: IncomeSourceTypeModel = { id: 42, type: 'CAF' };
     const activatedRoute = {
@@ -39,15 +60,13 @@ describe('IncomeTypeEditComponent', () => {
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+
+      tester = new IncomeTypeEditComponentTester();
     });
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
-        "Modification de l'organisme payeur CAF"
-      );
+      tester.detectChanges();
+      expect(tester.title).toContainText(`Modification de l'organisme payeur CAF`);
     });
 
     it('should edit and update an existing income type', () => {
@@ -58,20 +77,14 @@ describe('IncomeTypeEditComponent', () => {
       const router: Router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');
 
-      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
-      fixture.detectChanges();
+      tester.detectChanges();
 
-      expect(fixture.componentInstance.incomeTypeForm.value).toEqual({ type: 'CAF' });
+      expect(tester.componentInstance.incomeTypeForm.value).toEqual({ type: 'CAF' });
 
-      const element: HTMLElement = fixture.nativeElement;
-      const type: HTMLInputElement = element.querySelector('#type');
-      expect(type.value).toBe('CAF');
+      expect(tester.type).toHaveValue('CAF');
 
-      type.value = 'Caisse Allocations Familiales';
-      type.dispatchEvent(new Event('input'));
-
-      const saveButton: HTMLButtonElement = element.querySelector('#save');
-      saveButton.click();
+      tester.type.fillWith('Caisse Allocations Familiales');
+      tester.save.click();
 
       expect(incomeSourceTypeService.update).toHaveBeenCalledWith(42, {
         type: 'Caisse Allocations Familiales'
@@ -93,15 +106,13 @@ describe('IncomeTypeEditComponent', () => {
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+
+      tester = new IncomeTypeEditComponentTester();
     });
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
-        'Nouvel organisme payeur'
-      );
+      tester.detectChanges();
+      expect(tester.title).toContainText('Nouvel organisme payeur');
     });
 
     it('should create and save a new income type', () => {
@@ -111,20 +122,12 @@ describe('IncomeTypeEditComponent', () => {
       spyOn(incomeSourceTypeService, 'create').and.returnValue(of(null));
       spyOn(router, 'navigateByUrl');
 
-      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
+      tester.detectChanges();
 
-      fixture.detectChanges();
-
-      expect(fixture.componentInstance.incomeTypeForm.value).toEqual({ type: '' });
-      const element: HTMLElement = fixture.nativeElement;
-
-      const type: HTMLInputElement = element.querySelector('#type');
-      expect(type.value).toBe('');
-      type.value = 'CAF';
-      type.dispatchEvent(new Event('input'));
-
-      const saveButton: HTMLButtonElement = element.querySelector('#save');
-      saveButton.click();
+      expect(tester.componentInstance.incomeTypeForm.value).toEqual({ type: '' });
+      expect(tester.type).toHaveValue('');
+      tester.type.fillWith('CAF');
+      tester.save.click();
 
       expect(incomeSourceTypeService.create).toHaveBeenCalledWith({ type: 'CAF' });
       expect(router.navigateByUrl).toHaveBeenCalledWith('/income-types');
@@ -137,18 +140,12 @@ describe('IncomeTypeEditComponent', () => {
       spyOn(incomeSourceTypeService, 'create').and.returnValue(of(null));
       spyOn(router, 'navigateByUrl');
 
-      const fixture = TestBed.createComponent(IncomeTypeEditComponent);
+      tester.detectChanges();
 
-      fixture.detectChanges();
+      expect(tester.testElement).not.toContainText('Le type est obligatoire');
+      tester.save.click();
 
-      const element: HTMLElement = fixture.nativeElement;
-      expect(element.textContent).not.toContain('Le type est obligatoire');
-
-      const saveButton: HTMLButtonElement = element.querySelector('#save');
-      saveButton.click();
-      fixture.detectChanges();
-
-      expect(element.textContent).toContain('Le type est obligatoire');
+      expect(tester.testElement).toContainText('Le type est obligatoire');
 
       expect(incomeSourceTypeService.create).not.toHaveBeenCalled();
       expect(router.navigateByUrl).not.toHaveBeenCalled();

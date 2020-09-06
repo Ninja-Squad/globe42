@@ -5,21 +5,59 @@ import { MenuComponent } from './menu.component';
 import { UserModel } from '../models/user.model';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { ComponentTester } from 'ngx-speculoos';
+import { Router } from '@angular/router';
+
+class MenuComponentTester extends ComponentTester<MenuComponent> {
+  constructor() {
+    super(MenuComponent);
+  }
+
+  get navbar() {
+    return this.element('#navbar');
+  }
+
+  get toggler() {
+    return this.button('button');
+  }
+
+  get userDropDown() {
+    return this.element<HTMLAnchorElement>('#userDropDown');
+  }
+
+  get changePasswordLink() {
+    return this.element('a[href="/password-changes"]');
+  }
+
+  get usersLink() {
+    return this.element('a[href="/users"]');
+  }
+
+  get logout() {
+    return this.element<HTMLAnchorElement>('#menu-logout');
+  }
+}
 
 describe('MenuComponent', () => {
-  const fakeUserService = {
-    userEvents: new BehaviorSubject<UserModel | null>(null),
-    logout: () => {}
-  } as CurrentUserService;
-  const fakeRouter = jasmine.createSpyObj('Router', ['navigate']);
+  let fakeUserService: CurrentUserService;
+  let fakeRouter: jasmine.SpyObj<Router>;
+  let tester: MenuComponentTester;
 
-  beforeEach(() =>
+  beforeEach(() => {
+    fakeUserService = {
+      userEvents: new BehaviorSubject<UserModel | null>(null),
+      logout: () => {}
+    } as CurrentUserService;
+    fakeRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, GlobeNgbModule],
       declarations: [MenuComponent],
       providers: [{ provide: CurrentUserService, useValue: fakeUserService }]
-    })
-  );
+    });
+
+    tester = new MenuComponentTester();
+  });
 
   it('should have a `navbarCollapsed` field', () => {
     const menu: MenuComponent = new MenuComponent(fakeUserService, fakeRouter);
@@ -41,23 +79,15 @@ describe('MenuComponent', () => {
   });
 
   it('should toggle the class on click', () => {
-    const fixture = TestBed.createComponent(MenuComponent);
-    const element = fixture.nativeElement;
+    tester.detectChanges();
 
-    fixture.detectChanges();
+    expect(tester.navbar).not.toBeNull();
+    expect(tester.navbar).toHaveClass('collapse');
 
-    const navbarCollapsed = element.querySelector('#navbar');
-    expect(navbarCollapsed).not.toBeNull();
-    expect(navbarCollapsed.classList).toContain('collapse');
+    expect(tester.toggler).not.toBeNull();
+    tester.toggler.click();
 
-    const button = element.querySelector('button');
-    expect(button).not.toBeNull();
-    button.dispatchEvent(new Event('click'));
-
-    fixture.detectChanges();
-
-    const navbar = element.querySelector('#navbar');
-    expect(navbar.classList).not.toContain('collapse');
+    expect(tester.navbar).not.toHaveClass('collapse');
   });
 
   it('should listen to userEvents in ngOnInit', fakeAsync(() => {
@@ -80,51 +110,36 @@ describe('MenuComponent', () => {
   }));
 
   it('should display the user if logged', () => {
-    const fixture = TestBed.createComponent(MenuComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const component = fixture.componentInstance;
-    component.user = { login: 'cedric' } as UserModel;
+    tester.componentInstance.user = { login: 'cedric' } as UserModel;
 
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const element = fixture.nativeElement;
-    const info = element.querySelector('#userDropDown');
-    expect(info).not.toBeNull();
-    expect(info.textContent).toContain('cedric');
+    expect(tester.userDropDown).not.toBeNull();
+    expect(tester.userDropDown).toContainText('cedric');
   });
 
   it('should navigate to the password change page', () => {
-    const fixture = TestBed.createComponent(MenuComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const component = fixture.componentInstance;
-    component.user = { login: 'cedric' } as UserModel;
+    tester.componentInstance.user = { login: 'cedric' } as UserModel;
 
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const element = fixture.nativeElement;
-    const info = element.querySelector('#userDropDown');
-    info.dispatchEvent(new Event('click'));
+    tester.userDropDown.click();
 
-    fixture.detectChanges();
-
-    const changePasswordLink = element.querySelector('a[href="/password-changes"]');
-    expect(changePasswordLink).not.toBeNull();
+    expect(tester.changePasswordLink).not.toBeNull();
   });
 
   it('should navigate to the users page if admin', () => {
-    const fixture = TestBed.createComponent(MenuComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const component = fixture.componentInstance;
-    component.user = { login: 'cedric', admin: true } as UserModel;
+    tester.componentInstance.user = { login: 'cedric', admin: true } as UserModel;
 
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const element = fixture.nativeElement;
-    const usersLink = element.querySelector('a[href="/users"]');
-    expect(usersLink).not.toBeNull();
+    expect(tester.usersLink).not.toBeNull();
   });
 
   it('should unsubscribe on destroy', () => {
@@ -137,20 +152,16 @@ describe('MenuComponent', () => {
   });
 
   it('should display a logout button', () => {
-    const fixture = TestBed.createComponent(MenuComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
-    component.user = { login: 'cedric' } as UserModel;
-    fixture.detectChanges();
-    spyOn(fixture.componentInstance, 'logout');
+    tester.detectChanges();
+    tester.componentInstance.user = { login: 'cedric' } as UserModel;
+    tester.detectChanges();
+    spyOn(tester.componentInstance, 'logout').and.callFake(event => event.preventDefault());
 
-    const element = fixture.nativeElement;
-    const logout = element.querySelector('span.fa-power-off');
-    expect(logout).not.toBeNull();
-    logout.dispatchEvent(new Event('click', { bubbles: true }));
+    tester.userDropDown.click();
+    expect(tester.logout).not.toBeNull();
+    tester.logout.click();
 
-    fixture.detectChanges();
-    expect(fixture.componentInstance.logout).toHaveBeenCalled();
+    expect(tester.componentInstance.logout).toHaveBeenCalled();
   });
 
   it('should stop the click event propagation', () => {

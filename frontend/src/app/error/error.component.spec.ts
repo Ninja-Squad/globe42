@@ -5,12 +5,28 @@ import { ErrorService } from '../error.service';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
+import { ComponentTester } from 'ngx-speculoos';
+
+class ErrorComponentTester extends ComponentTester<ErrorComponent> {
+  constructor() {
+    super(ErrorComponent);
+  }
+
+  get alert() {
+    return this.element('ngb-alert');
+  }
+
+  get alertDetail() {
+    return this.alert.element('small');
+  }
+}
 
 describe('ErrorComponent', () => {
   let errorService: ErrorService;
   let fakeRouter: {
     events: Subject<any>;
   };
+  let tester: ErrorComponentTester;
 
   beforeEach(() => {
     fakeRouter = { events: new Subject<any>() };
@@ -22,122 +38,101 @@ describe('ErrorComponent', () => {
     });
 
     errorService = TestBed.inject(ErrorService);
+
+    tester = new ErrorComponentTester();
   });
 
   it('should react to technical errors', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.error).toBeFalsy();
+    expect(tester.componentInstance.error).toBeFalsy();
 
     errorService.technicalErrors.next({ status: 500, message: 'Server error' });
 
-    expect(component.error).toEqual({ status: 500, technical: true, message: 'Server error' });
+    expect(tester.componentInstance.error).toEqual({
+      status: 500,
+      technical: true,
+      message: 'Server error'
+    });
   });
 
   it('should react to functional errors without parameters', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.error).toBeFalsy();
+    expect(tester.componentInstance.error).toBeFalsy();
 
     errorService.functionalErrors.next({ code: 'USER_LOGIN_ALREADY_EXISTS' });
 
-    expect(component.error).toEqual({
+    expect(tester.componentInstance.error).toEqual({
       technical: false,
       message: 'Un utilisateur ayant le même identifiant existe déjà.'
     });
   });
 
   it('should react to functional errors with parameters', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.error).toBeFalsy();
+    expect(tester.componentInstance.error).toBeFalsy();
 
     errorService.functionalErrors.next({ code: '__TEST__', parameters: { login: 'JB' } });
 
-    expect(component.error).toEqual({ technical: false, message: 'Hello JB' });
+    expect(tester.componentInstance.error).toEqual({ technical: false, message: 'Hello JB' });
   });
 
   it('should react to functional errors with unknown code', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.error).toBeFalsy();
+    expect(tester.componentInstance.error).toBeFalsy();
 
     errorService.functionalErrors.next({ code: 'UNKNOWN' });
 
-    expect(component.error).toEqual({ technical: false, message: 'UNKNOWN' });
+    expect(tester.componentInstance.error).toEqual({ technical: false, message: 'UNKNOWN' });
   });
 
   it('should react to navigation end events', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
-
-    component.error = { technical: false, message: 'Hello JB' };
+    tester.componentInstance.error = { technical: false, message: 'Hello JB' };
 
     fakeRouter.events.next(new NavigationStart(1, 'url'));
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(component.error).not.toBeNull();
+    expect(tester.componentInstance.error).not.toBeNull();
 
     fakeRouter.events.next(new NavigationEnd(1, 'url', ''));
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(component.error).toBeNull();
+    expect(tester.componentInstance.error).toBeNull();
   });
 
   it('should display a technical error with status', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
-    const element = fixture.nativeElement;
+    tester.detectChanges();
 
-    fixture.detectChanges();
+    expect(tester.alert).toBeNull();
 
-    expect(element.querySelector('ngb-alert')).toBeNull();
+    tester.componentInstance.error = { status: 500, technical: true, message: 'Server error' };
+    tester.detectChanges();
 
-    component.error = { status: 500, technical: true, message: 'Server error' };
-    fixture.detectChanges();
-
-    expect(element.querySelector('ngb-alert').textContent).toContain(
-      "Une erreur technique inattendue s'est produite. Essayez de recharger la page."
+    expect(tester.alert).toContainText(
+      `Une erreur technique inattendue s'est produite. Essayez de recharger la page.`
     );
-    expect(element.querySelector('ngb-alert small').textContent).toContain('500 - Server error');
+    expect(tester.alertDetail).toContainText('500 - Server error');
 
-    component.error = null;
-    fixture.detectChanges();
+    tester.componentInstance.error = null;
+    tester.detectChanges();
 
-    expect(element.querySelector('ngb-alert')).toBeNull();
+    expect(tester.alert).toBeNull();
   });
 
   it('should display a technical error without status', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
-    const element = fixture.nativeElement;
+    tester.componentInstance.error = { technical: true, message: 'Server error' };
+    tester.detectChanges();
 
-    component.error = { technical: true, message: 'Server error' };
-    fixture.detectChanges();
-
-    expect(element.querySelector('ngb-alert small').textContent).toContain('Server error');
+    expect(tester.alertDetail).toContainText('Server error');
   });
 
   it('should display a functional error', () => {
-    const fixture = TestBed.createComponent(ErrorComponent);
-    const component = fixture.componentInstance;
-    const element = fixture.nativeElement;
+    tester.componentInstance.error = { technical: false, message: 'Booo!' };
+    tester.detectChanges();
 
-    component.error = { technical: false, message: 'Booo!' };
-    fixture.detectChanges();
-
-    expect(element.querySelector('ngb-alert').textContent).toContain('Booo!');
+    expect(tester.alert).toContainText('Booo!');
   });
 });
