@@ -12,9 +12,35 @@ import { of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class PersonPerUnitRevenueInformationEditComponentTester extends ComponentTester<
+  PersonPerUnitRevenueInformationEditComponent
+> {
+  constructor() {
+    super(PersonPerUnitRevenueInformationEditComponent);
+  }
+
+  get adultLikeCount() {
+    return this.input('#adultLikeCount');
+  }
+
+  get childCount() {
+    return this.input('#childCount');
+  }
+
+  get monoParental() {
+    return this.input('#monoParental');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+}
 
 describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let route: ActivatedRoute;
+  let tester: PersonPerUnitRevenueInformationEditComponentTester;
 
   beforeEach(() => {
     const mockPerUnitRevenueInformationService = jasmine.createSpyObj(
@@ -56,44 +82,39 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
     }).compileComponents();
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+    tester = new PersonPerUnitRevenueInformationEditComponentTester();
   });
 
   it('should contain a filled form when person has info', () => {
-    const fixture = TestBed.createComponent(PersonPerUnitRevenueInformationEditComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.infoGroup.value).toEqual({
+    tester.detectChanges();
+    expect(tester.componentInstance.infoGroup.value).toEqual({
       adultLikeCount: 3,
       childCount: 2,
       monoParental: true
     });
 
-    expect(fixture.nativeElement.querySelector('#adultLikeCount').value).toBe('3');
-    expect(fixture.nativeElement.querySelector('#childCount').value).toBe('2');
-    expect(fixture.nativeElement.querySelector('#monoParental').checked).toBe(true);
+    expect(tester.adultLikeCount).toHaveValue('3');
+    expect(tester.childCount).toHaveValue('2');
+    expect(tester.monoParental).toBeChecked();
   });
 
   it('should contain a filled form when person has no info', () => {
     route.snapshot.data.perUnitRevenueInformation = null;
-    const fixture = TestBed.createComponent(PersonPerUnitRevenueInformationEditComponent);
-    const component = fixture.componentInstance;
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(component.infoGroup.value).toEqual({
+    expect(tester.componentInstance.infoGroup.value).toEqual({
       adultLikeCount: 1,
       childCount: 0,
       monoParental: false
     });
 
-    expect(fixture.nativeElement.querySelector('#adultLikeCount').value).toBe('1');
-    expect(fixture.nativeElement.querySelector('#childCount').value).toBe('0');
-    expect(fixture.nativeElement.querySelector('#monoParental').checked).toBe(false);
+    expect(tester.adultLikeCount).toHaveValue('1');
+    expect(tester.childCount).toHaveValue('0');
+    expect(tester.monoParental).not.toBeChecked();
   });
 
   it('should save and redirect', () => {
-    const fixture = TestBed.createComponent(PersonPerUnitRevenueInformationEditComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     const router: Router = TestBed.inject(Router);
     spyOn(router, 'navigate');
@@ -101,9 +122,7 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
     const perUnitRevenueInformationService = TestBed.inject(PerUnitRevenueInformationService);
     (perUnitRevenueInformationService.update as jasmine.Spy).and.returnValue(of(undefined));
 
-    const saveButton: HTMLButtonElement = fixture.nativeElement.querySelector('#save');
-    saveButton.click();
-    fixture.detectChanges();
+    tester.save.click();
 
     expect(perUnitRevenueInformationService.update).toHaveBeenCalledWith(42, {
       adultLikeCount: 3,
@@ -115,42 +134,28 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
   });
 
   it('should display errors and not save if invalid', () => {
-    const fixture = TestBed.createComponent(PersonPerUnitRevenueInformationEditComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const adultLikeCount: HTMLInputElement = fixture.nativeElement.querySelector('#adultLikeCount');
-    adultLikeCount.value = '0';
-    adultLikeCount.dispatchEvent(new Event('input'));
-    adultLikeCount.dispatchEvent(new Event('blur'));
-    fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain(
-      "Le nombre d'adultes ou équivalent doit être supérieur ou égal à 1"
+    tester.adultLikeCount.fillWith('0');
+    tester.adultLikeCount.dispatchEventOfType('blur');
+
+    expect(tester.testElement).toContainText(
+      `Le nombre d'adultes ou équivalent doit être supérieur ou égal à 1`
     );
 
-    adultLikeCount.value = '';
-    adultLikeCount.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain(
-      "Le nombre d'adultes ou équivalent est obligatoire"
-    );
+    tester.adultLikeCount.fillWith('');
+    expect(tester.testElement).toContainText(`Le nombre d'adultes ou équivalent est obligatoire`);
 
-    const childCount: HTMLInputElement = fixture.nativeElement.querySelector('#childCount');
-    childCount.value = '-1';
-    childCount.dispatchEvent(new Event('input'));
-    childCount.dispatchEvent(new Event('blur'));
-    fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain(
-      "Le nombre d'enfants doit être supérieur ou égal à 0"
-    );
+    tester.childCount.fillWith('-1');
+    tester.childCount.dispatchEventOfType('blur');
 
-    childCount.value = '';
-    childCount.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain("Le nombre d'enfants est obligatoire");
+    expect(tester.testElement).toContainText(`Le nombre d'enfants doit être supérieur ou égal à 0`);
 
-    const saveButton: HTMLButtonElement = fixture.nativeElement.querySelector('#save');
-    saveButton.click();
-    fixture.detectChanges();
+    tester.childCount.fillWith('');
+
+    expect(tester.testElement).toContainText(`Le nombre d'enfants est obligatoire`);
+
+    tester.save.click();
 
     const perUnitRevenueInformationService = TestBed.inject(PerUnitRevenueInformationService);
     expect(perUnitRevenueInformationService.update).not.toHaveBeenCalled();

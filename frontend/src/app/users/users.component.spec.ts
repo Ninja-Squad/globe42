@@ -12,6 +12,21 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class UsersComponentTester extends ComponentTester<UsersComponent> {
+  constructor() {
+    super(UsersComponent);
+  }
+
+  get userItems() {
+    return this.elements('.user-item');
+  }
+
+  get deleteButtons() {
+    return this.elements<HTMLButtonElement>('.user-item .delete-button');
+  }
+}
 
 describe('UsersComponent', () => {
   const users: Array<UserModel> = [
@@ -24,6 +39,7 @@ describe('UsersComponent', () => {
 
   let currentUserService: CurrentUserService;
   let userService: UserService;
+  let tester: UsersComponentTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,33 +51,22 @@ describe('UsersComponent', () => {
     userService = TestBed.inject(UserService);
     currentUserService = TestBed.inject(CurrentUserService);
     currentUserService.userEvents = new BehaviorSubject<UserModel>({ id: 42 } as UserModel);
+
+    tester = new UsersComponentTester();
+    tester.detectChanges();
   });
 
   it('should expose sorted users', () => {
-    const fixture = TestBed.createComponent(UsersComponent);
-    fixture.detectChanges();
-
-    expect(fixture.componentInstance.users.map(u => u.login)).toEqual(['ced', 'jb']);
+    expect(tester.componentInstance.users.map(u => u.login)).toEqual(['ced', 'jb']);
   });
 
   it('should list users', () => {
-    const fixture = TestBed.createComponent(UsersComponent);
-    fixture.detectChanges();
-
-    const nativeElement = fixture.nativeElement;
-    const userElements = nativeElement.querySelectorAll('div.user-item');
-    expect(userElements.length).toBe(2);
+    expect(tester.userItems.length).toBe(2);
   });
 
   it('should disable the delete button of the current user', () => {
-    const fixture = TestBed.createComponent(UsersComponent);
-    fixture.detectChanges();
-
-    const nativeElement = fixture.nativeElement;
-    const userElements = nativeElement.querySelectorAll('div.user-item');
-
-    expect(userElements[0].querySelector('.delete-button').disabled).toBe(false);
-    expect(userElements[1].querySelector('.delete-button').disabled).toBe(true);
+    expect(tester.deleteButtons[0].disabled).toBe(false);
+    expect(tester.deleteButtons[1].disabled).toBe(true);
   });
 
   it('should confirm before deleting a user', () => {
@@ -70,10 +75,7 @@ describe('UsersComponent', () => {
     spyOn(userService, 'delete');
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
 
-    const fixture = TestBed.createComponent(UsersComponent);
-    fixture.detectChanges();
-
-    fixture.componentInstance.delete(users[1]);
+    tester.componentInstance.delete(users[1]);
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(userService.delete).not.toHaveBeenCalled();
@@ -86,22 +88,18 @@ describe('UsersComponent', () => {
     spyOn(userService, 'list').and.returnValue(of(users));
     spyOn(confirmService, 'confirm').and.returnValue(of(null));
 
-    const fixture = TestBed.createComponent(UsersComponent);
-    fixture.detectChanges();
+    const originalUsers = tester.componentInstance.users;
 
-    const originalUsers = fixture.componentInstance.users;
-
-    fixture.componentInstance.delete(users[1]);
+    tester.componentInstance.delete(users[1]);
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(userService.delete).toHaveBeenCalledWith(users[1].id);
-    expect(fixture.componentInstance.users).not.toBe(originalUsers);
-    expect(fixture.componentInstance.users.map(u => u.login)).toEqual(['ced', 'jb']);
+    expect(tester.componentInstance.users).not.toBe(originalUsers);
+    expect(tester.componentInstance.users.map(u => u.login)).toEqual(['ced', 'jb']);
   });
 
   it('should say if a user is the current user', () => {
-    const fixture = TestBed.createComponent(UsersComponent);
-    expect(fixture.componentInstance.isCurrentUser(users[0])).toBeTruthy();
-    expect(fixture.componentInstance.isCurrentUser(users[1])).toBeFalsy();
+    expect(tester.componentInstance.isCurrentUser(users[0])).toBeTruthy();
+    expect(tester.componentInstance.isCurrentUser(users[1])).toBeFalsy();
   });
 });

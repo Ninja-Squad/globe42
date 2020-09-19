@@ -5,24 +5,42 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouterOutlet } from '@angular/router';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class PersonsLayoutComponentTester extends ComponentTester<PersonsLayoutComponent> {
+  constructor() {
+    super(PersonsLayoutComponent);
+  }
+
+  get title() {
+    return this.element('h1');
+  }
+
+  get links() {
+    return this.elements('a.nav-link');
+  }
+
+  get routerOutlet() {
+    return this.debugElement.query(By.directive(RouterOutlet));
+  }
+}
 
 describe('PersonsLayoutComponent', () => {
-  beforeEach(() =>
+  let tester: PersonsLayoutComponentTester;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [PersonsLayoutComponent, PageTitleDirective]
-    })
-  );
+    });
+
+    tester = new PersonsLayoutComponentTester();
+    tester.detectChanges();
+  });
 
   it('should have a title, pills and a router outlet', () => {
-    const fixture = TestBed.createComponent(PersonsLayoutComponent);
-    fixture.detectChanges();
-
-    expect(fixture.nativeElement.querySelector('h1').textContent).toBe('Adhérents');
-    const links = fixture.nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(5);
-
-    const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
-    expect(outlet).toBeTruthy();
+    expect(tester.title).toHaveText('Adhérents');
+    expect(tester.links.length).toBe(5);
+    expect(tester.routerOutlet).toBeTruthy();
   });
 });

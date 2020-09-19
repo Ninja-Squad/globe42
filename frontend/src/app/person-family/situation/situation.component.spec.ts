@@ -3,6 +3,7 @@ import { Component, LOCALE_ID } from '@angular/core';
 import { SituationComponent } from './situation.component';
 import { Situation } from '../person-family.component';
 import { DateTime } from 'luxon';
+import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
   template: `<gl-situation [situation]="situation"></gl-situation>`
@@ -11,7 +12,19 @@ class TestComponent {
   situation: Situation;
 }
 
+class TestComponentTester extends ComponentTester<TestComponent> {
+  constructor() {
+    super(TestComponent);
+  }
+
+  get listItems() {
+    return this.elements('li');
+  }
+}
+
 describe('SituationComponent', () => {
+  let tester: TestComponentTester;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [SituationComponent, TestComponent],
@@ -19,25 +32,25 @@ describe('SituationComponent', () => {
     });
 
     jasmine.clock().mockDate(DateTime.fromISO('2018-05-01').toJSDate());
+
+    tester = new TestComponentTester();
   });
 
   afterEach(() => jasmine.clock().uninstall());
 
   it('should display family situation when no child', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.situation = {
+    tester.componentInstance.situation = {
       spousePresent: true,
       children: []
     };
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toMatch(/Époux\(se\) présent\(e\)Oui/);
-    expect(fixture.nativeElement.textContent).not.toContain('enfant');
+    expect(tester.testElement.textContent).toMatch(/Époux\(se\) présent\(e\)Oui/);
+    expect(tester.testElement).not.toContainText('enfant');
   });
 
   it('should display family situation when empty child present', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.situation = {
+    tester.componentInstance.situation = {
       spousePresent: false,
       children: [
         {
@@ -47,16 +60,15 @@ describe('SituationComponent', () => {
         }
       ]
     };
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toMatch(/Époux\(se\) présent\(e\)Non/);
-    expect(fixture.nativeElement.textContent).toContain('1 enfant(s)');
-    expect(fixture.nativeElement.querySelector('li').textContent.trim()).toBe('aucune information');
+    expect(tester.testElement.textContent).toMatch(/Époux\(se\) présent\(e\)Non/);
+    expect(tester.testElement).toContainText('1 enfant(s)');
+    expect(tester.listItems[0]).toContainText('aucune information');
   });
 
   it('should display child with only first name', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.situation = {
+    tester.componentInstance.situation = {
       spousePresent: false,
       children: [
         {
@@ -66,14 +78,13 @@ describe('SituationComponent', () => {
         }
       ]
     };
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('li').textContent.trim()).toBe('John');
+    expect(tester.listItems[0]).toContainText('John');
   });
 
   it('should display child with only birth date', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.situation = {
+    tester.componentInstance.situation = {
       spousePresent: false,
       children: [
         {
@@ -83,16 +94,13 @@ describe('SituationComponent', () => {
         }
       ]
     };
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('li').textContent.trim()).toMatch(
-      /30 nov\. 2000\s+\–\s+17 ans/
-    );
+    expect(tester.listItems[0].textContent.trim()).toMatch(/30 nov\. 2000\s+\–\s+17 ans/);
   });
 
   it('should display child with first name and birth date', () => {
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.situation = {
+    tester.componentInstance.situation = {
       spousePresent: false,
       children: [
         {
@@ -102,9 +110,9 @@ describe('SituationComponent', () => {
         }
       ]
     };
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('li').textContent.trim()).toMatch(
+    expect(tester.listItems[0].textContent.trim()).toMatch(
       /John\s+\–\s+30 nov\. 2000\s+\–\s+17 ans/
     );
   });

@@ -12,12 +12,37 @@ import { By } from '@angular/platform-browser';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
-import { fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
+
+class PersonFamilyComponentTester extends ComponentTester<PersonFamilyComponent> {
+  constructor() {
+    super(PersonFamilyComponent);
+  }
+
+  get noFamily() {
+    return this.element('#no-family');
+  }
+
+  get family() {
+    return this.element('#family');
+  }
+
+  get situationComponents(): Array<SituationComponent> {
+    return this.debugElement
+      .queryAll(By.directive(SituationComponent))
+      .map(d => d.componentInstance);
+  }
+
+  get deleteButton() {
+    return this.button('#delete');
+  }
+}
 
 describe('PersonFamilyComponent', () => {
   let route: ActivatedRoute;
   let currentPersonService: CurrentPersonService;
+  let tester: PersonFamilyComponentTester;
 
   beforeEach(() => {
     route = fakeRoute({
@@ -42,23 +67,21 @@ describe('PersonFamilyComponent', () => {
       firstName: 'John',
       lastName: 'Doe'
     });
+
+    tester = new PersonFamilyComponentTester();
   });
 
   it('should display no family message if no family', () => {
     route.snapshot.data.family = null;
-    const fixture = TestBed.createComponent(PersonFamilyComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const component = fixture.componentInstance;
-    expect(component.family).toBeNull();
-    expect(component.france).toBeFalsy();
-    expect(component.abroad).toBeFalsy();
-    expect(component.person.id).toBe(42);
+    expect(tester.componentInstance.family).toBeNull();
+    expect(tester.componentInstance.france).toBeFalsy();
+    expect(tester.componentInstance.abroad).toBeFalsy();
+    expect(tester.componentInstance.person.id).toBe(42);
 
-    expect(fixture.nativeElement.querySelector('#no-family').textContent).toContain(
-      `Pas d'information`
-    );
-    expect(fixture.nativeElement.querySelector('#family')).toBeFalsy();
+    expect(tester.noFamily).toContainText(`Pas d'information`);
+    expect(tester.family).toBeNull();
   });
 
   it('should display family if family present', () => {
@@ -79,12 +102,10 @@ describe('PersonFamilyComponent', () => {
     } as FamilyModel;
     route.snapshot.data.family = family;
 
-    const fixture = TestBed.createComponent(PersonFamilyComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    const component = fixture.componentInstance;
-    expect(component.family).toBe(family);
-    expect(component.france).toEqual({
+    expect(tester.componentInstance.family).toBe(family);
+    expect(tester.componentInstance.france).toEqual({
       spousePresent: false,
       children: [
         {
@@ -94,7 +115,7 @@ describe('PersonFamilyComponent', () => {
         }
       ]
     } as Situation);
-    expect(component.abroad).toEqual({
+    expect(tester.componentInstance.abroad).toEqual({
       spousePresent: true,
       children: [
         {
@@ -105,12 +126,11 @@ describe('PersonFamilyComponent', () => {
       ]
     } as Situation);
 
-    expect(fixture.nativeElement.querySelector('#no-family')).toBeFalsy();
-    expect(fixture.nativeElement.querySelector('#family')).toBeTruthy();
-    const situationComponents = fixture.debugElement.queryAll(By.directive(SituationComponent));
-    expect(situationComponents.length).toBe(2);
-    expect(situationComponents[0].componentInstance.situation).toBe(component.france);
-    expect(situationComponents[1].componentInstance.situation).toBe(component.abroad);
+    expect(tester.noFamily).toBeNull();
+    expect(tester.family).not.toBeNull();
+    expect(tester.situationComponents.length).toBe(2);
+    expect(tester.situationComponents[0].situation).toBe(tester.componentInstance.france);
+    expect(tester.situationComponents[1].situation).toBe(tester.componentInstance.abroad);
   });
 
   it('should delete family after confirmation', () => {
@@ -120,8 +140,7 @@ describe('PersonFamilyComponent', () => {
     } as FamilyModel;
     route.snapshot.data.family = family;
 
-    const fixture = TestBed.createComponent(PersonFamilyComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     const confirmService: ConfirmService = TestBed.inject(ConfirmService);
     const familyService: FamilyService = TestBed.inject(FamilyService);
@@ -129,16 +148,14 @@ describe('PersonFamilyComponent', () => {
     spyOn(confirmService, 'confirm').and.returnValue(of(undefined));
     spyOn(familyService, 'delete').and.returnValue(of(undefined));
 
-    fixture.nativeElement.querySelector('#delete').click();
-    fixture.detectChanges();
-    const component = fixture.componentInstance;
+    tester.deleteButton.click();
 
-    expect(component.family).toBeNull();
-    expect(component.france).toBeFalsy();
-    expect(component.abroad).toBeFalsy();
+    expect(tester.componentInstance.family).toBeNull();
+    expect(tester.componentInstance.france).toBeFalsy();
+    expect(tester.componentInstance.abroad).toBeFalsy();
 
-    expect(fixture.nativeElement.querySelector('#no-family')).toBeTruthy();
-    expect(fixture.nativeElement.querySelector('#family')).toBeFalsy();
+    expect(tester.noFamily).not.toBeNull();
+    expect(tester.family).toBeNull();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(familyService.delete).toHaveBeenCalledWith(42);
@@ -151,8 +168,7 @@ describe('PersonFamilyComponent', () => {
     } as FamilyModel;
     route.snapshot.data.family = family;
 
-    const fixture = TestBed.createComponent(PersonFamilyComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     const confirmService: ConfirmService = TestBed.inject(ConfirmService);
     const familyService: FamilyService = TestBed.inject(FamilyService);
@@ -160,9 +176,8 @@ describe('PersonFamilyComponent', () => {
     spyOn(confirmService, 'confirm').and.returnValue(EMPTY);
     spyOn(familyService, 'delete').and.returnValue(of(undefined));
 
-    fixture.nativeElement.querySelector('#delete').click();
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('#family')).toBeTruthy();
+    tester.deleteButton.click();
+    expect(tester.family).not.toBeNull();
 
     expect(confirmService.confirm).toHaveBeenCalled();
     expect(familyService.delete).not.toHaveBeenCalled();
