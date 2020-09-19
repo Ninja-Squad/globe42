@@ -15,12 +15,40 @@ import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CurrentPersonService } from '../current-person.service';
+import { ComponentTester } from 'ngx-speculoos';
+
+class PersonFilesComponentTester extends ComponentTester<PersonFilesComponent> {
+  constructor() {
+    super(PersonFilesComponent);
+  }
+
+  get fileItems() {
+    return this.elements('.file-item');
+  }
+
+  get fileItemLinks() {
+    return this.elements('.file-item a');
+  }
+
+  get fileItemDeleteButtons() {
+    return this.elements<HTMLButtonElement>('.file-item button');
+  }
+
+  get spinner() {
+    return this.element('.fa-spinner');
+  }
+
+  get progressBar(): NgbProgressbar | null {
+    return this.debugElement.query(By.directive(NgbProgressbar))?.componentInstance ?? null;
+  }
+}
 
 describe('PersonFilesComponent', () => {
   const person = { id: 42, firstName: 'John', lastName: 'Doe' } as PersonModel;
   let files: Array<FileModel>;
 
   let currentPersonService: CurrentPersonService;
+  let tester: PersonFilesComponentTester;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,29 +71,27 @@ describe('PersonFilesComponent', () => {
         size: 1000000
       }
     ] as Array<FileModel>;
+
+    tester = new PersonFilesComponentTester();
   });
 
   it('should display files', () => {
     const personFileService = TestBed.inject(PersonFileService);
     spyOn(personFileService, 'list').and.returnValue(of(files));
 
-    const fixture = TestBed.createComponent(PersonFilesComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('.file-item').length).toBe(2);
-    expect(fixture.nativeElement.querySelector('.file-item a').href).toContain(
-      '/api/persons/42/files/file2.txt'
-    );
+    expect(tester.fileItems.length).toBe(2);
+    expect(tester.fileItemLinks[0].attr('href')).toContain('/api/persons/42/files/file2.txt');
   });
 
   it('should display no file message if no files', () => {
     const personFileService = TestBed.inject(PersonFileService);
     spyOn(personFileService, 'list').and.returnValue(of([]));
 
-    const fixture = TestBed.createComponent(PersonFilesComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.textContent).toContain('Aucun document');
+    expect(tester.testElement).toContainText('Aucun document');
   });
 
   it('should display a spinner after 300 ms until files are available', fakeAsync(() => {
@@ -73,19 +99,18 @@ describe('PersonFilesComponent', () => {
     const subject = new Subject<Array<FileModel>>();
     spyOn(personFileService, 'list').and.returnValue(subject);
 
-    const fixture = TestBed.createComponent(PersonFilesComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
     tick();
 
-    expect(fixture.nativeElement.querySelector('.fa-spinner')).toBeFalsy();
+    expect(tester.spinner).toBeNull();
 
     tick(350);
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.fa-spinner')).toBeTruthy();
+    tester.detectChanges();
+    expect(tester.spinner).not.toBeNull();
 
     subject.next(files);
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.fa-spinner')).toBeFalsy();
+    tester.detectChanges();
+    expect(tester.spinner).toBeNull();
   }));
 
   it('should delete file', () => {
@@ -96,17 +121,15 @@ describe('PersonFilesComponent', () => {
     spyOn(personFileService, 'delete').and.returnValue(of(null));
     spyOn(personFileService, 'list').and.returnValues(of(files), of([files[1]]));
 
-    const fixture = TestBed.createComponent(PersonFilesComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     // delete first file and confirm
-    fixture.nativeElement.querySelector('.file-item button').click();
-    fixture.detectChanges();
+    tester.fileItemDeleteButtons[0].click();
 
     expect(personFileService.delete).toHaveBeenCalledWith(person.id, files[1].name);
     expect(personFileService.list).toHaveBeenCalledWith(person.id);
 
-    expect(fixture.nativeElement.querySelectorAll('.file-item').length).toBe(1);
+    expect(tester.fileItems.length).toBe(1);
   });
 
   it('should upload a file', () => {
@@ -117,8 +140,7 @@ describe('PersonFilesComponent', () => {
     const fakeEvents = new Subject<any>();
     spyOn(personFileService, 'create').and.returnValues(fakeEvents);
 
-    const fixture = TestBed.createComponent(PersonFilesComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     // trigger change
     const fileChangeEvent = {
@@ -131,34 +153,32 @@ describe('PersonFilesComponent', () => {
       }
     } as any;
 
-    fixture.componentInstance.upload(fileChangeEvent);
-    fixture.detectChanges();
+    tester.componentInstance.upload(fileChangeEvent);
+    tester.detectChanges();
 
-    expect(fixture.componentInstance.uploading).toBeTruthy();
+    expect(tester.componentInstance.uploading).toBeTruthy();
 
     fakeEvents.next({
       type: HttpEventType.UploadProgress,
       loaded: 5,
       total: 10
     });
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.componentInstance.uploadProgress).toBe(5 / 10);
-    const progressBar: NgbProgressbar = fixture.debugElement.query(By.directive(NgbProgressbar))
-      .componentInstance;
-    expect(progressBar.value).toBe(5 / 10);
-    expect(progressBar.max).toBe(1);
+    expect(tester.componentInstance.uploadProgress).toBe(5 / 10);
+    expect(tester.progressBar.value).toBe(5 / 10);
+    expect(tester.progressBar.max).toBe(1);
 
     fakeEvents.next({
       type: HttpEventType.UploadProgress,
       loaded: 10,
       total: 10
     });
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.componentInstance.uploadProgress).toBe(1);
-    expect(progressBar.striped).toBeTruthy();
-    expect(progressBar.animated).toBeTruthy();
+    expect(tester.componentInstance.uploadProgress).toBe(1);
+    expect(tester.progressBar.striped).toBeTruthy();
+    expect(tester.progressBar.animated).toBeTruthy();
 
     // emit response and complete
     fakeEvents.next(
@@ -167,15 +187,14 @@ describe('PersonFilesComponent', () => {
       })
     );
     fakeEvents.complete();
-    fixture.detectChanges();
+    tester.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('.file-item').length).toBe(2);
+    expect(tester.fileItems.length).toBe(2);
   });
 
   it('should set the page title', () => {
     const titleService: Title = TestBed.inject(Title);
-    const fixture = TestBed.createComponent(PersonFilesComponent);
-    fixture.detectChanges();
+    tester.detectChanges();
 
     expect(titleService.getTitle()).toContain('John Doe: Documents');
   });

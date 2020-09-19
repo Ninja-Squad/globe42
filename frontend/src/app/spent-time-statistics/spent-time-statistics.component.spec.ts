@@ -16,6 +16,33 @@ import { GlobeNgbModule } from '../globe-ngb/globe-ngb.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
+import { ComponentTester } from 'ngx-speculoos';
+
+class SpentTimeStatisticsComponentTester extends ComponentTester<SpentTimeStatisticsComponent> {
+  constructor() {
+    super(SpentTimeStatisticsComponent);
+  }
+
+  get from() {
+    return this.input('#from');
+  }
+
+  get to() {
+    return this.input('#to');
+  }
+
+  get by() {
+    return this.select('#by');
+  }
+
+  get tableRows() {
+    return this.elements('table tbody tr');
+  }
+
+  get chart(): ChartComponent {
+    return this.debugElement.query(By.directive(ChartComponent)).componentInstance;
+  }
+}
 
 function createRoute(queryParams: { [key: string]: string }): ActivatedRoute {
   return {
@@ -33,6 +60,7 @@ function createRoute(queryParams: { [key: string]: string }): ActivatedRoute {
 
 describe('SpentTimeStatisticsComponent', () => {
   let route: ActivatedRoute;
+  let tester: SpentTimeStatisticsComponentTester;
 
   beforeEach(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2017-12-29T12:13:00Z').toJSDate());
@@ -71,19 +99,17 @@ describe('SpentTimeStatisticsComponent', () => {
     const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
 
-    const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
-    const component = fixture.componentInstance;
+    tester = new SpentTimeStatisticsComponentTester();
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.criteriaForm.value).toEqual({
+    expect(tester.componentInstance.criteriaForm.value).toEqual({
       from: '2017-12-01',
       to: '2017-12-31',
       by: 0
     });
 
     expect(router.navigate).toHaveBeenCalledWith(['tasks/statistics'], {
-      queryParams: component.criteriaForm.value,
+      queryParams: tester.componentInstance.criteriaForm.value,
       replaceUrl: true
     });
   });
@@ -95,12 +121,10 @@ describe('SpentTimeStatisticsComponent', () => {
       by: '1'
     });
 
-    const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
-    const component = fixture.componentInstance;
+    tester = new SpentTimeStatisticsComponentTester();
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.criteriaForm.value).toEqual({
+    expect(tester.componentInstance.criteriaForm.value).toEqual({
       from: '2017-11-01',
       to: '2017-11-31',
       by: 1
@@ -115,12 +139,10 @@ describe('SpentTimeStatisticsComponent', () => {
     };
     (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
-    const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
-    const component = fixture.componentInstance;
+    tester = new SpentTimeStatisticsComponentTester();
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.statisticsModel).toEqual(statisticsModel);
+    expect(tester.componentInstance.statisticsModel).toEqual(statisticsModel);
     expect(taskService.spentTimeStatistics).toHaveBeenCalledWith({
       from: '2017-12-01',
       to: '2017-12-31'
@@ -156,12 +178,10 @@ describe('SpentTimeStatisticsComponent', () => {
     };
     (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
-    const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
-    const component = fixture.componentInstance;
+    tester = new SpentTimeStatisticsComponentTester();
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.categoryStatistics).toEqual([
+    expect(tester.componentInstance.categoryStatistics).toEqual([
       {
         category: { id: 7, name: 'Administration' },
         minutes: 70
@@ -172,10 +192,15 @@ describe('SpentTimeStatisticsComponent', () => {
       }
     ]);
 
-    expect(component.chartConfiguration.data.labels).toEqual(['Administration', 'Meal']);
-    expect(component.chartConfiguration.data.datasets[0].data).toEqual([70, 30]);
+    expect(tester.componentInstance.chartConfiguration.data.labels).toEqual([
+      'Administration',
+      'Meal'
+    ]);
+    expect(tester.componentInstance.chartConfiguration.data.datasets[0].data).toEqual([70, 30]);
     expect(
-      (component.chartConfiguration.data.datasets[0].backgroundColor as Array<ChartColor>).length
+      (tester.componentInstance.chartConfiguration.data.datasets[0].backgroundColor as Array<
+        ChartColor
+      >).length
     ).toBe(2);
   });
 
@@ -208,15 +233,13 @@ describe('SpentTimeStatisticsComponent', () => {
     };
     (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
-    const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
-    const component = fixture.componentInstance;
+    tester = new SpentTimeStatisticsComponentTester();
+    tester.detectChanges();
 
-    fixture.detectChanges();
+    tester.componentInstance.criteriaForm.patchValue({ by: 1 });
+    tester.detectChanges();
 
-    component.criteriaForm.patchValue({ by: 1 });
-    fixture.detectChanges();
-
-    expect(component.categoryStatistics).toEqual([
+    expect(tester.componentInstance.categoryStatistics).toEqual([
       {
         category: { id: 7, name: 'Administration' },
         minutes: 30
@@ -227,8 +250,11 @@ describe('SpentTimeStatisticsComponent', () => {
       }
     ]);
 
-    expect(component.chartConfiguration.data.labels).toEqual(['Administration', 'Meal']);
-    expect(component.chartConfiguration.data.datasets[0].data).toEqual([30, 10]);
+    expect(tester.componentInstance.chartConfiguration.data.labels).toEqual([
+      'Administration',
+      'Meal'
+    ]);
+    expect(tester.componentInstance.chartConfiguration.data.datasets[0].data).toEqual([30, 10]);
   });
 
   it('should reload statistics and reset chart configuration when date changes', () => {
@@ -257,24 +283,22 @@ describe('SpentTimeStatisticsComponent', () => {
       of(statisticsModel2)
     );
 
-    const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
-    const component = fixture.componentInstance;
+    tester = new SpentTimeStatisticsComponentTester();
+    tester.detectChanges();
 
-    fixture.detectChanges();
+    tester.componentInstance.criteriaForm.patchValue({ to: '2018-01-01' });
 
-    component.criteriaForm.patchValue({ to: '2018-01-01' });
+    tester.detectChanges();
 
-    fixture.detectChanges();
-
-    expect(component.categoryStatistics).toEqual([
+    expect(tester.componentInstance.categoryStatistics).toEqual([
       {
         category: { id: 6, name: 'Meal' },
         minutes: 30
       }
     ]);
 
-    expect(component.chartConfiguration.data.labels).toEqual(['Meal']);
-    expect(component.chartConfiguration.data.datasets[0].data).toEqual([30]);
+    expect(tester.componentInstance.chartConfiguration.data.labels).toEqual(['Meal']);
+    expect(tester.componentInstance.chartConfiguration.data.datasets[0].data).toEqual([30]);
   });
 
   it('should have a view', () => {
@@ -296,26 +320,20 @@ describe('SpentTimeStatisticsComponent', () => {
     };
     (taskService.spentTimeStatistics as jasmine.Spy).and.returnValue(of(statisticsModel));
 
-    const fixture = TestBed.createComponent(SpentTimeStatisticsComponent);
+    tester = new SpentTimeStatisticsComponentTester();
+    tester.detectChanges();
 
-    fixture.detectChanges();
+    expect(tester.from).toHaveValue('01/12/2017');
+    expect(tester.to).toHaveValue('31/12/2017');
+    expect(tester.by).toHaveSelectedLabel('Tous les utilisateurs');
+    expect(tester.by.optionLabels[1]).toBe('ced');
+    expect(tester.by.optionLabels[2]).toBe('jb');
 
-    expect(fixture.nativeElement.querySelector('#from').value).toBe('01/12/2017');
-    expect(fixture.nativeElement.querySelector('#to').value).toBe('31/12/2017');
-    const bySelect: HTMLSelectElement = fixture.nativeElement.querySelector('#by');
-    expect(bySelect.selectedIndex).toBe(0);
-    expect(bySelect.selectedOptions.item(0).textContent).toBe('Tous les utilisateurs');
-    expect(bySelect.options.item(1).textContent).toBe('ced');
-    expect(bySelect.options.item(2).textContent).toBe('jb');
+    expect(tester.tableRows[0]).toContainText('Administration');
+    expect(tester.tableRows[0]).toContainText('0h30m');
+    expect(tester.tableRows[1]).toContainText('Meal');
+    expect(tester.tableRows[1]).toContainText('0h10m');
 
-    const table: HTMLTableElement = fixture.nativeElement.querySelector('table');
-    expect(table.rows.item(1).textContent).toContain('Administration');
-    expect(table.rows.item(1).textContent).toContain('0h30m');
-    expect(table.rows.item(2).textContent).toContain('Meal');
-    expect(table.rows.item(2).textContent).toContain('0h10m');
-
-    const chart: ChartComponent = fixture.debugElement.query(By.directive(ChartComponent))
-      .componentInstance;
-    expect(chart.configuration).toBe(fixture.componentInstance.chartConfiguration);
+    expect(tester.chart.configuration).toBe(tester.componentInstance.chartConfiguration);
   });
 });

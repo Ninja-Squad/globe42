@@ -15,6 +15,37 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { UserWithPasswordModel } from '../models/user-with-password.model';
+import { ComponentTester } from 'ngx-speculoos';
+
+class UserEditComponentTester extends ComponentTester<UserEditComponent> {
+  constructor() {
+    super(UserEditComponent);
+  }
+
+  get title() {
+    return this.element('h1');
+  }
+
+  get login() {
+    return this.input('#login');
+  }
+
+  get roleNoAdmin() {
+    return this.input('#role-no-admin');
+  }
+
+  get roleAdmin() {
+    return this.input('#role-admin');
+  }
+
+  get save() {
+    return this.button('#save');
+  }
+
+  get createdUser() {
+    return this.element('#created-user');
+  }
+}
 
 describe('UserEditComponent', () => {
   @NgModule({
@@ -30,6 +61,8 @@ describe('UserEditComponent', () => {
   })
   class TestModule {}
 
+  let tester: UserEditComponentTester;
+
   describe('in creation mode', () => {
     const activatedRoute = {
       snapshot: { data: {} }
@@ -42,47 +75,29 @@ describe('UserEditComponent', () => {
       });
 
       TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+      tester = new UserEditComponentTester();
+      tester.detectChanges();
     });
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Nouvel utilisateur');
+      expect(tester.title).toContainText('Nouvel utilisateur');
     });
 
     it('should expose no created user, and a default user', () => {
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
-
-      const component = fixture.componentInstance;
-      expect(component.createdUser).toBeUndefined();
-      expect(component.userForm.value).toEqual({ login: '', admin: false });
+      expect(tester.componentInstance.createdUser).toBeUndefined();
+      expect(tester.componentInstance.userForm.value).toEqual({ login: '', admin: false });
     });
 
     it('should display the user in a form, and validate the form', () => {
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
+      expect(tester.login).toHaveValue('');
+      expect(tester.roleNoAdmin).toBeChecked();
+      expect(tester.roleAdmin).not.toBeChecked();
 
-      const element: HTMLElement = fixture.nativeElement;
+      tester.save.click();
 
-      const login: HTMLInputElement = element.querySelector('#login');
-      expect(login.value).toBe('');
+      expect(tester.testElement).toContainText(`L'identifiant est obligatoire`);
 
-      const noAdmin: HTMLInputElement = element.querySelector('#role-no-admin');
-      expect(noAdmin.checked).toBe(true);
-
-      const admin: HTMLInputElement = element.querySelector('#role-admin');
-      expect(admin.checked).toBe(false);
-
-      const save: HTMLButtonElement = element.querySelector('#save');
-      save.click();
-      fixture.detectChanges();
-
-      expect(element.textContent).toContain(`L'identifiant est obligatoire`);
-
-      const createdUser = element.querySelector('#created-user');
-      expect(createdUser).toBeNull();
+      expect(tester.createdUser).toBeNull();
     });
 
     it('should save the user and display the result', () => {
@@ -94,29 +109,15 @@ describe('UserEditComponent', () => {
         } as UserWithPasswordModel)
       );
 
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
-
-      const element: HTMLElement = fixture.nativeElement;
-
-      const login: HTMLInputElement = element.querySelector('#login');
-      login.value = 'foo';
-      login.dispatchEvent(new Event('input'));
-
-      const admin: HTMLInputElement = element.querySelector('#role-admin');
-      admin.click();
-      fixture.detectChanges();
-
-      const save: HTMLButtonElement = element.querySelector('#save');
-      save.click();
-      fixture.detectChanges();
+      tester.login.fillWith('foo');
+      tester.roleAdmin.check();
+      tester.save.click();
 
       expect(userService.create).toHaveBeenCalledWith({ login: 'foo', admin: true });
 
-      const createdUser = element.querySelector('#created-user');
-      expect(createdUser).not.toBeNull();
-      expect(createdUser.textContent).toContain('foo');
-      expect(createdUser.textContent).toContain('passw0rd');
+      expect(tester.createdUser).not.toBeNull();
+      expect(tester.createdUser).toContainText('foo');
+      expect(tester.createdUser).toContainText('passw0rd');
     });
   });
 
@@ -130,48 +131,30 @@ describe('UserEditComponent', () => {
       snapshot: { data: { user } }
     };
 
-    beforeEach(() =>
+    beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [TestModule],
         providers: [{ provide: ActivatedRoute, useValue: activatedRoute }]
-      })
-    );
+      });
+
+      tester = new UserEditComponentTester();
+      tester.detectChanges();
+    });
 
     it('should have a title', () => {
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.querySelector('h1').textContent).toContain(
-        "Modification de l'utilisateur jb"
-      );
+      expect(tester.title).toContainText(`Modification de l'utilisateur jb`);
     });
 
     it('should expose no created user, and the edited user info', () => {
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
-
-      const component = fixture.componentInstance;
-      expect(component.createdUser).toBeUndefined();
-      expect(component.userForm.value).toEqual({ login: 'jb', admin: true });
+      expect(tester.componentInstance.createdUser).toBeUndefined();
+      expect(tester.componentInstance.userForm.value).toEqual({ login: 'jb', admin: true });
     });
 
     it('should display the user in a form, and have the save button enabled', () => {
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
-
-      const element: HTMLElement = fixture.nativeElement;
-
-      const login: HTMLInputElement = element.querySelector('#login');
-      expect(login.value).toBe('jb');
-
-      const noAdmin: HTMLInputElement = element.querySelector('#role-no-admin');
-      expect(noAdmin.checked).toBe(false);
-
-      const admin: HTMLInputElement = element.querySelector('#role-admin');
-      expect(admin.checked).toBe(true);
-
-      const createdUser = element.querySelector('#created-user');
-      expect(createdUser).toBeNull();
+      expect(tester.login).toHaveValue('jb');
+      expect(tester.roleNoAdmin).not.toBeChecked();
+      expect(tester.roleAdmin).toBeChecked();
+      expect(tester.createdUser).toBeNull();
     });
 
     it('should save the user and navigate to the users page', () => {
@@ -181,13 +164,7 @@ describe('UserEditComponent', () => {
       spyOn(userService, 'update').and.returnValue(of(null));
       spyOn(router, 'navigate');
 
-      const fixture = TestBed.createComponent(UserEditComponent);
-      fixture.detectChanges();
-
-      const element: HTMLElement = fixture.nativeElement;
-      const save: HTMLButtonElement = element.querySelector('#save');
-      save.click();
-      fixture.detectChanges();
+      tester.save.click();
 
       expect(userService.update).toHaveBeenCalledWith(42, { login: 'jb', admin: true });
       expect(router.navigate).toHaveBeenCalledWith(['/users']);

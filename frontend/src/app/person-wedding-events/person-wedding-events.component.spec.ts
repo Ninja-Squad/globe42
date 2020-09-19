@@ -74,6 +74,8 @@ describe('PersonWeddingEventsComponent', () => {
   let person: PersonModel;
   let route: ActivatedRoute;
 
+  let tester: PersonWeddingEventsComponentTester;
+
   beforeEach(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2018-03-25T15:30:00').toJSDate());
 
@@ -132,6 +134,7 @@ describe('PersonWeddingEventsComponent', () => {
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue(person);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
+    tester = new PersonWeddingEventsComponentTester();
   });
 
   afterEach(() => jasmine.clock().uninstall());
@@ -140,7 +143,7 @@ describe('PersonWeddingEventsComponent', () => {
     let component: PersonWeddingEventsComponent;
 
     beforeEach(() => {
-      component = TestBed.createComponent(PersonWeddingEventsComponent).componentInstance;
+      component = tester.componentInstance;
     });
 
     it('should expose events and event types, and not have a form initially', () => {
@@ -242,10 +245,7 @@ describe('PersonWeddingEventsComponent', () => {
   });
 
   describe('UI', () => {
-    let tester: PersonWeddingEventsComponentTester;
-
     beforeEach(() => {
-      tester = new PersonWeddingEventsComponentTester();
       tester.detectChanges();
     });
 

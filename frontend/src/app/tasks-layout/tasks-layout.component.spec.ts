@@ -4,24 +4,41 @@ import { TasksLayoutComponent } from './tasks-layout.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
+import { ComponentTester } from 'ngx-speculoos';
+
+class TasksLayoutComponentTester extends ComponentTester<TasksLayoutComponent> {
+  constructor() {
+    super(TasksLayoutComponent);
+  }
+
+  get title() {
+    return this.element('h1');
+  }
+
+  get links() {
+    return this.elements('a.nav-link');
+  }
+
+  get routerOutlet() {
+    return this.debugElement.query(By.directive(RouterOutlet));
+  }
+}
 
 describe('TasksLayoutComponent', () => {
-  beforeEach(() =>
+  let tester: TasksLayoutComponentTester;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [TasksLayoutComponent]
-    })
-  );
+    });
+    tester = new TasksLayoutComponentTester();
+    tester.detectChanges();
+  });
 
   it('should have a title, pills and a router outlet', () => {
-    const fixture = TestBed.createComponent(TasksLayoutComponent);
-    fixture.detectChanges();
-
-    expect(fixture.nativeElement.querySelector('h1').textContent).toBe('Tâches');
-    const links = fixture.nativeElement.querySelectorAll('a.nav-link');
-    expect(links.length).toBe(7);
-
-    const outlet = fixture.debugElement.query(By.directive(RouterOutlet));
-    expect(outlet).toBeTruthy();
+    expect(tester.title).toHaveText('Tâches');
+    expect(tester.links.length).toBe(7);
+    expect(tester.routerOutlet).toBeTruthy();
   });
 });
