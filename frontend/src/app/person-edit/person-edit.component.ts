@@ -14,7 +14,7 @@ import { HEALTH_INSURANCE_TRANSLATIONS } from '../display-health-insurance.pipe'
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CityTypeahead } from './city-typeahead';
 import { finalize, map, switchMap, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import { combineLatest, EMPTY } from 'rxjs';
 import { CountryTypeahead } from '../person/country-typeahead';
 import { VISA_TRANSLATIONS } from '../display-visa.pipe';
 import { RESIDENCE_PERMIT_TRANSLATIONS } from '../display-residence-permit.pipe';
@@ -74,6 +74,7 @@ export class PersonEditComponent {
   countryTypeahead: CountryTypeahead;
 
   saving = false;
+  similarPerson: PersonIdentityModel | null = null;
 
   private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
     if (!ctrl.value) {
@@ -194,6 +195,22 @@ export class PersonEditComponent {
       if (value === 'UNKNOWN' && fiscalNumberCtrl.invalid) {
         fiscalNumberCtrl.setValue(null);
       }
+    });
+
+    combineLatest([
+      this.personForm.get('firstName').valueChanges,
+      this.personForm.get('lastName').valueChanges
+    ]).subscribe(([firstName, lastName]) => {
+      const lowercaseFirstName = firstName.toLowerCase();
+      const lowercaseLastName = lastName.toLowerCase();
+      this.similarPerson =
+        persons.find(
+          p =>
+            (p.firstName.toLowerCase() === lowercaseFirstName &&
+              p.lastName.toLowerCase() === lowercaseLastName) ||
+            (p.lastName.toLowerCase() === lowercaseFirstName &&
+              p.firstName.toLowerCase() === lowercaseLastName)
+        ) ?? null;
     });
   }
 
