@@ -701,7 +701,9 @@
 
   <div class="row mt-5">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" id="save" type="submit">Enregistrer</button>
+      <button class="btn btn-primary mr-2" id="save" type="submit" [disabled]="saving">
+        Enregistrer
+      </button>
       <a
         class="btn btn-secondary"
         [routerLink]="editedPerson ? ['/persons', editedPerson.id] : '/persons'"
