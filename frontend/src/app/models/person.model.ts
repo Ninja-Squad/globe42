@@ -31,7 +31,15 @@ export type HealthCareCoverage =
   | 'PUMA'
   | 'SSI'
   | 'OTHER';
-export type HealthInsurance = 'UNKNOWN' | 'NONE' | 'CMUC' | 'AME' | 'ACS' | 'MUTUELLE';
+export type HealthInsurance =
+  | 'UNKNOWN'
+  | 'NONE'
+  | 'C2S_WITHOUT_FINANCIAL_PARTICIPATION'
+  | 'C2S_WITH_FINANCIAL_PARTICIPATION'
+  | 'CMUC'
+  | 'AME'
+  | 'ACS'
+  | 'MUTUELLE';
 export type Visa = 'UNKNOWN' | 'NONE' | 'SHORT_STAY' | 'LONG_STAY';
 export type ResidencePermit =
   | 'UNKNOWN'

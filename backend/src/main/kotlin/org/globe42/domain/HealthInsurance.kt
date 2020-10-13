@@ -7,6 +7,8 @@ package org.globe42.domain
 enum class HealthInsurance {
     UNKNOWN,
     NONE,
+    C2S_WITHOUT_FINANCIAL_PARTICIPATION,
+    C2S_WITH_FINANCIAL_PARTICIPATION,
     CMUC,
     AME,
     ACS,
