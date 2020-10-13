@@ -25,7 +25,7 @@
     "@angular/platform-browser-dynamic": "10.1.5",
     "@angular/router": "10.1.5",
     "@ng-bootstrap/ng-bootstrap": "7.0.0",
-    "bootstrap": "4.5.2",
+    "bootstrap": "4.5.3",
     "chart.js": "2.9.3",
     "font-awesome": "4.7.0",
     "luxon": "1.25.0",
