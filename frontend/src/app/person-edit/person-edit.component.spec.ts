@@ -229,6 +229,10 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.button('#save');
   }
 
+  get similarPersonWarning() {
+    return this.element('#similar-person-warning');
+  }
+
   fillAndTick(input: TestInput, text: string) {
     input.fillWith(text);
     tick(500);
@@ -906,6 +910,25 @@ describe('PersonEditComponent', () => {
       expect(FISCAL_NUMBER_PATTERN.test('123456789012')).toBeFalsy();
       expect(FISCAL_NUMBER_PATTERN.test('12345678901234')).toBeFalsy();
       expect(FISCAL_NUMBER_PATTERN.test('1234567890123')).toBeTruthy();
+    });
+
+    it('should warn about duplicate person creation', () => {
+      const tester = new PersonEditTester();
+      tester.detectChanges();
+
+      expect(tester.similarPersonWarning).toBeNull();
+
+      tester.firstName.fillWith('JANE');
+      expect(tester.similarPersonWarning).toBeNull();
+
+      tester.lastName.fillWith('DOE');
+      expect(tester.similarPersonWarning).not.toBeNull();
+
+      tester.lastName.fillWith('jane');
+      expect(tester.similarPersonWarning).toBeNull();
+
+      tester.lastName.fillWith('doe');
+      expect(tester.similarPersonWarning).not.toBeNull();
     });
   });
 });

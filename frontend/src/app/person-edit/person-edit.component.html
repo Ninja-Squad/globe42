@@ -27,6 +27,11 @@
     <div class="col-sm-9">
       <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName" />
       <val-errors controlName="lastName" label="Le nom"></val-errors>
+      <div *ngIf="similarPerson" class="form-text text-warning small" id="similar-person-warning">
+        <span class="fa fa-exclamation-triangle mr-2"></span>
+        Il existe déjà une personne nommée {{ similarPerson | fullname }}. Attention à ne pas créer
+        un doublon&nbsp;!
+      </div>
     </div>
   </div>
   <div class="form-group row">
