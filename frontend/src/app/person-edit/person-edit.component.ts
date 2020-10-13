@@ -13,7 +13,7 @@ import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-covera
 import { HEALTH_INSURANCE_TRANSLATIONS } from '../display-health-insurance.pipe';
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CityTypeahead } from './city-typeahead';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { finalize, map, switchMap, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { CountryTypeahead } from '../person/country-typeahead';
 import { VISA_TRANSLATIONS } from '../display-visa.pipe';
@@ -72,6 +72,8 @@ export class PersonEditComponent {
   spouseIsInCouple = false;
 
   countryTypeahead: CountryTypeahead;
+
+  saving = false;
 
   private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
     if (!ctrl.value) {
@@ -227,6 +229,9 @@ export class PersonEditComponent {
     } else {
       action = this.personService.create(command).pipe(map(createdPerson => createdPerson.id));
     }
-    action.subscribe(personId => this.router.navigate(['persons', personId]));
+    this.saving = true;
+    action
+      .pipe(finalize(() => (this.saving = false)))
+      .subscribe(personId => this.router.navigate(['persons', personId]));
   }
 }
