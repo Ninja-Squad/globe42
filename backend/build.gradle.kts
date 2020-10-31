@@ -73,7 +73,7 @@ tasks {
 
     bootRun {
         args("--globe42.secretKey=QMwbcwa19VV02Oy5T7LSWyV+/wZrOsRRfhCR6TkapsY=")
-        args("--globe42.googleCloudStorageCredentialsPath=${rootProject.file("secrets/google-cloud-storage-dev.json")}")
+        args("--globe42.google-cloud-storage.credentials-path=${rootProject.file("secrets/google-cloud-storage-dev.json")}")
     }
 
     test {

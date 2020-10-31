@@ -2,3 +2,11 @@ li,
 .list-item {
   margin-bottom: 0.5em;
 }
+
+li a {
+  display: inline-block;
+  transition: all 300ms ease;
+  &:hover {
+    transform: scale(1.06);
+  }
+}
