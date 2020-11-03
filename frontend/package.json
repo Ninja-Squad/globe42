@@ -45,7 +45,7 @@
     "@types/luxon": "1.25.0",
     "@types/node": "12.19.3",
     "bundlesize": "0.18.0",
-    "codecov": "3.8.0",
+    "codecov": "3.8.1",
     "codelyzer": "6.0.1",
     "jasmine-core": "3.6.0",
     "jasmine-spec-reporter": "6.0.0",
