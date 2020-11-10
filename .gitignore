@@ -28,3 +28,4 @@ nbdist/
 classes
 .java-version
 secrets
+.sdkmanrc
