@@ -30,7 +30,7 @@ class HealthCareCoverageControllerMvcTest(@Autowired val mockMvc: MockMvc) {
         )
 
         mockMvc.get("/api/health-care-coverage").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonPath("$.entries.length()") { value(HealthCareCoverage.values().size) }
             jsonPath("$.entries[0].coverage") { value(HealthCareCoverage.values()[0].name) } // UNKNOWN
             jsonPath("$.entries[0].count") { value(0) }

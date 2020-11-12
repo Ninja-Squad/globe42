@@ -41,7 +41,7 @@ class TaskStatisticsControllerMvcTest(@Autowired private val mvc: MockMvc) {
             param("from", criteria.from.toString())
             param("to", criteria.to.toString())
         }.andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.statistics[0].user.login", user.login)
             jsonValue("$.statistics[0].category.name", meal.name)
             jsonValue("$.statistics[0].minutes", 100)

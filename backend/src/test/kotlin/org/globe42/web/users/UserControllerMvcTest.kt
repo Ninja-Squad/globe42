@@ -44,7 +44,7 @@ class UserControllerMvcTest(
         every { mockUserDao.findNotDeletedById(userId) } returns user
 
         mvc.get("/api/users/me").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.id", user.id!!)
             jsonValue("$.login", user.login)
             jsonPath("$.password") { doesNotExist() }
@@ -65,7 +65,7 @@ class UserControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -75,7 +75,7 @@ class UserControllerMvcTest(
         every { mockUserDao.findNotDeleted() } returns listOf(user)
 
         mvc.get("/api/users").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", user.id!!)
             jsonValue("$[0].login", user.login)
             jsonPath("$[0].password") { doesNotExist() }
@@ -95,7 +95,7 @@ class UserControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.login", command.login)
             jsonValue("$.generatedPassword", "password")
         }
@@ -115,7 +115,7 @@ class UserControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -126,7 +126,7 @@ class UserControllerMvcTest(
         every { mockUserDao.findNotDeletedById(userId) } returns user
 
         mvc.delete("/api/users/{userId}", user.id).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -140,7 +140,7 @@ class UserControllerMvcTest(
         every { mockPasswordDigester.hash("password") } returns "hashed"
 
         mvc.post("/api/users/{userId}/password-resets", user.id).andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.login", user.login)
             jsonValue("$.generatedPassword", "password")
         }
@@ -154,7 +154,7 @@ class UserControllerMvcTest(
         every { mockUserDao.findNotDeletedById(userId) } returns user
 
         mvc.get("/api/users/me/profile").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.login", user.login)
             jsonValue("$.admin", user.admin)
             jsonValue("$.email", user.email!!)
@@ -178,7 +178,7 @@ class UserControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
         assertThat(user.email).isEqualTo(command.email)
         assertThat(user.taskAssignmentEmailNotificationEnabled).isEqualTo(command.taskAssignmentEmailNotificationEnabled)

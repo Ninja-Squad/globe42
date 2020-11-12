@@ -68,7 +68,7 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
         mvc.multipart("/api/persons/{personId}/files", person.id) {
             file(multipartFile)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.name", "new.txt")
         }
     }
@@ -83,7 +83,7 @@ class PersonFileControllerMvcTest(@Autowired private val mvc: MockMvc) {
         every { mockStorageService.get(directory, theFile.name)} returns readableFile
 
         mvc.get("/api/persons/{personId}/files/{name}", person.id, theFile.name).asyncDispatch().andExpect {
-            status { isOk }
+            status { isOk() }
             header { longValue(HttpHeaders.CONTENT_LENGTH, 5L) }
             content {
                 contentType(MediaType.TEXT_PLAIN)

@@ -31,7 +31,7 @@ class CountryControllerMvcTest(@Autowired private val mvc: MockMvc) {
     @Test
     fun `should list`() {
         mvc.get("/api/countries").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", "BEL")
             jsonValue("$[1].name", "France")
         }

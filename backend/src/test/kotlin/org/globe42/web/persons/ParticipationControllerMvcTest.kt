@@ -46,7 +46,7 @@ class ParticipationControllerMvcTest(
     @Test
     fun `should list`() {
         mvc.get("/api/persons/{personId}/participations", person.id).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 34)
         }
     }
@@ -62,7 +62,7 @@ class ParticipationControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.activityType", ActivityType.SOCIAL_MEDIATION.name)
         }
     }
@@ -71,7 +71,7 @@ class ParticipationControllerMvcTest(
     fun `should delete`() {
         mvc.delete("/api/persons/{personId}/participations/{participationId}", person.id, mealParticipation.id)
             .andExpect {
-                status { isNoContent }
+                status { isNoContent() }
             }
     }
 }
