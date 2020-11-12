@@ -64,7 +64,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
         )
 
         val result = mockMvc.get("/api/reports/appointments").andExpect {
-            status { isOk }
+            status { isOk() }
         }.andReturn()
 
         val bytes = result.response.contentAsByteArray
@@ -119,7 +119,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
         )
 
         val result = mockMvc.get("/api/reports/memberships").andExpect {
-            status { isOk }
+            status { isOk() }
         }.andReturn()
 
         val bytes = result.response.contentAsByteArray
@@ -161,7 +161,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
         )
 
         val result = mockMvc.get("/api/reports/missing-memberships").andExpect {
-            status { isOk }
+            status { isOk() }
         }.andReturn()
 
         val bytes = result.response.contentAsByteArray

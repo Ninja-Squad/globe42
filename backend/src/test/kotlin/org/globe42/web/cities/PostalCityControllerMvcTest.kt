@@ -35,7 +35,7 @@ class PostalCityControllerMvcTest(@Autowired private val mvc: MockMvc) {
         mvc.get("/api/cities") {
             param("query", "ST E")
         }.andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].code", "42000")
             jsonValue("$[0].city", "ST ETIENNE")
         }
@@ -50,7 +50,7 @@ class PostalCityControllerMvcTest(@Autowired private val mvc: MockMvc) {
         mvc.post("/api/cities/uploads") {
             content = body
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
         }
 
         verify { mockPostalCityDao.saveAllEfficiently(parsedCities) }

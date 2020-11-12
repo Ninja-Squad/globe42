@@ -53,8 +53,8 @@ class MembershipControllerMvcTest(
         every { mockMembershipDao.findByPerson(person) } returns listOf(membership)
 
         mvc.get("/api/persons/{personId}/memberships", person.id!!).andExpect {
-            status { isOk }
-            jsonPath("$") { isArray }
+            status { isOk() }
+            jsonPath("$") { isArray() }
             jsonValue("$[0].id", membership.id!!)
         }
     }
@@ -65,7 +65,7 @@ class MembershipControllerMvcTest(
         every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns membership
 
         mvc.get("/api/persons/{personId}/memberships/current", person.id!!).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.id", membership.id!!)
         }
     }
@@ -75,7 +75,7 @@ class MembershipControllerMvcTest(
         val currentYear = LocalDate.now(PARIS_TIME_ZONE).year
         every { mockMembershipDao.findByPersonAndYear(person, currentYear) } returns null
         mvc.get("/api/persons/{personId}/memberships/current", person.id!!).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
             content { string("") }
         }
     }
@@ -97,7 +97,7 @@ class MembershipControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.id", 42L)
         }
     }
@@ -115,7 +115,7 @@ class MembershipControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -124,7 +124,7 @@ class MembershipControllerMvcTest(
         every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         mvc.delete("/api/persons/{personId}/memberships/{membershipId}", person.id!!, membership.id!!).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 }

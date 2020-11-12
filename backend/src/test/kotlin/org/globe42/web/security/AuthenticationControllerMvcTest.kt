@@ -44,7 +44,7 @@ class AuthenticationControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(credentials)
         }.andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.login", user.login)
             jsonValue("$.admin", user.admin)
             jsonValue("$.token", token)

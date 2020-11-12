@@ -37,7 +37,7 @@ class PerUnitRevenueControllerMvcTest(
         every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         mvc.get("/api/persons/{personId}/per-unit-revenue", person.id!!).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.adultLikeCount", 2)
         }
     }
@@ -48,7 +48,7 @@ class PerUnitRevenueControllerMvcTest(
         every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         mvc.get("/api/persons/{personId}/per-unit-revenue", person.id!!).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
             content { string("") }
         }
     }
@@ -59,7 +59,7 @@ class PerUnitRevenueControllerMvcTest(
         every { mockPersonDao.findByIdOrNull(42L) } returns person
 
         mvc.delete("/api/persons/{personId}/per-unit-revenue", person.id!!).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -72,7 +72,7 @@ class PerUnitRevenueControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(PerUnitRevenueInformationDTO(2, 3, true))
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 }

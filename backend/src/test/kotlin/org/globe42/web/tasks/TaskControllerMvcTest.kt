@@ -69,7 +69,7 @@ class TaskControllerMvcTest(
         every { mockTaskDao.findTodo(any<Pageable>()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.content.[0].id", task.id!!.toInt())
             jsonValue("$.content.[0].dueDate", task.dueDate.toString())
         }
@@ -81,7 +81,7 @@ class TaskControllerMvcTest(
             singlePage(listOf(task))
 
         mvc.get("/api/tasks?before=2017-08-01").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.content[0].id", task.id!!.toInt())
         }
     }
@@ -93,7 +93,7 @@ class TaskControllerMvcTest(
         every { mockTaskDao.findTodoByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.content[0].id", task.id!!.toInt())
         }
     }
@@ -105,7 +105,7 @@ class TaskControllerMvcTest(
         every { mockTaskDao.findArchivedByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1&archived").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.content[0].id", task.id!!.toInt())
         }
     }
@@ -115,7 +115,7 @@ class TaskControllerMvcTest(
         every { mockTaskDao.findTodoUnassigned(any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?unassigned").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.content[0].id", task.id!!.toInt())
         }
     }
@@ -130,7 +130,7 @@ class TaskControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(TaskAssignmentCommandDTO(otherUser.id!!))
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
         }
         assertThat(task.assignee).isEqualTo(otherUser)
     }
@@ -143,7 +143,7 @@ class TaskControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(TaskStatusChangeCommandDTO(TaskStatus.DONE))
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
         }
         assertThat(task.status).isEqualTo(TaskStatus.DONE)
     }
@@ -160,7 +160,7 @@ class TaskControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.id", 42)
         }
     }
@@ -174,7 +174,7 @@ class TaskControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 

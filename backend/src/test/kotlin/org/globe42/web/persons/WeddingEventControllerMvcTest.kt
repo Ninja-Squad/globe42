@@ -46,7 +46,7 @@ class WeddingEventControllerMvcTest(
     @Test
     fun `should list`() {
         mvc.get("/api/persons/{personId}/wedding-events", person.id).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 34)
             jsonValue("$[0].date", "2000-02-28")
             jsonValue("$[0].type", WeddingEventType.WEDDING.name)
@@ -70,7 +70,7 @@ class WeddingEventControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.type", WeddingEventType.DIVORCE.name)
         }
     }
@@ -78,7 +78,7 @@ class WeddingEventControllerMvcTest(
     @Test
     fun `should delete`() {
         mvc.delete("/api/persons/{personId}/wedding-events/{eventId}", person.id, firstWedding.id).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 }

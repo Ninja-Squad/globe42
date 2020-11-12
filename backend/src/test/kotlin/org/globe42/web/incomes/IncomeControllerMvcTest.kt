@@ -52,7 +52,7 @@ class IncomeControllerMvcTest(
         person.addIncome(income)
 
         mvc.get("/api/persons/{personId}/incomes", person.id).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", income.id!!.toInt())
             jsonValue("$[0].monthlyAmount", income.monthlyAmount.toDouble())
             jsonValue("$[0].source.id", income.source.id!!.toInt())
@@ -67,7 +67,7 @@ class IncomeControllerMvcTest(
         every { mockIncomeDao.findByIdOrNull(income.id!!) } returns income
 
         mvc.delete("/api/persons/{personId}/incomes/{incomeId}", person.id, income.id).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -83,7 +83,7 @@ class IncomeControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.id", 345)
         }
     }

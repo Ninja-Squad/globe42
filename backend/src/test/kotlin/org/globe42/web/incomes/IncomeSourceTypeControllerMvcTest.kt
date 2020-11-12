@@ -26,7 +26,7 @@ class IncomeSourceTypeControllerMvcTest(@Autowired private val mvc: MockMvc) {
         every { mockIncomeSourceTypeDao.findAll() } returns listOf(IncomeSourceType(1L, "type1"))
 
         mvc.get("/api/income-source-types").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 1)
             jsonValue("$[0].type", "type1")
         }

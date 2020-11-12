@@ -51,7 +51,7 @@ class IncomeSourceControllerMvcTest(
         every { mockIncomeSourceDao.findAll() } returns listOf(incomeSource)
 
         mvc.get("/api/income-sources").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 42)
             jsonValue("$[0].name", incomeSource.name)
             jsonValue("$[0].type.id", incomeSource.type.id!!)
@@ -65,7 +65,7 @@ class IncomeSourceControllerMvcTest(
         every { mockIncomeSourceDao.findByIdOrNull(incomeSource.id!!) }  returns incomeSource
 
         mvc.get("/api/income-sources/{sourceId}", incomeSource.id).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.id", 42)
         }
     }
@@ -81,7 +81,7 @@ class IncomeSourceControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.id", 42)
         }
     }
@@ -98,7 +98,7 @@ class IncomeSourceControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 }

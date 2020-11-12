@@ -51,7 +51,7 @@ class FamilyControllerMvcTest(
         }
 
         mvc.get("/api/persons/{personId}/family", person.id!!).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.children[0].location", Location.ABROAD.name)
         }
     }
@@ -67,7 +67,7 @@ class FamilyControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
 
         assertThat(person.family).isNotNull
@@ -78,7 +78,7 @@ class FamilyControllerMvcTest(
         person.family = Family()
 
         mvc.delete("/api/persons/{personId}/family", person.id!!).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
 
         assertThat(person.family).isNull()

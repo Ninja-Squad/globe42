@@ -29,7 +29,7 @@ class ActivityTypeControllerMvcTest(@Autowired private val mvc: MockMvc) {
         every { mockPersonDao.findParticipants(ActivityType.MEAL) } returns listOf(person)
 
         mvc.get("/api/activity-types/{activityType}/participants", ActivityType.MEAL).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 42)
             jsonValue("$[0].email", person.email!!)
         }

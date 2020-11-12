@@ -54,7 +54,7 @@ class PersonControllerMvcTest(
         every { mockPersonDao.findNotDeleted() } returns listOf(person)
 
         mvc.get("/api/persons").andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 1)
         }
     }
@@ -66,7 +66,7 @@ class PersonControllerMvcTest(
         mvc.get("/api/persons") {
             param("deleted", "")
         }.andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 1)
         }
     }
@@ -76,7 +76,7 @@ class PersonControllerMvcTest(
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         mvc.get("/api/persons/{personId}", person.id).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$.id", 1)
             jsonValue("$.entryDate", "2017-05-21")
             jsonValue("$.entryDate", "2017-05-21")
@@ -88,7 +88,7 @@ class PersonControllerMvcTest(
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         mvc.get("/api/persons/{personId}", person.id).andExpect {
-            status { isNotFound }
+            status { isNotFound() }
         }
     }
 
@@ -101,7 +101,7 @@ class PersonControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
             jsonValue("$.id", 1)
         }
     }
@@ -114,7 +114,7 @@ class PersonControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(PersonControllerTest.createCommand())
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -123,7 +123,7 @@ class PersonControllerMvcTest(
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         mvc.delete("/api/persons/{personId}", person.id).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -132,7 +132,7 @@ class PersonControllerMvcTest(
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
         mvc.delete("/api/persons/{personId}/deletion", person.id).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
@@ -146,7 +146,7 @@ class PersonControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
 
         assertThat(person.deathDate).isEqualTo(command.deathDate)

@@ -39,7 +39,7 @@ class NetworkMemberControllerMvcTest(
     @Test
     fun `should list`() {
         mvc.get("/api/persons/{personId}/network-members", person.id).andExpect {
-            status { isOk }
+            status { isOk() }
             jsonValue("$[0].id", 345L)
             jsonValue("$[0].type", NetworkMemberType.DOCTOR.name)
             jsonValue("$[0].text", "Dr. No")
@@ -58,7 +58,7 @@ class NetworkMemberControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isCreated }
+            status { isCreated() }
         }
     }
 
@@ -70,14 +70,14 @@ class NetworkMemberControllerMvcTest(
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsBytes(command)
         }.andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 
     @Test
     fun `should delete`() {
         mvc.delete("/api/persons/{personId}/network-members/{memberId}", person.id, 345L).andExpect {
-            status { isNoContent }
+            status { isNoContent() }
         }
     }
 }
