@@ -133,7 +133,7 @@ dependencies {
         exclude(module = "junit")
         exclude(module = "mockito")
     }
-    testImplementation("com.ninja-squad:springmockk:2.0.3")
+    testImplementation("com.ninja-squad:springmockk:3.0.0")
     testImplementation("io.mockk:mockk:1.10.2")
 
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
