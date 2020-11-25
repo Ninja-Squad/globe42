@@ -5903,12 +5903,12 @@ ngx-speculoos@4.1.0:
   dependencies:
     tslib "2.0.1"
 
-ngx-valdemort@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-4.0.0.tgz#b0369ea3a6a62173b645dc85cf1b21e740b9c68f"
-  integrity sha512-JWOn5XMaE/N0I40Zu5AOZjegXupFWlY40tVEwt7CUYll33ZuFK97Xz3Kx+/GcHZ8qGpNxXGN8BqRTaz9Wwq/Yg==
+ngx-valdemort@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-5.0.0.tgz#15c257f9d679f35fe17fa2e3a532c9d845ba5de2"
+  integrity sha512-BRTncDL5i5cFT419vd1U/W367OUm1kKkNBolQupxMtPB0HyxIQLB49TrnYVK4wtn+gw5NVTag+zOtTQZk+RHdA==
   dependencies:
-    tslib "^2.0.0"
+    tslib "2.0.3"
 
 nice-try@^1.0.4:
   version "1.0.5"
