@@ -198,9 +198,8 @@ describe('SpentTimeStatisticsComponent', () => {
     ]);
     expect(tester.componentInstance.chartConfiguration.data.datasets[0].data).toEqual([70, 30]);
     expect(
-      (tester.componentInstance.chartConfiguration.data.datasets[0].backgroundColor as Array<
-        ChartColor
-      >).length
+      (tester.componentInstance.chartConfiguration.data.datasets[0]
+        .backgroundColor as Array<ChartColor>).length
     ).toBe(2);
   });
 
