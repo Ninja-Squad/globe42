@@ -42,7 +42,7 @@
     "@types/chart.js": "2.9.28",
     "@types/jasmine": "3.6.1",
     "@types/luxon": "1.25.0",
-    "@types/node": "12.19.3",
+    "@types/node": "12.19.7",
     "bundlesize": "0.18.0",
     "codecov": "3.8.1",
     "codelyzer": "6.0.1",
