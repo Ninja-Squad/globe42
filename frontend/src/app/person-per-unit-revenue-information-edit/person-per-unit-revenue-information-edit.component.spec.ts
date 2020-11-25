@@ -14,9 +14,7 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { ComponentTester } from 'ngx-speculoos';
 
-class PersonPerUnitRevenueInformationEditComponentTester extends ComponentTester<
-  PersonPerUnitRevenueInformationEditComponent
-> {
+class PersonPerUnitRevenueInformationEditComponentTester extends ComponentTester<PersonPerUnitRevenueInformationEditComponent> {
   constructor() {
     super(PersonPerUnitRevenueInformationEditComponent);
   }
