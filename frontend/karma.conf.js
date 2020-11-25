@@ -15,6 +15,9 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
+    jasmineHtmlReporter: {
+      suppressAll: true // removes the duplicated traces
+    },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/globe42'),
       subdir: '.',
@@ -22,7 +25,7 @@ module.exports = function (config) {
         { type: 'html' },
         { type: 'text-summary' },
         { type: 'lcovonly' }
-      ],
+      ]
     },
     reporters: process.env.CI === 'true' ? ['dots'] : ['progress', 'kjhtml'],
     port: 9876,
