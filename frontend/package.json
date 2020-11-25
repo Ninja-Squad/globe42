@@ -40,7 +40,7 @@
     "@angular/compiler-cli": "11.0.0",
     "@angular/localize": "11.0.0",
     "@types/chart.js": "2.9.28",
-    "@types/jasmine": "3.6.1",
+    "@types/jasmine": "3.6.2",
     "@types/luxon": "1.25.0",
     "@types/node": "12.19.3",
     "bundlesize": "0.18.0",
