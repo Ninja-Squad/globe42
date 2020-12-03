@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { PersonService } from '../person.service';
 import { Gender, MaritalStatus, PersonIdentityModel, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
@@ -27,9 +35,9 @@ function validateValidityDates(
   startPath: string,
   endPath: string,
   error: string,
-  condition: (form: FormGroup) => boolean
-): (form: FormGroup) => ValidationErrors | null {
-  return (form: FormGroup) => {
+  condition: (form: AbstractControl) => boolean
+): ValidatorFn {
+  return (form: AbstractControl) => {
     if (!condition(form)) {
       return null;
     }
