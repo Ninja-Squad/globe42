@@ -24,11 +24,11 @@ export class SpentTimeAddComponent {
   constructor(private taskService: TaskService, fb: FormBuilder) {
     this.addForm = fb.group(
       {
-        hours: [0, Validators.compose([Validators.required, Validators.min(0)])],
-        minutes: [0, Validators.compose([Validators.required, Validators.min(0)])]
+        hours: [0, [Validators.required, Validators.min(0)]],
+        minutes: [0, [Validators.required, Validators.min(0)]]
       },
       {
-        validator: this.addableValidator
+        validators: this.addableValidator
       }
     );
   }
