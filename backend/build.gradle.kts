@@ -9,12 +9,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.14")
+        classpath("org.postgresql:postgresql:42.2.18")
     }
 }
 
 plugins {
-    val kotlinVersion = "1.4.10"
+    val kotlinVersion = "1.4.21"
 
     java
     jacoco
@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.4.0"
+    id("org.springframework.boot") version "2.4.1"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("org.flywaydb.flyway") version "7.1.1"
     id("com.gorylenko.gradle-git-properties") version "2.2.2"
@@ -118,7 +118,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
-    implementation("com.google.cloud:google-cloud-storage:1.111.2")
+    implementation("com.google.cloud:google-cloud-storage:1.113.5")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.poi:poi:4.1.2")
@@ -130,11 +130,10 @@ dependencies {
     runtimeOnly("org.flywaydb:flyway-core")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(module = "junit")
         exclude(module = "mockito")
     }
     testImplementation("com.ninja-squad:springmockk:3.0.0")
-    testImplementation("io.mockk:mockk:1.10.2")
+    testImplementation("io.mockk:mockk:1.10.3-jdk8")
 
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
