@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@angular-builders/custom-webpack@11.0.0-beta.4":
-  version "11.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@angular-builders/custom-webpack/-/custom-webpack-11.0.0-beta.4.tgz#2f7b88b84adbb5960ffb4dc18c824cac66228aa3"
-  integrity sha512-nAsH8N5Ehc2tC+RKZ+E7Rt3dpwGjG1ZlmHTgDRulrwlt9/ywjZrg05dlHkJiRjuEbn2hSjzc1BvVQ9a4z23mfQ==
+"@angular-builders/custom-webpack@11.0.0-beta.5":
+  version "11.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@angular-builders/custom-webpack/-/custom-webpack-11.0.0-beta.5.tgz#2e4af1700a4fcc8575c2d8ca2873185d2fff9f50"
+  integrity sha512-MxpdUl1HA8V16XyYQRf0CvNVJ/ley1AFnktWAmcsN04Ht2o0qdsXYYd55+vMzHC2Hqh2NPNoBd7eadZFEgI4/A==
   dependencies:
     "@angular-devkit/architect" ">=0.1100.0 < 0.1200.0"
     "@angular-devkit/build-angular" ">=0.1100.0 < 0.1200.0"
     "@angular-devkit/core" "^11.0.0"
     lodash "^4.17.15"
     ts-node "^9.0.0"
-    webpack-merge "^5.7.2"
+    webpack-merge "^5.7.3"
 
 "@angular-devkit/architect@0.1100.2", "@angular-devkit/architect@>=0.1100.0 < 0.1200.0":
   version "0.1100.2"
@@ -9184,10 +9184,10 @@ webpack-merge@5.2.0:
     clone-deep "^4.0.1"
     wildcard "^2.0.0"
 
-webpack-merge@^5.7.2:
-  version "5.7.2"
-  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-5.7.2.tgz#55320baf05d8be068ff8112be72c04d7c14a9abd"
-  integrity sha512-7o7qjwcIB6lqHX0VZA2Vxcp8RHftW1LNcaB6t87PEpco/VPlG0Wn9DnvgmcJ0nZU578/vKQfhDSLTF0EZ+pFAg==
+webpack-merge@^5.7.3:
+  version "5.7.3"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-5.7.3.tgz#2a0754e1877a25a8bbab3d2475ca70a052708213"
+  integrity sha512-6/JUQv0ELQ1igjGDzHkXbVDRxkfA57Zw7PfiupdLFJYrgFqY5ZP8xxbpp2lU3EPwYx89ht5Z/aDkD40hFCm5AA==
   dependencies:
     clone-deep "^4.0.1"
     wildcard "^2.0.0"
