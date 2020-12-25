@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { TaskService } from '../task.service';
-import { ChartConfiguration } from 'chart.js';
+import {
+  ArcElement,
+  Chart,
+  ChartConfiguration,
+  DoughnutController,
+  Legend,
+  Tooltip,
+  TooltipItem
+} from 'chart.js';
 import { minutesToDuration, sortBy } from '../utils';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -104,6 +112,8 @@ export class SpentTimeStatisticsComponent implements OnInit {
   }
 
   private createChartConfiguration(): ChartConfiguration {
+    Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+
     const labels: Array<string> = [];
     const data: Array<number> = [];
     const backgroundColor: Array<string> = [];
@@ -119,14 +129,16 @@ export class SpentTimeStatisticsComponent implements OnInit {
       data: { labels, datasets: [{ data, backgroundColor }] },
       options: {
         cutoutPercentage: 70,
-        tooltips: {
-          callbacks: {
-            label: (tooltipItem, chart) => {
-              const categoryName = chart.labels[tooltipItem.index];
-              const duration = minutesToDuration(
-                chart.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] as number
-              );
-              return `${categoryName}: ${duration}`;
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label(tooltipItem: TooltipItem) {
+                const categoryName = tooltipItem.label;
+                const duration = minutesToDuration(
+                  tooltipItem.dataset.data[tooltipItem.dataIndex] as number
+                );
+                return `${categoryName}: ${duration}`;
+              }
             }
           }
         },

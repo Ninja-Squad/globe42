@@ -2,26 +2,6 @@
 # yarn lockfile v1
 
 
-"@angular-builders/custom-webpack@11.0.0-beta.5":
-  version "11.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@angular-builders/custom-webpack/-/custom-webpack-11.0.0-beta.5.tgz#2e4af1700a4fcc8575c2d8ca2873185d2fff9f50"
-  integrity sha512-MxpdUl1HA8V16XyYQRf0CvNVJ/ley1AFnktWAmcsN04Ht2o0qdsXYYd55+vMzHC2Hqh2NPNoBd7eadZFEgI4/A==
-  dependencies:
-    "@angular-devkit/architect" ">=0.1100.0 < 0.1200.0"
-    "@angular-devkit/build-angular" ">=0.1100.0 < 0.1200.0"
-    "@angular-devkit/core" "^11.0.0"
-    lodash "^4.17.15"
-    ts-node "^9.0.0"
-    webpack-merge "^5.7.3"
-
-"@angular-devkit/architect@0.1100.2", "@angular-devkit/architect@>=0.1100.0 < 0.1200.0":
-  version "0.1100.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1100.2.tgz#7567af030afe7d6cdea1771bcd2a193a19a90dc9"
-  integrity sha512-wSMMM8eBPol48OtvIyrIq2H9rOIiJmrPEtPbH0BSuPX0B8BckVImeTPzloqxSrpul4tY7Iwx0zwISDEgb59Vbw==
-  dependencies:
-    "@angular-devkit/core" "11.0.2"
-    rxjs "6.6.3"
-
 "@angular-devkit/architect@0.1100.5":
   version "0.1100.5"
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1100.5.tgz#3cf9b25464d484160b10417668efbdbd15c9e492"
@@ -105,92 +85,6 @@
     webpack-subresource-integrity "1.5.1"
     worker-plugin "5.0.0"
 
-"@angular-devkit/build-angular@>=0.1100.0 < 0.1200.0":
-  version "0.1100.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-0.1100.2.tgz#afbeef979df4dbafeed3ff3de438dc9f35e2d148"
-  integrity sha512-5Qo3DDKggzUJKibNgeyE5mIMFYP0tVebNvMatpbnYnR/U0fUuuQdvNC68s380M5KoOuubfeXr0Js0VFk0mkaow==
-  dependencies:
-    "@angular-devkit/architect" "0.1100.2"
-    "@angular-devkit/build-optimizer" "0.1100.2"
-    "@angular-devkit/build-webpack" "0.1100.2"
-    "@angular-devkit/core" "11.0.2"
-    "@babel/core" "7.12.3"
-    "@babel/generator" "7.12.1"
-    "@babel/plugin-transform-runtime" "7.12.1"
-    "@babel/preset-env" "7.12.1"
-    "@babel/runtime" "7.12.1"
-    "@babel/template" "7.10.4"
-    "@jsdevtools/coverage-istanbul-loader" "3.0.5"
-    "@ngtools/webpack" "11.0.2"
-    ansi-colors "4.1.1"
-    autoprefixer "9.8.6"
-    babel-loader "8.1.0"
-    browserslist "^4.9.1"
-    cacache "15.0.5"
-    caniuse-lite "^1.0.30001032"
-    circular-dependency-plugin "5.2.0"
-    copy-webpack-plugin "6.2.1"
-    core-js "3.6.5"
-    css-loader "4.3.0"
-    cssnano "4.1.10"
-    file-loader "6.1.1"
-    find-cache-dir "3.3.1"
-    glob "7.1.6"
-    inquirer "7.3.3"
-    jest-worker "26.5.0"
-    karma-source-map-support "1.4.0"
-    less "3.12.2"
-    less-loader "7.0.2"
-    license-webpack-plugin "2.3.1"
-    loader-utils "2.0.0"
-    mini-css-extract-plugin "1.2.1"
-    minimatch "3.0.4"
-    open "7.3.0"
-    ora "5.1.0"
-    parse5-html-rewriting-stream "6.0.1"
-    pnp-webpack-plugin "1.6.4"
-    postcss "7.0.32"
-    postcss-import "12.0.1"
-    postcss-loader "4.0.4"
-    raw-loader "4.0.2"
-    regenerator-runtime "0.13.7"
-    resolve-url-loader "3.1.2"
-    rimraf "3.0.2"
-    rollup "2.32.1"
-    rxjs "6.6.3"
-    sass "1.27.0"
-    sass-loader "10.0.5"
-    semver "7.3.2"
-    source-map "0.7.3"
-    source-map-loader "1.1.2"
-    source-map-support "0.5.19"
-    speed-measure-webpack-plugin "1.3.3"
-    style-loader "2.0.0"
-    stylus "0.54.8"
-    stylus-loader "4.1.1"
-    terser "5.3.7"
-    terser-webpack-plugin "4.2.3"
-    text-table "0.2.0"
-    tree-kill "1.2.2"
-    webpack "4.44.2"
-    webpack-dev-middleware "3.7.2"
-    webpack-dev-server "3.11.0"
-    webpack-merge "5.2.0"
-    webpack-sources "2.0.1"
-    webpack-subresource-integrity "1.5.1"
-    worker-plugin "5.0.0"
-
-"@angular-devkit/build-optimizer@0.1100.2":
-  version "0.1100.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-optimizer/-/build-optimizer-0.1100.2.tgz#93dea833aed64d265cfdfebb6580e10cf909630b"
-  integrity sha512-2ZdEeAs0a53g9LDkP5H2mCEPLyk7yd9P7eTepNYvIOz3xJ6W6dB2CqotPMfnHgd4o12cbzCOWrPBxbfo/VnMig==
-  dependencies:
-    loader-utils "2.0.0"
-    source-map "0.7.3"
-    tslib "2.0.3"
-    typescript "4.0.5"
-    webpack-sources "2.0.1"
-
 "@angular-devkit/build-optimizer@0.1100.5":
   version "0.1100.5"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-optimizer/-/build-optimizer-0.1100.5.tgz#25de00e9cbea1444f911aa0a7a53a05800c90d62"
@@ -202,15 +96,6 @@
     typescript "4.0.5"
     webpack-sources "2.0.1"
 
-"@angular-devkit/build-webpack@0.1100.2":
-  version "0.1100.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.1100.2.tgz#1613334c396931de295d47d8ec8ef980592cc00d"
-  integrity sha512-XVMtWoxNa3wJLRjJ846Y02PzupdbUizdAtggRu2731RLMvI1KawWlsTURi12MNUnoVQYm9eldiIA/Y1UqeE8mQ==
-  dependencies:
-    "@angular-devkit/architect" "0.1100.2"
-    "@angular-devkit/core" "11.0.2"
-    rxjs "6.6.3"
-
 "@angular-devkit/build-webpack@0.1100.5":
   version "0.1100.5"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.1100.5.tgz#81be4b35dc90ea66be205ad1cb9dc44dc31bf9e0"
@@ -219,17 +104,6 @@
     "@angular-devkit/architect" "0.1100.5"
     "@angular-devkit/core" "11.0.5"
     rxjs "6.6.3"
-
-"@angular-devkit/core@11.0.2", "@angular-devkit/core@^11.0.0":
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-11.0.2.tgz#dd3475912e830740e71e14e3168d609e8ddef8c6"
-  integrity sha512-vUmmUNmNM9oRcDmt0PunU/ayglo0apq4pGL9Z5jj6alf2WwEiTcGHjyuZSDIO9MOLi41519jp3mDx79qXvvyww==
-  dependencies:
-    ajv "6.12.6"
-    fast-json-stable-stringify "2.1.0"
-    magic-string "0.25.7"
-    rxjs "6.6.3"
-    source-map "0.7.3"
 
 "@angular-devkit/core@11.0.5":
   version "11.0.5"
@@ -1256,15 +1130,6 @@
   dependencies:
     tslib "^2.0.0"
 
-"@ngtools/webpack@11.0.2":
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-11.0.2.tgz#d9513854d474fe09350ce705d04fee38ffb8f0c7"
-  integrity sha512-GbNP6HMBVoee2CkYW/pknprFCeiOLz4FGE06yr4m0700c1i6wuX7AzyHfBcLGAIP6nVblNOT3eh5M41b3cDf8g==
-  dependencies:
-    "@angular-devkit/core" "11.0.2"
-    enhanced-resolve "5.3.1"
-    webpack-sources "2.0.1"
-
 "@ngtools/webpack@11.0.5":
   version "11.0.5"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-11.0.5.tgz#9d1abb9f9a5e72c014b5ed3e0c2cefe2a4175b30"
@@ -1329,13 +1194,6 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
-
-"@types/chart.js@2.9.29":
-  version "2.9.29"
-  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.29.tgz#73bf7f02387402943f29946012492f10bde7ed43"
-  integrity sha512-WOZMitUU3gHDM0oQsCsVivX+oDsIki93szcTmmUPBm39cCvAELBjokjSDVOoA3xiIEbb+jp17z/3S2tIqruwOQ==
-  dependencies:
-    moment "^2.10.2"
 
 "@types/glob@^7.1.1":
   version "7.1.3"
@@ -2483,28 +2341,10 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-chart.js@2.9.4:
-  version "2.9.4"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.4.tgz#0827f9563faffb2dc5c06562f8eb10337d5b9684"
-  integrity sha512-B07aAzxcrikjAPyV+01j7BmOpxtQETxTSlQ26BEYJ+3iUkbNKaOJ/nDbT6JjyqYxseM0ON12COHYdU2cTIjC7A==
-  dependencies:
-    chartjs-color "^2.1.0"
-    moment "^2.10.2"
-
-chartjs-color-string@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/chartjs-color-string/-/chartjs-color-string-0.6.0.tgz#1df096621c0e70720a64f4135ea171d051402f71"
-  integrity sha512-TIB5OKn1hPJvO7JcteW4WY/63v6KwEdt6udfnDE9iCAZgy+V4SrbSxoIbTw/xkUIapjEI4ExGtD0+6D3KyFd7A==
-  dependencies:
-    color-name "^1.0.0"
-
-chartjs-color@^2.1.0:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/chartjs-color/-/chartjs-color-2.4.1.tgz#6118bba202fe1ea79dd7f7c0f9da93467296c3b0"
-  integrity sha512-haqOg1+Yebys/Ts/9bLo/BqUcONQOdr/hoEr2LLTRl6C5LXctUdHxsCYfvQVg5JIxITrfCNUDr4ntqmQk9+/0w==
-  dependencies:
-    chartjs-color-string "^0.6.0"
-    color-convert "^1.9.3"
+chart.js@3.0.0-beta.7:
+  version "3.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.0.0-beta.7.tgz#ce11f437b555cc61b52ad24bf9505d08b4e09e6f"
+  integrity sha512-UL0HlWNRBvvzGPoh0WfmsiaLuYdgjLj9PtutfEjL43eJxxDPHWmsqROJT7x81oyF6TVrFs2uR5UEkt0GfhGxxw==
 
 "chokidar@>=2.0.0 <4.0.0", chokidar@^3.0.0, chokidar@^3.4.1, chokidar@^3.4.2:
   version "3.4.3"
@@ -2701,7 +2541,7 @@ collection-visit@^1.0.0:
     map-visit "^1.0.0"
     object-visit "^1.0.0"
 
-color-convert@^1.9.0, color-convert@^1.9.1, color-convert@^1.9.3:
+color-convert@^1.9.0, color-convert@^1.9.1:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
   integrity sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==
@@ -5576,7 +5416,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19:
+lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.19:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -5940,11 +5780,6 @@ mkdirp@^1.0.3, mkdirp@^1.0.4, mkdirp@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
-
-moment@^2.10.2:
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -8421,17 +8256,6 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-stylus-loader@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/stylus-loader/-/stylus-loader-4.1.1.tgz#0e94f5d6274932a2dad054d1a736b32146ac7a99"
-  integrity sha512-Vnm7J/nIs/P6swIrdwJW/dflhsCOiFmb1U3PeQ6phRtg1soPLN4uKnnL7AtGIJDe173elbtYIXVzmCyF493CfA==
-  dependencies:
-    fast-glob "^3.2.4"
-    klona "^2.0.4"
-    loader-utils "^2.0.0"
-    normalize-path "^3.0.0"
-    schema-utils "^3.0.0"
-
 stylus-loader@4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/stylus-loader/-/stylus-loader-4.3.1.tgz#8b4e749294d9fe0729c2e5e1f04cbf87e1c941aa"
@@ -8754,17 +8578,6 @@ ts-node@9.1.1:
   dependencies:
     arg "^4.1.0"
     create-require "^1.1.0"
-    diff "^4.0.1"
-    make-error "^1.1.1"
-    source-map-support "^0.5.17"
-    yn "3.1.1"
-
-ts-node@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-9.0.0.tgz#e7699d2a110cc8c0d3b831715e417688683460b3"
-  integrity sha512-/TqB4SnererCDR/vb4S/QvSZvzQMJN8daAslg7MeaiHvD8rDZsSfXmNeNumyZZzMned72Xoq/isQljYSt8Ynfg==
-  dependencies:
-    arg "^4.1.0"
     diff "^4.0.1"
     make-error "^1.1.1"
     source-map-support "^0.5.17"
@@ -9180,14 +8993,6 @@ webpack-merge@5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-5.2.0.tgz#31cbcc954f8f89cd4b06ca8d97a38549f7f3f0c9"
   integrity sha512-QBglJBg5+lItm3/Lopv8KDDK01+hjdg2azEwi/4vKJ8ZmGPdtJsTpjtNNOW3a4WiqzXdCATtTudOZJngE7RKkA==
-  dependencies:
-    clone-deep "^4.0.1"
-    wildcard "^2.0.0"
-
-webpack-merge@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-5.7.3.tgz#2a0754e1877a25a8bbab3d2475ca70a052708213"
-  integrity sha512-6/JUQv0ELQ1igjGDzHkXbVDRxkfA57Zw7PfiupdLFJYrgFqY5ZP8xxbpp2lU3EPwYx89ht5Z/aDkD40hFCm5AA==
   dependencies:
     clone-deep "^4.0.1"
     wildcard "^2.0.0"

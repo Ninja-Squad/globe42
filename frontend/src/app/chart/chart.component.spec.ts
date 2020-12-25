@@ -1,6 +1,6 @@
 import { ChartComponent } from './chart.component';
 import { Component } from '@angular/core';
-import { ChartConfiguration } from 'chart.js';
+import { ArcElement, Chart, ChartConfiguration, DoughnutController } from 'chart.js';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ComponentTester } from 'ngx-speculoos';
@@ -10,14 +10,19 @@ import { ComponentTester } from 'ngx-speculoos';
   template: '<gl-chart [configuration]="configuration"></gl-chart>'
 })
 class TestComponent {
+  constructor() {
+    Chart.register(DoughnutController, ArcElement);
+  }
+
   configuration: ChartConfiguration = {
-    type: 'pie',
+    type: 'doughnut',
     data: {
       datasets: [
         {
           data: [1, 2, 3]
         }
-      ]
+      ],
+      labels: ['a', 'b', 'c']
     },
     options: {
       animation: {
@@ -68,7 +73,8 @@ describe('ChartComponent', () => {
           {
             data: [4, 5, 6]
           }
-        ]
+        ],
+        labels: ['a', 'b', 'c']
       },
       options: {
         animation: {

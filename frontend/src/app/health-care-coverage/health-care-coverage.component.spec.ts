@@ -9,7 +9,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { HealthCareCoverageModel } from '../models/health-care-coverage.model';
-import { ChartColor } from 'chart.js';
 
 class HealthCareCoverageComponentTester extends ComponentTester<HealthCareCoverageComponent> {
   constructor() {
@@ -85,7 +84,7 @@ describe('HealthcareCoverageComponent', () => {
     ]);
     expect(tester.chart.configuration.data.datasets[0].data).toEqual([10, 5, 17, 11]);
     expect(
-      (tester.chart.configuration.data.datasets[0].backgroundColor as Array<ChartColor>).length
+      (tester.chart.configuration.data.datasets[0].backgroundColor as Array<string>).length
     ).toBe(4);
   });
 

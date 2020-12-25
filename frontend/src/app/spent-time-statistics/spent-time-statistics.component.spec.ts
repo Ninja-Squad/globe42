@@ -10,7 +10,6 @@ import { DurationPipe } from '../duration.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
 import { UserModel } from '../models/user.model';
-import { ChartColor } from 'chart.js';
 import { By } from '@angular/platform-browser';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
@@ -199,7 +198,7 @@ describe('SpentTimeStatisticsComponent', () => {
     expect(tester.componentInstance.chartConfiguration.data.datasets[0].data).toEqual([70, 30]);
     expect(
       (tester.componentInstance.chartConfiguration.data.datasets[0]
-        .backgroundColor as Array<ChartColor>).length
+        .backgroundColor as Array<string>).length
     ).toBe(2);
   });
 

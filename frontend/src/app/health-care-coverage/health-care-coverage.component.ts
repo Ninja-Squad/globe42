@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HealthCareCoverageModel } from '../models/health-care-coverage.model';
-import { ChartConfiguration } from 'chart.js';
+import {
+  ArcElement,
+  Chart,
+  ChartConfiguration,
+  DoughnutController,
+  Legend,
+  Tooltip,
+  TooltipItem
+} from 'chart.js';
 import { COLORS } from '../chart/chart.component';
 import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
 
@@ -32,6 +40,8 @@ export class HealthCareCoverageComponent implements OnInit {
   }
 
   private createChartConfiguration(): ChartConfiguration {
+    Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+
     const labels: Array<string> = [];
     const data: Array<number> = [];
     const backgroundColor: Array<string> = [];
@@ -49,14 +59,14 @@ export class HealthCareCoverageComponent implements OnInit {
       data: { labels, datasets: [{ data, backgroundColor }] },
       options: {
         cutoutPercentage: 70,
-        tooltips: {
-          callbacks: {
-            label: (tooltipItem, chart) => {
-              const categoryName = chart.labels[tooltipItem.index];
-              const count = chart.datasets[tooltipItem.datasetIndex].data[
-                tooltipItem.index
-              ] as number;
-              return `${categoryName}: ${count}`;
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label(tooltipItem: TooltipItem) {
+                const categoryName = tooltipItem.label;
+                const count = tooltipItem.dataset.data[tooltipItem.dataIndex] as number;
+                return `${categoryName}: ${count}`;
+              }
             }
           }
         },
