@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.4.1"
+    id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("org.flywaydb.flyway") version "7.1.1"
     id("com.gorylenko.gradle-git-properties") version "2.2.2"
