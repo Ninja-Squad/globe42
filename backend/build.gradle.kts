@@ -23,9 +23,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
     id("org.springframework.boot") version "2.4.2"
-    id("io.spring.dependency-management") version "1.0.10.RELEASE"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.flywaydb.flyway") version "7.1.1"
-    id("com.gorylenko.gradle-git-properties") version "2.2.2"
+    id("com.gorylenko.gradle-git-properties") version "2.2.4"
     id("org.jetbrains.dokka") version "0.10.1"
 }
 
@@ -118,7 +118,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
-    implementation("com.google.cloud:google-cloud-storage:1.113.5")
+    implementation("com.google.cloud:google-cloud-storage:1.113.9")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.poi:poi:4.1.2")
