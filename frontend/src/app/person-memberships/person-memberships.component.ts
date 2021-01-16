@@ -8,7 +8,7 @@ import { min, pastDate } from '../globe-validators';
 import { MembershipService } from '../membership.service';
 import { MembershipCommand } from '../models/membership.command';
 import { ConfirmService } from '../confirm.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
 import { CurrentPersonService } from '../current-person.service';
 
@@ -27,6 +27,10 @@ export class PersonMembershipsComponent implements OnInit {
 
   paymentModes = PAYMENT_MODE_TRANSLATIONS.map(t => t.key).filter(key => key !== 'UNKNOWN');
 
+  choosableOldMembershipYears: Array<number> = [];
+  oldMembershipFormVisible = false;
+  oldMembershipForm: FormGroup;
+
   constructor(
     private currentPersonService: CurrentPersonService,
     private route: ActivatedRoute,
@@ -36,34 +40,22 @@ export class PersonMembershipsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const memberships = this.route.snapshot.data.memberships;
-    this.currentYear = DateTime.local().year;
-    // memberships are sorted from latest to oldest, so the current one can only be the first one
-    if (memberships.length > 0 && memberships[0].year === this.currentYear) {
-      this.currentMembership = memberships[0];
-      this.oldMemberships = memberships.slice(1);
-    } else {
-      this.oldMemberships = memberships;
-    }
     this.person = this.currentPersonService.snapshot;
-
-    this.membershipForm = this.fb.group({
-      paymentMode: [null, Validators.required],
-      paymentDate: [
-        DateTime.local().toISODate(),
-        [Validators.required, min(DateTime.local(this.currentYear, 1, 1).toISODate()), pastDate]
-      ],
-      cardNumber: [null, Validators.required]
-    });
+    const memberships = this.route.snapshot.data.memberships;
+    this.initialize(memberships);
   }
 
   createCurrentMembership() {
+    if (this.membershipForm.invalid) {
+      return;
+    }
     const command = this.membershipForm.value as MembershipCommand;
     command.year = this.currentYear;
 
     this.membershipService
       .createCurrent(this.person.id, command)
-      .subscribe(membership => (this.currentMembership = membership));
+      .pipe(switchMap(() => this.membershipService.list(this.person.id)))
+      .subscribe(memberships => this.initialize(memberships));
   }
 
   deleteCurrentMembership() {
@@ -74,8 +66,74 @@ export class PersonMembershipsComponent implements OnInit {
       .pipe(
         switchMap(() =>
           this.membershipService.deleteCurrent(this.person.id, this.currentMembership.id)
-        )
+        ),
+        switchMap(() => this.membershipService.list(this.person.id))
       )
-      .subscribe(() => (this.currentMembership = null));
+      .subscribe(memberships => this.initialize(memberships));
+  }
+
+  displayOldMembershipForm() {
+    this.oldMembershipForm = this.fb.group({
+      year: [null, Validators.required],
+      paymentMode: [null, Validators.required],
+      paymentDate: [DateTime.local().toISODate(), [Validators.required, pastDate]],
+      cardNumber: [null, Validators.required]
+    });
+    this.oldMembershipFormVisible = true;
+  }
+
+  createOldMembership() {
+    if (this.oldMembershipForm.invalid) {
+      return;
+    }
+    const command = this.oldMembershipForm.value as MembershipCommand;
+
+    this.membershipService
+      .createOld(this.person.id, command)
+      .pipe(
+        tap(() => (this.oldMembershipFormVisible = false)),
+        switchMap(() => this.membershipService.list(this.person.id))
+      )
+      .subscribe(memberships => this.initialize(memberships));
+  }
+
+  deleteOldMembership(membership: MembershipModel) {
+    this.confirmService
+      .confirm({
+        message: `Voulez-vous vraiment supprimer l'adhésion de l'année ${membership.year}\u00a0?`
+      })
+      .pipe(
+        switchMap(() => this.membershipService.deleteOld(this.person.id, membership.id)),
+        switchMap(() => this.membershipService.list(this.person.id))
+      )
+      .subscribe(memberships => this.initialize(memberships));
+  }
+
+  private initialize(memberships: Array<MembershipModel>) {
+    this.currentYear = DateTime.local().year;
+    // memberships are sorted from latest to oldest, so the current one can only be the first one
+    if (memberships.length > 0 && memberships[0].year === this.currentYear) {
+      this.currentMembership = memberships[0];
+      this.oldMemberships = memberships.slice(1);
+    } else {
+      this.currentMembership = null;
+      this.oldMemberships = memberships;
+    }
+
+    this.membershipForm = this.fb.group({
+      paymentMode: [null, Validators.required],
+      paymentDate: [
+        DateTime.local().toISODate(),
+        [Validators.required, min(DateTime.local(this.currentYear, 1, 1).toISODate()), pastDate]
+      ],
+      cardNumber: [null, Validators.required]
+    });
+
+    this.choosableOldMembershipYears = [];
+    for (let year = 2018; year < this.currentYear; year++) {
+      if (!memberships.some(m => m.year === year)) {
+        this.choosableOldMembershipYears.push(year);
+      }
+    }
   }
 }
