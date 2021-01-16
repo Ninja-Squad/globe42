@@ -25,9 +25,7 @@ class TestComponent {
       labels: ['a', 'b', 'c']
     },
     options: {
-      animation: {
-        duration: 0
-      }
+      animation: false
     }
   };
 }
@@ -77,9 +75,7 @@ describe('ChartComponent', () => {
         labels: ['a', 'b', 'c']
       },
       options: {
-        animation: {
-          duration: 0
-        }
+        animation: false
       }
     };
     tester.componentInstance.configuration = newConfiguration;
