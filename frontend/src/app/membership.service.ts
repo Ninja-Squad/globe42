@@ -23,6 +23,14 @@ export class MembershipService {
     return this.http.get<MembershipModel>(url(personId) + '/current');
   }
 
+  createOld(personId: number, command: MembershipCommand): Observable<MembershipModel> {
+    return this.http.post<MembershipModel>(url(personId), command);
+  }
+
+  deleteOld(personId: number, membershipId: number): Observable<void> {
+    return this.http.delete<void>(url(personId) + '/' + membershipId);
+  }
+
   createCurrent(personId: number, command: MembershipCommand): Observable<MembershipModel> {
     return this.http
       .post<MembershipModel>(url(personId), command)

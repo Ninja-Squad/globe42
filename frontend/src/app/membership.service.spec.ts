@@ -32,21 +32,58 @@ describe('MembershipService', () => {
   });
 
   it('should create current membership', () => {
+    let current: MembershipModel = null;
+    service.currentMembership$.subscribe(m => (current = m));
+
     const command: MembershipCommand = {
       year: 2018,
       paymentMode: 'CASH',
       paymentDate: '2018-01-31',
       cardNumber: '002'
     };
+    const createdMembership = {} as MembershipModel;
     httpTester.testPost(
       '/api/persons/42/memberships',
       command,
-      {} as MembershipModel,
+      createdMembership,
       service.createCurrent(42, command)
     );
+    expect(current).toBe(createdMembership);
   });
 
   it('should delete current membership', () => {
+    let current: MembershipModel = {} as MembershipModel;
+    service.currentMembership$.subscribe(m => (current = m));
+
     httpTester.testDelete('/api/persons/42/memberships/54', service.deleteCurrent(42, 54));
+    expect(current).toBeNull();
+  });
+
+  it('should create old membership', () => {
+    let current: MembershipModel = null;
+    service.currentMembership$.subscribe(m => (current = m));
+
+    const command: MembershipCommand = {
+      year: 2018,
+      paymentMode: 'CASH',
+      paymentDate: '2018-01-31',
+      cardNumber: '002'
+    };
+    const createdMembership = {} as MembershipModel;
+    httpTester.testPost(
+      '/api/persons/42/memberships',
+      command,
+      createdMembership,
+      service.createOld(42, command)
+    );
+    expect(current).toBeNull();
+  });
+
+  it('should delete old membership', () => {
+    let current: MembershipModel = {} as MembershipModel;
+    service.currentMembership$.subscribe(m => (current = m));
+
+    httpTester.testDelete('/api/persons/42/memberships/54', service.deleteOld(42, 54));
+    expect(current).not.toBeNull();
   });
 });
