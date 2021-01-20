@@ -38,7 +38,7 @@
     "@angular/cli": "11.0.7",
     "@angular/compiler-cli": "11.0.9",
     "@angular/localize": "11.0.9",
-    "@types/jasmine": "3.6.2",
+    "@types/jasmine": "3.6.3",
     "@types/luxon": "1.25.1",
     "@types/node": "12.19.14",
     "bundlesize": "0.18.1",
