@@ -90,6 +90,7 @@ import { DisplayPassportStatusPipe } from './display-passport-status.pipe';
 import { HealthCareCoverageComponent } from './health-care-coverage/health-care-coverage.component';
 import { PersonsReportsComponent } from './persons-reports/persons-reports.component';
 import { DisplaySchoolLevelPipe } from './display-school-level.pipe';
+import { DisplayNoteCategoryPipe } from './display-note-category.pipe';
 
 @NgModule({
   declarations: [
@@ -171,7 +172,8 @@ import { DisplaySchoolLevelPipe } from './display-school-level.pipe';
     DisplayPassportStatusPipe,
     HealthCareCoverageComponent,
     PersonsReportsComponent,
-    DisplaySchoolLevelPipe
+    DisplaySchoolLevelPipe,
+    DisplayNoteCategoryPipe
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

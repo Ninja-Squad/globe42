@@ -1,5 +1,8 @@
 <div class="small text-muted">
   {{ note.creator.login }} &mdash; {{ note.creationInstant | date }}
+  <ng-container *ngIf="!edited">
+    &mdash; <span class="badge badge-secondary">{{ note.category | displayNoteCategory }}</span>
+  </ng-container>
 </div>
 <div class="bubble text-muted">
   <ng-container *ngIf="!edited">
@@ -32,6 +35,17 @@
         style="width: 100%"
         [rows]="rowCount"
       ></textarea>
+      <div
+        class="mt-2 btn-group btn-group-toggle btn-group-sm"
+        ngbRadioGroup
+        name="category"
+        formControlName="category"
+      >
+        <label ngbButtonLabel class="btn-outline-secondary" *ngFor="let category of noteCategories">
+          <input ngbButton type="radio" [value]="category" [id]="'category-' + category" />
+          {{ category | displayNoteCategory }}
+        </label>
+      </div>
       <div class="text-right mt-2">
         <button
           type="submit"

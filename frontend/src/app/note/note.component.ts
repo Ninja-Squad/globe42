@@ -8,14 +8,15 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { NoteModel } from '../models/note.model';
+import { NoteCommand, NoteModel } from '../models/note.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { concat, of } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { NOTE_CATEGORY_TRANSLATIONS } from '../display-note-category.pipe';
 
 export interface NoteEditionEvent {
   id: number;
-  text: string;
+  command: NoteCommand;
 }
 
 @Component({
@@ -24,6 +25,8 @@ export interface NoteEditionEvent {
   styleUrls: ['./note.component.scss']
 })
 export class NoteComponent implements AfterViewInit {
+  noteCategories = NOTE_CATEGORY_TRANSLATIONS.map(t => t.key);
+
   @Input()
   note: NoteModel;
 
@@ -59,7 +62,10 @@ export class NoteComponent implements AfterViewInit {
   @Input()
   set edited(value) {
     if (value) {
-      this.noteForm = this.fb.group({ text: [this.note.text, Validators.required] });
+      this.noteForm = this.fb.group({
+        text: [this.note.text, Validators.required],
+        category: [this.note.category]
+      });
       this.rowCount = this.note.text.split('\n').length;
       if (this.rowCount < 2) {
         this.rowCount = 2;
@@ -79,11 +85,11 @@ export class NoteComponent implements AfterViewInit {
   }
 
   cancel() {
-    this.editionCancelled.emit({ id: this.note.id, text: this.noteForm.value.text });
+    this.editionCancelled.emit({ id: this.note.id, command: this.noteForm.value });
   }
 
   save() {
-    this.editionDone.emit({ id: this.note.id, text: this.noteForm.value.text });
+    this.editionDone.emit({ id: this.note.id, command: this.noteForm.value });
   }
 
   ngAfterViewInit() {

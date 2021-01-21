@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull
 private const val NOTE_GENERATOR = "NoteGenerator"
 
 /**
- * A note, allowing to add free information on a person (or other future entities)
+ * A note, allowing to add free information on a person
  * @author JB Nizet
  */
 @Entity
@@ -31,6 +31,10 @@ class Note {
 
     @NotNull
     var creationInstant = Instant.now()
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    var category: NoteCategory = NoteCategory.APPOINTMENT
 
     constructor()
 

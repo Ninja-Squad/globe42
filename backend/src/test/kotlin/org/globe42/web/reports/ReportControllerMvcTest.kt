@@ -32,6 +32,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
     fun `should create appointments report`() {
         val malika = User().apply { login = "malika" }
         val alix = User().apply { login = "alix" }
+        val admin = User().apply { login = "admin" }
 
         every { personDao.findNotDeletedWithMediation() } returns listOf(
             Person().apply {
@@ -46,6 +47,10 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                 addNote(Note().apply {
                     creator = malika
                 })
+                addNote(Note().apply {
+                    creator = admin
+                    category = NoteCategory.OTHER
+                })
             },
             Person().apply {
                 firstName = "JB"
@@ -59,6 +64,14 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                 })
                 addNote(Note().apply {
                     creator = alix
+                })
+                addNote(Note().apply {
+                    creator = alix
+                    category = NoteCategory.OTHER
+                })
+                addNote(Note().apply {
+                    creator = malika
+                    category = NoteCategory.OTHER
                 })
             }
         )

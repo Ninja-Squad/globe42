@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { NoteModel } from './models/note.model';
+import { NoteCommand, NoteModel } from './models/note.model';
 
 @Injectable({ providedIn: 'root' })
 export class PersonNoteService {
@@ -11,13 +11,11 @@ export class PersonNoteService {
     return this.http.get<Array<NoteModel>>(`/api/persons/${personId}/notes`);
   }
 
-  create(personId: number, text: string): Observable<NoteModel> {
-    const command = { text };
+  create(personId: number, command: NoteCommand): Observable<NoteModel> {
     return this.http.post<NoteModel>(`/api/persons/${personId}/notes`, command);
   }
 
-  update(personId: number, noteId: number, text: string): Observable<void> {
-    const command = { text };
+  update(personId: number, noteId: number, command: NoteCommand): Observable<void> {
     return this.http.put<void>(`/api/persons/${personId}/notes/${noteId}`, command);
   }
 

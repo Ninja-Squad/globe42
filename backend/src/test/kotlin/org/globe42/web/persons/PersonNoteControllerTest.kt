@@ -8,6 +8,7 @@ import org.globe42.dao.PersonDao
 import org.globe42.dao.UserDao
 import org.globe42.domain.Gender
 import org.globe42.domain.Note
+import org.globe42.domain.NoteCategory
 import org.globe42.domain.Person
 import org.globe42.domain.User
 import org.globe42.web.exception.NotFoundException
@@ -51,6 +52,7 @@ class PersonNoteControllerTest {
         note2.text = "test2"
         note2.creator = creator
         note2.creationInstant = Instant.now().minus(1, ChronoUnit.DAYS)
+        note2.category = NoteCategory.OTHER
         person.addNote(note2)
 
         every { mockCurrentUser.userId } returns creator.id
@@ -64,11 +66,12 @@ class PersonNoteControllerTest {
         val result = controller.list(person.id!!)
 
         assertThat(result).hasSize(2)
-        val (id, text, creator, creationInstant) = result[1]
+        val (id, text, creator, creationInstant, category) = result[1]
         assertThat(id).isEqualTo(note2.id) // sorted anti-chronologically
         assertThat(creationInstant).isEqualTo(note2.creationInstant)
-        assertThat(text).isEqualTo(note2.text) // sorted chronologically
-        assertThat(creator.id).isEqualTo(note2.creator.id) // sorted chronologically
+        assertThat(text).isEqualTo(note2.text)
+        assertThat(creator.id).isEqualTo(note2.creator.id)
+        assertThat(category).isEqualTo(note2.category)
 
         assertThat(result[0].creator.id).isEqualTo(creator.id)
     }
@@ -89,11 +92,13 @@ class PersonNoteControllerTest {
             Unit
         }
 
-        val command = NoteCommandDTO("test3")
+        val command = NoteCommandDTO("test3", NoteCategory.OTHER)
         val result = controller.create(person.id!!, command)
 
         assertThat(person.getNotes()).hasSize(3)
-        assertThat(person.getNotes().filter { note -> note.text == command.text }).isNotEmpty
+        val createdNote = person.getNotes().find { note -> note.text == command.text }
+        assertThat(createdNote).isNotNull()
+        assertThat(createdNote?.category).isEqualTo(NoteCategory.OTHER)
         assertThat(result.creationInstant).isNotNull()
         assertThat(result.creator.id).isEqualTo(mockCurrentUser.userId)
     }
@@ -101,7 +106,7 @@ class PersonNoteControllerTest {
     @Test
     fun `should throw when creating for unknown person`() {
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
-        val command = NoteCommandDTO("test3")
+        val command = NoteCommandDTO("test3", NoteCategory.OTHER)
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.create(person.id!!, command)
@@ -112,16 +117,17 @@ class PersonNoteControllerTest {
     fun `should update`() {
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
 
-        val command = NoteCommandDTO("test3")
+        val command = NoteCommandDTO("test3", NoteCategory.OTHER)
         controller.update(person.id!!, note1.id!!, command)
 
         assertThat(note1.text).isEqualTo(command.text)
+        assertThat(note1.category).isEqualTo(command.category)
     }
 
     @Test
     fun `should throw when updating for unknown person`() {
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
-        val command = NoteCommandDTO("test3")
+        val command = NoteCommandDTO("test3", NoteCategory.OTHER)
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.update(person.id!!, note1.id!!, command)
@@ -131,7 +137,7 @@ class PersonNoteControllerTest {
     @Test
     fun `should throw when updating unknown note`() {
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
-        val command = NoteCommandDTO("test3")
+        val command = NoteCommandDTO("test3", NoteCategory.OTHER)
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
             controller.update(person.id!!, 87654L, command)

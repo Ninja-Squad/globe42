@@ -58,7 +58,8 @@ export class PersonNotesComponent implements OnChanges {
       id: null,
       text: '',
       creationInstant: DateTime.utc().toISO(),
-      creator: this.currentUserService.userEvents.getValue()
+      creator: this.currentUserService.userEvents.getValue(),
+      category: 'APPOINTMENT'
     };
     this.notes.unshift(this.editedNote);
   }
@@ -72,8 +73,8 @@ export class PersonNotesComponent implements OnChanges {
 
   saveNote(event: NoteEditionEvent) {
     const action = event.id
-      ? this.personNoteService.update(this.person.id, event.id, event.text)
-      : this.personNoteService.create(this.person.id, event.text);
+      ? this.personNoteService.update(this.person.id, event.id, event.command)
+      : this.personNoteService.create(this.person.id, event.command);
     this.reloadAfterAction(action);
   }
 

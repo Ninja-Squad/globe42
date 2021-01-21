@@ -16,6 +16,7 @@ import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { ComponentTester } from 'ngx-speculoos';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { DisplayNoteCategoryPipe } from '../display-note-category.pipe';
 
 @Component({
   template: '<gl-person-notes [person]="person"></gl-person-notes>'
@@ -80,7 +81,7 @@ describe('PersonNotesComponent', () => {
         HttpClientModule,
         GlobeNgbTestingModule
       ],
-      declarations: [PersonNotesComponent, NoteComponent, TestComponent]
+      declarations: [PersonNotesComponent, NoteComponent, TestComponent, DisplayNoteCategoryPipe]
     });
 
     notes = [
@@ -91,7 +92,8 @@ describe('PersonNotesComponent', () => {
           id: 1,
           login: 'admin'
         } as UserModel,
-        creationInstant: '2017-08-09T12:00:00.000Z'
+        creationInstant: '2017-08-09T12:00:00.000Z',
+        category: 'APPOINTMENT'
       },
       {
         id: 2,
@@ -100,7 +102,8 @@ describe('PersonNotesComponent', () => {
           id: 1,
           login: 'admin'
         } as UserModel,
-        creationInstant: '2017-08-10T12:00:00.000Z'
+        creationInstant: '2017-08-10T12:00:00.000Z',
+        category: 'OTHER'
       }
     ];
 
@@ -250,7 +253,10 @@ describe('PersonNotesComponent', () => {
     // save the change
     tester.saveNote(0).click();
 
-    expect(personNoteService.update).toHaveBeenCalledWith(person.id, notes[0].id, 'new text');
+    expect(personNoteService.update).toHaveBeenCalledWith(person.id, notes[0].id, {
+      text: 'new text',
+      category: 'APPOINTMENT'
+    });
     expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
     expect(tester.notes.length).toBe(2);
@@ -272,6 +278,8 @@ describe('PersonNotesComponent', () => {
     expect(tester.notes.length).toBe(3);
 
     expect(tester.notesComponentInstance.editedNote).toBe(notes[0]);
+    expect(notes[0].text).toBe('');
+    expect(notes[0].category).toBe('APPOINTMENT');
     expect(tester.noteComponents[1].disabled).toBe(true);
     expect(tester.noteComponents[2].disabled).toBe(true);
     expect(tester.noteComponents[0].edited).toBe(true);
@@ -290,14 +298,15 @@ describe('PersonNotesComponent', () => {
 
   it('should create a note', () => {
     // create component with 2 notes
-    const newNote = {
+    const newNote: NoteModel = {
       id: 3,
       text: 'new text',
       creator: {
         id: 1,
         login: 'admin'
       } as UserModel,
-      creationInstant: '2017-08-11T12:00:00.000Z'
+      creationInstant: '2017-08-11T12:00:00.000Z',
+      category: 'APPOINTMENT'
     };
 
     const personNoteService = TestBed.inject(PersonNoteService);
@@ -320,7 +329,10 @@ describe('PersonNotesComponent', () => {
     // save new note
     tester.saveNote(0).click();
 
-    expect(personNoteService.create).toHaveBeenCalledWith(person.id, 'new text');
+    expect(personNoteService.create).toHaveBeenCalledWith(person.id, {
+      text: 'new text',
+      category: 'APPOINTMENT'
+    });
     expect(personNoteService.list).toHaveBeenCalledWith(person.id);
 
     tester.detectChanges();

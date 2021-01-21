@@ -32,9 +32,10 @@ class ReportController(private val personDao: PersonDao, private val membershipD
     fun appointmentReport(): ResponseEntity<ByteArray> {
         val persons = personDao.findNotDeletedWithMediation()
 
-        val noteCreators =
+        val appointmentCreators =
             persons.asSequence()
                 .flatMap { it.getNotes().asSequence() }
+                .filter { note -> note.category == NoteCategory.APPOINTMENT }
                 .map(Note::creator)
                 .distinct()
                 .sortedBy(User::login)
@@ -49,7 +50,7 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             "Accompagné",
             "Inscrit aux repas",
             "Inscrit aux cours de français"
-        ) + noteCreators.map { "Nb. de RDV par ${it.login}" }
+        ) + appointmentCreators.map { "Nb. de RDV par ${it.login}" }
 
         return createReport(
             fileNameWithoutExtension = "rendez-vous",
@@ -69,9 +70,11 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             row.createCell(col++, CellType.BOOLEAN).setCellValue(
                 person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON })
 
-            noteCreators.forEach { noteCreator ->
+            appointmentCreators.forEach { noteCreator ->
                 row.createCell(col++, CellType.NUMERIC)
-                    .setCellValue(person.getNotes().count { it.creator == noteCreator }.toDouble())
+                    .setCellValue(person.getNotes().count {
+                            note -> note.category == NoteCategory.APPOINTMENT && note.creator == noteCreator
+                    }.toDouble())
             }
         }
     }

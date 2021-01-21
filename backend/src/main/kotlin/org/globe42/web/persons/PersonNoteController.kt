@@ -43,6 +43,7 @@ class PersonNoteController(
         val note = Note()
         note.creator = userDao.getOne(currentUser.userId!!)
         note.text = command.text
+        note.category = command.category
         person.addNote(note)
 
         personDao.flush()
@@ -64,6 +65,7 @@ class PersonNoteController(
             .findAny()
             .orElseThrow(::NotFoundException)
         note.text = command.text
+        note.category = command.category
     }
 
     @DeleteMapping("/{noteId}")
