@@ -305,6 +305,13 @@ class Person {
     var residencePermitValidityEndDate: LocalDate? = null
 
     /**
+     * The scool level, only requested to mediation-enabled persons, and unknown by default (so, technically
+     * mandatory, but can be left as unknown)
+     */
+    @Enumerated(EnumType.STRING)
+    var schoolLevel: SchoolLevel = SchoolLevel.UNKNOWN
+
+    /**
      * The notes added on the person
      */
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)

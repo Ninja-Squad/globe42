@@ -8,7 +8,8 @@ import {
   Visa,
   ResidencePermit,
   EntryType,
-  PassportStatus
+  PassportStatus,
+  SchoolLevel
 } from './person.model';
 
 export interface PersonCommand {
@@ -55,6 +56,7 @@ export interface PersonCommand {
   residencePermitRenewalDate: string;
   residencePermitValidityStartDate: string;
   residencePermitValidityEndDate: string;
+  schoolLevel: SchoolLevel;
 }
 
 export interface PersonDeathCommand {

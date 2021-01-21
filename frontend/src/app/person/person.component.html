@@ -283,6 +283,16 @@
           </div>
         </div>
       </ng-container>
+
+      <h2 class="mt-3">Scolarité</h2>
+      <div class="form-group row">
+        <label class="col-sm-6 col-form-label">Niveau de scolarité</label>
+        <div class="col-sm-6">
+          <p id="schoolLevel" class="form-control-plaintext">
+            {{ person.schoolLevel | displaySchoolLevel }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

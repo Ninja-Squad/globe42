@@ -705,6 +705,18 @@
         </div>
       </div>
     </div>
+
+    <h3>Scolarité</h3>
+    <div class="form-group row">
+      <label for="schoolLevel" class="col-sm-3 col-form-label">Niveau de scolarité</label>
+      <div class="col-sm-9">
+        <select id="schoolLevel" class="form-control" formControlName="schoolLevel">
+          <option *ngFor="let schoolLevel of schoolLevels" [value]="schoolLevel">
+            {{ schoolLevel | displaySchoolLevel }}
+          </option>
+        </select>
+      </div>
+    </div>
   </div>
 
   <div class="row mt-5">

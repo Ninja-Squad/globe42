@@ -155,6 +155,7 @@ class PersonController(
                 residencePermitValidityEndDate = command.residencePermitValidityEndDate
                 handleCouple(this, command.spouseId)
                 person.partner = if (command.spouseId == null) command.partner?.takeIf { it.isNotBlank() } else null
+                person.schoolLevel = command.schoolLevel
             }
         }
     }
