@@ -4,9 +4,9 @@
   <div class="col-xs-12 col-md-4 col-lg-3">
     <ul class="nav nav-pills flex-column">
       <li class="nav-item" *ngFor="let activityType of activityTypes">
-        <a class="nav-link" [routerLink]="activityType" routerLinkActive="active">{{
-          activityType | displayActivityType
-        }}</a>
+        <a class="nav-link" [routerLink]="activityType.key" routerLinkActive="active">
+          {{ activityType.name }}
+        </a>
       </li>
     </ul>
   </div>

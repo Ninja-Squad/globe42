@@ -28,6 +28,13 @@ private val DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 @Transactional
 class ReportController(private val personDao: PersonDao, private val membershipDao: MembershipDao) {
 
+    private val frenchLessons = setOf(
+        ActivityType.FRENCH_AND_COMPUTER_LESSON_1,
+        ActivityType.FRENCH_AND_COMPUTER_LESSON_2,
+        ActivityType.FRENCH_AND_COMPUTER_LESSON_3,
+        ActivityType.FRENCH_AND_COMPUTER_LESSON_4
+    )
+
     @GetMapping("/appointments")
     fun appointmentReport(): ResponseEntity<ByteArray> {
         val persons = personDao.findNotDeletedWithMediation()
@@ -68,7 +75,7 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             row.createCell(col++, CellType.BOOLEAN)
                 .setCellValue(person.getParticipations().any { it.activityType == ActivityType.MEAL })
             row.createCell(col++, CellType.BOOLEAN).setCellValue(
-                person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON })
+                person.getParticipations().any { it.activityType in frenchLessons })
 
             appointmentCreators.forEach { noteCreator ->
                 row.createCell(col++, CellType.NUMERIC)

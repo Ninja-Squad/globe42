@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { ActivityType, ParticipationModel } from '../models/participation.model';
-import { ACTIVITY_TYPE_TRANSLATIONS } from '../display-activity-type.pipe';
+import { ParticipationModel } from '../models/participation.model';
 import { ParticipationService } from '../participation.service';
 import { PersonModel } from '../models/person.model';
 import { CurrentPersonService } from '../current-person.service';
 import { ActivatedRoute } from '@angular/router';
+import { ACTIVITY_TYPES, ActivityTypeModel } from '../models/activity-type.model';
 
 export interface ParticipationItem {
   id: number;
-  activityType: ActivityType;
+  activityType: ActivityTypeModel;
   selected: boolean;
 }
 
@@ -29,11 +29,11 @@ export class PersonParticipationsComponent {
     this.person = currentPersonService.snapshot;
 
     const participations: Array<ParticipationModel> = route.snapshot.data.participations;
-    this.items = ACTIVITY_TYPE_TRANSLATIONS.map(t => {
-      const participation = participations.filter(p => p.activityType === t.key)[0];
+    this.items = ACTIVITY_TYPES.map(activityType => {
+      const participation = participations.find(p => p.activityType === activityType.key);
       return {
         id: participation?.id,
-        activityType: t.key,
+        activityType,
         selected: !!participation
       };
     });
@@ -42,7 +42,7 @@ export class PersonParticipationsComponent {
   selectItem(item: ParticipationItem) {
     item.selected = !item.selected;
     if (item.selected) {
-      this.participationService.create(this.person.id, item.activityType).subscribe({
+      this.participationService.create(this.person.id, item.activityType.key).subscribe({
         next: participation => (item.id = participation.id),
         error: () => (item.selected = false)
       });

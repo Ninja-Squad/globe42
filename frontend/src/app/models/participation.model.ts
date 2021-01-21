@@ -1,12 +1,4 @@
-export type ActivityType =
-  | 'FRENCH_AND_COMPUTER_LESSON'
-  | 'SOCIAL_MEDIATION'
-  | 'HEALTH_MEDIATION'
-  | 'MEAL'
-  | 'SOCIAL_RIGHTS_WORKSHOP'
-  | 'HEALTH_WORKSHOP'
-  | 'EPHEMERAL_WORKSHOP'
-  | 'VARIOUS_WORKSHOP';
+import { ActivityType } from './activity-type.model';
 
 export interface ParticipationModel {
   id: number;

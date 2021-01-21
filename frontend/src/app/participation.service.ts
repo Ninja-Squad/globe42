@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ActivityType, ParticipationModel } from './models/participation.model';
+import { ParticipationModel } from './models/participation.model';
 import { PersonIdentityModel } from './models/person.model';
+import { ActivityType } from './models/activity-type.model';
 
 @Injectable({ providedIn: 'root' })
 export class ParticipationService {

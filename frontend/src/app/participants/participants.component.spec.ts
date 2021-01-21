@@ -2,10 +2,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { ParticipantsComponent } from './participants.component';
 import { FullnamePipe } from '../fullname.pipe';
-import { DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ParticipantModel } from '../models/participant.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { ComponentTester } from 'ngx-speculoos';
@@ -26,12 +25,12 @@ class ParticipantsComponentTester extends ComponentTester<ParticipantsComponent>
 
 describe('ParticipantsComponent', () => {
   let tester: ParticipantsComponentTester;
-  let dataSubject: Subject<any>;
-  let paramMapSubject: Subject<ParamMap>;
+  let dataSubject: BehaviorSubject<any>;
+  let paramMapSubject: BehaviorSubject<ParamMap>;
 
   beforeEach(() => {
-    dataSubject = new Subject<any>();
-    paramMapSubject = new Subject<ParamMap>();
+    dataSubject = new BehaviorSubject<any>(null);
+    paramMapSubject = new BehaviorSubject<ParamMap>(null);
 
     const route = {
       data: dataSubject,
@@ -39,18 +38,12 @@ describe('ParticipantsComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [
-        ParticipantsComponent,
-        FullnamePipe,
-        DisplayActivityTypePipe,
-        PageTitleDirective
-      ],
+      declarations: [ParticipantsComponent, FullnamePipe, PageTitleDirective],
       imports: [RouterTestingModule],
       providers: [{ provide: ActivatedRoute, useValue: route }]
     });
 
     tester = new ParticipantsComponentTester();
-    tester.detectChanges();
   });
 
   it('should expose activity type and sorted participants', () => {
@@ -62,8 +55,10 @@ describe('ParticipantsComponent', () => {
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
+    tester.detectChanges();
+
     expect(tester.componentInstance.participants.map(p => p.firstName)).toEqual(['Agnès', 'JB']);
-    expect(tester.componentInstance.activityType).toBe('MEAL');
+    expect(tester.componentInstance.activityType.key).toBe('MEAL');
   });
 
   it('should have a title', () => {

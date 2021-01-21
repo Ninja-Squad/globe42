@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ActivityTypesComponent } from './activity-types.component';
-import { ACTIVITY_TYPE_TRANSLATIONS, DisplayActivityTypePipe } from '../display-activity-type.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { ComponentTester } from 'ngx-speculoos';
+import { ACTIVITY_TYPES } from '../models/activity-type.model';
 
 class ActivityTypesComponentTester extends ComponentTester<ActivityTypesComponent> {
   constructor() {
@@ -22,7 +22,7 @@ describe('ActivityTypesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ActivityTypesComponent, DisplayActivityTypePipe],
+      declarations: [ActivityTypesComponent],
       imports: [RouterTestingModule]
     });
 
@@ -31,13 +31,12 @@ describe('ActivityTypesComponent', () => {
   });
 
   it('should expose all activity types', () => {
-    expect(tester.componentInstance.activityTypes.length).toBe(ACTIVITY_TYPE_TRANSLATIONS.length);
-    expect(tester.componentInstance.activityTypes[0]).toBe(ACTIVITY_TYPE_TRANSLATIONS[0].key);
+    expect(tester.componentInstance.activityTypes).toBe(ACTIVITY_TYPES);
   });
 
   it('should display links to activity type details', () => {
-    expect(tester.activityTypeLinks.length).toBe(ACTIVITY_TYPE_TRANSLATIONS.length);
-    expect(tester.activityTypeLinks[0]).toHaveText(ACTIVITY_TYPE_TRANSLATIONS[0].translation);
+    expect(tester.activityTypeLinks.length).toBe(ACTIVITY_TYPES.length);
+    expect(tester.activityTypeLinks[0]).toContainText(ACTIVITY_TYPES[0].name);
   });
 
   it('should have a router outlet', () => {

@@ -42,7 +42,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                 nationality = Country("FR", "France")
                 gender = Gender.FEMALE
                 accompanying = "someone"
-                addParticipation(Participation().apply { activityType = ActivityType.FRENCH_AND_COMPUTER_LESSON })
+                addParticipation(Participation().apply { activityType = ActivityType.FRENCH_AND_COMPUTER_LESSON_3 })
                 addParticipation(Participation().apply { activityType = ActivityType.MEAL })
                 addNote(Note().apply {
                     creator = malika
