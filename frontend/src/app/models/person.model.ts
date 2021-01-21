@@ -86,6 +86,7 @@ export interface PersonModel extends PersonIdentityModel {
   healthCareCoverageStartDate: string;
   healthInsurance: HealthInsurance;
   healthInsuranceStartDate: string;
+  lastHealthCheckDate: string;
   accompanying: string;
   socialSecurityNumber: string;
   cafNumber: string;

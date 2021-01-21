@@ -39,6 +39,7 @@ class PersonCommandDTO(
     val healthCareCoverageStartDate: LocalDate?,
     @field:NotNull val healthInsurance: HealthInsurance = HealthInsurance.UNKNOWN,
     val healthInsuranceStartDate: LocalDate?,
+    val lastHealthCheckDate: LocalDate?,
     val accompanying: String?,
     val socialSecurityNumber: String?,
     val cafNumber: String?,

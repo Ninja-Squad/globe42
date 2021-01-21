@@ -304,9 +304,9 @@
     <div class="row">
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="healthCareCoverage" class="col-sm-3 col-lg-6 col-form-label"
-            >Couverture médicale de base</label
-          >
+          <label for="healthCareCoverage" class="col-sm-3 col-lg-6 col-form-label">
+            Couverture médicale de base
+          </label>
           <div class="col-sm-9 col-lg-6">
             <select
               class="form-control"
@@ -326,9 +326,9 @@
         *ngIf="personForm.get('healthCareCoverage').value !== 'UNKNOWN'"
       >
         <div class="row">
-          <label for="healthCareCoverageStartDate" class="col-sm-3 col-lg-6 col-form-label"
-            >Depuis le</label
-          >
+          <label for="healthCareCoverageStartDate" class="col-sm-3 col-lg-6 col-form-label">
+            Depuis le
+          </label>
           <gl-datepicker-container class="col-sm-9 col-lg-6">
             <input
               class="form-control"
@@ -346,9 +346,9 @@
     <div class="row">
       <div class="form-group col-lg-6">
         <div class="row">
-          <label for="healthInsurance" class="col-sm-3 col-lg-6 col-form-label"
-            >Couverture médicale complémentaire</label
-          >
+          <label for="healthInsurance" class="col-sm-3 col-lg-6 col-form-label">
+            Couverture médicale complémentaire
+          </label>
 
           <div class="col-sm-9 col-lg-6">
             <select class="form-control" formControlName="healthInsurance" id="healthInsurance">
@@ -380,6 +380,21 @@
           </gl-datepicker-container>
         </div>
       </div>
+    </div>
+    <div class="form-group row">
+      <label for="lastHealthCheckDate" class="col-sm-3 col-form-label"
+        >Dernier bilan de santé</label
+      >
+      <gl-datepicker-container class="col-sm-9">
+        <input
+          class="form-control"
+          id="lastHealthCheckDate"
+          placeholder="15/11/20120"
+          formControlName="lastHealthCheckDate"
+          ngbDatepicker
+        />
+      </gl-datepicker-container>
+      <val-errors controlName="lastHealthCheckDate"></val-errors>
     </div>
 
     <h3>Logement</h3>

@@ -80,6 +80,9 @@ class PersonComponentTester extends ComponentTester<PersonComponent> {
   get healthInsurance() {
     return this.element('#healthInsurance');
   }
+  get lastHealthCheckDate() {
+    return this.element('#lastHealthCheckDate');
+  }
   get accompanying() {
     return this.element('#accompanying');
   }
@@ -180,6 +183,7 @@ describe('PersonComponent', () => {
       healthCareCoverageStartDate: '2017-01-01',
       healthInsurance: 'CMUC',
       healthInsuranceStartDate: '2017-02-02',
+      lastHealthCheckDate: '2019-12-05',
       accompanying: 'Paul',
       socialSecurityNumber: '277126912340454',
       cafNumber: '123765',
@@ -261,6 +265,7 @@ describe('PersonComponent', () => {
     expect(tester.healthCareCoverage).toContainText('depuis le 1 janv. 2017');
     expect(tester.healthInsurance).toContainText('CMU-C');
     expect(tester.healthInsurance).toContainText('depuis le 2 févr. 2017');
+    expect(tester.lastHealthCheckDate).toContainText('5 déc. 2019');
     expect(tester.accompanying).toContainText('Paul');
     expect(tester.socialSecurityNumber).toContainText('277126912340454');
     expect(tester.cafNumber).toContainText('123765');
@@ -301,6 +306,7 @@ describe('PersonComponent', () => {
       'spouse',
       'healthCareCoverage',
       'healthInsurance',
+      'lastHealthCheckDate',
       'accompanying',
       'socialSecurityNumber',
       'cafNumber',

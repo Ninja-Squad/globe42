@@ -224,6 +224,11 @@ class Person {
     var healthInsuranceStartDate: LocalDate? = null
 
     /**
+     * The date of the last health check. Only requested to mediation-enabled persons, and not required
+     */
+    var lastHealthCheckDate: LocalDate? = null
+
+    /**
      * The name of the accompanying. Only requested to mediation-enabled persons, and not mandatory
      */
     var accompanying: String? = null

@@ -134,6 +134,7 @@ class PersonController(
                 healthCareCoverageStartDate = command.healthCareCoverageStartDate
                 healthInsurance = command.healthInsurance
                 healthInsuranceStartDate = command.healthInsuranceStartDate
+                lastHealthCheckDate = command.lastHealthCheckDate
                 accompanying = command.accompanying
                 socialSecurityNumber = command.socialSecurityNumber
                 cafNumber = command.cafNumber
@@ -154,8 +155,8 @@ class PersonController(
                 residencePermitValidityStartDate = command.residencePermitValidityStartDate
                 residencePermitValidityEndDate = command.residencePermitValidityEndDate
                 handleCouple(this, command.spouseId)
-                person.partner = if (command.spouseId == null) command.partner?.takeIf { it.isNotBlank() } else null
-                person.schoolLevel = command.schoolLevel
+                partner = if (command.spouseId == null) command.partner?.takeIf { it.isNotBlank() } else null
+                schoolLevel = command.schoolLevel
             }
         }
     }
