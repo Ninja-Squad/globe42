@@ -2,8 +2,7 @@ import {
   ParticipationItem,
   PersonParticipationsComponent
 } from './person-participations.component';
-import { ActivityType, ParticipationModel } from '../models/participation.model';
-import { ACTIVITY_TYPE_TRANSLATIONS, DisplayActivityTypePipe } from '../display-activity-type.pipe';
+import { ParticipationModel } from '../models/participation.model';
 import { PersonModel } from '../models/person.model';
 import { ParticipationService } from '../participation.service';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +14,7 @@ import { of, throwError } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { CurrentPersonService } from '../current-person.service';
 import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ACTIVITY_TYPES, activityType, ActivityType } from '../models/activity-type.model';
 
 class PersonParticipationsComponentTester extends ComponentTester<PersonParticipationsComponent> {
   constructor() {
@@ -68,15 +68,17 @@ describe('PersonParticipationsComponent', () => {
     });
 
     it('should initialize person and items', () => {
-      expect(component.items.length).toBe(ACTIVITY_TYPE_TRANSLATIONS.length);
-      expect(component.items.filter(item => item.activityType === 'MEAL')[0]).toEqual({
+      expect(component.items.length).toBe(ACTIVITY_TYPES.length);
+      expect(component.items.find(item => item.activityType.key === 'MEAL')).toEqual({
         id: 42,
-        activityType: 'MEAL',
+        activityType: activityType('MEAL'),
         selected: true
       });
-      expect(component.items.filter(item => item.activityType === 'SOCIAL_MEDIATION')[0]).toEqual({
+      expect(
+        component.items.filter(item => item.activityType.key === 'SOCIAL_MEDIATION')[0]
+      ).toEqual({
         id: undefined,
-        activityType: 'SOCIAL_MEDIATION',
+        activityType: activityType('SOCIAL_MEDIATION'),
         selected: false
       });
 
@@ -85,7 +87,7 @@ describe('PersonParticipationsComponent', () => {
 
     it('should create a participation when item is selected', () => {
       const socialMediationItem: ParticipationItem = component.items.filter(
-        item => item.activityType === 'SOCIAL_MEDIATION'
+        item => item.activityType.key === 'SOCIAL_MEDIATION'
       )[0];
 
       const participation = { id: 22 } as ParticipationModel;
@@ -95,16 +97,13 @@ describe('PersonParticipationsComponent', () => {
 
       expect(socialMediationItem.id).toBe(participation.id);
       expect(socialMediationItem.selected).toBe(true);
-      expect(participationService.create).toHaveBeenCalledWith(
-        person.id,
-        socialMediationItem.activityType
-      );
+      expect(participationService.create).toHaveBeenCalledWith(person.id, 'SOCIAL_MEDIATION');
     });
 
     it('should switch back to unselected if creation fails', () => {
-      const socialMediationItem: ParticipationItem = component.items.filter(
-        item => item.activityType === 'SOCIAL_MEDIATION'
-      )[0];
+      const socialMediationItem: ParticipationItem = component.items.find(
+        item => item.activityType.key === 'SOCIAL_MEDIATION'
+      );
 
       spyOn(participationService, 'create').and.returnValue(throwError('error'));
 
@@ -112,16 +111,13 @@ describe('PersonParticipationsComponent', () => {
 
       expect(socialMediationItem.id).toBeFalsy();
       expect(socialMediationItem.selected).toBe(false);
-      expect(participationService.create).toHaveBeenCalledWith(
-        person.id,
-        socialMediationItem.activityType
-      );
+      expect(participationService.create).toHaveBeenCalledWith(person.id, 'SOCIAL_MEDIATION');
     });
 
     it('should delete a participation when item is unselected', () => {
-      const mealItem: ParticipationItem = component.items.filter(
-        item => item.activityType === 'MEAL'
-      )[0];
+      const mealItem: ParticipationItem = component.items.find(
+        item => item.activityType.key === 'MEAL'
+      );
       const participationId = mealItem.id;
       spyOn(participationService, 'delete').and.returnValue(of(null));
 
@@ -133,9 +129,9 @@ describe('PersonParticipationsComponent', () => {
     });
 
     it('should switch back to selected if deletion fails', () => {
-      const mealItem: ParticipationItem = component.items.filter(
-        item => item.activityType === 'MEAL'
-      )[0];
+      const mealItem: ParticipationItem = component.items.find(
+        item => item.activityType.key === 'MEAL'
+      );
       const participationId = mealItem.id;
       spyOn(participationService, 'delete').and.returnValue(throwError('error'));
 
@@ -151,12 +147,7 @@ describe('PersonParticipationsComponent', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          PersonParticipationsComponent,
-          FullnamePipe,
-          DisplayActivityTypePipe,
-          PageTitleDirective
-        ],
+        declarations: [PersonParticipationsComponent, FullnamePipe, PageTitleDirective],
         imports: [HttpClientModule, RouterTestingModule],
         providers: [{ provide: ActivatedRoute, useValue: route }]
       });
@@ -183,7 +174,9 @@ describe('PersonParticipationsComponent', () => {
 
       tester.checkboxForActivityType('MEAL').uncheck();
 
-      const mealItem = tester.componentInstance.items.find(item => item.activityType === 'MEAL');
+      const mealItem = tester.componentInstance.items.find(
+        item => item.activityType.key === 'MEAL'
+      );
       expect(tester.componentInstance.selectItem).toHaveBeenCalledWith(mealItem);
     });
   });

@@ -46,7 +46,6 @@ import { PersonChargeEditComponent } from './person-charge-edit/person-charge-ed
 import { ParticipationsResolverService } from './participations-resolver.service';
 import { PersonParticipationsComponent } from './person-participations/person-participations.component';
 import { ActivityTypesComponent } from './activity-types/activity-types.component';
-import { ACTIVITY_TYPE_TRANSLATIONS } from './display-activity-type.pipe';
 import { ParticipantsComponent } from './participants/participants.component';
 import { ParticipantsResolverService } from './participants-resolver.service';
 import { PersonsLayoutComponent } from './persons-layout/persons-layout.component';
@@ -74,6 +73,7 @@ import { ProfileResolverService } from './profile-resolver.service';
 import { HealthCareCoverageComponent } from './health-care-coverage/health-care-coverage.component';
 import { HealthCareCoverageResolverService } from './health-care-coverage-resolver.service';
 import { PersonsReportsComponent } from './persons-reports/persons-reports.component';
+import { ACTIVITY_TYPES } from './models/activity-type.model';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -425,7 +425,7 @@ export const routes: Routes = [
         path: 'activity-types',
         component: ActivityTypesComponent,
         children: [
-          { path: '', pathMatch: 'full', redirectTo: ACTIVITY_TYPE_TRANSLATIONS[0].key },
+          { path: '', pathMatch: 'full', redirectTo: ACTIVITY_TYPES[0].key },
           {
             path: ':activityType',
             component: ParticipantsComponent,

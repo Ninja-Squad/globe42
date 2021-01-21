@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivityType } from '../models/participation.model';
-import { ACTIVITY_TYPE_TRANSLATIONS } from '../display-activity-type.pipe';
+import { ACTIVITY_TYPES } from '../models/activity-type.model';
 
 @Component({
   selector: 'gl-activity-types',
@@ -8,5 +7,5 @@ import { ACTIVITY_TYPE_TRANSLATIONS } from '../display-activity-type.pipe';
   styleUrls: ['./activity-types.component.scss']
 })
 export class ActivityTypesComponent {
-  activityTypes: Array<ActivityType> = ACTIVITY_TYPE_TRANSLATIONS.map(t => t.key);
+  activityTypes = ACTIVITY_TYPES;
 }

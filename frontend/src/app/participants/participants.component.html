@@ -1,9 +1,11 @@
-<gl-page-title
-  [title]="'Participants aux activités de type ' + (activityType | displayActivityType)"
-></gl-page-title>
+<gl-page-title [title]="'Participants aux activités de type ' + activityType.name"></gl-page-title>
 
 <h2>
-  Participants aux activités de type <em>{{ activityType | displayActivityType }}</em>
+  Participants aux activités de type <em>{{ activityType.name }}</em>
+  <ng-container *ngIf="activityType.description">
+    <br />
+    <small class="text-muted">{{ activityType.description }}</small>
+  </ng-container>
 </h2>
 
 <div class="row mb-2 person-item" *ngFor="let person of participants">

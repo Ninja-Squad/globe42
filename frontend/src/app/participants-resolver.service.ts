@@ -3,7 +3,7 @@ import { PersonIdentityModel } from './models/person.model';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { ParticipationService } from './participation.service';
 import { Observable } from 'rxjs';
-import { ActivityType } from './models/participation.model';
+import { ActivityType } from './models/activity-type.model';
 
 @Injectable({ providedIn: 'root' })
 export class ParticipantsResolverService implements Resolve<Array<PersonIdentityModel>> {

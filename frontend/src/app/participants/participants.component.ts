@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { sortBy } from '../utils';
-import { ActivityType } from '../models/participation.model';
 import { ParticipantModel } from '../models/participant.model';
 import { displayFullname } from '../fullname.pipe';
+import { ActivityType, activityType, ActivityTypeModel } from '../models/activity-type.model';
 
 @Component({
   selector: 'gl-participants',
@@ -12,7 +12,9 @@ import { displayFullname } from '../fullname.pipe';
 })
 export class ParticipantsComponent implements OnInit {
   participants: Array<ParticipantModel>;
-  activityType: ActivityType;
+  activityType: ActivityTypeModel;
+
+  descriptionExists = false;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -21,7 +23,7 @@ export class ParticipantsComponent implements OnInit {
       this.participants = sortBy<ParticipantModel>(data.participants, displayFullname);
     });
     this.route.paramMap.subscribe(paramMap => {
-      this.activityType = paramMap.get('activityType') as ActivityType;
+      this.activityType = activityType(paramMap.get('activityType') as ActivityType);
     });
   }
 }

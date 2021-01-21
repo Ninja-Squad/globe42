@@ -50,7 +50,6 @@ import { ChargeTypesComponent } from './charge-types/charge-types.component';
 import { ChargeTypeEditComponent } from './charge-type-edit/charge-type-edit.component';
 import { PersonChargeEditComponent } from './person-charge-edit/person-charge-edit.component';
 import { PersonParticipationsComponent } from './person-participations/person-participations.component';
-import { DisplayActivityTypePipe } from './display-activity-type.pipe';
 import { ActivityTypesComponent } from './activity-types/activity-types.component';
 import { ParticipantsComponent } from './participants/participants.component';
 import '@angular/common/locales/global/fr';
@@ -139,7 +138,6 @@ import { DisplayNoteCategoryPipe } from './display-note-category.pipe';
     ChargeTypeEditComponent,
     PersonChargeEditComponent,
     PersonParticipationsComponent,
-    DisplayActivityTypePipe,
     ActivityTypesComponent,
     ParticipantsComponent,
     DurationPipe,
