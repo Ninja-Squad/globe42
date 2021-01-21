@@ -51,6 +51,7 @@ export type ResidencePermit =
   | 'OTHER';
 export type EntryType = 'UNKNOWN' | 'REGULAR' | 'IRREGULAR';
 export type PassportStatus = 'UNKNOWN' | 'PASSPORT' | 'NO_PASSPORT';
+export type SchoolLevel = 'UNKNOWN' | 'NONE' | 'PRIMARY' | 'MIDDLE' | 'HIGH' | 'HIGHER';
 
 export interface PersonIdentityModel {
   id: number;
@@ -99,6 +100,7 @@ export interface PersonModel extends PersonIdentityModel {
   residencePermitRenewalDate: string;
   residencePermitValidityStartDate: string;
   residencePermitValidityEndDate: string;
+  schoolLevel: SchoolLevel;
   deathDate: string;
   deleted: boolean;
 }

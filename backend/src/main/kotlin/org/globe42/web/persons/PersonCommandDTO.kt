@@ -52,5 +52,6 @@ class PersonCommandDTO(
     val residencePermitDepositDate: LocalDate?,
     val residencePermitRenewalDate: LocalDate?,
     val residencePermitValidityStartDate: LocalDate?,
-    val residencePermitValidityEndDate: LocalDate?
+    val residencePermitValidityEndDate: LocalDate?,
+    @field:NotNull val schoolLevel: SchoolLevel = SchoolLevel.UNKNOWN
 )

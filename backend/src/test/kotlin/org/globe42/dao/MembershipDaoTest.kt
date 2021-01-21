@@ -28,6 +28,7 @@ class MembershipDaoTest : BaseDaoTest() {
                 withDefaultValue("residence_permit", ResidencePermit.UNKNOWN)
                 withDefaultValue("entry_type", EntryType.UNKNOWN)
                 withDefaultValue("passport_status", PassportStatus.UNKNOWN)
+                withDefaultValue("school_level", SchoolLevel.UNKNOWN)
                 columns("id", "first_name", "last_name", "mediation_enabled", "gender", "deleted")
                 values(1L, "Cédric", "Exbrayat", false, Gender.MALE, false)
             }

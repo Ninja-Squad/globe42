@@ -89,6 +89,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { DisplayPassportStatusPipe } from './display-passport-status.pipe';
 import { HealthCareCoverageComponent } from './health-care-coverage/health-care-coverage.component';
 import { PersonsReportsComponent } from './persons-reports/persons-reports.component';
+import { DisplaySchoolLevelPipe } from './display-school-level.pipe';
 
 @NgModule({
   declarations: [
@@ -169,7 +170,8 @@ import { PersonsReportsComponent } from './persons-reports/persons-reports.compo
     ProfileComponent,
     DisplayPassportStatusPipe,
     HealthCareCoverageComponent,
-    PersonsReportsComponent
+    PersonsReportsComponent,
+    DisplaySchoolLevelPipe
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

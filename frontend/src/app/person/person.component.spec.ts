@@ -25,6 +25,7 @@ import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
 import { CurrentPersonService } from '../current-person.service';
 import { DisplayPassportStatusPipe } from '../display-passport-status.pipe';
 import { ComponentTester } from 'ngx-speculoos';
+import { DisplaySchoolLevelPipe } from '../display-school-level.pipe';
 
 class PersonComponentTester extends ComponentTester<PersonComponent> {
   constructor() {
@@ -121,6 +122,9 @@ class PersonComponentTester extends ComponentTester<PersonComponent> {
   get residencePermitValidityEndDate() {
     return this.element('#residencePermitValidityEndDate');
   }
+  get schoolLevel() {
+    return this.element('#schoolLevel');
+  }
 
   get resurrectButton() {
     return this.button('#resurrect-person-button');
@@ -193,6 +197,7 @@ describe('PersonComponent', () => {
       residencePermitRenewalDate: '2018-10-02',
       residencePermitValidityStartDate: '2019-03-02',
       residencePermitValidityEndDate: '2029-03-02',
+      schoolLevel: 'MIDDLE',
       deathDate: null,
       deleted: false
     };
@@ -212,6 +217,7 @@ describe('PersonComponent', () => {
         DisplayVisaPipe,
         DisplayEntryTypePipe,
         DisplayPassportStatusPipe,
+        DisplaySchoolLevelPipe,
         FullnamePipe,
         PageTitleDirective
       ],
@@ -269,6 +275,7 @@ describe('PersonComponent', () => {
     expect(tester.residencePermitRenewalDate).toContainText('2 oct. 2018');
     expect(tester.residencePermitValidityStartDate).toContainText('2 mars 2019');
     expect(tester.residencePermitValidityEndDate).toContainText('2 mars 2029');
+    expect(tester.schoolLevel).toContainText('Collège');
   });
 
   it('should display a person with no spouse but a partner', () => {
@@ -301,7 +308,8 @@ describe('PersonComponent', () => {
       'visa',
       'residencePermit',
       'residencePermitDepositDate',
-      'residencePermitRenewalDate'
+      'residencePermitRenewalDate',
+      'schoolLevel'
     ];
     mediationDependantElementIds.forEach(id =>
       expect(tester.element(`#${id}`)).toBeFalsy(`#${id} should be absent`)

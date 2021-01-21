@@ -39,6 +39,7 @@ import { DisplayVisaPipe } from '../display-visa.pipe';
 import { PageTitleDirective } from '../page-title.directive';
 import { DisplayEntryTypePipe } from '../display-entry-type.pipe';
 import { DisplayPassportStatusPipe } from '../display-passport-status.pipe';
+import { DisplaySchoolLevelPipe } from '../display-school-level.pipe';
 
 class PersonEditTester extends ComponentTester<PersonEditComponent> {
   constructor() {
@@ -237,6 +238,10 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.mediationSection.input('#residencePermitValidityEndDate');
   }
 
+  get schoolLevel() {
+    return this.select('#schoolLevel');
+  }
+
   get firstTypeaheadOption() {
     return this.button('ngb-typeahead-window button');
   }
@@ -319,6 +324,7 @@ describe('PersonEditComponent', () => {
       DisplayResidencePermitPipe,
       DisplayEntryTypePipe,
       DisplayPassportStatusPipe,
+      DisplaySchoolLevelPipe,
       FullnamePipe,
       ValidationDefaultsComponent,
       PageTitleDirective
@@ -380,6 +386,7 @@ describe('PersonEditComponent', () => {
       residencePermitRenewalDate: '2018-10-02',
       residencePermitValidityStartDate: '2019-03-02',
       residencePermitValidityEndDate: '2029-03-02',
+      schoolLevel: 'MIDDLE',
       deathDate: null,
       deleted: false
     };
@@ -459,6 +466,7 @@ describe('PersonEditComponent', () => {
       expect(tester.residencePermitRenewalDate).toHaveValue('02/10/2018');
       expect(tester.residencePermitValidityStartDate).toHaveValue('02/03/2019');
       expect(tester.residencePermitValidityEndDate).toHaveValue('02/03/2029');
+      expect(tester.schoolLevel).toHaveSelectedLabel('Collège');
 
       tester.lastName.fillWith('Do');
 
@@ -771,6 +779,7 @@ describe('PersonEditComponent', () => {
       expect(tester.residencePermitRenewalDate).toHaveValue('');
       expect(tester.residencePermitValidityStartDate).toHaveValue('');
       expect(tester.residencePermitValidityEndDate).toHaveValue('');
+      expect(tester.schoolLevel).toHaveSelectedLabel('Inconnue');
 
       tester.lastName.fillWith('Doe');
       tester.firstName.fillWith('Jane');
@@ -845,6 +854,8 @@ describe('PersonEditComponent', () => {
       tester.residencePermitValidityStartDate.fillWith('02/03/2019');
       tester.residencePermitValidityEndDate.fillWith('02/03/2029');
 
+      tester.schoolLevel.selectLabel('Lycée');
+
       tester.save.click();
 
       expect(spiedCreate).toHaveBeenCalled();
@@ -895,6 +906,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.residencePermitRenewalDate).toBe(null);
       expect(createdPerson.residencePermitValidityStartDate).toBe('2019-03-02');
       expect(createdPerson.residencePermitValidityEndDate).toBe('2029-03-02');
+      expect(createdPerson.schoolLevel).toBe('HIGH');
 
       expect(router.navigate).toHaveBeenCalledWith(['persons', 43]);
     }));

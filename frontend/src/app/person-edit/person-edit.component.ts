@@ -10,7 +10,7 @@ import {
   Validators
 } from '@angular/forms';
 import { PersonService } from '../person.service';
-import { Gender, MaritalStatus, PersonIdentityModel, PersonModel } from '../models/person.model';
+import { MaritalStatus, PersonIdentityModel, PersonModel } from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
 import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
 import { GENDER_TRANSLATIONS } from '../display-gender.pipe';
@@ -28,6 +28,7 @@ import { VISA_TRANSLATIONS } from '../display-visa.pipe';
 import { RESIDENCE_PERMIT_TRANSLATIONS } from '../display-residence-permit.pipe';
 import { ENTRY_TYPE_TRANSLATIONS } from '../display-entry-type.pipe';
 import { PASSPORT_STATUS_TRANSLATIONS } from '../display-passport-status.pipe';
+import { SCHOOL_LEVEL_TRANSLATIONS } from '../display-school-level.pipe';
 
 export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;
 
@@ -63,7 +64,7 @@ export class PersonEditComponent {
   personForm: FormGroup;
   spouseTypeCtrl: FormControl;
 
-  genders: Array<Gender> = GENDER_TRANSLATIONS.map(t => t.key);
+  genders = GENDER_TRANSLATIONS.map(t => t.key);
   maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
   housings = HOUSING_TRANSLATIONS.map(t => t.key);
   fiscalStatuses = FISCAL_STATUS_TRANSLATIONS.map(t => t.key);
@@ -73,6 +74,7 @@ export class PersonEditComponent {
   residencePermits = RESIDENCE_PERMIT_TRANSLATIONS.map(t => t.key);
   entryTypes = ENTRY_TYPE_TRANSLATIONS.map(t => t.key);
   passportStatuses = PASSPORT_STATUS_TRANSLATIONS.map(t => t.key);
+  schoolLevels = SCHOOL_LEVEL_TRANSLATIONS.map(t => t.key);
 
   cityTypeahead: CityTypeahead;
   spouseTypeahead: PersonTypeahead;
@@ -151,7 +153,8 @@ export class PersonEditComponent {
         residencePermitDepositDate: null,
         residencePermitRenewalDate: null,
         residencePermitValidityStartDate: null,
-        residencePermitValidityEndDate: null
+        residencePermitValidityEndDate: null,
+        schoolLevel: 'UNKNOWN'
       },
       {
         validators: [

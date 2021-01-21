@@ -49,6 +49,7 @@ data class PersonDTO(
     val residencePermitRenewalDate: LocalDate?,
     val residencePermitValidityStartDate: LocalDate?,
     val residencePermitValidityEndDate: LocalDate?,
+    val schoolLevel: SchoolLevel,
     val deathDate: LocalDate?,
     val deleted: Boolean
 ) {
@@ -93,6 +94,7 @@ data class PersonDTO(
         residencePermitRenewalDate = person.residencePermitRenewalDate,
         residencePermitValidityStartDate = person.residencePermitValidityStartDate,
         residencePermitValidityEndDate = person.residencePermitValidityEndDate,
+        schoolLevel = person.schoolLevel,
         deathDate = person.deathDate,
         deleted = person.deleted
     )
