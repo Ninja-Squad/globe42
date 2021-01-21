@@ -45,6 +45,7 @@ export interface PersonCommand {
   healthCareCoverageStartDate: string;
   healthInsurance: string;
   healthInsuranceStartDate: string;
+  lastHealthCheckDate: string;
   nationalityId: string;
   passportStatus: PassportStatus;
   passportNumber: string;

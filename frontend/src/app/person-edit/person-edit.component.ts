@@ -132,6 +132,7 @@ export class PersonEditComponent {
         healthCareCoverageStartDate: null,
         healthInsurance: 'UNKNOWN',
         healthInsuranceStartDate: null,
+        lastHealthCheckDate: null,
         accompanying: '',
         socialSecurityNumber: '',
         cafNumber: '',

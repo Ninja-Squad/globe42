@@ -178,6 +178,10 @@ class PersonEditTester extends ComponentTester<PersonEditComponent> {
     return this.mediationSection.input('#healthInsuranceStartDate');
   }
 
+  get lastHealthCheckDate() {
+    return this.mediationSection.input('#lastHealthCheckDate');
+  }
+
   get accompanying() {
     return this.mediationSection.input('#accompanying');
   }
@@ -369,6 +373,7 @@ describe('PersonEditComponent', () => {
       healthCareCoverageStartDate: '2017-01-01',
       healthInsurance: 'MUTUELLE',
       healthInsuranceStartDate: '2017-02-02',
+      lastHealthCheckDate: '2019-12-05',
       accompanying: 'Paul',
       socialSecurityNumber: '234765498056734',
       cafNumber: '56734',
@@ -452,6 +457,7 @@ describe('PersonEditComponent', () => {
       expect(tester.healthCareCoverageStartDate).toHaveValue('01/01/2017');
       expect(tester.healthInsurance).toHaveSelectedValue(person.healthInsurance);
       expect(tester.healthInsuranceStartDate).toHaveValue('02/02/2017');
+      expect(tester.lastHealthCheckDate).toHaveValue('05/12/2019');
       expect(tester.accompanying).toHaveValue(person.accompanying);
       expect(tester.socialSecurityNumber).toHaveValue(person.socialSecurityNumber);
       expect(tester.cafNumber).toHaveValue(person.cafNumber);

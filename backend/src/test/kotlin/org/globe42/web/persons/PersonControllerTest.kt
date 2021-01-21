@@ -439,6 +439,7 @@ class PersonControllerTest {
         assertThat(person.healthCareCoverageStartDate).isEqualTo(command.healthCareCoverageStartDate)
         assertThat(person.healthInsurance).isEqualTo(command.healthInsurance)
         assertThat(person.healthInsuranceStartDate).isEqualTo(command.healthInsuranceStartDate)
+        assertThat(person.lastHealthCheckDate).isEqualTo(command.lastHealthCheckDate)
         assertThat(person.accompanying).isEqualTo(command.accompanying)
         assertThat(person.socialSecurityNumber).isEqualTo(command.socialSecurityNumber)
         assertThat(person.cafNumber).isEqualTo(command.cafNumber)
@@ -504,6 +505,7 @@ class PersonControllerTest {
                 healthCareCoverageStartDate = LocalDate.of(2016, 1, 1),
                 healthInsurance = HealthInsurance.MUTUELLE,
                 healthInsuranceStartDate = LocalDate.of(2017, 1, 1),
+                lastHealthCheckDate = LocalDate.of(2019, 1, 1),
                 accompanying = "Nadia DURAND",
                 socialSecurityNumber = "277126912340454",
                 cafNumber = "123765",
