@@ -11,6 +11,7 @@ import { ConfirmService } from '../confirm.service';
 import { ActivityComponent } from './activity.component';
 import { ActivityService } from '../activity.service';
 import { FullnamePipe } from '../fullname.pipe';
+import { PageTitleDirective } from '../page-title.directive';
 
 class ActivityComponentTester extends ComponentTester<ActivityComponent> {
   constructor() {
@@ -67,7 +68,7 @@ describe('ActivityComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [ActivityComponent, FullnamePipe],
+      declarations: [ActivityComponent, FullnamePipe, PageTitleDirective],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: ConfirmService, useValue: confirmService },

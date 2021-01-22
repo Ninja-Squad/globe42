@@ -93,6 +93,8 @@ import { DisplayNoteCategoryPipe } from './display-note-category.pipe';
 import { ActivitiesComponent } from './activities/activities.component';
 import { ActivityComponent } from './activity/activity.component';
 import { ActivityEditComponent } from './activity-edit/activity-edit.component';
+import { ActivityReportComponent } from './activity-report/activity-report.component';
+import { ActivitiesLayoutComponent } from './activities-layout/activities-layout.component';
 
 @NgModule({
   declarations: [
@@ -177,7 +179,9 @@ import { ActivityEditComponent } from './activity-edit/activity-edit.component';
     DisplayNoteCategoryPipe,
     ActivitiesComponent,
     ActivityComponent,
-    ActivityEditComponent
+    ActivityEditComponent,
+    ActivityReportComponent,
+    ActivitiesLayoutComponent
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

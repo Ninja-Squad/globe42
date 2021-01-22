@@ -1,3 +1,6 @@
+<gl-page-title
+  [title]="activity.type.name + ' du ' + (activity.date | date: 'fullDate')"
+></gl-page-title>
 <h1>
   {{ activity.type.name }}
   <br />
@@ -10,13 +13,15 @@
 
 <h2>
   Présents
-  <small
-    ><span class="badge badge-success">{{ activity.participants.length | number }}</span></small
-  >
+  <small>
+    <span class="badge badge-success">{{ activity.participants.length | number }}</span>
+  </small>
 </h2>
 
 <ul>
-  <li *ngFor="let participant of activity.participants">{{ participant | fullname }}</li>
+  <li *ngFor="let participant of activity.participants">
+    <a [routerLink]="['/persons', participant.id]">{{ participant | fullname }}</a>
+  </li>
 </ul>
 
 <a class="btn btn-outline-primary mr-2" routerLink="edit">

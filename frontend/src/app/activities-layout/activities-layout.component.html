@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-xs-12 col-md-4 col-lg-2">
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="activities" routerLinkActive="active">
+          Liste des activités
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="report" routerLinkActive="active">Rapports d'assiduité</a>
+      </li>
+
+      <li class="nav-item" class="mt-4">
+        <a class="nav-link btn btn-outline-primary" routerLink="create">
+          <span class="fa fa-plus"></span> Nouvelle activité
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <router-outlet></router-outlet>
+  </div>
+</div>

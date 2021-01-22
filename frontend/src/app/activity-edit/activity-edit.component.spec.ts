@@ -17,6 +17,7 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { Activity } from '../models/activity.model';
 import { ActivityType, activityType } from '../models/activity-type.model';
+import { PageTitleDirective } from '../page-title.directive';
 
 class ActivityEditComponentTester extends ComponentTester<ActivityEditComponent> {
   constructor() {
@@ -73,7 +74,7 @@ describe('ActivityEditComponent', () => {
   function configureTestingModule(route: ActivatedRoute) {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, ReactiveFormsModule, ValdemortModule, GlobeNgbTestingModule],
-      declarations: [ActivityEditComponent, FullnamePipe],
+      declarations: [ActivityEditComponent, FullnamePipe, PageTitleDirective],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: ActivityService, useValue: activityService },

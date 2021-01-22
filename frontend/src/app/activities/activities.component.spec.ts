@@ -12,6 +12,8 @@ import { activityType } from '../models/activity-type.model';
 import { Page } from '../models/page';
 import { Activity } from '../models/activity.model';
 import { LOCALE_ID } from '@angular/core';
+import { FullnamePipe } from '../fullname.pipe';
+import { PageTitleDirective } from '../page-title.directive';
 
 class ActivitiesComponentTester extends ComponentTester<ActivitiesComponent> {
   constructor() {
@@ -77,7 +79,7 @@ describe('ActivitiesComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [GlobeNgbTestingModule, RouterTestingModule],
-      declarations: [ActivitiesComponent],
+      declarations: [ActivitiesComponent, FullnamePipe, PageTitleDirective],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: LOCALE_ID, useValue: 'fr' }

@@ -8,6 +8,7 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.ActivityDao
 import org.globe42.dao.PersonDao
+import org.globe42.dao.Presence
 import org.globe42.domain.Activity
 import org.globe42.domain.ActivityType
 import org.globe42.domain.IncomeSourceType
@@ -187,5 +188,42 @@ class ActivityControllerMvcTest(
         }
 
         verify { mockActivityDao.delete(activity) }
+    }
+
+    @Test
+    fun `should get report`() {
+        val from = LocalDate.of(2021, 1, 1)
+        val to = LocalDate.of(2021, 12, 31)
+        val activityType = ActivityType.MEAL
+        every { mockActivityDao.countWithTypeBetwen(activityType, from, to) } returns 10
+        every { mockActivityDao.countPresencesWithTypeBetween(activityType, from, to) } returns listOf(
+            Presence(42L, 5),
+            Presence(43L, 7),
+        )
+        every { mockPersonDao.findAllById(listOf(42L, 43L)) } returns listOf(
+            Person(42L).apply {
+                firstName = "JB"
+                lastName = "Nizet"
+            },
+            Person(43L).apply {
+                firstName = "Claire"
+                lastName =  "Brucy"
+            }
+        )
+
+        mockMvc.get("/api/activities/reports") {
+            param("type", activityType.name)
+            param("from", from.toString())
+            param("to", to.toString())
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.totalActivityCount") { value(10) }
+            jsonPath("$.presences[0].activityCount") { value(5) }
+            jsonPath("$.presences[0].person.id") { value(42) }
+            jsonPath("$.presences[0].person.firstName") { value("JB") }
+            jsonPath("$.presences[1].activityCount") { value(7) }
+            jsonPath("$.presences[1].person.id") { value(43) }
+            jsonPath("$.presences[1].person.firstName") { value("Claire") }
+        }
     }
 }

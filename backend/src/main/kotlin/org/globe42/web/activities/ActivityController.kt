@@ -6,6 +6,7 @@ import org.globe42.domain.Activity
 import org.globe42.domain.ActivityType
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
+import org.globe42.web.persons.PersonIdentityDTO
 import org.globe42.web.util.PageDTO
 import org.globe42.web.util.toDTO
 import org.springframework.data.domain.Page
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 import javax.transaction.Transactional
 
 const val PAGE_SIZE = 20
@@ -72,6 +74,19 @@ class ActivityController(private val activityDao: ActivityDao, private val perso
     fun delete(@PathVariable activityId: Long) {
         val activity = activityDao.findByIdOrNull(activityId) ?: throw NotFoundException("No activity with ID $activityId")
         activityDao.delete(activity)
+    }
+
+    @GetMapping("/reports")
+    fun report(@RequestParam type: ActivityType, @RequestParam from: LocalDate, @RequestParam to: LocalDate): ActivityReportDTO {
+        val totalActivityCount = activityDao.countWithTypeBetwen(type, from, to)
+        val presences = activityDao.countPresencesWithTypeBetween(type, from, to)
+
+        val persons = personDao.findAllById(presences.map { it.personId }).associateBy { it.id }
+
+        return ActivityReportDTO(
+            totalActivityCount,
+            presences.map { p -> PresenceDTO(PersonIdentityDTO(persons[p.personId]!!), p.count) }
+        )
     }
 
     private fun copyCommandToActivity(command: ActivityCommandDTO, activity: Activity) {
