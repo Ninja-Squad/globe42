@@ -14,8 +14,6 @@ export class ParticipantsComponent implements OnInit {
   participants: Array<ParticipantModel>;
   activityType: ActivityTypeModel;
 
-  descriptionExists = false;
-
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {

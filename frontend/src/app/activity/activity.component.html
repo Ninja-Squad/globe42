@@ -1,0 +1,29 @@
+<h1>
+  {{ activity.type.name }}
+  <br />
+  <small class="text-muted"
+    ><span class="fa fa-calendar-check-o mr-1"></span> {{ activity.date | date: 'fullDate' }}</small
+  >
+</h1>
+
+<p class="text-muted" *ngIf="activity.type.description">{{ activity.type.description }}</p>
+
+<h2>
+  Présents
+  <small
+    ><span class="badge badge-success">{{ activity.participants.length | number }}</span></small
+  >
+</h2>
+
+<ul>
+  <li *ngFor="let participant of activity.participants">{{ participant | fullname }}</li>
+</ul>
+
+<a class="btn btn-outline-primary mr-2" routerLink="edit">
+  <span class="fa fa-edit"></span>
+  Éditer
+</a>
+<button type="button" class="btn btn-outline-danger" id="delete-button" (click)="delete()">
+  <span class="fa fa-trash"></span>
+  Supprimer
+</button>

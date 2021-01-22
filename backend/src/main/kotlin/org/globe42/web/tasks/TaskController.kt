@@ -216,7 +216,7 @@ class TaskController(
         }
     }
 
-    private fun pageRequest(@RequestParam page: Int?): PageRequest {
+    private fun pageRequest(page: Int?): PageRequest {
         return PageRequest.of(page ?: 0, PAGE_SIZE)
     }
 }

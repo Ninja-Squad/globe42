@@ -34,11 +34,15 @@
             <a class="dropdown-item" routerLink="/charge-categories">Dépenses</a>
           </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/activity-types">
+        <li class="nav-item" ngbDropdown>
+          <a class="nav-link" tabindex="0" ngbDropdownToggle role="button" id="activitiesDropDown">
             <span class="fa fa-comments"></span>
             Activités
           </a>
+          <div ngbDropdownMenu aria-labelledby="activitiesDropDown">
+            <a class="dropdown-item" routerLink="/activity-types">Types d'activités</a>
+            <a class="dropdown-item" routerLink="/activities">Activités</a>
+          </div>
         </li>
       </ul>
       <ul class="navbar-nav">

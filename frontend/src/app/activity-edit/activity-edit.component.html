@@ -1,0 +1,109 @@
+<h1 *ngIf="editedActivity">Modifier une activité</h1>
+<h1 *ngIf="!editedActivity">Créer une activité</h1>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <div class="row">
+    <div class="col-md">
+      <div class="form-group">
+        <label for="type">Type d'activité</label>
+        <select formControlName="type" class="form-control" id="type">
+          <option [ngValue]="null"></option>
+          <option *ngFor="let activityType of activityTypes" [ngValue]="activityType.key">
+            {{ activityType.name }}
+          </option>
+        </select>
+        <val-errors controlName="type" label="Le type d'activité"></val-errors>
+      </div>
+    </div>
+
+    <div class="col-md">
+      <div class="form-group">
+        <label for="date">Date de l'activité</label>
+        <gl-datepicker-container>
+          <input
+            class="form-control"
+            id="date"
+            placeholder="23/12/2023"
+            formControlName="date"
+            ngbDatepicker
+          />
+        </gl-datepicker-container>
+        <val-errors controlName="date" label="La date de l'activité"></val-errors>
+      </div>
+    </div>
+  </div>
+
+  <h2>Participants</h2>
+
+  <div class="row">
+    <div class="col-sm">
+      <h3>Absents</h3>
+      <div class="scrollable-list border rounded p-2">
+        <ul class="list-unstyled">
+          <li *ngFor="let person of choosablePersons$ | async" class="my-1 d-flex absent-item">
+            <div class="flex-grow-1">{{ person | fullname }}</div>
+            <div class="ml-2">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-success add-present-button"
+                (click)="choosePerson(person)"
+              >
+                <span class="sr-only">Ajouter {{ person | fullname }} aux présents</span>
+                <span class="fa fa-plus-circle"></span>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="custom-control custom-switch">
+        <input
+          [formControl]="showAllPersonsCtrl"
+          type="checkbox"
+          class="custom-control-input"
+          id="show-all-persons"
+        />
+        <label class="custom-control-label" for="show-all-persons"
+          >Afficher toutes les personnes</label
+        >
+      </div>
+    </div>
+    <div class="col-sm">
+      <h3>
+        Présents
+        <small
+          ><span class="badge badge-success">{{
+            form.value.participants.length | number
+          }}</span></small
+        >
+      </h3>
+      <div class="scrollable-list border rounded p-2">
+        <ul class="list-unstyled">
+          <li *ngFor="let person of form.value.participants" class="my-1 d-flex present-item">
+            <span class="flex-grow-1">{{ person | fullname }}</span>
+            <div class="ml-2">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger remove-present-button"
+                (click)="unchoosePerson(person)"
+              >
+                <span class="sr-only">Enlever {{ person | fullname }} des présents</span>
+                <span class="fa fa-times-circle"></span>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group mt-2">
+    <button class="btn btn-primary mr-2" id="save-button">Enregistrer</button>
+    <a
+      class="btn btn-secondary"
+      *ngIf="editedActivity"
+      [routerLink]="['/activities', editedActivity.id]"
+      >Annuler</a
+    >
+    <a class="btn btn-secondary" *ngIf="!editedActivity" [routerLink]="['/activities']">Annuler</a>
+  </div>
+</form>

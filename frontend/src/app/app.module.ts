@@ -90,6 +90,9 @@ import { HealthCareCoverageComponent } from './health-care-coverage/health-care-
 import { PersonsReportsComponent } from './persons-reports/persons-reports.component';
 import { DisplaySchoolLevelPipe } from './display-school-level.pipe';
 import { DisplayNoteCategoryPipe } from './display-note-category.pipe';
+import { ActivitiesComponent } from './activities/activities.component';
+import { ActivityComponent } from './activity/activity.component';
+import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 
 @NgModule({
   declarations: [
@@ -171,7 +174,10 @@ import { DisplayNoteCategoryPipe } from './display-note-category.pipe';
     HealthCareCoverageComponent,
     PersonsReportsComponent,
     DisplaySchoolLevelPipe,
-    DisplayNoteCategoryPipe
+    DisplayNoteCategoryPipe,
+    ActivitiesComponent,
+    ActivityComponent,
+    ActivityEditComponent
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

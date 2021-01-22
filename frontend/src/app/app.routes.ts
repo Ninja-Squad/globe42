@@ -74,6 +74,11 @@ import { HealthCareCoverageComponent } from './health-care-coverage/health-care-
 import { HealthCareCoverageResolverService } from './health-care-coverage-resolver.service';
 import { PersonsReportsComponent } from './persons-reports/persons-reports.component';
 import { ACTIVITY_TYPES } from './models/activity-type.model';
+import { ActivitiesComponent } from './activities/activities.component';
+import { ActivitiesResolverService } from './activities-resolver.service';
+import { ActivityComponent } from './activity/activity.component';
+import { ActivityResolverService } from './activity-resolver.service';
+import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -434,6 +439,32 @@ export const routes: Routes = [
             }
           }
         ]
+      },
+      {
+        path: 'activities',
+        component: ActivitiesComponent,
+        resolve: {
+          activities: ActivitiesResolverService
+        },
+        runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+      },
+      {
+        path: 'activities/create',
+        component: ActivityEditComponent
+      },
+      {
+        path: 'activities/:activityId',
+        component: ActivityComponent,
+        resolve: {
+          activity: ActivityResolverService
+        }
+      },
+      {
+        path: 'activities/:activityId/edit',
+        component: ActivityEditComponent,
+        resolve: {
+          activity: ActivityResolverService
+        }
       }
     ]
   }
