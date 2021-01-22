@@ -1,0 +1,34 @@
+<h1>Activités</h1>
+
+<div class="row align-items-center mb-2 activity-item" *ngFor="let activity of activities.content">
+  <div class="col-sm">
+    <a [routerLink]="['/activities', activity.id]">
+      <span class="fa fa-calendar-check-o mr-1"></span>
+      {{ activity.date | date: 'fullDate' }}
+    </a>
+  </div>
+  <div class="col-sm">{{ activity.type.name }}</div>
+  <div class="col-sm">
+    <span class="badge badge-success">{{ activity.participants.length }}</span
+    >&ngsp;
+    <ng-container *ngIf="activity.participants.length > 1">présents</ng-container>
+    <ng-container *ngIf="activity.participants.length <= 1">présent</ng-container>
+  </div>
+  <div class="col-sm text-right">
+    <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/activities', activity.id, 'edit']">
+      <span class="fa fa-edit"></span>
+      Éditer
+    </a>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center mt-5" *ngIf="activities.totalPages > 1">
+  <ngb-pagination
+    [collectionSize]="activities.totalElements"
+    [page]="activities.number + 1"
+    (pageChange)="loadPage($event)"
+    [maxSize]="5"
+    [pageSize]="activities.size"
+    [rotate]="true"
+  ></ngb-pagination>
+</div>

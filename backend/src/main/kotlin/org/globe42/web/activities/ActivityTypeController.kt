@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 import javax.transaction.Transactional
 
 /**
- * REST controller used to list the persons participating in a given actiity type
+ * REST controller used to list the persons participating in a given activity type
  * @author JB Nizet
  */
 @RestController
