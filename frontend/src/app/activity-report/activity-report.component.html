@@ -1,0 +1,88 @@
+<gl-page-title title="Rapports d'assiduité"></gl-page-title>
+<h1>Rapports d'assiduité</h1>
+
+<form [formGroup]="form">
+  <div class="form-row">
+    <div class="form-group col-lg">
+      <label for="type">Type d'activité</label>
+      <select formControlName="type" class="form-control" id="type">
+        <option [ngValue]="null"></option>
+        <option *ngFor="let activityType of activityTypes" [ngValue]="activityType.key">
+          {{ activityType.name }}
+        </option>
+      </select>
+      <val-errors controlName="type" label="Le type d'activité"></val-errors>
+    </div>
+    <div class="form-group col-lg">
+      <label for="from">Du</label>
+      <gl-datepicker-container>
+        <input
+          class="form-control"
+          id="from"
+          placeholder="01/01/2021"
+          formControlName="from"
+          ngbDatepicker
+          [minDate]="{ year: 2012, month: 1, day: 1 }"
+        />
+      </gl-datepicker-container>
+      <val-errors controlName="from" label="La date de début"></val-errors>
+    </div>
+    <div class="form-group col-lg">
+      <label for="to">Au</label>
+      <gl-datepicker-container>
+        <input
+          class="form-control"
+          id="to"
+          placeholder="31/01/2021"
+          formControlName="to"
+          ngbDatepicker
+          [minDate]="{ year: 2012, month: 1, day: 1 }"
+        />
+      </gl-datepicker-container>
+      <val-errors controlName="from" label="La date de fin"></val-errors>
+    </div>
+  </div>
+</form>
+
+<div *ngIf="report$ | async as report">
+  <h2>
+    <ng-container *ngIf="report.totalActivityCount == 0">
+      Aucune <small>activité de ce type sur cette période</small>
+    </ng-container>
+    <ng-container *ngIf="report.totalActivityCount == 1">
+      1 <small>activité de ce type sur cette période</small>
+    </ng-container>
+    <ng-container *ngIf="report.totalActivityCount > 1">
+      {{ report.totalActivityCount | number }} <small>activités de ce type sur cette période</small>
+    </ng-container>
+  </h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Participant</th>
+        <th>Nombre de présences</th>
+        <th>Assiduité</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let presence of report.presences">
+        <td>
+          <a [routerLink]="['/persons', presence.person.id]">{{ presence.person | fullname }}</a>
+        </td>
+        <td>{{ presence.activityCount | number }}</td>
+        <td class="d-flex align-items-center">
+          <ngb-progressbar
+            class="flex-grow-1"
+            type="success"
+            [value]="presence.activityCount"
+            [max]="report.totalActivityCount"
+          ></ngb-progressbar>
+          <span class="ml-1" style="width: 3rem">{{
+            presence.activityCount / report.totalActivityCount | percent: '.0-0'
+          }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

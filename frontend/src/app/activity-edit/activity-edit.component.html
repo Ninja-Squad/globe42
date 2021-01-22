@@ -1,5 +1,11 @@
-<h1 *ngIf="editedActivity">Modifier une activité</h1>
-<h1 *ngIf="!editedActivity">Créer une activité</h1>
+<ng-container *ngIf="editedActivity">
+  <gl-page-title title="Modifier une activité"></gl-page-title>
+  <h1>Modifier une activité</h1>
+</ng-container>
+<ng-container *ngIf="!editedActivity">
+  <gl-page-title title="Créer une activité"></gl-page-title>
+  <h1>Créer une activité</h1>
+</ng-container>
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <div class="row">

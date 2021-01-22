@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Activity, ActivityCommand, ActivityModel } from './models/activity.model';
+import { Activity, ActivityCommand, ActivityModel, ActivityReport } from './models/activity.model';
 import { Page } from './models/page';
 import { Observable } from 'rxjs';
-import { activityType } from './models/activity-type.model';
+import { ActivityType, activityType } from './models/activity-type.model';
 import { map } from 'rxjs/operators';
 import { sortBy } from './utils';
 import { displayFullname } from './fullname.pipe';
@@ -51,7 +51,19 @@ export class ActivityService {
     return this.http.put<void>(`/api/activities/${activityId}`, command);
   }
 
-  delete(activityId: number) {
+  delete(activityId: number): Observable<void> {
     return this.http.delete<void>(`/api/activities/${activityId}`);
+  }
+
+  report(type: ActivityType, from: string, to: string): Observable<ActivityReport> {
+    const params = { type, from, to };
+    return this.http
+      .get<ActivityReport>('/api/activities/reports', { params })
+      .pipe(
+        map(report => ({
+          ...report,
+          presences: sortBy(report.presences, presence => displayFullname(presence.person))
+        }))
+      );
   }
 }

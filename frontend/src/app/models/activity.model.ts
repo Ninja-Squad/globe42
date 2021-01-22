@@ -1,5 +1,6 @@
 import { ActivityType, ActivityTypeModel } from './activity-type.model';
 import { ParticipantModel } from './participant.model';
+import { PersonIdentityModel } from './person.model';
 
 export interface ActivityModel {
   id: number;
@@ -19,4 +20,14 @@ export interface ActivityCommand {
   date: string;
   type: ActivityType;
   participantIds: Array<number>;
+}
+
+export interface Presence {
+  person: PersonIdentityModel;
+  activityCount: number;
+}
+
+export interface ActivityReport {
+  totalActivityCount: number;
+  presences: Array<Presence>;
 }

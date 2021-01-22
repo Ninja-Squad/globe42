@@ -79,6 +79,8 @@ import { ActivitiesResolverService } from './activities-resolver.service';
 import { ActivityComponent } from './activity/activity.component';
 import { ActivityResolverService } from './activity-resolver.service';
 import { ActivityEditComponent } from './activity-edit/activity-edit.component';
+import { ActivityReportComponent } from './activity-report/activity-report.component';
+import { ActivitiesLayoutComponent } from './activities-layout/activities-layout.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -442,11 +444,26 @@ export const routes: Routes = [
       },
       {
         path: 'activities',
-        component: ActivitiesComponent,
-        resolve: {
-          activities: ActivitiesResolverService
-        },
-        runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+        component: ActivitiesLayoutComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'activities',
+            pathMatch: 'full'
+          },
+          {
+            path: 'activities',
+            component: ActivitiesComponent,
+            resolve: {
+              activities: ActivitiesResolverService
+            },
+            runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+          },
+          {
+            path: 'report',
+            component: ActivityReportComponent
+          }
+        ]
       },
       {
         path: 'activities/create',
