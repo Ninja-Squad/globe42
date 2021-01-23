@@ -1,0 +1,26 @@
+<div *ngFor="let reminder of reminders" class="d-flex align-items-baseline reminder-item">
+  <span class="fa fa-exclamation-triangle"></span>
+  <span class="ml-2">
+    <ng-container *ngIf="reminder.type === 'HEALTH_INSURANCE_TO_RENEW'">
+      La couverture médicale complémentaire doit être renouvelée. Elle arrive à échéance le
+      {{ reminder.endDate | date: 'longDate' }}.
+    </ng-container>
+    <ng-container *ngIf="reminder.type === 'HEALTH_CHECK_TO_PLAN'">
+      Un nouveau bilan de santé doit être planifié.
+      <ng-container *ngIf="reminder.lastDate">
+        Le dernier date du {{ reminder.lastDate | date: 'longDate' }}.
+      </ng-container>
+      <ng-container *ngIf="!reminder.lastDate">La date du dernier bilan est inconnue.</ng-container>
+    </ng-container>
+    <ng-container *ngIf="reminder.type === 'RESIDENCE_PERMIT_TO_RENEW'">
+      Le titre de séjour doit être renouvelé. Il arrive à échéance le
+      {{ reminder.endDate | date: 'longDate' }}.
+    </ng-container>
+    <ng-container *ngIf="reminder.type === 'MEMBERSHIP_TO_RENEW'">
+      Pas d'adhésion pour l'année en cours.
+    </ng-container>
+    <ng-container *ngIf="reminder.type === 'MEMBERSHIP_PAYMENT_OUT_OF_DATE'">
+      Le paiement de l'adhésion pour l'année en cours n'est pas à jour.
+    </ng-container>
+  </span>
+</div>

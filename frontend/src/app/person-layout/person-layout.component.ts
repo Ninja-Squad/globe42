@@ -1,44 +1,46 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PersonModel } from '../models/person.model';
-import { switchMap, tap } from 'rxjs/operators';
-import { MembershipService } from '../membership.service';
-import { merge, Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { PersonModel, ReminderModel } from '../models/person.model';
+import { map, startWith, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { CurrentPersonService } from '../current-person.service';
+import { CurrentPersonReminderService } from '../current-person-reminder.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'gl-person-layout',
   templateUrl: './person-layout.component.html',
-  styleUrls: ['./person-layout.component.scss']
+  styleUrls: ['./person-layout.component.scss'],
+  providers: [CurrentPersonReminderService]
 })
-export class PersonLayoutComponent implements OnInit, OnDestroy {
-  person: PersonModel;
-  membershipStatus: 'OK' | 'KO' | 'OUT_OF_DATE' | 'loading' = 'loading';
-  private membershipSubscription: Subscription;
+export class PersonLayoutComponent implements OnInit {
+  person$: Observable<PersonModel>;
+  reminders$: Observable<Array<ReminderModel>>;
+  membershipStatus$: Observable<'OK' | 'KO' | 'OUT_OF_DATE' | 'loading'>;
 
   constructor(
     private currentPersonService: CurrentPersonService,
-    private membershipService: MembershipService
+    private currentPersonReminderService: CurrentPersonReminderService,
+    private viewportScroller: ViewportScroller
   ) {}
 
   ngOnInit() {
-    this.currentPersonService.personChanges$.subscribe(person => (this.person = person));
-
-    this.membershipSubscription = merge(
-      this.currentPersonService.personChanges$.pipe(
-        tap(() => (this.membershipStatus = 'loading')),
-        switchMap(person => this.membershipService.getCurrent(person.id))
-      ),
-      this.membershipService.currentMembership$
-    ).subscribe(membership => {
-      if (membership) {
-        this.membershipStatus = membership.paymentMode === 'OUT_OF_DATE' ? 'OUT_OF_DATE' : 'OK';
-      } else {
-        this.membershipStatus = 'KO';
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.membershipSubscription.unsubscribe();
+    this.viewportScroller.scrollToPosition([0, 0]);
+    this.person$ = this.currentPersonService.personChanges$.pipe(
+      tap(person => {
+        this.reminders$ = this.currentPersonReminderService.initialize(person.id);
+        this.membershipStatus$ = this.reminders$.pipe(
+          map(reminders => {
+            if (reminders.some(reminder => reminder.type === 'MEMBERSHIP_PAYMENT_OUT_OF_DATE')) {
+              return 'OUT_OF_DATE';
+            } else if (reminders.some(reminder => reminder.type === 'MEMBERSHIP_TO_RENEW')) {
+              return 'KO';
+            } else {
+              return 'OK';
+            }
+          }),
+          startWith('loading')
+        );
+      })
+    );
   }
 }

@@ -7,12 +7,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.CountryDao
 import org.globe42.dao.CoupleDao
+import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.Period
 
 /**
  * Unit tests for PersonController
@@ -21,12 +24,11 @@ import java.time.LocalDate
 class PersonControllerTest {
 
     private val mockPersonDao = mockk<PersonDao>()
-
     private val mockCoupleDao = mockk<CoupleDao>(relaxUnitFun = true)
-
     private val mockCountryDao = mockk<CountryDao>()
+    private val mockMembershipDao = mockk<MembershipDao>(relaxUnitFun = true)
 
-    private val controller = PersonController(mockPersonDao, mockCoupleDao, mockCountryDao)
+    private val controller = PersonController(mockPersonDao, mockCoupleDao, mockCountryDao, mockMembershipDao)
 
     private lateinit var person: Person
 
@@ -405,6 +407,104 @@ class PersonControllerTest {
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.resurrect(person.id!!) }
+    }
+
+    @Nested
+    inner class Reminders {
+        val today = LocalDate.now(PARIS_TIME_ZONE)
+
+        @BeforeEach
+        fun prepare() {
+            every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
+            every { mockMembershipDao.findByPersonAndYear(person, any()) } returns null
+        }
+
+        @Test
+        fun `should get membership to renew`() {
+            var reminders = controller.reminders(person.id!!)
+            assertThat(reminders).contains(MembershipToRenewDTO)
+
+            every { mockMembershipDao.findByPersonAndYear(person, any()) } returns
+                    Membership(1L).apply { paymentMode = PaymentMode.CASH }
+
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders).doesNotContain(MembershipToRenewDTO)
+        }
+
+        @Test
+        fun `should get membership payment out of date`() {
+            every { mockMembershipDao.findByPersonAndYear(person, any()) } returns
+                    Membership(1L).apply { paymentMode = PaymentMode.OUT_OF_DATE }
+            var reminders = controller.reminders(person.id!!)
+            assertThat(reminders).contains(MembershipPaymentOutOfDateDTO)
+
+            every { mockMembershipDao.findByPersonAndYear(person, any()) } returns
+                    Membership(1L).apply { paymentMode = PaymentMode.CASH }
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders).doesNotContain(MembershipPaymentOutOfDateDTO)
+        }
+
+        @Test
+        fun `should get health insurance to renew`() {
+            person.mediationEnabled = true
+            person.healthInsuranceStartDate = today.minus(Period.ofMonths(11).plusDays(1))
+
+            var reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.HEALTH_INSURANCE_TO_RENEW }).isNotNull()
+
+            person.mediationEnabled = false
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.HEALTH_INSURANCE_TO_RENEW }).isNull()
+
+            person.mediationEnabled = true
+            person.healthInsuranceStartDate = today.minus(Period.ofMonths(11).minusDays(1))
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.HEALTH_INSURANCE_TO_RENEW }).isNull()
+        }
+
+        @Test
+        fun `should get residence permit to renew`() {
+            person.mediationEnabled = true
+            person.residencePermitValidityEndDate = null
+
+            var reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.RESIDENCE_PERMIT_TO_RENEW }).isNull()
+
+            person.residencePermitValidityEndDate = today.plusMonths(2)
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.RESIDENCE_PERMIT_TO_RENEW }).isNotNull()
+
+            person.mediationEnabled = false
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.RESIDENCE_PERMIT_TO_RENEW }).isNull()
+
+            person.mediationEnabled = true
+            person.residencePermitValidityEndDate = today.plusMonths(4)
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.RESIDENCE_PERMIT_TO_RENEW }).isNull()
+        }
+
+        @Test
+        fun `should get health check to plan`() {
+            person.mediationEnabled = true
+            person.lastHealthCheckDate = null
+
+            var reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.HEALTH_CHECK_TO_PLAN }).isNotNull()
+
+            person.lastHealthCheckDate = today.minusMonths(25)
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.HEALTH_CHECK_TO_PLAN }).isNotNull()
+
+            person.mediationEnabled = false
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.HEALTH_CHECK_TO_PLAN }).isNull()
+
+            person.mediationEnabled = true
+            person.lastHealthCheckDate = today.minusMonths(23)
+            reminders = controller.reminders(person.id!!)
+            assertThat(reminders.find { it.type == ReminderType.HEALTH_CHECK_TO_PLAN }).isNull()
+        }
     }
 
     private fun assertPersonEqualsCommand(person: Person, command: PersonCommandDTO) {

@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { pastDate } from '../globe-validators';
 import { CurrentPersonService } from '../current-person.service';
 import { switchMap } from 'rxjs/operators';
+import { CurrentPersonReminderService } from '../current-person-reminder.service';
 
 @Component({
   selector: 'gl-person-death',
@@ -19,6 +20,7 @@ export class PersonDeathComponent {
   constructor(
     private route: ActivatedRoute,
     private currentPersonService: CurrentPersonService,
+    private currentPersonReminderService: CurrentPersonReminderService,
     fb: FormBuilder,
     private personService: PersonService,
     private router: Router
@@ -36,6 +38,9 @@ export class PersonDeathComponent {
     this.personService
       .signalDeath(this.person.id, this.form.value)
       .pipe(switchMap(() => this.currentPersonService.refresh(this.person.id)))
-      .subscribe(() => this.router.navigate(['..', 'info'], { relativeTo: this.route }));
+      .subscribe(() => {
+        this.currentPersonReminderService.refresh();
+        this.router.navigate(['..', 'info'], { relativeTo: this.route });
+      });
   }
 }

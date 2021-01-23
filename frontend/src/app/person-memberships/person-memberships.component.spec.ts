@@ -18,6 +18,7 @@ import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
+import { CurrentPersonReminderService } from '../current-person-reminder.service';
 
 class PersonMembershipsComponentTester extends ComponentTester<PersonMembershipsComponent> {
   constructor() {
@@ -105,6 +106,7 @@ describe('PersonMembershipsComponent', () => {
   let person: PersonModel;
   let memberships: Array<MembershipModel>;
   let tester: PersonMembershipsComponentTester;
+  let currentPersonReminderService: jasmine.SpyObj<CurrentPersonReminderService>;
 
   beforeEach(() => {
     jasmine.clock().mockDate(DateTime.fromISO('2020-04-30T15:30:00').toJSDate());
@@ -122,6 +124,10 @@ describe('PersonMembershipsComponent', () => {
         }
       })
     });
+    currentPersonReminderService = jasmine.createSpyObj<CurrentPersonReminderService>(
+      'CurrentPersonReminderService',
+      ['refresh']
+    );
 
     TestBed.configureTestingModule({
       declarations: [
@@ -133,6 +139,7 @@ describe('PersonMembershipsComponent', () => {
       ],
       providers: [
         { provide: ActivatedRoute, useFactory: () => route },
+        { provide: CurrentPersonReminderService, useValue: currentPersonReminderService },
         { provide: LOCALE_ID, useValue: 'fr-FR' }
       ],
       imports: [

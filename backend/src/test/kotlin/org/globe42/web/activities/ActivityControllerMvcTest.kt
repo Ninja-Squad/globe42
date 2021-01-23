@@ -14,6 +14,7 @@ import org.globe42.domain.ActivityType
 import org.globe42.domain.IncomeSourceType
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
+import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -78,13 +79,13 @@ class ActivityControllerMvcTest(
         mockMvc.get("/api/activities?page=1")
             .andExpect {
                 status { isOk() }
-                jsonPath("$.content[0].id") { value(42) }
-                jsonPath("$.content[0].type") { value(ActivityType.MEAL.name) }
-                jsonPath("$.content[0].date") { value("2021-02-14") }
-                jsonPath("$.content[0].type") { value(ActivityType.MEAL.name) }
-                jsonPath("$.content[0].participants[0].id") { value(10) }
-                jsonPath("$.content[0].participants[0].firstName") { value("JB") }
-                jsonPath("$.content[0].participants[0].lastName") { value("Nizet") }
+                jsonValue("$.content[0].id", 42)
+                jsonValue("$.content[0].type", ActivityType.MEAL.name)
+                jsonValue("$.content[0].date", "2021-02-14")
+                jsonValue("$.content[0].type", ActivityType.MEAL.name)
+                jsonValue("$.content[0].participants[0].id", 10)
+                jsonValue("$.content[0].participants[0].firstName", "JB")
+                jsonValue("$.content[0].participants[0].lastName", "Nizet")
             }
     }
 
@@ -100,7 +101,7 @@ class ActivityControllerMvcTest(
         mockMvc.get("/api/activities?type=MEAL")
             .andExpect {
                 status { isOk() }
-                jsonPath("$.content[0].id") { value(42) }
+                jsonValue("$.content[0].id", 42)
             }
     }
 
@@ -109,7 +110,7 @@ class ActivityControllerMvcTest(
         mockMvc.get("/api/activities/${activity.id}")
             .andExpect {
                 status { isOk() }
-                jsonPath("$.id") { value(42) }
+                jsonValue("$.id", 42)
             }
     }
 
@@ -141,7 +142,7 @@ class ActivityControllerMvcTest(
         }
             .andExpect {
                 status { isCreated() }
-                jsonPath("$.id") { value(42) }
+                jsonValue("$.id", 42)
             }
 
         verify { mockActivityDao.saveAndFlush(
@@ -217,13 +218,13 @@ class ActivityControllerMvcTest(
             param("to", to.toString())
         }.andExpect {
             status { isOk() }
-            jsonPath("$.totalActivityCount") { value(10) }
-            jsonPath("$.presences[0].activityCount") { value(5) }
-            jsonPath("$.presences[0].person.id") { value(42) }
-            jsonPath("$.presences[0].person.firstName") { value("JB") }
-            jsonPath("$.presences[1].activityCount") { value(7) }
-            jsonPath("$.presences[1].person.id") { value(43) }
-            jsonPath("$.presences[1].person.firstName") { value("Claire") }
+            jsonValue("$.totalActivityCount", 10)
+            jsonValue("$.presences[0].activityCount", 5)
+            jsonValue("$.presences[0].person.id", 42)
+            jsonValue("$.presences[0].person.firstName", "JB")
+            jsonValue("$.presences[1].activityCount", 7)
+            jsonValue("$.presences[1].person.id", 43)
+            jsonValue("$.presences[1].person.firstName", "Claire")
         }
     }
 }

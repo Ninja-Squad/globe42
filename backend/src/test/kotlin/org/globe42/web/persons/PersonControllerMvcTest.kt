@@ -6,9 +6,11 @@ import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.CountryDao
 import org.globe42.dao.CoupleDao
+import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.Country
 import org.globe42.domain.Gender
+import org.globe42.domain.PARIS_TIME_ZONE
 import org.globe42.domain.Participation
 import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
@@ -36,6 +38,9 @@ class PersonControllerMvcTest(
 
     @MockkBean
     private lateinit var mockCountryDao: CountryDao
+
+    @MockkBean
+    private lateinit var mockMembershipDao: MembershipDao
 
     private lateinit var person: Person
 
@@ -151,5 +156,17 @@ class PersonControllerMvcTest(
 
         assertThat(person.deathDate).isEqualTo(command.deathDate)
         assertThat(person.getParticipations()).isEmpty()
+    }
+
+    @Test
+    fun `should get reminders`() {
+        every { mockPersonDao.findByIdOrNull(person.id!!) } returns person
+        every { mockMembershipDao.findByPersonAndYear(person, LocalDate.now(PARIS_TIME_ZONE).year) } returns null
+
+        mvc.get("/api/persons/{personId}/reminders", person.id)
+            .andExpect {
+                status { isOk() }
+                jsonValue("$[0].type", ReminderType.MEMBERSHIP_TO_RENEW.name)
+            }
     }
 }

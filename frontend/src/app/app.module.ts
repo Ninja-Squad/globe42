@@ -95,6 +95,7 @@ import { ActivityComponent } from './activity/activity.component';
 import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 import { ActivityReportComponent } from './activity-report/activity-report.component';
 import { ActivitiesLayoutComponent } from './activities-layout/activities-layout.component';
+import { PersonRemindersComponent } from './person-reminders/person-reminders.component';
 
 @NgModule({
   declarations: [
@@ -181,7 +182,8 @@ import { ActivitiesLayoutComponent } from './activities-layout/activities-layout
     ActivityComponent,
     ActivityEditComponent,
     ActivityReportComponent,
-    ActivitiesLayoutComponent
+    ActivitiesLayoutComponent,
+    PersonRemindersComponent
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

@@ -3,6 +3,7 @@ package org.globe42.web.security
 import com.ninjasquad.springmockk.MockkBean
 import org.globe42.dao.CountryDao
 import org.globe42.dao.CoupleDao
+import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
 import org.globe42.dao.UserDao
 import org.globe42.web.persons.PersonController
@@ -18,25 +19,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
  * @author JB Nizet
  */
 @WebMvcTest(PersonController::class, AuthenticationConfig::class)
+@MockkBean(
+    PersonDao::class,
+    CoupleDao::class,
+    CountryDao::class,
+    UserDao::class,
+    JwtHelper::class,
+    CurrentUser::class,
+    MembershipDao::class,
+    relaxUnitFun = true
+)
 class AuthenticationTest {
-    @MockkBean
-    private lateinit var mockPersonDao: PersonDao
-
-    @MockkBean
-    private lateinit var mockCoupleDao: CoupleDao
-
-    @MockkBean
-    private lateinit var mockCountryDao: CountryDao
-
-    @MockkBean
-    private lateinit var mockUserDao: UserDao
-
-    @MockkBean
-    private lateinit var mockJwtHelper: JwtHelper
-
-    @MockkBean(relaxUnitFun = true)
-    private lateinit var mockCurrentUser: CurrentUser
-
     @Autowired
     private lateinit var mvc: MockMvc
 

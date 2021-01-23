@@ -1,60 +1,70 @@
-<h1 id="fullName" [class.deleted]="person.deleted">{{ person | fullname }}</h1>
+<ng-container *ngIf="person$ | async as person">
+  <h1 id="fullName" [class.deleted]="person.deleted">{{ person | fullname }}</h1>
 
-<p class="bg-dark rounded p-2 text-center text-light" *ngIf="person.deathDate" id="death-message">
-  {{ person | fullname }} est décédé(e) le {{ person.deathDate | date: 'longDate' }}
-</p>
+  <p class="bg-dark rounded p-2 text-center text-light" *ngIf="person.deathDate" id="death-message">
+    {{ person | fullname }} est décédé(e) le {{ person.deathDate | date: 'longDate' }}
+  </p>
 
-<div class="row">
-  <div class="col-xs-12 col-md-4 col-lg-2">
-    <ul class="nav nav-pills flex-column">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="info" routerLinkActive="active">Informations</a>
-      </li>
-      <li class="nav-item" *ngIf="person.mediationEnabled">
-        <a class="nav-link" routerLink="resources" routerLinkActive="active">Ressources</a>
-      </li>
-      <li class="nav-item" *ngIf="person.mediationEnabled">
-        <a class="nav-link" routerLink="family" routerLinkActive="active">Situation familiale</a>
-      </li>
-      <li class="nav-item" *ngIf="person.mediationEnabled">
-        <a class="nav-link" routerLink="network" routerLinkActive="active">Réseau</a>
-      </li>
-      <li class="nav-item" *ngIf="person.mediationEnabled">
-        <a class="nav-link" routerLink="wedding-events" routerLinkActive="active"
-          >Mariages & divorces</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="tasks" routerLinkActive="active">Tâches</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="files" routerLinkActive="active">Documents</a>
-      </li>
-      <li class="nav-item" *ngIf="!person.deathDate">
-        <a class="nav-link" routerLink="participations" routerLinkActive="active">Activités</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="memberships" routerLinkActive="active">
-          Adhésion
-          <span
-            id="membership-warning-icon"
-            *ngIf="membershipStatus === 'KO' || membershipStatus === 'OUT_OF_DATE'"
-            class="text-warning fa fa-exclamation-triangle"
-            [ngbTooltip]="
-              membershipStatus === 'KO'
-                ? 'Pas d\'adhésion pour l\'année en cours'
-                : 'Paiement de l\'adhésion pas à jour'
-            "
-          ></span>
-        </a>
-      </li>
-      <li class="nav-item" *ngIf="!person.deathDate">
-        <a class="nav-link" routerLink="death" routerLinkActive="active"> Décès </a>
-      </li>
-    </ul>
+  <ng-container *ngIf="reminders$ | async as reminders">
+    <div class="alert alert-warning reminders" *ngIf="reminders.length">
+      <gl-person-reminders [reminders]="reminders"></gl-person-reminders>
+    </div>
+  </ng-container>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-4 col-lg-2">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="info" routerLinkActive="active">Informations</a>
+        </li>
+        <li class="nav-item" *ngIf="person.mediationEnabled">
+          <a class="nav-link" routerLink="resources" routerLinkActive="active">Ressources</a>
+        </li>
+        <li class="nav-item" *ngIf="person.mediationEnabled">
+          <a class="nav-link" routerLink="family" routerLinkActive="active">Situation familiale</a>
+        </li>
+        <li class="nav-item" *ngIf="person.mediationEnabled">
+          <a class="nav-link" routerLink="network" routerLinkActive="active">Réseau</a>
+        </li>
+        <li class="nav-item" *ngIf="person.mediationEnabled">
+          <a class="nav-link" routerLink="wedding-events" routerLinkActive="active">
+            Mariages & divorces
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="tasks" routerLinkActive="active">Tâches</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="files" routerLinkActive="active">Documents</a>
+        </li>
+        <li class="nav-item" *ngIf="!person.deathDate">
+          <a class="nav-link" routerLink="participations" routerLinkActive="active">Activités</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="memberships" routerLinkActive="active">
+            Adhésion
+            <ng-container *ngIf="membershipStatus$ | async as membershipStatus">
+              <span
+                id="membership-warning-icon"
+                *ngIf="membershipStatus === 'KO' || membershipStatus === 'OUT_OF_DATE'"
+                class="text-warning fa fa-exclamation-triangle"
+                [ngbTooltip]="
+                  membershipStatus === 'KO'
+                    ? 'Pas d\'adhésion pour l\'année en cours'
+                    : 'Paiement de l\'adhésion pas à jour'
+                "
+              ></span>
+            </ng-container>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="!person.deathDate">
+          <a class="nav-link" routerLink="death" routerLinkActive="active"> Décès </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-
-  <div class="col">
-    <router-outlet></router-outlet>
-  </div>
-</div>
+</ng-container>

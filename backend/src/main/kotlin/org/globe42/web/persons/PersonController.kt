@@ -2,16 +2,21 @@ package org.globe42.web.persons
 
 import org.globe42.dao.CountryDao
 import org.globe42.dao.CoupleDao
+import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.City
 import org.globe42.domain.Couple
+import org.globe42.domain.PARIS_TIME_ZONE
 import org.globe42.domain.PassportStatus
+import org.globe42.domain.PaymentMode
 import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 import javax.transaction.Transactional
 
 /**
@@ -24,7 +29,8 @@ import javax.transaction.Transactional
 class PersonController(
     private val personDao: PersonDao,
     private val coupleDao: CoupleDao,
-    private val countryDao: CountryDao
+    private val countryDao: CountryDao,
+    private val membershipDao: MembershipDao
 ) {
 
     @GetMapping
@@ -101,6 +107,51 @@ class PersonController(
         val person = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
         person.deathDate = command.deathDate
         person.clearParticipations()
+    }
+
+    @GetMapping("/{personId}/reminders")
+    fun reminders(@PathVariable("personId") id: Long): List<ReminderDTO> {
+        val person = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
+
+        if (person.deathDate != null || person.deleted) {
+            return emptyList()
+        }
+
+        val today = LocalDate.now(PARIS_TIME_ZONE)
+        val result = mutableListOf<ReminderDTO>()
+
+        // health insurance to renew
+        if (person.mediationEnabled) {
+            person.healthInsuranceStartDate?.let { startDate ->
+                val endDate = startDate.plus(HEALTH_INSURANCE_PERIOD)
+                if (today.isAfter(endDate.minus(HEALTH_INSURANCE_DELAY_BEFORE_REMINDER))) {
+                    result.add(HealthInsuranceToRenewDTO(endDate))
+                }
+            }
+
+            // residence permit to renew
+            person.residencePermitValidityEndDate?.let { endDate ->
+                if (today.isAfter(endDate.minus(RESIDENCE_PERMIT_DELAY_BEFORE_REMINDER))) {
+                    result.add(ResidencePermitToRenewDTO(endDate))
+                }
+            }
+
+            // health check to plan
+            person.lastHealthCheckDate?.let { lastDate ->
+                if (today.isAfter(lastDate.plus(HEALTH_CHECK_PERIOD))) {
+                    result.add(HealthCheckToPlanDTO(lastDate))
+                }
+            } ?: result.add(HealthCheckToPlanDTO(null))
+        }
+
+        // membership to renew / membership payment out of date
+        membershipDao.findByPersonAndYear(person, today.year)?.let { membership ->
+            if (membership.paymentMode == PaymentMode.OUT_OF_DATE) {
+                result.add(MembershipPaymentOutOfDateDTO)
+            }
+        } ?: result.add(MembershipToRenewDTO)
+
+        return result
     }
 
     private fun copyCommandToPerson(command: PersonCommandDTO, person: Person) {

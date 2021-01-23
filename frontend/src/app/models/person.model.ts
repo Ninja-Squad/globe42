@@ -110,3 +110,42 @@ export interface CityModel {
   code: number;
   city: string;
 }
+
+interface BaseReminder {
+  type:
+    | 'HEALTH_INSURANCE_TO_RENEW'
+    | 'RESIDENCE_PERMIT_TO_RENEW'
+    | 'HEALTH_CHECK_TO_PLAN'
+    | 'MEMBERSHIP_TO_RENEW'
+    | 'MEMBERSHIP_PAYMENT_OUT_OF_DATE';
+}
+
+export interface HealthInsuranceToRenew extends BaseReminder {
+  type: 'HEALTH_INSURANCE_TO_RENEW';
+  endDate: string;
+}
+
+export interface ResidencePermitToRenew extends BaseReminder {
+  type: 'RESIDENCE_PERMIT_TO_RENEW';
+  endDate: string;
+}
+
+export interface HealthCheckToPlan extends BaseReminder {
+  type: 'HEALTH_CHECK_TO_PLAN';
+  lastDate: string | null;
+}
+
+export interface MembershipToRenew extends BaseReminder {
+  type: 'MEMBERSHIP_TO_RENEW';
+}
+
+export interface MembershipPaymentOutOfDate extends BaseReminder {
+  type: 'MEMBERSHIP_PAYMENT_OUT_OF_DATE';
+}
+
+export type ReminderModel =
+  | HealthInsuranceToRenew
+  | ResidencePermitToRenew
+  | HealthCheckToPlan
+  | MembershipToRenew
+  | MembershipPaymentOutOfDate;

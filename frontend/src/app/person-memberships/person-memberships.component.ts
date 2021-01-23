@@ -11,6 +11,7 @@ import { ConfirmService } from '../confirm.service';
 import { switchMap, tap } from 'rxjs/operators';
 import { PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
 import { CurrentPersonService } from '../current-person.service';
+import { CurrentPersonReminderService } from '../current-person-reminder.service';
 
 @Component({
   selector: 'gl-person-memberships',
@@ -33,6 +34,7 @@ export class PersonMembershipsComponent implements OnInit {
 
   constructor(
     private currentPersonService: CurrentPersonService,
+    private currentPersonReminderService: CurrentPersonReminderService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private membershipService: MembershipService,
@@ -54,7 +56,10 @@ export class PersonMembershipsComponent implements OnInit {
 
     this.membershipService
       .createCurrent(this.person.id, command)
-      .pipe(switchMap(() => this.membershipService.list(this.person.id)))
+      .pipe(
+        tap(() => this.currentPersonReminderService.refresh()),
+        switchMap(() => this.membershipService.list(this.person.id))
+      )
       .subscribe(memberships => this.initialize(memberships));
   }
 
@@ -67,6 +72,7 @@ export class PersonMembershipsComponent implements OnInit {
         switchMap(() =>
           this.membershipService.deleteCurrent(this.person.id, this.currentMembership.id)
         ),
+        tap(() => this.currentPersonReminderService.refresh()),
         switchMap(() => this.membershipService.list(this.person.id))
       )
       .subscribe(memberships => this.initialize(memberships));

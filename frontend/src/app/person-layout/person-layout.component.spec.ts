@@ -1,19 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PersonLayoutComponent } from './person-layout.component';
-import { PersonModel } from '../models/person.model';
+import { PersonModel, ReminderModel } from '../models/person.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouterOutlet } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MembershipModel } from '../models/membership.model';
-import { MembershipService } from '../membership.service';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { ComponentTester } from 'ngx-speculoos';
 import { LOCALE_ID } from '@angular/core';
 import { CurrentPersonService } from '../current-person.service';
+import { CurrentPersonReminderService } from '../current-person-reminder.service';
+import { PersonRemindersComponent } from '../person-reminders/person-reminders.component';
 
 class PersonLayoutComponentTester extends ComponentTester<PersonLayoutComponent> {
   constructor() {
@@ -35,11 +35,16 @@ class PersonLayoutComponentTester extends ComponentTester<PersonLayoutComponent>
   get deathMessage() {
     return this.element('#death-message');
   }
+
+  get reminders() {
+    return this.element('.reminders');
+  }
 }
 
 describe('PersonLayoutComponent', () => {
   let person: PersonModel;
   let tester: PersonLayoutComponentTester;
+  let remindersSubject: Subject<Array<ReminderModel>>;
 
   beforeEach(() => {
     person = {
@@ -52,7 +57,7 @@ describe('PersonLayoutComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule, GlobeNgbTestingModule],
-      declarations: [PersonLayoutComponent, FullnamePipe],
+      declarations: [PersonLayoutComponent, FullnamePipe, PersonRemindersComponent],
       providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
     });
 
@@ -60,6 +65,11 @@ describe('PersonLayoutComponent', () => {
     spyOnProperty(currentPersonService, 'personChanges$').and.returnValue(of(person));
 
     tester = new PersonLayoutComponentTester();
+    const currentPersonReminderService = tester.debugElement.injector.get(
+      CurrentPersonReminderService
+    );
+    remindersSubject = new Subject<Array<ReminderModel>>();
+    spyOn(currentPersonReminderService, 'initialize').and.returnValue(remindersSubject);
   });
 
   it('should display the person full name as title', () => {
@@ -84,42 +94,30 @@ describe('PersonLayoutComponent', () => {
     expect(tester.navLinks.length).toBe(6);
   });
 
-  it('should have a loading membership status initially', () => {
+  it('should have a loading membership status initially and no reminders', () => {
     tester.detectChanges();
 
-    expect(tester.componentInstance.membershipStatus).toBe('loading');
-    expect(tester.membershipWarningIcon).toBeFalsy();
+    expect(tester.membershipWarningIcon).toBeNull();
+    expect(tester.reminders).toBeNull();
   });
 
-  it('should change the working status when the current membership is loaded or when it is created or deleted', () => {
-    const membershipService: MembershipService = TestBed.inject(MembershipService);
-    spyOn(membershipService, 'getCurrent').and.returnValue(of({} as MembershipModel));
-
+  it('should change the membership status and the reminders alert when the reminders change', () => {
     tester.detectChanges();
 
-    expect(tester.componentInstance.membershipStatus).toBe('OK');
-    expect(membershipService.getCurrent).toHaveBeenCalledWith(person.id);
-    expect(tester.membershipWarningIcon).toBeFalsy();
-
-    membershipService.currentMembership$.next(null);
+    remindersSubject.next([{ type: 'MEMBERSHIP_TO_RENEW' }]);
     tester.detectChanges();
-    expect(tester.componentInstance.membershipStatus).toBe('KO');
-    expect(tester.membershipWarningIcon).toBeTruthy();
+    expect(tester.membershipWarningIcon).not.toBeNull();
+    expect(tester.reminders).not.toBeNull();
 
-    membershipService.currentMembership$.next({ paymentMode: 'CASH' } as MembershipModel);
+    remindersSubject.next([]);
     tester.detectChanges();
-    expect(tester.componentInstance.membershipStatus).toBe('OK');
-    expect(tester.membershipWarningIcon).toBeFalsy();
+    expect(tester.membershipWarningIcon).toBeNull();
+    expect(tester.reminders).toBeNull();
 
-    membershipService.currentMembership$.next({ paymentMode: 'OUT_OF_DATE' } as MembershipModel);
+    remindersSubject.next([{ type: 'MEMBERSHIP_PAYMENT_OUT_OF_DATE' }]);
     tester.detectChanges();
-    expect(tester.componentInstance.membershipStatus).toBe('OUT_OF_DATE');
-    expect(tester.membershipWarningIcon).toBeTruthy();
-
-    tester.componentInstance.ngOnDestroy();
-    membershipService.currentMembership$.next(null);
-    tester.detectChanges();
-    expect(tester.componentInstance.membershipStatus).toBe('OUT_OF_DATE'); // should have been unsubscribed
+    expect(tester.membershipWarningIcon).not.toBeNull();
+    expect(tester.reminders).not.toBeNull();
   });
 
   it('should not display a death message if not dead', () => {

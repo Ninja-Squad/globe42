@@ -6,11 +6,11 @@ import org.globe42.dao.ChargeCategoryDao
 import org.globe42.domain.ChargeCategory
 import org.globe42.test.GlobeMvcTest
 import org.globe42.web.incomes.IncomeSourceTypeController
+import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
@@ -30,9 +30,11 @@ class ChargeCategoryControllerMvcTest {
     fun `should list`() {
         every { mockChargeCategoryDao.findAll() } returns listOf(ChargeCategory(1L, "category1"))
 
-        mvc.perform(get("/api/charge-categories"))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$[0].id").value(1))
-            .andExpect(jsonPath("$[0].name").value("category1"))
+        mvc.get("/api/charge-categories")
+            .andExpect {
+                status().isOk()
+                jsonValue("$[0].id", 1)
+                jsonValue("$[0].name", "category1")
+            }
     }
 }
