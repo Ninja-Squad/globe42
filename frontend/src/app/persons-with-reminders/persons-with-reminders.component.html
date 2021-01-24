@@ -1,0 +1,45 @@
+<div class="bg-light border rounded p-2">
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label>Afficher les personnes avec un rappel de type</label>
+      <div>
+        <div *ngFor="let reminderType of reminderTypes" class="custom-control custom-switch">
+          <input
+            [formControlName]="reminderType"
+            class="custom-control-input"
+            type="checkbox"
+            [id]="'reminder-type-' + reminderType"
+          />
+          <label class="custom-control-label" [for]="'reminder-type-' + reminderType">{{
+            reminderType | displayReminderType
+          }}</label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<hr />
+
+<div *ngFor="let person of filteredPersons" class="mb-2 person-item">
+  <div class="row mb-1">
+    <div class="col-sm-8 col-lg-3">
+      <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
+    </div>
+    <div class="col-sm-4 col-lg-2">{{ person.mediationCode }}</div>
+    <div class="col-sm-8 col-lg-4">
+      <ng-container *ngIf="person.email">
+        <span class="fa fa-envelope"></span>&nbsp;{{ person.email }}
+      </ng-container>
+    </div>
+    <div class="col-sm-4 col-lg-3">
+      <ng-container *ngIf="person.phoneNumber">
+        <span class="fa fa-phone"></span>&nbsp;{{ person.phoneNumber }}
+      </ng-container>
+    </div>
+  </div>
+  <div class="alert alert-warning ml-4">
+    <gl-person-reminders [reminders]="person.reminders"></gl-person-reminders>
+  </div>
+  <hr />
+</div>

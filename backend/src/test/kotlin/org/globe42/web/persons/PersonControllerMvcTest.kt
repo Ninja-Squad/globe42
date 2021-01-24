@@ -169,4 +169,16 @@ class PersonControllerMvcTest(
                 jsonValue("$[0].type", ReminderType.MEMBERSHIP_TO_RENEW.name)
             }
     }
+
+    @Test
+    fun `should get persons with reminders`() {
+        every { mockPersonDao.findNotDeleted() } returns listOf(person)
+        every { mockMembershipDao.findByYear(LocalDate.now(PARIS_TIME_ZONE).year) } returns emptyList()
+
+        mvc.get("/api/persons/with-reminders")
+            .andExpect {
+                status { isOk() }
+                jsonPath("$") { isArray() }
+            }
+    }
 }

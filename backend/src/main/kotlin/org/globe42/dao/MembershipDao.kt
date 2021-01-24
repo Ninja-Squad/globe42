@@ -17,6 +17,9 @@ interface MembershipDao : GlobeRepository<Membership, Long> {
     @Query("select m from Membership m where m.person = :person and m.year = :year")
     fun findByPersonAndYear(@Param("person") person: Person, @Param("year") year: Int): Membership?
 
+    @Query("select m from Membership m where m.year = :year")
+    fun findByYear(@Param("year") year: Int): List<Membership>
+
     @Query("""select m from Membership m 
         left join fetch m.person p
         order by m.year, p.firstName, p.lastName""")

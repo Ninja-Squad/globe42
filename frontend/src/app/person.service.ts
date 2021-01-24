@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { PersonIdentityModel, PersonModel } from './models/person.model';
+import { PersonIdentityModel, PersonModel, PersonWithRemindersModel } from './models/person.model';
 import { HttpClient } from '@angular/common/http';
 import { PersonCommand, PersonDeathCommand } from './models/person.command';
+import { sortBy } from './utils';
+import { displayFullname } from './fullname.pipe';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class PersonService {
@@ -39,5 +42,11 @@ export class PersonService {
 
   signalDeath(id: number, command: PersonDeathCommand): Observable<void> {
     return this.http.put<void>(`/api/persons/${id}/death`, command);
+  }
+
+  listWithReminders() {
+    return this.http
+      .get<Array<PersonWithRemindersModel>>('/api/persons/with-reminders')
+      .pipe(map(persons => sortBy(persons, displayFullname)));
   }
 }

@@ -6,6 +6,7 @@ import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.City
 import org.globe42.domain.Couple
+import org.globe42.domain.Membership
 import org.globe42.domain.PARIS_TIME_ZONE
 import org.globe42.domain.PassportStatus
 import org.globe42.domain.PaymentMode
@@ -13,7 +14,6 @@ import org.globe42.domain.Person
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -80,7 +80,7 @@ class PersonController(
         if (newMediationCodeLetter != oldMediationCodeLetter) {
             if (command.mediationEnabled) {
                 person.mediationCode = newMediationCodeLetter +
-                    personDao.nextMediationCode(newMediationCodeLetter).toString()
+                        personDao.nextMediationCode(newMediationCodeLetter).toString()
             } else {
                 person.mediationCode = null
             }
@@ -112,8 +112,31 @@ class PersonController(
     @GetMapping("/{personId}/reminders")
     fun reminders(@PathVariable("personId") id: Long): List<ReminderDTO> {
         val person = personDao.findByIdOrNull(id) ?: throw NotFoundException("No person with ID $id")
+        return person.findReminders()
+    }
 
-        if (person.deathDate != null || person.deleted) {
+    @GetMapping("/with-reminders")
+    fun listWithReminders(): List<PersonWithRemindersDTO> {
+        val persons = personDao.findNotDeleted()
+
+        val currentYear = LocalDate.now(PARIS_TIME_ZONE).year
+        val currentYearMemberships = membershipDao.findByYear(currentYear).associateBy { it.person }
+
+        return persons
+            .map { person -> person to person.findReminders(currentYearMemberships) }
+            .filter { (_, reminders) -> reminders.isNotEmpty() }
+            .map { (person, reminders) ->
+                PersonWithRemindersDTO(
+                    identity = PersonIdentityDTO(person),
+                    email = person.email,
+                    phoneNumber = person.phoneNumber,
+                    reminders = reminders
+                )
+            }
+    }
+
+    private fun Person.findReminders(currentYearMemberships: Map<Person, Membership>? = null): List<ReminderDTO> {
+        if (deathDate != null || deleted) {
             return emptyList()
         }
 
@@ -121,8 +144,8 @@ class PersonController(
         val result = mutableListOf<ReminderDTO>()
 
         // health insurance to renew
-        if (person.mediationEnabled) {
-            person.healthInsuranceStartDate?.let { startDate ->
+        if (mediationEnabled) {
+            healthInsuranceStartDate?.let { startDate ->
                 val endDate = startDate.plus(HEALTH_INSURANCE_PERIOD)
                 if (today.isAfter(endDate.minus(HEALTH_INSURANCE_DELAY_BEFORE_REMINDER))) {
                     result.add(HealthInsuranceToRenewDTO(endDate))
@@ -130,14 +153,14 @@ class PersonController(
             }
 
             // residence permit to renew
-            person.residencePermitValidityEndDate?.let { endDate ->
+            residencePermitValidityEndDate?.let { endDate ->
                 if (today.isAfter(endDate.minus(RESIDENCE_PERMIT_DELAY_BEFORE_REMINDER))) {
                     result.add(ResidencePermitToRenewDTO(endDate))
                 }
             }
 
             // health check to plan
-            person.lastHealthCheckDate?.let { lastDate ->
+            lastHealthCheckDate?.let { lastDate ->
                 if (today.isAfter(lastDate.plus(HEALTH_CHECK_PERIOD))) {
                     result.add(HealthCheckToPlanDTO(lastDate))
                 }
@@ -145,7 +168,12 @@ class PersonController(
         }
 
         // membership to renew / membership payment out of date
-        membershipDao.findByPersonAndYear(person, today.year)?.let { membership ->
+        val membership = if (currentYearMemberships != null) {
+            currentYearMemberships[this]
+        } else {
+            membershipDao.findByPersonAndYear(this, today.year)
+        }
+        membership?.let { membership ->
             if (membership.paymentMode == PaymentMode.OUT_OF_DATE) {
                 result.add(MembershipPaymentOutOfDateDTO)
             }

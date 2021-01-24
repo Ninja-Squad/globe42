@@ -81,6 +81,8 @@ import { ActivityResolverService } from './activity-resolver.service';
 import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 import { ActivityReportComponent } from './activity-report/activity-report.component';
 import { ActivitiesLayoutComponent } from './activities-layout/activities-layout.component';
+import { PersonsWithRemindersComponent } from './persons-with-reminders/persons-with-reminders.component';
+import { PersonsWithRemindersResolverService } from './persons-with-reminders-resolver.service';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -99,6 +101,13 @@ export const routes: Routes = [
               { path: '', pathMatch: 'full', redirectTo: 'active' },
               personsRoute('active'),
               personsRoute('deleted'),
+              {
+                path: 'to-remind',
+                component: PersonsWithRemindersComponent,
+                resolve: {
+                  persons: PersonsWithRemindersResolverService
+                }
+              },
               {
                 path: 'healthcare',
                 component: HealthCareCoverageComponent,

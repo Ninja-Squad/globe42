@@ -96,6 +96,8 @@ import { ActivityEditComponent } from './activity-edit/activity-edit.component';
 import { ActivityReportComponent } from './activity-report/activity-report.component';
 import { ActivitiesLayoutComponent } from './activities-layout/activities-layout.component';
 import { PersonRemindersComponent } from './person-reminders/person-reminders.component';
+import { PersonsWithRemindersComponent } from './persons-with-reminders/persons-with-reminders.component';
+import { DisplayReminderTypePipe } from './display-reminder-type.pipe';
 
 @NgModule({
   declarations: [
@@ -183,7 +185,9 @@ import { PersonRemindersComponent } from './person-reminders/person-reminders.co
     ActivityEditComponent,
     ActivityReportComponent,
     ActivitiesLayoutComponent,
-    PersonRemindersComponent
+    PersonRemindersComponent,
+    PersonsWithRemindersComponent,
+    DisplayReminderTypePipe
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

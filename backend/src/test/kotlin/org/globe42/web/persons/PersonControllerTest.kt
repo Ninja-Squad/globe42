@@ -14,6 +14,7 @@ import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.springframework.test.web.servlet.get
 import java.time.LocalDate
 import java.time.Period
 
@@ -407,6 +408,16 @@ class PersonControllerTest {
         every { mockPersonDao.findByIdOrNull(person.id!!) } returns null
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy { controller.resurrect(person.id!!) }
+    }
+
+    @Test
+    fun `should get persons with reminders`() {
+        every { mockPersonDao.findNotDeleted() } returns listOf(person)
+        every { mockMembershipDao.findByYear(LocalDate.now(PARIS_TIME_ZONE).year) } returns emptyList()
+
+        val result = controller.listWithReminders()
+        assertThat(result).hasSize(1)
+        assertThat(result.get(0).reminders.find { it.type == ReminderType.MEMBERSHIP_TO_RENEW }).isNotNull()
     }
 
     @Nested

@@ -111,13 +111,17 @@ export interface CityModel {
   city: string;
 }
 
+export const REMINDER_TYPES = [
+  'HEALTH_INSURANCE_TO_RENEW',
+  'RESIDENCE_PERMIT_TO_RENEW',
+  'HEALTH_CHECK_TO_PLAN',
+  'MEMBERSHIP_TO_RENEW',
+  'MEMBERSHIP_PAYMENT_OUT_OF_DATE'
+] as const;
+export type ReminderType = typeof REMINDER_TYPES[number];
+
 interface BaseReminder {
-  type:
-    | 'HEALTH_INSURANCE_TO_RENEW'
-    | 'RESIDENCE_PERMIT_TO_RENEW'
-    | 'HEALTH_CHECK_TO_PLAN'
-    | 'MEMBERSHIP_TO_RENEW'
-    | 'MEMBERSHIP_PAYMENT_OUT_OF_DATE';
+  type: ReminderType;
 }
 
 export interface HealthInsuranceToRenew extends BaseReminder {
@@ -149,3 +153,9 @@ export type ReminderModel =
   | HealthCheckToPlan
   | MembershipToRenew
   | MembershipPaymentOutOfDate;
+
+export interface PersonWithRemindersModel extends PersonIdentityModel {
+  email: string;
+  phoneNumber: string;
+  reminders: Array<ReminderModel>;
+}
