@@ -12,10 +12,11 @@
   <div class="col-sm-8 col-lg-3">
     <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
   </div>
-  <div class="col-sm-4 col-lg-2">{{ person.mediationCode }}</div>
-  <div class="col-sm-8 col-lg-4">
+  <div class="col-sm-4 col-lg-1">{{ person.mediationCode }}</div>
+  <div class="col-sm-8 col-lg-5 text-nowrap">
     <ng-container *ngIf="person.email">
-      <span class="fa fa-envelope"></span>&nbsp;{{ person.email }}
+      <span class="fa fa-envelope"></span>
+      {{ person.email }}
     </ng-container>
   </div>
   <div class="col-sm-4 col-lg-3">
