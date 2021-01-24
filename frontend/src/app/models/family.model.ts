@@ -1,4 +1,5 @@
-export type Location = 'FRANCE' | 'ABROAD';
+export const LOCATIONS = ['FRANCE', 'ABROAD'] as const;
+export type Location = typeof LOCATIONS[number];
 
 export interface ChildModel {
   firstName: string;

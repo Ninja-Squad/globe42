@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MembershipModel } from '../models/membership.model';
+import { MembershipModel, PAYMENT_MODES } from '../models/membership.model';
 import { DateTime } from 'luxon';
 import { PersonModel } from '../models/person.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,7 +9,6 @@ import { MembershipService } from '../membership.service';
 import { MembershipCommand } from '../models/membership.command';
 import { ConfirmService } from '../confirm.service';
 import { switchMap, tap } from 'rxjs/operators';
-import { PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
 import { CurrentPersonService } from '../current-person.service';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
 
@@ -26,7 +25,7 @@ export class PersonMembershipsComponent implements OnInit {
 
   membershipForm: FormGroup;
 
-  paymentModes = PAYMENT_MODE_TRANSLATIONS.map(t => t.key).filter(key => key !== 'UNKNOWN');
+  paymentModes = PAYMENT_MODES.filter(mode => mode !== 'UNKNOWN');
 
   choosableOldMembershipYears: Array<number> = [];
   oldMembershipFormVisible = false;

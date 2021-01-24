@@ -1,6 +1,7 @@
 import { UserModel } from './user.model';
 
-export type NoteCategory = 'APPOINTMENT' | 'OTHER';
+export const NOTE_CATEGORIES = ['APPOINTMENT', 'OTHER'];
+export type NoteCategory = typeof NOTE_CATEGORIES[number];
 
 export interface NoteModel {
   id: number;

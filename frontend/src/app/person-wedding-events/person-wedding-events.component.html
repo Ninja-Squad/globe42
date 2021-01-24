@@ -46,8 +46,8 @@
       <label for="type">Type d'événement</label>
       <select id="type" formControlName="type" class="form-control">
         <option value=""></option>
-        <option *ngFor="let eventType of eventTypes" [value]="eventType.key">
-          {{ eventType.translation }}
+        <option *ngFor="let eventType of eventTypes" [value]="eventType">
+          {{ eventType | displayWeddingEventType }}
         </option>
       </select>
       <val-errors controlName="type" label="Le type d'événement"></val-errors>
@@ -70,11 +70,11 @@
             <input
               ngbButton
               name="location"
-              id="location{{ location.key }}"
+              id="location-{{ location }}"
               type="radio"
-              [value]="location.key"
+              [value]="location"
             />
-            {{ location.translation }}
+            {{ location | displayLocation }}
           </label>
         </div>
       </div>

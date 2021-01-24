@@ -2,15 +2,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { NoteCategory } from './models/note.model';
 import { BaseEnumPipe } from './base-enum-pipe';
 
-export const NOTE_CATEGORY_TRANSLATIONS: Array<{ key: NoteCategory; translation: string }> = [
-  { key: 'APPOINTMENT', translation: 'Rendez-vous' },
-  { key: 'OTHER', translation: 'Autre' }
-];
+const NOTE_CATEGORY_TRANSLATIONS: Record<NoteCategory, string> = {
+  APPOINTMENT: 'Rendez-vous',
+  OTHER: 'Autre'
+};
 
 @Pipe({
   name: 'displayNoteCategory'
 })
-export class DisplayNoteCategoryPipe extends BaseEnumPipe implements PipeTransform {
+export class DisplayNoteCategoryPipe extends BaseEnumPipe<NoteCategory> implements PipeTransform {
   constructor() {
     super(NOTE_CATEGORY_TRANSLATIONS);
   }

@@ -47,9 +47,7 @@ export class HealthCareCoverageComponent implements OnInit {
     const backgroundColor: Array<string> = [];
 
     this.coverage.entries.forEach((value, index) => {
-      labels.push(
-        HEALTH_CARE_COVERAGE_TRANSLATIONS.find(t => t.key === value.coverage).translation
-      );
+      labels.push(HEALTH_CARE_COVERAGE_TRANSLATIONS[value.coverage]);
       data.push(value.count);
       backgroundColor.push(COLORS[index % COLORS.length]);
     });

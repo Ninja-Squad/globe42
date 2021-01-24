@@ -4,14 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
-import { WEDDING_EVENT_TYPE_TRANSLATIONS } from '../display-wedding-event-type.pipe';
 import { ConfirmService } from '../confirm.service';
 import { WeddingEventService } from '../wedding-event.service';
-import { WeddingEventModel } from '../models/wedding-event.model';
+import { WEDDING_EVENT_TYPES, WeddingEventModel } from '../models/wedding-event.model';
 import { pastDate } from '../globe-validators';
-import { LOCATION_TRANSLATIONS } from '../display-location.pipe';
 import { CurrentPersonService } from '../current-person.service';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { LOCATIONS } from '../models/family.model';
 
 @Component({
   selector: 'gl-person-wedding-events',
@@ -24,8 +23,8 @@ export class PersonWeddingEventsComponent {
 
   newEvent: FormGroup = null;
   maxMonth: NgbDateStruct;
-  eventTypes = WEDDING_EVENT_TYPE_TRANSLATIONS;
-  locations = LOCATION_TRANSLATIONS;
+  eventTypes = WEDDING_EVENT_TYPES;
+  locations = LOCATIONS;
 
   constructor(
     route: ActivatedRoute,

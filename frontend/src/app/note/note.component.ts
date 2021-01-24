@@ -8,11 +8,10 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { NoteCommand, NoteModel } from '../models/note.model';
+import { NOTE_CATEGORIES, NoteCommand, NoteModel } from '../models/note.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { concat, of } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { NOTE_CATEGORY_TRANSLATIONS } from '../display-note-category.pipe';
 
 export interface NoteEditionEvent {
   id: number;
@@ -25,7 +24,7 @@ export interface NoteEditionEvent {
   styleUrls: ['./note.component.scss']
 })
 export class NoteComponent implements AfterViewInit {
-  noteCategories = NOTE_CATEGORY_TRANSLATIONS.map(t => t.key);
+  noteCategories = NOTE_CATEGORIES;
 
   @Input()
   note: NoteModel;

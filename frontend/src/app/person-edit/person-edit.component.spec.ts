@@ -8,15 +8,13 @@ import {
   CityModel,
   FiscalStatus,
   Gender,
+  MARITAL_STATUSES,
   PassportStatus,
   PersonIdentityModel,
   PersonModel
 } from '../models/person.model';
 import { displayCity, DisplayCityPipe } from '../display-city.pipe';
-import {
-  DisplayMaritalStatusPipe,
-  MARITAL_STATUS_TRANSLATIONS
-} from '../display-marital-status.pipe';
+import { DisplayMaritalStatusPipe } from '../display-marital-status.pipe';
 import { PersonCommand } from '../models/person.command';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -881,7 +879,7 @@ describe('PersonEditComponent', () => {
       expect(createdPerson.email).toBe('jane@mail.com');
       expect(createdPerson.phoneNumber).toBe('06 13 13 13 13');
       expect(createdPerson.firstMediationAppointmentDate).toBe('2017-02-02');
-      expect(createdPerson.maritalStatus).toBe(MARITAL_STATUS_TRANSLATIONS[2].key);
+      expect(createdPerson.maritalStatus).toBe(MARITAL_STATUSES[2]);
       expect(createdPerson.spouseId).toBe(1);
       expect(createdPerson.partner).toBeNull();
       expect((createdPerson as any).spouse).not.toBeDefined();

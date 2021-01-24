@@ -1,13 +1,12 @@
 import { ActivatedRoute } from '@angular/router';
 import { PersonModel } from '../models/person.model';
 import { TestBed } from '@angular/core/testing';
-import { MembershipModel } from '../models/membership.model';
+import { MembershipModel, PAYMENT_MODES } from '../models/membership.model';
 import { MembershipService } from '../membership.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PersonMembershipsComponent } from './person-memberships.component';
 import { DateTime } from 'luxon';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
-import { DisplayPaymentModePipe, PAYMENT_MODE_TRANSLATIONS } from '../display-payment-mode.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConfirmService } from '../confirm.service';
 import { LOCALE_ID } from '@angular/core';
@@ -19,6 +18,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
+import { DisplayPaymentModePipe } from '../display-payment-mode.pipe';
 
 class PersonMembershipsComponentTester extends ComponentTester<PersonMembershipsComponent> {
   constructor() {
@@ -186,7 +186,7 @@ describe('PersonMembershipsComponent', () => {
     tester.detectChanges();
 
     expect(tester.paymentMode).toHaveSelectedLabel('');
-    expect(tester.paymentMode.optionLabels.length).toBe(PAYMENT_MODE_TRANSLATIONS.length);
+    expect(tester.paymentMode.optionLabels.length).toBe(PAYMENT_MODES.length);
     expect(tester.paymentMode.optionLabels[0]).toBe('');
     expect(tester.paymentMode.optionLabels[1]).toBe('Chèque');
     expect(tester.paymentMode.optionLabels[2]).toBe('Espèces');
@@ -368,7 +368,7 @@ describe('PersonMembershipsComponent', () => {
     expect(tester.oldYear).toHaveSelectedLabel('');
     expect(tester.oldYear.optionLabels).toEqual(['', '2018']);
     expect(tester.oldPaymentMode).toHaveSelectedLabel('');
-    expect(tester.oldPaymentMode.optionLabels.length).toBe(PAYMENT_MODE_TRANSLATIONS.length);
+    expect(tester.oldPaymentMode.optionLabels.length).toBe(PAYMENT_MODES.length);
     expect(tester.oldPaymentMode.optionLabels[0]).toBe('');
     expect(tester.oldPaymentMode.optionLabels[1]).toBe('Chèque');
     expect(tester.oldPaymentMode.optionLabels[2]).toBe('Espèces');

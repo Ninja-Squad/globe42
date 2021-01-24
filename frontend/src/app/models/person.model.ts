@@ -1,57 +1,84 @@
 import { CountryModel } from './country.model';
 
-export type MaritalStatus =
-  | 'UNKNOWN'
-  | 'MARRIED'
-  | 'SINGLE'
-  | 'CONCUBINAGE'
-  | 'WIDOWER'
-  | 'DIVORCED'
-  | 'SPLIT';
-export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
-export type FiscalStatus = 'UNKNOWN' | 'TAXABLE' | 'NOT_TAXABLE';
-export type Housing =
-  | 'UNKNOWN'
-  | 'NONE'
-  | 'EMERGENCY'
-  | 'F0'
-  | 'F1'
-  | 'F2'
-  | 'F3'
-  | 'F4'
-  | 'F5'
-  | 'F6';
-export type HealthCareCoverage =
-  | 'UNKNOWN'
-  | 'GENERAL'
-  | 'NONE'
-  | 'AGR'
-  | 'AME'
-  | 'CNAREFE'
-  | 'PUMA'
-  | 'SSI'
-  | 'OTHER';
-export type HealthInsurance =
-  | 'UNKNOWN'
-  | 'NONE'
-  | 'C2S_WITHOUT_FINANCIAL_PARTICIPATION'
-  | 'C2S_WITH_FINANCIAL_PARTICIPATION'
-  | 'CMUC'
-  | 'AME'
-  | 'ACS'
-  | 'MUTUELLE';
-export type Visa = 'UNKNOWN' | 'NONE' | 'SHORT_STAY' | 'LONG_STAY';
-export type ResidencePermit =
-  | 'UNKNOWN'
-  | 'RECEIPT_OF_APPLICATION_FOR_FIRST_RESIDENCE_PERMIT'
-  | 'RECEIPT_OF_RENEWAL_RESIDENCE_PERMIT'
-  | 'RETIREMENT_RESIDENCE_PERMIT'
-  | 'TEN_YEAR_OLD_RESIDENT'
-  | 'TEMPORARY_RESIDENCE_PRIVATE_AND_FAMILY_LIFE'
-  | 'OTHER';
-export type EntryType = 'UNKNOWN' | 'REGULAR' | 'IRREGULAR';
-export type PassportStatus = 'UNKNOWN' | 'PASSPORT' | 'NO_PASSPORT';
-export type SchoolLevel = 'UNKNOWN' | 'NONE' | 'PRIMARY' | 'MIDDLE' | 'HIGH' | 'HIGHER';
+export const MARITAL_STATUSES = [
+  'UNKNOWN',
+  'MARRIED',
+  'SINGLE',
+  'CONCUBINAGE',
+  'WIDOWER',
+  'DIVORCED',
+  'SPLIT'
+] as const;
+export type MaritalStatus = typeof MARITAL_STATUSES[number];
+
+export const GENDERS = ['MALE', 'FEMALE', 'OTHER'] as const;
+export type Gender = typeof GENDERS[number];
+
+export const FISCAL_STATUSES = ['UNKNOWN', 'TAXABLE', 'NOT_TAXABLE'] as const;
+export type FiscalStatus = typeof FISCAL_STATUSES[number];
+
+export const HOUSINGS = [
+  'UNKNOWN',
+  'NONE',
+  'EMERGENCY',
+  'F0',
+  'F1',
+  'F2',
+  'F3',
+  'F4',
+  'F5',
+  'F6'
+] as const;
+export type Housing = typeof HOUSINGS[number];
+
+export const HEALTH_CARE_COVERAGES = [
+  'UNKNOWN',
+  'GENERAL',
+  'NONE',
+  'AGR',
+  'AME',
+  'CNAREFE',
+  'PUMA',
+  'SSI',
+  'OTHER'
+] as const;
+export type HealthCareCoverage = typeof HEALTH_CARE_COVERAGES[number];
+
+export const HEALTH_INSURANCES = [
+  ,
+  'UNKNOWN',
+  'NONE',
+  'C2S_WITHOUT_FINANCIAL_PARTICIPATION',
+  'C2S_WITH_FINANCIAL_PARTICIPATION',
+  'CMUC',
+  'AME',
+  'ACS',
+  'MUTUELLE'
+];
+export type HealthInsurance = typeof HEALTH_INSURANCES[number];
+
+export const VISAS = ['UNKNOWN', 'NONE', 'SHORT_STAY', 'LONG_STAY'] as const;
+export type Visa = typeof VISAS[number];
+
+export const RESIDENCE_PERMITS = [
+  'UNKNOWN',
+  'RECEIPT_OF_APPLICATION_FOR_FIRST_RESIDENCE_PERMIT',
+  'RECEIPT_OF_RENEWAL_RESIDENCE_PERMIT',
+  'RETIREMENT_RESIDENCE_PERMIT',
+  'TEN_YEAR_OLD_RESIDENT',
+  'TEMPORARY_RESIDENCE_PRIVATE_AND_FAMILY_LIFE',
+  'OTHER'
+] as const;
+export type ResidencePermit = typeof RESIDENCE_PERMITS[number];
+
+export const ENTRY_TYPES = ['UNKNOWN', 'REGULAR', 'IRREGULAR'] as const;
+export type EntryType = typeof ENTRY_TYPES[number];
+
+export const PASSPORT_STATUSES = ['UNKNOWN', 'PASSPORT', 'NO_PASSPORT'] as const;
+export type PassportStatus = typeof PASSPORT_STATUSES[number];
+
+export const SCHOOL_LEVELS = ['UNKNOWN', 'NONE', 'PRIMARY', 'MIDDLE', 'HIGH', 'HIGHER'] as const;
+export type SchoolLevel = typeof SCHOOL_LEVELS[number];
 
 export interface PersonIdentityModel {
   id: number;
