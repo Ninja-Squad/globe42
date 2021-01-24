@@ -9,6 +9,7 @@ import { DisplayReminderTypePipe } from '../display-reminder-type.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FullnamePipe } from '../fullname.pipe';
+import { RouterTestingModule } from '@angular/router/testing';
 
 class PersonsWithRemindersComponentTester extends ComponentTester<PersonsWithRemindersComponent> {
   constructor() {
@@ -80,7 +81,7 @@ describe('PersonsWithRemindersComponent', () => {
     });
 
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, RouterTestingModule],
       declarations: [
         PersonsWithRemindersComponent,
         PersonRemindersComponent,

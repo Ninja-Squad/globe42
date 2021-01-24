@@ -1,4 +1,5 @@
 import { DisplayPaymentModePipe } from './display-payment-mode.pipe';
+import { PaymentMode } from './models/membership.model';
 
 describe('DisplayPaymentModePipe', () => {
   it('should translate payment mode', () => {
@@ -7,6 +8,6 @@ describe('DisplayPaymentModePipe', () => {
     expect(pipe.transform('CASH')).toBe('Espèces');
     expect(pipe.transform('CHECK')).toBe('Chèque');
     expect(pipe.transform(null)).toBe('');
-    expect(pipe.transform('foobar')).toBe('???foobar???');
+    expect(pipe.transform('foobar' as PaymentMode)).toBe('???foobar???');
   });
 });

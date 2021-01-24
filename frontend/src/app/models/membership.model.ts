@@ -1,4 +1,5 @@
-export type PaymentMode = 'CASH' | 'CHECK' | 'FREE' | 'OUT_OF_DATE' | 'UNKNOWN';
+export const PAYMENT_MODES = ['CHECK', 'CASH', 'FREE', 'OUT_OF_DATE', 'UNKNOWN'] as const;
+export type PaymentMode = typeof PAYMENT_MODES[number];
 
 export interface MembershipModel {
   id: number;

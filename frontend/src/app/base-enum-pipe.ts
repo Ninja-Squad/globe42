@@ -1,14 +1,14 @@
 import { PipeTransform } from '@angular/core';
 
-export class BaseEnumPipe implements PipeTransform {
-  constructor(private translations: Array<{ key: string; translation: string }>) {}
+export class BaseEnumPipe<E extends string> implements PipeTransform {
+  constructor(private translations: Record<E, string>) {}
 
-  transform(key: string): string {
+  transform(key: E): string {
     if (!key) {
       return '';
     }
 
-    const element = this.translations.find(t => t.key === key);
-    return element ? element.translation : `???${key}???`;
+    const translation = this.translations[key];
+    return translation ?? `???${key}???`;
   }
 }

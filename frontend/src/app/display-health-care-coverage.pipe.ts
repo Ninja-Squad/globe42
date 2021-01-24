@@ -2,25 +2,24 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { HealthCareCoverage } from './models/person.model';
 import { BaseEnumPipe } from './base-enum-pipe';
 
-export const HEALTH_CARE_COVERAGE_TRANSLATIONS: Array<{
-  key: HealthCareCoverage;
-  translation: string;
-}> = [
-  { key: 'UNKNOWN', translation: 'Inconnue' },
-  { key: 'NONE', translation: 'Aucune' },
-  { key: 'GENERAL', translation: 'Régime général' },
-  { key: 'PUMA', translation: 'Protection Universelle Maladie' },
-  { key: 'AGR', translation: 'Régime agricole' },
-  { key: 'AME', translation: "Aide médicale de l'Etat" },
-  { key: 'SSI', translation: 'Sécurité sociale des indépendants' },
-  { key: 'CNAREFE', translation: "Centre National des Retraités de France à l'Étranger" },
-  { key: 'OTHER', translation: 'Autre' }
-];
+export const HEALTH_CARE_COVERAGE_TRANSLATIONS: Record<HealthCareCoverage, string> = {
+  UNKNOWN: 'Inconnue',
+  NONE: 'Aucune',
+  GENERAL: 'Régime général',
+  PUMA: 'Protection Universelle Maladie',
+  AGR: 'Régime agricole',
+  AME: "Aide médicale de l'Etat",
+  SSI: 'Sécurité sociale des indépendants',
+  CNAREFE: "Centre National des Retraités de France à l'Étranger",
+  OTHER: 'Autre'
+};
 
 @Pipe({
   name: 'displayHealthCareCoverage'
 })
-export class DisplayHealthCareCoveragePipe extends BaseEnumPipe implements PipeTransform {
+export class DisplayHealthCareCoveragePipe
+  extends BaseEnumPipe<HealthCareCoverage>
+  implements PipeTransform {
   constructor() {
     super(HEALTH_CARE_COVERAGE_TRANSLATIONS);
   }

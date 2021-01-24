@@ -4,12 +4,9 @@ import { PersonWeddingEventsComponent } from './person-wedding-events.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { PersonModel } from '../models/person.model';
-import { WeddingEventModel } from '../models/wedding-event.model';
+import { WEDDING_EVENT_TYPES, WeddingEventModel } from '../models/wedding-event.model';
 import { WeddingEventService } from '../wedding-event.service';
-import {
-  DisplayWeddingEventTypePipe,
-  WEDDING_EVENT_TYPE_TRANSLATIONS
-} from '../display-wedding-event-type.pipe';
+import { DisplayWeddingEventTypePipe } from '../display-wedding-event-type.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmService } from '../confirm.service';
 import { EMPTY, of } from 'rxjs';
@@ -17,9 +14,9 @@ import { DateTime } from 'luxon';
 import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
-import { DisplayLocationPipe, LOCATION_TRANSLATIONS } from '../display-location.pipe';
+import { DisplayLocationPipe } from '../display-location.pipe';
 import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
-import { Location } from '../models/family.model';
+import { Location, LOCATIONS } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { CurrentPersonService } from '../current-person.service';
@@ -61,7 +58,7 @@ class PersonWeddingEventsComponentTester extends ComponentTester<PersonWeddingEv
   }
 
   locationInput(location: Location) {
-    return this.input(`#location${location}`);
+    return this.input(`#location-${location}`);
   }
 
   get createButton() {
@@ -148,8 +145,8 @@ describe('PersonWeddingEventsComponent', () => {
 
     it('should expose events and event types, and not have a form initially', () => {
       expect(component.events).toBe(events);
-      expect(component.eventTypes).toBe(WEDDING_EVENT_TYPE_TRANSLATIONS);
-      expect(component.locations).toBe(LOCATION_TRANSLATIONS);
+      expect(component.eventTypes).toBe(WEDDING_EVENT_TYPES);
+      expect(component.locations).toBe(LOCATIONS);
       expect(component.newEvent).toBeNull();
     });
 

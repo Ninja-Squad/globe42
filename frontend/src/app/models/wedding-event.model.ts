@@ -1,12 +1,14 @@
 import { Location } from './family.model';
 
-export type WeddingEventType =
-  | 'WEDDING'
-  | 'PACS'
-  | 'COHABITATION'
-  | 'DIVORCE'
-  | 'SPOUSE_DEATH'
-  | 'SEPARATION';
+export const WEDDING_EVENT_TYPES = [
+  'WEDDING',
+  'PACS',
+  'COHABITATION',
+  'DIVORCE',
+  'SPOUSE_DEATH',
+  'SEPARATION'
+] as const;
+export type WeddingEventType = typeof WEDDING_EVENT_TYPES[number];
 
 export interface WeddingEventModel {
   id: number;

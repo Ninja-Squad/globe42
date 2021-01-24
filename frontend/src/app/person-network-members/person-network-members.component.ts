@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NetworkMemberModel } from '../models/network-member.model';
+import { NETWORK_MEMBER_TYPES, NetworkMemberModel } from '../models/network-member.model';
 import { ConfirmService } from '../confirm.service';
 import { NetworkMemberService } from '../network-member.service';
 import { switchMap, tap } from 'rxjs/operators';
 import { PersonModel } from '../models/person.model';
-import { NETWORK_MEMBER_TYPE_TRANSLATIONS } from '../display-network-member-type.pipe';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NetworkMemberCommand } from '../models/network-member.command';
 import { Observable } from 'rxjs';
@@ -19,7 +18,7 @@ import { CurrentPersonService } from '../current-person.service';
 export class PersonNetworkMembersComponent implements OnInit {
   members: Array<NetworkMemberModel>;
   person: PersonModel;
-  memberTypes = NETWORK_MEMBER_TYPE_TRANSLATIONS.map(t => t.key);
+  memberTypes = NETWORK_MEMBER_TYPES;
 
   editedMember: NetworkMemberModel;
   memberForm: FormGroup;

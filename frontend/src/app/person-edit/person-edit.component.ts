@@ -10,25 +10,28 @@ import {
   Validators
 } from '@angular/forms';
 import { PersonService } from '../person.service';
-import { MaritalStatus, PersonIdentityModel, PersonModel } from '../models/person.model';
+import {
+  ENTRY_TYPES,
+  FISCAL_STATUSES,
+  GENDERS,
+  HEALTH_CARE_COVERAGES,
+  HEALTH_INSURANCES,
+  HOUSINGS,
+  MARITAL_STATUSES,
+  PASSPORT_STATUSES,
+  PersonIdentityModel,
+  PersonModel,
+  RESIDENCE_PERMITS,
+  SCHOOL_LEVELS,
+  VISAS
+} from '../models/person.model';
 import { SearchCityService } from '../search-city.service';
-import { MARITAL_STATUS_TRANSLATIONS } from '../display-marital-status.pipe';
-import { GENDER_TRANSLATIONS } from '../display-gender.pipe';
 import { PersonCommand } from '../models/person.command';
-import { HOUSING_TRANSLATIONS } from '../display-housing.pipe';
-import { FISCAL_STATUS_TRANSLATIONS } from '../display-fiscal-status.pipe';
-import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
-import { HEALTH_INSURANCE_TRANSLATIONS } from '../display-health-insurance.pipe';
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CityTypeahead } from './city-typeahead';
 import { finalize, map, switchMap, tap } from 'rxjs/operators';
 import { combineLatest, EMPTY } from 'rxjs';
 import { CountryTypeahead } from '../person/country-typeahead';
-import { VISA_TRANSLATIONS } from '../display-visa.pipe';
-import { RESIDENCE_PERMIT_TRANSLATIONS } from '../display-residence-permit.pipe';
-import { ENTRY_TYPE_TRANSLATIONS } from '../display-entry-type.pipe';
-import { PASSPORT_STATUS_TRANSLATIONS } from '../display-passport-status.pipe';
-import { SCHOOL_LEVEL_TRANSLATIONS } from '../display-school-level.pipe';
 
 export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;
 
@@ -64,17 +67,17 @@ export class PersonEditComponent {
   personForm: FormGroup;
   spouseTypeCtrl: FormControl;
 
-  genders = GENDER_TRANSLATIONS.map(t => t.key);
-  maritalStatuses: Array<MaritalStatus> = MARITAL_STATUS_TRANSLATIONS.map(t => t.key);
-  housings = HOUSING_TRANSLATIONS.map(t => t.key);
-  fiscalStatuses = FISCAL_STATUS_TRANSLATIONS.map(t => t.key);
-  healthCareCoverages = HEALTH_CARE_COVERAGE_TRANSLATIONS.map(t => t.key);
-  healthInsurances = HEALTH_INSURANCE_TRANSLATIONS.map(t => t.key);
-  visas = VISA_TRANSLATIONS.map(t => t.key);
-  residencePermits = RESIDENCE_PERMIT_TRANSLATIONS.map(t => t.key);
-  entryTypes = ENTRY_TYPE_TRANSLATIONS.map(t => t.key);
-  passportStatuses = PASSPORT_STATUS_TRANSLATIONS.map(t => t.key);
-  schoolLevels = SCHOOL_LEVEL_TRANSLATIONS.map(t => t.key);
+  genders = GENDERS;
+  maritalStatuses = MARITAL_STATUSES;
+  housings = HOUSINGS;
+  fiscalStatuses = FISCAL_STATUSES;
+  healthCareCoverages = HEALTH_CARE_COVERAGES;
+  healthInsurances = HEALTH_INSURANCES;
+  visas = VISAS;
+  residencePermits = RESIDENCE_PERMITS;
+  entryTypes = ENTRY_TYPES;
+  passportStatuses = PASSPORT_STATUSES;
+  schoolLevels = SCHOOL_LEVELS;
 
   cityTypeahead: CityTypeahead;
   spouseTypeahead: PersonTypeahead;
