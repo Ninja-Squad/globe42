@@ -1,0 +1,4 @@
+codecov:
+  comment: true
+fixes:
+  - "src/::frontend/src/"

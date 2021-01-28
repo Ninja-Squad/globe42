@@ -8,7 +8,7 @@
     "build": "ng build --prod --no-progress",
     "test": "ng test --code-coverage --no-progress --no-watch",
     "bundlesize": "bundlesize",
-    "codecov": "codecov",
+    "codecov": "codecov --root=..",
     "lint": "ng lint > tslint-result.txt",
     "format": "prettier --write \"src/**/*.+(ts|js|json|html|scss)\"",
     "format:check": "prettier --check \"src/**/*.+(ts|js|json|html|scss)\" > prettier-result.txt 2>&1",
