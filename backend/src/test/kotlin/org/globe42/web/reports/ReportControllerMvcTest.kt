@@ -88,7 +88,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
 
             assertThat(sheet.lastRowNum).isEqualTo(2)
             sheet.rowIterator().forEach { row ->
-                assertThat(row.lastCellNum).isEqualTo(10) // last cell num is the last cell num + 1
+                assertThat(row.lastCellNum).isEqualTo(13) // last cell num is the last cell num + 1
             }
 
             val agnesRow = sheet.getRow(1)
@@ -99,16 +99,22 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
             assertThat(agnesRow.getCell(4).stringCellValue).isEqualTo("F")
             assertThat(agnesRow.getCell(5).booleanCellValue).isTrue() // accompanied
             assertThat(agnesRow.getCell(6).booleanCellValue).isTrue() // meals
-            assertThat(agnesRow.getCell(7).booleanCellValue).isTrue() // french
-            assertThat(agnesRow.getCell(8).numericCellValue).isEqualTo(0.0) // alix
-            assertThat(agnesRow.getCell(9).numericCellValue).isEqualTo(1.0) // malika
+            assertThat(agnesRow.getCell(7).booleanCellValue).isFalse() // french 1
+            assertThat(agnesRow.getCell(8).booleanCellValue).isFalse() // french 2
+            assertThat(agnesRow.getCell(9).booleanCellValue).isTrue() // french 3
+            assertThat(agnesRow.getCell(10).booleanCellValue).isFalse() // french 4
+            assertThat(agnesRow.getCell(11).numericCellValue).isEqualTo(0.0) // alix
+            assertThat(agnesRow.getCell(12).numericCellValue).isEqualTo(1.0) // malika
 
             val jbRow = sheet.getRow(2)
             assertThat(jbRow.getCell(5).booleanCellValue).isFalse() // accompanied
             assertThat(jbRow.getCell(6).booleanCellValue).isFalse() // meals
-            assertThat(jbRow.getCell(7).booleanCellValue).isFalse() // french
-            assertThat(jbRow.getCell(8).numericCellValue).isEqualTo(2.0) // alix
-            assertThat(jbRow.getCell(9).numericCellValue).isEqualTo(0.0) // malika
+            assertThat(jbRow.getCell(7).booleanCellValue).isFalse() // french 1
+            assertThat(jbRow.getCell(8).booleanCellValue).isFalse() // french 2
+            assertThat(jbRow.getCell(9).booleanCellValue).isFalse() // french 3
+            assertThat(jbRow.getCell(10).booleanCellValue).isFalse() // french 4
+            assertThat(jbRow.getCell(11).numericCellValue).isEqualTo(2.0) // alix
+            assertThat(jbRow.getCell(12).numericCellValue).isEqualTo(0.0) // malika
         }
     }
 

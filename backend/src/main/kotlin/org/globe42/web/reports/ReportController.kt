@@ -28,13 +28,6 @@ private val DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 @Transactional
 class ReportController(private val personDao: PersonDao, private val membershipDao: MembershipDao) {
 
-    private val frenchLessons = setOf(
-        ActivityType.FRENCH_AND_COMPUTER_LESSON_1,
-        ActivityType.FRENCH_AND_COMPUTER_LESSON_2,
-        ActivityType.FRENCH_AND_COMPUTER_LESSON_3,
-        ActivityType.FRENCH_AND_COMPUTER_LESSON_4
-    )
-
     @GetMapping("/appointments")
     fun appointmentReport(): ResponseEntity<ByteArray> {
         val persons = personDao.findNotDeletedWithMediation()
@@ -56,7 +49,10 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             "Sexe",
             "Accompagné",
             "Inscrit aux repas",
-            "Inscrit aux cours de français"
+            "Inscrit aux cours de français - groupe 1",
+            "Inscrit aux cours de français - groupe 2",
+            "Inscrit aux cours de français - groupe 3",
+            "Inscrit aux cours de français - groupe 4",
         ) + appointmentCreators.map { "Nb. de RDV par ${it.login}" }
 
         return createReport(
@@ -72,10 +68,11 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             row.createCell(col++, CellType.STRING).setCellValue(person.nationality?.name)
             row.createCell(col++, CellType.STRING).setCellValue(person.gender.reportValue)
             row.createCell(col++, CellType.BOOLEAN).setCellValue(!person.accompanying.isNullOrBlank())
-            row.createCell(col++, CellType.BOOLEAN)
-                .setCellValue(person.getParticipations().any { it.activityType == ActivityType.MEAL })
-            row.createCell(col++, CellType.BOOLEAN).setCellValue(
-                person.getParticipations().any { it.activityType in frenchLessons })
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(person.getParticipations().any { it.activityType == ActivityType.MEAL })
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON_1 })
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON_2 })
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON_3 })
+            row.createCell(col++, CellType.BOOLEAN).setCellValue(person.getParticipations().any { it.activityType == ActivityType.FRENCH_AND_COMPUTER_LESSON_4 })
 
             appointmentCreators.forEach { noteCreator ->
                 row.createCell(col++, CellType.NUMERIC)
