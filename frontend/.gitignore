@@ -6,8 +6,6 @@
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
-tslint-result.txt
-prettier-result.txt
 
 # dependencies
 /node_modules
