@@ -37,6 +37,10 @@ class ActivityReportComponentTester extends ComponentTester<ActivityReportCompon
     return this.element('h2');
   }
 
+  get reportHeadings() {
+    return this.elements<HTMLTableHeaderCellElement>('thead th');
+  }
+
   get reportRows() {
     return this.elements('tbody tr');
   }
@@ -144,17 +148,31 @@ describe('ActivityReportComponent', () => {
       expect(router.navigate).toHaveBeenCalledTimes(4);
     });
 
-    it('should display the presences', () => {
+    it('should display and sort the presences', () => {
       activityService.report.and.returnValue(
         of({
           totalActivityCount: 10,
           presences: [
             {
-              activityCount: 6,
               person: {
                 firstName: 'JB',
                 lastName: 'Nizet'
-              }
+              },
+              activityCount: 6
+            },
+            {
+              person: {
+                firstName: 'Cedric',
+                lastName: 'Exbrayat'
+              },
+              activityCount: 6
+            },
+            {
+              person: {
+                firstName: 'Claire',
+                lastName: 'Brucy'
+              },
+              activityCount: 7
             }
           ]
         } as ActivityReport)
@@ -162,10 +180,36 @@ describe('ActivityReportComponent', () => {
 
       tester.detectChanges();
 
-      expect(tester.reportRows.length).toBe(1);
-      expect(tester.reportRows[0]).toContainText('JB Nizet');
+      expect(tester.reportRows.length).toBe(3);
+      expect(tester.reportRows[0]).toContainText('Cedric Exbrayat');
       expect(tester.reportRows[0]).toContainText('6');
       expect(tester.reportRows[0]).toContainText('60%');
+      expect(tester.reportRows[1]).toContainText('Claire Brucy');
+      expect(tester.reportRows[1]).toContainText('7');
+      expect(tester.reportRows[1]).toContainText('70%');
+      expect(tester.reportRows[2]).toContainText('JB Nizet');
+      expect(tester.reportRows[2]).toContainText('6');
+      expect(tester.reportRows[2]).toContainText('60%');
+
+      tester.reportHeadings[0].click();
+      expect(tester.reportRows[0]).toContainText('JB Nizet');
+      expect(tester.reportRows[1]).toContainText('Claire Brucy');
+      expect(tester.reportRows[2]).toContainText('Cedric Exbrayat');
+
+      tester.reportHeadings[0].click();
+      expect(tester.reportRows[0]).toContainText('Cedric Exbrayat');
+      expect(tester.reportRows[1]).toContainText('Claire Brucy');
+      expect(tester.reportRows[2]).toContainText('JB Nizet');
+
+      tester.reportHeadings[1].click();
+      expect(tester.reportRows[0]).toContainText('Cedric Exbrayat');
+      expect(tester.reportRows[1]).toContainText('JB Nizet');
+      expect(tester.reportRows[2]).toContainText('Claire Brucy');
+
+      tester.reportHeadings[1].click();
+      expect(tester.reportRows[0]).toContainText('Claire Brucy');
+      expect(tester.reportRows[1]).toContainText('JB Nizet');
+      expect(tester.reportRows[2]).toContainText('Cedric Exbrayat');
     });
 
     it('should validate', () => {
