@@ -173,8 +173,8 @@ class PersonController(
         } else {
             membershipDao.findByPersonAndYear(this, today.year)
         }
-        membership?.let { membership ->
-            if (membership.paymentMode == PaymentMode.OUT_OF_DATE) {
+        membership?.let {
+            if (it.paymentMode == PaymentMode.OUT_OF_DATE) {
                 result.add(MembershipPaymentOutOfDateDTO)
             }
         } ?: result.add(MembershipToRenewDTO)
