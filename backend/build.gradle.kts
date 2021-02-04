@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.4.21"
+    val kotlinVersion = "1.4.30"
 
     java
     jacoco
