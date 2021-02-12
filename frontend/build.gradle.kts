@@ -3,7 +3,7 @@ import com.github.gradle.node.yarn.task.YarnTask
 
 plugins {
     base
-    id("com.github.node-gradle.node") version "3.0.0-rc7"
+    id("com.github.node-gradle.node") version "3.0.1"
 }
 
 node {
