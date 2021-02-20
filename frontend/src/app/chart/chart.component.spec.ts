@@ -1,6 +1,6 @@
 import { ChartComponent } from './chart.component';
 import { Component } from '@angular/core';
-import { ArcElement, Chart, ChartConfiguration, DoughnutController } from 'chart.js';
+import { AnimationSpec, ArcElement, Chart, ChartConfiguration, DoughnutController } from 'chart.js';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ComponentTester } from 'ngx-speculoos';
@@ -25,10 +25,8 @@ class TestComponent {
       labels: ['a', 'b', 'c']
     },
     options: {
-      animation: {
-        animateScale: false,
-        animateRotate: false
-      }
+      // TODO change this to animation: false once https://github.com/chartjs/Chart.js/issues/8469 is fixed
+      animation: (false as unknown) as AnimationSpec
     }
   };
 }
@@ -64,13 +62,8 @@ describe('ChartComponent', () => {
     expect(tester.chartComponent.configuration).toBe(tester.componentInstance.configuration);
   });
 
-  it('should display a different chart when input changes', async () => {
-    const sleep = () => {
-      return new Promise(resolve => setTimeout(resolve, 1));
-    };
-
+  it('should display a different chart when input changes', () => {
     tester.detectChanges();
-    await sleep();
     const firstImage = tester.canvas.nativeElement.toDataURL();
 
     const newConfiguration: ChartConfiguration = {
@@ -84,14 +77,11 @@ describe('ChartComponent', () => {
         labels: ['a', 'b', 'c']
       },
       options: {
-        animation: {
-          animateScale: false,
-          animateRotate: false
-        }
+        // TODO change this to animation: false once https://github.com/chartjs/Chart.js/issues/8469 is fixed
+        animation: (false as unknown) as AnimationSpec
       }
     };
     tester.componentInstance.configuration = newConfiguration;
-    await sleep();
     tester.detectChanges();
 
     expect(tester.canvas.nativeElement.toDataURL()).not.toBe(firstImage);
