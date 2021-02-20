@@ -25,7 +25,10 @@ class TestComponent {
       labels: ['a', 'b', 'c']
     },
     options: {
-      animation: false
+      animation: {
+        animateScale: false,
+        animateRotate: false
+      }
     }
   };
 }
@@ -61,7 +64,13 @@ describe('ChartComponent', () => {
     expect(tester.chartComponent.configuration).toBe(tester.componentInstance.configuration);
   });
 
-  it('should display a different chart when input changes', () => {
+  it('should display a different chart when input changes', async () => {
+    const sleep = () => {
+      return new Promise(resolve => setTimeout(resolve, 1));
+    };
+
+    tester.detectChanges();
+    await sleep();
     const firstImage = tester.canvas.nativeElement.toDataURL();
 
     const newConfiguration: ChartConfiguration = {
@@ -75,10 +84,14 @@ describe('ChartComponent', () => {
         labels: ['a', 'b', 'c']
       },
       options: {
-        animation: false
+        animation: {
+          animateScale: false,
+          animateRotate: false
+        }
       }
     };
     tester.componentInstance.configuration = newConfiguration;
+    await sleep();
     tester.detectChanges();
 
     expect(tester.canvas.nativeElement.toDataURL()).not.toBe(firstImage);
