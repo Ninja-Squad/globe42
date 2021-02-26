@@ -1,5 +1,15 @@
+@import '../../common';
+
 .scrollable-list {
   min-height: 12rem;
   height: 45vh;
   overflow-y: auto;
+}
+
+.absent-item,
+.present-item {
+  transition: background-color 200ms ease;
+  &:hover {
+    background-color: $gray-200;
+  }
 }

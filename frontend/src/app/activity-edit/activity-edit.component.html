@@ -46,7 +46,10 @@
       <h3>Absents</h3>
       <div class="scrollable-list border rounded p-2">
         <ul class="list-unstyled">
-          <li *ngFor="let person of choosablePersons$ | async" class="my-1 d-flex absent-item">
+          <li
+            *ngFor="let person of choosablePersons$ | async"
+            class="p-1 d-flex rounded align-items-baseline absent-item"
+          >
             <div class="flex-grow-1">{{ person | fullname }}</div>
             <div class="ml-2">
               <button
@@ -84,7 +87,10 @@
       </h3>
       <div class="scrollable-list border rounded p-2">
         <ul class="list-unstyled">
-          <li *ngFor="let person of form.value.participants" class="my-1 d-flex present-item">
+          <li
+            *ngFor="let person of form.value.participants"
+            class="p-1 d-flex rounded align-items-baseline present-item"
+          >
             <span class="flex-grow-1">{{ person | fullname }}</span>
             <div class="ml-2">
               <button
