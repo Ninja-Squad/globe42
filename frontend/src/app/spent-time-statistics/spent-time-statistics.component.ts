@@ -128,15 +128,13 @@ export class SpentTimeStatisticsComponent implements OnInit {
       type: 'doughnut',
       data: { labels, datasets: [{ data, backgroundColor }] },
       options: {
-        cutoutPercentage: 70,
+        cutout: '70%',
         plugins: {
           tooltip: {
             callbacks: {
-              label(tooltipItem: TooltipItem) {
+              label(tooltipItem: TooltipItem<'doughnut'>) {
                 const categoryName = tooltipItem.label;
-                const duration = minutesToDuration(
-                  tooltipItem.dataset.data[tooltipItem.dataIndex] as number
-                );
+                const duration = minutesToDuration(tooltipItem.parsed);
                 return `${categoryName}: ${duration}`;
               }
             }

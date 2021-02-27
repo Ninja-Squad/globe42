@@ -1,6 +1,6 @@
 import { ChartComponent } from './chart.component';
 import { Component } from '@angular/core';
-import { AnimationSpec, ArcElement, Chart, ChartConfiguration, DoughnutController } from 'chart.js';
+import { ArcElement, Chart, ChartConfiguration, DoughnutController } from 'chart.js';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ComponentTester } from 'ngx-speculoos';
@@ -25,8 +25,7 @@ class TestComponent {
       labels: ['a', 'b', 'c']
     },
     options: {
-      // TODO change this to animation: false once https://github.com/chartjs/Chart.js/issues/8469 is fixed
-      animation: (false as unknown) as AnimationSpec
+      animation: false
     }
   };
 }
@@ -77,8 +76,7 @@ describe('ChartComponent', () => {
         labels: ['a', 'b', 'c']
       },
       options: {
-        // TODO change this to animation: false once https://github.com/chartjs/Chart.js/issues/8469 is fixed
-        animation: (false as unknown) as AnimationSpec
+        animation: false
       }
     };
     tester.componentInstance.configuration = newConfiguration;
