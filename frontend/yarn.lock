@@ -2357,10 +2357,10 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-chart.js@3.0.0-beta.12:
-  version "3.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.0.0-beta.12.tgz#3aa42194b65fc4671ed29b7f4b21b1792b6d57f6"
-  integrity sha512-+VT+7hEfJMhjtpudOkRpafolWM6YcoXXK+1Kgujy9n06Fzd/w//AYyQfRog/b1cQRe11iMx2UA+UdxlsmJjCnA==
+chart.js@3.0.0-beta.13:
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.0.0-beta.13.tgz#0cbcb379c75ad293aa0f1929907d9a6787760d1e"
+  integrity sha512-AYWrxh/pPwjStIrbmmowacab01vsp7oZrvghzQrexUn6jBSj+iix9jcRx/sxDHJHfEgG+azG1BkULtDuSXdLaw==
 
 "chokidar@>=2.0.0 <4.0.0", chokidar@^3.0.0, chokidar@^3.4.1, chokidar@^3.4.2:
   version "3.5.1"
