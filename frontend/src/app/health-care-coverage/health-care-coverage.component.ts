@@ -7,8 +7,7 @@ import {
   ChartConfiguration,
   DoughnutController,
   Legend,
-  Tooltip,
-  TooltipItem
+  Tooltip
 } from 'chart.js';
 import { COLORS } from '../chart/chart.component';
 import { HEALTH_CARE_COVERAGE_TRANSLATIONS } from '../display-health-care-coverage.pipe';
@@ -22,7 +21,7 @@ export class HealthCareCoverageComponent implements OnInit {
   coverage: HealthCareCoverageModel;
   totalCount: number;
   coveredCount: number;
-  chartConfiguration: ChartConfiguration;
+  chartConfiguration: ChartConfiguration<'doughnut'>;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -39,7 +38,7 @@ export class HealthCareCoverageComponent implements OnInit {
     this.chartConfiguration = this.createChartConfiguration();
   }
 
-  private createChartConfiguration(): ChartConfiguration {
+  private createChartConfiguration(): ChartConfiguration<'doughnut'> {
     Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
     const labels: Array<string> = [];
@@ -60,7 +59,7 @@ export class HealthCareCoverageComponent implements OnInit {
         plugins: {
           tooltip: {
             callbacks: {
-              label(tooltipItem: TooltipItem<'doughnut'>) {
+              label(tooltipItem) {
                 const categoryName = tooltipItem.label;
                 const count = tooltipItem.parsed;
                 return `${categoryName}: ${count}`;
