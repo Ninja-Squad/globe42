@@ -7,8 +7,7 @@ import {
   ChartConfiguration,
   DoughnutController,
   Legend,
-  Tooltip,
-  TooltipItem
+  Tooltip
 } from 'chart.js';
 import { minutesToDuration, sortBy } from '../utils';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -36,7 +35,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
   criteriaForm: FormGroup;
 
   statisticsModel: SpentTimeStatisticsModel;
-  chartConfiguration: ChartConfiguration;
+  chartConfiguration: ChartConfiguration<'doughnut'>;
   categoryStatistics: Array<CategoryStatistic>;
 
   users: Array<UserModel>;
@@ -111,7 +110,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
     this.chartConfiguration = this.createChartConfiguration();
   }
 
-  private createChartConfiguration(): ChartConfiguration {
+  private createChartConfiguration(): ChartConfiguration<'doughnut'> {
     Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
     const labels: Array<string> = [];
@@ -132,7 +131,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
         plugins: {
           tooltip: {
             callbacks: {
-              label(tooltipItem: TooltipItem<'doughnut'>) {
+              label(tooltipItem) {
                 const categoryName = tooltipItem.label;
                 const duration = minutesToDuration(tooltipItem.parsed);
                 return `${categoryName}: ${duration}`;
