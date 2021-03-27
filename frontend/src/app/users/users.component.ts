@@ -28,7 +28,7 @@ export class UsersComponent implements OnInit {
 
   delete(user: UserModel) {
     this.confirmService
-      .confirm({ message: `Voulez-vous vraiment supprimer l\'utilisateur ${user.login}\u00A0?` })
+      .confirm({ message: `Voulez-vous vraiment supprimer l'utilisateur ${user.login}\u00A0?` })
       .pipe(
         switchMap(() => this.userService.delete(user.id)),
         switchMap(() => this.userService.list())

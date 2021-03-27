@@ -15,9 +15,18 @@ describe('CurrentUserService', () => {
   const originalLocalStorage = window.localStorage;
 
   const mockLocalStorage = {
-    setItem: (key: string, value: string) => {},
-    getItem: (key: string) => null as string,
-    removeItem: (key: string) => {}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setItem(key: string, value: string) {
+      // do nothing
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getItem(key: string): string {
+      return null;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    removeItem(key: string) {
+      // do nothing
+    }
   };
 
   const globeUser = {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TaskCategoryModel } from './models/task-category.model';
 import { TaskService } from './task.service';
@@ -8,10 +8,7 @@ import { TaskService } from './task.service';
 export class TaskCategoriesResolverService implements Resolve<Array<TaskCategoryModel>> {
   constructor(private taskService: TaskService) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<Array<TaskCategoryModel>> {
+  resolve(): Observable<Array<TaskCategoryModel>> {
     return this.taskService.listCategories();
   }
 }

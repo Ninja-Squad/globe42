@@ -67,7 +67,7 @@ import { PersonWeddingEventsComponent } from './person-wedding-events/person-wed
 import { DisplayWeddingEventTypePipe } from './display-wedding-event-type.pipe';
 import { DisplayVisaPipe } from './display-visa.pipe';
 import { DisplayResidencePermitPipe } from './display-residence-permit.pipe';
-// tslint:disable-next-line:max-line-length
+// eslint-disable-next-line max-len
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
 import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
 import { DisplayPaymentModePipe } from './display-payment-mode.pipe';

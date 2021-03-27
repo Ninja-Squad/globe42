@@ -40,6 +40,6 @@ export class MembershipService {
   deleteCurrent(personId: number, membershipId: number): Observable<void> {
     return this.http
       .delete<void>(url(personId) + '/' + membershipId)
-      .pipe(tap(membership => this.currentMembership$.next(null)));
+      .pipe(tap(() => this.currentMembership$.next(null)));
   }
 }

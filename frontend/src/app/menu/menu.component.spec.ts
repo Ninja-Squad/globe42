@@ -46,7 +46,9 @@ describe('MenuComponent', () => {
   beforeEach(() => {
     fakeUserService = {
       userEvents: new BehaviorSubject<UserModel | null>(null),
-      logout: () => {}
+      logout: () => {
+        // do nothing
+      }
     } as CurrentUserService;
     fakeRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
 

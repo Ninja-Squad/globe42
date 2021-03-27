@@ -160,7 +160,7 @@ describe('PersonParticipationsComponent', () => {
     });
 
     it('should have a message', () => {
-      expect(tester.message).toHaveText(`JB Nizet participe aux types d'activités suivants :`);
+      expect(tester.message).toHaveText(`JB Nizet participe aux types d'activités suivants\u00a0:`);
     });
 
     it('should have checkboxes', () => {

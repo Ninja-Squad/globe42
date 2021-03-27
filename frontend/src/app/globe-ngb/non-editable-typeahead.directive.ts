@@ -1,4 +1,4 @@
-/* tslint:disable:directive-selector */
+/* eslint-disable @angular-eslint/directive-selector */
 
 import { Directive, ElementRef, HostBinding, HostListener } from '@angular/core';
 import { NgControl } from '@angular/forms';

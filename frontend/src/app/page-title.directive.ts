@@ -1,4 +1,4 @@
-/* tslint:disable:directive-selector */
+/* eslint-disable @angular-eslint/directive-selector */
 import { Directive, Input, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
