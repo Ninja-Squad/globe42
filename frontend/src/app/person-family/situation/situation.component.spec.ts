@@ -96,7 +96,7 @@ describe('SituationComponent', () => {
     };
     tester.detectChanges();
 
-    expect(tester.listItems[0].textContent.trim()).toMatch(/30 nov\. 2000\s+\–\s+17 ans/);
+    expect(tester.listItems[0].textContent.trim()).toMatch(/30 nov\. 2000\s+–\s+17 ans/);
   });
 
   it('should display child with first name and birth date', () => {
@@ -112,8 +112,6 @@ describe('SituationComponent', () => {
     };
     tester.detectChanges();
 
-    expect(tester.listItems[0].textContent.trim()).toMatch(
-      /John\s+\–\s+30 nov\. 2000\s+\–\s+17 ans/
-    );
+    expect(tester.listItems[0].textContent.trim()).toMatch(/John\s+–\s+30 nov\. 2000\s+–\s+17 ans/);
   });
 });

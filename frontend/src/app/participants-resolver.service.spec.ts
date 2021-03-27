@@ -22,7 +22,7 @@ describe('ParticipantsResolverService', () => {
 
     const resolver: ParticipantsResolverService = TestBed.inject(ParticipantsResolverService);
     const route: any = { paramMap: convertToParamMap({ activityType: 'MEAL' }) };
-    const result = resolver.resolve(route, null);
+    const result = resolver.resolve(route);
     expect(result).toBe(participants);
     expect(participationService.listParticipants).toHaveBeenCalledWith('MEAL');
   });

@@ -49,8 +49,9 @@ tasks {
         args.set(listOf("lint"))
         dependsOn(prepare)
         inputs.dir("src")
-        inputs.file("tslint.json")
-        outputs.file("$buildDir/tslint-result.txt")
+        inputs.file(".eslintrc.json")
+        inputs.file(".prettierrc")
+        outputs.file("$buildDir/eslint-result.txt")
     }
 
     val lint by registering {
@@ -58,23 +59,7 @@ tasks {
         doLast {
             file("$buildDir/tslint-result.txt").useLines { sequence ->
                 if (sequence.any { it.contains("WARNING") }) {
-                    throw GradleException("Lint warning found. Check tslint-result.txt")
-                }
-            }
-        }
-    }
-
-    val checkFormat by registering(YarnTask::class) {
-        args.set(listOf("format:check"))
-        ignoreExitValue.set(true)
-        dependsOn(prepare)
-        inputs.dir("src")
-        inputs.file(".prettierrc")
-        outputs.file("prettier-result.txt")
-        doLast {
-            file("$buildDir/prettier-result.txt").useLines { sequence ->
-                if (sequence.any { it.contains("src") }) {
-                    throw GradleException ("Formatting warning found. Check prettier-result.txt")
+                    throw GradleException("Lint warning found. Check eslint-result.txt")
                 }
             }
         }
@@ -91,7 +76,6 @@ tasks {
     }
 
     check {
-        dependsOn(checkFormat)
         dependsOn(lint)
         dependsOn(test)
     }

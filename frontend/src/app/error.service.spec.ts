@@ -9,7 +9,9 @@ describe('ErrorService', () => {
   let service: ErrorService;
   let http: HttpTestingController;
   let httpClient: HttpClient;
-  const noop = () => {};
+  const noop = () => {
+    // do nothing
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({

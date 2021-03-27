@@ -45,7 +45,6 @@ export const HEALTH_CARE_COVERAGES = [
 export type HealthCareCoverage = typeof HEALTH_CARE_COVERAGES[number];
 
 export const HEALTH_INSURANCES = [
-  ,
   'UNKNOWN',
   'NONE',
   'C2S_WITHOUT_FINANCIAL_PARTICIPATION',

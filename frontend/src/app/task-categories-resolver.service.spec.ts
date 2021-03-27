@@ -20,7 +20,7 @@ describe('TaskCategoriesResolverService', () => {
     fakeTaskService.listCategories.and.returnValue(expectedResults);
 
     const resolver = TestBed.inject(TaskCategoriesResolverService);
-    const result = resolver.resolve(null, null);
+    const result = resolver.resolve();
 
     expect(result).toBe(expectedResults);
     expect(fakeTaskService.listCategories).toHaveBeenCalled();

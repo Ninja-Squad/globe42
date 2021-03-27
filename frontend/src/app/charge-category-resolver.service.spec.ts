@@ -24,7 +24,7 @@ describe('ChargeCategoryResolverService', () => {
     const paramMap = convertToParamMap(params);
 
     const routeSnapshot = { paramMap } as ActivatedRouteSnapshot;
-    const result = resolver.resolve(routeSnapshot, null);
+    const result = resolver.resolve(routeSnapshot);
 
     expect(result).toBe(expectedResult);
     expect(chargeCategoryService.get).toHaveBeenCalledWith(42);

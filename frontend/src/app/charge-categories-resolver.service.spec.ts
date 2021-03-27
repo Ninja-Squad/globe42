@@ -22,7 +22,7 @@ describe('ChargeCategoriesResolverService', () => {
     spyOn(chargeCategoryService, 'list').and.returnValue(expectedResults);
 
     const resolver = TestBed.inject(ChargeCategoriesResolverService);
-    const result = resolver.resolve(null, null);
+    const result = resolver.resolve();
 
     expect(result).toBe(expectedResults);
     expect(chargeCategoryService.list).toHaveBeenCalled();

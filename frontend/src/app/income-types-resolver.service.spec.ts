@@ -19,7 +19,7 @@ describe('IncomeTypesResolverService', () => {
     spyOn(incomeSourceTypeService, 'list').and.returnValue(expectedResults);
 
     const resolver = TestBed.inject(IncomeTypesResolverService);
-    const result = resolver.resolve(null, null);
+    const result = resolver.resolve();
 
     expect(result).toBe(expectedResults);
     expect(incomeSourceTypeService.list).toHaveBeenCalled();

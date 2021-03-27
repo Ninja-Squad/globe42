@@ -72,13 +72,14 @@ export class TasksPageComponent implements OnInit {
       case 'unassign':
         this.handleEvent(this.taskService.unassign(event.task.id));
         break;
-      case 'edit':
+      case 'edit': {
         const destination: Array<any> = ['/tasks', event.task.id, 'edit'];
         if (this.person) {
           destination.push({ 'concerned-person': this.person.id });
         }
         this.router.navigate(destination);
         break;
+      }
     }
   }
 
@@ -94,7 +95,9 @@ export class TasksPageComponent implements OnInit {
           this.page = page;
         }
       },
-      error: () => {}
+      error: () => {
+        // ignore
+      }
     });
   }
 }
