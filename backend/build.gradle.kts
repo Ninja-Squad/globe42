@@ -26,12 +26,10 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.flywaydb.flyway") version "7.1.1"
     id("com.gorylenko.gradle-git-properties") version "2.2.4"
-    id("org.jetbrains.dokka") version "0.10.1"
 }
 
 repositories {
     mavenCentral()
-    jcenter() // necessary for dokka
 }
 
 // otherwise lazy ToOne assiciations are not lazy
