@@ -57,8 +57,8 @@ tasks {
     val lint by registering {
         dependsOn(yarnLint)
         doLast {
-            file("$buildDir/tslint-result.txt").useLines { sequence ->
-                if (sequence.any { it.contains("WARNING") }) {
+            file("$buildDir/eslint-result.txt").useLines { sequence ->
+                if (sequence.any { it.contains("warning") }) {
                     throw GradleException("Lint warning found. Check eslint-result.txt")
                 }
             }

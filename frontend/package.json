@@ -9,7 +9,7 @@
     "test": "ng test --code-coverage --no-progress --no-watch",
     "bundlesize": "bundlesize",
     "codecov": "codecov --root=..",
-    "lint": "mkdirp build && ng lint > build/tslint-result.txt",
+    "lint": "mkdirp build && ng lint > build/eslint-result.txt",
     "format": "prettier --write \"src/**/*.+(ts|js|json|html|scss)\"",
     "format:check": "mkdirp build && prettier --check \"src/**/*.+(ts|js|json|html|scss)\" > build/prettier-result.txt 2>&1",
     "ngcc": "ngcc --properties es2015 browser module main --async false"
