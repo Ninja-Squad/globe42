@@ -12,21 +12,41 @@
         "createDefaultProgram": true
       },
       "extends": [
-        "plugin:@angular-eslint/recommended",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
         "plugin:prettier/recommended"
       ],
-      "plugins": ["ban"],
       "rules": {
-        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "ban/ban": [
+        "no-restricted-syntax": [
           "error",
-          {"name": "fit", "message": "Do not use focused tests (fit)"},
-          {"name": "fdescribe", "message": "Do not use focused test suites (fdescribe)"}
-        ]
+          {
+            "selector": "CallExpression[callee.name='fdescribe']",
+            "message": "do not use fdescribe"
+          },
+          {
+            "selector": "CallExpression[callee.name='fit']",
+            "message": "do not use fit"
+          }
+        ],
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "rxjs/Rx",
+                "message": "Please import directly from 'rxjs' instead"
+              }
+            ]
+          }
+        ],
+        "@typescript-eslint/no-inferrable-types": [
+          "error",
+          { "ignoreParameters": true }
+        ],
+        "no-fallthrough": "error"
       }
     },
     {
