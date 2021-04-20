@@ -106,7 +106,8 @@
             "lintFilePatterns": [
               "src/**/*.ts",
               "src/**/*.html"
-            ]
+            ],
+            "maxWarnings": 0
           }
         }
       }
