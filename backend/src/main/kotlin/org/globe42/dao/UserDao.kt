@@ -27,7 +27,6 @@ interface UserDao : GlobeRepository<User, Long>, UserDaoCustom {
     /**
      * Finds a not deleted user by ID
      */
-    @JvmDefault
     fun findNotDeletedById(id: Long): User? {
         return this.findByIdOrNull(id)?.takeIf { user -> !user.deleted }
     }

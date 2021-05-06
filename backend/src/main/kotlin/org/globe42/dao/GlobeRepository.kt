@@ -10,6 +10,5 @@ import org.springframework.data.repository.NoRepositoryBean
  */
 @NoRepositoryBean
 interface GlobeRepository<T: Any, ID: Any>: JpaRepository<T, ID> {
-    @JvmDefault
     fun findByIdOrNull(id: ID): T? = findById(id).orElse(null)
 }
