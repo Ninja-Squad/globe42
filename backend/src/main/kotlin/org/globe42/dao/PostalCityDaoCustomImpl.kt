@@ -46,7 +46,7 @@ class PostalCityDaoCustomImpl : PostalCityDaoCustom {
 
     private fun sanitizeQuery(search: String): String {
         // Use uppercase
-        var result = search.toUpperCase()
+        var result = search.uppercase()
         // replace dashed and commas with spaces, since thre is none in the data
         result = result.replace('\'', ' ').replace('-', ' ')
         // remove accents

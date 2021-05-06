@@ -46,5 +46,5 @@ class PostalCityController(private val postalCityDao: PostalCityDao, private val
         postalCityDao.saveAllEfficiently(cities)
     }
 
-    private fun String.isNumeric(): Boolean = chars().allMatch { c -> c >= '0'.toInt() && c <= '9'.toInt() }
+    private fun String.isNumeric(): Boolean = all { c -> c in '0'..'9' }
 }
