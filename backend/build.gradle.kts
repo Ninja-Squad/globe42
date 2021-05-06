@@ -37,6 +37,10 @@ allOpen {
     annotation("javax.persistence.Entity")
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 tasks {
     withType<KotlinCompile>() {
         kotlinOptions {
