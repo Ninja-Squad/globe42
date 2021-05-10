@@ -96,9 +96,9 @@ export class ActivityReportComponent implements OnInit {
   private sortedPresences(presences: Array<Presence>, sorting: Sorting) {
     let comparator =
       sorting.column === 'activityCount'
-        ? Comparator.comparing<Presence>(
-            presence => presence.activityCount
-          ).thenComparing(presence => displayFullname(presence.person))
+        ? Comparator.comparing<Presence>(presence => presence.activityCount).thenComparing(
+            presence => displayFullname(presence.person)
+          )
         : Comparator.comparing<Presence>(presence => displayFullname(presence.person));
     if (sorting.desc) {
       comparator = comparator.reversed();

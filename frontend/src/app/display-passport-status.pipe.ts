@@ -13,7 +13,8 @@ const PASSPORT_STATUS_TRANSLATIONS: Record<PassportStatus, string> = {
 })
 export class DisplayPassportStatusPipe
   extends BaseEnumPipe<PassportStatus>
-  implements PipeTransform {
+  implements PipeTransform
+{
   constructor() {
     super(PASSPORT_STATUS_TRANSLATIONS);
   }

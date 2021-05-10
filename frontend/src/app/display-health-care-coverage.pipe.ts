@@ -19,7 +19,8 @@ export const HEALTH_CARE_COVERAGE_TRANSLATIONS: Record<HealthCareCoverage, strin
 })
 export class DisplayHealthCareCoveragePipe
   extends BaseEnumPipe<HealthCareCoverage>
-  implements PipeTransform {
+  implements PipeTransform
+{
   constructor() {
     super(HEALTH_CARE_COVERAGE_TRANSLATIONS);
   }

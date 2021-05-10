@@ -16,7 +16,8 @@ const NETWORK_MEMBER_TYPE_TRANSLATIONS: Record<NetworkMemberType, string> = {
 })
 export class DisplayNetworkMemberTypePipe
   extends BaseEnumPipe<NetworkMemberType>
-  implements PipeTransform {
+  implements PipeTransform
+{
   constructor() {
     super(NETWORK_MEMBER_TYPE_TRANSLATIONS);
   }

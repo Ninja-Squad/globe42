@@ -18,7 +18,8 @@ const HEALTH_INSURANCE_TRANSLATIONS: Record<HealthInsurance, string> = {
 })
 export class DisplayHealthInsurancePipe
   extends BaseEnumPipe<HealthInsurance>
-  implements PipeTransform {
+  implements PipeTransform
+{
   constructor() {
     super(HEALTH_INSURANCE_TRANSLATIONS);
   }

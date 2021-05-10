@@ -17,7 +17,8 @@ const RESIDENCE_PERMIT_TRANSLATIONS: Record<ResidencePermit, string> = {
 })
 export class DisplayResidencePermitPipe
   extends BaseEnumPipe<ResidencePermit>
-  implements PipeTransform {
+  implements PipeTransform
+{
   constructor() {
     super(RESIDENCE_PERMIT_TRANSLATIONS);
   }

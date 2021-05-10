@@ -60,14 +60,13 @@ export class ActivityEditComponent implements OnInit {
     this.showAllPersonsCtrl.valueChanges.subscribe(showAllPersonsSubject);
     this.form.get('participants').valueChanges.subscribe(chosenPersonsSubject);
 
-    const activityTypeParticipants$: Observable<
-      Array<PersonIdentityModel>
-    > = activityTypeSubject.pipe(
-      switchMap(activityType =>
-        activityType ? participationService.listParticipants(activityType) : of([])
-      ),
-      shareReplay()
-    );
+    const activityTypeParticipants$: Observable<Array<PersonIdentityModel>> =
+      activityTypeSubject.pipe(
+        switchMap(activityType =>
+          activityType ? participationService.listParticipants(activityType) : of([])
+        ),
+        shareReplay()
+      );
 
     const allPersons$: Observable<Array<PersonIdentityModel>> = personService
       .list()

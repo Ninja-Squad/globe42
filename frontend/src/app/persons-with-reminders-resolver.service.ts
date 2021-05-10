@@ -8,7 +8,8 @@ import { PersonWithRemindersModel } from './models/person.model';
   providedIn: 'root'
 })
 export class PersonsWithRemindersResolverService
-  implements Resolve<Array<PersonWithRemindersModel>> {
+  implements Resolve<Array<PersonWithRemindersModel>>
+{
   constructor(private personService: PersonService) {}
 
   resolve(): Observable<Array<PersonWithRemindersModel>> {

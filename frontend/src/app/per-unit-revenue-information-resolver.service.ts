@@ -7,7 +7,8 @@ import { CurrentPersonService } from './current-person.service';
 
 @Injectable({ providedIn: 'root' })
 export class PerUnitRevenueInformationResolverService
-  implements Resolve<PerUnitRevenueInformationModel | null> {
+  implements Resolve<PerUnitRevenueInformationModel | null>
+{
   constructor(
     private currentPersonService: CurrentPersonService,
     private perUnitRevenueInformationService: PerUnitRevenueInformationService
