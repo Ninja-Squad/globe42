@@ -48,7 +48,7 @@ describe('CitiesUploadComponent', () => {
 
     expect(component.status).toBe('pending');
 
-    const fakeFile = ('fakeFile' as unknown) as Blob;
+    const fakeFile = 'fakeFile' as unknown as Blob;
     const fileChangeEvent = {
       target: {
         files: ['fakeFile']
@@ -120,7 +120,7 @@ describe('CitiesUploadComponent', () => {
 
     expect(component.status).toBe('pending');
 
-    const fakeFile = ('fakeFile' as unknown) as Blob;
+    const fakeFile = 'fakeFile' as unknown as Blob;
     const fileChangeEvent = {
       target: {
         files: [fakeFile]

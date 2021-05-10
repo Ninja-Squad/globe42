@@ -16,7 +16,8 @@ const WEDDING_EVENT_TYPE_TRANSLATIONS: Record<WeddingEventType, string> = {
 })
 export class DisplayWeddingEventTypePipe
   extends BaseEnumPipe<WeddingEventType>
-  implements PipeTransform {
+  implements PipeTransform
+{
   constructor() {
     super(WEDDING_EVENT_TYPE_TRANSLATIONS);
   }

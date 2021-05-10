@@ -70,9 +70,8 @@ describe('IncomeTypeEditComponent', () => {
     });
 
     it('should edit and update an existing income type', () => {
-      const incomeSourceTypeService: IncomeSourceTypeService = TestBed.inject(
-        IncomeSourceTypeService
-      );
+      const incomeSourceTypeService: IncomeSourceTypeService =
+        TestBed.inject(IncomeSourceTypeService);
       spyOn(incomeSourceTypeService, 'update').and.returnValue(of(undefined));
       const router: Router = TestBed.inject(Router);
       spyOn(router, 'navigateByUrl');

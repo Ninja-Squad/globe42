@@ -57,13 +57,11 @@ export class ActivityService {
 
   report(type: ActivityType, from: string, to: string): Observable<ActivityReport> {
     const params = { type, from, to };
-    return this.http
-      .get<ActivityReport>('/api/activities/reports', { params })
-      .pipe(
-        map(report => ({
-          ...report,
-          presences: sortBy(report.presences, presence => displayFullname(presence.person))
-        }))
-      );
+    return this.http.get<ActivityReport>('/api/activities/reports', { params }).pipe(
+      map(report => ({
+        ...report,
+        presences: sortBy(report.presences, presence => displayFullname(presence.person))
+      }))
+    );
   }
 }
