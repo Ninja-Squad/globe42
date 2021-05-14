@@ -27,7 +27,7 @@
     "bootstrap": "4.6.0",
     "chart.js": "3.2.1",
     "font-awesome": "4.7.0",
-    "luxon": "1.26.0",
+    "luxon": "1.27.0",
     "ngx-valdemort": "5.1.0",
     "rxjs": "6.6.7",
     "tslib": "2.2.0",
