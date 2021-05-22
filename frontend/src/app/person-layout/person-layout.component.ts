@@ -6,6 +6,8 @@ import { CurrentPersonService } from '../current-person.service';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
 import { ViewportScroller } from '@angular/common';
 
+type MembershipStatus = 'OK' | 'KO' | 'OUT_OF_DATE' | 'loading';
+
 @Component({
   selector: 'gl-person-layout',
   templateUrl: './person-layout.component.html',
@@ -15,7 +17,7 @@ import { ViewportScroller } from '@angular/common';
 export class PersonLayoutComponent implements OnInit {
   person$: Observable<PersonModel>;
   reminders$: Observable<Array<ReminderModel>>;
-  membershipStatus$: Observable<'OK' | 'KO' | 'OUT_OF_DATE' | 'loading'>;
+  membershipStatus$: Observable<MembershipStatus>;
 
   constructor(
     private currentPersonService: CurrentPersonService,
@@ -38,7 +40,7 @@ export class PersonLayoutComponent implements OnInit {
               return 'OK';
             }
           }),
-          startWith('loading')
+          startWith('loading' as MembershipStatus)
         );
       })
     );

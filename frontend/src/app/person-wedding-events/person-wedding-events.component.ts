@@ -71,7 +71,7 @@ export class PersonWeddingEventsComponent {
     this.weddingEventService
       .create(this.person.id, this.newEvent.value)
       .pipe(
-        tap(() => (this.newEvent = null)),
+        tap(() => (this.newEvent = null) as () => void),
         switchMap(() => this.weddingEventService.list(this.person.id))
       )
       .subscribe(events => (this.events = events));
