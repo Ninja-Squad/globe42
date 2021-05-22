@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --no-progress",
+    "build": "ng build --no-progress",
     "test": "ng test --code-coverage --no-progress --no-watch",
     "bundlesize": "bundlesize",
     "codecov": "codecov --root=..",
