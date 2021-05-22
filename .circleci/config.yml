@@ -16,5 +16,6 @@ jobs: # a collection of steps
       - run: sudo apt-get install postgresql-client
       - run: psql -h localhost -f backend/database/database.sql -U postgres
       - run: ./gradlew yarnNgcc
+      - run: ./gradlew :frontend:build
       - run: ./gradlew check jacocoTestReport build
       - run: ./gradlew :frontend:yarnCodecov :frontend:yarnBundlesize
