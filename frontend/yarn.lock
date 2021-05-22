@@ -6147,10 +6147,10 @@ ngx-speculoos@5.0.0:
   dependencies:
     tslib "2.0.3"
 
-ngx-valdemort@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-5.1.0.tgz#67a52b773ca2c25f2c78b8d902545dbfdfcacb0c"
-  integrity sha512-UDE+EgKfyZpNXtqCrYX9m6xlSrV7R3NzO4VS7IzU/gNLXQMsVdCimICri2lyJmn+lkIM0p+5aNosO4oFRVCtCQ==
+ngx-valdemort@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-6.0.0.tgz#f134e5c089ffd2a53a2564ff19cf579d9ed9dd7f"
+  integrity sha512-YumNQQmviChM1GwkmoEUOtLLnFvkdvzYIbhCYXilzuhAfTp30q9HKk/rvE/cq3GdtTMNbCDOQk18GZ8qCN23wg==
   dependencies:
     tslib "2.2.0"
 
