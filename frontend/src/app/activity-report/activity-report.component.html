@@ -46,10 +46,10 @@
 
 <div *ngIf="vm$ | async as vm">
   <h2>
-    <ng-container *ngIf="vm.report.totalActivityCount == 0">
+    <ng-container *ngIf="vm.report.totalActivityCount === 0">
       Aucune <small>activité de ce type sur cette période</small>
     </ng-container>
-    <ng-container *ngIf="vm.report.totalActivityCount == 1">
+    <ng-container *ngIf="vm.report.totalActivityCount === 1">
       1 <small>activité de ce type sur cette période</small>
     </ng-container>
     <ng-container *ngIf="vm.report.totalActivityCount > 1">
