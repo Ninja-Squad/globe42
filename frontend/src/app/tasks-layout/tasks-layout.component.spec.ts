@@ -38,7 +38,7 @@ describe('TasksLayoutComponent', () => {
 
   it('should have a title, pills and a router outlet', () => {
     expect(tester.title).toHaveText('Tâches');
-    expect(tester.links.length).toBe(7);
+    expect(tester.links.length).toBe(6);
     expect(tester.routerOutlet).toBeTruthy();
   });
 });

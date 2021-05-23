@@ -22,7 +22,7 @@
   <div class="form-group row">
     <label for="category" class="col-sm-3 col-form-label">Dépense</label>
     <div class="col-sm-9">
-      <select class="form-control" id="category" formControlName="categoryId">
+      <select class="form-select" id="category" formControlName="categoryId">
         <option [ngValue]="null"></option>
         <option *ngFor="let category of chargeCategories" [ngValue]="category.id">
           {{ category.name }}
@@ -48,7 +48,7 @@
   </div>
   <div class="row">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
+      <button class="btn btn-primary me-2" id="save">Enregistrer</button>
       <a class="btn btn-secondary" routerLink="/charge-types">Annuler</a>
     </div>
   </div>

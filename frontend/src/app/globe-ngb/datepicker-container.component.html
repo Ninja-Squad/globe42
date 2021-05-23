@@ -1,6 +1,6 @@
-<div class="input-group-prepend" (click)="toggle()">
-  <button type="button" class="btn btn-outline-secondary">
+<div class="input-group">
+  <button type="button" class="btn btn-outline-secondary" (click)="toggle()">
     <span class="fa fa-calendar" aria-hidden="true"></span>
   </button>
+  <ng-content></ng-content>
 </div>
-<ng-content></ng-content>

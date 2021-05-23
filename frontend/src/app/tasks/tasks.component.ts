@@ -38,7 +38,7 @@ export class Task {
     const today = DateTime.local().startOf('day');
     const days = dueDateTime.diff(today, ['days']).days;
     if (days < 0) {
-      return 'text-danger font-weight-bold';
+      return 'text-danger fw-bold';
     }
     if (days === 0) {
       return 'text-danger';

@@ -7,9 +7,9 @@
       <strong>{{ member.type | displayNetworkMemberType }}</strong>
     </div>
     <div class="col-md-9 col-lg-5" style="white-space: pre-line">{{ member.text }}</div>
-    <div class="col-lg-4 text-right">
+    <div class="col-lg-4 text-end">
       <button
-        class="btn btn-outline-secondary btn-sm mr-1 edit"
+        class="btn btn-outline-secondary btn-sm me-1 edit"
         (click)="showMemberEdition(member)"
       >
         <span class="fa fa-edit"></span>
@@ -36,8 +36,8 @@
 
 <form *ngIf="memberForm" [formGroup]="memberForm" (ngSubmit)="save()">
   <div class="form-group">
-    <label for="type">Type</label>
-    <select class="form-control" id="type" formControlName="type">
+    <label for="type" class="form-label">Type</label>
+    <select class="form-select" id="type" formControlName="type">
       <option [ngValue]="null"></option>
       <option *ngFor="let memberType of memberTypes" [value]="memberType">
         {{ memberType | displayNetworkMemberType }}
@@ -47,12 +47,12 @@
   </div>
 
   <div class="form-group">
-    <label for="type">Texte (nom, adresse, n° de téléphone, etc.)</label>
+    <label for="type" class="form-label">Texte (nom, adresse, n° de téléphone, etc.)</label>
     <textarea id="text" formControlName="text" class="form-control" rows="3"></textarea>
     <val-errors controlName="text" label="Le texte"></val-errors>
   </div>
 
-  <button id="saveButton" class="btn btn-primary mr-2">Enregistrer</button>
+  <button id="saveButton" class="btn btn-primary me-2">Enregistrer</button>
   <button
     id="cancelEditionButton"
     type="button"

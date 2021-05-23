@@ -7,7 +7,7 @@ import { ComponentTester } from 'ngx-speculoos';
 @Component({
   template: `
     <form [formGroup]="personForm" (ngSubmit)="submit()">
-      <div class="form-group row">
+      <div class="row">
         <label for="lastName" class="col-sm-2 col-form-label">Nom</label>
         <div class="col-sm-10">
           <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName" />

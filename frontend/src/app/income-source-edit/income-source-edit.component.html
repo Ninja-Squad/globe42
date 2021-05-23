@@ -22,7 +22,7 @@
   <div class="form-group row">
     <label for="type" class="col-sm-3 col-form-label">Organisme payeur</label>
     <div class="col-sm-9">
-      <select class="form-control" id="type" formControlName="typeId">
+      <select class="form-select" id="type" formControlName="typeId">
         <option value=""></option>
         <option *ngFor="let type of incomeSourceTypes" [ngValue]="type.id">{{ type.type }}</option>
       </select>
@@ -46,7 +46,7 @@
   </div>
   <div class="row">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
+      <button class="btn btn-primary me-2" id="save">Enregistrer</button>
       <a class="btn btn-secondary" routerLink="/income-sources">Annuler</a>
     </div>
   </div>

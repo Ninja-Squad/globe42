@@ -2,7 +2,7 @@
 
 <div class="text-center text-muted" *ngIf="loading">
   <span class="fa fa-spinner fa-pulse fa-3x fa-fw"></span>
-  <span class="sr-only">Chargement...</span>
+  <span class="visually-hidden">Chargement...</span>
 </div>
 
 <ng-container *ngIf="files">
@@ -17,8 +17,8 @@
       <a target="_blank" [href]="url(file)">{{ file.name }}</a>
     </div>
     <div class="col-4 col-lg-2 text-muted">{{ file.creationInstant | date }}</div>
-    <div class="col-4 col-lg-2 text-muted text-right">{{ file.size | fileSize }}</div>
-    <div class="col-4 col-lg-2 text-right">
+    <div class="col-4 col-lg-2 text-muted text-end">{{ file.size | fileSize }}</div>
+    <div class="col-4 col-lg-2 text-end">
       <button
         class="btn btn-danger btn-sm"
         (click)="delete(file)"
@@ -32,14 +32,13 @@
 
 <div class="row mt-5 align-items-center">
   <div class="col">
-    <div class="custom-file" id="file-input">
+    <div id="file-input">
       <input
         [disabled]="loading || uploading"
         type="file"
-        class="custom-file-input"
+        class="form-control"
         (change)="upload($event)"
       />
-      <label class="custom-file-label">Choisir un fichier...</label>
     </div>
   </div>
   <div class="col">

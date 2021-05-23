@@ -5,7 +5,7 @@
   <div class="form-group row">
     <label for="type" class="col-sm-3 col-form-label">Nature de la charge</label>
     <div class="col-sm-9">
-      <select class="form-control" id="type" formControlName="type">
+      <select class="form-select" id="type" formControlName="type">
         <option [ngValue]="null"></option>
         <option *ngFor="let type of chargeTypes" [ngValue]="type">{{ type.name }}</option>
       </select>
@@ -34,7 +34,7 @@
   </div>
   <div class="row">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
+      <button class="btn btn-primary me-2" id="save">Enregistrer</button>
       <a class="btn btn-secondary" [routerLink]="['/persons', person.id, 'resources']">Annuler</a>
     </div>
   </div>

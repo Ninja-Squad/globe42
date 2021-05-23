@@ -9,13 +9,13 @@
     <span *ngIf="user.admin" class="text-muted">administrateur</span>
     <span *ngIf="!user.admin" class="text-muted">simple utilisateur</span>
   </div>
-  <div class="col-sm-6 text-right">
-    <a class="btn btn-outline-secondary btn-sm mr-1" [routerLink]="['/users', user.id, 'edit']">
+  <div class="col-sm-6 text-end">
+    <a class="btn btn-outline-secondary btn-sm me-1" [routerLink]="['/users', user.id, 'edit']">
       <span class="fa fa-edit"></span>
       Éditer
     </a>
     <a
-      class="btn btn-outline-secondary btn-sm mr-1"
+      class="btn btn-outline-secondary btn-sm me-1"
       [routerLink]="['/users', user.id, 'password-resets']"
     >
       <span class="fa fa-key"></span>
@@ -23,7 +23,7 @@
     </a>
     &ngsp;
     <button
-      class="btn btn-outline-danger btn-sm mr-1 delete-button"
+      class="btn btn-outline-danger btn-sm me-1 delete-button"
       [disabled]="isCurrentUser(user)"
       (click)="delete(user)"
     >

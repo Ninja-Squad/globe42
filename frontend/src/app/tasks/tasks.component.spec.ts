@@ -166,7 +166,7 @@ describe('TasksComponent', () => {
 
       // due yesterday
       model.dueDate = '2017-07-31';
-      expect(new Task(model).dueDateClass).toBe('text-danger font-weight-bold');
+      expect(new Task(model).dueDateClass).toBe('text-danger fw-bold');
 
       // due today
       model.dueDate = '2017-08-01';

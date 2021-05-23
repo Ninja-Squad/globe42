@@ -40,7 +40,7 @@ describe('PersonsLayoutComponent', () => {
 
   it('should have a title, pills and a router outlet', () => {
     expect(tester.title).toHaveText('Adhérents');
-    expect(tester.links.length).toBe(6);
+    expect(tester.links.length).toBe(5);
     expect(tester.routerOutlet).toBeTruthy();
   });
 });

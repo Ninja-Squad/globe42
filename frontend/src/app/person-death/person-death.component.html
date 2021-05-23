@@ -9,8 +9,8 @@
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <div class="form-group">
-    <label for="deathDate" class="mr-2">Date du décès</label>
-    <gl-datepicker-container class="mr-2">
+    <label for="deathDate" class="form-label">Date du décès</label>
+    <gl-datepicker-container>
       <input class="form-control" formControlName="deathDate" ngbDatepicker id="deathDate" />
     </gl-datepicker-container>
     <val-errors controlName="deathDate" label="La date du décès"></val-errors>

@@ -28,7 +28,7 @@
       <input class="form-control" id="lastName" placeholder="Nom" formControlName="lastName" />
       <val-errors controlName="lastName" label="Le nom"></val-errors>
       <div *ngIf="similarPerson" class="form-text text-warning small" id="similar-person-warning">
-        <span class="fa fa-exclamation-triangle mr-2"></span>
+        <span class="fa fa-exclamation-triangle me-2"></span>
         Il existe déjà une personne nommée {{ similarPerson | fullname }}. Attention à ne pas créer
         un doublon&nbsp;!
       </div>
@@ -54,9 +54,16 @@
   <div class="form-group row">
     <label class="col-sm-3 col-form-label">Genre</label>
     <div class="col-sm-9">
-      <div class="btn-group btn-group-toggle" ngbRadioGroup name="gender" formControlName="gender">
+      <div class="btn-group" ngbRadioGroup name="gender" formControlName="gender">
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let gender of genders">
-          <input ngbButton name="gender" id="gender{{ gender }}" type="radio" [value]="gender" />
+          <input
+            ngbButton
+            class="btn-check"
+            name="gender"
+            id="gender{{ gender }}"
+            type="radio"
+            [value]="gender"
+          />
           {{ gender | displayGender }}
         </label>
       </div>
@@ -136,7 +143,7 @@
     <label class="col-sm-3 col-form-label">Médiation activée pour cet adhérent</label>
     <div class="col-sm-9">
       <div
-        class="btn-group btn-group-toggle"
+        class="btn-group"
         ngbRadioGroup
         name="mediationEnabled"
         formControlName="mediationEnabled"
@@ -144,6 +151,7 @@
         <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let value of [true, false]">
           <input
             ngbButton
+            class="btn-check"
             name="mediationEnabled"
             id="mediationEnabled{{ value }}"
             type="radio"
@@ -194,7 +202,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">Statut marital</label>
       <div class="col-sm-9">
-        <select class="form-control" formControlName="maritalStatus" id="maritalStatus">
+        <select class="form-select" formControlName="maritalStatus" id="maritalStatus">
           <option *ngFor="let ms of maritalStatuses" [value]="ms">
             {{ ms | displayMaritalStatus }}
           </option>
@@ -205,7 +213,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">En couple avec</label>
       <div class="col-sm-9">
-        <div class="form-row">
+        <div class="row g-2">
           <div class="col-md-4">
             <div class="form-check">
               <input
@@ -220,7 +228,7 @@
             </div>
           </div>
         </div>
-        <div class="form-row">
+        <div class="row g-2">
           <div class="col-md-4 d-flex align-items-center">
             <div class="form-check">
               <input
@@ -250,7 +258,7 @@
             </div>
           </div>
         </div>
-        <div class="form-row">
+        <div class="row g-2">
           <div class="col-md-4 d-flex align-items-center">
             <div class="form-check">
               <input
@@ -309,7 +317,7 @@
           </label>
           <div class="col-sm-9 col-lg-6">
             <select
-              class="form-control"
+              class="form-select"
               formControlName="healthCareCoverage"
               id="healthCareCoverage"
             >
@@ -351,7 +359,7 @@
           </label>
 
           <div class="col-sm-9 col-lg-6">
-            <select class="form-control" formControlName="healthInsurance" id="healthInsurance">
+            <select class="form-select" formControlName="healthInsurance" id="healthInsurance">
               <option *ngFor="let hi of healthInsurances" [value]="hi">
                 {{ hi | displayHealthInsurance }}
               </option>
@@ -401,7 +409,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label" for="housing">Classe de logement</label>
       <div class="col-sm-9">
-        <select id="housing" class="form-control" formControlName="housing">
+        <select id="housing" class="form-select" formControlName="housing">
           <option *ngFor="let housing of housings" [value]="housing">
             {{ housing | displayHousing }}
           </option>
@@ -461,7 +469,7 @@
         <div class="row">
           <label for="entryType" class="col-sm-3 col-lg-6 col-form-label">de manière</label>
           <div class="col-sm-9 col-lg-6">
-            <select id="entryType" class="form-control" formControlName="entryType">
+            <select id="entryType" class="form-select" formControlName="entryType">
               <option *ngFor="let entryType of entryTypes" [value]="entryType">
                 {{ entryType | displayEntryType }}
               </option>
@@ -474,7 +482,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label" for="visa">Type de Visa</label>
       <div class="col-sm-9">
-        <select id="visa" class="form-control" formControlName="visa">
+        <select id="visa" class="form-select" formControlName="visa">
           <option *ngFor="let visa of visas" [value]="visa">{{ visa | displayVisa }}</option>
         </select>
       </div>
@@ -482,7 +490,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label" for="visa">Type de carte de séjour</label>
       <div class="col-sm-9">
-        <select id="residencePermit" class="form-control" formControlName="residencePermit">
+        <select id="residencePermit" class="form-select" formControlName="residencePermit">
           <option *ngFor="let rp of residencePermits" [value]="rp">
             {{ rp | displayResidencePermit }}
           </option>
@@ -557,12 +565,12 @@
               ngbDatepicker
               [minDate]="{ year: 1900, month: 1, day: 1 }"
             />
-            <val-errors [control]="personForm">
-              <ng-template valError="residencePermitValidity">
-                La date de fin de validité doit être ultérieure à la date de début de validité
-              </ng-template>
-            </val-errors>
           </gl-datepicker-container>
+          <val-errors [control]="personForm">
+            <ng-template valError="residencePermitValidity">
+              La date de fin de validité doit être ultérieure à la date de début de validité
+            </ng-template>
+          </val-errors>
         </div>
       </div>
     </div>
@@ -571,12 +579,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">Situation fiscale</label>
       <div class="col-sm-9">
-        <div
-          class="btn-group btn-group-toggle"
-          ngbRadioGroup
-          name="fiscalStatus"
-          formControlName="fiscalStatus"
-        >
+        <div class="btn-group" ngbRadioGroup name="fiscalStatus" formControlName="fiscalStatus">
           <label
             ngbButtonLabel
             class="btn btn-outline-secondary"
@@ -584,6 +587,7 @@
           >
             <input
               ngbButton
+              class="btn-check"
               name="fiscalStatus"
               id="fiscalStatus{{ fiscalStatus }}"
               type="radio"
@@ -646,12 +650,7 @@
     <div class="form-group row">
       <label class="col-sm-3 col-form-label">Possède un passeport</label>
       <div class="col-sm-9">
-        <div
-          class="btn-group btn-group-toggle"
-          ngbRadioGroup
-          name="passportStatus"
-          formControlName="passportStatus"
-        >
+        <div class="btn-group" ngbRadioGroup name="passportStatus" formControlName="passportStatus">
           <label
             ngbButtonLabel
             class="btn btn-outline-secondary"
@@ -659,6 +658,7 @@
           >
             <input
               ngbButton
+              class="btn-check"
               name="passportStatus"
               id="passportStatus{{ passportStatus }}"
               type="radio"
@@ -725,7 +725,7 @@
     <div class="form-group row">
       <label for="schoolLevel" class="col-sm-3 col-form-label">Niveau de scolarité</label>
       <div class="col-sm-9">
-        <select id="schoolLevel" class="form-control" formControlName="schoolLevel">
+        <select id="schoolLevel" class="form-select" formControlName="schoolLevel">
           <option *ngFor="let schoolLevel of schoolLevels" [value]="schoolLevel">
             {{ schoolLevel | displaySchoolLevel }}
           </option>
@@ -736,7 +736,7 @@
 
   <div class="row mt-5">
     <div class="col-sm-9 offset-sm-3">
-      <button class="btn btn-primary mr-2" id="save" type="submit" [disabled]="saving">
+      <button class="btn btn-primary me-2" id="save" type="submit" [disabled]="saving">
         Enregistrer
       </button>
       <a

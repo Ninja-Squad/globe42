@@ -8,16 +8,13 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
  *
  * Example usage:
  *
- * <gl-datepicker-container class="col-sm-9">
+ * <gl-datepicker-container>
  *   <input class="form-control" formControlName="date" ngbDatepicker />
  * </gl-datepicker-container>
  */
 @Component({
   selector: 'gl-datepicker-container',
-  templateUrl: './datepicker-container.component.html',
-  host: {
-    class: 'input-group'
-  }
+  templateUrl: './datepicker-container.component.html'
 })
 export class DatepickerContainerComponent {
   @ContentChild(NgbInputDatepicker)

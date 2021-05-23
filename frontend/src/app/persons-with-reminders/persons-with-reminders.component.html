@@ -1,16 +1,16 @@
 <div class="bg-light border rounded p-2">
   <form [formGroup]="form">
     <div class="form-group">
-      <label>Afficher les personnes avec un rappel de type</label>
+      <label class="form-label">Afficher les personnes avec un rappel de type</label>
       <div>
-        <div *ngFor="let reminderType of reminderTypes" class="custom-control custom-switch">
+        <div *ngFor="let reminderType of reminderTypes" class="form-check form-switch">
           <input
             [formControlName]="reminderType"
-            class="custom-control-input"
+            class="form-check-input"
             type="checkbox"
             [id]="'reminder-type-' + reminderType"
           />
-          <label class="custom-control-label" [for]="'reminder-type-' + reminderType">{{
+          <label class="form-check-label" [for]="'reminder-type-' + reminderType">{{
             reminderType | displayReminderType
           }}</label>
         </div>
@@ -39,7 +39,7 @@
       </ng-container>
     </div>
   </div>
-  <div class="alert alert-warning ml-4">
+  <div class="alert alert-warning ms-4">
     <gl-person-reminders [reminders]="person.reminders"></gl-person-reminders>
   </div>
   <hr />

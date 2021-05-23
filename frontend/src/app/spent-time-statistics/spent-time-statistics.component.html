@@ -1,36 +1,42 @@
 <gl-page-title title="Tâches: statistiques"></gl-page-title>
 <h2>Temps passé par catégorie</h2>
 
-<form [formGroup]="criteriaForm" class="form-inline mb-4">
-  <label for="from" class="mr-2">Du</label>
-  <gl-datepicker-container class="mr-2">
-    <input
-      class="form-control"
-      style="width: 8em"
-      id="from"
-      formControlName="from"
-      ngbDatepicker
-      [minDate]="{ year: 2017, month: 1, day: 1 }"
-    />
-  </gl-datepicker-container>
+<form [formGroup]="criteriaForm" class="row g-3 row-cols-sm-auto align-items-center mb-4">
+  <div class="col-12 d-flex align-items-baseline gap-2">
+    <label for="from">Du</label>
+    <gl-datepicker-container>
+      <input
+        class="form-control"
+        style="width: 8em"
+        id="from"
+        formControlName="from"
+        ngbDatepicker
+        [minDate]="{ year: 2017, month: 1, day: 1 }"
+      />
+    </gl-datepicker-container>
+  </div>
 
-  <label for="to" class="mr-2">au</label>
-  <gl-datepicker-container class="mr-2">
-    <input
-      class="form-control"
-      style="width: 8em"
-      id="to"
-      formControlName="to"
-      ngbDatepicker
-      [minDate]="{ year: 2017, month: 1, day: 1 }"
-    />
-  </gl-datepicker-container>
+  <div class="col-12 d-flex align-items-baseline gap-2">
+    <label for="to">au</label>
+    <gl-datepicker-container>
+      <input
+        class="form-control"
+        style="width: 8em"
+        id="to"
+        formControlName="to"
+        ngbDatepicker
+        [minDate]="{ year: 2017, month: 1, day: 1 }"
+      />
+    </gl-datepicker-container>
+  </div>
 
-  <label for="by" class="mr-2">Par</label>
-  <select id="by" formControlName="by" class="form-control">
-    <option [ngValue]="0">Tous les utilisateurs</option>
-    <option *ngFor="let user of users" [ngValue]="user.id">{{ user.login }}</option>
-  </select>
+  <div class="col-12 d-flex align-items-baseline gap-2">
+    <label for="by">Par</label>
+    <select id="by" formControlName="by" class="form-select">
+      <option [ngValue]="0">Tous les utilisateurs</option>
+      <option *ngFor="let user of users" [ngValue]="user.id">{{ user.login }}</option>
+    </select>
+  </div>
 </form>
 
 <div class="row" *ngIf="chartConfiguration">
@@ -42,13 +48,13 @@
       <thead>
         <tr>
           <th>Catégorie</th>
-          <th class="text-right">Temps passé</th>
+          <th class="text-end">Temps passé</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let stat of categoryStatistics">
           <td>{{ stat.category.name }}</td>
-          <td class="text-right">{{ stat.minutes | duration }}</td>
+          <td class="text-end">{{ stat.minutes | duration }}</td>
         </tr>
       </tbody>
     </table>

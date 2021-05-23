@@ -1,6 +1,6 @@
 <gl-page-title [title]="(person | fullname) + ': Fiche d\'adhésion'"></gl-page-title>
 
-<div class="print-button text-right">
+<div class="print-button text-end">
   <button class="btn btn-primary btn-lg" (click)="print()">
     <span class="fa fa-print"></span> Imprimer
   </button>
@@ -22,43 +22,43 @@
   </p>
 
   <div class="row mb-3">
-    <div class="col-2 text-right">Nom&nbsp;:</div>
+    <div class="col-2 text-end">Nom&nbsp;:</div>
     <div class="col-4">
       <div class="field">{{ person.lastName | uppercase }}&nbsp;</div>
     </div>
-    <div class="col-2 text-right">Prénom&nbsp;:</div>
+    <div class="col-2 text-end">Prénom&nbsp;:</div>
     <div class="col-4">
       <div class="field">{{ person.firstName | uppercase }}&nbsp;</div>
     </div>
   </div>
   <div class="row mb-3">
-    <div class="col-2 text-right">Né·e le&nbsp;:</div>
+    <div class="col-2 text-end">Né·e le&nbsp;:</div>
     <div class="col-4">
       <div class="field">{{ person.birthDate | date: 'dd/MM/yyyy' }}&nbsp;</div>
     </div>
-    <div class="col-2 text-right">à&nbsp;:</div>
+    <div class="col-2 text-end">à&nbsp;:</div>
     <div class="col-4"><div class="field">&nbsp;</div></div>
   </div>
   <div class="row mb-3">
-    <div class="col-2 text-right">Adresse&nbsp;:</div>
+    <div class="col-2 text-end">Adresse&nbsp;:</div>
     <div class="col-10">
       <div class="field">{{ person.address }}&nbsp;</div>
     </div>
   </div>
   <div class="row mb-3">
-    <div class="col-2 text-right"></div>
+    <div class="col-2 text-end"></div>
     <div class="col-10">
       <div class="field">{{ person.city?.code }} {{ person.city?.city }}&nbsp;</div>
     </div>
   </div>
   <div class="row mb-3">
-    <div class="col-2 text-right">Email&nbsp;:</div>
+    <div class="col-2 text-end">Email&nbsp;:</div>
     <div class="col-10">
       <div class="field">{{ person.email }}&nbsp;</div>
     </div>
   </div>
   <div class="row mb-3">
-    <div class="col-2 text-right">Téléphone&nbsp;:</div>
+    <div class="col-2 text-end">Téléphone&nbsp;:</div>
     <div class="col-10">
       <div class="field">{{ person.phoneNumber }}&nbsp;</div>
     </div>
@@ -87,9 +87,9 @@
   <div class="mb-3 field">&nbsp;</div>
 
   <div class="row mt-5 mb-5">
-    <div class="col-2 text-right">Date&nbsp;:</div>
+    <div class="col-2 text-end">Date&nbsp;:</div>
     <div class="col-4"><div class="field">&nbsp;</div></div>
-    <div class="col-2 text-right">Signature&nbsp;:</div>
+    <div class="col-2 text-end">Signature&nbsp;:</div>
   </div>
 
   <p class="small" style="margin-top: 100pt">

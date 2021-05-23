@@ -4,18 +4,18 @@
 <div class="row align-items-start mb-2 activity-item" *ngFor="let activity of activities.content">
   <div class="col-lg">
     <a [routerLink]="['/activities', activity.id]">
-      <span class="fa fa-calendar-check-o mr-1"></span>
+      <span class="fa fa-calendar-check-o me-1"></span>
       {{ activity.date | date: 'fullDate' }}
     </a>
   </div>
   <div class="col-lg">{{ activity.type.name }}</div>
   <div class="col-lg-2">
-    <span class="badge badge-success">{{ activity.participants.length }}</span
+    <span class="badge bg-success">{{ activity.participants.length }}</span
     >&ngsp;
     <ng-container *ngIf="activity.participants.length > 1">présents</ng-container>
     <ng-container *ngIf="activity.participants.length <= 1">présent</ng-container>
   </div>
-  <div class="col-lg-2 text-right">
+  <div class="col-lg-2 text-end">
     <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/activities', activity.id, 'edit']">
       <span class="fa fa-edit"></span>
       Éditer

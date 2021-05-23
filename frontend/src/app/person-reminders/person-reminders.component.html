@@ -1,6 +1,6 @@
 <div *ngFor="let reminder of reminders" class="d-flex align-items-baseline reminder-item">
   <span class="fa fa-exclamation-triangle"></span>
-  <span class="ml-2">
+  <span class="ms-2">
     <ng-container *ngIf="reminder.type === 'HEALTH_INSURANCE_TO_RENEW'">
       La couverture médicale complémentaire doit être renouvelée. Elle arrive à échéance le
       {{ reminder.endDate | date: 'longDate' }}.

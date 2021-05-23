@@ -5,7 +5,7 @@
   {{ activity.type.name }}
   <br />
   <small class="text-muted"
-    ><span class="fa fa-calendar-check-o mr-1"></span> {{ activity.date | date: 'fullDate' }}</small
+    ><span class="fa fa-calendar-check-o me-1"></span> {{ activity.date | date: 'fullDate' }}</small
   >
 </h1>
 
@@ -14,7 +14,7 @@
 <h2>
   Présents
   <small>
-    <span class="badge badge-success">{{ activity.participants.length | number }}</span>
+    <span class="badge bg-success">{{ activity.participants.length | number }}</span>
   </small>
 </h2>
 
@@ -24,7 +24,7 @@
   </li>
 </ul>
 
-<a class="btn btn-outline-primary mr-2" routerLink="edit">
+<a class="btn btn-outline-primary me-2" routerLink="edit">
   <span class="fa fa-edit"></span>
   Éditer
 </a>

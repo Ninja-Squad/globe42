@@ -2,9 +2,9 @@
 <h1>Éditer la situation familiale de {{ person | fullname }}</h1>
 
 <form [formGroup]="familyForm" (ngSubmit)="save()">
-  <div class="form-group row">
-    <label class="form-check-label col-sm-3">Époux(se)</label>
-    <div class="col-sm-9">
+  <div class="form-group">
+    <label class="form-label">Époux(se)</label>
+    <div class="ms-3">
       <div class="form-check form-check-inline">
         <input
           class="form-check-input"
@@ -41,57 +41,66 @@
     </div>
   </div>
 
-  <div class="form-group row">
-    <label class="form-col-label col-sm-3">Enfants</label>
-    <div class="col-sm-9" formArrayName="children">
+  <div class="form-group">
+    <label class="form-label">Enfants</label>
+    <div class="ms-3" formArrayName="children">
       <div *ngFor="let child of children.controls; index as i" [formGroupName]="i" class="mb-2">
-        <div class="form-inline">
-          <input
-            class="form-control mr-sm-2"
-            placeholder="Prénom"
-            formControlName="firstName"
-            [id]="'childFirstName' + i"
-          />
-
-          <gl-datepicker-container class="mr-sm-2">
+        <div class="row row-cols-lg-auto g-3 align-items-center">
+          <div class="col-12">
             <input
               class="form-control"
-              placeholder="Date de naissance"
-              formControlName="birthDate"
-              [id]="'childBirthDate' + i"
-              ngbDatepicker
-              [minDate]="{ year: 1900, month: 1, day: 1 }"
+              placeholder="Prénom"
+              formControlName="firstName"
+              [id]="'childFirstName' + i"
             />
-          </gl-datepicker-container>
+          </div>
 
-          <div class="form-check mr-sm-2">
-            <input
-              class="form-check-input"
-              type="radio"
-              [id]="'childLocationFrance' + i"
-              formControlName="location"
-              value="FRANCE"
-            />
-            <label class="form-check-label" [for]="'childLocationFrance' + i">en France</label>
+          <div class="col-12">
+            <gl-datepicker-container>
+              <input
+                class="form-control"
+                placeholder="Date de naissance"
+                formControlName="birthDate"
+                [id]="'childBirthDate' + i"
+                ngbDatepicker
+                [minDate]="{ year: 1900, month: 1, day: 1 }"
+              />
+            </gl-datepicker-container>
           </div>
-          <div class="form-check mr-sm-2">
-            <input
-              class="form-check-input"
-              type="radio"
-              [id]="'childLocationAbroad' + i"
-              formControlName="location"
-              value="ABROAD"
-            />
-            <label class="form-check-label" [for]="'childLocationAbroad' + i">au Pays</label>
+
+          <div class="col-12">
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                [id]="'childLocationFrance' + i"
+                formControlName="location"
+                value="FRANCE"
+              />
+              <label class="form-check-label" [for]="'childLocationFrance' + i">en France</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                [id]="'childLocationAbroad' + i"
+                formControlName="location"
+                value="ABROAD"
+              />
+              <label class="form-check-label" [for]="'childLocationAbroad' + i">au Pays</label>
+            </div>
           </div>
-          <button
-            type="button"
-            class="btn btn-secondary btn-sm"
-            (click)="removeChild(i)"
-            [id]="'removeChild' + i"
-          >
-            <span class="fa fa-trash"></span>&ngsp;Supprimer
-          </button>
+
+          <div class="col-12">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              (click)="removeChild(i)"
+              [id]="'removeChild' + i"
+            >
+              <span class="fa fa-trash"></span>&ngsp;Supprimer
+            </button>
+          </div>
         </div>
       </div>
       <button type="button" class="btn btn-secondary btn-sm" (click)="addChild()" id="add-child">
@@ -101,10 +110,8 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="offset-sm-3 col">
-      <button class="btn btn-primary mr-2" id="save">Enregistrer</button>
-      <a class="btn btn-danger" [routerLink]="['/persons', person.id, 'family']">Annuler</a>
-    </div>
+  <div class="form-group mt-4">
+    <button class="btn btn-primary me-2" id="save">Enregistrer</button>
+    <a class="btn btn-danger" [routerLink]="['/persons', person.id, 'family']">Annuler</a>
   </div>
 </form>

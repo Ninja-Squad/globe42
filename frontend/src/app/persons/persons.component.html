@@ -10,7 +10,7 @@
     <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
   </div>
   <div class="col-sm">{{ person.mediationCode }}</div>
-  <div class="col-sm text-right">
+  <div class="col-sm text-end">
     <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/persons', person.id, 'edit']">
       <span class="fa fa-edit"></span>
       Éditer
@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<div class="text-right mt-4">
+<div class="text-end mt-4">
   <a class="btn btn-outline-primary" routerLink="/persons/create">
     <span class="fa fa-plus"></span>
     Nouvel adhérent

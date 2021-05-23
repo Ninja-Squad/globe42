@@ -1,27 +1,36 @@
-<form class="form-inline" (ngSubmit)="add()" [formGroup]="addForm">
-  <div class="form-group">
-    <input
-      type="number"
-      class="form-control form-control-sm"
-      style="width: 4rem"
-      formControlName="hours"
-      min="0"
-    />
-    &nbsp;h
-  </div>
-  <div class="form-group">
-    <input
-      type="number"
-      class="form-control form-control-sm ml-sm-2"
-      style="width: 4rem"
-      formControlName="minutes"
-      min="0"
-    />
-    &nbsp;m.
+<form class="row g-2 row-cols-sm-auto" (ngSubmit)="add()" [formGroup]="addForm">
+  <div class="col-12 form-group">
+    <div class="input-group input-group-sm">
+      <input
+        type="number"
+        class="form-control form-control-sm"
+        style="width: 4rem"
+        formControlName="hours"
+        min="0"
+      />
+      <div class="input-group-text">h.</div>
+    </div>
   </div>
 
-  <button type="submit" class="btn btn-primary btn-sm ml-sm-2" [disabled]="addForm.invalid">
-    Ajouter
-  </button>
-  <button type="button" class="btn btn-secondary btn-sm ml-sm-2" (click)="cancel()">Annuler</button>
+  <div class="col-12 form-group text-nowrap">
+    <div class="input-group input-group-sm">
+      <input
+        type="number"
+        class="form-control form-control-sm ms-sm-2"
+        style="width: 4rem"
+        formControlName="minutes"
+        min="0"
+      />
+      <div class="input-group-text">m.</div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary btn-sm ms-sm-2" [disabled]="addForm.invalid">
+      Ajouter
+    </button>
+    <button type="button" class="btn btn-secondary btn-sm ms-sm-2" (click)="cancel()">
+      Annuler
+    </button>
+  </div>
 </form>

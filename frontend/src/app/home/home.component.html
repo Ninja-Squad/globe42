@@ -1,5 +1,5 @@
 <gl-page-title title="Accueil"></gl-page-title>
-<h1 class="sr-only">Accueil</h1>
+<h1 class="visually-hidden">Accueil</h1>
 
 <div class="row align-items-center justify-content-center" style="margin-top: 100px">
   <div class="col-sm">
@@ -13,7 +13,7 @@
       </a>
     </div>
     <ng-template #loggedIn>
-      <ul class="list-unstyled lead ml-sm-5">
+      <ul class="list-unstyled lead ms-sm-5">
         <li>
           <a routerLink="/persons" id="persons-link"
             ><span class="fa fa-caret-right"></span> Gestion des adhérents</a
@@ -24,7 +24,7 @@
         </li>
         <li>
           <div class="list-item">Gestion des ressources</div>
-          <ul class="list-unstyled ml-4">
+          <ul class="list-unstyled ms-4">
             <li>
               <a routerLink="/income-sources"
                 ><span class="fa fa-caret-right"></span> Natures de prestation</a

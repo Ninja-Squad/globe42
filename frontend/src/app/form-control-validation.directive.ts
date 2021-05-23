@@ -4,7 +4,8 @@ import { NgControl } from '@angular/forms';
 import { ValdemortConfig } from 'ngx-valdemort';
 
 @Directive({
-  selector: '.form-control:not([glFormControlValidation]),[glFormControlValidation],[ngbRadioGroup]'
+  selector:
+    '.form-control:not([glFormControlValidation]),.form-select:not([glFormControlValidation]),[glFormControlValidation],[ngbRadioGroup]'
 })
 export class FormControlValidationDirective {
   constructor(@Optional() private ngControl: NgControl, private config: ValdemortConfig) {}

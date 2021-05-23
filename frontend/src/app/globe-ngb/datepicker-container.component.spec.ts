@@ -8,7 +8,7 @@ import { GlobeNgbTestingModule } from './globe-ngb-testing.module';
 
 @Component({
   template: `
-    <gl-datepicker-container class="foo">
+    <gl-datepicker-container>
       <input class="form-control" [formControl]="dateCtrl" ngbDatepicker />
     </gl-datepicker-container>
   `
@@ -22,8 +22,12 @@ class TestComponentTester extends ComponentTester<TestComponent> {
     super(TestComponent);
   }
 
+  get wrapper() {
+    return this.element('div');
+  }
+
   get toggler() {
-    return this.element<HTMLElement>('.input-group-prepend .fa-calendar');
+    return this.button('button');
   }
 
   get inputDatepicker() {
@@ -32,10 +36,6 @@ class TestComponentTester extends ComponentTester<TestComponent> {
 
   get datepicker() {
     return this.debugElement.query(By.directive(NgbDatepicker));
-  }
-
-  get container() {
-    return this.element('gl-datepicker-container');
   }
 }
 
@@ -66,8 +66,7 @@ describe('DatepickerContainerComponent', () => {
     expect(tester.datepicker).toBeFalsy();
   });
 
-  it('should have the input-group class in addition to its original class', () => {
-    expect(tester.container).toHaveClass('input-group');
-    expect(tester.container).toHaveClass('foo');
+  it('should have the input-group class', () => {
+    expect(tester.wrapper).toHaveClass('input-group');
   });
 });

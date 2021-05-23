@@ -1,71 +1,79 @@
 <nav class="navbar navbar-light navbar-expand-md bg-light">
-  <a class="navbar-brand" routerLink="/">
-    <span class="fa fa-globe"></span>
-    Globe42
-  </a>
-  <button type="button" class="navbar-toggler" (click)="toggleNavbar()">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div id="navbar" class="collapse navbar-collapse" [ngbCollapse]="navbarCollapsed">
-    <ng-container *ngIf="user">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/persons">
-            <span class="fa fa-users"></span>
-            Adhérents
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/tasks">
-            <span class="fa fa-tasks"></span>
-            Tâches
-          </a>
-        </li>
-        <li class="nav-item" ngbDropdown>
-          <a class="nav-link" tabindex="0" ngbDropdownToggle id="resourcesDropDown" role="button">
-            <span class="fa fa-money"></span>
-            Ressources
-          </a>
-          <div ngbDropdownMenu aria-labelledby="resourcesDropDown">
-            <a class="dropdown-item" routerLink="/income-sources">Natures de prestation</a>
-            <a class="dropdown-item" routerLink="/income-types">Organismes payeurs</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" routerLink="/charge-types">Natures des charges</a>
-            <a class="dropdown-item" routerLink="/charge-categories">Dépenses</a>
-          </div>
-        </li>
-        <li class="nav-item" ngbDropdown>
-          <a class="nav-link" tabindex="0" ngbDropdownToggle role="button" id="activitiesDropDown">
-            <span class="fa fa-comments"></span>
-            Activités
-          </a>
-          <div ngbDropdownMenu aria-labelledby="activitiesDropDown">
-            <a class="dropdown-item" routerLink="/activity-types">Types d'activités</a>
-            <a class="dropdown-item" routerLink="/activities">Activités</a>
-          </div>
-        </li>
-      </ul>
-      <ul class="navbar-nav">
-        <li class="nav-item mr-2" ngbDropdown>
-          <a class="nav-link" tabindex="0" ngbDropdownToggle id="userDropDown" role="button">
-            <span class="fa fa-user-circle fa-fw"></span> {{ user.login }}
-          </a>
-          <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu-right">
-            <a class="dropdown-item" (click)="logout($event)" href="#" id="menu-logout">
-              <span class="fa fa-power-off fa-fw"></span> Déconnexion
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">
+      <span class="fa fa-globe"></span>
+      Globe42
+    </a>
+    <button type="button" class="navbar-toggler" (click)="toggleNavbar()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="navbar" class="collapse navbar-collapse" [ngbCollapse]="navbarCollapsed">
+      <ng-container *ngIf="user">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/persons">
+              <span class="fa fa-users"></span>
+              Adhérents
             </a>
-            <a class="dropdown-item" routerLink="/profile">
-              <span class="fa fa-address-card fa-fw"></span> Profil et préférences
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/tasks">
+              <span class="fa fa-tasks"></span>
+              Tâches
             </a>
-            <a class="dropdown-item" routerLink="/password-changes">
-              <span class="fa fa-lock fa-fw"></span> Changer de mot de passe
+          </li>
+          <li class="nav-item" ngbDropdown>
+            <a class="nav-link" tabindex="0" ngbDropdownToggle id="resourcesDropDown" role="button">
+              <span class="fa fa-money"></span>
+              Ressources
             </a>
-            <a class="dropdown-item" *ngIf="user?.admin" routerLink="/users">
-              <span class="fa fa-user fa-fw"></span> Utilisateurs
+            <div ngbDropdownMenu aria-labelledby="resourcesDropDown">
+              <a class="dropdown-item" routerLink="/income-sources">Natures de prestation</a>
+              <a class="dropdown-item" routerLink="/income-types">Organismes payeurs</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" routerLink="/charge-types">Natures des charges</a>
+              <a class="dropdown-item" routerLink="/charge-categories">Dépenses</a>
+            </div>
+          </li>
+          <li class="nav-item" ngbDropdown>
+            <a
+              class="nav-link"
+              tabindex="0"
+              ngbDropdownToggle
+              role="button"
+              id="activitiesDropDown"
+            >
+              <span class="fa fa-comments"></span>
+              Activités
             </a>
-          </div>
-        </li>
-      </ul>
-    </ng-container>
+            <div ngbDropdownMenu aria-labelledby="activitiesDropDown">
+              <a class="dropdown-item" routerLink="/activity-types">Types d'activités</a>
+              <a class="dropdown-item" routerLink="/activities">Activités</a>
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item me-2" ngbDropdown>
+            <a class="nav-link" tabindex="0" ngbDropdownToggle id="userDropDown" role="button">
+              <span class="fa fa-user-circle fa-fw"></span> {{ user.login }}
+            </a>
+            <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu-end">
+              <a class="dropdown-item" (click)="logout($event)" href="#" id="menu-logout">
+                <span class="fa fa-power-off fa-fw"></span> Déconnexion
+              </a>
+              <a class="dropdown-item" routerLink="/profile">
+                <span class="fa fa-address-card fa-fw"></span> Profil et préférences
+              </a>
+              <a class="dropdown-item" routerLink="/password-changes">
+                <span class="fa fa-lock fa-fw"></span> Changer de mot de passe
+              </a>
+              <a class="dropdown-item" *ngIf="user?.admin" routerLink="/users">
+                <span class="fa fa-user fa-fw"></span> Utilisateurs
+              </a>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+    </div>
   </div>
 </nav>

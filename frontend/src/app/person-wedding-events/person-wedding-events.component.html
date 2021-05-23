@@ -7,7 +7,7 @@
     {{ event.type | displayWeddingEventType }}
     {{ event.location | displayLocation }}
   </div>
-  <div class="col-sm text-right">
+  <div class="col-sm text-end">
     <button type="button" class="btn btn-danger btn-sm" (click)="deleteEvent(event)">
       <span class="fa fa-trash"></span>
       Supprimer
@@ -28,7 +28,7 @@
 
   <form *ngIf="newEvent" [formGroup]="newEvent" (ngSubmit)="create()">
     <div class="form-group">
-      <label for="date">Date</label>
+      <label for="date" class="form-label">Date</label>
       <gl-datepicker-container>
         <input
           class="form-control"
@@ -43,8 +43,8 @@
     </div>
 
     <div class="form-group">
-      <label for="type">Type d'événement</label>
-      <select id="type" formControlName="type" class="form-control">
+      <label for="type" class="form-label">Type d'événement</label>
+      <select id="type" formControlName="type" class="form-select">
         <option value=""></option>
         <option *ngFor="let eventType of eventTypes" [value]="eventType">
           {{ eventType | displayWeddingEventType }}
@@ -54,14 +54,9 @@
     </div>
 
     <div class="form-group">
-      <label>Lieu</label>
+      <label class="form-label">Lieu</label>
       <div>
-        <div
-          class="btn-group btn-group-toggle"
-          ngbRadioGroup
-          name="location"
-          formControlName="location"
-        >
+        <div class="btn-group" ngbRadioGroup name="location" formControlName="location">
           <label
             ngbButtonLabel
             class="btn btn-outline-secondary"
@@ -69,6 +64,7 @@
           >
             <input
               ngbButton
+              class="btn-check"
               name="location"
               id="location-{{ location }}"
               type="radio"
@@ -81,7 +77,7 @@
       <val-errors controlName="location" label="Le lieu"></val-errors>
     </div>
 
-    <button id="createButton" class="btn btn-primary mr-2">Ajouter</button>
+    <button id="createButton" class="btn btn-primary me-2">Ajouter</button>
     <button
       id="cancelCreationButton"
       type="button"

@@ -115,7 +115,6 @@ describe('ConfirmService and its modal component', () => {
 
   it('should error when closing and errorOnClose is true', (done: DoneFn) => {
     confirm({ message: 'Really?', errorOnClose: true }).subscribe({ error: () => done() });
-    expect(tester.closeButton.textContent).toContain('×');
     tester.closeButton.click();
 
     tester.detectChanges();

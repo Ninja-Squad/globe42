@@ -11,8 +11,8 @@
   <div class="row">
     <div class="col-md">
       <div class="form-group">
-        <label for="type">Type d'activité</label>
-        <select formControlName="type" class="form-control" id="type">
+        <label for="type" class="form-label">Type d'activité</label>
+        <select formControlName="type" class="form-select" id="type">
           <option [ngValue]="null"></option>
           <option *ngFor="let activityType of activityTypes" [ngValue]="activityType.key">
             {{ activityType.name }}
@@ -24,7 +24,7 @@
 
     <div class="col-md">
       <div class="form-group">
-        <label for="date">Date de l'activité</label>
+        <label for="date" class="form-label">Date de l'activité</label>
         <gl-datepicker-container>
           <input
             class="form-control"
@@ -51,36 +51,34 @@
             class="p-1 d-flex rounded align-items-baseline absent-item"
           >
             <div class="flex-grow-1">{{ person | fullname }}</div>
-            <div class="ml-2">
+            <div class="ms-2">
               <button
                 type="button"
                 class="btn btn-sm btn-outline-success add-present-button"
                 (click)="choosePerson(person)"
               >
-                <span class="sr-only">Ajouter {{ person | fullname }} aux présents</span>
+                <span class="visually-hidden">Ajouter {{ person | fullname }} aux présents</span>
                 <span class="fa fa-plus-circle"></span>
               </button>
             </div>
           </li>
         </ul>
       </div>
-      <div class="custom-control custom-switch">
+      <div class="form-check form-switch">
         <input
           [formControl]="showAllPersonsCtrl"
           type="checkbox"
-          class="custom-control-input"
+          class="form-check-input"
           id="show-all-persons"
         />
-        <label class="custom-control-label" for="show-all-persons"
-          >Afficher toutes les personnes</label
-        >
+        <label class="form-check-label" for="show-all-persons">Afficher toutes les personnes</label>
       </div>
     </div>
     <div class="col-sm">
       <h3>
         Présents
         <small
-          ><span class="badge badge-success">{{
+          ><span class="badge bg-success">{{
             form.value.participants.length | number
           }}</span></small
         >
@@ -92,13 +90,13 @@
             class="p-1 d-flex rounded align-items-baseline present-item"
           >
             <span class="flex-grow-1">{{ person | fullname }}</span>
-            <div class="ml-2">
+            <div class="ms-2">
               <button
                 type="button"
                 class="btn btn-sm btn-outline-danger remove-present-button"
                 (click)="unchoosePerson(person)"
               >
-                <span class="sr-only">Enlever {{ person | fullname }} des présents</span>
+                <span class="visually-hidden">Enlever {{ person | fullname }} des présents</span>
                 <span class="fa fa-times-circle"></span>
               </button>
             </div>
@@ -109,7 +107,7 @@
   </div>
 
   <div class="form-group mt-2">
-    <button class="btn btn-primary mr-2" id="save-button">Enregistrer</button>
+    <button class="btn btn-primary me-2" id="save-button">Enregistrer</button>
     <a
       class="btn btn-secondary"
       *ngIf="editedActivity"
