@@ -89,7 +89,7 @@ class TaskControllerMvcTest(
     @Test
     fun `should list todo for person`() {
         val person = Person(1L)
-        every { mockPersonDao.getOne(1L) } returns person
+        every { mockPersonDao.getById(1L) } returns person
         every { mockTaskDao.findTodoByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1").andExpect {
@@ -101,7 +101,7 @@ class TaskControllerMvcTest(
     @Test
     fun `should list archived for person`() {
         val person = Person(1L)
-        every { mockPersonDao.getOne(1L) } returns person
+        every { mockPersonDao.getById(1L) } returns person
         every { mockTaskDao.findArchivedByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1&archived").andExpect {
@@ -153,7 +153,7 @@ class TaskControllerMvcTest(
         val command = createCommand(null, null)
 
         every { mockCurrentUser.userId } returns user.id
-        every { mockUserDao.getOne(user.id!!) } returns user
+        every { mockUserDao.getById(user.id!!) } returns user
         every { mockTaskDao.save(any<Task>()) } answers { arg<Task>(0).apply { id = 42L } }
 
         mvc.post("/api/tasks") {

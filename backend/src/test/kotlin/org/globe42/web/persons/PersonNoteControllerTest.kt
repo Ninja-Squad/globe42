@@ -56,7 +56,7 @@ class PersonNoteControllerTest {
         person.addNote(note2)
 
         every { mockCurrentUser.userId } returns creator.id
-        every { mockUserDao.getOne(creator.id!!) } returns creator
+        every { mockUserDao.getById(creator.id!!) } returns creator
     }
 
     @Test

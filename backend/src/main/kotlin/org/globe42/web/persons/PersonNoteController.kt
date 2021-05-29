@@ -41,7 +41,7 @@ class PersonNoteController(
         val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
 
         val note = Note()
-        note.creator = userDao.getOne(currentUser.userId!!)
+        note.creator = userDao.getById(currentUser.userId!!)
         note.text = command.text
         note.category = command.category
         person.addNote(note)
