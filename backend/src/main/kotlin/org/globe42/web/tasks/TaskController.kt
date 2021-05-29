@@ -47,7 +47,7 @@ class TaskController(
 
     @GetMapping(params = ["mine"])
     fun listMine(@RequestParam page: Int?): PageDTO<TaskDTO> {
-        val user = userDao.getOne(currentUser.userId!!)
+        val user = userDao.getById(currentUser.userId!!)
         return taskDao.findTodoByAssignee(user, pageRequest(page)).toDTO(::TaskDTO)
     }
 
@@ -58,7 +58,7 @@ class TaskController(
 
     @GetMapping(params = ["person"])
     fun listTodoForPerson(@RequestParam("person") personId: Long?, @RequestParam page: Int?): PageDTO<TaskDTO> {
-        val person = personDao.getOne(personId!!)
+        val person = personDao.getById(personId!!)
         return taskDao.findTodoByConcernedPerson(person, pageRequest(page)).toDTO(::TaskDTO)
     }
 
@@ -67,7 +67,7 @@ class TaskController(
         @RequestParam("person") personId: Long?,
         @RequestParam page: Int?
     ): PageDTO<TaskDTO> {
-        val person = personDao.getOne(personId!!)
+        val person = personDao.getById(personId!!)
         return taskDao.findArchivedByConcernedPerson(person, pageRequest(page)).toDTO(::TaskDTO)
     }
 
@@ -132,7 +132,7 @@ class TaskController(
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@Validated @RequestBody command: TaskCommandDTO): TaskDTO {
         val task = Task()
-        task.creator = userDao.getOne(currentUser.userId!!)
+        task.creator = userDao.getById(currentUser.userId!!)
 
         copyCommandToTask(command, task)
         taskDao.save(task)
@@ -179,7 +179,7 @@ class TaskController(
     fun addSpentTime(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: SpentTimeCommandDTO): SpentTimeDTO {
         val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException("no task with ID $taskId")
         val spentTime = SpentTime()
-        spentTime.creator = userDao.getOne(currentUser.userId!!)
+        spentTime.creator = userDao.getById(currentUser.userId!!)
         spentTime.minutes = command.minutes
 
         task.addSpentTime(spentTime)

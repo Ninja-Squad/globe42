@@ -109,7 +109,7 @@ class TaskControllerTest {
     @Test
     fun `should list mine`() {
         every { mockCurrentUser.userId } returns user.id
-        every { mockUserDao.getOne(user.id!!) } returns user
+        every { mockUserDao.getById(user.id!!) } returns user
 
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         every { mockTaskDao.findTodoByAssignee(user, pageRequest) } returns
@@ -135,7 +135,7 @@ class TaskControllerTest {
     @Test
     fun `should list todo for person`() {
         val person = Person(42L)
-        every { mockPersonDao.getOne(person.id!!) } returns person
+        every { mockPersonDao.getById(person.id!!) } returns person
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         every { mockTaskDao.findTodoByConcernedPerson(person, pageRequest) } returns
             singlePage(listOf(task1, task2), pageRequest)
@@ -148,7 +148,7 @@ class TaskControllerTest {
     @Test
     fun `should list archived for person`() {
         val person = Person(42L)
-        every { mockPersonDao.getOne(person.id!!) } returns person
+        every { mockPersonDao.getById(person.id!!) } returns person
         val pageRequest = PageRequest.of(0, PAGE_SIZE)
         every { mockTaskDao.findArchivedByConcernedPerson(person, pageRequest) } returns
             singlePage(listOf(task1, task2), pageRequest)
@@ -287,7 +287,7 @@ class TaskControllerTest {
         every { mockUserDao.findNotDeletedById(user.id!!) } returns user
 
         every { mockCurrentUser.userId } returns user.id
-        every { mockUserDao.getOne(user.id!!) } returns user
+        every { mockUserDao.getById(user.id!!) } returns user
 
         every { mockTaskDao.save(any<Task>()) } answers{ arg<Task>(0).apply { id = 42L } }
 
@@ -315,7 +315,7 @@ class TaskControllerTest {
         val command = createCommand(null, null)
 
         every { mockCurrentUser.userId } returns user.id
-        every { mockUserDao.getOne(user.id!!) } returns user
+        every { mockUserDao.getById(user.id!!) } returns user
         every { mockTaskDao.save(any<Task>()) } answers { arg<Task>(0).apply { id = 42L } }
 
         val task = controller.create(command)
@@ -330,7 +330,7 @@ class TaskControllerTest {
         val command = createCommand(null, null).copy(description = " ")
 
         every { mockCurrentUser.userId } returns user.id
-        every { mockUserDao.getOne(user.id!!) } returns user
+        every { mockUserDao.getById(user.id!!) } returns user
         every { mockTaskDao.save(any<Task>()) } answers { arg<Task>(0).apply { id = 42L } }
 
         val task = controller.create(command)
@@ -400,7 +400,7 @@ class TaskControllerTest {
     fun `should add spent time`() {
         every { mockTaskDao.findByIdOrNull(task1.id!!) } returns task1
         every { mockCurrentUser.userId } returns user.id
-        every { mockUserDao.getOne(user.id!!) } returns user
+        every { mockUserDao.getById(user.id!!) } returns user
         every { mockTaskDao.flush() } answers { task1.getSpentTimes().forEach { it.id = it.id ?: 76L } }
 
         val command = SpentTimeCommandDTO(10)

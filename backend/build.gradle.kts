@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.5.0"
+    val kotlinVersion = "1.5.10"
 
     java
     jacoco
@@ -22,10 +22,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.4.5"
+    id("org.springframework.boot") version "2.5.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("org.flywaydb.flyway") version "7.1.1"
-    id("com.gorylenko.gradle-git-properties") version "2.2.4"
+    id("org.flywaydb.flyway") version "7.7.3"
+    id("com.gorylenko.gradle-git-properties") version "2.3.1"
 }
 
 repositories {
@@ -120,7 +120,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
-    implementation("com.google.cloud:google-cloud-storage:1.113.9")
+    implementation("com.google.cloud:google-cloud-storage:1.114.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.poi:poi:4.1.2")
@@ -135,7 +135,7 @@ dependencies {
         exclude(module = "mockito")
     }
     testImplementation("com.ninja-squad:springmockk:3.0.1")
-    testImplementation("io.mockk:mockk:1.10.4")
+    testImplementation("io.mockk:mockk:1.11.0")
 
     testImplementation("com.ninja-squad:DbSetup:2.1.0")
     testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")

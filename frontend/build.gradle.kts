@@ -18,6 +18,10 @@ tasks {
         enabled = false
     }
 
+    named<YarnInstallTask>(YarnInstallTask.NAME) {
+        ignoreExitValue.set(true)
+    }
+
     val prepare by registering {
         dependsOn(YarnInstallTask.NAME)
     }
