@@ -48,7 +48,7 @@
     "@angular/localize": "12.0.3",
     "@types/jasmine": "3.7.7",
     "@types/luxon": "1.26.5",
-    "@types/node": "14.17.2",
+    "@types/node": "14.17.3",
     "@typescript-eslint/eslint-plugin": "4.26.1",
     "@typescript-eslint/parser": "4.26.1",
     "bundlesize": "0.18.1",
