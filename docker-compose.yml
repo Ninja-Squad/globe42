@@ -2,7 +2,7 @@ version: '3.7'
 services:
   postgres:
     # 11-alpine
-    image: postgres@sha256:fdecfb9a2de3bd27ca695cecb79b4519b74f7c9e505fa4f9129a9e72e8ff5193
+    image: postgres:11-alpine
     container_name: globe42-postgres
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
