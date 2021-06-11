@@ -34,7 +34,7 @@
     "luxon": "1.27.0",
     "ngx-valdemort": "6.0.0",
     "rxjs": "7.1.0",
-    "tslib": "2.2.0",
+    "tslib": "2.3.0",
     "zone.js": "0.11.4"
   },
   "devDependencies": {
