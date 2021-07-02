@@ -24,6 +24,8 @@ interface Sorting {
 interface ViewModel {
   report: ActivityReport;
   sorting: Sorting;
+  totalPresenceCount: number;
+  averageDiligence: number;
 }
 
 @Component({
@@ -63,7 +65,16 @@ export class ActivityReportComponent implements OnInit {
               activityService.report(formValue.type, formValue.from, formValue.to),
               this.sortingSubject
             ]).pipe(
-              map(([report, sorting]) => ({ report: this.sortedReport(report, sorting), sorting })),
+              map(([unsortedReport, sorting]) => {
+                const report = this.sortedReport(unsortedReport, sorting);
+                const totalPresenceCount = report.presences.reduce(
+                  (acc, presence) => acc + presence.activityCount,
+                  0
+                );
+                const averageDiligence =
+                  totalPresenceCount / (report.totalActivityCount * report.presences.length);
+                return { report, sorting, totalPresenceCount, averageDiligence };
+              }),
               catchError(() => of(null))
             )
           : of(null)
