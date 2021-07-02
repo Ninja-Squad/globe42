@@ -58,6 +58,24 @@
     </ng-container>
   </h2>
 
+  <div *ngIf="vm.report.totalActivityCount" class="row lead">
+    <div class="col-lg-6" id="total-presence-count">
+      Nombre total de présences&nbsp;: {{ vm.totalPresenceCount }}
+    </div>
+    <div class="col-lg-6 d-flex align-items-center">
+      <span class="me-1">Assiduité moyenne&nbsp;:</span>
+      <ngb-progressbar
+        class="flex-grow-1"
+        type="success"
+        [value]="vm.averageDiligence"
+        [max]="1"
+      ></ngb-progressbar>
+      <span class="ms-1" style="width: 3rem" id="average-diligence">{{
+        vm.averageDiligence | percent: '.0-0'
+      }}</span>
+    </div>
+  </div>
+
   <table class="table">
     <thead>
       <tr>

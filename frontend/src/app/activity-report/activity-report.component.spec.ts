@@ -45,6 +45,14 @@ class ActivityReportComponentTester extends ComponentTester<ActivityReportCompon
     return this.elements('tbody tr');
   }
 
+  get totalPresenceCount() {
+    return this.element('#total-presence-count');
+  }
+
+  get averageDiligence() {
+    return this.element('#average-diligence');
+  }
+
   get errors() {
     return this.elements('val-errors div');
   }
@@ -130,6 +138,8 @@ describe('ActivityReportComponent', () => {
         '2021-02-28'
       );
       expect(tester.reportTitle).toContainText('Aucune activité');
+      expect(tester.totalPresenceCount).toBeNull();
+      expect(tester.averageDiligence).toBeNull();
 
       tester.type.selectLabel('Repas');
 
@@ -179,6 +189,9 @@ describe('ActivityReportComponent', () => {
       );
 
       tester.detectChanges();
+
+      expect(tester.totalPresenceCount).toContainText('Nombre total de présences\u00a0: 19');
+      expect(tester.averageDiligence).toContainText('63%');
 
       expect(tester.reportRows.length).toBe(3);
       expect(tester.reportRows[0]).toContainText('Cedric Exbrayat');
