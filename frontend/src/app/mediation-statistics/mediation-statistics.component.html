@@ -1,0 +1,134 @@
+<gl-page-title title="Statistiques sur les rendez-vous de médiation"></gl-page-title>
+
+<form [formGroup]="form">
+  <div class="row g-2">
+    <div class="form-group col-md-6">
+      <label for="from" class="form-label">Du</label>
+      <gl-datepicker-container>
+        <input
+          class="form-control"
+          id="from"
+          placeholder="01/01/2021"
+          formControlName="from"
+          ngbDatepicker
+          [minDate]="{ year: 2012, month: 1, day: 1 }"
+        />
+      </gl-datepicker-container>
+      <val-errors controlName="from" label="La date de début"></val-errors>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="to" class="form-label">Au</label>
+      <gl-datepicker-container>
+        <input
+          class="form-control"
+          id="to"
+          placeholder="31/01/2021"
+          formControlName="to"
+          ngbDatepicker
+          [minDate]="{ year: 2012, month: 1, day: 1 }"
+        />
+      </gl-datepicker-container>
+      <val-errors controlName="from" label="La date de fin"></val-errors>
+    </div>
+  </div>
+</form>
+
+<div *ngIf="report$ | async as report" class="mt-4">
+  <h2>{{ report.appointmentCount | number }} <small>rendez-vous</small></h2>
+
+  <div class="row" *ngIf="report.appointmentCount > 0">
+    <div class="col-lg-6">
+      <div class="block border rounded-1 p-2 bg-light mb-4">
+        <h3>Répartition des rendez-vous par utilisatrice·eur</h3>
+        <table class="table">
+          <tbody>
+            <tr *ngFor="let userAppointment of report.userAppointments">
+              <th scope="row">{{ userAppointment.user.login }}</th>
+              <td class="text-end">{{ userAppointment.count | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block border rounded-1 p-2 bg-light mb-4">
+        <h3>Répartition des rendez-vous par tranche d'âge</h3>
+        <table class="table">
+          <tbody>
+            <tr *ngFor="let ageRangeAppointment of report.ageRangeAppointments">
+              <th scope="row">
+                <span *ngIf="ageRangeAppointment.range.fromInclusive === null">
+                  &lt; {{ ageRangeAppointment.range.toExclusive | number }} ans
+                </span>
+                <span *ngIf="ageRangeAppointment.range.toExclusive === null">
+                  &ge; {{ ageRangeAppointment.range.fromInclusive | number }} ans
+                </span>
+                <span
+                  *ngIf="
+                    ageRangeAppointment.range.fromInclusive !== null &&
+                    ageRangeAppointment.range.toExclusive !== null
+                  "
+                >
+                  &ge; {{ ageRangeAppointment.range.fromInclusive | number }} ans et &lt;
+                  {{ ageRangeAppointment.range.toExclusive | number }} ans
+                </span>
+              </th>
+              <td class="text-end">{{ ageRangeAppointment.count | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          Âge moyen des personnes en rendez-vous&nbsp;:
+          <span class="lead">{{ report.averageAge | number: '.0-1' }}&nbsp;ans</span>
+        </div>
+        <div class="small text-muted">
+          Les personnes sans date de naissance ont été ignorées pour calculer cette moyenne.<br />
+          L'âge utilisé pour chaque personne est l'âge en milieu de période.
+        </div>
+      </div>
+
+      <div class="block border rounded-1 p-2 bg-light mb-4">
+        <h3>Répartition des rendez-vous par nationalité</h3>
+        <table class="table">
+          <tbody>
+            <tr *ngFor="let nationalityAppointment of report.nationalityAppointments">
+              <th scope="row">{{ nationalityAppointment.nationality.name }}</th>
+              <td class="text-end">{{ nationalityAppointment.count | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="small text-muted">Les personnes sans nationalité n'apparaissent pas.</div>
+      </div>
+
+      <div class="block border rounded-1 p-2 bg-light mb-4">
+        <h3>Ressources</h3>
+        <div>
+          Moyenne des ressources des personnes en rendez-vous&nbsp;:
+          <span class="lead">
+            {{ report.averageIncomeMonthlyAmount | number }}&nbsp;&euro;/mois
+          </span>
+        </div>
+        <div class="small text-muted">
+          Les personnes sans aucune ligne de ressource ont été ignorées pour calculer cette moyenne.
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="block border rounded-1 p-2 bg-light mb-4">
+        <h3>Répartition des rendez-vous par personne</h3>
+        <table class="table">
+          <tbody>
+            <tr *ngFor="let personAppointment of report.personAppointments">
+              <th scope="row">
+                <a [routerLink]="['/persons', personAppointment.person.id]">{{
+                  personAppointment.person | fullname
+                }}</a>
+              </th>
+              <td class="text-end">{{ personAppointment.count | number }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

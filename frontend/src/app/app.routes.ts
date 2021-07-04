@@ -83,6 +83,7 @@ import { ActivityReportComponent } from './activity-report/activity-report.compo
 import { ActivitiesLayoutComponent } from './activities-layout/activities-layout.component';
 import { PersonsWithRemindersComponent } from './persons-with-reminders/persons-with-reminders.component';
 import { PersonsWithRemindersResolverService } from './persons-with-reminders-resolver.service';
+import { MediationStatisticsComponent } from './mediation-statistics/mediation-statistics.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -118,6 +119,10 @@ export const routes: Routes = [
               {
                 path: 'reports',
                 component: PersonsReportsComponent
+              },
+              {
+                path: 'mediation-statistics',
+                component: MediationStatisticsComponent
               }
             ]
           },
