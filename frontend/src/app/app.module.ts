@@ -98,6 +98,7 @@ import { ActivitiesLayoutComponent } from './activities-layout/activities-layout
 import { PersonRemindersComponent } from './person-reminders/person-reminders.component';
 import { PersonsWithRemindersComponent } from './persons-with-reminders/persons-with-reminders.component';
 import { DisplayReminderTypePipe } from './display-reminder-type.pipe';
+import { MediationStatisticsComponent } from './mediation-statistics/mediation-statistics.component';
 
 @NgModule({
   declarations: [
@@ -187,7 +188,8 @@ import { DisplayReminderTypePipe } from './display-reminder-type.pipe';
     ActivitiesLayoutComponent,
     PersonRemindersComponent,
     PersonsWithRemindersComponent,
-    DisplayReminderTypePipe
+    DisplayReminderTypePipe,
+    MediationStatisticsComponent
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

@@ -5,16 +5,24 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.globe42.dao.MembershipDao
+import org.globe42.dao.NoteDao
 import org.globe42.dao.PersonDao
 import org.globe42.domain.*
+import org.globe42.web.countries.CountryDTO
+import org.globe42.web.persons.PersonIdentityDTO
+import org.globe42.web.users.UserDTO
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.io.ByteArrayOutputStream
+import java.time.Instant
 import java.time.LocalDate
+import java.time.Period
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
 
 private val DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy")
