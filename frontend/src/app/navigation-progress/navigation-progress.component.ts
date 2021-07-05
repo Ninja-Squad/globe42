@@ -6,8 +6,17 @@ import {
   NavigationStart,
   Router
 } from '@angular/router';
-import { merge, Observable, timer } from 'rxjs';
-import { filter, first, map, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
+import {
+  filter,
+  first,
+  map,
+  merge,
+  Observable,
+  switchMap,
+  takeUntil,
+  takeWhile,
+  timer
+} from 'rxjs';
 
 export interface Progress {
   value: number;

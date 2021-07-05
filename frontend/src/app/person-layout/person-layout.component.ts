@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonModel, ReminderModel } from '../models/person.model';
-import { map, startWith, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map, Observable, startWith, tap } from 'rxjs';
 import { CurrentPersonService } from '../current-person.service';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
 import { ViewportScroller } from '@angular/common';

@@ -1,5 +1,4 @@
-import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, Observable } from 'rxjs';
 
 /**
  * Base class used for typeahead helpers

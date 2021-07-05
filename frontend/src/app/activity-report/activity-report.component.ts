@@ -2,9 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ACTIVITY_TYPES, ActivityType } from '../models/activity-type.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap
+} from 'rxjs';
 import { ActivityReport, Presence } from '../models/activity.model';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { ActivityService } from '../activity.service';
 import { DateTime } from 'luxon';
 import { Comparator, sortBy } from '../utils';

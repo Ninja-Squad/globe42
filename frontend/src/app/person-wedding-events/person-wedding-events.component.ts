@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PersonModel } from '../models/person.model';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { ConfirmService } from '../confirm.service';

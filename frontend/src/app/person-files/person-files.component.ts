@@ -5,7 +5,7 @@ import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
 import { Comparator, sortBy } from '../utils';
 import { HttpEventType } from '@angular/common/http';
-import { finalize, switchMap } from 'rxjs/operators';
+import { finalize, switchMap } from 'rxjs';
 import { CurrentPersonService } from '../current-person.service';
 
 @Component({

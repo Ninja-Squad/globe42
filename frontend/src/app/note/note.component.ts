@@ -10,8 +10,7 @@ import {
 } from '@angular/core';
 import { NOTE_CATEGORIES, NoteCommand, NoteModel } from '../models/note.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { concat, of } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { concat, filter, of } from 'rxjs';
 
 export interface NoteEditionEvent {
   id: number;

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { concat, Observable, Subject } from 'rxjs';
+import { concat, Observable, shareReplay, Subject, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ReminderModel } from './models/person.model';
-import { shareReplay, switchMap } from 'rxjs/operators';
 
 /**
  * Service provided by the parent person-layout component, which is used to get the

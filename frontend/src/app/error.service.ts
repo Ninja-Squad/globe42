@@ -6,9 +6,8 @@ import {
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { FunctionalErrorModel, TechnicalErrorModel } from './models/error.model';
-import { tap } from 'rxjs/operators';
 
 /**
  * Service which acts as an HTTP interceptor, in order to emit HTTP errors (which are then consumed by the

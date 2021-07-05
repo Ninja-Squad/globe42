@@ -3,7 +3,7 @@ import { ErrorService } from '../error.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { ERRORS, FunctionalErrorModel } from '../models/error.model';
 import { interpolate } from '../utils';
-import { filter } from 'rxjs/operators';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'gl-error',

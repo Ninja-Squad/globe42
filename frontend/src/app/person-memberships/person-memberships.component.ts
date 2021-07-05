@@ -8,7 +8,7 @@ import { min, pastDate } from '../globe-validators';
 import { MembershipService } from '../membership.service';
 import { MembershipCommand } from '../models/membership.command';
 import { ConfirmService } from '../confirm.service';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs';
 import { CurrentPersonService } from '../current-person.service';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
 

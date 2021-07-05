@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Activity } from '../models/activity.model';
 import { ConfirmService } from '../confirm.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 import { ActivityService } from '../activity.service';
 
 @Component({

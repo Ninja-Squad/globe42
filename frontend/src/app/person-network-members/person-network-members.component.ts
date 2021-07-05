@@ -3,11 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { NETWORK_MEMBER_TYPES, NetworkMemberModel } from '../models/network-member.model';
 import { ConfirmService } from '../confirm.service';
 import { NetworkMemberService } from '../network-member.service';
-import { switchMap, tap } from 'rxjs/operators';
+import { Observable, switchMap, tap } from 'rxjs';
 import { PersonModel } from '../models/person.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NetworkMemberCommand } from '../models/network-member.command';
-import { Observable } from 'rxjs';
 import { CurrentPersonService } from '../current-person.service';
 
 @Component({

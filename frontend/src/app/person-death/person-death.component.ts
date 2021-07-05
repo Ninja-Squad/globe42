@@ -5,7 +5,7 @@ import { PersonService } from '../person.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { pastDate } from '../globe-validators';
 import { CurrentPersonService } from '../current-person.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
 
 @Component({

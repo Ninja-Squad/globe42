@@ -1,7 +1,7 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { filter, map, Observable, of } from 'rxjs';
 import { FISCAL_NUMBER_PATTERN, PersonEditComponent } from './person-edit.component';
 import { PersonService } from '../person.service';
 import {
@@ -27,7 +27,6 @@ import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.p
 import { DisplayHealthInsurancePipe } from '../display-health-insurance.pipe';
 import { FullnamePipe } from '../fullname.pipe';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
-import { filter, map } from 'rxjs/operators';
 import { CountryModel } from '../models/country.model';
 import { ComponentTester, TestInput } from 'ngx-speculoos';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';

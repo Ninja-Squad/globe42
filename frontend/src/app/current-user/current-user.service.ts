@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProfileCommand, ProfileModel, UserModel } from '../models/user.model';
 import { JwtInterceptorService } from './jwt-interceptor.service';
-import { tap } from 'rxjs/operators';
 import { CredentialsCommand } from '../models/credentials.command';
 
 @Injectable({ providedIn: 'root' })

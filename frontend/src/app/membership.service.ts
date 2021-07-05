@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { MembershipModel } from './models/membership.model';
 import { MembershipCommand } from './models/membership.command';
-import { tap } from 'rxjs/operators';
 
 function url(personId: number): string {
   return `/api/persons/${personId}/memberships`;

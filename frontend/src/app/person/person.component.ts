@@ -5,7 +5,7 @@ import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
 import { displayFullname } from '../fullname.pipe';
 import { PersonService } from '../person.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 import { CurrentPersonService } from '../current-person.service';
 
 @Component({
