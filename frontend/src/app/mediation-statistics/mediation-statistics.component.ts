@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, switchMap, tap } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { MediationReportModel } from '../mediation-statistics.model';
 import { MediationStatisticsService } from '../mediation-statistics.service';

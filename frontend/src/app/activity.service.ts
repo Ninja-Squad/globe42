@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Activity, ActivityCommand, ActivityModel, ActivityReport } from './models/activity.model';
 import { Page } from './models/page';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ActivityType, activityType } from './models/activity-type.model';
-import { map } from 'rxjs/operators';
 import { sortBy } from './utils';
 import { displayFullname } from './fullname.pipe';
 

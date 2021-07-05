@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FamilyService } from '../family.service';
 import { PersonModel } from '../models/person.model';
 import { ConfirmService } from '../confirm.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 import { CurrentPersonService } from '../current-person.service';
 
 export interface Situation {

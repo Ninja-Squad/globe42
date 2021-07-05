@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, Observable, shareReplay } from 'rxjs';
 import { CountryModel } from './models/country.model';
 
 @Injectable({ providedIn: 'root' })

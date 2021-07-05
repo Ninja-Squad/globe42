@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { TaskModel } from './models/task.model';
 import { Page } from './models/page';
 import { TaskCommand } from './models/task.command';
@@ -10,7 +10,6 @@ import { TaskCategoryModel } from './models/task-category.model';
 import { CurrentUserService } from './current-user/current-user.service';
 import { SpentTimeStatisticsCriteria } from './models/spent-time-statistics.criteria';
 import { SpentTimeStatisticsModel } from './models/spent-time-statistics.model';
-import { map } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 
 function pageParams(pageNumber: number): HttpParams {

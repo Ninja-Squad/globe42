@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalContentComponent } from './confirm-modal-content/confirm-modal-content.component';
-import { Observable, from, EMPTY, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, EMPTY, from, Observable, throwError } from 'rxjs';
 
 export interface ConfirmOptions {
   message: string;

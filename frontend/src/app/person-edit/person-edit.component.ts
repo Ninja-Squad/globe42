@@ -29,8 +29,7 @@ import { SearchCityService } from '../search-city.service';
 import { PersonCommand } from '../models/person.command';
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CityTypeahead } from './city-typeahead';
-import { finalize, map, switchMap, tap } from 'rxjs/operators';
-import { combineLatest, EMPTY } from 'rxjs';
+import { combineLatest, EMPTY, finalize, map, switchMap, tap } from 'rxjs';
 import { CountryTypeahead } from '../person/country-typeahead';
 
 export const FISCAL_NUMBER_PATTERN = /^\d{13}$/;

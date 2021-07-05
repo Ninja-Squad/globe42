@@ -3,8 +3,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService } from '../activity.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ParticipationService } from '../participation.service';
-import { map, mapTo, shareReplay, switchMap } from 'rxjs/operators';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  mapTo,
+  Observable,
+  of,
+  shareReplay,
+  switchMap
+} from 'rxjs';
 import { PersonIdentityModel } from '../models/person.model';
 import { PersonService } from '../person.service';
 import { Activity, ActivityCommand } from '../models/activity.model';

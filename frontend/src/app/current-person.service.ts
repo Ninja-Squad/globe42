@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { PersonModel } from './models/person.model';
 import { PersonService } from './person.service';
-import { tap } from 'rxjs/operators';
 
 /**
  * Service used to hold the person displayed by the person layout component and all its children.

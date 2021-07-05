@@ -14,8 +14,17 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
-import { concat, EMPTY, of } from 'rxjs';
-import { catchError, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  concat,
+  distinctUntilChanged,
+  EMPTY,
+  filter,
+  map,
+  of,
+  switchMap,
+  tap
+} from 'rxjs';
 import { DateTime } from 'luxon';
 import { COLORS } from '../chart/chart.component';
 

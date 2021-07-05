@@ -6,7 +6,7 @@ import { IncomeService } from '../income.service';
 import { PersonModel } from '../models/person.model';
 import { ChargeModel } from '../models/charge.model';
 import { ChargeService } from '../charge.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
 import { CurrentPersonService } from '../current-person.service';

@@ -5,7 +5,7 @@ import { sortBy } from '../utils';
 import { ConfirmService } from '../confirm.service';
 import { UserService } from '../user.service';
 import { CurrentUserService } from '../current-user/current-user.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'gl-users',
