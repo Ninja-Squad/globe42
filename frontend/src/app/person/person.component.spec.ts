@@ -170,7 +170,9 @@ describe('PersonComponent', () => {
         firstName: 'Jane',
         lastName: 'Doe',
         nickName: null,
-        mediationCode: 'D2'
+        mediationCode: 'D2',
+        email: null,
+        phoneNumber: null
       },
       partner: null,
       housing: 'F6',

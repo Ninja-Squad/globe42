@@ -357,7 +357,9 @@ describe('PersonEditComponent', () => {
         firstName: 'Jane',
         lastName: 'Doe',
         nickName: null,
-        mediationCode: 'D2'
+        mediationCode: 'D2',
+        phoneNumber: null,
+        email: null
       },
       partner: null,
       housing: 'F4',

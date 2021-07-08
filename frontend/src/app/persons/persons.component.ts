@@ -34,16 +34,43 @@ export class PersonsComponent implements OnInit {
       return;
     }
 
+    const valueSanitizedForPhoneFiltering = this.sanitizeForPhoneFiltering(text);
+
     this.persons = this.allPersons.filter(
       p =>
         this.includes(p.firstName, value) ||
         this.includes(p.lastName, value) ||
         this.includes(p.nickName, value) ||
-        this.includes(p.mediationCode, value)
+        this.includes(p.mediationCode, value) ||
+        this.phoneMatches(p.phoneNumber, valueSanitizedForPhoneFiltering)
     );
   }
 
   private includes(s: string, searchString: string): boolean {
     return s?.toLowerCase().includes(searchString);
+  }
+
+  private phoneMatches(phoneNumber: string | null, phonePart: string) {
+    if (!phoneNumber || !phonePart) {
+      return false;
+    }
+
+    const sanitizedPhoneNumber = this.sanitizeForPhoneFiltering(phoneNumber);
+    if (!sanitizedPhoneNumber) {
+      return false;
+    }
+
+    return sanitizedPhoneNumber.includes(phonePart);
+  }
+
+  private sanitizeForPhoneFiltering(phoneNumber: string) {
+    let result = '';
+    for (let i = 0; i < phoneNumber.length; i++) {
+      const char = phoneNumber.charAt(i);
+      if (char >= '0' && char <= '9') {
+        result += char;
+      }
+    }
+    return result;
   }
 }

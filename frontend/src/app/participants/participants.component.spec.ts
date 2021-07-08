@@ -5,9 +5,9 @@ import { FullnamePipe } from '../fullname.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, convertToParamMap, ParamMap } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { ParticipantModel } from '../models/participant.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { ComponentTester } from 'ngx-speculoos';
+import { PersonIdentityModel } from '../models/person.model';
 
 class ParticipantsComponentTester extends ComponentTester<ParticipantsComponent> {
   constructor() {
@@ -50,7 +50,7 @@ describe('ParticipantsComponent', () => {
     const participants = [
       { id: 42, firstName: 'JB', lastName: 'Nizet' },
       { id: 43, firstName: 'Agnès', lastName: 'Crepet' }
-    ] as Array<ParticipantModel>;
+    ] as Array<PersonIdentityModel>;
 
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
@@ -62,7 +62,7 @@ describe('ParticipantsComponent', () => {
   });
 
   it('should have a title', () => {
-    const participants = [] as Array<ParticipantModel>;
+    const participants = [] as Array<PersonIdentityModel>;
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
 
@@ -81,7 +81,7 @@ describe('ParticipantsComponent', () => {
         email: 'agnes@mail.com',
         phoneNumber: '0987654321'
       }
-    ] as Array<ParticipantModel>;
+    ] as Array<PersonIdentityModel>;
 
     dataSubject.next({ participants });
     paramMapSubject.next(convertToParamMap({ activityType: 'MEAL' }));
