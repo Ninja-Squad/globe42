@@ -24,6 +24,6 @@ class ActivityTypeControllerTest {
         every { mockPersonDao.findParticipants(ActivityType.MEAL) } returns listOf(person)
 
         val result = controller.list(ActivityType.MEAL)
-        assertThat(result).extracting<Long> { (identity) -> identity.id }.containsExactly(42L)
+        assertThat(result).extracting<Long> { it.id }.containsExactly(42L)
     }
 }

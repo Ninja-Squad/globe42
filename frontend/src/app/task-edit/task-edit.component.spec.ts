@@ -78,8 +78,24 @@ describe('TaskEditComponent', () => {
 
   beforeEach(() => {
     persons = [
-      { id: 1, firstName: 'Cedric', lastName: 'Exbrayat', nickName: 'Hype', mediationCode: 'C1' },
-      { id: 2, firstName: 'Jean-Baptiste', lastName: 'Nizet', nickName: null, mediationCode: null }
+      {
+        id: 1,
+        firstName: 'Cedric',
+        lastName: 'Exbrayat',
+        nickName: 'Hype',
+        mediationCode: 'C1',
+        phoneNumber: null,
+        email: null
+      },
+      {
+        id: 2,
+        firstName: 'Jean-Baptiste',
+        lastName: 'Nizet',
+        nickName: null,
+        mediationCode: null,
+        phoneNumber: null,
+        email: null
+      }
     ];
 
     users = [

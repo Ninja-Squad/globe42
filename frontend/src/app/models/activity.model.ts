@@ -1,19 +1,18 @@
 import { ActivityType, ActivityTypeModel } from './activity-type.model';
-import { ParticipantModel } from './participant.model';
 import { PersonIdentityModel } from './person.model';
 
 export interface ActivityModel {
   id: number;
   date: string;
   type: ActivityType;
-  participants: Array<ParticipantModel>;
+  participants: Array<PersonIdentityModel>;
 }
 
 export interface Activity {
   id: number;
   date: string;
   type: ActivityTypeModel;
-  participants: Array<ParticipantModel>;
+  participants: Array<PersonIdentityModel>;
 }
 
 export interface ActivityCommand {

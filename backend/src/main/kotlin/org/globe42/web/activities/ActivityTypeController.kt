@@ -2,6 +2,7 @@ package org.globe42.web.activities
 
 import org.globe42.dao.PersonDao
 import org.globe42.domain.ActivityType
+import org.globe42.web.persons.PersonIdentityDTO
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +19,7 @@ import javax.transaction.Transactional
 class ActivityTypeController(private val personDao: PersonDao) {
 
     @GetMapping
-    fun list(@PathVariable("activityType") activityType: ActivityType): List<ParticipantDTO> {
-        return personDao.findParticipants(activityType).map(::ParticipantDTO)
+    fun list(@PathVariable("activityType") activityType: ActivityType): List<PersonIdentityDTO> {
+        return personDao.findParticipants(activityType).map(::PersonIdentityDTO)
     }
 }

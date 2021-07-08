@@ -5,16 +5,23 @@
   placeholder="Filtrer"
 />
 
-<div class="row align-items-center mb-2 person-item" *ngFor="let person of persons">
-  <div class="col-sm">
-    <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
-  </div>
-  <div class="col-sm">{{ person.mediationCode }}</div>
-  <div class="col-sm text-end">
-    <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/persons', person.id, 'edit']">
-      <span class="fa fa-edit"></span>
-      Éditer
-    </a>
+<div class="align-items-center person-item" *ngFor="let person of persons">
+  <div class="row align-items-baseline">
+    <div class="col-sm">
+      <a [routerLink]="['/persons', person.id]">{{ person | fullname }}</a>
+    </div>
+    <div class="col-sm-1">{{ person.mediationCode }}</div>
+    <div class="col-sm small text-muted">
+      <ng-container *ngIf="person.phoneNumber">
+        <span class="fa fa-phone"></span>&nbsp;{{ person.phoneNumber }}
+      </ng-container>
+    </div>
+    <div class="col-sm text-end">
+      <a class="btn btn-outline-secondary btn-sm" [routerLink]="['/persons', person.id, 'edit']">
+        <span class="fa fa-edit"></span>
+        Éditer
+      </a>
+    </div>
   </div>
 </div>
 

@@ -85,6 +85,8 @@ export interface PersonIdentityModel {
   lastName: string;
   nickName: string;
   mediationCode: string;
+  email: string;
+  phoneNumber: string;
 }
 
 export interface PersonModel extends PersonIdentityModel {
@@ -92,11 +94,9 @@ export interface PersonModel extends PersonIdentityModel {
   birthDate: string;
   address: string;
   city: CityModel;
-  email: string;
   entryDate: string;
   entryType: EntryType;
   gender: Gender;
-  phoneNumber: string;
   mediationEnabled: boolean;
   firstMediationAppointmentDate: string;
   maritalStatus: MaritalStatus;

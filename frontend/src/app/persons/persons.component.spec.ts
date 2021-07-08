@@ -6,6 +6,7 @@ import { PersonsComponent } from './persons.component';
 import { FullnamePipe } from '../fullname.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentTester } from 'ngx-speculoos';
+import { PersonIdentityModel } from '../models/person.model';
 
 class PersonsComponentTester extends ComponentTester<PersonsComponent> {
   constructor() {
@@ -30,9 +31,21 @@ describe('PersonsComponent', () => {
       snapshot: {
         data: {
           persons: [
-            { firstName: 'John', lastName: 'Doe', nickName: 'JD', mediationCode: 'D1' },
-            { firstName: 'Abe', lastName: 'Dean', nickName: 'AD', mediationCode: 'D2' }
-          ]
+            {
+              firstName: 'John',
+              lastName: 'Doe',
+              nickName: 'JD',
+              mediationCode: 'D1',
+              phoneNumber: null
+            },
+            {
+              firstName: 'Abe',
+              lastName: 'Dean',
+              nickName: 'AD',
+              mediationCode: 'D2',
+              phoneNumber: '06 04 87 56 42'
+            }
+          ] as Array<PersonIdentityModel>
         }
       }
     };
@@ -69,6 +82,17 @@ describe('PersonsComponent', () => {
   it('should filter by mediation code, ignoring case', () => {
     tester.componentInstance.filterCtrl.setValue('d2');
     expect(tester.componentInstance.persons.map(p => p.mediationCode)).toEqual(['D2']);
+  });
+
+  it('should filter by phone number, excluding non-digit characters', () => {
+    tester.componentInstance.filterCtrl.setValue(' 06-04');
+    expect(tester.componentInstance.persons.map(p => p.mediationCode)).toEqual(['D2']);
+
+    tester.componentInstance.filterCtrl.setValue(' 06-03');
+    expect(tester.componentInstance.persons.map(p => p.mediationCode)).toEqual([]);
+
+    tester.componentInstance.filterCtrl.setValue('Abcd');
+    expect(tester.componentInstance.persons.map(p => p.mediationCode)).toEqual([]);
   });
 
   it('should not blow up when filtering if no first name', () => {

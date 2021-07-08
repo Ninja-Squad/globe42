@@ -11,15 +11,19 @@ data class PersonIdentityDTO(
     val firstName: String,
     val lastName: String,
     val nickName: String?,
-    val mediationCode: String?
+    val mediationCode: String?,
+    val phoneNumber: String?,
+    val email: String?
 ) {
 
     constructor(person: Person) : this(
-        person.id!!,
-        person.firstName,
-        person.lastName,
-        person.nickName,
+        id = person.id!!,
+        firstName = person.firstName,
+        lastName = person.lastName,
+        nickName = person.nickName,
         // we hide the mediation code if mediation is disabled
-        if (person.mediationEnabled) person.mediationCode else null
+        mediationCode = if (person.mediationEnabled) person.mediationCode else null,
+        phoneNumber = person.phoneNumber,
+        email = person.email
     )
 }
