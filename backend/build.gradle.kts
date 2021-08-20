@@ -9,12 +9,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.19")
+        classpath("org.postgresql:postgresql:42.2.23")
     }
 }
 
 plugins {
-    val kotlinVersion = "1.5.10"
+    val kotlinVersion = "1.5.21"
 
     java
     jacoco
@@ -22,7 +22,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
-    id("org.springframework.boot") version "2.5.1"
+    id("org.springframework.boot") version "2.5.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.flywaydb.flyway") version "7.7.3"
     id("com.gorylenko.gradle-git-properties") version "2.3.1"
@@ -110,8 +110,10 @@ tasks {
     }
 }
 
-ext["okhttp3.version"] = "4.8.0"
+ext["okhttp3.version"] = "4.9.1"
 val jwtVersion = "0.11.2"
+val poiVersion = "5.0.0"
+val dbSetupVersion = "2.1.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -120,11 +122,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
-    implementation("com.google.cloud:google-cloud-storage:1.114.0")
+    implementation("com.google.cloud:google-cloud-storage:2.0.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.apache.poi:poi:4.1.2")
-    implementation("org.apache.poi:poi-ooxml:4.1.2")
+    implementation("org.apache.poi:poi:$poiVersion")
+    implementation("org.apache.poi:poi-ooxml:$poiVersion")
 
     runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwtVersion")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
@@ -135,10 +137,10 @@ dependencies {
         exclude(module = "mockito")
     }
     testImplementation("com.ninja-squad:springmockk:3.0.1")
-    testImplementation("io.mockk:mockk:1.11.0")
+    testImplementation("io.mockk:mockk:1.12.0")
 
-    testImplementation("com.ninja-squad:DbSetup:2.1.0")
-    testImplementation("com.ninja-squad:DbSetup-kotlin:2.1.0")
+    testImplementation("com.ninja-squad:DbSetup:$dbSetupVersion")
+    testImplementation("com.ninja-squad:DbSetup-kotlin:$dbSetupVersion")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("com.squareup.okhttp3:mockwebserver")
 }
