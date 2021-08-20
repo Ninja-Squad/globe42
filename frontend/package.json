@@ -29,7 +29,7 @@
     "@angular/router": "12.2.1",
     "@ng-bootstrap/ng-bootstrap": "11.0.0-beta.2",
     "bootstrap": "5.1.0",
-    "chart.js": "3.5.0",
+    "chart.js": "3.5.1",
     "font-awesome": "4.7.0",
     "luxon": "2.0.2",
     "ngx-valdemort": "6.0.0",
