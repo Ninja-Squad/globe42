@@ -12,7 +12,7 @@ jobs: # a collection of steps
 
       - checkout # check out source code to working directory
 
-      - run: sudo apt-get update
+      - run: sudo apt-get --allow-releaseinfo-change update
       - run: sudo apt-get install postgresql-client
       - run: psql -h localhost -f backend/database/database.sql -U postgres
       - run: ./gradlew yarnNgcc
