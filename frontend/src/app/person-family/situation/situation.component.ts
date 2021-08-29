@@ -14,6 +14,6 @@ export class SituationComponent {
   situation: Situation;
 
   age(child: ChildModel): number {
-    return -DateTime.fromISO(child.birthDate).diffNow('year').years;
+    return -DateTime.fromISO(child.birthDate).diffNow('years').years;
   }
 }
