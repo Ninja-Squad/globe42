@@ -2490,10 +2490,10 @@ builtins@^1.0.3:
   resolved "https://registry.yarnpkg.com/builtins/-/builtins-1.0.3.tgz#cb94faeb61c8696451db36534e1422f94f0aee88"
   integrity sha1-y5T662HIaWRR2zZTThQi+U8K7og=
 
-bundlesize2@0.0.30:
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/bundlesize2/-/bundlesize2-0.0.30.tgz#a90de469eaaca9840bd20562a011f258f5c97cd9"
-  integrity sha512-dVNC4zGdaRMMf+KK4Xf+wsPIuuDYrgDtZaX5gb1jX2vRCSOgrh2ka0Y3BGmcwMC0vViBg38yoap9AUXLBItZFA==
+bundlesize2@0.0.31:
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/bundlesize2/-/bundlesize2-0.0.31.tgz#cef6830dbbe5360e27fce07593ec0f4e3e5355d9"
+  integrity sha512-MdzJW/u+n+0jH0Uz78g8WENHAW7QNUdLD/c8aLuPB/aCIwt52zMJ4fc2fBU2y1K2iMwE/9+JoR8ojsAF0r0Xjw==
   dependencies:
     bytes "^3.1.0"
     chalk "^4.0.0"
