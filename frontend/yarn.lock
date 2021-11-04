@@ -5980,12 +5980,12 @@ ngx-speculoos@6.0.0:
   dependencies:
     tslib "2.2.0"
 
-ngx-valdemort@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-6.0.0.tgz#f134e5c089ffd2a53a2564ff19cf579d9ed9dd7f"
-  integrity sha512-YumNQQmviChM1GwkmoEUOtLLnFvkdvzYIbhCYXilzuhAfTp30q9HKk/rvE/cq3GdtTMNbCDOQk18GZ8qCN23wg==
+ngx-valdemort@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-7.0.0.tgz#338f37b6f6dc66bcb3010ed71bbcb581b45931d1"
+  integrity sha512-AnB+TFUsro7xcSkyNGryKtGBO5PmFZ+VCKUpNNV0in6lnKelHpAHZCT6F4qs5rsudj5jWVGwagGAz/4b3dNE8w==
   dependencies:
-    tslib "2.2.0"
+    tslib "2.3.1"
 
 nice-napi@^1.0.2:
   version "1.0.2"
