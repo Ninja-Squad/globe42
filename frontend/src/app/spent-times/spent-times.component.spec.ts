@@ -144,9 +144,9 @@ describe('SpentTimesComponent', () => {
       expect(tester.spentTimeItems.length).toBe(2);
 
       // avoid using contains because the exact value depends on the browser timezone
-      expect(tester.spentTimeItems[0]).toContainText('3 nov. 2018 à 14:13:00: 0h12m');
+      expect(tester.spentTimeItems[0]).toContainText('3 nov. 2018, 14:13:00: 0h12m');
       expect(tester.spentTimeItems[0]).toContainText('par Ced');
-      expect(tester.spentTimeItems[1]).toContainText('3 nov. 2018 à 12:13:00: 1h40m');
+      expect(tester.spentTimeItems[1]).toContainText('3 nov. 2018, 12:13:00: 1h40m');
       expect(tester.spentTimeItems[1]).toContainText('par JB');
     });
 
