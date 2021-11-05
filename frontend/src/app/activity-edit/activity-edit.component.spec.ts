@@ -74,7 +74,12 @@ describe('ActivityEditComponent', () => {
   function configureTestingModule(route: ActivatedRoute) {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, ReactiveFormsModule, ValdemortModule, GlobeNgbTestingModule],
-      declarations: [ActivityEditComponent, FullnamePipe, PageTitleDirective],
+      declarations: [
+        ActivityEditComponent,
+        FullnamePipe,
+        PageTitleDirective,
+        ValidationDefaultsComponent
+      ],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: ActivityService, useValue: activityService },
