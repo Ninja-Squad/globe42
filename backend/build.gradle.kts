@@ -81,8 +81,8 @@ tasks {
 
     jacocoTestReport {
         reports {
-            xml.setEnabled(true)
-            html.setEnabled(true)
+            xml.required.set(true)
+            html.required.set(true)
         }
     }
 
