@@ -9,12 +9,12 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.postgresql:postgresql:42.2.23")
+        classpath("org.postgresql:postgresql:42.3.1")
     }
 }
 
 plugins {
-    val kotlinVersion = "1.5.31"
+    val kotlinVersion = "1.6.10"
 
     java
     jacoco
@@ -24,8 +24,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.noarg") version kotlinVersion
     id("org.springframework.boot") version "2.6.1"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("org.flywaydb.flyway") version "7.7.3"
-    id("com.gorylenko.gradle-git-properties") version "2.3.1"
+    id("org.flywaydb.flyway") version "8.0.4"
+    id("com.gorylenko.gradle-git-properties") version "2.3.2"
 }
 
 repositories {
@@ -108,7 +108,7 @@ tasks {
 
 ext["okhttp3.version"] = "4.9.1"
 val jwtVersion = "0.11.2"
-val poiVersion = "5.0.0"
+val poiVersion = "5.1.0"
 val dbSetupVersion = "2.1.0"
 
 dependencies {
@@ -118,7 +118,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
-    implementation("com.google.cloud:google-cloud-storage:2.0.2")
+    implementation("com.google.cloud:google-cloud-storage:2.2.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.poi:poi:$poiVersion")
