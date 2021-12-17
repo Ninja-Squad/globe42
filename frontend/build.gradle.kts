@@ -26,11 +26,6 @@ tasks {
         dependsOn(YarnInstallTask.NAME)
     }
 
-    val yarnNgcc by registering(YarnTask::class) {
-        args.set(listOf("ngcc"))
-        dependsOn(prepare)
-    }
-
     val yarnBuild by registering(YarnTask::class) {
         args.set(listOf("build"))
         dependsOn(prepare)
