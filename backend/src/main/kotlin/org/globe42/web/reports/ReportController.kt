@@ -5,24 +5,26 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.globe42.dao.MembershipDao
-import org.globe42.dao.NoteDao
 import org.globe42.dao.PersonDao
-import org.globe42.domain.*
-import org.globe42.web.countries.CountryDTO
-import org.globe42.web.persons.PersonIdentityDTO
-import org.globe42.web.users.UserDTO
-import org.springframework.http.*
+import org.globe42.domain.ActivityType
+import org.globe42.domain.Gender
+import org.globe42.domain.Membership
+import org.globe42.domain.Note
+import org.globe42.domain.NoteCategory
+import org.globe42.domain.PaymentMode
+import org.globe42.domain.User
+import org.springframework.http.ContentDisposition
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.io.ByteArrayOutputStream
-import java.time.Instant
 import java.time.LocalDate
-import java.time.Period
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import javax.transaction.Transactional
 
 private val DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -94,6 +96,16 @@ class ReportController(private val personDao: PersonDao, private val membershipD
     @GetMapping("/memberships")
     fun membershipReport(): ResponseEntity<ByteArray> {
         val memberships = membershipDao.list()
+        return createMembershipReport(memberships)
+    }
+
+    @GetMapping("/current-year-memberships")
+    fun currentYearMembershipReport(): ResponseEntity<ByteArray> {
+        val memberships = membershipDao.findByYear(LocalDate.now(ZoneId.of("Europe/Paris")).year)
+        return createMembershipReport(memberships)
+    }
+
+    private fun createMembershipReport(memberships: List<Membership>): ResponseEntity<ByteArray> {
         val headers = listOf(
             "Prénom",
             "Nom",
