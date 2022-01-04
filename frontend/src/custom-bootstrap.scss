@@ -37,3 +37,6 @@
 
 // Utilities
 @import '~bootstrap/scss/utilities/api';
+
+// this doesn't exist in BS5 anymore, so we copied it from BS4
+@import 'print';
