@@ -24,4 +24,9 @@ interface MembershipDao : GlobeRepository<Membership, Long> {
         left join fetch m.person p
         order by m.year, p.firstName, p.lastName""")
     fun list(): List<Membership>
+
+    @Query("""
+        select coalesce(max(m.cardNumber), 0) + 1 from Membership m where m.year = :year
+    """)
+    fun nextAvailableCardNumber(@Param("year") year: Int): Int
 }

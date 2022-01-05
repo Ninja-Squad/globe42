@@ -2,7 +2,20 @@ package org.globe42.dao
 
 import com.ninja_squad.dbsetup.generator.ValueGenerators
 import org.assertj.core.api.Assertions.assertThat
-import org.globe42.domain.*
+import org.globe42.domain.ActivityType
+import org.globe42.domain.EntryType
+import org.globe42.domain.FiscalStatus
+import org.globe42.domain.Gender
+import org.globe42.domain.HealthCareCoverage
+import org.globe42.domain.HealthInsurance
+import org.globe42.domain.Housing
+import org.globe42.domain.MaritalStatus
+import org.globe42.domain.PassportStatus
+import org.globe42.domain.PaymentMode
+import org.globe42.domain.Person
+import org.globe42.domain.ResidencePermit
+import org.globe42.domain.SchoolLevel
+import org.globe42.domain.Visa
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,7 +59,7 @@ class PersonDaoTest : BaseDaoTest() {
             insertInto("membership") {
                 withDefaultValue("payment_date", Instant.parse("2020-05-01T00:00:00Z"))
                 withDefaultValue("payment_mode", PaymentMode.CASH)
-                withGeneratedValue("card_number", ValueGenerators.stringSequence("C"))
+                withGeneratedValue("card_number", ValueGenerators.sequence())
                 withGeneratedValue("id", ValueGenerators.sequence())
                 columns("year", "person_id")
                 values(2019, 1L)

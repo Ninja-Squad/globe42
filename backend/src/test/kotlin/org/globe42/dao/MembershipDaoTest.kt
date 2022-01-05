@@ -1,7 +1,19 @@
 package org.globe42.dao
 
 import org.assertj.core.api.Assertions.assertThat
-import org.globe42.domain.*
+import org.globe42.domain.EntryType
+import org.globe42.domain.FiscalStatus
+import org.globe42.domain.Gender
+import org.globe42.domain.HealthCareCoverage
+import org.globe42.domain.HealthInsurance
+import org.globe42.domain.Housing
+import org.globe42.domain.MaritalStatus
+import org.globe42.domain.Membership
+import org.globe42.domain.PassportStatus
+import org.globe42.domain.Person
+import org.globe42.domain.ResidencePermit
+import org.globe42.domain.SchoolLevel
+import org.globe42.domain.Visa
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,8 +47,8 @@ class MembershipDaoTest : BaseDaoTest() {
 
             insertInto("membership") {
                 columns("id", "year", "person_id", "payment_mode", "payment_date", "card_number")
-                values(1L, 2017, 1L, "UNKNOWN", "2017-01-31", "001")
-                values(2L, 2018, 1L, "CHECK", "2018-01-31", "002")
+                values(1L, 2017, 1L, "UNKNOWN", "2017-01-31", 1)
+                values(2L, 2018, 1L, "CHECK", "2018-01-31", 2)
             }
         }
     }
@@ -66,5 +78,12 @@ class MembershipDaoTest : BaseDaoTest() {
     @Test
     fun `should list`() {
         assertThat(dao.list().map(Membership::id)).containsExactly(1L, 2L)
+    }
+
+    @Test
+    fun `should find the next available card number`() {
+        assertThat(dao.nextAvailableCardNumber(2020)).isEqualTo(1)
+        assertThat(dao.nextAvailableCardNumber(2017)).isEqualTo(2)
+        assertThat(dao.nextAvailableCardNumber(2018)).isEqualTo(3)
     }
 }

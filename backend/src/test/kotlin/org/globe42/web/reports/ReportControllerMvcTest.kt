@@ -142,7 +142,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                 },
                 year = 2020,
                 paymentMode = PaymentMode.CHECK,
-                cardNumber = "12",
+                cardNumber = 12,
                 paymentDate = LocalDate.of(2020, 1, 2)
             )
         )
@@ -171,7 +171,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
             assertThat(row.getCell(5).stringCellValue).isEqualTo("02/01/2020")
             assertThat(row.getCell(6).stringCellValue).isEqualTo("Chèque")
             assertThat(row.getCell(7).numericCellValue).isEqualTo(2020.0)
-            assertThat(row.getCell(8).stringCellValue).isEqualTo("12")
+            assertThat(row.getCell(8).numericCellValue).isEqualTo(12.0)
         }
     }
 
@@ -189,7 +189,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                 },
                 year = 2020,
                 paymentMode = PaymentMode.CHECK,
-                cardNumber = "12",
+                cardNumber = 12,
                 paymentDate = LocalDate.of(2020, 1, 2)
             )
         )
@@ -218,7 +218,7 @@ class ReportControllerMvcTest(@Autowired val mockMvc: MockMvc) {
             assertThat(row.getCell(5).stringCellValue).isEqualTo("02/01/2020")
             assertThat(row.getCell(6).stringCellValue).isEqualTo("Chèque")
             assertThat(row.getCell(7).numericCellValue).isEqualTo(2020.0)
-            assertThat(row.getCell(8).stringCellValue).isEqualTo("12")
+            assertThat(row.getCell(8).numericCellValue).isEqualTo(12.0)
         }
     }
 

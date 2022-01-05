@@ -131,7 +131,7 @@ export class PersonMembershipsComponent implements OnInit {
         DateTime.local().toISODate(),
         [Validators.required, min(DateTime.local(this.currentYear, 1, 1).toISODate()), pastDate]
       ],
-      cardNumber: [null, Validators.required]
+      cardNumber: null
     });
 
     this.choosableOldMembershipYears = [];

@@ -7,7 +7,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
-import org.globe42.domain.*
+import org.globe42.domain.Gender
+import org.globe42.domain.Membership
+import org.globe42.domain.PARIS_TIME_ZONE
+import org.globe42.domain.PaymentMode
+import org.globe42.domain.Person
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,8 +41,8 @@ class MembershipControllerTest {
     fun `should list`() {
         every { mockMembershipDao.findByPerson(person) } returns
             listOf(
-                Membership(2L, person, 2018, LocalDate.of(2018, 1, 31), PaymentMode.CASH, "002"),
-                Membership(1L, person, 2017, LocalDate.of(2017, 1, 31), PaymentMode.UNKNOWN, "001")
+                Membership(2L, person, 2018, LocalDate.of(2018, 1, 31), PaymentMode.CASH, 2),
+                Membership(1L, person, 2017, LocalDate.of(2017, 1, 31), PaymentMode.UNKNOWN, 1)
             )
 
         val result = controller.list(person.id!!)
@@ -49,7 +53,7 @@ class MembershipControllerTest {
                 2018,
                 PaymentMode.CASH,
                 LocalDate.of(2018, 1, 31),
-                "002"
+                2
             )
         )
     }
@@ -72,7 +76,7 @@ class MembershipControllerTest {
                 year = currentYear,
                 paymentDate = LocalDate.of(currentYear, 1, 31),
                 paymentMode = PaymentMode.CASH,
-                cardNumber = "002"
+                cardNumber = 2
             )
 
         val result = controller.getCurrentMembership(person.id!!)
@@ -84,7 +88,7 @@ class MembershipControllerTest {
                 currentYear,
                 PaymentMode.CASH,
                 LocalDate.of(currentYear, 1, 31),
-                "002"
+                2
             )
         )
     }
@@ -108,12 +112,41 @@ class MembershipControllerTest {
     }
 
     @Test
-    fun `should create membership`() {
+    fun `should create new membership with auto-generated card number`() {
         val command = MembershipCommandDTO(
             2018,
             PaymentMode.CASH,
             LocalDate.of(2018, 1, 31),
-            "002"
+            null
+        )
+
+        every { mockMembershipDao.findByPersonAndYear(person, command.year) } returns null
+        every { mockMembershipDao.nextAvailableCardNumber(command.year) } returns 56
+        every { mockMembershipDao.save(any<Membership>()) } answers { arg<Membership>(0).apply { id = 42L } }
+
+        val result = controller.create(person.id!!, command)
+        assertThat(result).isEqualTo(
+            MembershipDTO(
+                42L,
+                2018,
+                PaymentMode.CASH,
+                LocalDate.of(2018, 1, 31),
+                56
+            )
+        )
+
+        verify {
+            mockMembershipDao.save(withArg<Membership> { it.person === person })
+        }
+    }
+
+    @Test
+    fun `should create old membership with given card number`() {
+        val command = MembershipCommandDTO(
+            2018,
+            PaymentMode.CASH,
+            LocalDate.of(2018, 1, 31),
+            52
         )
 
         every { mockMembershipDao.findByPersonAndYear(person, command.year) } returns null
@@ -126,7 +159,7 @@ class MembershipControllerTest {
                 2018,
                 PaymentMode.CASH,
                 LocalDate.of(2018, 1, 31),
-                "002"
+                52
             )
         )
 
@@ -137,14 +170,14 @@ class MembershipControllerTest {
 
     @Test
     fun `should update membership`() {
-        val membership = Membership(42L, person, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, "0")
+        val membership = Membership(42L, person, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, 42)
         every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         val command = MembershipCommandDTO(
             2017, // should be ignored
             PaymentMode.CHECK,
             LocalDate.of(2018, 1, 31),
-            "002"
+            43
         )
 
         controller.update(person.id!!, membership.id!!, command)
@@ -152,7 +185,7 @@ class MembershipControllerTest {
         assertThat(membership.person).isEqualTo(person)
         assertThat(membership.paymentMode).isEqualTo(command.paymentMode)
         assertThat(membership.paymentDate).isEqualTo(command.paymentDate)
-        assertThat(membership.cardNumber).isEqualTo(command.cardNumber)
+        assertThat(membership.cardNumber).isEqualTo(43)
     }
 
     @Test
@@ -161,7 +194,7 @@ class MembershipControllerTest {
             2018,
             PaymentMode.CHECK,
             LocalDate.of(2018, 1, 31),
-            "002"
+            42
         )
         every { mockMembershipDao.findByIdOrNull(345L) } returns null
 
@@ -173,14 +206,14 @@ class MembershipControllerTest {
     @Test
     fun `should throw when updating membership that doesn't belong to the given person`() {
         val otherPerson = Person(765L)
-        val membership = Membership(42L, otherPerson, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, "0")
+        val membership = Membership(42L, otherPerson, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, 1)
         every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         val command = MembershipCommandDTO(
             2018,
             PaymentMode.CHECK,
             LocalDate.of(2018, 1, 31),
-            "002"
+            42
         )
 
         assertThatExceptionOfType(NotFoundException::class.java).isThrownBy {
@@ -190,7 +223,7 @@ class MembershipControllerTest {
 
     @Test
     fun `should delete membership`() {
-        val membership = Membership(42L, person, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, "0")
+        val membership = Membership(42L, person, 2018, LocalDate.of(2018, 1, 1), PaymentMode.CASH, 1)
         every { mockMembershipDao.findByIdOrNull(membership.id!!) } returns membership
 
         controller.delete(person.id!!, membership.id!!)
