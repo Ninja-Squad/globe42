@@ -1,7 +1,14 @@
 package org.globe42.domain
 
 import java.time.LocalDate
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.ManyToOne
+import javax.persistence.SequenceGenerator
 import javax.validation.constraints.NotNull
 
 private const val MEMBERSHIP_GENERATOR = "MembershipGenerator"
@@ -35,7 +42,7 @@ class Membership {
     @Enumerated(EnumType.STRING)
     lateinit var paymentMode: PaymentMode
 
-    var cardNumber: String? = null
+    var cardNumber: Int? = null
 
     constructor(id: Long) {
         this.id = id
@@ -53,7 +60,7 @@ class Membership {
         year: Int,
         paymentDate: LocalDate,
         paymentMode: PaymentMode,
-        cardNumber: String
+        cardNumber: Int
     ) : this(person, year) {
         this.id = id
         this.paymentDate = paymentDate

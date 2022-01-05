@@ -132,7 +132,11 @@ class ReportController(private val personDao: PersonDao, private val membershipD
             row.createCell(col++, CellType.STRING).setCellValue(membership.paymentDate.toReportString())
             row.createCell(col++, CellType.STRING).setCellValue(membership.paymentMode.reportValue)
             row.createCell(col++, CellType.NUMERIC).setCellValue(membership.year.toDouble())
-            row.createCell(col, CellType.STRING).setCellValue(membership.cardNumber)
+            row.createCell(col, CellType.NUMERIC).apply {
+                membership.cardNumber?.let {
+                    setCellValue(it.toDouble())
+                }
+            }
         }
     }
 

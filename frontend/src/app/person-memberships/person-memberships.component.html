@@ -53,10 +53,9 @@
     </div>
 
     <div class="row form-group">
-      <label for="cardNumber" class="col-form-label col-sm-3">Carte n°</label>
-      <div class="col-sm-9">
-        <input class="form-control" id="cardNumber" formControlName="cardNumber" />
-        <val-errors controlName="cardNumber" label="Le n° de carte"></val-errors>
+      <label class="col-form-label col-sm-3">Carte n°</label>
+      <div class="col-sm-9 form-text text-muted">
+        Le n° de carte sera généré automatiquement à l'enregistrement
       </div>
     </div>
 
@@ -73,10 +72,10 @@
     Payée ({{ currentMembership.paymentMode | displayPaymentMode }}) le
     {{ currentMembership.paymentDate | date }}.
     <br />
-    <ng-container *ngIf="currentMembership.cardNumber"
-      >Carte n° {{ currentMembership.cardNumber }}.</ng-container
+    <ng-container *ngIf="currentMembership.cardNumber != null"
+      >Carte n° {{ currentMembership.cardNumber | number }}.</ng-container
     >
-    <ng-container *ngIf="!currentMembership.cardNumber">N° de carte inconnu.</ng-container>
+    <ng-container *ngIf="currentMembership.cardNumber == null">N° de carte inconnu.</ng-container>
   </ngb-alert>
   <div class="text-end">
     <button
@@ -112,7 +111,7 @@
         <td>{{ membership.year }}</td>
         <td>{{ membership.paymentMode | displayPaymentMode }}</td>
         <td>{{ membership.paymentDate | date }}</td>
-        <td>{{ membership.cardNumber }}</td>
+        <td>{{ membership.cardNumber | number }}</td>
         <td class="text-end">
           <button
             type="button"
@@ -191,7 +190,7 @@
     <div class="row form-group">
       <label for="oldCardNumber" class="col-form-label col-sm-3">Carte n°</label>
       <div class="col-sm-9">
-        <input class="form-control" id="oldCardNumber" formControlName="cardNumber" />
+        <input type="number" class="form-control" id="oldCardNumber" formControlName="cardNumber" />
         <val-errors controlName="cardNumber" label="Le n° de carte"></val-errors>
       </div>
     </div>

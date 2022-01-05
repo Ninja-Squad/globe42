@@ -53,10 +53,6 @@ class PersonMembershipsComponentTester extends ComponentTester<PersonMemberships
     return this.input('#paymentDate');
   }
 
-  get cardNumber() {
-    return this.input('#cardNumber');
-  }
-
   get save() {
     return this.button('#save');
   }
@@ -191,7 +187,6 @@ describe('PersonMembershipsComponent', () => {
     expect(tester.paymentMode.optionLabels[1]).toBe('Chèque');
     expect(tester.paymentMode.optionLabels[2]).toBe('Espèces');
     expect(tester.paymentDate).toHaveValue('30/04/2020');
-    expect(tester.cardNumber).toHaveValue('');
 
     tester.paymentMode.dispatchEventOfType('blur');
     expect(tester.testElement).toContainText('Le mode de paiement est obligatoire');
@@ -206,12 +201,8 @@ describe('PersonMembershipsComponent', () => {
     tester.paymentDate.fillWith('31/12/2019');
     expect(tester.testElement).toContainText(`La date de paiement doit être dans l'année en cours`);
 
-    tester.cardNumber.dispatchEventOfType('blur');
-    expect(tester.testElement).toContainText('Le n° de carte est obligatoire');
-
     tester.paymentMode.selectIndex(1);
     tester.paymentDate.fillWith('30/04/2020');
-    tester.cardNumber.fillWith('002');
 
     const membershipService: MembershipService = TestBed.inject(MembershipService);
     const newMembership: MembershipModel = {
@@ -219,7 +210,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2020,
       paymentMode: 'CHECK',
       paymentDate: '2020-04-30',
-      cardNumber: '002'
+      cardNumber: 2
     };
     spyOn(membershipService, 'createCurrent').and.returnValue(of(newMembership));
     spyOn(membershipService, 'list').and.returnValue(of([newMembership]));
@@ -230,7 +221,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2020,
       paymentMode: 'CHECK',
       paymentDate: '2020-04-30',
-      cardNumber: '002'
+      cardNumber: null
     });
     expect(tester.componentInstance.currentMembership).toEqual(newMembership);
     expect(tester.noCurrentMembership).toBeNull();
@@ -243,7 +234,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2017,
       paymentMode: 'CHECK',
       paymentDate: '2017-01-31',
-      cardNumber: '002'
+      cardNumber: 2
     });
 
     const component = tester.componentInstance;
@@ -267,7 +258,7 @@ describe('PersonMembershipsComponent', () => {
     expect(tester.oldMemberships).toContainText('2017');
     expect(tester.oldMemberships).toContainText('31 janv. 2017');
     expect(tester.oldMemberships).toContainText('Chèque');
-    expect(tester.oldMemberships).toContainText('002');
+    expect(tester.oldMemberships).toContainText('2');
   });
 
   it('should display current membership when current membership exists', () => {
@@ -276,7 +267,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2020,
       paymentMode: 'CHECK',
       paymentDate: '2020-01-31',
-      cardNumber: '002'
+      cardNumber: 2
     });
 
     const component = tester.componentInstance;
@@ -291,7 +282,7 @@ describe('PersonMembershipsComponent', () => {
     expect(tester.oldMemberships).toBeNull();
 
     expect(tester.alert).toContainText(`Payée (Chèque) le 31 janv. 2020.`);
-    expect(tester.alert).toContainText(`Carte n° 002`);
+    expect(tester.alert).toContainText(`Carte n° 2`);
   });
 
   it('should delete current membership if confirmed', () => {
@@ -300,7 +291,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2020,
       paymentMode: 'CHECK',
       paymentDate: '2020-01-31',
-      cardNumber: '002'
+      cardNumber: 2
     });
 
     tester.detectChanges();
@@ -326,7 +317,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2019,
       paymentMode: 'CHECK',
       paymentDate: '2020-01-31',
-      cardNumber: '002'
+      cardNumber: 2
     });
 
     tester.detectChanges();
@@ -352,7 +343,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2019,
       paymentMode: 'CHECK',
       paymentDate: '2020-01-31',
-      cardNumber: '002'
+      cardNumber: 2
     });
 
     tester.detectChanges();
@@ -394,7 +385,7 @@ describe('PersonMembershipsComponent', () => {
     tester.oldYear.selectLabel('2018');
     tester.oldPaymentMode.selectIndex(1);
     tester.oldPaymentDate.fillWith('30/04/2020');
-    tester.oldCardNumber.fillWith('002');
+    tester.oldCardNumber.fillWith('3');
 
     const membershipService: MembershipService = TestBed.inject(MembershipService);
     const newMembership: MembershipModel = {
@@ -402,7 +393,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2018,
       paymentMode: 'CHECK',
       paymentDate: '2020-04-30',
-      cardNumber: '002'
+      cardNumber: 3
     };
     spyOn(membershipService, 'createOld').and.returnValue(of(newMembership));
     spyOn(membershipService, 'list').and.returnValue(of([newMembership, ...memberships]));
@@ -413,7 +404,7 @@ describe('PersonMembershipsComponent', () => {
       year: 2018,
       paymentMode: 'CHECK',
       paymentDate: '2020-04-30',
-      cardNumber: '002'
+      cardNumber: 3
     });
     expect(tester.componentInstance.currentMembership).toBeNull();
     expect(tester.componentInstance.oldMemberships.length).toBe(2);

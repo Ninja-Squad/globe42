@@ -5,14 +5,22 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.globe42.dao.MembershipDao
 import org.globe42.dao.PersonDao
-import org.globe42.domain.*
+import org.globe42.domain.Gender
+import org.globe42.domain.Membership
+import org.globe42.domain.PARIS_TIME_ZONE
+import org.globe42.domain.PaymentMode
+import org.globe42.domain.Person
 import org.globe42.test.GlobeMvcTest
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.*
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 import java.time.LocalDate
 
 /**
@@ -44,7 +52,7 @@ class MembershipControllerMvcTest(
             year = 2018,
             paymentDate = LocalDate.of(2018, 1, 31),
             paymentMode = PaymentMode.CASH,
-            cardNumber = "002"
+            cardNumber = 2
         )
     }
 
@@ -86,9 +94,10 @@ class MembershipControllerMvcTest(
             2018,
             PaymentMode.CASH,
             LocalDate.of(2018, 1, 31),
-            "002"
+            null
         )
         every { mockMembershipDao.findByPersonAndYear(person, command.year) } returns null
+        every { mockMembershipDao.nextAvailableCardNumber(command.year) } returns 56
         every { mockMembershipDao.save(any<Membership>()) } answers {
             arg<Membership>(0).apply { id = 42L }
         }
@@ -99,6 +108,7 @@ class MembershipControllerMvcTest(
         }.andExpect {
             status { isCreated() }
             jsonValue("$.id", 42L)
+            jsonValue("$.cardNumber", 56)
         }
     }
 
@@ -109,7 +119,7 @@ class MembershipControllerMvcTest(
             2018,
             PaymentMode.CHECK,
             LocalDate.of(2018, 1, 15),
-            "003"
+            34
         )
         mvc.put("/api/persons/{personId}/memberships/{membershipId}", person.id!!, membership.id!!) {
             contentType = MediaType.APPLICATION_JSON

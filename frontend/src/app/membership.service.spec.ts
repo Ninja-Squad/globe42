@@ -39,7 +39,7 @@ describe('MembershipService', () => {
       year: 2018,
       paymentMode: 'CASH',
       paymentDate: '2018-01-31',
-      cardNumber: '002'
+      cardNumber: null
     };
     const createdMembership = {} as MembershipModel;
     httpTester.testPost(
@@ -67,7 +67,7 @@ describe('MembershipService', () => {
       year: 2018,
       paymentMode: 'CASH',
       paymentDate: '2018-01-31',
-      cardNumber: '002'
+      cardNumber: 2
     };
     const createdMembership = {} as MembershipModel;
     httpTester.testPost(

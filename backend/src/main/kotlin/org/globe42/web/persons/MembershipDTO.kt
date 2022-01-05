@@ -13,7 +13,7 @@ data class MembershipDTO(
     val year: Int,
     val paymentMode: PaymentMode,
     val paymentDate: LocalDate,
-    val cardNumber: String?
+    val cardNumber: Int?
 ) {
     constructor(membership: Membership) : this(
         membership.id!!,

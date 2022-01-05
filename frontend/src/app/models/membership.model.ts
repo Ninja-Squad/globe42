@@ -6,5 +6,5 @@ export interface MembershipModel {
   year: number;
   paymentMode: PaymentMode;
   paymentDate: string;
-  cardNumber: string | null;
+  cardNumber: number | null;
 }

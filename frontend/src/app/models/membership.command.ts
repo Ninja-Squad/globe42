@@ -4,5 +4,5 @@ export interface MembershipCommand {
   year: number;
   paymentMode: Exclude<PaymentMode, 'UNKNOWN'>;
   paymentDate: string;
-  cardNumber: string | null;
+  cardNumber: number | null;
 }
