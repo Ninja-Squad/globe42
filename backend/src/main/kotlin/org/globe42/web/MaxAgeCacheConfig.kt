@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class MaxAgeCacheConfig : WebMvcConfigurer {
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("*.js", "*.css", "fontawesome-webfont.*")
+        registry.addResourceHandler("*.js", "*.css", "fontawesome-webfont.{ext:.+}")
             .addResourceLocations("classpath:/static/", "classpath:/public/")
             .setCachePeriod(Integer.MAX_VALUE)
     }
