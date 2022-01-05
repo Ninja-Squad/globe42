@@ -7,6 +7,7 @@ import org.globe42.domain.PARIS_TIME_ZONE
 import org.globe42.web.exception.BadRequestException
 import org.globe42.web.exception.NotFoundException
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
 import java.time.LocalDate
 import javax.transaction.Transactional
 
@@ -28,7 +30,11 @@ import javax.transaction.Transactional
 @RestController
 @RequestMapping(value = ["/api/persons/{personId}/memberships"])
 @Transactional
-class MembershipController(val personDao: PersonDao, val membershipDao: MembershipDao) {
+class MembershipController(
+    private val personDao: PersonDao,
+    private val membershipDao: MembershipDao,
+    private val membershipFormGenerator: MembershipFormGenerator
+) {
 
     @GetMapping
     fun list(@PathVariable("personId") personId: Long): List<MembershipDTO> {
@@ -43,6 +49,17 @@ class MembershipController(val personDao: PersonDao, val membershipDao: Membersh
         return membershipDao.findByPersonAndYear(person, currentYear)
             ?.let { ResponseEntity.ok(MembershipDTO(it)) }
             ?: ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/form")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun membershipForm(
+        @PathVariable("personId") personId: Long
+    ): ResponseEntity<StreamingResponseBody> {
+        val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body( StreamingResponseBody { out ->
+            membershipFormGenerator.generate(person, out)
+        })
     }
 
     @PostMapping

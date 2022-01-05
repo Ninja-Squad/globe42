@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
+import java.io.OutputStream
 import java.time.LocalDate
 
 /**
@@ -37,6 +38,9 @@ class MembershipControllerMvcTest(
 
     @MockkBean
     lateinit var mockPersonDao: PersonDao
+
+    @MockkBean
+    lateinit var mockMembershipFormGenerator: MembershipFormGenerator
 
     lateinit var person: Person
     lateinit var membership: Membership
@@ -76,6 +80,23 @@ class MembershipControllerMvcTest(
             status { isOk() }
             jsonValue("$.id", membership.id!!)
         }
+    }
+
+    @Test
+    fun `should get membership form`() {
+        every { mockMembershipFormGenerator.generate(person, any()) } answers {
+            arg<OutputStream>(1).write("fake pdf body".toByteArray())
+        }
+
+        mvc.get("/api/persons/{personId}/memberships/form", person.id!!)
+            .asyncDispatch()
+            .andExpect {
+                status { isOk() }
+                content {
+                    contentType(MediaType.APPLICATION_PDF)
+                    string("fake pdf body")
+                }
+            }
     }
 
     @Test

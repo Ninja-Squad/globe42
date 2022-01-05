@@ -24,10 +24,10 @@ import java.time.LocalDate
  */
 class MembershipControllerTest {
     private val mockMembershipDao = mockk<MembershipDao>(relaxUnitFun = true)
-
     private val mockPersonDao = mockk<PersonDao>()
+    private val mockMembershipFormGenerator = mockk<MembershipFormGenerator>()
 
-    private val controller = MembershipController(mockPersonDao, mockMembershipDao)
+    private val controller = MembershipController(mockPersonDao, mockMembershipDao, mockMembershipFormGenerator)
 
     private lateinit var person: Person
 
