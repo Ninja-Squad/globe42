@@ -61,7 +61,6 @@ import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-inf
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
 import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
 import { MembershipsResolverService } from './memberships-resolver.service';
-import { PersonMembershipPrintComponent } from './person-membership-print/person-membership-print.component';
 import { PersonFamilyComponent } from './person-family/person-family.component';
 import { FamilyResolverService } from './family-resolver.service';
 import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
@@ -254,13 +253,6 @@ export const routes: Routes = [
             resolve: {
               person: PersonResolverService,
               perUnitRevenueInformation: PerUnitRevenueInformationResolverService
-            }
-          },
-          {
-            path: ':id/membership-print',
-            component: PersonMembershipPrintComponent,
-            resolve: {
-              person: PersonResolverService
             }
           },
           {

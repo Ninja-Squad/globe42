@@ -71,7 +71,6 @@ import { DisplayResidencePermitPipe } from './display-residence-permit.pipe';
 import { PersonPerUnitRevenueInformationEditComponent } from './person-per-unit-revenue-information-edit/person-per-unit-revenue-information-edit.component';
 import { PersonMembershipsComponent } from './person-memberships/person-memberships.component';
 import { DisplayPaymentModePipe } from './display-payment-mode.pipe';
-import { PersonMembershipPrintComponent } from './person-membership-print/person-membership-print.component';
 import { PersonFamilyComponent } from './person-family/person-family.component';
 import { SituationComponent } from './person-family/situation/situation.component';
 import { PersonFamilyEditComponent } from './person-family-edit/person-family-edit.component';
@@ -161,7 +160,6 @@ import { MediationStatisticsComponent } from './mediation-statistics/mediation-s
     PersonPerUnitRevenueInformationEditComponent,
     PersonMembershipsComponent,
     DisplayPaymentModePipe,
-    PersonMembershipPrintComponent,
     PersonFamilyComponent,
     SituationComponent,
     PersonFamilyEditComponent,

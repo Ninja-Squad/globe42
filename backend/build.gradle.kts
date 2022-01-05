@@ -110,6 +110,7 @@ ext["okhttp3.version"] = "4.9.1"
 val jwtVersion = "0.11.2"
 val poiVersion = "5.1.0"
 val dbSetupVersion = "2.1.0"
+val itextVersion = "7.2.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -123,6 +124,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.poi:poi:$poiVersion")
     implementation("org.apache.poi:poi-ooxml:$poiVersion")
+    implementation("com.itextpdf:kernel:$itextVersion")
+    implementation("com.itextpdf:io:$itextVersion")
+    implementation("com.itextpdf:layout:$itextVersion")
 
     runtimeOnly("io.jsonwebtoken:jjwt-impl:$jwtVersion")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
