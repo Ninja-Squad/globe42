@@ -1,20 +1,16 @@
 <gl-page-title [title]="(person | fullname) + ': Adhésion'"></gl-page-title>
+
 <h2>Adhésion de l'année en cours ({{ currentYear }})</h2>
 
 <div *ngIf="!currentMembership" id="no-current-membership">
-  <ngb-alert [dismissible]="false" type="warning">
+  <ngb-alert *ngIf="!currentMembership" [dismissible]="false" type="warning">
     Pas d'adhésion pour l'année en cours.
-  </ngb-alert>
-  <div class="text-end">
-    <a
-      class="btn btn-outline-primary"
-      target="membershipprint"
-      href="/api/persons/{{ person.id }}/memberships/form"
-    >
+    <br />
+    <a target="membershipprint" href="/api/persons/{{ person.id }}/memberships/form">
       Imprimer une fiche d'adhésion
-      <sup class="fa fa-external-link small"></sup>
+      <span class="fa fa-external-link small"></span>
     </a>
-  </div>
+  </ngb-alert>
 
   <h3>Enregistrer l'adhésion</h3>
 
@@ -67,7 +63,7 @@
   </form>
 </div>
 
-<div *ngIf="currentMembership" id="current-membership">
+<div *ngIf="currentMembership" id="current-membership" class="mt-2">
   <ngb-alert [dismissible]="false" type="info">
     Payée ({{ currentMembership.paymentMode | displayPaymentMode }}) le
     {{ currentMembership.paymentDate | date }}.
@@ -76,6 +72,11 @@
       >Carte n° {{ currentMembership.cardNumber | number }}.</ng-container
     >
     <ng-container *ngIf="currentMembership.cardNumber == null">N° de carte inconnu.</ng-container>
+    <br />
+    <a target="membershipprint" href="/api/persons/{{ person.id }}/memberships/form">
+      Imprimer une fiche d'adhésion
+      <span class="fa fa-external-link small"></span>
+    </a>
   </ngb-alert>
   <div class="text-end">
     <button
