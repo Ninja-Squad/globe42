@@ -42,17 +42,24 @@
   </div>
 
   <div class="form-group">
-    <label class="form-label">Enfants</label>
-    <div class="ms-3" formArrayName="children">
-      <div *ngFor="let child of children.controls; index as i" [formGroupName]="i" class="mb-2">
+    <label class="form-label">Enfants, frères et soeurs</label>
+    <div class="ms-3" formArrayName="relatives">
+      <div *ngFor="let relative of relatives.controls; index as i" [formGroupName]="i" class="mb-2">
         <div class="row row-cols-lg-auto g-3 align-items-center">
           <div class="col-12">
-            <input
-              class="form-control"
-              placeholder="Prénom"
-              formControlName="firstName"
-              [id]="'childFirstName' + i"
-            />
+            <div class="input-group">
+              <input
+                class="form-control"
+                placeholder="Prénom"
+                formControlName="firstName"
+                [id]="'relativeFirstName' + i"
+              />
+              <span class="input-group-text" style="width: 5rem" [id]="'relativeType' + i">
+                <ng-container *ngIf="relative.value.type === 'CHILD'">Enfant</ng-container>
+                <ng-container *ngIf="relative.value.type === 'BROTHER'">Frère</ng-container>
+                <ng-container *ngIf="relative.value.type === 'SISTER'">Soeur</ng-container>
+              </span>
+            </div>
           </div>
 
           <div class="col-12">
@@ -61,7 +68,7 @@
                 class="form-control"
                 placeholder="Date de naissance"
                 formControlName="birthDate"
-                [id]="'childBirthDate' + i"
+                [id]="'relativeBirthDate' + i"
                 ngbDatepicker
                 [minDate]="{ year: 1900, month: 1, day: 1 }"
               />
@@ -73,21 +80,21 @@
               <input
                 class="form-check-input"
                 type="radio"
-                [id]="'childLocationFrance' + i"
+                [id]="'relativeLocationFrance' + i"
                 formControlName="location"
                 value="FRANCE"
               />
-              <label class="form-check-label" [for]="'childLocationFrance' + i">en France</label>
+              <label class="form-check-label" [for]="'relativeLocationFrance' + i">en France</label>
             </div>
             <div class="form-check form-check-inline">
               <input
                 class="form-check-input"
                 type="radio"
-                [id]="'childLocationAbroad' + i"
+                [id]="'relativeLocationAbroad' + i"
                 formControlName="location"
                 value="ABROAD"
               />
-              <label class="form-check-label" [for]="'childLocationAbroad' + i">au Pays</label>
+              <label class="form-check-label" [for]="'relativeLocationAbroad' + i">au Pays</label>
             </div>
           </div>
 
@@ -95,17 +102,40 @@
             <button
               type="button"
               class="btn btn-secondary btn-sm"
-              (click)="removeChild(i)"
-              [id]="'removeChild' + i"
+              (click)="removeRelative(i)"
+              [id]="'removeRelative' + i"
             >
               <span class="fa fa-trash"></span>&ngsp;Supprimer
             </button>
           </div>
         </div>
       </div>
-      <button type="button" class="btn btn-secondary btn-sm" (click)="addChild()" id="add-child">
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm me-1"
+        (click)="addRelative('CHILD')"
+        id="add-child"
+      >
         <span class="fa fa-plus"></span>
         Ajouter un enfant
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm me-1"
+        (click)="addRelative('BROTHER')"
+        id="add-brother"
+      >
+        <span class="fa fa-plus"></span>
+        Ajouter un frère
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm me-1"
+        (click)="addRelative('SISTER')"
+        id="add-sister"
+      >
+        <span class="fa fa-plus"></span>
+        Ajouter une soeur
       </button>
     </div>
   </div>

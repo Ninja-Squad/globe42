@@ -1,7 +1,14 @@
 package org.globe42.domain
 
 import java.util.*
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.OneToMany
+import javax.persistence.SequenceGenerator
 
 private const val FAMILY_GENERATOR = "FamilyGenerator"
 
@@ -26,22 +33,22 @@ class Family {
      * The children of the person
      */
     @OneToMany(mappedBy = "family", cascade = arrayOf(CascadeType.ALL), orphanRemoval = true)
-    private val children: MutableSet<Child> = HashSet()
+    private val relatives: MutableSet<Relative> = HashSet()
 
-    fun getChildren(): Set<Child> {
-        return Collections.unmodifiableSet(children)
+    fun getRelatives(): Set<Relative> {
+        return Collections.unmodifiableSet(relatives)
     }
 
-    fun addChild(child: Child) {
-        child.family = this
-        children.add(child)
+    fun addRelative(relative: Relative) {
+        relative.family = this
+        relatives.add(relative)
     }
 
-    fun removeChild(child: Child) {
-        children.remove(child)
+    fun removeRelative(relative: Relative) {
+        relatives.remove(relative)
     }
 
-    fun clearChildren() {
-        children.clear()
+    fun clearRelatives() {
+        relatives.clear()
     }
 }

@@ -1,0 +1,5 @@
+{{ relative.firstName }}
+<ng-container *ngIf="relative.firstName && relative.birthDate">&ndash;</ng-container>
+{{ relative.birthDate | date }}
+<ng-container *ngIf="relative.birthDate"> &ndash; {{ age | number: '.0-0' }} ans</ng-container>
+<ng-container *ngIf="!relative.firstName && !relative.birthDate">aucune information</ng-container>

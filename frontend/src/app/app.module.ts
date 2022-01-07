@@ -98,6 +98,7 @@ import { PersonRemindersComponent } from './person-reminders/person-reminders.co
 import { PersonsWithRemindersComponent } from './persons-with-reminders/persons-with-reminders.component';
 import { DisplayReminderTypePipe } from './display-reminder-type.pipe';
 import { MediationStatisticsComponent } from './mediation-statistics/mediation-statistics.component';
+import { RelativeComponent } from './person-family/relative/relative.component';
 
 @NgModule({
   declarations: [
@@ -187,7 +188,8 @@ import { MediationStatisticsComponent } from './mediation-statistics/mediation-s
     PersonRemindersComponent,
     PersonsWithRemindersComponent,
     DisplayReminderTypePipe,
-    MediationStatisticsComponent
+    MediationStatisticsComponent,
+    RelativeComponent
   ],
   entryComponents: [ConfirmModalContentComponent],
   imports: [

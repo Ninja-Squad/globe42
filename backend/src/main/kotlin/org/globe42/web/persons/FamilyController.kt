@@ -1,13 +1,20 @@
 package org.globe42.web.persons
 
 import org.globe42.dao.PersonDao
-import org.globe42.domain.Child
 import org.globe42.domain.Family
+import org.globe42.domain.Relative
 import org.globe42.web.exception.NotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 import javax.transaction.Transactional
 
 /**
@@ -32,11 +39,12 @@ class FamilyController(val personDao: PersonDao) {
         val family = Family()
         with(family) {
             spouseLocation = command.spouseLocation
-            command.children.forEach { childCommand ->
-                addChild(Child().apply {
-                    firstName = childCommand.firstName
-                    birthDate = childCommand.birthDate
-                    location = childCommand.location
+            command.relatives.forEach { relativeCommand ->
+                addRelative(Relative().apply {
+                    type = relativeCommand.type
+                    firstName = relativeCommand.firstName
+                    birthDate = relativeCommand.birthDate
+                    location = relativeCommand.location
                 })
             }
         }

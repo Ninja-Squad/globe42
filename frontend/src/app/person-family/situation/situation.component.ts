@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Situation } from '../person-family.component';
-import { ChildModel } from '../../models/family.model';
-import { DateTime } from 'luxon';
 
 @Component({
   selector: 'gl-situation',
@@ -12,8 +10,4 @@ import { DateTime } from 'luxon';
 export class SituationComponent {
   @Input()
   situation: Situation;
-
-  age(child: ChildModel): number {
-    return -DateTime.fromISO(child.birthDate).diffNow('years').years;
-  }
 }

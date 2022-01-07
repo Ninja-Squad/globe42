@@ -36,7 +36,7 @@ abstract class BaseDaoTest {
                 "participation",
                 "membership",
                 "person",
-                "child",
+                "relative",
                 "family",
                 "income_source",
                 "income_source_type",

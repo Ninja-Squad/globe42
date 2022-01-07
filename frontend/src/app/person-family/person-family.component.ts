@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChildModel, FamilyModel } from '../models/family.model';
+import { FamilyModel, RelativeModel } from '../models/family.model';
 import { ActivatedRoute } from '@angular/router';
 import { FamilyService } from '../family.service';
 import { PersonModel } from '../models/person.model';
@@ -9,7 +9,9 @@ import { CurrentPersonService } from '../current-person.service';
 
 export interface Situation {
   spousePresent: boolean;
-  children: Array<ChildModel>;
+  children: Array<RelativeModel>;
+  brothers: Array<RelativeModel>;
+  sisters: Array<RelativeModel>;
 }
 
 @Component({
@@ -36,12 +38,28 @@ export class PersonFamilyComponent implements OnInit {
     if (this.family) {
       this.france = {
         spousePresent: this.family.spouseLocation === 'FRANCE',
-        children: this.family.children.filter(child => child.location === 'FRANCE')
+        children: this.family.relatives.filter(
+          relative => relative.location === 'FRANCE' && relative.type === 'CHILD'
+        ),
+        brothers: this.family.relatives.filter(
+          relative => relative.location === 'FRANCE' && relative.type === 'BROTHER'
+        ),
+        sisters: this.family.relatives.filter(
+          relative => relative.location === 'FRANCE' && relative.type === 'SISTER'
+        )
       };
 
       this.abroad = {
         spousePresent: this.family.spouseLocation === 'ABROAD',
-        children: this.family.children.filter(child => child.location === 'ABROAD')
+        children: this.family.relatives.filter(
+          relative => relative.location === 'ABROAD' && relative.type === 'CHILD'
+        ),
+        brothers: this.family.relatives.filter(
+          relative => relative.location === 'ABROAD' && relative.type === 'BROTHER'
+        ),
+        sisters: this.family.relatives.filter(
+          relative => relative.location === 'ABROAD' && relative.type === 'SISTER'
+        )
       };
     }
   }

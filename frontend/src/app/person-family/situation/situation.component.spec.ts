@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { Component, LOCALE_ID } from '@angular/core';
+import { Component } from '@angular/core';
 import { SituationComponent } from './situation.component';
 import { Situation } from '../person-family.component';
-import { DateTime } from 'luxon';
 import { ComponentTester } from 'ngx-speculoos';
+import { RelativeComponent } from '../relative/relative.component';
 
 @Component({
   template: `<gl-situation [situation]="situation"></gl-situation>`
@@ -17,8 +17,16 @@ class TestComponentTester extends ComponentTester<TestComponent> {
     super(TestComponent);
   }
 
-  get listItems() {
-    return this.elements('li');
+  get childrenItems() {
+    return this.elements('.children li');
+  }
+
+  get brothersItems() {
+    return this.elements('.brothers li');
+  }
+
+  get sistersItems() {
+    return this.elements('.sisters li');
   }
 }
 
@@ -27,34 +35,71 @@ describe('SituationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SituationComponent, TestComponent],
-      providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }]
+      declarations: [SituationComponent, TestComponent, RelativeComponent]
     });
-
-    jasmine.clock().mockDate(DateTime.fromISO('2018-05-01').toJSDate());
 
     tester = new TestComponentTester();
   });
 
-  afterEach(() => jasmine.clock().uninstall());
-
-  it('should display family situation when no child', () => {
+  it('should display family situation when no relative', () => {
     tester.componentInstance.situation = {
       spousePresent: true,
-      children: []
+      children: [],
+      brothers: [],
+      sisters: []
     };
     tester.detectChanges();
 
     expect(tester.testElement.textContent).toMatch(/Époux\(se\) présent\(e\)Oui/);
     expect(tester.testElement).not.toContainText('enfant');
+    expect(tester.childrenItems.length).toBe(0);
+    expect(tester.testElement).not.toContainText('frère');
+    expect(tester.brothersItems.length).toBe(0);
+    expect(tester.testElement).not.toContainText('soeur');
+    expect(tester.sistersItems.length).toBe(0);
   });
 
-  it('should display family situation when empty child present', () => {
+  it('should display family situation when relatives', () => {
     tester.componentInstance.situation = {
       spousePresent: false,
       children: [
         {
-          firstName: null,
+          type: 'CHILD',
+          firstName: 'c1',
+          birthDate: null,
+          location: 'ABROAD'
+        },
+        {
+          type: 'CHILD',
+          firstName: 'c2',
+          birthDate: null,
+          location: 'ABROAD'
+        },
+        {
+          type: 'CHILD',
+          firstName: 'c3',
+          birthDate: null,
+          location: 'ABROAD'
+        }
+      ],
+      brothers: [
+        {
+          type: 'BROTHER',
+          firstName: 'b1',
+          birthDate: null,
+          location: 'ABROAD'
+        },
+        {
+          type: 'BROTHER',
+          firstName: 'b2',
+          birthDate: null,
+          location: 'ABROAD'
+        }
+      ],
+      sisters: [
+        {
+          type: 'CHILD',
+          firstName: 's1',
           birthDate: null,
           location: 'ABROAD'
         }
@@ -63,55 +108,11 @@ describe('SituationComponent', () => {
     tester.detectChanges();
 
     expect(tester.testElement.textContent).toMatch(/Époux\(se\) présent\(e\)Non/);
-    expect(tester.testElement).toContainText('1 enfant(s)');
-    expect(tester.listItems[0]).toContainText('aucune information');
-  });
-
-  it('should display child with only first name', () => {
-    tester.componentInstance.situation = {
-      spousePresent: false,
-      children: [
-        {
-          firstName: 'John',
-          birthDate: null,
-          location: 'ABROAD'
-        }
-      ]
-    };
-    tester.detectChanges();
-
-    expect(tester.listItems[0]).toContainText('John');
-  });
-
-  it('should display child with only birth date', () => {
-    tester.componentInstance.situation = {
-      spousePresent: false,
-      children: [
-        {
-          firstName: null,
-          birthDate: '2000-11-30',
-          location: 'ABROAD'
-        }
-      ]
-    };
-    tester.detectChanges();
-
-    expect(tester.listItems[0].textContent.trim()).toMatch(/30 nov\. 2000\s+–\s+17 ans/);
-  });
-
-  it('should display child with first name and birth date', () => {
-    tester.componentInstance.situation = {
-      spousePresent: false,
-      children: [
-        {
-          firstName: 'John',
-          birthDate: '2000-11-30',
-          location: 'ABROAD'
-        }
-      ]
-    };
-    tester.detectChanges();
-
-    expect(tester.listItems[0].textContent.trim()).toMatch(/John\s+–\s+30 nov\. 2000\s+–\s+17 ans/);
+    expect(tester.testElement).toContainText('3 enfant(s)');
+    expect(tester.childrenItems.length).toBe(3);
+    expect(tester.testElement).toContainText('2 frère(s)');
+    expect(tester.brothersItems.length).toBe(2);
+    expect(tester.testElement).toContainText('1 soeur(s)');
+    expect(tester.sistersItems.length).toBe(1);
   });
 });

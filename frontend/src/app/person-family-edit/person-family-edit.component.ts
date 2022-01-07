@@ -27,13 +27,14 @@ export class PersonFamilyEditComponent implements OnInit {
 
     this.familyForm = this.fb.group({
       spouseLocation: family ? family.spouseLocation : null,
-      children: this.fb.array(
+      relatives: this.fb.array(
         family
-          ? family.children.map(child =>
+          ? family.relatives.map(relative =>
               this.fb.group({
-                firstName: child.firstName,
-                birthDate: child.birthDate,
-                location: child.location
+                type: relative.type,
+                firstName: relative.firstName,
+                birthDate: relative.birthDate,
+                location: relative.location
               })
             )
           : []
@@ -41,13 +42,14 @@ export class PersonFamilyEditComponent implements OnInit {
     });
   }
 
-  get children(): FormArray {
-    return this.familyForm.get('children') as FormArray;
+  get relatives(): FormArray {
+    return this.familyForm.get('relatives') as FormArray;
   }
 
-  addChild() {
-    this.children.push(
+  addRelative(type: 'CHILD' | 'BROTHER' | 'SISTER') {
+    this.relatives.push(
       this.fb.group({
+        type,
         firstName: null,
         birthDate: null,
         location: 'FRANCE'
@@ -55,8 +57,8 @@ export class PersonFamilyEditComponent implements OnInit {
     );
   }
 
-  removeChild(index: number) {
-    this.children.removeAt(index);
+  removeRelative(index: number) {
+    this.relatives.removeAt(index);
   }
 
   save() {

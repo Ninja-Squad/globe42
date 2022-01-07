@@ -5,10 +5,11 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
 import org.globe42.dao.PersonDao
-import org.globe42.domain.Child
 import org.globe42.domain.Family
 import org.globe42.domain.Location
 import org.globe42.domain.Person
+import org.globe42.domain.Relative
+import org.globe42.domain.RelativeType
 import org.globe42.test.GlobeMvcTest
 import org.globe42.web.test.jsonValue
 import org.junit.jupiter.api.BeforeEach
@@ -44,15 +45,16 @@ class FamilyControllerMvcTest(
     fun `should get family of person`() {
         person.family = Family().apply {
             id = 56L
-            addChild(Child().apply {
+            addRelative(Relative().apply {
                 id = 67
+                type = RelativeType.CHILD
                 location = Location.ABROAD
             })
         }
 
         mvc.get("/api/persons/{personId}/family", person.id!!).andExpect {
             status { isOk() }
-            jsonValue("$.children[0].location", Location.ABROAD.name)
+            jsonValue("$.relatives[0].location", Location.ABROAD.name)
         }
     }
 
@@ -60,7 +62,7 @@ class FamilyControllerMvcTest(
     fun `should save family`() {
         val command = FamilyCommand(
             spouseLocation = Location.FRANCE,
-            children = emptySet()
+            relatives = emptySet()
         )
 
         mvc.put("/api/persons/{personId}/family", person.id!!) {

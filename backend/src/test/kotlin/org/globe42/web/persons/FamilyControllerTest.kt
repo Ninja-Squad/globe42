@@ -5,10 +5,11 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.globe42.dao.PersonDao
-import org.globe42.domain.Child
 import org.globe42.domain.Family
 import org.globe42.domain.Location
 import org.globe42.domain.Person
+import org.globe42.domain.Relative
+import org.globe42.domain.RelativeType
 import org.globe42.web.exception.NotFoundException
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -29,8 +30,9 @@ class FamilyControllerTest {
 
     @Test
     fun `should get family of person`() {
-        val child = Child().apply {
+        val relative = Relative().apply {
             id = 98
+            type = RelativeType.CHILD
             firstName = "John"
             birthDate = LocalDate.of(2000, 11, 23)
             location = Location.ABROAD
@@ -39,7 +41,7 @@ class FamilyControllerTest {
         val family = Family().apply {
             id = 56L
             spouseLocation = Location.FRANCE
-            addChild(child)
+            addRelative(relative)
         }
         person.family = family
 
@@ -48,11 +50,12 @@ class FamilyControllerTest {
         assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
         with(result.body!!) {
             assertThat(spouseLocation).isEqualTo(family.spouseLocation)
-            assertThat(children).hasSize(1)
-            with(children.get(0)) {
-                assertThat(firstName).isEqualTo(child.firstName)
-                assertThat(birthDate).isEqualTo(child.birthDate)
-                assertThat(location).isEqualTo(child.location)
+            assertThat(relatives).hasSize(1)
+            with(relatives.get(0)) {
+                assertThat(type).isEqualTo(relative.type)
+                assertThat(firstName).isEqualTo(relative.firstName)
+                assertThat(birthDate).isEqualTo(relative.birthDate)
+                assertThat(location).isEqualTo(relative.location)
             }
         }
     }
@@ -76,25 +79,27 @@ class FamilyControllerTest {
 
     @Test
     fun `should save family`() {
-        val childDTO = ChildDTO(
+        val relativeDTO = RelativeDTO(
+            RelativeType.CHILD,
             "John",
             LocalDate.of(2000, 11, 23),
             Location.ABROAD
         )
         val command = FamilyCommand(
             spouseLocation = Location.FRANCE,
-            children = setOf(childDTO)
+            relatives = setOf(relativeDTO)
         )
         controller.save(person.id!!, command)
 
         with(person.family!!) {
             assertThat(spouseLocation).isEqualTo(command.spouseLocation)
-            assertThat(getChildren()).hasSize(1)
-            with(getChildren().first()) {
+            assertThat(getRelatives()).hasSize(1)
+            with(getRelatives().first()) {
                 assertThat(family).isEqualTo(person.family)
-                assertThat(firstName).isEqualTo(childDTO.firstName)
-                assertThat(birthDate).isEqualTo(childDTO.birthDate)
-                assertThat(location).isEqualTo(childDTO.location)
+                assertThat(type).isEqualTo(relativeDTO.type)
+                assertThat(firstName).isEqualTo(relativeDTO.firstName)
+                assertThat(birthDate).isEqualTo(relativeDTO.birthDate)
+                assertThat(location).isEqualTo(relativeDTO.location)
             }
         }
     }

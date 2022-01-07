@@ -7,15 +7,25 @@
   </div>
   <div class="form-group" *ngIf="situation.children.length">
     <label>{{ situation.children.length }} enfant(s)</label>
-    <ul>
+    <ul class="children">
       <li *ngFor="let child of situation.children">
-        {{ child.firstName }}
-        <ng-container *ngIf="child.firstName && child.birthDate">&ndash;</ng-container>
-        {{ child.birthDate | date }}
-        <ng-container *ngIf="child.birthDate">
-          &ndash; {{ age(child) | number: '.0-0' }} ans</ng-container
-        >
-        <ng-container *ngIf="!child.firstName && !child.birthDate">aucune information</ng-container>
+        <gl-relative [relative]="child"></gl-relative>
+      </li>
+    </ul>
+  </div>
+  <div class="form-group" *ngIf="situation.brothers.length">
+    <label>{{ situation.brothers.length }} frère(s)</label>
+    <ul class="brothers">
+      <li *ngFor="let brother of situation.brothers">
+        <gl-relative [relative]="brother"></gl-relative>
+      </li>
+    </ul>
+  </div>
+  <div class="form-group" *ngIf="situation.sisters.length">
+    <label>{{ situation.sisters.length }} soeur(s)</label>
+    <ul class="sisters">
+      <li *ngFor="let sister of situation.sisters">
+        <gl-relative [relative]="sister"></gl-relative>
       </li>
     </ul>
   </div>

@@ -35,28 +35,40 @@ class PersonFamilyEditComponentTester extends ComponentTester<PersonFamilyEditCo
     return this.input('#noSpouse');
   }
 
-  childFirstName(index: number) {
-    return this.input(`#childFirstName${index}`);
+  relativeFirstName(index: number) {
+    return this.input(`#relativeFirstName${index}`);
   }
 
-  childBirthdate(index: number) {
-    return this.input(`#childBirthDate${index}`);
+  relativeType(index: number) {
+    return this.element(`#relativeType${index}`);
   }
 
-  childLocationFrance(index: number) {
-    return this.input(`#childLocationFrance${index}`);
+  relativeBirthdate(index: number) {
+    return this.input(`#relativeBirthDate${index}`);
   }
 
-  childLocationAbroad(index: number) {
-    return this.input(`#childLocationAbroad${index}`);
+  relativeLocationFrance(index: number) {
+    return this.input(`#relativeLocationFrance${index}`);
   }
 
-  removeChildButton(index: number) {
-    return this.button(`#removeChild${index}`);
+  relativeLocationAbroad(index: number) {
+    return this.input(`#relativeLocationAbroad${index}`);
+  }
+
+  removeRelativeButton(index: number) {
+    return this.button(`#removeRelative${index}`);
   }
 
   get addChildButton() {
     return this.button('#add-child');
+  }
+
+  get addBrotherButton() {
+    return this.button('#add-brother');
+  }
+
+  get addSisterButton() {
+    return this.button('#add-sister');
   }
 
   get saveButton() {
@@ -111,7 +123,7 @@ describe('PersonFamilyEditComponent', () => {
 
     expect(tester.componentInstance.familyForm.value).toEqual({
       spouseLocation: null,
-      children: []
+      relatives: []
     } as FamilyCommand);
 
     expect(tester.spouseInFrance).not.toBeChecked();
@@ -122,8 +134,9 @@ describe('PersonFamilyEditComponent', () => {
   it('should have a form when family is present', () => {
     route.snapshot.data.family = {
       spouseLocation: 'FRANCE',
-      children: [
+      relatives: [
         {
+          type: 'CHILD',
           firstName: 'John',
           birthDate: '2000-11-30',
           location: 'ABROAD'
@@ -135,8 +148,9 @@ describe('PersonFamilyEditComponent', () => {
 
     expect(tester.componentInstance.familyForm.value).toEqual({
       spouseLocation: 'FRANCE',
-      children: [
+      relatives: [
         {
+          type: 'CHILD',
           firstName: 'John',
           birthDate: '2000-11-30',
           location: 'ABROAD'
@@ -147,17 +161,19 @@ describe('PersonFamilyEditComponent', () => {
     expect(tester.spouseInFrance).toBeChecked();
     expect(tester.spouseAbroad).not.toBeChecked();
     expect(tester.noSpouse).not.toBeChecked();
-    expect(tester.childFirstName(0)).toHaveValue('John');
-    expect(tester.childBirthdate(0)).toHaveValue('30/11/2000');
-    expect(tester.childLocationFrance(0)).not.toBeChecked();
-    expect(tester.childLocationAbroad(0)).toBeChecked();
+    expect(tester.relativeFirstName(0)).toHaveValue('John');
+    expect(tester.relativeType(0)).toHaveText('Enfant');
+    expect(tester.relativeBirthdate(0)).toHaveValue('30/11/2000');
+    expect(tester.relativeLocationFrance(0)).not.toBeChecked();
+    expect(tester.relativeLocationAbroad(0)).toBeChecked();
   });
 
-  it('should add and remove child', () => {
+  it('should add and remove relatives', () => {
     route.snapshot.data.family = {
       spouseLocation: 'FRANCE',
-      children: [
+      relatives: [
         {
+          type: 'CHILD',
           firstName: 'John',
           birthDate: '2000-11-30',
           location: 'ABROAD'
@@ -169,24 +185,43 @@ describe('PersonFamilyEditComponent', () => {
 
     tester.addChildButton.click();
 
-    expect(tester.componentInstance.children.length).toBe(2);
-    expect(tester.childBirthdate(1)).toHaveValue('');
-    expect(tester.childLocationFrance(1)).toBeChecked();
-    expect(tester.childLocationAbroad(1)).not.toBeChecked();
+    expect(tester.componentInstance.relatives.length).toBe(2);
+    expect(tester.relativeType(1)).toHaveText('Enfant');
+    expect(tester.relativeBirthdate(1)).toHaveValue('');
+    expect(tester.relativeLocationFrance(1)).toBeChecked();
+    expect(tester.relativeLocationAbroad(1)).not.toBeChecked();
 
-    tester.removeChildButton(0).click();
+    tester.addBrotherButton.click();
 
-    expect(tester.componentInstance.children.length).toBe(1);
-    expect(tester.childBirthdate(0)).toHaveValue('');
-    expect(tester.childLocationFrance(0)).toBeChecked();
-    expect(tester.childLocationAbroad(0)).not.toBeChecked();
+    expect(tester.componentInstance.relatives.length).toBe(3);
+    expect(tester.relativeType(2)).toHaveText('Frère');
+    expect(tester.relativeBirthdate(2)).toHaveValue('');
+    expect(tester.relativeLocationFrance(2)).toBeChecked();
+    expect(tester.relativeLocationAbroad(2)).not.toBeChecked();
+
+    tester.addSisterButton.click();
+
+    expect(tester.componentInstance.relatives.length).toBe(4);
+    expect(tester.relativeType(3)).toHaveText('Soeur');
+    expect(tester.relativeBirthdate(3)).toHaveValue('');
+    expect(tester.relativeLocationFrance(3)).toBeChecked();
+    expect(tester.relativeLocationAbroad(3)).not.toBeChecked();
+
+    tester.removeRelativeButton(0).click();
+
+    expect(tester.componentInstance.relatives.length).toBe(3);
+    expect(tester.relativeType(0)).toHaveText('Enfant');
+    expect(tester.relativeBirthdate(0)).toHaveValue('');
+    expect(tester.relativeLocationFrance(0)).toBeChecked();
+    expect(tester.relativeLocationAbroad(0)).not.toBeChecked();
   });
 
   it('should save the family is present', () => {
     route.snapshot.data.family = {
       spouseLocation: 'FRANCE',
-      children: [
+      relatives: [
         {
+          type: 'CHILD',
           firstName: 'John',
           birthDate: '2000-11-30',
           location: 'ABROAD'
@@ -205,8 +240,9 @@ describe('PersonFamilyEditComponent', () => {
 
     const command: FamilyCommand = {
       spouseLocation: 'FRANCE',
-      children: [
+      relatives: [
         {
+          type: 'CHILD',
           firstName: 'John',
           birthDate: '2000-11-30',
           location: 'ABROAD'

@@ -14,6 +14,7 @@ import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
+import { RelativeComponent } from './relative/relative.component';
 
 class PersonFamilyComponentTester extends ComponentTester<PersonFamilyComponent> {
   constructor() {
@@ -52,7 +53,13 @@ describe('PersonFamilyComponent', () => {
     });
 
     TestBed.configureTestingModule({
-      declarations: [PersonFamilyComponent, SituationComponent, PageTitleDirective, FullnamePipe],
+      declarations: [
+        PersonFamilyComponent,
+        SituationComponent,
+        RelativeComponent,
+        PageTitleDirective,
+        FullnamePipe
+      ],
       providers: [
         FamilyService,
         ConfirmService,
@@ -87,14 +94,40 @@ describe('PersonFamilyComponent', () => {
   it('should display family if family present', () => {
     const family = {
       spouseLocation: 'ABROAD',
-      children: [
+      relatives: [
         {
-          firstName: 'foreigner',
+          type: 'CHILD',
+          firstName: 'foreignerChild',
           birthDate: null,
           location: 'ABROAD'
         },
         {
-          firstName: 'french',
+          type: 'CHILD',
+          firstName: 'frenchChild',
+          birthDate: null,
+          location: 'FRANCE'
+        },
+        {
+          type: 'BROTHER',
+          firstName: 'foreignerBrother',
+          birthDate: null,
+          location: 'ABROAD'
+        },
+        {
+          type: 'BROTHER',
+          firstName: 'frenchBrother',
+          birthDate: null,
+          location: 'FRANCE'
+        },
+        {
+          type: 'SISTER',
+          firstName: 'foreignerSister',
+          birthDate: null,
+          location: 'ABROAD'
+        },
+        {
+          type: 'SISTER',
+          firstName: 'frenchSister',
           birthDate: null,
           location: 'FRANCE'
         }
@@ -109,7 +142,24 @@ describe('PersonFamilyComponent', () => {
       spousePresent: false,
       children: [
         {
-          firstName: 'french',
+          type: 'CHILD',
+          firstName: 'frenchChild',
+          birthDate: null,
+          location: 'FRANCE'
+        }
+      ],
+      brothers: [
+        {
+          type: 'BROTHER',
+          firstName: 'frenchBrother',
+          birthDate: null,
+          location: 'FRANCE'
+        }
+      ],
+      sisters: [
+        {
+          type: 'SISTER',
+          firstName: 'frenchSister',
           birthDate: null,
           location: 'FRANCE'
         }
@@ -119,7 +169,24 @@ describe('PersonFamilyComponent', () => {
       spousePresent: true,
       children: [
         {
-          firstName: 'foreigner',
+          type: 'CHILD',
+          firstName: 'foreignerChild',
+          birthDate: null,
+          location: 'ABROAD'
+        }
+      ],
+      brothers: [
+        {
+          type: 'BROTHER',
+          firstName: 'foreignerBrother',
+          birthDate: null,
+          location: 'ABROAD'
+        }
+      ],
+      sisters: [
+        {
+          type: 'SISTER',
+          firstName: 'foreignerSister',
           birthDate: null,
           location: 'ABROAD'
         }
@@ -136,7 +203,7 @@ describe('PersonFamilyComponent', () => {
   it('should delete family after confirmation', () => {
     const family = {
       spouseLocation: 'ABROAD',
-      children: []
+      relatives: []
     } as FamilyModel;
     route.snapshot.data.family = family;
 
@@ -164,7 +231,7 @@ describe('PersonFamilyComponent', () => {
   it('should not delete family if no confirmation', () => {
     const family = {
       spouseLocation: 'ABROAD',
-      children: []
+      relatives: []
     } as FamilyModel;
     route.snapshot.data.family = family;
 

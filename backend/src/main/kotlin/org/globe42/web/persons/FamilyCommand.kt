@@ -8,5 +8,5 @@ import org.globe42.domain.Location
  */
 data class FamilyCommand(
     val spouseLocation: Location?,
-    val children: Set<ChildDTO>
+    val relatives: Set<RelativeDTO>
 )

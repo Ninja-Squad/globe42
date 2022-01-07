@@ -1,7 +1,8 @@
 export const LOCATIONS = ['FRANCE', 'ABROAD'] as const;
 export type Location = typeof LOCATIONS[number];
 
-export interface ChildModel {
+export interface RelativeModel {
+  type: 'CHILD' | 'BROTHER' | 'SISTER';
   firstName: string;
   birthDate: string;
   location: Location;
@@ -9,5 +10,5 @@ export interface ChildModel {
 
 export interface FamilyModel {
   spouseLocation: Location;
-  children: Array<ChildModel>;
+  relatives: Array<RelativeModel>;
 }
