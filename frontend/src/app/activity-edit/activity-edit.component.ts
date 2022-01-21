@@ -11,13 +11,14 @@ import {
   Observable,
   of,
   shareReplay,
+  startWith,
   switchMap
 } from 'rxjs';
 import { PersonIdentityModel } from '../models/person.model';
 import { PersonService } from '../person.service';
 import { Activity, ActivityCommand } from '../models/activity.model';
 import { sortBy } from '../utils';
-import { displayFullname } from '../fullname.pipe';
+import { displayFullname, FullnameOption } from '../fullname.pipe';
 import { ACTIVITY_TYPES, ActivityType } from '../models/activity-type.model';
 
 interface FormValue {
@@ -34,6 +35,7 @@ interface FormValue {
 export class ActivityEditComponent implements OnInit {
   form: FormGroup;
   showAllPersonsCtrl: FormControl;
+  startWithFirstNameOptionCtrl: FormControl;
 
   choosablePersons$: Observable<Array<PersonIdentityModel>>;
   editedActivity: Activity | null;
@@ -55,6 +57,7 @@ export class ActivityEditComponent implements OnInit {
     } as Record<keyof FormValue, any>);
 
     this.showAllPersonsCtrl = fb.control(false);
+    this.startWithFirstNameOptionCtrl = fb.control(false);
 
     const showAllPersonsSubject = new BehaviorSubject<boolean>(this.showAllPersonsCtrl.value);
     const activityTypeSubject = new BehaviorSubject<ActivityType | null>(
@@ -84,17 +87,31 @@ export class ActivityEditComponent implements OnInit {
       switchMap(showAll => (showAll ? allPersons$ : activityTypeParticipants$))
     );
 
-    this.choosablePersons$ = combineLatest([allChoosablePersons$, chosenPersonsSubject]).pipe(
+    const startWithFirstName$ = this.startWithFirstNameOptionCtrl.valueChanges.pipe(
+      startWith(this.startWithFirstNameOptionCtrl.value)
+    );
+
+    this.choosablePersons$ = combineLatest([
+      allChoosablePersons$,
+      chosenPersonsSubject,
+      startWithFirstName$
+    ]).pipe(
       map(([allChoosablePersons, chosenPersons]) =>
         sortBy(
           allChoosablePersons.filter(
             choosablePerson =>
               !chosenPersons.some(chosenPerson => chosenPerson.id === choosablePerson.id)
           ),
-          displayFullname
+          this.personFullnameAccessor()
         )
       )
     );
+
+    startWithFirstName$.subscribe(() => {
+      let participants: Array<PersonIdentityModel> = this.form.value.participants;
+      participants = sortBy([...participants], this.personFullnameAccessor());
+      this.form.patchValue({ participants });
+    });
   }
 
   ngOnInit(): void {
@@ -109,9 +126,19 @@ export class ActivityEditComponent implements OnInit {
     }
   }
 
+  get fullnameOption(): FullnameOption {
+    return this.startWithFirstNameOptionCtrl.value
+      ? 'startWithFirstName'
+      : 'startWithLastNameUppercase';
+  }
+
+  private personFullnameAccessor(): (p: PersonIdentityModel) => string {
+    return p => displayFullname(p, this.fullnameOption);
+  }
+
   choosePerson(person: PersonIdentityModel) {
     let participants: Array<PersonIdentityModel> = this.form.value.participants;
-    participants = sortBy([...participants, person], displayFullname);
+    participants = sortBy([...participants, person], this.personFullnameAccessor());
     this.form.patchValue({ participants });
   }
 

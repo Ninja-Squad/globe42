@@ -1,10 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { PersonIdentityModel } from './models/person.model';
 
-export function displayFullname(person: PersonIdentityModel) {
+export type FullnameOption = 'startWithFirstName' | 'startWithLastNameUppercase';
+
+export function displayFullname(
+  person: PersonIdentityModel,
+  startWith: FullnameOption = 'startWithFirstName'
+) {
   const elements = [
-    person.firstName,
-    person.lastName,
+    startWith === 'startWithLastNameUppercase' ? person.lastName?.toUpperCase() : person.firstName,
+    startWith === 'startWithLastNameUppercase' ? person.firstName : person.lastName,
     person.nickName ? `(${person.nickName})` : null
   ];
   return elements.filter(e => e).join(' ');
@@ -14,7 +19,7 @@ export function displayFullname(person: PersonIdentityModel) {
   name: 'fullname'
 })
 export class FullnamePipe implements PipeTransform {
-  transform(person: PersonIdentityModel): string {
-    return displayFullname(person);
+  transform(person: PersonIdentityModel, startWith: FullnameOption = 'startWithFirstName'): string {
+    return displayFullname(person, startWith);
   }
 }

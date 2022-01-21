@@ -49,15 +49,18 @@
           <li
             *ngFor="let person of choosablePersons$ | async"
             class="p-1 d-flex rounded align-items-baseline absent-item"
+            (dblclick)="choosePerson(person)"
           >
-            <div class="flex-grow-1">{{ person | fullname }}</div>
+            <div class="flex-grow-1">{{ person | fullname: fullnameOption }}</div>
             <div class="ms-2">
               <button
                 type="button"
                 class="btn btn-sm btn-outline-success add-present-button"
                 (click)="choosePerson(person)"
               >
-                <span class="visually-hidden">Ajouter {{ person | fullname }} aux présents</span>
+                <span class="visually-hidden">
+                  Ajouter {{ person | fullname: fullnameOption }} aux présents
+                </span>
                 <span class="fa fa-plus-circle"></span>
               </button>
             </div>
@@ -72,6 +75,17 @@
           id="show-all-persons"
         />
         <label class="form-check-label" for="show-all-persons">Afficher toutes les personnes</label>
+      </div>
+      <div class="form-check form-switch">
+        <input
+          [formControl]="startWithFirstNameOptionCtrl"
+          type="checkbox"
+          class="form-check-input"
+          id="start-with-first-name"
+        />
+        <label class="form-check-label" for="start-with-first-name">
+          Afficher le prénom avant le nom
+        </label>
       </div>
     </div>
     <div class="col-sm">
@@ -88,15 +102,18 @@
           <li
             *ngFor="let person of form.value.participants"
             class="p-1 d-flex rounded align-items-baseline present-item"
+            (dblclick)="unchoosePerson(person)"
           >
-            <span class="flex-grow-1">{{ person | fullname }}</span>
+            <span class="flex-grow-1">{{ person | fullname: fullnameOption }}</span>
             <div class="ms-2">
               <button
                 type="button"
                 class="btn btn-sm btn-outline-danger remove-present-button"
                 (click)="unchoosePerson(person)"
               >
-                <span class="visually-hidden">Enlever {{ person | fullname }} des présents</span>
+                <span class="visually-hidden">
+                  Enlever {{ person | fullname: fullnameOption }} des présents
+                </span>
                 <span class="fa fa-times-circle"></span>
               </button>
             </div>
@@ -112,8 +129,9 @@
       class="btn btn-secondary"
       *ngIf="editedActivity"
       [routerLink]="['/activities', editedActivity.id]"
-      >Annuler</a
     >
+      Annuler
+    </a>
     <a class="btn btn-secondary" *ngIf="!editedActivity" [routerLink]="['/activities']">Annuler</a>
   </div>
 </form>

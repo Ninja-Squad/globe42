@@ -56,6 +56,10 @@ class ActivityEditComponentTester extends ComponentTester<ActivityEditComponent>
     return this.input('#show-all-persons');
   }
 
+  get startWithFirstName() {
+    return this.input('#start-with-first-name');
+  }
+
   get saveButton() {
     return this.button('#save-button');
   }
@@ -110,22 +114,22 @@ describe('ActivityEditComponent', () => {
     joe = {
       id: 1,
       firstName: 'Joe',
-      lastName: 'Dalton'
+      lastName: 'Dalton1'
     } as PersonIdentityModel;
     jack = {
       id: 2,
       firstName: 'Jack',
-      lastName: 'Dalton'
+      lastName: 'Dalton2'
     } as PersonIdentityModel;
     william = {
       id: 3,
       firstName: 'William',
-      lastName: 'Dalton'
+      lastName: 'Dalton3'
     } as PersonIdentityModel;
     averell = {
       id: 4,
       firstName: 'Averell',
-      lastName: 'Dalton'
+      lastName: 'Dalton4'
     } as PersonIdentityModel;
 
     personService.list.and.returnValue(
@@ -178,56 +182,96 @@ describe('ActivityEditComponent', () => {
       tester.type.selectLabel('Repas');
 
       expect(tester.absentItems.length).toBe(2);
-      expect(tester.absentItems[0]).toContainText('Averell');
-      expect(tester.absentItems[1]).toContainText('William');
+      expect(tester.absentItems[0]).toContainText('DALTON3 William');
+      expect(tester.absentItems[1]).toContainText('DALTON4 Averell');
 
       tester.type.selectLabel('Médiation santé');
       expect(tester.absentItems.length).toBe(2);
-      expect(tester.absentItems[0]).toContainText('Jack');
-      expect(tester.absentItems[1]).toContainText('William');
+      expect(tester.absentItems[0]).toContainText('DALTON2 Jack');
+      expect(tester.absentItems[1]).toContainText('DALTON3 William');
 
       tester.showAllPersons.check();
       expect(tester.absentItems.length).toBe(4);
-      expect(tester.absentItems[0]).toContainText('Averell');
-      expect(tester.absentItems[1]).toContainText('Jack');
-      expect(tester.absentItems[2]).toContainText('Joe');
-      expect(tester.absentItems[3]).toContainText('William');
-
-      tester.addPresentButtons[3].click();
-      expect(tester.absentItems.length).toBe(3);
-      expect(tester.absentItems[0]).toContainText('Averell');
-      expect(tester.absentItems[1]).toContainText('Jack');
-      expect(tester.absentItems[2]).toContainText('Joe');
-
-      expect(tester.presentItems.length).toBe(1);
-      expect(tester.presentItems[0]).toContainText('William');
+      expect(tester.absentItems[0]).toContainText('DALTON1 Joe');
+      expect(tester.absentItems[1]).toContainText('DALTON2 Jack');
+      expect(tester.absentItems[2]).toContainText('DALTON3 William');
+      expect(tester.absentItems[3]).toContainText('DALTON4 Averell');
 
       tester.addPresentButtons[2].click();
+      expect(tester.absentItems.length).toBe(3);
+      expect(tester.absentItems[0]).toContainText('DALTON1 Joe');
+      expect(tester.absentItems[1]).toContainText('DALTON2 Jack');
+      expect(tester.absentItems[2]).toContainText('DALTON4 Averell');
+
+      expect(tester.presentItems.length).toBe(1);
+      expect(tester.presentItems[0]).toContainText('DALTON3 William');
+
+      tester.addPresentButtons[0].click();
       expect(tester.absentItems.length).toBe(2);
-      expect(tester.absentItems[0]).toContainText('Averell');
-      expect(tester.absentItems[1]).toContainText('Jack');
+      expect(tester.absentItems[0]).toContainText('DALTON2 Jack');
+      expect(tester.absentItems[1]).toContainText('DALTON4 Averell');
 
       expect(tester.presentItems.length).toBe(2);
-      expect(tester.presentItems[0]).toContainText('Joe');
-      expect(tester.presentItems[1]).toContainText('William');
+      expect(tester.presentItems[0]).toContainText('DALTON1 Joe');
+      expect(tester.presentItems[1]).toContainText('DALTON3 William');
 
       tester.showAllPersons.uncheck();
       expect(tester.absentItems.length).toBe(1);
-      expect(tester.absentItems[0]).toContainText('Jack');
+      expect(tester.absentItems[0]).toContainText('DALTON2 Jack');
 
       tester.removePresentButtons[0].click();
       expect(tester.absentItems.length).toBe(1);
-      expect(tester.absentItems[0]).toContainText('Jack');
+      expect(tester.absentItems[0]).toContainText('DALTON2 Jack');
 
       expect(tester.presentItems.length).toBe(1);
-      expect(tester.presentItems[0]).toContainText('William');
+      expect(tester.presentItems[0]).toContainText('DALTON3 William');
 
       tester.removePresentButtons[0].click();
       expect(tester.absentItems.length).toBe(2);
-      expect(tester.absentItems[0]).toContainText('Jack');
-      expect(tester.absentItems[1]).toContainText('William');
+      expect(tester.absentItems[0]).toContainText('DALTON2 Jack');
+      expect(tester.absentItems[1]).toContainText('DALTON3 William');
 
       expect(tester.presentItems.length).toBe(0);
+    });
+
+    it('should switch to start with first name', () => {
+      expect(tester.presentItems.length).toBe(0);
+
+      tester.type.selectLabel('Repas');
+      tester.showAllPersons.check();
+
+      expect(tester.absentItems.length).toBe(4);
+      expect(tester.absentItems[0]).toContainText('DALTON1 Joe');
+      expect(tester.absentItems[1]).toContainText('DALTON2 Jack');
+      expect(tester.absentItems[2]).toContainText('DALTON3 William');
+      expect(tester.absentItems[3]).toContainText('DALTON4 Averell');
+
+      tester.addPresentButtons[1].click();
+      tester.addPresentButtons[1].click();
+      expect(tester.absentItems.length).toBe(2);
+      expect(tester.absentItems[0]).toContainText('DALTON1 Joe');
+      expect(tester.absentItems[1]).toContainText('DALTON4 Averell');
+
+      expect(tester.presentItems.length).toBe(2);
+      expect(tester.presentItems[0]).toContainText('DALTON2 Jack');
+      expect(tester.presentItems[1]).toContainText('DALTON3 William');
+
+      tester.startWithFirstName.check();
+      expect(tester.absentItems[0]).toContainText('Averell Dalton4');
+      expect(tester.absentItems[1]).toContainText('Joe Dalton1');
+
+      expect(tester.presentItems[0]).toContainText('Jack Dalton2');
+      expect(tester.presentItems[1]).toContainText('William Dalton3');
+
+      tester.addPresentButtons[0].click();
+      expect(tester.presentItems[0]).toContainText('Averell Dalton4');
+      expect(tester.presentItems[1]).toContainText('Jack Dalton2');
+      expect(tester.presentItems[2]).toContainText('William Dalton3');
+
+      tester.startWithFirstName.uncheck();
+      expect(tester.presentItems[0]).toContainText('DALTON2 Jack');
+      expect(tester.presentItems[1]).toContainText('DALTON3 William');
+      expect(tester.presentItems[2]).toContainText('DALTON4 Averell');
     });
 
     it('should save', () => {
@@ -246,7 +290,7 @@ describe('ActivityEditComponent', () => {
       expect(activityService.create).toHaveBeenCalledWith({
         type: 'MEAL',
         date: '2021-05-12',
-        participantIds: [averell.id, william.id]
+        participantIds: [william.id, averell.id]
       });
       expect(router.navigate).toHaveBeenCalledWith(['/activities', 42]);
     });
