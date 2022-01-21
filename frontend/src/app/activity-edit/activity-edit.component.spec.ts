@@ -305,7 +305,7 @@ describe('ActivityEditComponent', () => {
               id: 22,
               date: '2021-01-02',
               type: activityType('MEAL'),
-              participants: [{ ...joe }, { ...william }]
+              participants: [{ ...william }, { ...joe }]
             } as Activity
           }
         })
@@ -323,11 +323,11 @@ describe('ActivityEditComponent', () => {
       expect(tester.type).toHaveSelectedLabel('Repas');
       expect(tester.date).toHaveValue('02/01/2021');
       expect(tester.presentItems.length).toBe(2);
-      expect(tester.presentItems[0]).toContainText('Joe');
-      expect(tester.presentItems[1]).toContainText('William');
+      expect(tester.presentItems[0]).toContainText('DALTON1 Joe');
+      expect(tester.presentItems[1]).toContainText('DALTON3 William');
 
       expect(tester.absentItems.length).toBe(1);
-      expect(tester.absentItems[0]).toContainText('Averell');
+      expect(tester.absentItems[0]).toContainText('DALTON4 Averell');
     });
 
     it('should save', () => {
