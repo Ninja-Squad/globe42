@@ -120,7 +120,7 @@ export class ActivityEditComponent implements OnInit {
       const value: FormValue = {
         type: this.editedActivity.type.key,
         date: this.editedActivity.date,
-        participants: this.editedActivity.participants
+        participants: sortBy(this.editedActivity.participants, this.personFullnameAccessor())
       };
       this.form.setValue(value);
     }

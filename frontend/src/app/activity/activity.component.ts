@@ -4,6 +4,8 @@ import { Activity } from '../models/activity.model';
 import { ConfirmService } from '../confirm.service';
 import { switchMap } from 'rxjs';
 import { ActivityService } from '../activity.service';
+import { sortBy } from '../utils';
+import { displayFullname } from '../fullname.pipe';
 
 @Component({
   selector: 'gl-activity',
@@ -22,6 +24,7 @@ export class ActivityComponent implements OnInit {
 
   ngOnInit(): void {
     this.activity = this.route.snapshot.data.activity;
+    this.activity.participants = sortBy([...this.activity.participants], displayFullname);
   }
 
   delete() {

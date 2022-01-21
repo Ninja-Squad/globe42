@@ -85,7 +85,7 @@ describe('ActivityComponent', () => {
     expect(tester.title).toContainText('samedi 2 janvier 2021');
     expect(tester.title).toContainText('Repas');
     expect(tester.participants.length).toBe(2);
-    expect(tester.participants[0]).toContainText('JB Nizet');
+    expect(tester.participants[0]).toContainText('Claire Brucy');
   });
 
   it('should delete after confirmation', () => {
