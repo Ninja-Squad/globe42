@@ -1341,10 +1341,10 @@
   resolved "https://registry.yarnpkg.com/@jridgewell/resolve-uri/-/resolve-uri-1.0.0.tgz#3fdf5798f0b49e90155896f6291df186eac06c83"
   integrity sha512-9oLAnygRMi8Q5QkYEU4XWK04B+nuoXoxjRvRxgjuChkLZFBja0YPSgdZ7dZtwhncLBcQe/I/E+fLuk5qxcYVJA==
 
-"@ng-bootstrap/ng-bootstrap@12.0.0-beta.4":
-  version "12.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-12.0.0-beta.4.tgz#e27fb7b6672612c05bd40f1eec7f22e4396c4a11"
-  integrity sha512-iOXZT4FLouAGJDRw4ruogyR+lg648nywNWKUxW7l+mtMC9i4kdpfo4beQ/nqb4Uq2zMDs9zj4MbKVI391+kMnA==
+"@ng-bootstrap/ng-bootstrap@12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-12.0.0.tgz#ff05c40aad897d3902780062994ef7f86c55b32d"
+  integrity sha512-XWf/CsP1gH0aev7Mtsldtj0DPPFdTrJpSiyjzLFS29gU1ZuDlJz6OKthgUDxZoua6uNPAzaGMc0A20T+reMfRw==
   dependencies:
     tslib "^2.3.0"
 
