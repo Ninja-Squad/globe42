@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ActivityEditComponent } from './activity-edit.component';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { ActivityService } from '../activity.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FullnamePipe } from '../fullname.pipe';
@@ -148,11 +148,7 @@ describe('ActivityEditComponent', () => {
 
   describe('in create mode', () => {
     beforeEach(() => {
-      const route = fakeRoute({
-        snapshot: fakeSnapshot({
-          data: {}
-        })
-      });
+      const route = stubRoute();
       configureTestingModule(route);
       tester = new ActivityEditComponentTester();
       tester.detectChanges();
@@ -298,17 +294,15 @@ describe('ActivityEditComponent', () => {
 
   describe('in edit mode', () => {
     beforeEach(() => {
-      const route = fakeRoute({
-        snapshot: fakeSnapshot({
-          data: {
-            activity: {
-              id: 22,
-              date: '2021-01-02',
-              type: activityType('MEAL'),
-              participants: [{ ...william }, { ...joe }]
-            } as Activity
-          }
-        })
+      const route = stubRoute({
+        data: {
+          activity: {
+            id: 22,
+            date: '2021-01-02',
+            type: activityType('MEAL'),
+            participants: [{ ...william }, { ...joe }]
+          } as Activity
+        }
       });
       configureTestingModule(route);
       tester = new ActivityEditComponentTester();

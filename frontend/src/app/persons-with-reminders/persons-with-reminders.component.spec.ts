@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PersonsWithRemindersComponent } from './persons-with-reminders.component';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { PersonWithRemindersModel, ReminderType } from '../models/person.model';
 import { PersonRemindersComponent } from '../person-reminders/person-reminders.component';
 import { By } from '@angular/platform-browser';
@@ -72,12 +72,8 @@ describe('PersonsWithRemindersComponent', () => {
       }
     ] as Array<PersonWithRemindersModel>;
 
-    const route = fakeRoute({
-      snapshot: fakeSnapshot({
-        data: {
-          persons
-        }
-      })
+    const route = stubRoute({
+      data: { persons }
     });
 
     TestBed.configureTestingModule({

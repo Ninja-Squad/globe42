@@ -12,7 +12,7 @@ import { By } from '@angular/platform-browser';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
 import { RelativeComponent } from './relative/relative.component';
 
@@ -46,11 +46,7 @@ describe('PersonFamilyComponent', () => {
   let tester: PersonFamilyComponentTester;
 
   beforeEach(() => {
-    route = fakeRoute({
-      snapshot: fakeSnapshot({
-        data: {}
-      })
-    });
+    route = stubRoute();
 
     TestBed.configureTestingModule({
       declarations: [

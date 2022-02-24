@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -55,12 +55,8 @@ describe('ActivityComponent', () => {
         }
       ]
     } as Activity;
-    const route = fakeRoute({
-      snapshot: fakeSnapshot({
-        data: {
-          activity
-        }
-      })
+    const route = stubRoute({
+      data: { activity }
     });
 
     confirmService = jasmine.createSpyObj<ConfirmService>('ConfirmService', ['confirm']);

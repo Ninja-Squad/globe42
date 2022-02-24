@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ProfileComponent } from './profile.component';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -43,10 +43,8 @@ describe('ProfileComponent', () => {
       taskAssignmentEmailNotificationEnabled: true
     } as ProfileModel;
 
-    const route = fakeRoute({
-      snapshot: fakeSnapshot({
-        data: { profile }
-      })
+    const route = stubRoute({
+      data: { profile }
     });
 
     TestBed.configureTestingModule({

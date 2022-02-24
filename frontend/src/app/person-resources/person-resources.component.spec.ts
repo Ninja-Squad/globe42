@@ -14,7 +14,7 @@ import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { EMPTY, of } from 'rxjs';
 import { PerUnitRevenueInformationModel } from '../models/per-unit-revenue-information.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { CurrentPersonService } from '../current-person.service';
@@ -110,14 +110,12 @@ describe('PersonResourcesComponent', () => {
     monoParental: true
   };
 
-  const activatedRoute = fakeRoute({
-    snapshot: fakeSnapshot({
-      data: {
-        incomes,
-        charges,
-        perUnitRevenueInformation
-      }
-    })
+  const activatedRoute = stubRoute({
+    data: {
+      incomes,
+      charges,
+      perUnitRevenueInformation
+    }
   });
 
   let tester: PersonResourcesTester;

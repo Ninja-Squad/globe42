@@ -13,7 +13,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { CurrentPersonService } from '../current-person.service';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { ACTIVITY_TYPES, activityType, ActivityType } from '../models/activity-type.model';
 
 class PersonParticipationsComponentTester extends ComponentTester<PersonParticipationsComponent> {
@@ -50,8 +50,8 @@ describe('PersonParticipationsComponent', () => {
 
     person = { id: 1, firstName: 'JB', lastName: 'Nizet' } as PersonModel;
 
-    route = fakeRoute({
-      snapshot: fakeSnapshot({ data: { participations } })
+    route = stubRoute({
+      data: { participations }
     });
     currentPersonService = { snapshot: person } as CurrentPersonService;
   });
