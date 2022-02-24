@@ -1,7 +1,6 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { NgbDatepicker, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentTester } from 'ngx-speculoos';
 import { GlobeNgbTestingModule } from './globe-ngb-testing.module';
@@ -31,11 +30,11 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   }
 
   get inputDatepicker() {
-    return this.debugElement.query(By.directive(NgbInputDatepicker));
+    return this.element(NgbInputDatepicker);
   }
 
   get datepicker() {
-    return this.debugElement.query(By.directive(NgbDatepicker));
+    return this.element(NgbDatepicker);
   }
 }
 

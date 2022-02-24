@@ -35,11 +35,11 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   }
 
   get notes() {
-    return this.elements<HTMLElement>('gl-note');
+    return this.elements(NoteComponent);
   }
 
   get noteComponents() {
-    return this.notes.map(note => note.debugElement.componentInstance as NoteComponent);
+    return this.components(NoteComponent);
   }
 
   editNote(index: number) {

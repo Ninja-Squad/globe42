@@ -10,7 +10,6 @@ import { DurationPipe } from '../duration.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
 import { UserModel } from '../models/user.model';
-import { By } from '@angular/platform-browser';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { CurrentUserModule } from '../current-user/current-user.module';
 import { EMPTY, of } from 'rxjs';
@@ -39,7 +38,7 @@ class SpentTimeStatisticsComponentTester extends ComponentTester<SpentTimeStatis
   }
 
   get chart(): ChartComponent {
-    return this.debugElement.query(By.directive(ChartComponent)).componentInstance;
+    return this.component(ChartComponent);
   }
 }
 

@@ -4,7 +4,6 @@ import { PersonLayoutComponent } from './person-layout.component';
 import { PersonModel, ReminderModel } from '../models/person.model';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouterOutlet } from '@angular/router';
-import { By } from '@angular/platform-browser';
 import { FullnamePipe } from '../fullname.pipe';
 import { of, Subject } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -83,7 +82,7 @@ describe('PersonLayoutComponent', () => {
 
     expect(tester.navLinks.length).toBe(10);
 
-    const outlet = tester.debugElement.query(By.directive(RouterOutlet));
+    const outlet = tester.element(RouterOutlet);
     expect(outlet).toBeTruthy();
   });
 

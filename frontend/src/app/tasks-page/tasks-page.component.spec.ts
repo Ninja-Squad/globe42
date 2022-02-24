@@ -8,7 +8,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TaskEventType, TasksComponent } from '../tasks/tasks.component';
 import { FullnamePipe } from '../fullname.pipe';
 import { DateTime } from 'luxon';
-import { By } from '@angular/platform-browser';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { TaskService } from '../task.service';
 import { TasksResolverService } from '../tasks-resolver.service';
@@ -29,16 +28,16 @@ class TasksPageComponentTester extends ComponentTester<TasksPageComponent> {
     super(TasksPageComponent);
   }
 
-  get tasksComponent(): TasksComponent {
-    return this.debugElement.query(By.directive(TasksComponent)).componentInstance;
+  get tasksComponent() {
+    return this.component(TasksComponent);
   }
 
   get resurrectButton() {
     return this.button('.resurrect-button');
   }
 
-  get pagination(): NgbPagination {
-    return this.debugElement.query(By.directive(NgbPagination)).componentInstance;
+  get pagination() {
+    return this.component(NgbPagination);
   }
 
   get newTaskLink() {
