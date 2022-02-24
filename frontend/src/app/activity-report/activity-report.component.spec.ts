@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ActivityReportComponent } from './activity-report.component';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { ActivityService } from '../activity.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -94,11 +94,7 @@ describe('ActivityReportComponent', () => {
 
   describe('without query params', () => {
     beforeEach(() => {
-      const route = fakeRoute({
-        snapshot: fakeSnapshot({
-          queryParams: {}
-        })
-      });
+      const route = stubRoute();
 
       configureTestingModule(route);
       tester = new ActivityReportComponentTester();
@@ -257,14 +253,12 @@ describe('ActivityReportComponent', () => {
 
   describe('with query params', () => {
     beforeEach(() => {
-      const route = fakeRoute({
-        snapshot: fakeSnapshot({
-          queryParams: {
-            type: 'MEAL',
-            from: '2020-01-01',
-            to: '2020-12-31'
-          }
-        })
+      const route = stubRoute({
+        queryParams: {
+          type: 'MEAL',
+          from: '2020-01-01',
+          to: '2020-12-31'
+        }
       });
 
       configureTestingModule(route);

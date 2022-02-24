@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { HealthCareCoverageComponent } from './health-care-coverage.component';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { ChartComponent } from '../chart/chart.component';
 import { By } from '@angular/platform-browser';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
@@ -56,12 +56,8 @@ describe('HealthcareCoverageComponent', () => {
         }
       ]
     };
-    const route = fakeRoute({
-      snapshot: fakeSnapshot({
-        data: {
-          coverage
-        }
-      })
+    const route = stubRoute({
+      data: { coverage }
     });
 
     TestBed.configureTestingModule({

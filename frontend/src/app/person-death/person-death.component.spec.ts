@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PersonDeathComponent } from './person-death.component';
-import { ComponentTester, fakeRoute } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { FullnamePipe } from '../fullname.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PersonService } from '../person.service';
@@ -39,7 +39,7 @@ describe('PersonDeathComponent', () => {
   let currentPersonReminderService: jasmine.SpyObj<CurrentPersonReminderService>;
 
   beforeEach(() => {
-    route = fakeRoute({});
+    route = stubRoute();
     currentPersonReminderService = jasmine.createSpyObj<CurrentPersonReminderService>(
       'CurrentPersonReminderService',
       ['refresh']

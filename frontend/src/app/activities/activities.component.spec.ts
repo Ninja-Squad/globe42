@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ActivitiesComponent } from './activities.component';
-import { ComponentTester, fakeRoute } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { By } from '@angular/platform-browser';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 import { activityType } from '../models/activity-type.model';
 import { Page } from '../models/page';
 import { Activity } from '../models/activity.model';
@@ -71,10 +70,8 @@ describe('ActivitiesComponent', () => {
         }
       ]
     } as Page<Activity>;
-    const route = fakeRoute({
-      data: of({
-        activities
-      })
+    const route = stubRoute({
+      data: { activities }
     });
 
     TestBed.configureTestingModule({

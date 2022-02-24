@@ -15,7 +15,7 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
 import { DisplayPaymentModePipe } from '../display-payment-mode.pipe';
@@ -113,12 +113,8 @@ describe('PersonMembershipsComponent', () => {
 
     memberships = [];
 
-    const route = fakeRoute({
-      snapshot: fakeSnapshot({
-        data: {
-          memberships
-        }
-      })
+    const route = stubRoute({
+      data: { memberships }
     });
     currentPersonReminderService = jasmine.createSpyObj<CurrentPersonReminderService>(
       'CurrentPersonReminderService',

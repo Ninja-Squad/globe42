@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { MediationStatisticsComponent } from './mediation-statistics.component';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ValdemortModule } from 'ngx-valdemort';
@@ -80,11 +80,7 @@ describe('MediationStatisticsComponent', () => {
 
   describe('without query params', () => {
     beforeEach(() => {
-      const route = fakeRoute({
-        snapshot: fakeSnapshot({
-          queryParams: {}
-        })
-      });
+      const route = stubRoute();
 
       configureTestingModule(route);
       tester = new MediationStatisticsComponentTester();
@@ -177,13 +173,11 @@ describe('MediationStatisticsComponent', () => {
 
   describe('with query params', () => {
     beforeEach(() => {
-      const route = fakeRoute({
-        snapshot: fakeSnapshot({
-          queryParams: {
-            from: '2020-01-01',
-            to: '2020-12-31'
-          }
-        })
+      const route = stubRoute({
+        queryParams: {
+          from: '2020-01-01',
+          to: '2020-12-31'
+        }
       });
 
       configureTestingModule(route);

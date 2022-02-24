@@ -15,7 +15,7 @@ import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe } from '../display-location.pipe';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { Location, LOCATIONS } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
@@ -93,8 +93,8 @@ describe('PersonWeddingEventsComponent', () => {
 
     person = { id: 1, firstName: 'JB', lastName: 'Nizet' } as PersonModel;
 
-    route = fakeRoute({
-      snapshot: fakeSnapshot({ data: { events } })
+    route = stubRoute({
+      data: { events }
     });
 
     const weddingEventService: WeddingEventService = jasmine.createSpyObj('weddingEventService', [

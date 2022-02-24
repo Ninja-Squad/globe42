@@ -15,7 +15,7 @@ import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { CurrentPersonService } from '../current-person.service';
-import { ComponentTester, fakeRoute, fakeSnapshot } from 'ngx-speculoos';
+import { ComponentTester, stubRoute } from 'ngx-speculoos';
 
 class PersonNetworlMembersComponentTester extends ComponentTester<PersonNetworkMembersComponent> {
   constructor() {
@@ -76,12 +76,8 @@ describe('PersonNetworkMembersComponent', () => {
       text: 'Dr. Yes'
     };
 
-    route = fakeRoute({
-      snapshot: fakeSnapshot({
-        data: {
-          members: [member1, member2]
-        }
-      })
+    route = stubRoute({
+      data: { members: [member1, member2] }
     });
 
     TestBed.configureTestingModule({
