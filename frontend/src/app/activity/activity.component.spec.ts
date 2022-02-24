@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ComponentTester, stubRoute } from 'ngx-speculoos';
+import { ComponentTester, createMock, stubRoute } from 'ngx-speculoos';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -59,8 +59,8 @@ describe('ActivityComponent', () => {
       data: { activity }
     });
 
-    confirmService = jasmine.createSpyObj<ConfirmService>('ConfirmService', ['confirm']);
-    activityService = jasmine.createSpyObj<ActivityService>('ActivityService', ['delete']);
+    confirmService = createMock(ConfirmService);
+    activityService = createMock(ActivityService);
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],

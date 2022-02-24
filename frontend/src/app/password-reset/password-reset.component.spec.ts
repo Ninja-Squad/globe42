@@ -9,7 +9,7 @@ import { UserService } from '../user.service';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
-import { ComponentTester } from 'ngx-speculoos';
+import { ComponentTester, createMock } from 'ngx-speculoos';
 
 class PasswordResetComponentTester extends ComponentTester<PasswordResetComponent> {
   constructor() {
@@ -35,7 +35,7 @@ describe('PasswordResetComponent', () => {
   let tester: PasswordResetComponentTester;
 
   beforeEach(() => {
-    fakeRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    fakeRouter = createMock(Router);
     user = { id: 42, login: 'jb', admin: false };
     const activatedRoute = {
       snapshot: { data: { user } }
