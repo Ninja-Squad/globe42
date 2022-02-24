@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ActivityEditComponent } from './activity-edit.component';
-import { ComponentTester, stubRoute } from 'ngx-speculoos';
+import { ComponentTester, createMock, stubRoute } from 'ngx-speculoos';
 import { ActivityService } from '../activity.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FullnamePipe } from '../fullname.pipe';
@@ -102,14 +102,9 @@ describe('ActivityEditComponent', () => {
   let averell: PersonIdentityModel;
 
   beforeEach(() => {
-    participationService = jasmine.createSpyObj<ParticipationService>('ParticipationService', [
-      'listParticipants'
-    ]);
-    activityService = jasmine.createSpyObj<ActivityService>('ActivityService', [
-      'create',
-      'update'
-    ]);
-    personService = jasmine.createSpyObj<PersonService>('PersonService', ['list']);
+    participationService = createMock(ParticipationService);
+    activityService = createMock(ActivityService);
+    personService = createMock(PersonService);
 
     joe = {
       id: 1,

@@ -12,7 +12,7 @@ import { of } from 'rxjs';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
-import { ComponentTester } from 'ngx-speculoos';
+import { ComponentTester, createMock, stubRoute } from 'ngx-speculoos';
 
 class PersonPerUnitRevenueInformationEditComponentTester extends ComponentTester<PersonPerUnitRevenueInformationEditComponent> {
   constructor() {
@@ -41,26 +41,21 @@ describe('PersonPerUnitRevenueInformationEditComponent', () => {
   let tester: PersonPerUnitRevenueInformationEditComponentTester;
 
   beforeEach(() => {
-    const mockPerUnitRevenueInformationService = jasmine.createSpyObj(
-      'perUnitRevenueInformationService',
-      ['update']
-    );
-    route = {
-      snapshot: {
-        data: {
-          person: {
-            id: 42,
-            firstName: 'John',
-            lastName: 'Doe'
-          } as PersonModel,
-          perUnitRevenueInformation: {
-            adultLikeCount: 3,
-            childCount: 2,
-            monoParental: true
-          } as PerUnitRevenueInformationModel
-        }
+    const mockPerUnitRevenueInformationService = createMock(PerUnitRevenueInformationService);
+    route = stubRoute({
+      data: {
+        person: {
+          id: 42,
+          firstName: 'John',
+          lastName: 'Doe'
+        } as PersonModel,
+        perUnitRevenueInformation: {
+          adultLikeCount: 3,
+          childCount: 2,
+          monoParental: true
+        } as PerUnitRevenueInformationModel
       }
-    } as any;
+    });
 
     TestBed.configureTestingModule({
       declarations: [

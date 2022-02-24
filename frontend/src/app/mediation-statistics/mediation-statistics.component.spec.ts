@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { MediationStatisticsComponent } from './mediation-statistics.component';
-import { ComponentTester, stubRoute } from 'ngx-speculoos';
+import { ComponentTester, createMock, stubRoute } from 'ngx-speculoos';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ValdemortModule } from 'ngx-valdemort';
@@ -68,11 +68,8 @@ describe('MediationStatisticsComponent', () => {
   }
 
   beforeEach(() => {
-    mediationStatisticsService = jasmine.createSpyObj<MediationStatisticsService>(
-      'MediationStatisticsService',
-      ['get']
-    );
-    router = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    mediationStatisticsService = createMock(MediationStatisticsService);
+    router = createMock(Router);
     jasmine.clock().mockDate(DateTime.fromISO('2021-02-10').toJSDate());
   });
 

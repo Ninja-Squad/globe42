@@ -15,7 +15,7 @@ import { ValidationDefaultsComponent } from '../validation-defaults/validation-d
 import { ValdemortModule } from 'ngx-valdemort';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
-import { ComponentTester, stubRoute } from 'ngx-speculoos';
+import { ComponentTester, createMock, stubRoute } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
 import { CurrentPersonReminderService } from '../current-person-reminder.service';
 import { DisplayPaymentModePipe } from '../display-payment-mode.pipe';
@@ -116,10 +116,7 @@ describe('PersonMembershipsComponent', () => {
     const route = stubRoute({
       data: { memberships }
     });
-    currentPersonReminderService = jasmine.createSpyObj<CurrentPersonReminderService>(
-      'CurrentPersonReminderService',
-      ['refresh']
-    );
+    currentPersonReminderService = createMock(CurrentPersonReminderService);
 
     TestBed.configureTestingModule({
       declarations: [

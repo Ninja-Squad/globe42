@@ -15,7 +15,7 @@ import { LOCALE_ID } from '@angular/core';
 import { ValidationDefaultsComponent } from '../validation-defaults/validation-defaults.component';
 import { ValdemortModule } from 'ngx-valdemort';
 import { DisplayLocationPipe } from '../display-location.pipe';
-import { ComponentTester, stubRoute } from 'ngx-speculoos';
+import { ComponentTester, createMock, stubRoute } from 'ngx-speculoos';
 import { Location, LOCATIONS } from '../models/family.model';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
@@ -97,12 +97,8 @@ describe('PersonWeddingEventsComponent', () => {
       data: { events }
     });
 
-    const weddingEventService: WeddingEventService = jasmine.createSpyObj('weddingEventService', [
-      'list',
-      'create',
-      'delete'
-    ]);
-    const confirmService: ConfirmService = jasmine.createSpyObj('confirmService', ['confirm']);
+    const weddingEventService = createMock(WeddingEventService);
+    const confirmService = createMock(ConfirmService);
 
     TestBed.configureTestingModule({
       declarations: [

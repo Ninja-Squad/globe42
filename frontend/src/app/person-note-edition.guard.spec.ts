@@ -4,6 +4,7 @@ import { PersonNoteEditionGuard } from './person-note-edition.guard';
 import { PersonComponent } from './person/person.component';
 import { ConfirmOptions, ConfirmService } from './confirm.service';
 import { Observable, of, throwError } from 'rxjs';
+import { createMock } from 'ngx-speculoos';
 
 describe('PersonNoteEditionGuard', () => {
   let guard: PersonNoteEditionGuard;
@@ -11,7 +12,7 @@ describe('PersonNoteEditionGuard', () => {
   let confirmService: ConfirmService;
 
   beforeEach(() => {
-    confirmService = jasmine.createSpyObj('confirmService', ['confirm']);
+    confirmService = createMock(ConfirmService);
 
     TestBed.configureTestingModule({
       providers: [{ provide: ConfirmService, useValue: confirmService }]

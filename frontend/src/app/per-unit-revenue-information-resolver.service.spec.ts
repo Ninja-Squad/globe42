@@ -4,22 +4,19 @@ import { PerUnitRevenueInformationResolverService } from './per-unit-revenue-inf
 import { PerUnitRevenueInformationService } from './per-unit-revenue-information.service';
 import { PerUnitRevenueInformationModel } from './models/per-unit-revenue-information.model';
 import { Observable, of } from 'rxjs';
-import { fakeSnapshot } from 'ngx-speculoos';
+import { createMock, fakeSnapshot } from 'ngx-speculoos';
 import { CurrentPersonService } from './current-person.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PerUnitRevenueInformationResolverService', () => {
-  let mockPerUnitRevenueInformationService: PerUnitRevenueInformationService;
+  let mockPerUnitRevenueInformationService: jasmine.SpyObj<PerUnitRevenueInformationService>;
   let info: Observable<PerUnitRevenueInformationModel>;
   let resolver: PerUnitRevenueInformationResolverService;
 
   beforeEach(() => {
-    mockPerUnitRevenueInformationService = jasmine.createSpyObj(
-      'perUnitRevenueInformationService',
-      ['get']
-    );
+    mockPerUnitRevenueInformationService = createMock(PerUnitRevenueInformationService);
     info = of({} as PerUnitRevenueInformationModel);
-    (mockPerUnitRevenueInformationService.get as jasmine.Spy).and.returnValue(info);
+    mockPerUnitRevenueInformationService.get.and.returnValue(info);
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],

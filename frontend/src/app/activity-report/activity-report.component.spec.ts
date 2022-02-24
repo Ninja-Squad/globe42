@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ActivityReportComponent } from './activity-report.component';
-import { ComponentTester, stubRoute } from 'ngx-speculoos';
+import { ComponentTester, createMock, stubRoute } from 'ngx-speculoos';
 import { ActivityService } from '../activity.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -85,8 +85,8 @@ describe('ActivityReportComponent', () => {
   }
 
   beforeEach(() => {
-    activityService = jasmine.createSpyObj<ActivityService>('ActivityService', ['report']);
-    router = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    activityService = createMock(ActivityService);
+    router = createMock(Router);
     jasmine.clock().mockDate(DateTime.fromISO('2021-02-10').toJSDate());
   });
 

@@ -5,7 +5,7 @@ import { MenuComponent } from './menu.component';
 import { UserModel } from '../models/user.model';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
-import { ComponentTester } from 'ngx-speculoos';
+import { ComponentTester, createMock } from 'ngx-speculoos';
 import { Router } from '@angular/router';
 
 class MenuComponentTester extends ComponentTester<MenuComponent> {
@@ -50,7 +50,7 @@ describe('MenuComponent', () => {
         // do nothing
       }
     } as CurrentUserService;
-    fakeRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    fakeRouter = createMock(Router);
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, GlobeNgbTestingModule],

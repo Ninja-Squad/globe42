@@ -10,7 +10,7 @@ import { of, Subject } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { DurationPipe } from '../duration.pipe';
 import { CurrentUserModule } from '../current-user/current-user.module';
-import { ComponentTester } from 'ngx-speculoos';
+import { ComponentTester, createMock } from 'ngx-speculoos';
 import { DateTime } from 'luxon';
 import Spy = jasmine.Spy;
 
@@ -51,7 +51,7 @@ class TestComponentTester extends ComponentTester<TestComponent> {
 describe('SpentTimesComponent', () => {
   describe('logic', () => {
     it('should list spent times', () => {
-      const taskService: TaskService = jasmine.createSpyObj(['listSpentTimes']);
+      const taskService = createMock(TaskService);
       const task = {
         id: 42
       } as TaskModel;
@@ -61,7 +61,7 @@ describe('SpentTimesComponent', () => {
           id: 1
         }
       ] as Array<SpentTimeModel>;
-      (taskService.listSpentTimes as Spy).and.returnValue(of(spentTimes));
+      taskService.listSpentTimes.and.returnValue(of(spentTimes));
 
       const component = new SpentTimesComponent(taskService);
       component.taskModel = task;

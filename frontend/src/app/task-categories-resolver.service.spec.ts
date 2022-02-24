@@ -4,9 +4,10 @@ import { Observable, of } from 'rxjs';
 import { TaskCategoriesResolverService } from './task-categories-resolver.service';
 import { TaskService } from './task.service';
 import { TaskCategoryModel } from './models/task-category.model';
+import { createMock } from 'ngx-speculoos';
 
 describe('TaskCategoriesResolverService', () => {
-  const fakeTaskService = jasmine.createSpyObj('TaskService', ['listCategories']);
+  const fakeTaskService = createMock(TaskService);
   beforeEach(() =>
     TestBed.configureTestingModule({
       providers: [{ provide: TaskService, useValue: fakeTaskService }],
