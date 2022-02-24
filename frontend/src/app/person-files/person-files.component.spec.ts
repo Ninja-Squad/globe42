@@ -9,7 +9,7 @@ import { ConfirmService } from '../confirm.service';
 import { FileSizePipe } from '../file-size.pipe';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject } from 'rxjs';
-import { By, Title } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
@@ -39,7 +39,7 @@ class PersonFilesComponentTester extends ComponentTester<PersonFilesComponent> {
   }
 
   get progressBar(): NgbProgressbar | null {
-    return this.debugElement.query(By.directive(NgbProgressbar))?.componentInstance ?? null;
+    return this.component(NgbProgressbar);
   }
 }
 

@@ -2,7 +2,6 @@ import { ChartComponent } from './chart.component';
 import { Component } from '@angular/core';
 import { ArcElement, Chart, ChartConfiguration, DoughnutController } from 'chart.js';
 import { TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { ComponentTester } from 'ngx-speculoos';
 
 @Component({
@@ -40,7 +39,7 @@ class TestComponentTester extends ComponentTester<TestComponent> {
   }
 
   get chartComponent(): ChartComponent {
-    return this.debugElement.query(By.directive(ChartComponent)).componentInstance;
+    return this.component(ChartComponent);
   }
 }
 

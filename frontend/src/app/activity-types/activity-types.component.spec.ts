@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { ActivityTypesComponent } from './activity-types.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { ComponentTester } from 'ngx-speculoos';
 import { ACTIVITY_TYPES } from '../models/activity-type.model';
@@ -40,6 +39,6 @@ describe('ActivityTypesComponent', () => {
   });
 
   it('should have a router outlet', () => {
-    expect(tester.debugElement.query(By.directive(RouterOutlet))).toBeTruthy();
+    expect(tester.element(RouterOutlet)).toBeTruthy();
   });
 });

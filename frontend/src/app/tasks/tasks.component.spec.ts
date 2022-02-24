@@ -10,7 +10,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TaskService } from '../task.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { SpentTimesComponent } from '../spent-times/spent-times.component';
 import { SpentTimeAddComponent } from '../spent-time-add/spent-time-add.component';
 import { DurationPipe } from '../duration.pipe';
@@ -56,17 +55,15 @@ class TasksComponentTester extends ComponentTester<TestComponent> {
   }
 
   get addSpentTime() {
-    return this.element('gl-spent-time-add');
+    return this.element(SpentTimeAddComponent);
   }
 
-  get addSpentTimeComponent(): SpentTimeAddComponent {
-    const spentTimeAddDebugElement = this.debugElement.query(By.directive(SpentTimeAddComponent));
-    return spentTimeAddDebugElement?.componentInstance;
+  get addSpentTimeComponent() {
+    return this.component(SpentTimeAddComponent);
   }
 
-  get spentTimesComponent(): SpentTimesComponent {
-    const spentTimesDebugElement = this.debugElement.query(By.directive(SpentTimesComponent));
-    return spentTimesDebugElement?.componentInstance;
+  get spentTimesComponent() {
+    return this.component(SpentTimesComponent);
   }
 
   get title() {

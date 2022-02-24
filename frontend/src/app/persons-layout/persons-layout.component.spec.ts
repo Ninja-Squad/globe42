@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PersonsLayoutComponent } from './persons-layout.component';
-import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouterOutlet } from '@angular/router';
 import { PageTitleDirective } from '../page-title.directive';
@@ -21,7 +20,7 @@ class PersonsLayoutComponentTester extends ComponentTester<PersonsLayoutComponen
   }
 
   get routerOutlet() {
-    return this.debugElement.query(By.directive(RouterOutlet));
+    return this.element(RouterOutlet);
   }
 }
 

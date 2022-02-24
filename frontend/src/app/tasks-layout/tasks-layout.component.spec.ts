@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { TasksLayoutComponent } from './tasks-layout.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { ComponentTester } from 'ngx-speculoos';
 
@@ -20,7 +19,7 @@ class TasksLayoutComponentTester extends ComponentTester<TasksLayoutComponent> {
   }
 
   get routerOutlet() {
-    return this.debugElement.query(By.directive(RouterOutlet));
+    return this.element(RouterOutlet);
   }
 }
 

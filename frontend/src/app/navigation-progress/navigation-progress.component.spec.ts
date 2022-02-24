@@ -2,7 +2,6 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { NavigationProgressComponent } from './navigation-progress.component';
 import { ComponentTester } from 'ngx-speculoos';
-import { By } from '@angular/platform-browser';
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap';
 import {
   NavigationCancel,
@@ -19,14 +18,12 @@ class NavigationProgressComponentTester extends ComponentTester<NavigationProgre
     super(NavigationProgressComponent);
   }
 
-  get progressBar(): NgbProgressbar | null {
-    const debugElement = this.debugElement.query(By.directive(NgbProgressbar));
-    return debugElement?.componentInstance || null;
+  get progressBar() {
+    return this.component(NgbProgressbar);
   }
 
   get progressValue() {
-    const p = this.progressBar;
-    return p?.value ?? null;
+    return this.progressBar?.value ?? null;
   }
 
   adance(millis: number) {

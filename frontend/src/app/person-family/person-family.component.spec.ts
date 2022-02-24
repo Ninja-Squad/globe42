@@ -8,7 +8,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ConfirmService } from '../confirm.service';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { FamilyModel } from '../models/family.model';
-import { By } from '@angular/platform-browser';
 import { EMPTY, of } from 'rxjs';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
@@ -29,10 +28,8 @@ class PersonFamilyComponentTester extends ComponentTester<PersonFamilyComponent>
     return this.element('#family');
   }
 
-  get situationComponents(): Array<SituationComponent> {
-    return this.debugElement
-      .queryAll(By.directive(SituationComponent))
-      .map(d => d.componentInstance);
+  get situationComponents() {
+    return this.components(SituationComponent);
   }
 
   get deleteButton() {

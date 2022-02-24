@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PersonTasksComponent } from './person-tasks.component';
-import { By } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentTester } from 'ngx-speculoos';
@@ -16,7 +15,7 @@ class PersonTasksComponentTester extends ComponentTester<PersonTasksComponent> {
   }
 
   get routerOutlet() {
-    return this.debugElement.query(By.directive(RouterOutlet));
+    return this.element(RouterOutlet);
   }
 }
 

@@ -4,7 +4,6 @@ import { PersonsWithRemindersComponent } from './persons-with-reminders.componen
 import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { PersonWithRemindersModel, ReminderType } from '../models/person.model';
 import { PersonRemindersComponent } from '../person-reminders/person-reminders.component';
-import { By } from '@angular/platform-browser';
 import { DisplayReminderTypePipe } from '../display-reminder-type.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -25,9 +24,7 @@ class PersonsWithRemindersComponentTester extends ComponentTester<PersonsWithRem
   }
 
   get reminders(): Array<PersonRemindersComponent> {
-    return this.personItems.map(
-      item => item.debugElement.query(By.directive(PersonRemindersComponent)).componentInstance
-    );
+    return this.personItems.map(item => item.component(PersonRemindersComponent));
   }
 }
 

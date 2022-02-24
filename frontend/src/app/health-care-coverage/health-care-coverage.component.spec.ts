@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { HealthCareCoverageComponent } from './health-care-coverage.component';
 import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { ChartComponent } from '../chart/chart.component';
-import { By } from '@angular/platform-browser';
 import { DisplayHealthCareCoveragePipe } from '../display-health-care-coverage.pipe';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,7 +15,7 @@ class HealthCareCoverageComponentTester extends ComponentTester<HealthCareCovera
   }
 
   get chart(): ChartComponent {
-    return this.debugElement.query(By.directive(ChartComponent)).componentInstance;
+    return this.component(ChartComponent);
   }
 
   get tableRows() {

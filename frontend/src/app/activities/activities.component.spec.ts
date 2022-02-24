@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { ActivitiesComponent } from './activities.component';
 import { ComponentTester, stubRoute } from 'ngx-speculoos';
-import { By } from '@angular/platform-browser';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { GlobeNgbTestingModule } from '../globe-ngb/globe-ngb-testing.module';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -23,8 +22,8 @@ class ActivitiesComponentTester extends ComponentTester<ActivitiesComponent> {
     return this.elements('.activity-item');
   }
 
-  get pagination(): NgbPagination | null {
-    return this.debugElement.query(By.directive(NgbPagination))?.componentInstance ?? null;
+  get pagination() {
+    return this.component(NgbPagination);
   }
 }
 
