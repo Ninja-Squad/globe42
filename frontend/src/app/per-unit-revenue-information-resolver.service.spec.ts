@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { createMock, fakeSnapshot } from 'ngx-speculoos';
 import { CurrentPersonService } from './current-person.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PersonModel } from './models/person.model';
 
 describe('PerUnitRevenueInformationResolverService', () => {
   let mockPerUnitRevenueInformationService: jasmine.SpyObj<PerUnitRevenueInformationService>;
@@ -29,7 +30,7 @@ describe('PerUnitRevenueInformationResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 } as PersonModel);
 
     resolver = TestBed.inject(PerUnitRevenueInformationResolverService);
   });

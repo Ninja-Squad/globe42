@@ -6,6 +6,7 @@ import { ChargeService } from './charge.service';
 import { ChargeModel } from './models/charge.model';
 import { of } from 'rxjs';
 import { CurrentPersonService } from './current-person.service';
+import { PersonModel } from './models/person.model';
 
 describe('ChargesResolverService', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('ChargesResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
   });
 
   it('should retrieve the charges of the person stored in the data of the parent route', () => {

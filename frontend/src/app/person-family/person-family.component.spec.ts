@@ -14,6 +14,7 @@ import { FullnamePipe } from '../fullname.pipe';
 import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { CurrentPersonService } from '../current-person.service';
 import { RelativeComponent } from './relative/relative.component';
+import { PersonModel } from '../models/person.model';
 
 class PersonFamilyComponentTester extends ComponentTester<PersonFamilyComponent> {
   constructor() {
@@ -66,7 +67,7 @@ describe('PersonFamilyComponent', () => {
       id: 42,
       firstName: 'John',
       lastName: 'Doe'
-    });
+    } as PersonModel);
 
     tester = new PersonFamilyComponentTester();
   });

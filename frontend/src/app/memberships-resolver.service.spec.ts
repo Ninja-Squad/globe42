@@ -5,6 +5,7 @@ import { MembershipService } from './membership.service';
 import { MembershipModel } from './models/membership.model';
 import { CurrentPersonService } from './current-person.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PersonModel } from './models/person.model';
 
 describe('MembershipsResolverService', () => {
   beforeEach(() => {
@@ -13,7 +14,7 @@ describe('MembershipsResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
   });
 
   it('should resolve the list of memberships of a person', () => {

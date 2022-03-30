@@ -7,6 +7,7 @@ import { FamilyModel } from './models/family.model';
 import { Observable, of } from 'rxjs';
 import { CurrentPersonService } from './current-person.service';
 import { fakeSnapshot } from 'ngx-speculoos';
+import { PersonModel } from './models/person.model';
 
 describe('FamilyResolverService', () => {
   let familyService: FamilyService;
@@ -19,7 +20,7 @@ describe('FamilyResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 54 } as PersonModel);
 
     familyService = TestBed.inject(FamilyService);
     family = of({} as FamilyModel);

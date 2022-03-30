@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { IncomeModel } from './models/income.model';
 import { of } from 'rxjs';
 import { CurrentPersonService } from './current-person.service';
+import { PersonModel } from './models/person.model';
 
 describe('IncomesResolverService', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('IncomesResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
   });
 
   it('should retrieve the incomes of the person stored in the data of the parent route', () => {

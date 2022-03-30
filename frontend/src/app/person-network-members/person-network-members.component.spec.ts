@@ -16,6 +16,7 @@ import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { CurrentPersonService } from '../current-person.service';
 import { ComponentTester, stubRoute } from 'ngx-speculoos';
+import { PersonModel } from '../models/person.model';
 
 class PersonNetworlMembersComponentTester extends ComponentTester<PersonNetworkMembersComponent> {
   constructor() {
@@ -98,7 +99,7 @@ describe('PersonNetworkMembersComponent', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 1 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 1 } as PersonModel);
 
     TestBed.createComponent(ValidationDefaultsComponent).detectChanges();
 
