@@ -9,6 +9,7 @@ import { Page } from './models/page';
 import { CurrentUserModule } from './current-user/current-user.module';
 import { of } from 'rxjs';
 import { CurrentPersonService } from './current-person.service';
+import { PersonModel } from './models/person.model';
 
 describe('TasksResolverService', () => {
   let resolver: TasksResolverService;
@@ -76,7 +77,7 @@ describe('TasksResolverService', () => {
   it('should resolve tasks for person-todo list type', () => {
     const route: any = routeWithType('person-todo');
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
 
     const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listTodoForPerson').and.returnValue(expected);
@@ -87,7 +88,7 @@ describe('TasksResolverService', () => {
   it('should resolve tasks for person-archived list type', () => {
     const route: any = routeWithType('person-archived');
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
 
     const expected = of({} as Page<TaskModel>);
     spyOn(taskService, 'listArchivedForPerson').and.returnValue(expected);

@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { WeddingEventService } from './wedding-event.service';
 import { WeddingEventModel } from './models/wedding-event.model';
 import { CurrentPersonService } from './current-person.service';
+import { PersonModel } from './models/person.model';
 
 describe('WeddingEventsResolverService', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('WeddingEventsResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
   });
 
   it('should resolve the list of wedding events of a person', () => {

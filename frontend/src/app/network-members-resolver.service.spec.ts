@@ -6,6 +6,7 @@ import { NetworkMemberService } from './network-member.service';
 import { Observable, of } from 'rxjs';
 import { NetworkMemberModel } from './models/network-member.model';
 import { CurrentPersonService } from './current-person.service';
+import { PersonModel } from './models/person.model';
 
 describe('NetworkMembersResolverService', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('NetworkMembersResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
   });
 
   it('should resolve network members', () => {

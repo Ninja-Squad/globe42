@@ -6,6 +6,7 @@ import { ParticipationModel } from './models/participation.model';
 import { of } from 'rxjs';
 import { CurrentPersonService } from './current-person.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PersonModel } from './models/person.model';
 
 describe('ParticipationsResolverService', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('ParticipationsResolverService', () => {
     });
 
     const currentPersonService: CurrentPersonService = TestBed.inject(CurrentPersonService);
-    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 });
+    spyOnProperty(currentPersonService, 'snapshot').and.returnValue({ id: 42 } as PersonModel);
   });
 
   it('should resolve the list of participations of a person', () => {

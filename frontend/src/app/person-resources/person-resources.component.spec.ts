@@ -18,6 +18,7 @@ import { ComponentTester, stubRoute } from 'ngx-speculoos';
 import { PageTitleDirective } from '../page-title.directive';
 import { FullnamePipe } from '../fullname.pipe';
 import { CurrentPersonService } from '../current-person.service';
+import { PersonModel } from '../models/person.model';
 
 class PersonResourcesTester extends ComponentTester<PersonResourcesComponent> {
   constructor() {
@@ -134,7 +135,7 @@ describe('PersonResourcesComponent', () => {
     spyOnProperty(currentPersonService, 'snapshot').and.returnValue({
       id: 42,
       nickName: 'JB'
-    });
+    } as PersonModel);
 
     tester = new PersonResourcesTester();
   });
