@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   ViewChild
@@ -43,6 +44,8 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private chart: Chart;
 
+  constructor(private ngZone: NgZone) {}
+
   ngOnChanges() {
     this.createChart();
   }
@@ -63,7 +66,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
     if (this.canvas) {
       const ctx = this.canvas.nativeElement;
-      this.chart = new Chart(ctx, this.configuration);
+      this.chart = this.ngZone.runOutsideAngular(() => new Chart(ctx, this.configuration));
     }
   }
 }
