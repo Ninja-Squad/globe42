@@ -5,7 +5,7 @@ import { ConfirmService } from '../confirm.service';
 import { NetworkMemberService } from '../network-member.service';
 import { Observable, switchMap, tap } from 'rxjs';
 import { PersonModel } from '../models/person.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NetworkMemberCommand } from '../models/network-member.command';
 import { CurrentPersonService } from '../current-person.service';
 
@@ -20,14 +20,14 @@ export class PersonNetworkMembersComponent implements OnInit {
   memberTypes = NETWORK_MEMBER_TYPES;
 
   editedMember: NetworkMemberModel;
-  memberForm: FormGroup;
+  memberForm: UntypedFormGroup;
 
   constructor(
     private currentPersonService: CurrentPersonService,
     private route: ActivatedRoute,
     private confirmService: ConfirmService,
     private networkMemberService: NetworkMemberService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {

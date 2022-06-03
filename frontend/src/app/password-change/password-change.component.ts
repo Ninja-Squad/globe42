@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { switchMap } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-password-change',
@@ -10,13 +10,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./password-change.component.scss']
 })
 export class PasswordChangeComponent {
-  passwordChangeForm: FormGroup;
+  passwordChangeForm: UntypedFormGroup;
   passwordChangeFailed = false;
 
   constructor(
     private currentUserService: CurrentUserService,
     private router: Router,
-    fb: FormBuilder
+    fb: UntypedFormBuilder
   ) {
     this.passwordChangeForm = fb.group({
       oldPassword: ['', Validators.required],

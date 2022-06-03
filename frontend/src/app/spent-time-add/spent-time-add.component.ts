@@ -2,7 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../models/task.model';
 import { TaskService } from '../task.service';
 import { SpentTimeEvent } from '../tasks/tasks.component';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 
 @Component({
   selector: 'gl-spent-time-add',
@@ -15,13 +21,13 @@ export class SpentTimeAddComponent {
   @Output() readonly spentTimeAdded = new EventEmitter<SpentTimeEvent>();
   @Output() readonly cancelled = new EventEmitter<void>();
 
-  addForm: FormGroup;
+  addForm: UntypedFormGroup;
 
   private addableValidator: ValidatorFn = (form: AbstractControl) => {
     return form.get('hours').value > 0 || form.get('minutes').value > 0 ? null : { addable: false };
   };
 
-  constructor(private taskService: TaskService, fb: FormBuilder) {
+  constructor(private taskService: TaskService, fb: UntypedFormBuilder) {
     this.addForm = fb.group(
       {
         hours: [0, [Validators.required, Validators.min(0)]],

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CurrentUserService } from '../current-user/current-user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CredentialsCommand } from '../models/credentials.command';
 
 @Component({
@@ -11,13 +11,13 @@ import { CredentialsCommand } from '../models/credentials.command';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   authenticationFailed = false;
 
   constructor(
     private router: Router,
     private currentUserService: CurrentUserService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {

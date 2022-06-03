@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityService } from '../activity.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
 import { ParticipationService } from '../participation.service';
 import {
   BehaviorSubject,
@@ -33,9 +38,9 @@ interface FormValue {
   styleUrls: ['./activity-edit.component.scss']
 })
 export class ActivityEditComponent implements OnInit {
-  form: FormGroup;
-  showAllPersonsCtrl: FormControl;
-  startWithFirstNameOptionCtrl: FormControl;
+  form: UntypedFormGroup;
+  showAllPersonsCtrl: UntypedFormControl;
+  startWithFirstNameOptionCtrl: UntypedFormControl;
 
   choosablePersons$: Observable<Array<PersonIdentityModel>>;
   editedActivity: Activity | null;
@@ -43,7 +48,7 @@ export class ActivityEditComponent implements OnInit {
   activityTypes = ACTIVITY_TYPES;
 
   constructor(
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private activityService: ActivityService,
     participationService: ParticipationService,

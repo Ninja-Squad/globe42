@@ -3,7 +3,7 @@ import { PersonIdentityModel } from '../models/person.model';
 import { ActivatedRoute } from '@angular/router';
 import { sortBy } from '../utils';
 import { displayFullname } from '../fullname.pipe';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'gl-persons',
@@ -12,7 +12,7 @@ import { FormControl } from '@angular/forms';
 })
 export class PersonsComponent implements OnInit {
   persons: Array<PersonIdentityModel> = [];
-  filterCtrl = new FormControl('');
+  filterCtrl = new UntypedFormControl('');
 
   private allPersons: Array<PersonIdentityModel> = [];
 

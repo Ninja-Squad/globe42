@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CurrentUserService } from '../current-user/current-user.service';
 import { ProfileCommand, ProfileModel } from '../models/user.model';
 
@@ -10,12 +10,12 @@ import { ProfileCommand, ProfileModel } from '../models/user.model';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   profile: ProfileModel;
 
   constructor(
     private route: ActivatedRoute,
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     private currentUserService: CurrentUserService,
     private router: Router
   ) {

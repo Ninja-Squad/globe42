@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
   Validators
@@ -63,8 +63,8 @@ function validateValidityDates(
 export class PersonEditComponent {
   editedPerson: PersonModel | null;
 
-  personForm: FormGroup;
-  spouseTypeCtrl: FormControl;
+  personForm: UntypedFormGroup;
+  spouseTypeCtrl: UntypedFormControl;
 
   genders = GENDERS;
   maritalStatuses = MARITAL_STATUSES;
@@ -88,7 +88,7 @@ export class PersonEditComponent {
   saving = false;
   similarPerson: PersonIdentityModel | null = null;
 
-  private static emailOrEmpty(ctrl: FormControl): ValidationErrors {
+  private static emailOrEmpty(ctrl: UntypedFormControl): ValidationErrors {
     if (!ctrl.value) {
       return null;
     }
@@ -100,7 +100,7 @@ export class PersonEditComponent {
     private searchCityService: SearchCityService,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     this.editedPerson = this.route.snapshot.data.person;
 
@@ -177,7 +177,7 @@ export class PersonEditComponent {
       }
     );
 
-    this.spouseTypeCtrl = new FormControl('none');
+    this.spouseTypeCtrl = new UntypedFormControl('none');
 
     if (this.editedPerson) {
       this.personForm.patchValue(this.editedPerson);

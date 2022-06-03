@@ -191,7 +191,6 @@ import { RelativeComponent } from './person-family/relative/relative.component';
     MediationStatisticsComponent,
     RelativeComponent
   ],
-  entryComponents: [ConfirmModalContentComponent],
   imports: [
     BrowserModule,
     ReactiveFormsModule,

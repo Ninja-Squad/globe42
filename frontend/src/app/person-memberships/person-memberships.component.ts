@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MembershipModel, PAYMENT_MODES } from '../models/membership.model';
 import { DateTime } from 'luxon';
 import { PersonModel } from '../models/person.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { min, pastDate } from '../globe-validators';
 import { MembershipService } from '../membership.service';
 import { MembershipCommand } from '../models/membership.command';
@@ -23,19 +23,19 @@ export class PersonMembershipsComponent implements OnInit {
   currentYear: number;
   person: PersonModel;
 
-  membershipForm: FormGroup;
+  membershipForm: UntypedFormGroup;
 
   paymentModes = PAYMENT_MODES.filter(mode => mode !== 'UNKNOWN');
 
   choosableOldMembershipYears: Array<number> = [];
   oldMembershipFormVisible = false;
-  oldMembershipForm: FormGroup;
+  oldMembershipForm: UntypedFormGroup;
 
   constructor(
     private currentPersonService: CurrentPersonService,
     private currentPersonReminderService: CurrentPersonReminderService,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private membershipService: MembershipService,
     private confirmService: ConfirmService
   ) {}

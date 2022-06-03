@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { PersonModel } from '../models/person.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonService } from '../person.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { pastDate } from '../globe-validators';
 import { CurrentPersonService } from '../current-person.service';
 import { switchMap } from 'rxjs';
@@ -15,13 +15,13 @@ import { CurrentPersonReminderService } from '../current-person-reminder.service
 })
 export class PersonDeathComponent {
   person: PersonModel;
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private currentPersonService: CurrentPersonService,
     private currentPersonReminderService: CurrentPersonReminderService,
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     private personService: PersonService,
     private router: Router
   ) {

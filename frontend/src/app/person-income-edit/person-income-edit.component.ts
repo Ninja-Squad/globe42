@@ -7,9 +7,9 @@ import { IncomeService } from '../income.service';
 import { sortBy } from '../utils';
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidatorFn,
   Validators
 } from '@angular/forms';
@@ -22,7 +22,7 @@ import {
 export class PersonIncomeEditComponent implements OnInit {
   person: PersonModel;
   incomeSources: Array<IncomeSourceModel>;
-  incomeForm: FormGroup;
+  incomeForm: UntypedFormGroup;
 
   private monthlyAmountValidator: ValidatorFn = (control: AbstractControl) => {
     if (!this.selectedSource?.maxMonthlyAmount) {
@@ -36,7 +36,7 @@ export class PersonIncomeEditComponent implements OnInit {
     private route: ActivatedRoute,
     private incomeService: IncomeService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {
@@ -62,8 +62,8 @@ export class PersonIncomeEditComponent implements OnInit {
     return this.incomeForm?.get('source').value ?? null;
   }
 
-  get monthlyAmountCtrl(): FormControl {
-    return this.incomeForm.get('monthlyAmount') as FormControl;
+  get monthlyAmountCtrl(): UntypedFormControl {
+    return this.incomeForm.get('monthlyAmount') as UntypedFormControl;
   }
 
   save() {

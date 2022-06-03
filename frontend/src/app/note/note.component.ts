@@ -9,7 +9,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { NOTE_CATEGORIES, NoteCommand, NoteModel } from '../models/note.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { concat, filter, of } from 'rxjs';
 
 export interface NoteEditionEvent {
@@ -43,7 +43,7 @@ export class NoteComponent implements AfterViewInit {
   @Output()
   readonly deletionRequested = new EventEmitter<NoteModel>();
 
-  noteForm: FormGroup;
+  noteForm: UntypedFormGroup;
   rowCount: number;
 
   @ViewChildren('textArea')
@@ -51,7 +51,7 @@ export class NoteComponent implements AfterViewInit {
 
   private _edited = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: UntypedFormBuilder) {}
 
   get edited() {
     return this._edited;

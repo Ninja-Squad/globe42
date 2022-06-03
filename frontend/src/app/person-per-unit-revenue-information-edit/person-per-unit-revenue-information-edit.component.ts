@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonModel } from '../models/person.model';
 import { PerUnitRevenueInformationService } from '../per-unit-revenue-information.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-person-per-unit-revenue-information-edit',
@@ -11,13 +11,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class PersonPerUnitRevenueInformationEditComponent implements OnInit {
   person: PersonModel;
-  infoGroup: FormGroup;
+  infoGroup: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private perUnitRevenueInformationService: PerUnitRevenueInformationService,
     private router: Router,
-    fb: FormBuilder
+    fb: UntypedFormBuilder
   ) {
     this.infoGroup = fb.group({
       adultLikeCount: [1, [Validators.required, Validators.min(1)]],

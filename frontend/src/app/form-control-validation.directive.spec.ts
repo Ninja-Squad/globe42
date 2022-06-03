@@ -1,6 +1,11 @@
 import { FormControlValidationDirective } from './form-control-validation.directive';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
 import { ComponentTester } from 'ngx-speculoos';
 
@@ -18,8 +23,8 @@ import { ComponentTester } from 'ngx-speculoos';
   `
 })
 class FormComponent {
-  personForm = new FormGroup({
-    lastName: new FormControl('', Validators.required)
+  personForm = new UntypedFormGroup({
+    lastName: new UntypedFormControl('', Validators.required)
   });
   submit() {
     // do nothing

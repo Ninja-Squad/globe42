@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { PersonModel } from '../models/person.model';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap, tap } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { ConfirmService } from '../confirm.service';
 import { WeddingEventService } from '../wedding-event.service';
@@ -21,7 +21,7 @@ export class PersonWeddingEventsComponent {
   events: Array<WeddingEventModel>;
   person: PersonModel;
 
-  newEvent: FormGroup = null;
+  newEvent: UntypedFormGroup = null;
   maxMonth: NgbDateStruct;
   eventTypes = WEDDING_EVENT_TYPES;
   locations = LOCATIONS;
@@ -30,7 +30,7 @@ export class PersonWeddingEventsComponent {
     route: ActivatedRoute,
     currentPersonService: CurrentPersonService,
     private weddingEventService: WeddingEventService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private confirmService: ConfirmService
   ) {
     this.person = currentPersonService.snapshot;

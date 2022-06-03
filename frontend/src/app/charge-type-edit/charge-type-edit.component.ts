@@ -7,7 +7,7 @@ import { ChargeTypeService } from '../charge-type.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-charge-type-edit',
@@ -18,13 +18,13 @@ export class ChargeTypeEditComponent implements OnInit {
   editedChargeType: ChargeTypeModel;
 
   chargeCategories: Array<ChargeCategoryModel>;
-  chargeTypeForm: FormGroup;
+  chargeTypeForm: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private chargeTypeService: ChargeTypeService,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private errorService: ErrorService
   ) {}
 

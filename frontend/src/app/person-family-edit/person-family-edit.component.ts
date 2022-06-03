@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonModel } from '../models/person.model';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FamilyModel } from '../models/family.model';
 import { FamilyService } from '../family.service';
 
@@ -12,11 +12,11 @@ import { FamilyService } from '../family.service';
 })
 export class PersonFamilyEditComponent implements OnInit {
   person: PersonModel;
-  familyForm: FormGroup;
+  familyForm: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private familyService: FamilyService,
     private router: Router
   ) {}
@@ -42,8 +42,8 @@ export class PersonFamilyEditComponent implements OnInit {
     });
   }
 
-  get relatives(): FormArray {
-    return this.familyForm.get('relatives') as FormArray;
+  get relatives(): UntypedFormArray {
+    return this.familyForm.get('relatives') as UntypedFormArray;
   }
 
   addRelative(type: 'CHILD' | 'BROTHER' | 'SISTER') {
