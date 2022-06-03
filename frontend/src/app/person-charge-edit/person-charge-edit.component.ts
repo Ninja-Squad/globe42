@@ -7,9 +7,9 @@ import { sortBy } from '../utils';
 import { ChargeCommand } from '../models/charge.command';
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidatorFn,
   Validators
 } from '@angular/forms';
@@ -23,7 +23,7 @@ export class PersonChargeEditComponent implements OnInit {
   person: PersonModel;
   chargeTypes: Array<ChargeTypeModel>;
 
-  chargeForm: FormGroup;
+  chargeForm: UntypedFormGroup;
 
   private monthlyAmountValidator: ValidatorFn = (control: AbstractControl) => {
     if (!this.selectedChargeType || !this.selectedChargeType.maxMonthlyAmount) {
@@ -37,7 +37,7 @@ export class PersonChargeEditComponent implements OnInit {
     private route: ActivatedRoute,
     private chargeService: ChargeService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {
@@ -63,8 +63,8 @@ export class PersonChargeEditComponent implements OnInit {
     return this.chargeForm?.get('type').value ?? null;
   }
 
-  get monthlyAmountCtrl(): FormControl {
-    return this.chargeForm.get('monthlyAmount') as FormControl;
+  get monthlyAmountCtrl(): UntypedFormControl {
+    return this.chargeForm.get('monthlyAmount') as UntypedFormControl;
   }
 
   save() {

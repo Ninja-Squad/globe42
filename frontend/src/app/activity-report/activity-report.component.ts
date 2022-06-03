@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ACTIVITY_TYPES, ActivityType } from '../models/activity-type.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BehaviorSubject,
@@ -42,14 +42,14 @@ interface ViewModel {
   styleUrls: ['./activity-report.component.scss']
 })
 export class ActivityReportComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   vm$: Observable<ViewModel | null>;
   activityTypes = ACTIVITY_TYPES;
 
   sortingSubject = new BehaviorSubject<Sorting>({ column: 'person', desc: false });
 
   constructor(
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     router: Router,
     activityService: ActivityService

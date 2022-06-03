@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChargeCategoryService } from '../charge-category.service';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-charge-category-edit',
@@ -14,12 +14,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ChargeCategoryEditComponent implements OnInit {
   editedChargeCategory: ChargeCategoryModel;
-  chargeCategoryForm: FormGroup;
+  chargeCategoryForm: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private chargeCategoryService: ChargeCategoryService,
     private errorService: ErrorService
   ) {}

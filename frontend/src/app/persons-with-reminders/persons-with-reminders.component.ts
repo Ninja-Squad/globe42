@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PersonWithRemindersModel, REMINDER_TYPES, ReminderType } from '../models/person.model';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'gl-persons-with-reminders',
@@ -9,17 +9,19 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./persons-with-reminders.component.scss']
 })
 export class PersonsWithRemindersComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   unfilteredPersons: Array<PersonWithRemindersModel>;
   filteredPersons: Array<PersonWithRemindersModel>;
   reminderTypes = REMINDER_TYPES;
 
-  constructor(fb: FormBuilder, private route: ActivatedRoute) {
-    this.form = new FormGroup({});
+  constructor(fb: UntypedFormBuilder, private route: ActivatedRoute) {
+    this.form = new UntypedFormGroup({});
     REMINDER_TYPES.forEach(type =>
       this.form.addControl(
         type,
-        new FormControl(type !== 'MEMBERSHIP_TO_RENEW' && type !== 'MEMBERSHIP_PAYMENT_OUT_OF_DATE')
+        new UntypedFormControl(
+          type !== 'MEMBERSHIP_TO_RENEW' && type !== 'MEMBERSHIP_PAYMENT_OUT_OF_DATE'
+        )
       )
     );
 

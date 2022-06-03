@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { ErrorService } from '../error.service';
 import { UserService } from '../user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-user-edit',
@@ -16,14 +16,14 @@ export class UserEditComponent implements OnInit {
   editedUser: UserModel;
   createdUser: UserWithPasswordModel;
 
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
 
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
     private errorService: ErrorService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {

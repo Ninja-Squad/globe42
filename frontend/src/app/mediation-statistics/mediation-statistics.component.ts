@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateTime } from 'luxon';
@@ -18,11 +18,11 @@ interface FormValue {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MediationStatisticsComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   report$: Observable<MediationReportModel | null>;
 
   constructor(
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     router: Router,
     mediationStatisticsService: MediationStatisticsService

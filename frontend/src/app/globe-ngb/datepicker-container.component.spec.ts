@@ -1,4 +1,4 @@
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { NgbDatepicker, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,7 @@ import { GlobeNgbTestingModule } from './globe-ngb-testing.module';
   `
 })
 class TestComponent {
-  dateCtrl = new FormControl();
+  dateCtrl = new UntypedFormControl();
 }
 
 class TestComponentTester extends ComponentTester<TestComponent> {

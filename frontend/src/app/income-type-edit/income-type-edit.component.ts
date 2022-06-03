@@ -6,7 +6,7 @@ import { IncomeSourceTypeModel } from '../models/income-source-type.model';
 import { IncomeSourceTypeService } from '../income-source-type.service';
 import { ErrorService } from '../error.service';
 import { Observable } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-income-type-edit',
@@ -15,12 +15,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class IncomeTypeEditComponent implements OnInit {
   editedIncomeType: IncomeSourceTypeModel;
-  incomeTypeForm: FormGroup;
+  incomeTypeForm: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private incomeSourceTypeService: IncomeSourceTypeService,
     private errorService: ErrorService
   ) {}

@@ -10,7 +10,7 @@ import {
   Tooltip
 } from 'chart.js';
 import { minutesToDuration, sortBy } from '../utils';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { SpentTimeStatisticsModel } from '../models/spent-time-statistics.model';
@@ -41,7 +41,7 @@ const ALL_USERS = 0;
   styleUrls: ['./spent-time-statistics.component.scss']
 })
 export class SpentTimeStatisticsComponent implements OnInit {
-  criteriaForm: FormGroup;
+  criteriaForm: UntypedFormGroup;
 
   statisticsModel: SpentTimeStatisticsModel;
   chartConfiguration: ChartConfiguration<'doughnut'>;
@@ -50,7 +50,7 @@ export class SpentTimeStatisticsComponent implements OnInit {
   users: Array<UserModel>;
 
   constructor(
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     private taskService: TaskService,
     private router: Router,
     private route: ActivatedRoute

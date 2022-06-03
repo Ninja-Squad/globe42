@@ -9,7 +9,7 @@ import { TaskModel } from '../models/task.model';
 import { TaskCategoryModel } from '../models/task-category.model';
 import { PersonTypeahead } from '../person/person-typeahead';
 import { CurrentUserService } from '../current-user/current-user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'gl-task-edit',
@@ -18,7 +18,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class TaskEditComponent implements OnInit {
   editedTask: TaskModel;
-  taskForm: FormGroup;
+  taskForm: UntypedFormGroup;
   users: Array<UserModel>;
   categories: Array<TaskCategoryModel>;
 
@@ -30,7 +30,7 @@ export class TaskEditComponent implements OnInit {
     private taskService: TaskService,
     private router: Router,
     private currentUserService: CurrentUserService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit() {
