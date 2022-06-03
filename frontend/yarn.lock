@@ -5404,12 +5404,12 @@ ngx-speculoos@8.0.0:
   dependencies:
     tslib "2.4.0"
 
-ngx-valdemort@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-7.0.0.tgz#338f37b6f6dc66bcb3010ed71bbcb581b45931d1"
-  integrity sha512-AnB+TFUsro7xcSkyNGryKtGBO5PmFZ+VCKUpNNV0in6lnKelHpAHZCT6F4qs5rsudj5jWVGwagGAz/4b3dNE8w==
+ngx-valdemort@8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-valdemort/-/ngx-valdemort-8.0.0.tgz#6741d4fc4e324b16cb58097a7d482073129a6085"
+  integrity sha512-3UsY2FT3A3aYCnLtAKwm3QQJCUixPkq17iA7HOnnmkaub9lN7MlwOekuR7gy3KqWdfXd4tqygKCrYdC7yKaQ5A==
   dependencies:
-    tslib "2.3.1"
+    tslib "2.4.0"
 
 nice-napi@^1.0.2:
   version "1.0.2"
@@ -7279,11 +7279,6 @@ tsconfig-paths@^3.9.0:
     json5 "^1.0.1"
     minimist "^1.2.6"
     strip-bom "^3.0.0"
-
-tslib@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
-  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
 tslib@2.4.0, tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.4.0:
   version "2.4.0"
