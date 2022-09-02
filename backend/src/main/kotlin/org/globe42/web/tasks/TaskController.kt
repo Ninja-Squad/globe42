@@ -14,10 +14,18 @@ import org.globe42.web.util.PageDTO
 import org.globe42.web.util.toDTO
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.PageRequest
-import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
 import java.time.LocalDate
 import javax.transaction.Transactional
@@ -47,7 +55,7 @@ class TaskController(
 
     @GetMapping(params = ["mine"])
     fun listMine(@RequestParam page: Int?): PageDTO<TaskDTO> {
-        val user = userDao.getById(currentUser.userId!!)
+        val user = userDao.getReferenceById(currentUser.userId!!)
         return taskDao.findTodoByAssignee(user, pageRequest(page)).toDTO(::TaskDTO)
     }
 
@@ -58,7 +66,7 @@ class TaskController(
 
     @GetMapping(params = ["person"])
     fun listTodoForPerson(@RequestParam("person") personId: Long?, @RequestParam page: Int?): PageDTO<TaskDTO> {
-        val person = personDao.getById(personId!!)
+        val person = personDao.getReferenceById(personId!!)
         return taskDao.findTodoByConcernedPerson(person, pageRequest(page)).toDTO(::TaskDTO)
     }
 
@@ -67,7 +75,7 @@ class TaskController(
         @RequestParam("person") personId: Long?,
         @RequestParam page: Int?
     ): PageDTO<TaskDTO> {
-        val person = personDao.getById(personId!!)
+        val person = personDao.getReferenceById(personId!!)
         return taskDao.findArchivedByConcernedPerson(person, pageRequest(page)).toDTO(::TaskDTO)
     }
 
@@ -132,7 +140,7 @@ class TaskController(
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@Validated @RequestBody command: TaskCommandDTO): TaskDTO {
         val task = Task()
-        task.creator = userDao.getById(currentUser.userId!!)
+        task.creator = userDao.getReferenceById(currentUser.userId!!)
 
         copyCommandToTask(command, task)
         taskDao.save(task)
@@ -179,7 +187,7 @@ class TaskController(
     fun addSpentTime(@PathVariable("taskId") taskId: Long, @Validated @RequestBody command: SpentTimeCommandDTO): SpentTimeDTO {
         val task = taskDao.findByIdOrNull(taskId) ?: throw NotFoundException("no task with ID $taskId")
         val spentTime = SpentTime()
-        spentTime.creator = userDao.getById(currentUser.userId!!)
+        spentTime.creator = userDao.getReferenceById(currentUser.userId!!)
         spentTime.minutes = command.minutes
 
         task.addSpentTime(spentTime)

@@ -7,8 +7,15 @@ import org.globe42.web.exception.NotFoundException
 import org.globe42.web.security.CurrentUser
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
-import java.util.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 import java.util.stream.Collectors
 import javax.transaction.Transactional
 
@@ -41,7 +48,7 @@ class PersonNoteController(
         val person = personDao.findByIdOrNull(personId) ?: throw NotFoundException()
 
         val note = Note()
-        note.creator = userDao.getById(currentUser.userId!!)
+        note.creator = userDao.getReferenceById(currentUser.userId!!)
         note.text = command.text
         note.category = command.category
         person.addNote(note)

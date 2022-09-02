@@ -8,7 +8,12 @@ import org.globe42.dao.PersonDao
 import org.globe42.dao.TaskCategoryDao
 import org.globe42.dao.TaskDao
 import org.globe42.dao.UserDao
-import org.globe42.domain.*
+import org.globe42.domain.Gender
+import org.globe42.domain.Person
+import org.globe42.domain.Task
+import org.globe42.domain.TaskCategory
+import org.globe42.domain.TaskStatus
+import org.globe42.domain.User
 import org.globe42.test.GlobeMvcTest
 import org.globe42.web.security.CurrentUser
 import org.globe42.web.test.jsonValue
@@ -89,7 +94,7 @@ class TaskControllerMvcTest(
     @Test
     fun `should list todo for person`() {
         val person = Person(1L)
-        every { mockPersonDao.getById(1L) } returns person
+        every { mockPersonDao.getReferenceById(1L) } returns person
         every { mockTaskDao.findTodoByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1").andExpect {
@@ -101,7 +106,7 @@ class TaskControllerMvcTest(
     @Test
     fun `should list archived for person`() {
         val person = Person(1L)
-        every { mockPersonDao.getById(1L) } returns person
+        every { mockPersonDao.getReferenceById(1L) } returns person
         every { mockTaskDao.findArchivedByConcernedPerson(eq(person), any()) } returns singlePage(listOf(task))
 
         mvc.get("/api/tasks?person=1&archived").andExpect {
@@ -153,7 +158,7 @@ class TaskControllerMvcTest(
         val command = createCommand(null, null)
 
         every { mockCurrentUser.userId } returns user.id
-        every { mockUserDao.getById(user.id!!) } returns user
+        every { mockUserDao.getReferenceById(user.id!!) } returns user
         every { mockTaskDao.save(any<Task>()) } answers { arg<Task>(0).apply { id = 42L } }
 
         mvc.post("/api/tasks") {
