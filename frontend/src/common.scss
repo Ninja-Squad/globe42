@@ -1,3 +1,6 @@
+@import '~bootstrap/scss/functions';
+
+
 // make the placeholders lighter
 $input-placeholder-color: #dcdedf;
 // remove decoration of links
@@ -5,7 +8,8 @@ $link-decoration: none;
 
 $enable-validation-icons: false;
 
-@import '~bootstrap/scss/functions';
+
 @import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/maps';
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/utilities';
