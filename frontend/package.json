@@ -29,7 +29,7 @@
     "@ng-bootstrap/ng-bootstrap": "12.1.2",
     "@popperjs/core": "2.11.6",
     "bootstrap": "5.2.0",
-    "chart.js": "3.8.0",
+    "chart.js": "3.9.1",
     "font-awesome": "4.7.0",
     "luxon": "3.0.3",
     "ngx-valdemort": "8.0.0",
